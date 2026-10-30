@@ -290,6 +290,8 @@ export async function bootstrapWindowPage(app) {
   app.type = context.workspace?.search_type || context.route.searchType || '';
   app.selectedKeys = [...(context.workspace?.search_keys || [])];
   app.view = context.workspace?.view || 'table';
+  await app.loadNavigation();
+  if (app.session !== session) return;
   app.busy = false;
   app.restoringSession = false;
   app.routeReady = true;

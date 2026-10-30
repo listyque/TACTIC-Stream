@@ -1,0 +1,14 @@
+<manifest code="studio_review">
+  <data>
+    <code>studio_review</code>
+    <title>Studio Review</title>
+    <version>1.0.0</version>
+    <description>A complete native extension: review schema and sample records, reusable widgets, a table column, light/dark theme, Python business action and installation/removal hooks.</description>
+  </data>
+  <search_type code="studio/review" path="studio_review.spt"/>
+  <sobject search_type="studio/review" unique="true" path="data/reviews.spt"/>
+  <sobject search_type="config/widget_config" view="studio_review.%" unique="true" path="config/widgets.spt"/>
+  <sobject search_type="config/custom_script" code="STUDIO_REVIEW_APPROVE" unique="true" path="config/scripts.spt"/>
+  <sobject search_type="config/prod_setting" code="STUDIO_REVIEW_INSTALLED" unique="true" path="config/settings.spt"/>
+  <python path="install.py" undo_path="uninstall.py"/>
+</manifest>

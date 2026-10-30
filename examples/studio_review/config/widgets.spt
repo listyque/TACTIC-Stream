@@ -1,0 +1,36 @@
+#-- Start Entry --#
+insert = SearchType.create('config/widget_config')
+insert.set_value('code', 'STUDIO_REVIEW_WIDGET')
+insert.set_value('view', 'studio_review.widget')
+insert.set_value('search_type', 'studio/review')
+insert.set_value('category', 'CustomLayoutWdg')
+insert.set_value('widget_type', 'widget')
+insert.set_value('config', '<config>\n  <studio_review.widget layout="sobject-layout" collection="list" columns="12" padding="12 12 12 12" gap="8">\n    <element name="title" title="Review" row="1" height="36"><display class="title"><bind>record.name</bind></display></element>\n    <element name="description" title="Description" row="2" height="52"><display class="description"><bind>record.description</bind></display></element>\n    <element name="status" title="Review status" row="3" height="64"><display class="view"><view>studio_review.column</view></display></element>\n    <element name="notes" title="Notes" row="4" height="36"><display class="button"><action>notes</action><text>Notes</text></display></element>\n  </studio_review.widget>\n</config>\n')
+#-- End Entry --#
+#-- Start Entry --#
+insert = SearchType.create('config/widget_config')
+insert.set_value('code', 'STUDIO_REVIEW_COLUMN')
+insert.set_value('view', 'studio_review.column')
+insert.set_value('search_type', 'studio/review')
+insert.set_value('category', 'CustomLayoutWdg')
+insert.set_value('widget_type', 'column')
+insert.set_value('config', '<config>\n  <studio_review.column layout="sobject-layout" collection="list" columns="12" padding="4 8 4 8" gap="4">\n    <element name="status" title="Status" row="1" height="24"><display class="field"><bind>record.status</bind><format>badge</format><colors>{"Approved":"green","In review":"yellow","Changes requested":"red"}</colors></display></element>\n    <element name="progress" title="Progress" row="2" height="20"><display class="field"><bind>record.progress</bind><format>progress</format></display></element>\n  </studio_review.column>\n</config>\n')
+#-- End Entry --#
+#-- Start Entry --#
+insert = SearchType.create('config/widget_config')
+insert.set_value('code', 'STUDIO_REVIEW_TABLE')
+insert.set_value('view', 'studio_review.table')
+insert.set_value('search_type', 'studio/review')
+insert.set_value('category', '')
+insert.set_value('widget_type', '')
+insert.set_value('config', '<config>\n  <studio_review.table row_height="80">\n    <element name="name" title="Review" width="240"/>\n    <element name="description" title="Description" width="360"/>\n    <element name="review_status" title="Review status" width="200"><display class="tactic.ui.table.CustomLayoutElementWdg"><view>studio_review.column</view></display></element>\n    <element name="approved_by" title="Approved by" width="180"/>\n  </studio_review.table>\n</config>\n')
+#-- End Entry --#
+#-- Start Entry --#
+insert = SearchType.create('config/widget_config')
+insert.set_value('code', 'STUDIO_REVIEW_THEME')
+insert.set_value('view', 'studio_review.theme')
+insert.set_value('search_type', 'ALL')
+insert.set_value('category', 'PluginTheme')
+insert.set_value('widget_type', 'theme')
+insert.set_value('config', '<config>\n  <studio_review.theme>\n    <theme style="md3">\n      <light base="#edf5f6" accent="#176579"/>\n      <dark base="#1b262c" accent="#84c8db"/>\n    </theme>\n  </studio_review.theme>\n</config>\n')
+#-- End Entry --#

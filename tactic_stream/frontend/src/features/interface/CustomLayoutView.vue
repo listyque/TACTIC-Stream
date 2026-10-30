@@ -7,6 +7,7 @@ import LayoutDocument from './LayoutDocument.vue';
 import DashboardItems from './DashboardItems.vue';
 import { appearance } from '../../appearance.js';
 import { runTableScript } from './tableScript.js';
+import { layoutUrl } from './itemLayout.js';
 import { printCustomReport } from './customReport.js';
 import { rpc } from '../../api.js';
 import { copyText } from '../../controls/clipboard.js';
@@ -318,7 +319,7 @@ async function saveForm(action) {
       });
   }
 }
-function activate(action) {
+function activate(action, source) {
   if (props.editing) return;
   if (action.type === 'layout-split') {
     state.value = Layout.resize(state.value, action);
@@ -329,6 +330,16 @@ function activate(action) {
     return;
   }
   if (action.type === 'record-action') {
+    if (action.name === 'layout-link') {
+      const href = layoutUrl(action.href);
+      if (href)
+        window.open(
+          href,
+          href.startsWith('/') ? '_self' : '_blank',
+          'noopener'
+        );
+      return;
+    }
     if (action.name === 'copy_link') {
       copyText('skey://' + action.targetSearchKey).catch(
         (failure) => (error.value = failure.message)
@@ -343,12 +354,20 @@ function activate(action) {
     }
     emit(
       'action',
-      { __search_key__: action.targetSearchKey },
+      action.record || { __search_key__: action.targetSearchKey },
       action.name === 'details' ? 'sobject_detail' : action.name,
       {
         targetSearchKey: action.targetSearchKey,
         actionView: action.view,
-        process: action.process
+        process: action.process,
+        command: action.command
+      },
+      {
+        currentTarget: source,
+        target: source,
+        preventDefault() {},
+        clientX: source?.getBoundingClientRect()?.left,
+        clientY: source?.getBoundingClientRect()?.bottom
       }
     );
     return;

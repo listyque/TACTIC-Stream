@@ -1,4 +1,4 @@
-import { w as metrics } from "./AppButton.js";
+import { T as metrics } from "./AppButton.js";
 import { B as node, R as label, V as rect, v as translate, z as muted } from "./resize.js";
 //#region ../src/tactic_stream/shared_ui/controls/forms/fields.mjs
 function fieldProperties(field, language, enabled) {

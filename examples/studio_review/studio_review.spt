@@ -1,0 +1,24 @@
+#-- Start Entry --#
+insert = SearchType.create('sthpw/search_object')
+insert.set_value('code', 'studio/review')
+insert.set_value('search_type', 'studio/review')
+insert.set_value('namespace', 'studio')
+insert.set_value('database', '{project}')
+insert.set_value('table_name', 'studio_review')
+insert.set_value('title', 'Studio Review')
+insert.set_value('class_name', 'pyasm.search.SObject')
+insert.set_value('schema', 'public')
+#-- End Entry --#
+#-- Start Entry --#
+table = CreateTable()
+table.set_table('studio_review')
+table.add('id', 'serial', primary_key=True)
+table.add('code', 'text')
+table.add('name', 'text')
+table.add('description', 'text')
+table.add('status', 'text')
+table.add('progress', 'integer')
+table.add('approved_by', 'text')
+table.add('timestamp', 'timestamp')
+table.add('s_status', 'text')
+#-- End Entry --#

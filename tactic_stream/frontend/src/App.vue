@@ -27,7 +27,7 @@ import ActionRows from './controls/ActionRows.vue'
 import mainMenus from '../../src/tactic_stream/shared_ui/shell/main.menus.json'
 import { compose as composeMainMenu } from '../../src/tactic_stream/shared_ui/shell/main.menus.mjs'
 import DockWorkspaceFooter from './controls/DockWorkspaceFooter.vue'
-import { saveAppearance } from './appearance.js'
+import { saveAppearance, projectPalette } from './appearance.js'
 import CommitQueue from './features/checkin/CommitQueue.vue'
 const FileWorkspace = asyncComponent(() => import('./features/fileWorkspace/FileWorkspaceInspection.vue'))
 import DropPlate from './features/checkin/DropPlate.vue'
@@ -301,9 +301,9 @@ export default {
     },
     page(value) { this.pageNumber = value + 1 },
     browserTitle: { handler(value) { document.title = value }, immediate: true },
-    session: { handler() { resetNotifications(); resetRequestActivity(); this.inspectorSource = this.inspectorTarget = null; this.inspectorRequest++ }, flush: 'sync' },
+    session: { handler() { projectPalette.value = null; resetNotifications(); resetRequestActivity(); this.inspectorSource = this.inspectorTarget = null; this.inspectorRequest++ }, flush: 'sync' },
     project: { handler() { this.layoutLinks=[]; resetRequestActivity() }, flush: 'sync' },
-    workspaceProject: { handler() { resetRequestActivity(); this.inspectorSource = this.inspectorTarget = null; this.inspectorRequest++ }, flush: 'sync' },
+    workspaceProject: { handler() { projectPalette.value = this.navigationByProject[this.workspaceProject]?.pluginTheme || null; resetRequestActivity(); this.inspectorSource = this.inspectorTarget = null; this.inspectorRequest++ }, flush: 'sync' },
     activityProgress(value) { setNotificationProgress(this.session ? value : '') },
     updatesError(value) { if (value) notify('error', value, '', 'server') },
     error(value) { if (value && this.session) notify('error', value, '', 'server') },
@@ -1521,7 +1521,6 @@ export default {
       catch (error) { this.fail(error) }
     },
     async loadNavigation() {
-      if (this.windowPage) return
       if (!this.session || !this.workspaceProject) return
       const project = this.workspaceProject, ticket = this.session.ticket
       const id = (this.navigationRequests[project] || 0) + 1
@@ -1530,7 +1529,9 @@ export default {
         const result = await projectNavigation(ticket, project)
         if (id !== this.navigationRequests[project] || ticket !== this.session?.ticket) return
         this.navigationByProject[project] = result
+        if (project === this.workspaceProject) projectPalette.value = result.pluginTheme || null
         this.navigationErrors[project] = ''
+        if (this.windowPage) return
         const links = []
         const collect = entries => { for (const entry of entries) { links.push(entry); collect(entry.children || []) } }
         collect(navigationEntries(result.entries, this.types))

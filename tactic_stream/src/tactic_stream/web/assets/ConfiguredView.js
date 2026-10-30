@@ -1,7 +1,7 @@
 const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ObjectCheckin.js","assets/vue.js","assets/AppButton.js","assets/locales.js","assets/icons.js","assets/AppButton.css","assets/index.js","assets/index.css","assets/resize.js","assets/resize.css","assets/sections.ui.js","assets/file_values.js","assets/files.js","assets/confirmation.ui.js","assets/AppDialog.js","assets/toggle.ui.js","assets/ObjectCheckin.css","assets/IngestFiles.js","assets/VirtualCollection.js","assets/VirtualCollection.css","assets/IngestFiles.css","assets/DuplicateSObject.js","assets/ObjectFieldFrame.js","assets/ObjectFieldFrame.css","assets/ContentLoadingOverlay.js","assets/ContentLoadingOverlay.css","assets/DuplicateSObject.css","assets/TableViewsManager.js","assets/TableViewsManager.css","assets/SnapshotCheckout.js","assets/files2.js","assets/FrameProgress.js","assets/FrameProgress.css","assets/SnapshotCheckout.css"])))=>i.map(i=>d[i]);
 import { n as arrange, r as __exportAll } from "./ObjectFieldFrame.js";
 import { $ as toRaw, A as onMounted, C as inject, E as nextTick, F as resolveComponent, G as withCtx, H as watch, I as resolveDirective, J as markRaw, K as withDirectives, L as resolveDynamicComponent, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, S as h, T as mergeProps, V as useSlots, X as ref, Y as reactive, _ as createElementBlock, b as createVNode, c as withKeys, d as KeepAlive, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, o as vModelText, p as computed, q as isRef, rt as toDisplayString, s as vShow, t as Transition, tt as normalizeClass, u as Fragment, v as createSlots, y as createTextVNode, z as useId } from "./vue.js";
-import { E as textStyles, I as BusyIndicator_default, L as _plugin_vue_export_helper_default, a as _sfc_main$72, g as controls$1, k as preferences, o as t, p as readableText, s as appearance, t as _sfc_main$71, u as frameColors, v as cssRoles, w as metrics$3, x as fontMetricHeight, y as fontFamily } from "./AppButton.js";
+import { A as preferences, D as textStyles, L as BusyIndicator_default, R as _plugin_vue_export_helper_default, S as fontMetricHeight, T as metrics$3, _ as controls$1, a as _sfc_main$72, b as fontFamily, m as readableText, o as t, s as appearance, t as _sfc_main$71, u as frameColors, y as cssRoles } from "./AppButton.js";
 import { Ft as asyncComponent, G as transactionDetails, H as tableDependencies, K as uploadFormFile, N as searchConfiguration, O as resultItems, Ot as logRequest, U as tableDependencyFile, V as tableCells, W as tableParentGroup, Y as widgetConfiguration, _ as navigationLink, _t as mobile, a as __vitePreload, b as objectStatus, bt as debugLog, c as beginActivity, ct as notify, f as interfaceDefinition, ft as serverClock, h as messageFileRequest, k as rpc, m as linkPreviews, o as fileBlob, pt as serverTimestamp, u as endActivity, v as objectDeletion, y as objectRelations } from "./index.js";
 import { B as node, C as ItemPreview_default, D as _sfc_main$83, E as _sfc_main$81, F as _sfc_main$78, H as revealListOffset, L as button, N as _sfc_main$82, O as _sfc_main$75, P as _sfc_main$79, R as label, T as _sfc_main$74, U as virtualRange, V as rect, _ as readClipboardImages, a as _sfc_main$76, b as _sfc_main$80, f as javascriptTokens, g as copyText, h as copyImage, i as _sfc_main$77, m as xmlTokens, n as observeFrameSizes, o as _sfc_main$84, p as pythonTokens, r as _sfc_main$73, s as _sfc_main$85, t as frameContentWidth, v as translate, w as AppSearchField_default, z as muted } from "./resize.js";
 import { n as qtLabelTextWidth, t as layoutTextWidth } from "./textMetrics.js";
@@ -2837,6 +2837,647 @@ function field$1(item, id, width) {
 	};
 }
 //#endregion
+//#region ../src/tactic_stream/shared_ui/features/administration/layouts/layout.document.mjs
+var widgets = [
+	"group",
+	"view",
+	"text",
+	"field",
+	"title",
+	"description",
+	"image",
+	"link",
+	"button",
+	"metadata",
+	"snapshot-details",
+	"snapshot-size",
+	"snapshot-summary",
+	"branch-summary",
+	"file-offline",
+	"item-menu",
+	"knowledge",
+	"quick-actions",
+	"relations"
+];
+var roles = {
+	"": "None",
+	preview: "Preview",
+	copy: "Object information",
+	"title-line": "Heading",
+	"title-actions": "Snapshot actions",
+	description: "Description",
+	metadata: "Metadata",
+	actions: "Actions",
+	"hover-actions": "Actions on hover",
+	communication: "Tasks and notes",
+	"task-button": "Tasks",
+	"note-button": "Notes",
+	"mobile-actions": "Mobile actions",
+	"file-offline": "File Offline"
+};
+var actions = [
+	"inspect",
+	"operate",
+	"preview",
+	"tasks",
+	"notes",
+	"upload",
+	"create",
+	"link",
+	"relations"
+];
+var variants = [
+	"all",
+	"main",
+	"children",
+	"process",
+	"relation",
+	"versions",
+	"snapshot",
+	"file"
+];
+var children$1 = (node) => (node.children || []).filter((child) => child.type === 1);
+var get = (node, key) => {
+	const pair = (node.attributes || []).find((pair) => pair[0] === key);
+	return pair ? pair[1] : "";
+};
+function set(node, key, value) {
+	const index = (node.attributes || []).findIndex((pair) => pair[0] === key);
+	if (value === "") {
+		if (index >= 0) node.attributes.splice(index, 1);
+	} else if (index >= 0) node.attributes[index][1] = String(value);
+	else (node.attributes || (node.attributes = [])).push([key, String(value)]);
+}
+var element = (name, attributes, content) => ({
+	type: 1,
+	name,
+	attributes: attributes || [],
+	children: content || []
+});
+function root(tree) {
+	const node = tree.type === 9 ? children$1(tree)[0] : tree;
+	if (!node || node.name !== "config") throw Error("Invalid configuration XML");
+	return node;
+}
+function viewOf(tree, view) {
+	return children$1(root(tree)).find((node) => node.name === view || node.name === "view" && get(node, "name") === view);
+}
+function content(node) {
+	return [3, 4].indexOf(node.type) >= 0 ? node.text || "" : (node.children || []).map(content).join("");
+}
+function describe$16(tree, view) {
+	const node = viewOf(tree, view);
+	if (!node || get(node, "layout") !== "sobject-layout") throw Error("Select a SObject layout configuration");
+	const elements = children$1(node).filter((child) => child.name === "element").map((item) => {
+		const display = children$1(item).find((child) => child.name === "display"), options = {};
+		for (const option of display ? children$1(display) : []) options[option.name] = content(option);
+		const result = {
+			name: get(item, "name"),
+			title: get(item, "title") || get(item, "name"),
+			kind: display ? get(display, "class") || get(display, "widget") : "",
+			options,
+			parent: get(item, "parent"),
+			variant: get(item, "variant") || "all",
+			search_type: get(item, "search_type"),
+			role: get(item, "role"),
+			tag: get(item, "tag") || "div",
+			flow: get(item, "flow") || "grid",
+			when: get(item, "when").split(" ").filter(Boolean),
+			layer: Number(get(item, "layer") || 0),
+			hidden: [
+				"true",
+				"1",
+				"yes",
+				"on"
+			].indexOf(get(item, "hidden")) >= 0,
+			align: get(item, "align") || "stretch",
+			tone: get(item, "tone") || "normal"
+		};
+		for (const key of [
+			"row",
+			"column",
+			"span",
+			"rows",
+			"columns",
+			"height"
+		]) result[key] = Number(get(item, key) || {
+			span: 12,
+			columns: 12,
+			height: 40
+		}[key] || 1);
+		for (const key of ["padding", "margin"]) {
+			const value = get(item, key);
+			if (value) result[key] = value.split(/\s+/).map(Number);
+		}
+		if (get(item, "gap") !== "") result.gap = Number(get(item, "gap"));
+		return result;
+	});
+	const result = {
+		collection: get(node, "collection") || "grid",
+		flow: get(node, "flow") || "grid",
+		columns: Number(get(node, "columns") || 12),
+		tracks: get(node, "tracks"),
+		gap: get(node, "gap") === "" ? 6 : Number(get(node, "gap")),
+		card_width: Number(get(node, "card_width") || 280),
+		elements
+	};
+	if (get(node, "navigation")) result.navigation = JSON.parse(get(node, "navigation"));
+	return result;
+}
+function serialize(node, pretty = false) {
+	if (pretty) {
+		const whitespace = (item) => item.type === 3 && !String(item.text || "").trim();
+		function format(item, depth) {
+			if (item.type === 9) return (item.children || []).filter((child) => !whitespace(child)).map((child) => format(child, 0)).join("\n");
+			if (item.type !== 1) return serialize(item);
+			const children = item.children || [];
+			if ((item.attributes || []).some(([name, value]) => name === "xml:space" && value === "preserve") || children.some((child) => child.type === 4 || child.type === 3 && !whitespace(child))) return serialize(item);
+			const nested = children.filter((child) => !whitespace(child));
+			if (!nested.length) return serialize(item);
+			return serialize(Object.assign({}, item, { children: [] })).slice(0, -2) + ">\n" + nested.map((child) => "  ".repeat(depth + 1) + format(child, depth + 1)).join("\n") + "\n" + "  ".repeat(depth) + "</" + item.name + ">";
+		}
+		return format(node, 0);
+	}
+	const escape = (value, attr) => String(value).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, attr ? "&quot;" : "\"").replace(/\r/g, attr ? "&#13;" : "\r").replace(/\n/g, attr ? "&#10;" : "\n").replace(/\t/g, attr ? "&#9;" : "	");
+	if (node.type === 9) return (node.children || []).map((child) => serialize(child)).join("");
+	if (node.type === 3) return escape(node.text || "", false);
+	if (node.type === 4) return "<![CDATA[" + (node.text || "") + "]]>";
+	if (node.type === 8) return "<!--" + (node.text || "") + "-->";
+	if (node.type === 7) return "<?" + node.name + (node.text ? " " + node.text : "") + "?>";
+	if (node.type !== 1) throw Error("Unsupported XML node");
+	const attributes = (node.attributes || []).map((pair) => " " + pair[0] + "=\"" + escape(pair[1], true) + "\"").join(""), body = (node.children || []).map((child) => serialize(child)).join("");
+	return "<" + node.name + attributes + (node.children && node.children.length ? ">" + body + "</" + node.name + ">" : "/>");
+}
+function template(tree, view) {
+	if (!/^[A-Za-z_][\w.@-]{0,127}$/.test(view)) throw Error("Invalid view name");
+	const next = JSON.parse(JSON.stringify(tree)), original = children$1(root(next))[0];
+	if (!original) throw Error("Invalid layout template");
+	original.name = view.indexOf("@") >= 0 ? "view" : view;
+	if (view.indexOf("@") >= 0) set(original, "name", view);
+	return next;
+}
+function edit$1(tree, view, name, field, value) {
+	const next = JSON.parse(JSON.stringify(tree)), root = viewOf(next, view);
+	if (!root) throw Error("Configuration does not contain its view");
+	let item = name ? children$1(root).find((node) => node.name === "element" && get(node, "name") === name) : root;
+	if (field.startsWith("valueColor:")) {
+		const display = children$1(item).find((node) => node.name === "display"), option = display && children$1(display).find((node) => node.name === "colors"), colors = option ? JSON.parse(content(option)) : {}, key = field.slice(11);
+		if ([
+			"__proto__",
+			"constructor",
+			"prototype"
+		].includes(key)) throw Error("Invalid field value colors");
+		if (value) colors[key] = value;
+		else delete colors[key];
+		field = "option:colors";
+		value = Object.keys(colors).length ? JSON.stringify(colors) : "";
+	}
+	if (field === "add") {
+		if (widgets.indexOf(value) < 0) throw Error("Unsupported layout widget");
+		const names = children$1(root).map((node) => get(node, "name"));
+		let index = 1;
+		while (names.indexOf("item_" + index) >= 0) index++;
+		const last = children$1(root).reduce((max, node) => Math.max(max, Number(get(node, "row") || 1) + Number(get(node, "rows") || 1) - 1), 0);
+		item = element("element", [
+			["name", "item_" + index],
+			["title", value],
+			["row", String(last + 1)],
+			["span", get(root, "columns") || "12"]
+		], [element("display", [["class", value]])]);
+		root.children.push(item);
+	} else if (!item) throw Error("Layout element no longer exists");
+	else if (field === "order") {
+		const siblings = children$1(root).filter((node) => node.name === "element" && get(node, "parent") === get(item, "parent")), offset = Number(value), target = siblings[siblings.indexOf(item) + offset];
+		if (target && [-1, 1].indexOf(offset) >= 0) {
+			root.children.splice(root.children.indexOf(item), 1);
+			root.children.splice(root.children.indexOf(target) + (offset > 0 ? 1 : 0), 0, item);
+		}
+	} else if (field === "remove") {
+		const names = [name];
+		for (let depth = 0; depth < 8; depth++) for (const child of children$1(root)) if (names.indexOf(get(child, "parent")) >= 0 && names.indexOf(get(child, "name")) < 0) names.push(get(child, "name"));
+		root.children = root.children.filter((child) => child.type !== 1 || names.indexOf(get(child, "name")) < 0);
+	} else if (field.indexOf("option:") === 0 || field === "kind") {
+		let display = children$1(item).find((node) => node.name === "display");
+		if (!display) {
+			display = element("display");
+			item.children.push(display);
+		}
+		if (field === "kind") {
+			set(display, "widget", "");
+			set(display, "class", value);
+		} else {
+			const key = field.slice(7);
+			if (!/^[A-Za-z_][\w.-]*$/.test(key)) throw Error("Invalid widget option");
+			let option = children$1(display).find((node) => node.name === key);
+			if (!value) {
+				if (option) display.children.splice(display.children.indexOf(option), 1);
+			} else {
+				if (!option) {
+					option = element(key);
+					display.children.push(option);
+				}
+				option.children = [{
+					type: 3,
+					text: String(value)
+				}];
+			}
+		}
+	} else {
+		if (!/^[A-Za-z_][\w.-]*$/.test(field)) throw Error("Invalid layout attribute");
+		set(item, field, value);
+	}
+	return next;
+}
+function binding(binding, node) {
+	if (!/^(record|node)\.[A-Za-z_]\w*(\.[A-Za-z_]\w*){0,4}$/.test(binding || "")) return "";
+	const parts = binding.split(".");
+	let value = parts.shift() === "record" ? node.record : node;
+	for (const part of parts) {
+		if ([
+			"__proto__",
+			"prototype",
+			"constructor"
+		].indexOf(part) >= 0 || value == null || !Object.prototype.hasOwnProperty.call(value, part)) return "";
+		value = value[part];
+	}
+	return value === void 0 || value === null ? "" : value;
+}
+//#endregion
+//#region ../src/tactic_stream/shared_ui/features/administration/layouts/layout.preview.mjs
+function fieldModel(item, sample) {
+	const options = item.options || {}, value = options.bind ? binding(options.bind, sample) : "", colors = options.colors ? JSON.parse(options.colors) : {}, color = Object.prototype.hasOwnProperty.call(colors, String(value)) ? colors[String(value)] : options.color || (["badge", "progress"].includes(options.format) ? "contentAccent" : "primaryText");
+	return {
+		value,
+		text: options.text || "",
+		format: options.format || "plain",
+		suffix: options.format === "progress" ? "%" : "",
+		textColor: color,
+		progressColor: color
+	};
+}
+var number = (value, fallback, min, max) => Number.isFinite(Number(value)) ? Math.max(min, Math.min(max, Number(value))) : fallback;
+function variant(sample) {
+	return sample.kind === "branch" ? (sample.branch || {}).kind || "versions" : sample.kind === "object" ? sample.depth ? "children" : "main" : sample.kind;
+}
+function actionAvailable(action, sample) {
+	if (["tasks", "notes"].includes(action)) return sample.kind === "object" || sample.branch?.kind === "process";
+	if (["create", "link"].includes(action)) return sample.branch?.kind === "relation" && (action !== "link" || sample.branch.relationship === "instance");
+	if (action === "relations") return sample.kind === "object";
+	if (["inspect", "preview"].includes(action)) return sample.kind !== "branch";
+	return [
+		"operate",
+		"upload",
+		"quickaction"
+	].includes(action);
+}
+function visible(item, sample, layout, width) {
+	const branch = sample.branch || {}, snapshot = sample.snapshot_display || {}, conditions = {
+		desktop: width >= 700,
+		mobile: width < 700,
+		tree: layout.collection === "tree",
+		"not-tree": layout.collection !== "tree",
+		object: sample.kind === "object",
+		"object-or-process": sample.kind === "object" || branch.kind === "process",
+		"not-branch": sample.kind !== "branch",
+		description: sample.kind !== "branch" && sample.kind !== "snapshot" && !!(sample.subtitle || (sample.record || {}).description),
+		snapshot: sample.kind === "snapshot",
+		branch: sample.kind === "branch",
+		relation: branch.kind === "relation",
+		"mobile-upload": sample.kind === "object" || branch.kind === "process"
+	};
+	return !item.hidden && (!item.search_type || sample.kind !== "branch" && item.search_type === String((sample.record || {}).__search_key__ || sample.search_type || "").split("?")[0]) && (item.variant === "all" || item.variant === variant(sample)) && (item.when || []).every((key) => conditions[key]) && (item.kind !== "knowledge" || (sample.knowledge || []).length > 0) && (item.kind !== "snapshot-size" || snapshot.size !== void 0) && (item.kind !== "file-offline" || !snapshot.exists);
+}
+function tracks(value, count, width) {
+	const tokens = String(value || "").trim().split(/\s+/).filter(Boolean), sizes = [], weights = [];
+	let fixed = 0, weight = 0;
+	for (let index = 0; index < count; index++) {
+		const token = tokens.length === count ? tokens[index] : "1fr", pixels = /^\d+px$/.test(token) ? Number(token.slice(0, -2)) : 0, flex = /^\d+fr$/.test(token) ? Number(token.slice(0, -2)) : token === "auto" ? 1 : 0;
+		sizes.push(pixels);
+		weights.push(flex);
+		fixed += pixels;
+		weight += flex;
+	}
+	const scale = fixed > width ? width / fixed : 1;
+	return sizes.map((value, index) => value ? value * scale : Math.max(0, width - fixed) * weights[index] / Math.max(1, weight));
+}
+function supports(layout, sample, width) {
+	return !!layout && (layout.elements || []).some((item) => !item.parent && visible(item, sample, layout, width));
+}
+function safeImage(value, base, local) {
+	const text = String(value || "");
+	if (local && /^file:/i.test(text) && !/[\u0000-\u001f\u007f\\]/.test(text)) return text.replace(/ /g, "%20");
+	if (!text || /[\u0000-\u0020\u007f\\]/.test(text) || text.indexOf("//") === 0) return "";
+	if (text.charAt(0) === "/") return (base || "") + text;
+	return /^(https?:|blob:|data:image\/(?:png|jpeg|webp|gif);base64,)/i.test(text) || local && /^file:/i.test(text) ? text : "";
+}
+function describe$15(layout, sample, width, selected, language, screenWidth, assetBase, prefix, depth, editing = true) {
+	const tr = (text) => translate(text, language), nodes = [], namePrefix = prefix || "layoutPreview", level = depth || 0;
+	if (level >= 8) return {
+		nodes: [label(namePrefix + "Depth", rect(0, 0, width, 64), tr("Layout container depth exceeds 8"), {
+			wrap: true,
+			color: "error"
+		})],
+		height: 72
+	};
+	const elements = (layout.elements || []).filter((item) => visible(item, sample, layout, screenWidth || width)), snapshot = sample.snapshot_display || {}, record = sample.record || {}, title = sample.title || record.name || record.title || record.code || String(record.id || ""), subtitle = sample.subtitle || record.description || "";
+	function draw(item, box, inner) {
+		const id = namePrefix + "_" + item.name, children = [], options = item.options || {}, value = options.bind ? binding(options.bind, sample) : options.text || "", text = typeof value === "object" ? JSON.stringify(value) : String(value), color = item.tone === "muted" ? "secondaryText" : "primaryText", weight = item.tone === "strong" || item.kind === "title" ? 600 : 400;
+		if (item.kind === "group") children.push(node("Box", id + "Group", rect(4, 4, Math.max(0, box.width - 8), Math.max(0, box.height - 8)), {
+			background: options.fill || "transparent",
+			border: options.stroke,
+			radius: Number(options.radius || 0),
+			children: inner ? inner.nodes : []
+		}));
+		else if (item.kind === "view") {
+			if (inner) {
+				const owned = (nodes) => nodes.map((row) => Object.assign({}, row, {
+					action: row.action && row.action.type === "select" ? {
+						type: "select",
+						name: item.name
+					} : row.action,
+					children: owned(row.children || [])
+				}));
+				children.push(node("Box", id + "View", rect(4, 4, box.width - 8, box.height - 8), { children: owned(inner.nodes) }));
+			} else children.push(label(id + "ViewHelp", rect(4, 4, box.width - 8, box.height - 8), tr("Reusable view") + ": " + (options.view || "") + " · " + tr("Check and preview"), {
+				wrap: true,
+				color: "secondaryText"
+			}));
+		} else if (item.kind === "image") {
+			const initials = title.split(/\s+/).map((part) => part.charAt(0)).slice(0, 2).join("").toUpperCase() || "?";
+			children.push(node("Preview", id + "Image", rect(4, 4, Math.max(0, box.width - 8), Math.max(0, Math.min(box.height, item.height || box.height) - 8)), {
+				source: safeImage(value, assetBase, options.bind === "node.preview.image" && sample.preview && sample.preview.local === true),
+				initials,
+				icon: "image",
+				round: item.role === "preview",
+				outlined: false,
+				fit: options.fit || "cover"
+			}));
+		} else if (item.kind === "field") {
+			const rendered = field$1(fieldModel(item, sample), id + "Value", Math.max(0, box.width - 12));
+			for (const child of rendered.children) {
+				child.x += 6;
+				child.y += 4;
+				children.push(child);
+			}
+		} else if (item.kind === "button") {
+			const badge = options.badge ? Number(binding(options.badge, sample)) : 0, caption = text || (item.kind === "button" ? tr({
+				tasks: "Tasks",
+				notes: "Notes",
+				inspect: "Object details",
+				operate: "Object actions",
+				upload: "Add files",
+				create: "Create related object",
+				preview: "File preview",
+				relations: "Relationship actions",
+				link: "Link"
+			}[options.action] || "Button") : options.href || tr("Link"));
+			const iconOnly = !!options.icon && !options.text && !options.bind;
+			const fullCaption = caption + (Number.isFinite(badge) && badge > 0 ? " · " + badge : ""), icon = options.icon || {
+				tasks: "task",
+				notes: "notes",
+				upload: "upload",
+				inspect: "search",
+				relations: "link"
+			}[options.action] || "", counted = !iconOnly && !!icon && !!options.badge && box.width - 8 < buttonWidth(fullCaption.length * 7, true);
+			const buttonHeight = Math.max(0, Math.min(38, box.height - 8)), buttonWidth$1 = Math.max(0, Math.min(box.width - 8, iconOnly ? buttonHeight : box.width));
+			children.push(node("Button", id + "Button", rect(4, 4, buttonWidth$1, iconOnly ? buttonWidth$1 : buttonHeight), {
+				iconOnly,
+				iconAction: iconOnly,
+				round: iconOnly,
+				iconColor: badge > 0 ? "contentAccent" : "secondaryText",
+				badgeColor: "contentAccent",
+				badgeCount: iconOnly && Number.isFinite(badge) ? Math.max(0, badge) : 0,
+				text: counted ? String(Number.isFinite(badge) ? Math.max(0, badge) : 0) : fullCaption,
+				label: fullCaption,
+				toolTip: fullCaption,
+				enabled: !editing && (!!(options.href_bind ? binding(options.href_bind, sample) : options.href) || actionAvailable(options.action, sample)),
+				action: {
+					type: "itemAction",
+					action: options.action || "link",
+					urlOnly: !options.action,
+					href: options.href_bind ? binding(options.href_bind, sample) : options.href
+				},
+				icon
+			}));
+		} else if (item.kind === "item-menu") children.push(node("Button", id + "Menu", rect(Math.max(0, box.width - 38), 0, Math.min(38, box.width), 38), {
+			text: tr("Item actions"),
+			icon: "more-vert",
+			iconOnly: true,
+			enabled: !editing,
+			action: {
+				type: "itemAction",
+				action: "operate"
+			}
+		}));
+		else if (item.kind === "quick-actions" || item.kind === "relations") {
+			const icons = item.kind === "relations" ? ["link", "add"] : ["save", "folder-open"], size = Math.min(32, box.width / icons.length);
+			icons.forEach((icon, index) => children.push(node("Button", id + "Action_" + index, rect(index * size, 0, size, 32), {
+				text: tr(item.kind === "relations" ? "Relationship actions" : "Snapshot actions"),
+				icon,
+				iconOnly: true,
+				enabled: !editing,
+				action: {
+					type: "itemAction",
+					action: item.kind === "relations" ? index ? "create" : "link" : "quickaction",
+					command: index ? "open" : "save"
+				}
+			})));
+		} else {
+			let content = text;
+			if (item.kind === "link") content = text || item.title || options.href || "";
+			else if (item.kind === "title") content = text || title;
+			else if (item.kind === "description") content = text || subtitle;
+			else if (item.kind === "metadata") content = [
+				sample.search_type_label || record.search_type || "",
+				record.category || "",
+				record.process || ""
+			].filter(Boolean).join(" · ");
+			else if (item.kind === "snapshot-details") content = [
+				snapshot.version === void 0 ? "" : "v" + snapshot.version,
+				snapshot.author || "",
+				snapshot.context || ""
+			].filter(Boolean).join(" · ");
+			else if (item.kind === "snapshot-size") {
+				const bytes = Number(snapshot.size) || 0, unit = bytes >= 1073741824 ? "GB" : bytes >= 1048576 ? "MB" : bytes >= 1024 ? "KB" : "B";
+				content = (bytes / {
+					GB: 1073741824,
+					MB: 1048576,
+					KB: 1024,
+					B: 1
+				}[unit]).toFixed(unit === "B" ? 0 : 1) + " " + unit;
+			} else if (item.kind === "snapshot-summary") content = [
+				snapshot.title || "",
+				snapshot.description || "",
+				snapshot.author || ""
+			].filter(Boolean).join(" · ");
+			else if (item.kind === "branch-summary") content = [(sample.branch || {}).title || "", String((sample.branch || {}).count || 0)].join(" · ");
+			else if (item.kind === "file-offline") content = tr("File Offline");
+			else if (item.kind === "knowledge") content = (sample.knowledge || []).map((row) => row.title || row.name || row.code || "").join(" · ");
+			const maxLines = Math.max(1, Math.floor((box.height - 8) / (item.kind === "title" ? 20 : 17)));
+			children.push(label(id + "Text", rect(6, 4, Math.max(0, box.width - 12), Math.max(0, box.height - 8)), content, {
+				wrap: maxLines > 1,
+				maxLines,
+				color: options.color || color,
+				weight,
+				fontRole: item.kind === "title" ? "section" : "body",
+				align: item.align === "center" ? "center" : item.align === "end" ? "right" : "left"
+			}));
+		}
+		const padding = item.padding || [
+			0,
+			0,
+			0,
+			0
+		];
+		if (padding.some(Boolean)) for (const child of children) {
+			child.x += padding[3];
+			child.y += padding[0];
+			child.width = Math.max(0, child.width - padding[1] - padding[3]);
+			child.height = Math.max(0, child.height - padding[0] - padding[2]);
+		}
+		if (!editing && item.kind === "link") return node("Action", id, box, {
+			layoutElement: item.name,
+			layer: item.layer || 0,
+			text: text || item.title,
+			normalColor: "transparent",
+			children,
+			action: {
+				type: "itemAction",
+				action: "link",
+				urlOnly: true,
+				href: options.href_bind ? binding(options.href_bind, sample) : options.href
+			}
+		});
+		if (!editing) return node("Box", id, box, {
+			layoutElement: item.name,
+			layer: item.layer || 0,
+			children
+		});
+		if (item.kind === "group" || item.kind === "view" && inner) return node("Box", id, box, {
+			layoutElement: item.name,
+			layer: item.layer || 0,
+			background: "transparent",
+			border: selected === item.name ? "contentAccent" : void 0,
+			radius: 2,
+			children: [node("Action", id + "Select", rect(0, 0, box.width, box.height), {
+				text: item.title || item.name,
+				normalColor: "transparent",
+				selectedColor: "transparent",
+				action: {
+					type: "select",
+					name: item.name
+				}
+			})].concat(children)
+		});
+		return node("Action", id, box, {
+			layoutElement: item.name,
+			layer: item.layer || 0,
+			radius: 2,
+			text: item.title || item.name,
+			selected: selected === item.name,
+			normalColor: "transparent",
+			selectedColor: "contentSelection",
+			children,
+			action: {
+				type: "select",
+				name: item.name
+			}
+		});
+	}
+	function container(parent, w, nesting) {
+		if (nesting >= 8) return {
+			nodes: [],
+			height: 40
+		};
+		const definition = elements.find((item) => item.name === parent), items = elements.filter((item) => item.parent === parent), flow = definition ? definition.flow : layout.flow, columns = number(definition ? definition.columns : layout.columns, 12, 1, 12), result = [], placements = [];
+		if (flow === "contents") {
+			const copyX = items.some((item) => item.role === "preview") ? Math.min(96, w * .28) : 8;
+			let cursor = 8;
+			for (const item of items) {
+				let box, child = item.kind === "group" && item.role !== "copy" ? container(item.name, Math.max(1, w - 16), nesting + 1) : item.kind === "view" && item.widget_layout ? describe$15(item.widget_layout, sample, Math.max(1, w - 16), selected, language, screenWidth, assetBase, namePrefix + "_" + item.name, nesting + 1, editing) : null;
+				if (item.role === "preview") box = rect(8, 8, Math.min(76, w * .24), 76);
+				else if (item.role === "copy") {
+					child = container(item.name, Math.max(1, w - copyX - 16), nesting + 1);
+					box = rect(copyX, 8, Math.max(1, w - copyX - 8), child.height + 8);
+					cursor = Math.max(cursor, box.height + 16);
+				} else {
+					const h = child ? child.height + 8 : item.kind === "field" ? field$1(fieldModel(item, sample), "measure", w - 16).height + 8 : item.role === "title-line" ? 36 : item.kind === "image" ? number(item.height, 76, 24, 1200) : item.kind === "description" ? 44 : 38;
+					box = rect(8, cursor, w - 16, h);
+					cursor += h + 4;
+				}
+				placements.push({
+					item,
+					box,
+					child
+				});
+				cursor = Math.max(cursor, box.y + box.height + 8);
+			}
+			placements.sort((a, b) => (a.item.layer || 0) - (b.item.layer || 0)).forEach((row) => result.push(draw(row.item, row.box, row.child)));
+			return {
+				nodes: result,
+				height: Math.max(92, cursor)
+			};
+		}
+		const gap = (definition ? definition.gap : layout.gap) ?? 6, available = Math.max(1, w - gap * (columns - 1)), sizes = tracks(definition ? "" : layout.tracks, columns, available), rows = [];
+		for (const item of items) {
+			const start = number(item.row, 1, 1, 100) - 1, span = number(item.rows, 1, 1, 100), column = number(item.column, 1, 1, columns) - 1, columnsWide = number(item.span, 1, 1, columns - column), cellWidth = sizes.slice(column, column + columnsWide).reduce((a, b) => a + b, 0) + gap * (columnsWide - 1), child = item.kind === "group" ? container(item.name, Math.max(1, cellWidth - 8 - (item.margin?.[1] || 0) - (item.margin?.[3] || 0) - (item.padding?.[1] || 0) - (item.padding?.[3] || 0)), nesting + 1) : item.kind === "view" && item.widget_layout ? describe$15(item.widget_layout, sample, Math.max(1, cellWidth - 8 - (item.margin?.[1] || 0) - (item.margin?.[3] || 0) - (item.padding?.[1] || 0) - (item.padding?.[3] || 0)), selected, language, screenWidth, assetBase, namePrefix + "_" + item.name, nesting + 1, editing) : null, h = Math.max(child ? child.height + 8 : item.kind === "field" ? field$1(fieldModel(item, sample), "measure", cellWidth).height + 8 : item.kind === "button" ? Math.max(40, number(item.height, 40, 1, 1200)) : number(item.height, 40, 1, 1200), number(item.height, 40, 1, 1200)) + (item.padding?.[0] || 0) + (item.padding?.[2] || 0) + (item.margin?.[0] || 0) + (item.margin?.[2] || 0);
+			for (let index = start; index < start + span; index++) rows[index] = Math.max(rows[index] || 0, (h - gap * (span - 1)) / span);
+			placements.push({
+				item,
+				start,
+				span,
+				column,
+				columnsWide,
+				cellWidth,
+				child
+			});
+		}
+		const sum = (values, start, end) => {
+			let total = 0;
+			for (let index = start; index < end; index++) total += values[index] || 40;
+			return total;
+		};
+		placements.sort((a, b) => (a.item.layer || 0) - (b.item.layer || 0)).forEach((row) => {
+			const x = sizes.slice(0, row.column).reduce((a, b) => a + b, 0) + gap * row.column, y = sum(rows, 0, row.start) + gap * row.start, h = sum(rows, row.start, row.start + row.span) + gap * (row.span - 1);
+			const availableHeight = Math.max(0, h - (row.item.margin?.[0] || 0) - (row.item.margin?.[2] || 0));
+			const intrinsic = (row.child ? Math.max(row.child.height + 8, row.item.height || 40) : row.item.height || 40) + (row.item.padding?.[0] || 0) + (row.item.padding?.[2] || 0);
+			const placedHeight = row.item.align && row.item.align !== "stretch" ? Math.min(availableHeight, intrinsic) : availableHeight;
+			const offset = row.item.align === "center" ? (availableHeight - placedHeight) / 2 : row.item.align === "end" ? availableHeight - placedHeight : 0;
+			const drawn = draw(row.item, rect(x + (row.item.margin?.[3] || 0), y + (row.item.margin?.[0] || 0) + offset, Math.max(0, row.cellWidth - (row.item.margin?.[1] || 0) - (row.item.margin?.[3] || 0)), placedHeight), row.child);
+			if (editing) drawn.canvasGrid = {
+				columns: sizes.map((_, index) => sizes.slice(0, index).reduce((a, b) => a + b, 0) + gap * index),
+				ends: sizes.map((_, index) => sizes.slice(0, index + 1).reduce((a, b) => a + b, 0) + gap * index),
+				rows: Array.from({ length: rows.length }, (_, index) => sum(rows, 0, index) + gap * index)
+			};
+			result.push(drawn);
+		});
+		return {
+			nodes: result,
+			height: rows.length ? sum(rows, 0, rows.length) + gap * (rows.length - 1) : 64
+		};
+	}
+	let body;
+	if (layout.collection === "table") {
+		const items = elements.filter((item) => !item.parent), total = items.reduce((sum, item) => sum + number(item.span, 1, 1, 12), 0) || 1;
+		let x = 0;
+		body = {
+			nodes: [],
+			height: 160
+		};
+		for (const item of items) {
+			const w = width * number(item.span, 1, 1, 12) / total, child = item.kind === "group" ? container(item.name, Math.max(1, w - 8), level + 1) : item.kind === "view" && item.widget_layout ? describe$15(item.widget_layout, sample, Math.max(1, w - 8), selected, language, screenWidth, assetBase, namePrefix + "_" + item.name, level + 1, editing) : null;
+			body.height = Math.max(body.height, (child ? child.height : 108) + 52);
+			body.nodes.push(label(namePrefix + "Header_" + item.name, rect(x, 0, w, 38), item.title || item.name, { weight: 600 }), draw(item, rect(x, 44, w, Math.max(108, child ? child.height : 0)), child));
+			x += w;
+		}
+	} else body = container("", width, level);
+	nodes.push.apply(nodes, body.nodes);
+	return {
+		nodes,
+		height: body.height
+	};
+}
+//#endregion
 //#region ../src/tactic_stream/shared_ui/controls/tabs/workspace.ui.mjs
 var dimensions$1 = {
 	railWidth: 48,
@@ -2976,7 +3617,7 @@ function plain(value) {
 		"#39": "'"
 	})[entity]);
 }
-function describe$16(cell, width, height, language, editable = true, server = "", measure = (text, size) => String(text).length * size) {
+function describe$14(cell, width, height, language, editable = true, server = "", measure = (text, size) => String(text).length * size) {
 	const tabOffset = cell.layoutTabs?.length ? 56 : 0;
 	const children = [], gap = 8;
 	let tableHeight = Math.max(320, height - tabOffset - 48);
@@ -3000,7 +3641,32 @@ function describe$16(cell, width, height, language, editable = true, server = ""
 			], outerTop = top, outerWidth = width$1(item, space, measure), x = originX + margin[3] + padding[3], available = Math.max(0, outerWidth - margin[1] - margin[3] - padding[1] - padding[3]), firstOutput = output.length, childGap = item.gap === void 0 ? 8 : item.gap, slotCapacity = slotHeight === null ? null : Math.max(0, slotHeight - margin[0] - margin[2] - padding[0] - padding[2]);
 			top += margin[0] + padding[0];
 			let extent = 0;
-			if (item.children) {
+			if (item.kind === "widget") {
+				const scene = describe$15(item.layout, item.sample, available, "", language, width, server, id, 0, !editable);
+				function actions(nodes) {
+					for (const child of nodes) {
+						if (child.action?.type === "itemAction") child.action = Object.assign({}, child.action, {
+							type: "record-action",
+							name: child.action.href ? "layout-link" : {
+								inspect: "details",
+								operate: "context_menu",
+								relations: "context_menu",
+								tasks: "task-details",
+								preview: "quickaction",
+								upload: "checkin"
+							}[child.action.action] || child.action.action,
+							targetSearchKey: item.sample.search_key,
+							record: item.sample.record,
+							relationMenu: child.action.action === "relations",
+							command: child.action.action === "preview" ? "open" : child.action.command
+						});
+						actions(child.children || []);
+					}
+				}
+				actions(scene.nodes);
+				output.push(node("Box", id, rect(x, top, available, scene.height), { children: scene.nodes }));
+				extent = scene.height;
+			} else if (item.children) {
 				const horizontal = item.kind === "row" && available >= (item.collapseWidth ?? 600);
 				if (item.kind === "grid") {
 					const cells = grid(item.children, available, item, childGap);
@@ -3518,7 +4184,7 @@ function hours(cell, width, height, language, editable = true) {
 }
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/table/connections.ui.mjs
-function describe$15(cell, width, height, language) {
+function describe$13(cell, width, height, language) {
 	if (!cell.connectionRows?.length) return { nodes: [label("tableConnectionsEmpty", rect(8, 0, Math.max(0, width - 16), height), translate("No connections", language), { color: "secondaryText" })] };
 	return { nodes: [node("List", "tableConnections", rect(0, 0, width, height), {
 		source: "connectionRows",
@@ -3773,7 +4439,7 @@ var popupMetrics = {
 	padding: 10,
 	minimumBody: 308
 };
-function describe$14(model, width, height, language) {
+function describe$12(model, width, height, language) {
 	const tr = (text) => translate(text, language);
 	if (model.confirmAction) return describe$24({
 		message: tr(model.uncertain ? "Discard this draft? Some changes may already have been saved." : "Discard this draft?"),
@@ -3930,7 +4596,7 @@ function group$1(model, width, language, editable, server) {
 }
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/table/publish.ui.mjs
-function describe$13(cell, width, height, language, editable, server) {
+function describe$11(cell, width, height, language, editable, server) {
 	const size = Math.min(60, Math.max(0, height - 38), Math.max(0, width - 8)), nodes = [];
 	if (cell.preview && size > 0) nodes.push(node("Preview", "publishPreview", rect((width - size) / 2, 2, size, size), {
 		source: link(cell.preview.image || "", server) || "",
@@ -3951,18 +4617,18 @@ function describe$13(cell, width, height, language, editable, server) {
 }
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/table/services.ui.mjs
-function describe$12(cell, width, height, language, editable = true, expanded = {}, server = "") {
-	if (cell.publish) return describe$13(cell, width, height, language, editable, server);
+function describe$10(cell, width, height, language, editable = true, expanded = {}, server = "") {
+	if (cell.publish) return describe$11(cell, width, height, language, editable, server);
 	if (cell.parentGrouping !== void 0) return cell$1(cell, width, height, language, editable);
 	if (cell.summary) return summary(cell, width, height, language);
-	if (cell.connectionRows) return describe$15(cell, width, height, language);
+	if (cell.connectionRows) return describe$13(cell, width, height, language);
 	if (cell.timeline) return timeline(cell, width, height, language, editable);
 	if (cell.timeDays) return hours(cell, width, height, language, editable);
 	if (cell.layoutNodes && (tables(cell.layoutNodes).length || cell.layoutLoad?.length)) return { nodes: [button("tableLayoutDocument", rect(4, 0, Math.max(0, width - 24), 36), translate("Open details", language), "description", {
 		type: "service",
 		name: "layout-document"
 	}, true, { outlined: true })] };
-	if (cell.layoutNodes) return describe$16(cell, width, height, language, editable, server);
+	if (cell.layoutNodes) return describe$14(cell, width, height, language, editable, server);
 	if (cell.groups && cell.steps) return describe$23(cell, width, height, language, expanded);
 	if (cell.links || cell.ingest) return describe$22(cell, width, height, language, editable);
 	if (cell.label && !cell.text) cell = Object.assign({}, cell, { text: translate(cell.label, language) });
@@ -4057,7 +4723,7 @@ var _sfc_main$60 = {
 				function connectionRow(_node, record) {
 					return row$6(record, props.cell, Math.max(0, _node.width - 16), appearance.language, props.editable, location.origin);
 				}
-				const scene = computed(() => describe$12(props.cell || {}, width.value, props.height, appearance.language, props.editable, {
+				const scene = computed(() => describe$10(props.cell || {}, width.value, props.height, appearance.language, props.editable, {
 					...expanded.value,
 					__nested: props.nestedState
 				}, location.origin));
@@ -4760,13 +5426,13 @@ function transition(ui, model, action) {
 	};
 	return { ui };
 }
-function describe$11(model, ui, width, height, language) {
+function describe$9(model, ui, width, height, language) {
 	const tr = (key) => translate(key, language);
 	if (width < 600 || height < 540) return { nodes: [node("Scroll", "tableViewsWindowScroll", rect(0, 0, width, height), {
 		contentWidth: Math.max(600, width - 16),
 		contentHeight: Math.max(540, height),
 		scrollbarId: "tableViewsWindowScrollBar",
-		children: describe$11(model, ui, Math.max(600, width - 16), Math.max(540, height), language).nodes
+		children: describe$9(model, ui, Math.max(600, width - 16), Math.max(540, height), language).nodes
 	})] };
 	const left = Math.min(320, width * .4), x = left + 24, inner = width - x - 16;
 	const selected = model.views.find((row) => row.view === ui.selected);
@@ -5891,7 +6557,7 @@ function rows(state) {
 }
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/table/dependencies.ui.mjs
-function describe$10(state, width, height, language) {
+function describe$8(state, width, height, language) {
 	const root = state.pages.root, tr = (text) => translate(text, language), identity = [
 		root.identity,
 		root.context,
@@ -6099,7 +6765,7 @@ var _sfc_main$56 = {
 		onBeforeUnmount(cancel);
 		return (_ctx, _cache) => {
 			return openBlock(), createBlock(_sfc_main$73, {
-				scene: describe$10(state.value, __props.width, __props.height, unref(appearance).language),
+				scene: describe$8(state.value, __props.width, __props.height, unref(appearance).language),
 				models: { dependencyRows: records.value },
 				"describe-row": (list, row) => row$2(row, Math.max(0, list.width - 16), unref(appearance).language),
 				onEvent: activate
@@ -8239,647 +8905,6 @@ var _sfc_main$45 = {
 		};
 	}
 };
-//#endregion
-//#region ../src/tactic_stream/shared_ui/features/administration/layouts/layout.document.mjs
-var widgets = [
-	"group",
-	"view",
-	"text",
-	"field",
-	"title",
-	"description",
-	"image",
-	"link",
-	"button",
-	"metadata",
-	"snapshot-details",
-	"snapshot-size",
-	"snapshot-summary",
-	"branch-summary",
-	"file-offline",
-	"item-menu",
-	"knowledge",
-	"quick-actions",
-	"relations"
-];
-var roles = {
-	"": "None",
-	preview: "Preview",
-	copy: "Object information",
-	"title-line": "Heading",
-	"title-actions": "Snapshot actions",
-	description: "Description",
-	metadata: "Metadata",
-	actions: "Actions",
-	"hover-actions": "Actions on hover",
-	communication: "Tasks and notes",
-	"task-button": "Tasks",
-	"note-button": "Notes",
-	"mobile-actions": "Mobile actions",
-	"file-offline": "File Offline"
-};
-var actions = [
-	"inspect",
-	"operate",
-	"preview",
-	"tasks",
-	"notes",
-	"upload",
-	"create",
-	"link",
-	"relations"
-];
-var variants = [
-	"all",
-	"main",
-	"children",
-	"process",
-	"relation",
-	"versions",
-	"snapshot",
-	"file"
-];
-var children$1 = (node) => (node.children || []).filter((child) => child.type === 1);
-var get = (node, key) => {
-	const pair = (node.attributes || []).find((pair) => pair[0] === key);
-	return pair ? pair[1] : "";
-};
-function set(node, key, value) {
-	const index = (node.attributes || []).findIndex((pair) => pair[0] === key);
-	if (value === "") {
-		if (index >= 0) node.attributes.splice(index, 1);
-	} else if (index >= 0) node.attributes[index][1] = String(value);
-	else (node.attributes || (node.attributes = [])).push([key, String(value)]);
-}
-var element = (name, attributes, content) => ({
-	type: 1,
-	name,
-	attributes: attributes || [],
-	children: content || []
-});
-function root(tree) {
-	const node = tree.type === 9 ? children$1(tree)[0] : tree;
-	if (!node || node.name !== "config") throw Error("Invalid configuration XML");
-	return node;
-}
-function viewOf(tree, view) {
-	return children$1(root(tree)).find((node) => node.name === view || node.name === "view" && get(node, "name") === view);
-}
-function content(node) {
-	return [3, 4].indexOf(node.type) >= 0 ? node.text || "" : (node.children || []).map(content).join("");
-}
-function describe$9(tree, view) {
-	const node = viewOf(tree, view);
-	if (!node || get(node, "layout") !== "sobject-layout") throw Error("Select a SObject layout configuration");
-	const elements = children$1(node).filter((child) => child.name === "element").map((item) => {
-		const display = children$1(item).find((child) => child.name === "display"), options = {};
-		for (const option of display ? children$1(display) : []) options[option.name] = content(option);
-		const result = {
-			name: get(item, "name"),
-			title: get(item, "title") || get(item, "name"),
-			kind: display ? get(display, "class") || get(display, "widget") : "",
-			options,
-			parent: get(item, "parent"),
-			variant: get(item, "variant") || "all",
-			search_type: get(item, "search_type"),
-			role: get(item, "role"),
-			tag: get(item, "tag") || "div",
-			flow: get(item, "flow") || "grid",
-			when: get(item, "when").split(" ").filter(Boolean),
-			layer: Number(get(item, "layer") || 0),
-			hidden: [
-				"true",
-				"1",
-				"yes",
-				"on"
-			].indexOf(get(item, "hidden")) >= 0,
-			align: get(item, "align") || "stretch",
-			tone: get(item, "tone") || "normal"
-		};
-		for (const key of [
-			"row",
-			"column",
-			"span",
-			"rows",
-			"columns",
-			"height"
-		]) result[key] = Number(get(item, key) || {
-			span: 12,
-			columns: 12,
-			height: 40
-		}[key] || 1);
-		for (const key of ["padding", "margin"]) {
-			const value = get(item, key);
-			if (value) result[key] = value.split(/\s+/).map(Number);
-		}
-		if (get(item, "gap") !== "") result.gap = Number(get(item, "gap"));
-		return result;
-	});
-	const result = {
-		collection: get(node, "collection") || "grid",
-		flow: get(node, "flow") || "grid",
-		columns: Number(get(node, "columns") || 12),
-		tracks: get(node, "tracks"),
-		gap: get(node, "gap") === "" ? 6 : Number(get(node, "gap")),
-		card_width: Number(get(node, "card_width") || 280),
-		elements
-	};
-	if (get(node, "navigation")) result.navigation = JSON.parse(get(node, "navigation"));
-	return result;
-}
-function serialize(node, pretty = false) {
-	if (pretty) {
-		const whitespace = (item) => item.type === 3 && !String(item.text || "").trim();
-		function format(item, depth) {
-			if (item.type === 9) return (item.children || []).filter((child) => !whitespace(child)).map((child) => format(child, 0)).join("\n");
-			if (item.type !== 1) return serialize(item);
-			const children = item.children || [];
-			if ((item.attributes || []).some(([name, value]) => name === "xml:space" && value === "preserve") || children.some((child) => child.type === 4 || child.type === 3 && !whitespace(child))) return serialize(item);
-			const nested = children.filter((child) => !whitespace(child));
-			if (!nested.length) return serialize(item);
-			return serialize(Object.assign({}, item, { children: [] })).slice(0, -2) + ">\n" + nested.map((child) => "  ".repeat(depth + 1) + format(child, depth + 1)).join("\n") + "\n" + "  ".repeat(depth) + "</" + item.name + ">";
-		}
-		return format(node, 0);
-	}
-	const escape = (value, attr) => String(value).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, attr ? "&quot;" : "\"").replace(/\r/g, attr ? "&#13;" : "\r").replace(/\n/g, attr ? "&#10;" : "\n").replace(/\t/g, attr ? "&#9;" : "	");
-	if (node.type === 9) return (node.children || []).map((child) => serialize(child)).join("");
-	if (node.type === 3) return escape(node.text || "", false);
-	if (node.type === 4) return "<![CDATA[" + (node.text || "") + "]]>";
-	if (node.type === 8) return "<!--" + (node.text || "") + "-->";
-	if (node.type === 7) return "<?" + node.name + (node.text ? " " + node.text : "") + "?>";
-	if (node.type !== 1) throw Error("Unsupported XML node");
-	const attributes = (node.attributes || []).map((pair) => " " + pair[0] + "=\"" + escape(pair[1], true) + "\"").join(""), body = (node.children || []).map((child) => serialize(child)).join("");
-	return "<" + node.name + attributes + (node.children && node.children.length ? ">" + body + "</" + node.name + ">" : "/>");
-}
-function template(tree, view) {
-	if (!/^[A-Za-z_][\w.@-]{0,127}$/.test(view)) throw Error("Invalid view name");
-	const next = JSON.parse(JSON.stringify(tree)), original = children$1(root(next))[0];
-	if (!original) throw Error("Invalid layout template");
-	original.name = view.indexOf("@") >= 0 ? "view" : view;
-	if (view.indexOf("@") >= 0) set(original, "name", view);
-	return next;
-}
-function edit$1(tree, view, name, field, value) {
-	const next = JSON.parse(JSON.stringify(tree)), root = viewOf(next, view);
-	if (!root) throw Error("Configuration does not contain its view");
-	let item = name ? children$1(root).find((node) => node.name === "element" && get(node, "name") === name) : root;
-	if (field.startsWith("valueColor:")) {
-		const display = children$1(item).find((node) => node.name === "display"), option = display && children$1(display).find((node) => node.name === "colors"), colors = option ? JSON.parse(content(option)) : {}, key = field.slice(11);
-		if ([
-			"__proto__",
-			"constructor",
-			"prototype"
-		].includes(key)) throw Error("Invalid field value colors");
-		if (value) colors[key] = value;
-		else delete colors[key];
-		field = "option:colors";
-		value = Object.keys(colors).length ? JSON.stringify(colors) : "";
-	}
-	if (field === "add") {
-		if (widgets.indexOf(value) < 0) throw Error("Unsupported layout widget");
-		const names = children$1(root).map((node) => get(node, "name"));
-		let index = 1;
-		while (names.indexOf("item_" + index) >= 0) index++;
-		const last = children$1(root).reduce((max, node) => Math.max(max, Number(get(node, "row") || 1) + Number(get(node, "rows") || 1) - 1), 0);
-		item = element("element", [
-			["name", "item_" + index],
-			["title", value],
-			["row", String(last + 1)],
-			["span", get(root, "columns") || "12"]
-		], [element("display", [["class", value]])]);
-		root.children.push(item);
-	} else if (!item) throw Error("Layout element no longer exists");
-	else if (field === "order") {
-		const siblings = children$1(root).filter((node) => node.name === "element" && get(node, "parent") === get(item, "parent")), offset = Number(value), target = siblings[siblings.indexOf(item) + offset];
-		if (target && [-1, 1].indexOf(offset) >= 0) {
-			root.children.splice(root.children.indexOf(item), 1);
-			root.children.splice(root.children.indexOf(target) + (offset > 0 ? 1 : 0), 0, item);
-		}
-	} else if (field === "remove") {
-		const names = [name];
-		for (let depth = 0; depth < 8; depth++) for (const child of children$1(root)) if (names.indexOf(get(child, "parent")) >= 0 && names.indexOf(get(child, "name")) < 0) names.push(get(child, "name"));
-		root.children = root.children.filter((child) => child.type !== 1 || names.indexOf(get(child, "name")) < 0);
-	} else if (field.indexOf("option:") === 0 || field === "kind") {
-		let display = children$1(item).find((node) => node.name === "display");
-		if (!display) {
-			display = element("display");
-			item.children.push(display);
-		}
-		if (field === "kind") {
-			set(display, "widget", "");
-			set(display, "class", value);
-		} else {
-			const key = field.slice(7);
-			if (!/^[A-Za-z_][\w.-]*$/.test(key)) throw Error("Invalid widget option");
-			let option = children$1(display).find((node) => node.name === key);
-			if (!value) {
-				if (option) display.children.splice(display.children.indexOf(option), 1);
-			} else {
-				if (!option) {
-					option = element(key);
-					display.children.push(option);
-				}
-				option.children = [{
-					type: 3,
-					text: String(value)
-				}];
-			}
-		}
-	} else {
-		if (!/^[A-Za-z_][\w.-]*$/.test(field)) throw Error("Invalid layout attribute");
-		set(item, field, value);
-	}
-	return next;
-}
-function binding(binding, node) {
-	if (!/^(record|node)\.[A-Za-z_]\w*(\.[A-Za-z_]\w*){0,4}$/.test(binding || "")) return "";
-	const parts = binding.split(".");
-	let value = parts.shift() === "record" ? node.record : node;
-	for (const part of parts) {
-		if ([
-			"__proto__",
-			"prototype",
-			"constructor"
-		].indexOf(part) >= 0 || value == null || !Object.prototype.hasOwnProperty.call(value, part)) return "";
-		value = value[part];
-	}
-	return value === void 0 || value === null ? "" : value;
-}
-//#endregion
-//#region ../src/tactic_stream/shared_ui/features/administration/layouts/layout.preview.mjs
-function fieldModel(item, sample) {
-	const options = item.options || {}, value = options.bind ? binding(options.bind, sample) : "", colors = options.colors ? JSON.parse(options.colors) : {}, color = Object.prototype.hasOwnProperty.call(colors, String(value)) ? colors[String(value)] : options.color || (["badge", "progress"].includes(options.format) ? "contentAccent" : "primaryText");
-	return {
-		value,
-		text: options.text || "",
-		format: options.format || "plain",
-		suffix: options.format === "progress" ? "%" : "",
-		textColor: color,
-		progressColor: color
-	};
-}
-var number = (value, fallback, min, max) => Number.isFinite(Number(value)) ? Math.max(min, Math.min(max, Number(value))) : fallback;
-function variant(sample) {
-	return sample.kind === "branch" ? (sample.branch || {}).kind || "versions" : sample.kind === "object" ? sample.depth ? "children" : "main" : sample.kind;
-}
-function actionAvailable(action, sample) {
-	if (["tasks", "notes"].includes(action)) return sample.kind === "object" || sample.branch?.kind === "process";
-	if (["create", "link"].includes(action)) return sample.branch?.kind === "relation" && (action !== "link" || sample.branch.relationship === "instance");
-	if (action === "relations") return sample.kind === "object";
-	if (["inspect", "preview"].includes(action)) return sample.kind !== "branch";
-	return [
-		"operate",
-		"upload",
-		"quickaction"
-	].includes(action);
-}
-function visible(item, sample, layout, width) {
-	const branch = sample.branch || {}, snapshot = sample.snapshot_display || {}, conditions = {
-		desktop: width >= 700,
-		mobile: width < 700,
-		tree: layout.collection === "tree",
-		"not-tree": layout.collection !== "tree",
-		object: sample.kind === "object",
-		"object-or-process": sample.kind === "object" || branch.kind === "process",
-		"not-branch": sample.kind !== "branch",
-		description: sample.kind !== "branch" && sample.kind !== "snapshot" && !!(sample.subtitle || (sample.record || {}).description),
-		snapshot: sample.kind === "snapshot",
-		branch: sample.kind === "branch",
-		relation: branch.kind === "relation",
-		"mobile-upload": sample.kind === "object" || branch.kind === "process"
-	};
-	return !item.hidden && (!item.search_type || sample.kind !== "branch" && item.search_type === String((sample.record || {}).__search_key__ || sample.search_type || "").split("?")[0]) && (item.variant === "all" || item.variant === variant(sample)) && (item.when || []).every((key) => conditions[key]) && (item.kind !== "knowledge" || (sample.knowledge || []).length > 0) && (item.kind !== "snapshot-size" || snapshot.size !== void 0) && (item.kind !== "file-offline" || !snapshot.exists);
-}
-function tracks(value, count, width) {
-	const tokens = String(value || "").trim().split(/\s+/).filter(Boolean), sizes = [], weights = [];
-	let fixed = 0, weight = 0;
-	for (let index = 0; index < count; index++) {
-		const token = tokens.length === count ? tokens[index] : "1fr", pixels = /^\d+px$/.test(token) ? Number(token.slice(0, -2)) : 0, flex = /^\d+fr$/.test(token) ? Number(token.slice(0, -2)) : token === "auto" ? 1 : 0;
-		sizes.push(pixels);
-		weights.push(flex);
-		fixed += pixels;
-		weight += flex;
-	}
-	const scale = fixed > width ? width / fixed : 1;
-	return sizes.map((value, index) => value ? value * scale : Math.max(0, width - fixed) * weights[index] / Math.max(1, weight));
-}
-function supports(layout, sample, width) {
-	return !!layout && (layout.elements || []).some((item) => !item.parent && visible(item, sample, layout, width));
-}
-function safeImage(value, base, local) {
-	const text = String(value || "");
-	if (local && /^file:/i.test(text) && !/[\u0000-\u001f\u007f\\]/.test(text)) return text.replace(/ /g, "%20");
-	if (!text || /[\u0000-\u0020\u007f\\]/.test(text) || text.indexOf("//") === 0) return "";
-	if (text.charAt(0) === "/") return (base || "") + text;
-	return /^(https?:|blob:|data:image\/(?:png|jpeg|webp|gif);base64,)/i.test(text) || local && /^file:/i.test(text) ? text : "";
-}
-function describe$8(layout, sample, width, selected, language, screenWidth, assetBase, prefix, depth, editing = true) {
-	const tr = (text) => translate(text, language), nodes = [], namePrefix = prefix || "layoutPreview", level = depth || 0;
-	if (level >= 8) return {
-		nodes: [label(namePrefix + "Depth", rect(0, 0, width, 64), tr("Layout container depth exceeds 8"), {
-			wrap: true,
-			color: "error"
-		})],
-		height: 72
-	};
-	const elements = (layout.elements || []).filter((item) => visible(item, sample, layout, screenWidth || width)), snapshot = sample.snapshot_display || {}, record = sample.record || {}, title = sample.title || record.name || record.title || record.code || String(record.id || ""), subtitle = sample.subtitle || record.description || "";
-	function draw(item, box, inner) {
-		const id = namePrefix + "_" + item.name, children = [], options = item.options || {}, value = options.bind ? binding(options.bind, sample) : options.text || "", text = typeof value === "object" ? JSON.stringify(value) : String(value), color = item.tone === "muted" ? "secondaryText" : "primaryText", weight = item.tone === "strong" || item.kind === "title" ? 600 : 400;
-		if (item.kind === "group") children.push(node("Box", id + "Group", rect(4, 4, Math.max(0, box.width - 8), Math.max(0, box.height - 8)), {
-			background: options.fill || "transparent",
-			border: options.stroke,
-			radius: Number(options.radius || 0),
-			children: inner ? inner.nodes : []
-		}));
-		else if (item.kind === "view") {
-			if (inner) {
-				const owned = (nodes) => nodes.map((row) => Object.assign({}, row, {
-					action: row.action && row.action.type === "select" ? {
-						type: "select",
-						name: item.name
-					} : row.action,
-					children: owned(row.children || [])
-				}));
-				children.push(node("Box", id + "View", rect(4, 4, box.width - 8, box.height - 8), { children: owned(inner.nodes) }));
-			} else children.push(label(id + "ViewHelp", rect(4, 4, box.width - 8, box.height - 8), tr("Reusable view") + ": " + (options.view || "") + " · " + tr("Check and preview"), {
-				wrap: true,
-				color: "secondaryText"
-			}));
-		} else if (item.kind === "image") {
-			const initials = title.split(/\s+/).map((part) => part.charAt(0)).slice(0, 2).join("").toUpperCase() || "?";
-			children.push(node("Preview", id + "Image", rect(4, 4, Math.max(0, box.width - 8), Math.max(0, Math.min(box.height, item.height || box.height) - 8)), {
-				source: safeImage(value, assetBase, options.bind === "node.preview.image" && sample.preview && sample.preview.local === true),
-				initials,
-				icon: "image",
-				round: item.role === "preview",
-				outlined: false,
-				fit: options.fit || "cover"
-			}));
-		} else if (item.kind === "field") {
-			const rendered = field$1(fieldModel(item, sample), id + "Value", Math.max(0, box.width - 12));
-			for (const child of rendered.children) {
-				child.x += 6;
-				child.y += 4;
-				children.push(child);
-			}
-		} else if (item.kind === "button") {
-			const badge = options.badge ? Number(binding(options.badge, sample)) : 0, caption = text || (item.kind === "button" ? tr({
-				tasks: "Tasks",
-				notes: "Notes",
-				inspect: "Object details",
-				operate: "Object actions",
-				upload: "Add files",
-				create: "Create related object",
-				preview: "File preview",
-				relations: "Relationship actions",
-				link: "Link"
-			}[options.action] || "Button") : options.href || tr("Link"));
-			const iconOnly = !!options.icon && !options.text && !options.bind;
-			const fullCaption = caption + (Number.isFinite(badge) && badge > 0 ? " · " + badge : ""), icon = options.icon || {
-				tasks: "task",
-				notes: "notes",
-				upload: "upload",
-				inspect: "search",
-				relations: "link"
-			}[options.action] || "", counted = !iconOnly && !!icon && !!options.badge && box.width - 8 < buttonWidth(fullCaption.length * 7, true);
-			const buttonHeight = Math.max(0, Math.min(38, box.height - 8)), buttonWidth$1 = Math.max(0, Math.min(box.width - 8, iconOnly ? buttonHeight : box.width));
-			children.push(node("Button", id + "Button", rect(4, 4, buttonWidth$1, iconOnly ? buttonWidth$1 : buttonHeight), {
-				iconOnly,
-				iconAction: iconOnly,
-				round: iconOnly,
-				iconColor: badge > 0 ? "contentAccent" : "secondaryText",
-				badgeColor: "contentAccent",
-				badgeCount: iconOnly && Number.isFinite(badge) ? Math.max(0, badge) : 0,
-				text: counted ? String(Number.isFinite(badge) ? Math.max(0, badge) : 0) : fullCaption,
-				label: fullCaption,
-				toolTip: fullCaption,
-				enabled: !editing && (!!(options.href_bind ? binding(options.href_bind, sample) : options.href) || actionAvailable(options.action, sample)),
-				action: {
-					type: "itemAction",
-					action: options.action || "link",
-					urlOnly: !options.action,
-					href: options.href_bind ? binding(options.href_bind, sample) : options.href
-				},
-				icon
-			}));
-		} else if (item.kind === "item-menu") children.push(node("Button", id + "Menu", rect(Math.max(0, box.width - 38), 0, Math.min(38, box.width), 38), {
-			text: tr("Item actions"),
-			icon: "more-vert",
-			iconOnly: true,
-			enabled: !editing,
-			action: {
-				type: "itemAction",
-				action: "operate"
-			}
-		}));
-		else if (item.kind === "quick-actions" || item.kind === "relations") {
-			const icons = item.kind === "relations" ? ["link", "add"] : ["save", "folder-open"], size = Math.min(32, box.width / icons.length);
-			icons.forEach((icon, index) => children.push(node("Button", id + "Action_" + index, rect(index * size, 0, size, 32), {
-				text: tr(item.kind === "relations" ? "Relationship actions" : "Snapshot actions"),
-				icon,
-				iconOnly: true,
-				enabled: !editing,
-				action: {
-					type: "itemAction",
-					action: item.kind === "relations" ? index ? "create" : "link" : "quickaction",
-					command: index ? "open" : "save"
-				}
-			})));
-		} else {
-			let content = text;
-			if (item.kind === "link") content = text || item.title || options.href || "";
-			else if (item.kind === "title") content = text || title;
-			else if (item.kind === "description") content = text || subtitle;
-			else if (item.kind === "metadata") content = [
-				sample.search_type_label || record.search_type || "",
-				record.category || "",
-				record.process || ""
-			].filter(Boolean).join(" · ");
-			else if (item.kind === "snapshot-details") content = [
-				snapshot.version === void 0 ? "" : "v" + snapshot.version,
-				snapshot.author || "",
-				snapshot.context || ""
-			].filter(Boolean).join(" · ");
-			else if (item.kind === "snapshot-size") {
-				const bytes = Number(snapshot.size) || 0, unit = bytes >= 1073741824 ? "GB" : bytes >= 1048576 ? "MB" : bytes >= 1024 ? "KB" : "B";
-				content = (bytes / {
-					GB: 1073741824,
-					MB: 1048576,
-					KB: 1024,
-					B: 1
-				}[unit]).toFixed(unit === "B" ? 0 : 1) + " " + unit;
-			} else if (item.kind === "snapshot-summary") content = [
-				snapshot.title || "",
-				snapshot.description || "",
-				snapshot.author || ""
-			].filter(Boolean).join(" · ");
-			else if (item.kind === "branch-summary") content = [(sample.branch || {}).title || "", String((sample.branch || {}).count || 0)].join(" · ");
-			else if (item.kind === "file-offline") content = tr("File Offline");
-			else if (item.kind === "knowledge") content = (sample.knowledge || []).map((row) => row.title || row.name || row.code || "").join(" · ");
-			const maxLines = Math.max(1, Math.floor((box.height - 8) / (item.kind === "title" ? 20 : 17)));
-			children.push(label(id + "Text", rect(6, 4, Math.max(0, box.width - 12), Math.max(0, box.height - 8)), content, {
-				wrap: maxLines > 1,
-				maxLines,
-				color: options.color || color,
-				weight,
-				fontRole: item.kind === "title" ? "section" : "body",
-				align: item.align === "center" ? "center" : item.align === "end" ? "right" : "left"
-			}));
-		}
-		const padding = item.padding || [
-			0,
-			0,
-			0,
-			0
-		];
-		if (padding.some(Boolean)) for (const child of children) {
-			child.x += padding[3];
-			child.y += padding[0];
-			child.width = Math.max(0, child.width - padding[1] - padding[3]);
-			child.height = Math.max(0, child.height - padding[0] - padding[2]);
-		}
-		if (!editing && item.kind === "link") return node("Action", id, box, {
-			layoutElement: item.name,
-			layer: item.layer || 0,
-			text: text || item.title,
-			normalColor: "transparent",
-			children,
-			action: {
-				type: "itemAction",
-				action: "link",
-				urlOnly: true,
-				href: options.href_bind ? binding(options.href_bind, sample) : options.href
-			}
-		});
-		if (!editing) return node("Box", id, box, {
-			layoutElement: item.name,
-			layer: item.layer || 0,
-			children
-		});
-		if (item.kind === "group" || item.kind === "view" && inner) return node("Box", id, box, {
-			layoutElement: item.name,
-			layer: item.layer || 0,
-			background: "transparent",
-			border: selected === item.name ? "contentAccent" : void 0,
-			radius: 2,
-			children: [node("Action", id + "Select", rect(0, 0, box.width, box.height), {
-				text: item.title || item.name,
-				normalColor: "transparent",
-				selectedColor: "transparent",
-				action: {
-					type: "select",
-					name: item.name
-				}
-			})].concat(children)
-		});
-		return node("Action", id, box, {
-			layoutElement: item.name,
-			layer: item.layer || 0,
-			radius: 2,
-			text: item.title || item.name,
-			selected: selected === item.name,
-			normalColor: "transparent",
-			selectedColor: "contentSelection",
-			children,
-			action: {
-				type: "select",
-				name: item.name
-			}
-		});
-	}
-	function container(parent, w, nesting) {
-		if (nesting >= 8) return {
-			nodes: [],
-			height: 40
-		};
-		const definition = elements.find((item) => item.name === parent), items = elements.filter((item) => item.parent === parent), flow = definition ? definition.flow : layout.flow, columns = number(definition ? definition.columns : layout.columns, 12, 1, 12), result = [], placements = [];
-		if (flow === "contents") {
-			const copyX = items.some((item) => item.role === "preview") ? Math.min(96, w * .28) : 8;
-			let cursor = 8;
-			for (const item of items) {
-				let box, child = item.kind === "group" && item.role !== "copy" ? container(item.name, Math.max(1, w - 16), nesting + 1) : item.kind === "view" && item.widget_layout ? describe$8(item.widget_layout, sample, Math.max(1, w - 16), selected, language, screenWidth, assetBase, namePrefix + "_" + item.name, nesting + 1, editing) : null;
-				if (item.role === "preview") box = rect(8, 8, Math.min(76, w * .24), 76);
-				else if (item.role === "copy") {
-					child = container(item.name, Math.max(1, w - copyX - 16), nesting + 1);
-					box = rect(copyX, 8, Math.max(1, w - copyX - 8), child.height + 8);
-					cursor = Math.max(cursor, box.height + 16);
-				} else {
-					const h = child ? child.height + 8 : item.kind === "field" ? field$1(fieldModel(item, sample), "measure", w - 16).height + 8 : item.role === "title-line" ? 36 : item.kind === "image" ? number(item.height, 76, 24, 1200) : item.kind === "description" ? 44 : 38;
-					box = rect(8, cursor, w - 16, h);
-					cursor += h + 4;
-				}
-				placements.push({
-					item,
-					box,
-					child
-				});
-				cursor = Math.max(cursor, box.y + box.height + 8);
-			}
-			placements.sort((a, b) => (a.item.layer || 0) - (b.item.layer || 0)).forEach((row) => result.push(draw(row.item, row.box, row.child)));
-			return {
-				nodes: result,
-				height: Math.max(92, cursor)
-			};
-		}
-		const gap = (definition ? definition.gap : layout.gap) ?? 6, available = Math.max(1, w - gap * (columns - 1)), sizes = tracks(definition ? "" : layout.tracks, columns, available), rows = [];
-		for (const item of items) {
-			const start = number(item.row, 1, 1, 100) - 1, span = number(item.rows, 1, 1, 100), column = number(item.column, 1, 1, columns) - 1, columnsWide = number(item.span, 1, 1, columns - column), cellWidth = sizes.slice(column, column + columnsWide).reduce((a, b) => a + b, 0) + gap * (columnsWide - 1), child = item.kind === "group" ? container(item.name, Math.max(1, cellWidth - 8 - (item.margin?.[1] || 0) - (item.margin?.[3] || 0) - (item.padding?.[1] || 0) - (item.padding?.[3] || 0)), nesting + 1) : item.kind === "view" && item.widget_layout ? describe$8(item.widget_layout, sample, Math.max(1, cellWidth - 8 - (item.margin?.[1] || 0) - (item.margin?.[3] || 0) - (item.padding?.[1] || 0) - (item.padding?.[3] || 0)), selected, language, screenWidth, assetBase, namePrefix + "_" + item.name, nesting + 1, editing) : null, h = Math.max(child ? child.height + 8 : item.kind === "field" ? field$1(fieldModel(item, sample), "measure", cellWidth).height + 8 : item.kind === "button" ? Math.max(40, number(item.height, 40, 1, 1200)) : number(item.height, 40, 1, 1200), number(item.height, 40, 1, 1200)) + (item.padding?.[0] || 0) + (item.padding?.[2] || 0) + (item.margin?.[0] || 0) + (item.margin?.[2] || 0);
-			for (let index = start; index < start + span; index++) rows[index] = Math.max(rows[index] || 0, (h - gap * (span - 1)) / span);
-			placements.push({
-				item,
-				start,
-				span,
-				column,
-				columnsWide,
-				cellWidth,
-				child
-			});
-		}
-		const sum = (values, start, end) => {
-			let total = 0;
-			for (let index = start; index < end; index++) total += values[index] || 40;
-			return total;
-		};
-		placements.sort((a, b) => (a.item.layer || 0) - (b.item.layer || 0)).forEach((row) => {
-			const x = sizes.slice(0, row.column).reduce((a, b) => a + b, 0) + gap * row.column, y = sum(rows, 0, row.start) + gap * row.start, h = sum(rows, row.start, row.start + row.span) + gap * (row.span - 1);
-			const availableHeight = Math.max(0, h - (row.item.margin?.[0] || 0) - (row.item.margin?.[2] || 0));
-			const intrinsic = (row.child ? Math.max(row.child.height + 8, row.item.height || 40) : row.item.height || 40) + (row.item.padding?.[0] || 0) + (row.item.padding?.[2] || 0);
-			const placedHeight = row.item.align && row.item.align !== "stretch" ? Math.min(availableHeight, intrinsic) : availableHeight;
-			const offset = row.item.align === "center" ? (availableHeight - placedHeight) / 2 : row.item.align === "end" ? availableHeight - placedHeight : 0;
-			const drawn = draw(row.item, rect(x + (row.item.margin?.[3] || 0), y + (row.item.margin?.[0] || 0) + offset, Math.max(0, row.cellWidth - (row.item.margin?.[1] || 0) - (row.item.margin?.[3] || 0)), placedHeight), row.child);
-			if (editing) drawn.canvasGrid = {
-				columns: sizes.map((_, index) => sizes.slice(0, index).reduce((a, b) => a + b, 0) + gap * index),
-				ends: sizes.map((_, index) => sizes.slice(0, index + 1).reduce((a, b) => a + b, 0) + gap * index),
-				rows: Array.from({ length: rows.length }, (_, index) => sum(rows, 0, index) + gap * index)
-			};
-			result.push(drawn);
-		});
-		return {
-			nodes: result,
-			height: rows.length ? sum(rows, 0, rows.length) + gap * (rows.length - 1) : 64
-		};
-	}
-	let body;
-	if (layout.collection === "table") {
-		const items = elements.filter((item) => !item.parent), total = items.reduce((sum, item) => sum + number(item.span, 1, 1, 12), 0) || 1;
-		let x = 0;
-		body = {
-			nodes: [],
-			height: 160
-		};
-		for (const item of items) {
-			const w = width * number(item.span, 1, 1, 12) / total, child = item.kind === "group" ? container(item.name, Math.max(1, w - 8), level + 1) : item.kind === "view" && item.widget_layout ? describe$8(item.widget_layout, sample, Math.max(1, w - 8), selected, language, screenWidth, assetBase, namePrefix + "_" + item.name, level + 1, editing) : null;
-			body.height = Math.max(body.height, (child ? child.height : 108) + 52);
-			body.nodes.push(label(namePrefix + "Header_" + item.name, rect(x, 0, w, 38), item.title || item.name, { weight: 600 }), draw(item, rect(x, 44, w, Math.max(108, child ? child.height : 0)), child));
-			x += w;
-		}
-	} else body = container("", width, level);
-	nodes.push.apply(nodes, body.nodes);
-	return {
-		nodes,
-		height: body.height
-	};
-}
 function row$1(record, index, width, language) {
 	const text = (key) => translate(key, language), x = 5 + (record.depth || 0) * 18, kindIcon = record.kind === "child" || record.kind === "process", title = record.title + (record.kind === "child" ? text(" (child)") : record.kind === "builtin" ? text(" (builtin)") : ""), titleX = x + (kindIcon ? 77 : 58), nodes = [];
 	nodes.push(node("Action", "processVisibilitySelect", rect(0, 0, width, 30), {
@@ -9907,7 +9932,7 @@ var _sfc_main$42 = {
 		const emit = __emit;
 		const host = ref(null), width = ref(1);
 		let observer;
-		const baseScene = computed(() => describe$8(props.layout, props.node, width.value, props.selectedElement, appearance.language, window.innerWidth, location.origin, "itemComposition", 0, props.editing || props.readOnly));
+		const baseScene = computed(() => describe$15(props.layout, props.node, width.value, props.selectedElement, appearance.language, window.innerWidth, location.origin, "itemComposition", 0, props.editing || props.readOnly));
 		const scene = computed(() => props.editing ? itemScene(baseScene.value, props.layout) : baseScene.value);
 		const views = computed(() => ({ canvasOverlay: {
 			component: _sfc_main$43,
@@ -20114,7 +20139,7 @@ var _sfc_main$7 = {
 		const filterDraft = ref({}), forms = ref({}), localNodes = ref(null);
 		let generation = 0, abort;
 		let detailGeneration = 0;
-		const baseScene = computed(() => describe$16({
+		const baseScene = computed(() => describe$14({
 			...props.model,
 			layoutForms: forms.value,
 			layoutNodes: localNodes.value || props.model.layoutNodes,
@@ -20309,7 +20334,7 @@ var _sfc_main$7 = {
 				});
 			}
 		}
-		function activate(action) {
+		function activate(action, source) {
 			if (props.editing) return;
 			if (action.type === "layout-split") {
 				state.value = resize(state.value, action);
@@ -20320,6 +20345,11 @@ var _sfc_main$7 = {
 				return;
 			}
 			if (action.type === "record-action") {
+				if (action.name === "layout-link") {
+					const href = layoutUrl(action.href);
+					if (href) window.open(href, href.startsWith("/") ? "_self" : "_blank", "noopener");
+					return;
+				}
 				if (action.name === "copy_link") {
 					copyText("skey://" + action.targetSearchKey).catch((failure) => error.value = failure.message);
 					return;
@@ -20329,10 +20359,17 @@ var _sfc_main$7 = {
 					else emit("filter-apply", props.model.layoutFilterValues || {});
 					return;
 				}
-				emit("action", { __search_key__: action.targetSearchKey }, action.name === "details" ? "sobject_detail" : action.name, {
+				emit("action", action.record || { __search_key__: action.targetSearchKey }, action.name === "details" ? "sobject_detail" : action.name, {
 					targetSearchKey: action.targetSearchKey,
 					actionView: action.view,
-					process: action.process
+					process: action.process,
+					command: action.command
+				}, {
+					currentTarget: source,
+					target: source,
+					preventDefault() {},
+					clientX: source?.getBoundingClientRect()?.left,
+					clientY: source?.getBoundingClientRect()?.bottom
 				});
 				return;
 			}
@@ -20830,7 +20867,7 @@ var TableParentPicker_default = /*#__PURE__*/ _plugin_vue_export_helper_default(
 				key: 0,
 				ref_key: "frame",
 				ref: frame,
-				scene: describe$14(state.value, size.value.width, size.value.height, unref(appearance).language),
+				scene: describe$12(state.value, size.value.width, size.value.height, unref(appearance).language),
 				models: { parentRows: records.value },
 				"describe-row": (list, row) => row$5(row, Math.max(0, list.width - 16), unref(appearance).language),
 				onEvent: activate
@@ -22594,6 +22631,10 @@ var _sfc_main = {
 			this.serviceMessage = "";
 			try {
 				if (kind === "error") throw new Error(cell.error);
+				if (kind === "context_menu") {
+					await this.operate(record, anchor);
+					return;
+				}
 				if (kind === "change-parent" || kind === "drop-parent") {
 					await this.$refs.parentPicker.open(cell, record.name || record.title || record.code || "", anchor);
 					return;
@@ -22830,6 +22871,10 @@ var _sfc_main = {
 				}
 				if (kind === "notes") {
 					await this.$refs.notes.open(target, {}, cell.process || "publish");
+					return;
+				}
+				if (kind === "quickaction") {
+					await this.$refs.tableOperations.quick(target, cell, cell.command || "open");
 					return;
 				}
 				if ([
@@ -23935,6 +23980,6 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 }
 var ConfiguredView_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main, [["render", _sfc_render]]);
 //#endregion
-export { supports as $, layers as $t, _sfc_main$32 as A, row$4 as At, gallery as B, options as Bt, messageDate as C, describe$11 as Ct, _sfc_main$24 as D, rows$1 as Dt, contextActions as E, row$3 as Et, emojiCount as F, viewTabWidth as Ft, _sfc_main$43 as G, block as Gt, revision as H, type as Ht, formatFileSize as I, change$5 as It, selected as J, duplicate as Jt, alignment as K, change$6 as Kt, popup as L, fields as Lt, bodyOrder as M, key as Mt, bubbleContour as N, sectionWidth as Nt, _sfc_main$29 as O, transition as Ot, bubbleGeometry as P, tab as Pt, describe$8 as Q, kinds as Qt, forward as R, filter as Rt, messageAttachments as S, WorkspaceSearch_default as St, retainOlderMessages as T, loaded as Tt, _sfc_main$34 as U, add as Ut, heading as V, scope as Vt, _sfc_main$38 as W, appearances as Wt, itemScene as X, geometries as Xt, toggle as Y, fingerprint as Yt, spacingField as Z, geometry$1 as Zt, canChangeMessage as _, sorts as _t, _sfc_main$7 as a, sizing as an, roles as at, initials as b, _sfc_main$52 as bt, ResultPresentation_exports as c, variants as ct, ObjectAction_default as d, defaultResultView as dt, path as en, visible as et, ObjectOperations_default as f, filterActions as ft, attachmentName as g, sortColumn as gt, _sfc_main$22 as h, sortActions as ht, displayWidgets as i, siblings as in, edit$1 as it, _sfc_main$33 as j, dimensions$1 as jt, _sfc_main$30 as k, _sfc_main$58 as kt, RelatedObjects_default as l, widgets as lt, skeyPlaceholder as m, groups as mt, changeDefinition as n, reorder as nn, binding as nt, controls as o, spacing as on, serialize as ot, NotesPanel_default as p, groupActions as pt, roots as q, copy as qt, definitionWizard as r, reparent as rn, describe$9 as rt, zooms as s, _sfc_main$70 as sn, template as st, ConfiguredView_default as t, remove$1 as tn, actions as tt, RelatedObjects_exports as u, _sfc_main$47 as ut, conversationAttachments as v, viewActions as vt, messageId as w, initial as wt, mergeMessages as x, _sfc_main$53 as xt, groupedMessages as y, views as yt, forwarding as z, mode as zt };
+export { defaultResultView as $, layers as $t, _sfc_main$32 as A, edit$1 as At, gallery as B, options as Bt, messageDate as C, viewTabWidth as Ct, _sfc_main$24 as D, actions as Dt, contextActions as E, visible as Et, emojiCount as F, widgets as Ft, _sfc_main$43 as G, block as Gt, revision as H, type as Ht, formatFileSize as I, change$5 as It, selected as J, duplicate as Jt, alignment as K, change$6 as Kt, popup as L, fields as Lt, bodyOrder as M, serialize as Mt, bubbleContour as N, template as Nt, _sfc_main$29 as O, binding as Ot, bubbleGeometry as P, variants as Pt, _sfc_main$47 as Q, kinds as Qt, forward as R, filter as Rt, messageAttachments as S, tab as St, retainOlderMessages as T, supports as Tt, _sfc_main$34 as U, add as Ut, heading as V, scope as Vt, _sfc_main$38 as W, appearances as Wt, itemScene as X, geometries as Xt, toggle as Y, fingerprint as Yt, spacingField as Z, geometry$1 as Zt, canChangeMessage as _, _sfc_main$58 as _t, _sfc_main$7 as a, sizing as an, sorts as at, initials as b, key as bt, ResultPresentation_exports as c, _sfc_main$52 as ct, ObjectAction_default as d, describe$9 as dt, path as en, filterActions as et, ObjectOperations_default as f, initial as ft, attachmentName as g, transition as gt, _sfc_main$22 as h, rows$1 as ht, displayWidgets as i, siblings as in, sortColumn as it, _sfc_main$33 as j, roles as jt, _sfc_main$30 as k, describe$16 as kt, RelatedObjects_default as l, _sfc_main$53 as lt, skeyPlaceholder as m, row$3 as mt, changeDefinition as n, reorder as nn, groups as nt, controls as o, spacing as on, viewActions as ot, NotesPanel_default as p, loaded as pt, roots as q, copy as qt, definitionWizard as r, reparent as rn, sortActions as rt, zooms as s, _sfc_main$70 as sn, views as st, ConfiguredView_default as t, remove$1 as tn, groupActions as tt, RelatedObjects_exports as u, WorkspaceSearch_default as ut, conversationAttachments as v, row$4 as vt, messageId as w, describe$15 as wt, mergeMessages as x, sectionWidth as xt, groupedMessages as y, dimensions$1 as yt, forwarding as z, mode as zt };
 
 //# sourceMappingURL=ConfiguredView.js.map

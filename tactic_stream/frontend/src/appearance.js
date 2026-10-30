@@ -57,6 +57,7 @@ function readAppearance() {
 
 export const appearance = reactive(readAppearance())
 export const hostedPalette = ref(null)
+export const projectPalette = ref(null)
 
 export function readableText(color) {
   return '#' + sharedReadableText(color).map(channel => channel.toString(16).padStart(2, '0')).join('')
@@ -66,11 +67,16 @@ export function saveAppearance() { localStorage.setItem(storageKey, JSON.stringi
 const systemDark = ref(typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches)
 export const effectiveColorMode = computed(() => appearance.mode === 'system' ? (systemDark.value ? 'dark' : 'light') : appearance.mode)
 
-const colorPreset = computed(() => hostedPalette.value || accentPresets.find(item => item.value === appearance.themeAccents[appearance.theme][effectiveColorMode.value]))
+const projectPreset = computed(() => projectPalette.value ? {
+  light: projectPalette.value.light.accent, lightBase: projectPalette.value.light.base,
+  dark: projectPalette.value.dark.accent, darkBase: projectPalette.value.dark.base,
+} : null)
+const colorPreset = computed(() => hostedPalette.value || projectPreset.value || accentPresets.find(item => item.value === appearance.themeAccents[appearance.theme][effectiveColorMode.value]))
+const effectiveStyle = computed(() => hostedPalette.value ? appearance.theme : projectPalette.value?.style || appearance.theme)
 const channels = hex => hex.match(/[a-f\d]{2}/gi).map(value => parseInt(value, 16))
 export const frameColors = computed(() => {
   const mode = effectiveColorMode.value, preset = colorPreset.value
-  return sharedPalette(appearance.theme, mode === 'dark', channels(preset[mode + 'Base']), channels(preset[mode]))
+  return sharedPalette(effectiveStyle.value, mode === 'dark', channels(preset[mode + 'Base']), channels(preset[mode]))
 })
 
 export function initializeAppearance() {
@@ -83,7 +89,7 @@ export function initializeAppearance() {
   watchEffect(() => {
     const root = document.documentElement
     root.lang = appearance.language
-    root.dataset.theme = appearance.theme
+    root.dataset.theme = effectiveStyle.value
     const mode = effectiveColorMode.value
     root.dataset.mode = mode
     root.dataset.iconSet = appearance.iconSet
@@ -93,7 +99,7 @@ export function initializeAppearance() {
     const accent = palette[mode].match(/[a-f\d]{2}/gi).map(value => parseInt(value, 16))
     const base = palette[mode + 'Base'].match(/[a-f\d]{2}/gi).map(value => parseInt(value, 16))
     const dark = mode === 'dark'
-    const variables = cssVariables(appearance.theme, dark, base, accent, {
+    const variables = cssVariables(effectiveStyle.value, dark, base, accent, {
       click:appearance.clickAnimations, hover:appearance.hoverAnimations,
       fade:appearance.fadeAnimations, popup:appearance.popupAnimations, reduced:reducedMotion.value,
     })

@@ -1320,6 +1320,10 @@ export default {
       this.serviceMessage = '';
       try {
         if (kind === 'error') throw new Error(cell.error);
+        if (kind === 'context_menu') {
+          await this.operate(record, anchor);
+          return;
+        }
         if (kind === 'change-parent' || kind === 'drop-parent') {
           await this.$refs.parentPicker.open(
             cell,
@@ -1629,6 +1633,14 @@ export default {
         }
         if (kind === 'notes') {
           await this.$refs.notes.open(target, {}, cell.process || 'publish');
+          return;
+        }
+        if (kind === 'quickaction') {
+          await this.$refs.tableOperations.quick(
+            target,
+            cell,
+            cell.command || 'open'
+          );
           return;
         }
         if (['sobject_detail', 'file_list', 'metadata'].includes(kind)) {

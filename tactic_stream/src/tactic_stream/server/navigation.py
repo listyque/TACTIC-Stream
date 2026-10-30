@@ -96,4 +96,5 @@ def read_navigation():
             Container.remove('WidgetConfig:metadata_only')
         else:
             Container.put('WidgetConfig:metadata_only', previous)
-    return dict(view=view, configured=configured or had_definitions[0], entries=result)
+    from tactic.command.plugin_resources import selected_theme
+    return dict(view=view, configured=configured or had_definitions[0], entries=result, pluginTheme=selected_theme())

@@ -1189,6 +1189,7 @@ function readAppearance() {
 }
 var appearance = reactive(readAppearance());
 var hostedPalette = ref(null);
+var projectPalette = ref(null);
 function readableText(color) {
 	return "#" + readableText$1(color).map((channel) => channel.toString(16).padStart(2, "0")).join("");
 }
@@ -1197,11 +1198,18 @@ function saveAppearance() {
 }
 var systemDark = ref(typeof window !== "undefined" && window.matchMedia("(prefers-color-scheme: dark)").matches);
 var effectiveColorMode = computed(() => appearance.mode === "system" ? systemDark.value ? "dark" : "light" : appearance.mode);
-var colorPreset = computed(() => hostedPalette.value || accentPresets.find((item) => item.value === appearance.themeAccents[appearance.theme][effectiveColorMode.value]));
+var projectPreset = computed(() => projectPalette.value ? {
+	light: projectPalette.value.light.accent,
+	lightBase: projectPalette.value.light.base,
+	dark: projectPalette.value.dark.accent,
+	darkBase: projectPalette.value.dark.base
+} : null);
+var colorPreset = computed(() => hostedPalette.value || projectPreset.value || accentPresets.find((item) => item.value === appearance.themeAccents[appearance.theme][effectiveColorMode.value]));
+var effectiveStyle = computed(() => hostedPalette.value ? appearance.theme : projectPalette.value?.style || appearance.theme);
 var channels = (hex) => hex.match(/[a-f\d]{2}/gi).map((value) => parseInt(value, 16));
 var frameColors = computed(() => {
 	const mode = effectiveColorMode.value, preset = colorPreset.value;
-	return palette(appearance.theme, mode === "dark", channels(preset[mode + "Base"]), channels(preset[mode]));
+	return palette(effectiveStyle.value, mode === "dark", channels(preset[mode + "Base"]), channels(preset[mode]));
 });
 function initializeAppearance() {
 	const media = window.matchMedia("(prefers-color-scheme: dark)");
@@ -1217,7 +1225,7 @@ function initializeAppearance() {
 	watchEffect(() => {
 		const root = document.documentElement;
 		root.lang = appearance.language;
-		root.dataset.theme = appearance.theme;
+		root.dataset.theme = effectiveStyle.value;
 		const mode = effectiveColorMode.value;
 		root.dataset.mode = mode;
 		root.dataset.iconSet = appearance.iconSet;
@@ -1227,7 +1235,7 @@ function initializeAppearance() {
 		const accent = palette[mode].match(/[a-f\d]{2}/gi).map((value) => parseInt(value, 16));
 		const base = palette[mode + "Base"].match(/[a-f\d]{2}/gi).map((value) => parseInt(value, 16));
 		const dark = mode === "dark";
-		const variables = cssVariables(appearance.theme, dark, base, accent, {
+		const variables = cssVariables(effectiveStyle.value, dark, base, accent, {
 			click: appearance.clickAnimations,
 			hover: appearance.hoverAnimations,
 			fade: appearance.fadeAnimations,
@@ -1531,6 +1539,6 @@ var _sfc_main = {
 	}
 };
 //#endregion
-export { savePreferencePage as A, lineHeights as C, configurationPreview as D, textStyles as E, themes as F, BusyIndicator_default as I, _plugin_vue_export_helper_default as L, taskColumns as M, accentPresets as N, normalizePreferences as O, iconSets as P, layout as S, readableText$1 as T, cssColor as _, _sfc_main$1 as a, fontLineHeight as b, colorModes as c, initializeAppearance as d, languages as f, controls as g, blend as h, ripple as i, normalizeColumns as j, preferences as k, effectiveColorMode as l, saveAppearance as m, tooltipDirective as n, t as o, readableText as p, capturePress as r, appearance as s, _sfc_main as t, frameColors as u, cssRoles as v, metrics as w, fontMetricHeight as x, fontFamily as y };
+export { preferences as A, layout as C, textStyles as D, readableText$1 as E, iconSets as F, themes as I, BusyIndicator_default as L, normalizeColumns as M, taskColumns as N, configurationPreview as O, accentPresets as P, _plugin_vue_export_helper_default as R, fontMetricHeight as S, metrics as T, controls as _, _sfc_main$1 as a, fontFamily as b, colorModes as c, initializeAppearance as d, languages as f, blend as g, saveAppearance as h, ripple as i, savePreferencePage as j, normalizePreferences as k, effectiveColorMode as l, readableText as m, tooltipDirective as n, t as o, projectPalette as p, capturePress as r, appearance as s, _sfc_main as t, frameColors as u, cssColor as v, lineHeights as w, fontLineHeight as x, cssRoles as y };
 
 //# sourceMappingURL=AppButton.js.map

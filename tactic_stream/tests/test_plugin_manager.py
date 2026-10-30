@@ -150,6 +150,46 @@ class PluginManagerTests(unittest.TestCase):
         with self.assertRaisesRegex(Exception, 'every project'):
             self.change(parent, 'delete', confirmation=True)
 
+    def test_typed_resources_source_conflict_theme_and_export(self):
+        doc = self.create()
+        for kind, name in (('widget', 'review_widget'), ('column', 'review_column'), ('theme', 'review_theme'), ('python', 'review_action')):
+            doc = self.change(doc, 'add_resource', values=dict(kind=kind, name=name))
+            self.assertEqual(kind, doc['document']['resource']['kind'])
+        resources = doc['metadata']['resources']
+        self.assertEqual(4, len(resources))
+        theme = next(item for item in resources if item['kind'] == 'theme')
+        doc = self.call('open_resource', identity=doc['identity'], resource=theme['key'])
+        self.assertEqual('md3', doc['document']['resource']['palette']['style'])
+        doc['document']['resource']['source'] = doc['document']['resource']['source'].replace('#20282c', '#18202a')
+        stale = dict(doc['document']['resource'])
+        doc = self.change(doc, 'save', document=doc['document'])
+        self.assertEqual('#18202a', doc['document']['resource']['palette']['dark']['base'])
+        with self.assertRaisesRegex(Exception, 'Resource changed'):
+            self.change(doc, 'save', document=dict(doc['document'], resource=stale))
+        doc = self.change(doc, 'apply_theme', resource=theme['key'])
+        self.assertEqual('review_theme', doc['metadata']['pluginTheme']['view'])
+        doc = self.change(doc, 'export')
+        self.assertTrue(doc['download']['filename'].endswith('.zip'))
+        column = next(item for item in resources if item['kind'] == 'column')
+        doc = self.call('open_resource', identity=doc['identity'], resource=column['key'])
+        self.assertEqual('list', doc['document']['resource']['layout']['collection'])
+        doc = self.change(doc, 'deactivate', confirmation=True)
+        self.assertIsNone(doc['metadata']['pluginTheme'])
+
+    def test_data_selection_hook_authoring_and_resource_membership(self):
+        doc = self.create()
+        doc = self.change(doc,'add_resource',values=dict(kind='data',name='shot_seed',searchType='cg/shot',code='SH001',schema=True))
+        self.assertIn('<search_type code="cg/shot"',doc['document']['manifest'])
+        selected = next(item for item in doc['metadata']['resources'] if item['kind']=='data')
+        self.assertEqual(1,selected['count'])
+        doc = self.change(doc,'add_resource',values=dict(kind='hooks',name='setup'))
+        self.assertIn('undo_path="setup_uninstall.py"',doc['document']['manifest'])
+        self.assertTrue(any(item.get('path')=='setup_uninstall.py' for item in doc['metadata']['resources']))
+        other = self.call('create',document=dict(code='another_widget',title='Other',type='widget'))
+        foreign=next(item for item in other['metadata']['resources'] if item['field'])
+        with self.assertRaisesRegex(Exception,'belonging to this plugin'):
+            self.call('open_resource',identity=doc['identity'],resource=foreign['key'])
+
 
 if __name__ == '__main__':
     unittest.main()

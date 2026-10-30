@@ -1,0 +1,8 @@
+<config>
+  <studio_review.theme>
+    <theme style="md3">
+      <light base="#edf5f6" accent="#176579"/>
+      <dark base="#1b262c" accent="#84c8db"/>
+    </theme>
+  </studio_review.theme>
+</config>

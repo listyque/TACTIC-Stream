@@ -1,0 +1,6 @@
+<config>
+  <studio_review.column layout="sobject-layout" collection="list" columns="12" padding="4 8 4 8" gap="4">
+    <element name="status" title="Status" row="1" height="24"><display class="field"><bind>record.status</bind><format>badge</format><colors>{"Approved":"green","In review":"yellow","Changes requested":"red"}</colors></display></element>
+    <element name="progress" title="Progress" row="2" height="20"><display class="field"><bind>record.progress</bind><format>progress</format></display></element>
+  </studio_review.column>
+</config>

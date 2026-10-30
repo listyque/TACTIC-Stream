@@ -1,4 +1,4 @@
-import { g as controls } from "./AppButton.js";
+import { _ as controls } from "./AppButton.js";
 import { B as node, R as label, V as rect } from "./resize.js";
 //#region ../src/tactic_stream/shared_ui/controls/forms/toggle.ui.mjs
 function captionedSwitch(id, bounds, properties) {

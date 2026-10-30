@@ -1,6 +1,6 @@
 const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/Timesheet.js","assets/ObjectFieldFrame.js","assets/vue.js","assets/AppButton.js","assets/locales.js","assets/icons.js","assets/AppButton.css","assets/resize.js","assets/resize.css","assets/ObjectFieldFrame.css","assets/Timesheet.css","assets/ConfiguredView.js","assets/textMetrics.js","assets/sections.ui.js","assets/RecordForm.js","assets/RecordForm.css","assets/admin.document.js","assets/file_values.js","assets/files.js","assets/files2.js","assets/admin.css","assets/CodeBlock.js","assets/metrics.js","assets/confirmation.ui.js","assets/AppDialog.js","assets/markdown-it.js","assets/VirtualCollection.js","assets/VirtualCollection.css","assets/ContentLoadingOverlay.js","assets/ContentLoadingOverlay.css","assets/ConfiguredView.css","assets/ProcessRules.js","assets/ProcessRules.css","assets/DuplicateSObject.js","assets/DuplicateSObject.css","assets/IngestFiles.js","assets/IngestFiles.css","assets/ObjectCheckin.js","assets/toggle.ui.js","assets/ObjectCheckin.css","assets/ProjectTemplates.js","assets/ProjectTemplates.css","assets/MilestoneManager.js","assets/MilestoneManager.css","assets/SnapshotCheckout.js","assets/FrameProgress.js","assets/FrameProgress.css","assets/SnapshotCheckout.css","assets/ApiDocumentation.js","assets/AppearanceControls.js","assets/AppearanceControls.css","assets/ApiDocumentation.css","assets/App.js","assets/tree.ui.js","assets/App.css"])))=>i.map(i=>d[i]);
 import { $ as toRaw, A as onMounted, E as nextTick, H as watch, J as markRaw, M as openBlock, N as renderList, O as onBeforeUnmount, S as h, U as watchEffect, X as ref, Y as reactive, Z as shallowReactive, _ as createElementBlock, b as createVNode, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, n as createApp, nt as normalizeStyle, r as render, rt as toDisplayString, tt as normalizeClass, u as Fragment, x as defineAsyncComponent } from "./vue.js";
-import { D as configurationPreview, I as BusyIndicator_default, S as layout, d as initializeAppearance, o as t, t as _sfc_main$1 } from "./AppButton.js";
+import { C as layout, L as BusyIndicator_default, O as configurationPreview, d as initializeAppearance, o as t, t as _sfc_main$1 } from "./AppButton.js";
 //#region \0vite/modulepreload-polyfill.js
 (function polyfill() {
 	const relList = document.createElement("link").relList;
@@ -2089,6 +2089,8 @@ async function bootstrapWindowPage(app) {
 	app.type = context.workspace?.search_type || context.route.searchType || "";
 	app.selectedKeys = [...context.workspace?.search_keys || []];
 	app.view = context.workspace?.view || "table";
+	await app.loadNavigation();
+	if (app.session !== session) return;
 	app.busy = false;
 	app.restoringSession = false;
 	app.routeReady = true;

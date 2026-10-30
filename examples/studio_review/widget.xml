@@ -1,0 +1,8 @@
+<config>
+  <studio_review.widget layout="sobject-layout" collection="list" columns="12" padding="12 12 12 12" gap="8">
+    <element name="title" title="Review" row="1" height="36"><display class="title"><bind>record.name</bind></display></element>
+    <element name="description" title="Description" row="2" height="52"><display class="description"><bind>record.description</bind></display></element>
+    <element name="status" title="Review status" row="3" height="64"><display class="view"><view>studio_review.column</view></display></element>
+    <element name="notes" title="Notes" row="4" height="36"><display class="button"><action>notes</action><text>Notes</text></display></element>
+  </studio_review.widget>
+</config>

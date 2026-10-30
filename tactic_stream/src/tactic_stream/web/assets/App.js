@@ -1,7 +1,7 @@
 const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/NamingEditor.js","assets/ObjectFieldFrame.js","assets/vue.js","assets/AppButton.js","assets/locales.js","assets/icons.js","assets/AppButton.css","assets/resize.js","assets/resize.css","assets/ObjectFieldFrame.css","assets/index.js","assets/index.css","assets/sections.ui.js","assets/admin.document.js","assets/textMetrics.js","assets/file_values.js","assets/files.js","assets/files2.js","assets/admin.css","assets/MatchingTemplates.js","assets/MatchingTemplates.css","assets/TaskGanttView.js","assets/TaskGanttView.css","assets/TaskCalendarView.js","assets/TaskCalendarView.css","assets/TaskProcessPanel.js","assets/ConfiguredView.js","assets/RecordForm.js","assets/RecordForm.css","assets/CodeBlock.js","assets/metrics.js","assets/confirmation.ui.js","assets/AppDialog.js","assets/markdown-it.js","assets/VirtualCollection.js","assets/VirtualCollection.css","assets/Timesheet.js","assets/Timesheet.css","assets/ContentLoadingOverlay.js","assets/ContentLoadingOverlay.css","assets/ConfiguredView.css","assets/TaskProcessPanel.css","assets/FileWorkspaceInspection.js","assets/FileWorkspaceInspection.css","assets/DescriptionEditor.js","assets/DescriptionEditor.css","assets/SnapshotBrowser.js","assets/SnapshotBrowser.css","assets/KnowledgeBase.js","assets/KnowledgeBase.css","assets/Configuration.js","assets/AppearanceControls.js","assets/AppearanceControls.css","assets/AgentProviders.js","assets/executor.ui.js","assets/AgentProviders.css","assets/Configuration.css","assets/SearchTypes.js","assets/SchemaEditor.js","assets/graphFrame.js","assets/tree.ui.js","assets/SchemaEditor.css","assets/WorkflowEditor.js","assets/ProcessRules.js","assets/ProcessRules.css","assets/SidebarEditor.js","assets/PageLayoutEditor.js","assets/PageEditorTools.js","assets/LayoutEditor.js","assets/LayoutEditor.css","assets/ColumnsEditor.js","assets/RawDatabase.js","assets/RawDatabase.css","assets/SecurityUsers.js","assets/groups.ui.js","assets/SecurityGroups.js","assets/SecurityRules.js","assets/Plugins.js","assets/AgentRequest.js","assets/AgentRequest.css","assets/AgentMcp.js","assets/AgentMcp.css","assets/ScriptEditor.js","assets/ScriptEditor.css"])))=>i.map(i=>d[i]);
 import { r as __exportAll } from "./ObjectFieldFrame.js";
 import { $ as toRaw, A as onMounted, B as useModel, C as inject, E as nextTick, F as resolveComponent, G as withCtx, H as watch, I as resolveDirective, J as markRaw, K as withDirectives, L as resolveDynamicComponent, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, Q as shallowRef, S as h, T as mergeProps, V as useSlots, X as ref, Y as reactive, Z as shallowReactive, _ as createElementBlock, b as createVNode, c as withKeys, d as KeepAlive, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, o as vModelText, p as computed, q as isRef, rt as toDisplayString, s as vShow, t as Transition, tt as normalizeClass, u as Fragment, v as createSlots, w as mergeModels, y as createTextVNode, z as useId } from "./vue.js";
-import { A as savePreferencePage, C as lineHeights, D as configurationPreview, E as textStyles, I as BusyIndicator_default, L as _plugin_vue_export_helper_default, M as taskColumns, S as layout$6, T as readableText, a as _sfc_main$104, b as fontLineHeight, g as controls$1, h as blend, j as normalizeColumns, k as preferences, m as saveAppearance, o as t, s as appearance, t as _sfc_main$103, u as frameColors, w as metrics$9, x as fontMetricHeight, y as fontFamily } from "./AppButton.js";
+import { A as preferences, C as layout$6, D as textStyles, E as readableText, L as BusyIndicator_default, M as normalizeColumns, N as taskColumns, O as configurationPreview, R as _plugin_vue_export_helper_default, S as fontMetricHeight, T as metrics$9, _ as controls$1, a as _sfc_main$104, b as fontFamily, g as blend, h as saveAppearance, j as savePreferencePage, o as t, p as projectPalette, s as appearance, t as _sfc_main$103, u as frameColors, w as lineHeights, x as fontLineHeight } from "./AppButton.js";
 import { $ as updatesAvailable, At as savedSessions, C as projectNavigation, Ct as forgetSessions, D as resolveCustomUrl, E as resetRequestActivity, Et as levels, Ft as asyncComponent, J as userProfile, K as uploadFormFile, M as scriptShelf, Mt as setServerDebugContext, N as searchConfiguration, Nt as randomId, O as resultItems, Q as updateDelay, R as serverUpdates, S as projectCreationCatalog, St as exportSession, T as requestActivity, Tt as importSession, X as workspaceLayouts, Y as widgetConfiguration, Z as setUpdatesAvailable, _ as navigationLink, _t as mobile, a as __vitePreload, at as editNotificationReply, bt as debugLog, c as beginActivity, ct as notify, dt as submitNotificationReply, et as activeNotifications, f as interfaceDefinition, ft as serverClock, g as messagesRequest, h as messageFileRequest, ht as dockMinimumWidth, i as readWindowPage, it as dismissNotification, jt as sessionRecords, k as rpc, lt as resetNotifications, m as linkPreviews, mt as dockMinimumHeight, n as bootstrapWindowPage, nt as cancelNotificationReply, ot as failNotificationReply, pt as serverTimestamp, q as userAvatar, r as installWindowPages, rt as clearNotificationHistory, s as activityFeed, st as notificationHistory, tt as beginNotificationReply, u as endActivity, ut as setNotificationProgress, vt as mobileLayout, wt as formatEvent, x as projectCatalog, xt as debugSettings, yt as clearLive, z as sessionAction } from "./index.js";
 import { A as monthLabel, B as node, C as ItemPreview_default, D as _sfc_main$112, E as _sfc_main$108, F as _sfc_main$106, H as revealListOffset, I as _sfc_main$115, L as button, N as _sfc_main$109, O as _sfc_main$107, P as _sfc_main$111, R as label, S as _sfc_main$116, T as _sfc_main$113, V as rect$1, _ as readClipboardImages, b as _sfc_main$110, g as copyText, h as copyImage, j as parse, k as localDate, n as observeFrameSizes, r as _sfc_main$105, s as _sfc_main$117, t as frameContentWidth, v as translate, w as AppSearchField_default, x as matchesUser$1, y as _sfc_main$114, z as muted } from "./resize.js";
 import { t as _sfc_main$118 } from "./AppearanceControls.js";
@@ -12,7 +12,7 @@ import { A as activateRichLink, C as customUrlLocation, D as savedSearchLink, M 
 import { i as sourceIcon, n as fileName, r as prettySize, t as extension } from "./file_values.js";
 import { a as sourcePath, i as repositories, n as droppedFiles, r as prepareFiles, t as descriptors } from "./files.js";
 import { t as downloadBlob } from "./files2.js";
-import { A as _sfc_main$123, At as row$15, B as gallery, C as messageDate, D as _sfc_main$131, E as contextActions, F as emojiCount, Ft as viewTabWidth, H as revision, I as formatFileSize, L as popup$2, M as bodyOrder, Mt as key$1, N as bubbleContour, Nt as sectionWidth, O as _sfc_main$126, P as bubbleGeometry, Pt as tab, R as forward, S as messageAttachments, St as WorkspaceSearch_default, T as retainOlderMessages, U as _sfc_main$132, V as heading$1, W as _sfc_main$127, _ as canChangeMessage, _t as sorts$1, b as initials$1, bt as _sfc_main$134, d as ObjectAction_default, dt as defaultResultView, f as ObjectOperations_default, ft as filterActions, g as attachmentName, gt as sortColumn, h as _sfc_main$130, ht as sortActions, j as _sfc_main$133, jt as dimensions$4, k as _sfc_main$124, kt as _sfc_main$128, l as RelatedObjects_default, m as skeyPlaceholder, mt as groups$1, p as NotesPanel_default, pt as groupActions, sn as _sfc_main$125, t as ConfiguredView_default, ut as _sfc_main$129, v as conversationAttachments, vt as viewActions, w as messageId, x as mergeMessages, y as groupedMessages, yt as views, z as forwarding } from "./ConfiguredView.js";
+import { $ as defaultResultView, A as _sfc_main$123, B as gallery, C as messageDate, Ct as viewTabWidth, D as _sfc_main$131, E as contextActions, F as emojiCount, H as revision, I as formatFileSize, L as popup$2, M as bodyOrder, N as bubbleContour, O as _sfc_main$126, P as bubbleGeometry, Q as _sfc_main$129, R as forward, S as messageAttachments, St as tab, T as retainOlderMessages, U as _sfc_main$132, V as heading$1, W as _sfc_main$127, _ as canChangeMessage, _t as _sfc_main$128, at as sorts$1, b as initials$1, bt as key$1, ct as _sfc_main$134, d as ObjectAction_default, et as filterActions, f as ObjectOperations_default, g as attachmentName, h as _sfc_main$130, it as sortColumn, j as _sfc_main$133, k as _sfc_main$124, l as RelatedObjects_default, m as skeyPlaceholder, nt as groups$1, ot as viewActions, p as NotesPanel_default, rt as sortActions, sn as _sfc_main$125, st as views, t as ConfiguredView_default, tt as groupActions, ut as WorkspaceSearch_default, v as conversationAttachments, vt as row$15, w as messageId, x as mergeMessages, xt as sectionWidth, y as groupedMessages, yt as dimensions$4, z as forwarding } from "./ConfiguredView.js";
 import { t as _sfc_main$135 } from "./CodeBlock.js";
 import { t as describe$40 } from "./confirmation.ui.js";
 import { t as _sfc_main$136 } from "./AppDialog.js";
@@ -32392,7 +32392,7 @@ var RawDatabase = asyncComponent(() => __vitePreload(() => import("./RawDatabase
 var SecurityUsers = asyncComponent(() => __vitePreload(() => import("./SecurityUsers.js"), __vite__mapDeps([73,2,3,4,5,6,10,11,7,8,74])));
 var SecurityGroups = asyncComponent(() => __vitePreload(() => import("./SecurityGroups.js"), __vite__mapDeps([75,2,3,4,5,6,10,11,7,8,74])));
 var SecurityRules = asyncComponent(() => __vitePreload(() => import("./SecurityRules.js"), __vite__mapDeps([76,2,3,4,5,6,10,11,7,8,13,14,15,16,17,18])));
-var Plugins = asyncComponent(() => __vitePreload(() => import("./Plugins.js"), __vite__mapDeps([77,2,3,4,5,6,10,11,7,8,67,26,1,9,14,12,27,28,13,15,16,17,18,29,30,31,32,33,34,35,36,37,38,39,40])));
+var Plugins = asyncComponent(() => __vitePreload(() => import("./Plugins.js"), __vite__mapDeps([77,2,3,4,5,6,10,11,7,8,26,1,9,14,12,27,28,13,15,16,17,18,29,30,31,32,33,34,35,36,37,38,39,40,67])));
 var compactLayout = window.matchMedia("(max-width: 900px)");
 var shortcutLayout = mobileLayout;
 var _sfc_main = {
@@ -32999,6 +32999,7 @@ var _sfc_main = {
 		},
 		session: {
 			handler() {
+				projectPalette.value = null;
 				resetNotifications();
 				resetRequestActivity();
 				this.inspectorSource = this.inspectorTarget = null;
@@ -33015,6 +33016,7 @@ var _sfc_main = {
 		},
 		workspaceProject: {
 			handler() {
+				projectPalette.value = this.navigationByProject[this.workspaceProject]?.pluginTheme || null;
 				resetRequestActivity();
 				this.inspectorSource = this.inspectorTarget = null;
 				this.inspectorRequest++;
@@ -34738,7 +34740,6 @@ var _sfc_main = {
 			}
 		},
 		async loadNavigation() {
-			if (this.windowPage) return;
 			if (!this.session || !this.workspaceProject) return;
 			const project = this.workspaceProject, ticket = this.session.ticket;
 			const id = (this.navigationRequests[project] || 0) + 1;
@@ -34747,7 +34748,9 @@ var _sfc_main = {
 				const result = await projectNavigation(ticket, project);
 				if (id !== this.navigationRequests[project] || ticket !== this.session?.ticket) return;
 				this.navigationByProject[project] = result;
+				if (project === this.workspaceProject) projectPalette.value = result.pluginTheme || null;
 				this.navigationErrors[project] = "";
+				if (this.windowPage) return;
 				const links = [];
 				const collect = (entries) => {
 					for (const entry of entries) {

@@ -2,7 +2,329 @@ import { A as onMounted, H as watch, K as withDirectives, M as openBlock, O as o
 import { s as appearance } from "./AppButton.js";
 import { K as uploadFormFile, k as rpc } from "./index.js";
 import { B as node, L as button, R as label, V as rect, n as observeFrameSizes, r as _sfc_main$1, v as translate$1 } from "./resize.js";
+import { wt as describe$2 } from "./ConfiguredView.js";
 import { t as _sfc_main$2 } from "./PageEditorTools.js";
+//#region ../src/tactic_stream/shared_ui/features/administration/plugins/plugins.resources.mjs
+var russian$1 = {
+	Resources: "Состав пакета",
+	"Add resource": "Добавить ресурс",
+	"Resource type": "Тип ресурса",
+	"Resource name": "Имя ресурса",
+	"Python action": "Python-действие",
+	"Project data": "Данные проекта",
+	"Search Type": "Тип объектов",
+	"Record code (empty = all records)": "Код записи (пусто = все записи)",
+	"Include table schema": "Включить схему таблицы",
+	"Activate this package to edit its project resources. Inspect packaged files before activation.": "Активируйте пакет для редактирования его ресурсов в проекте. До активации проверьте файлы пакета.",
+	"Add a widget, column, theme, Python action or selected project data.": "Добавьте виджет, колонку, тему, Python-действие или выбранные данные проекта.",
+	Source: "Исходник",
+	"Saved preview": "Предпросмотр сохранённого",
+	"Save validates the resource, updates the project and exports it into the package.": "Сохранение проверяет ресурс, обновляет проект и экспортирует его в пакет.",
+	"Apply theme to project": "Применить тему к проекту",
+	"Use personal appearance": "Использовать личное оформление",
+	"Theme style": "Стиль темы",
+	"Light base": "Светлый фон",
+	"Light accent": "Светлый акцент",
+	"Dark base": "Тёмный фон",
+	"Dark accent": "Тёмный акцент",
+	"Install and removal hooks are Python files referenced by python path/undo_path in Manifest XML.": "Обработчики установки и удаления — Python-файлы, указанные в python path/undo_path в XML манифеста.",
+	"Review data selection in Manifest XML before publishing. Removing the plugin removes its selected records.": "Перед публикацией проверьте выборку данных в XML манифеста. Удаление плагина удаляет выбранные записи.",
+	"Resource added to this project and package.": "Ресурс добавлен в проект и пакет.",
+	"Project theme applied. Personal appearance settings are preserved.": "Тема проекта применена. Личные настройки оформления сохранены.",
+	"Personal appearance restored.": "Личное оформление восстановлено.",
+	"Install/removal hooks": "Обработчики установки и удаления",
+	"Run Python action": "Выполнить Python-действие",
+	"Arguments (JSON object)": "Аргументы (JSON-объект)",
+	"Run this trusted server Python action? It may modify project data.": "Выполнить этот доверенный Python-код на сервере? Он может изменить данные проекта.",
+	"Action result": "Результат действия",
+	Schema: "Схема",
+	Script: "Скрипт",
+	Configuration: "Конфигурация"
+};
+var names = {
+	widget: "Widget",
+	column: "Column",
+	theme: "Theme",
+	python: "Python action",
+	script: "Script",
+	data: "Project data",
+	hooks: "Install/removal hooks"
+};
+var icons = {
+	widget: "extension",
+	column: "view-column",
+	theme: "appearance",
+	python: "code",
+	script: "code",
+	data: "table-view",
+	search_type: "table-view",
+	include: "code",
+	plugin: "extension"
+};
+function row$1(list, entry, model, tr) {
+	const w = Math.max(0, list.width - 16);
+	return { nodes: [
+		node("Box", "pluginResourceBackground", rect(0, 0, w, 48), {
+			background: model.document?.resource?.key === entry.key ? "contentSelection" : "transparent",
+			radius: 0
+		}),
+		node("Icon", "pluginResourceIcon", rect(8, 10, 24, 24), { icon: icons[entry.kind] || "settings" }),
+		label("pluginResourceTitle", rect(44, 0, w - 48, 24), entry.title, { weight: 600 }),
+		label("pluginResourceKind", rect(44, 24, w - 48, 22), tr(names[entry.kind] || {
+			search_type: "Schema",
+			configuration: "Configuration"
+		}[entry.kind] || entry.kind) + (entry.searchType ? " · " + entry.searchType : "") + (entry.count === void 0 ? "" : " · " + entry.count), {
+			color: "secondaryText",
+			fontRole: "secondary"
+		}),
+		node("Action", "pluginResourceSelect", rect(0, 0, w, 48), {
+			text: entry.title,
+			selected: model.document?.resource?.key === entry.key,
+			enabled: !model.busy && !!(entry.field || entry.path),
+			action: entry.field ? {
+				type: "resource",
+				key: entry.key
+			} : {
+				type: "file",
+				path: entry.path,
+				directory: false
+			}
+		})
+	] };
+}
+function themeSource(source, field, value) {
+	const parts = field.split("_"), mode = field === "style" ? "theme" : parts[0], key = field === "style" ? "style" : parts[1];
+	return source.replace(new RegExp("<" + mode + "\\b[^>]*>"), (tag) => tag.replace(new RegExp("(\\b" + key + "\\s*=\\s*)([\"'])(.*?)\\2"), (_, prefix, quote) => prefix + quote + value + quote));
+}
+function describe$1(model, ui, width, height, language, tr) {
+	const nodes = [], meta = model.metadata || {}, resource = model.document?.resource, writable = model.canWrite && !model.busy && !model.uncertain, clean = !model.busy && !model.uncertain && !model.dirty;
+	let y = 0;
+	const text = (id, value, h = 44) => {
+		nodes.push(label(id, rect(0, y, width, h), tr(value), {
+			wrap: true,
+			color: "secondaryText"
+		}));
+		y += h + 8;
+	};
+	const action = (id, title, icon, event, enabled = clean) => button(id, rect(0, 0, width, 36), tr(title), icon, event, enabled);
+	if (!meta.active) {
+		text("pluginInactiveResources", "Activate this package to edit its project resources. Inspect packaged files before activation.", 72);
+		return {
+			nodes,
+			height: y
+		};
+	}
+	const add = action("pluginAddResource", "Add resource", "add", { type: "resource-add" }, clean && model.canWrite);
+	add.width = Math.min(240, width);
+	nodes.push(add);
+	y += 44;
+	if (ui.resourceAdd) {
+		const input = (field, title, options = null) => {
+			nodes.push(label("pluginResourceLabel_" + field, rect(0, y, width, 24), tr(title)));
+			y += 28;
+			nodes.push(node(options ? "Choice" : "Field", "pluginResourceInput_" + field, rect(0, y, width, 40), Object.assign({
+				label: tr(title),
+				action: {
+					type: "input",
+					field
+				},
+				enabled: !model.busy
+			}, options ? {
+				value: ui[field],
+				options
+			} : { text: ui[field] || "" })));
+			y += 48;
+		};
+		input("resourceKind", "Resource type", Object.keys(names).map((value) => ({
+			value,
+			label: tr(names[value])
+		})));
+		input("resourceName", "Resource name");
+		if (ui.resourceKind === "data") {
+			input("resourceType", "Search Type", meta.dataTypes || []);
+			input("resourceCode", "Record code (empty = all records)");
+			nodes.push(node("CheckBox", "pluginResourceSchema", rect(0, y, width, 36), {
+				text: tr("Include table schema"),
+				checked: ui.resourceSchema,
+				action: {
+					type: "input",
+					field: "resourceSchema"
+				}
+			}));
+			y += 44;
+			text("pluginDataRemovalHint", "Review data selection in Manifest XML before publishing. Removing the plugin removes its selected records.", 60);
+		}
+		const create = action("pluginResourceCreate", "Add resource", "add", { type: "resource-create" }, clean && !!ui.resourceName?.trim() && (ui.resourceKind !== "data" || !!ui.resourceType));
+		create.y = y;
+		create.width = Math.min(width / 2 - 4, 240);
+		nodes.push(create);
+		const cancel = action("pluginResourceCancel", "Cancel", "close", { type: "resource-cancel" }, !model.busy);
+		cancel.x = create.width + 8;
+		cancel.y = y;
+		cancel.width = Math.min(width - create.width - 8, 160);
+		nodes.push(cancel);
+		y += 48;
+	}
+	text("pluginResourceHint", "Add a widget, column, theme, Python action or selected project data.");
+	const wide = width >= 700, listTop = y, listHeight = wide ? Math.max(240, height - y - 16) : 192, editorStart = nodes.length + 1;
+	nodes.push(node("List", "pluginResources", rect(0, y, wide ? 240 : width, listHeight), {
+		source: "pluginResources",
+		keyField: "key",
+		fields: [
+			"key",
+			"kind",
+			"title",
+			"searchType",
+			"field",
+			"path",
+			"count"
+		],
+		rowHeight: 48,
+		scrollbarId: "pluginResourceScroll",
+		scrollbarReserved: 16,
+		label: tr("Resources"),
+		resetKey: model.identity
+	}));
+	if (wide) width -= 252;
+	else y += 204;
+	if (resource) {
+		nodes.push(label("pluginResourceSelected", rect(0, y, width, 28), resource.title, { weight: 600 }));
+		y += 36;
+		if (resource.validationError) {
+			nodes.push(label("pluginResourceValidation", rect(0, y, width, 64), resource.validationError, {
+				wrap: true,
+				color: "error"
+			}));
+			y += 72;
+		}
+		if (resource.kind === "python") {
+			nodes.push(label("pluginPythonInputsLabel", rect(0, y, width, 24), tr("Arguments (JSON object)")));
+			y += 28;
+			nodes.push(node("Area", "pluginPythonInputs", rect(0, y, width, 76), {
+				text: ui.resourceArguments || "{}",
+				enabled: !model.busy,
+				action: {
+					type: "input",
+					field: "resourceArguments"
+				}
+			}));
+			y += 84;
+			const run = action("pluginPythonRun", "Run Python action", "play-arrow", {
+				type: "operation",
+				action: "run_resource"
+			});
+			run.y = y;
+			nodes.push(run);
+			y += 44;
+			if (meta.runResult !== void 0) {
+				text("pluginPythonResultLabel", "Action result", 24);
+				nodes.push(label("pluginPythonResult", rect(0, y, width, 100), JSON.stringify(meta.runResult, null, 2), { wrap: true }));
+				y += 108;
+			}
+		}
+		if (resource.kind === "theme" && resource.palette) {
+			for (const [id, title, icon, operation] of [[
+				"pluginApplyTheme",
+				"Apply theme to project",
+				"palette",
+				"apply_theme"
+			], [
+				"pluginResetTheme",
+				"Use personal appearance",
+				"reset",
+				"reset_theme"
+			]]) {
+				const b = action(id, title, icon, {
+					type: "run",
+					action: operation,
+					values: { resource: resource.key }
+				});
+				b.y = y;
+				nodes.push(b);
+				y += 44;
+			}
+			nodes.push(node("Choice", "pluginThemeStyle", rect(0, y, width, 40), {
+				label: tr("Theme style"),
+				value: resource.palette?.style || "md3",
+				enabled: writable,
+				options: [
+					"md3",
+					"material5",
+					"fluent"
+				].map((value) => ({
+					value,
+					label: value
+				})),
+				action: {
+					type: "resource-theme",
+					field: "style"
+				}
+			}));
+			y += 48;
+			for (const mode of ["light", "dark"]) for (const color of ["base", "accent"]) {
+				const field = mode + "_" + color, title = (mode === "light" ? "Light" : "Dark") + " " + color;
+				nodes.push(label("pluginThemeLabel_" + field, rect(0, y, width, 24), tr(title)));
+				y += 28;
+				nodes.push(node("ColorChoice", "pluginTheme_" + field, rect(0, y, Math.min(width, 400), 40), {
+					label: tr(title),
+					value: resource.palette?.[mode]?.[color] || "",
+					enabled: writable,
+					action: {
+						type: "resource-theme",
+						field
+					}
+				}));
+				y += 48;
+			}
+		}
+		if (resource.layout) {
+			nodes.push(node("Segmented", "pluginResourceMode", rect(0, y, width, 36), {
+				label: tr("Resources"),
+				value: ui.resourceMode,
+				options: ["source", "preview"].map((value) => ({
+					value,
+					label: tr(value === "source" ? "Source" : "Saved preview")
+				})),
+				action: {
+					type: "input",
+					field: "resourceMode"
+				}
+			}));
+			y += 44;
+		}
+		if (resource.layout && ui.resourceMode === "preview") {
+			const previewWidth = Math.min(width, resource.kind === "column" ? 320 : 480);
+			const scene = describe$2(resource.layout, resource.sample, previewWidth, "", language, width, "", "pluginResourcePreview", 0, true);
+			nodes.push(node("Box", "pluginResourcePreview", rect(0, y, width, scene.height), { children: scene.nodes }));
+			y += scene.height + 12;
+		} else {
+			text("pluginResourceSaveHint", "Save validates the resource, updates the project and exports it into the package.", 52);
+			const h = Math.max(300, height - y);
+			nodes.push(node("Code", "pluginResourceSource", rect(0, y, width, h), {
+				text: resource.source,
+				syntax: resource.field === "script" ? resource.kind === "python" ? "python" : "javascript" : "xml",
+				language,
+				service: "sourceEditor",
+				bufferKey: model.identity + ":" + resource.key,
+				readOnly: !writable,
+				action: {
+					type: "field",
+					field: "resource_source"
+				}
+			}));
+			y += h + 12;
+		}
+	} else text("pluginHooksHint", "Install and removal hooks are Python files referenced by python path/undo_path in Manifest XML.", 56);
+	if (wide) {
+		for (const child of nodes.slice(editorStart)) child.x += 252;
+		y = Math.max(y, listTop + listHeight);
+	}
+	return {
+		nodes,
+		height: y
+	};
+}
+//#endregion
 //#region ../src/tactic_stream/shared_ui/features/administration/plugins/plugins.state.mjs
 function initial() {
 	return {
@@ -15,10 +337,18 @@ function initial() {
 		checksum: "",
 		collapsed: false,
 		source: "zip",
-		notice: ""
+		notice: "",
+		resourceAdd: false,
+		resourceKind: "widget",
+		resourceName: "",
+		resourceType: "",
+		resourceCode: "",
+		resourceSchema: false,
+		resourceMode: "source"
 	};
 }
 var destructive = {
+	run_resource: "Run this trusted server Python action? It may modify project data.",
 	activate: "Activate this package in the selected project? Its manifest can create or update project data and run server code.",
 	replace_file: "Replace the selected file with a local upload?",
 	reload_catalog: "Discard unsaved changes and reload the plugin catalogue?",
@@ -59,15 +389,19 @@ function transition(ui, model, event) {
 	};
 	if (event.type === "completed") {
 		next.notice = {
+			add_resource: "Resource added to this project and package.",
+			apply_theme: "Project theme applied. Personal appearance settings are preserved.",
+			reset_theme: "Personal appearance restored.",
 			install: "Package added. Review its contents, then activate it in this project.",
 			download_url: "Package added. Review its contents, then activate it in this project.",
 			create: model.metadata?.active ? "Plugin created and active in this project. Add files and configure its manifest." : model.identity ? "Package added. Review its contents, then activate it in this project." : "Package exported. Check your downloads.",
 			activate: "Plugin is now active in this project.",
 			deactivate: "Plugin removed from this project. The package remains on the server.",
-			save: model.metadata?.active && !model.document?.file ? "Changes saved. Reload the plugin to apply manifest changes to this project." : "Changes saved.",
+			save: model.metadata?.active && !model.document?.file && !model.document?.resource ? "Changes saved. Reload the plugin to apply manifest changes to this project." : "Changes saved.",
 			export: "Package exported. Check your downloads.",
 			publish: "Version published. Review the new release before activating it."
 		}[event.action] || "";
+		if (event.action === "add_resource") next.resourceAdd = false;
 		if ([
 			"list",
 			"new",
@@ -88,7 +422,37 @@ function transition(ui, model, event) {
 	else if (event.type === "activeOnly") next.activeOnly = event.value;
 	else if (event.type === "collapse") next.collapsed = !ui.collapsed;
 	else if (event.type === "input") next[event.field] = event.value;
-	else if (event.type === "field" && !blocked && model.canWrite) commands.push(event);
+	else if (event.type === "resource-add" && clean()) {
+		next.resourceAdd = true;
+		next.resourceName = "";
+	} else if (event.type === "resource-cancel" && !model.busy) next.resourceAdd = false;
+	else if (event.type === "resource-create" && clean()) request("add_resource", { values: {
+		kind: ui.resourceKind,
+		name: ui.resourceName,
+		searchType: ui.resourceType,
+		code: ui.resourceCode,
+		schema: ui.resourceSchema
+	} });
+	else if (event.type === "resource" && clean()) {
+		next.resourceMode = "source";
+		request("open_resource", { resource: event.key });
+	} else if (event.type === "resource-theme" && !blocked && model.canWrite && model.document?.resource?.kind === "theme" && model.document.resource.palette) {
+		const resource = model.document.resource, palette = JSON.parse(JSON.stringify(resource.palette));
+		if (event.field === "style") palette.style = event.value;
+		else {
+			const parts = event.field.split("_");
+			palette[parts[0]][parts[1]] = event.value;
+		}
+		commands.push({
+			type: "field",
+			field: "resource_source",
+			value: themeSource(resource.source, event.field, event.value)
+		}, {
+			type: "field",
+			field: "resource_palette",
+			value: palette
+		});
+	} else if (event.type === "field" && !blocked && model.canWrite) commands.push(event);
 	else if (event.type === "select" && clean()) {
 		next.operation = "";
 		next.notice = "";
@@ -98,9 +462,15 @@ function transition(ui, model, event) {
 		next.tab = event.value;
 		next.operation = "";
 		next.notice = "";
-		if (event.value === "docs") {
+		if (event.value === "resources") {
+			const first = model.metadata?.resources?.find((item) => item.field);
+			if (first) {
+				next.resourceMode = "preview";
+				request("open_resource", { resource: first.key });
+			}
+		} else if (event.value === "docs") {
 			if (model.metadata.docsExist) request("open_file", { file: model.metadata.docs });
-		} else if (model.document?.file) request("load");
+		} else if (model.document?.file || model.document?.resource) request("load");
 	} else if (event.type === "reload" && !model.busy) {
 		if (model.dirty) next.operation = "reload_catalog";
 		else {
@@ -158,6 +528,10 @@ function transition(ui, model, event) {
 			const selected = model.document?.file?.path || model.metadata.folder || "";
 			if (["new_file", "new_folder"].includes(action)) values.path = [model.metadata.folder, ui.value].filter(Boolean).join("/");
 			if (action === "publish") values.version = ui.value;
+			if (action === "run_resource") {
+				values.resource = model.document?.resource?.key;
+				values.inputs = ui.resourceArguments || "{}";
+			}
 			if (action === "rename") {
 				values.path = selected;
 				values.destination = ui.value;
@@ -536,6 +910,7 @@ var russian = {
 	"Plugin checksum does not match": "Контрольная сумма плагина не совпадает"
 };
 function translate(text, language) {
+	if (language === "ru" && russian$1[text]) return russian$1[text];
 	return language === "ru" && russian[text] ? russian[text] : translate$1(text, language);
 }
 var parent = (path) => path.split("/").slice(0, -1).join("/");
@@ -705,7 +1080,8 @@ function describe(model, ui, width, height, language) {
 			new_file: "New file",
 			new_folder: "New folder",
 			rename: "Rename or move",
-			publish: "Publish version"
+			publish: "Publish version",
+			run_resource: "Run Python action"
 		}[ui.operation];
 		content.push(label("pluginOperationTitle", rect(0, oy, w, 36), tr(heading), {
 			weight: 600,
@@ -806,6 +1182,7 @@ function describe(model, ui, width, height, language) {
 		}));
 		const tabs = [
 			["info", "Overview"],
+			["resources", "Resources"],
 			["details", "Package details"],
 			["manifest", "Manifest XML"],
 			["files", "Files"],
@@ -920,6 +1297,10 @@ function describe(model, ui, width, height, language) {
 			}));
 			cy += 68;
 		}
+	} else if (ui.tab === "resources") {
+		const resources = describe$1(model, ui, w, Math.max(360, height - y), language, tr);
+		resources.nodes.forEach((item) => content.push(item));
+		cy = resources.height;
 	} else if (ui.tab === "manifest") {
 		content.push(label("pluginManifestHint", rect(0, 0, w, 56), tr("Save changes the manifest file. Reload plugin applies its project data; review that confirmation first."), {
 			wrap: true,
@@ -1074,6 +1455,7 @@ function describe(model, ui, width, height, language) {
 }
 function row(list, record, model, language) {
 	const tr = (text) => translate(text, language), w = Math.max(0, list.width - 16);
+	if (list.id === "pluginResources") return row$1(list, record, model, tr);
 	if (list.id === "pluginFiles") return { nodes: [button("pluginFile_" + record.path, rect(0, 0, w, 40), record.name, record.directory ? "folder" : "file", {
 		type: "file",
 		path: record.path,
@@ -1140,7 +1522,8 @@ var _sfc_main = {
 			error: error.value
 		})), scene = computed(() => describe(model.value, ui.value, size.value.width, size.value.height, appearance.language)), toolbar$1 = computed(() => toolbar(model.value, toolbarWidth.value, appearance.language)), models = computed(() => ({
 			plugins: catalog(model.value, ui.value),
-			files: metadata.value.files || []
+			files: metadata.value.files || [],
+			pluginResources: metadata.value.resources || []
 		})), views = { pluginTools: {
 			component: _sfc_main$2,
 			nodeProps: true,
@@ -1151,8 +1534,8 @@ var _sfc_main = {
 		} };
 		let generation = 0, observer, uploadPackage = false, uploadReplace = false;
 		const clone = (value) => JSON.parse(JSON.stringify(value));
-		function rowScene(list, row$1) {
-			return row(list, row$1, model.value, appearance.language);
+		function rowScene(list, row$2) {
+			return row(list, row$2, model.value, appearance.language);
 		}
 		function clear() {
 			++generation;
@@ -1175,7 +1558,8 @@ var _sfc_main = {
 				"load",
 				"new",
 				"browse",
-				"open_file"
+				"open_file",
+				"open_resource"
 			].includes(action), args = Object.assign({
 				action,
 				project_code: props.project,
@@ -1256,7 +1640,9 @@ var _sfc_main = {
 			else if (command.type === "select") run("load", { identity: command.identity });
 			else if (command.type === "request") run(command.action, command.values);
 			else if (command.type === "field") {
-				if (command.field === "file_content" && draft.value.file) draft.value.file.content = command.value;
+				if (command.field === "resource_source" && draft.value.resource) draft.value.resource.source = command.value;
+				else if (command.field === "resource_palette" && draft.value.resource) draft.value.resource.palette = command.value;
+				else if (command.field === "file_content" && draft.value.file) draft.value.file.content = command.value;
 				else if (Object.hasOwn(draft.value, command.field)) draft.value[command.field] = command.value;
 			} else if (command.type === "save") run(metadata.value.new ? "create" : "save");
 			else if (command.type === "discard") discard();

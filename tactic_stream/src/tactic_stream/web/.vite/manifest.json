@@ -552,6 +552,7 @@
       "_AppButton.js",
       "index.html",
       "_resize.js",
+      "_ConfiguredView.js",
       "_PageEditorTools.js"
     ]
   },

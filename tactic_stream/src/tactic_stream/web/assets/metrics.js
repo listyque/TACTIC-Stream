@@ -1,4 +1,4 @@
-import { g as controls } from "./AppButton.js";
+import { _ as controls } from "./AppButton.js";
 //#region ../src/tactic_stream/shared_ui/controls/buttons/metrics.mjs
 function buttonWidth(advance, icon = false) {
 	const metrics = controls.button;

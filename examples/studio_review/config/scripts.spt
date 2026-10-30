@@ -1,0 +1,8 @@
+#-- Start Entry --#
+insert = SearchType.create('config/custom_script')
+insert.set_value('code', 'STUDIO_REVIEW_APPROVE')
+insert.set_value('folder', 'plugins/studio_review')
+insert.set_value('title', 'approve')
+insert.set_value('language', 'python')
+insert.set_value('script', "from pyasm.common import Environment\nfrom pyasm.search import Search\n\ncode = kwargs.get('review_code') or kwargs.get('input', {}).get('review_code')\nif not code:\n    raise ValueError('Pass review_code, for example STUDIO_REVIEW_001')\nreview = Search.get_by_code('studio/review', code)\nif review is None:\n    raise ValueError('Review does not exist in this project')\nreview.set_value('status', 'Approved')\nreview.set_value('progress', 100)\nreview.set_value('approved_by', Environment.get_user_name())\nreview.commit()\nreturn dict(code=code, status=review.get_value('status'), progress=review.get_value('progress'))\n")
+#-- End Entry --#

@@ -58,7 +58,8 @@ const dirty = computed(
   ),
   models = computed(() => ({
     plugins: UI.catalog(model.value, ui.value),
-    files: metadata.value.files || []
+    files: metadata.value.files || [],
+    pluginResources: metadata.value.resources || []
   })),
   views = {
     pluginTools: {
@@ -93,7 +94,14 @@ async function run(action, values = {}, upload = null) {
       project: props.project,
       language: 'python'
     },
-    write = !['list', 'load', 'new', 'browse', 'open_file'].includes(action),
+    write = ![
+      'list',
+      'load',
+      'new',
+      'browse',
+      'open_file',
+      'open_resource'
+    ].includes(action),
     args = Object.assign(
       {
         action,
@@ -189,7 +197,11 @@ function dispatch(event) {
       run('load', { identity: command.identity });
     else if (command.type === 'request') run(command.action, command.values);
     else if (command.type === 'field') {
-      if (command.field === 'file_content' && draft.value.file)
+      if (command.field === 'resource_source' && draft.value.resource)
+        draft.value.resource.source = command.value;
+      else if (command.field === 'resource_palette' && draft.value.resource)
+        draft.value.resource.palette = command.value;
+      else if (command.field === 'file_content' && draft.value.file)
         draft.value.file.content = command.value;
       else if (Object.hasOwn(draft.value, command.field))
         draft.value[command.field] = command.value;

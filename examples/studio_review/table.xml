@@ -1,0 +1,8 @@
+<config>
+  <studio_review.table row_height="80">
+    <element name="name" title="Review" width="240"/>
+    <element name="description" title="Description" width="360"/>
+    <element name="review_status" title="Review status" width="200"><display class="tactic.ui.table.CustomLayoutElementWdg"><view>studio_review.column</view></display></element>
+    <element name="approved_by" title="Approved by" width="180"/>
+  </studio_review.table>
+</config>

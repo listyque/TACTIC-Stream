@@ -22,6 +22,7 @@ from pyasm.security.security import _require_admin
 from tactic.command import PluginCreator, PluginInstaller, PluginReloader, PluginUninstaller
 from tactic.command.plugin import _manifest_xml, _package_path
 from tactic.command.python_cmd import check_script_execution
+from tactic.command import plugin_resources as Resources
 
 
 def _roots():
@@ -117,7 +118,7 @@ def _write(path, content):
     path.write_text(content, encoding='utf-8', newline='\n')
 
 
-def _document(identity, folder='', file=''):
+def _document(identity, folder='', file='', resource=''):
     root, path, builtin = _package(identity)
     manifest, data = _data(path)
     directory = _package_path(path, folder)
@@ -129,7 +130,12 @@ def _document(identity, folder='', file=''):
             continue
         files.append(dict(name=entry.name, path=entry.relative_to(path).as_posix(),
                           directory=entry.is_dir(), size=entry.stat().st_size if entry.is_file() else 0))
-    document = dict(data, manifest=manifest, file=None)
+    active = _is_active(data, path.relative_to(root).as_posix(), _active())
+    document = dict(data, manifest=manifest, file=None, resource=None)
+    if resource:
+        if not active:
+            raise TacticException('Activate the plugin before editing its project resources')
+        document['resource'] = Resources.resource_document(manifest, resource)
     if file:
         target = _file(path, file)
         if target.is_dir():
@@ -144,7 +150,11 @@ def _document(identity, folder='', file=''):
     relative = path.relative_to(root).as_posix()
     return dict(identity=identity, revision=_revision(path), document=document,
                 metadata=dict(folder=folder, files=files, builtin=builtin,
-                              active=_is_active(data, relative, _active()),
+                              active=active,
+                              resources=Resources.resources(manifest) if active else [],
+                              dataTypes=[dict(value=row.get_base_key(), label=row.get_title() or row.get_base_key())
+                                         for row in Project.get().get_search_types(include_multi_project=True)] if active else [],
+                              pluginTheme=Resources.selected_theme(),
                               project=Project.get_project_code(),
                               docs=next((name for name in ('doc/index.html', 'README.md', 'README.txt', 'doc/README.md')
                                          if (path / name).is_file()), 'README.md'),
@@ -184,8 +194,9 @@ class PluginManagerCmd(Command):
                              metadata=dict(new=True, project=project), canWrite=True)
             return
         identity = self.kwargs.get('identity') or ''
-        if action in ('load', 'browse', 'open_file'):
-            self.info.update(_document(identity, self.kwargs.get('folder', ''), self.kwargs.get('file', '')))
+        if action in ('load', 'browse', 'open_file', 'open_resource'):
+            self.info.update(_document(identity, self.kwargs.get('folder', ''), self.kwargs.get('file', ''),
+                                       self.kwargs.get('resource', '')))
             return
         check_script_execution()
         # Keep cross-project package writers serialized until Command commits or rolls back.
@@ -197,11 +208,14 @@ class PluginManagerCmd(Command):
         if identity:
             self.info.update(_document(identity, self.kwargs.get('folder', ''),
                                        self.kwargs.get('file', '') if action == 'save' else
-                                       self.kwargs.get('path', '') if action in ('new_file', 'download_file', 'upload') else ''))
+                                       self.kwargs.get('path', '') if action in ('new_file', 'download_file', 'upload') else '',
+                                       self.kwargs.get('resource', '')))
         else:
             self.info.update(identity='', revision='', document={}, metadata={}, canWrite=True)
         self.info['catalog'] = _catalog()
-        self.info['metadata']['changed'] = action != 'save'
+        if 'run_result' in self.kwargs:
+            self.info['metadata']['runResult'] = self.kwargs['run_result']
+        self.info['metadata']['changed'] = action != 'save' or bool(self.kwargs.get('resource'))
         self.add_description('Plugin manager: ' + action)
 
     def _mutate(self, action, identity):
@@ -212,7 +226,7 @@ class PluginManagerCmd(Command):
         root, path, builtin = _package(identity)
         if _revision(path) != self.kwargs.get('expected_revision'):
             raise TacticException('Plugin changed on the server. Reload before continuing.')
-        if builtin and action not in ('activate', 'reload', 'deactivate', 'clean', 'download_file'):
+        if builtin and action not in ('activate', 'reload', 'deactivate', 'clean', 'download_file', 'apply_theme', 'reset_theme', 'run_resource'):
             raise TacticException('Built-in plugin files are read-only')
         base = dict(base_dir=str(root), plugin_dir=str(path), verbose=False)
         if action in ('deactivate', 'clean', 'delete', 'delete_file', 'clear_spt', 'reload'):
@@ -230,11 +244,65 @@ class PluginManagerCmd(Command):
             else:
                 command = PluginUninstaller(**base)
             Command.execute_cmd(command)
+        elif action in ('add_resource', 'apply_theme', 'reset_theme', 'run_resource'):
+            manifest, data = _data(path)
+            if not _is_active(data, path.relative_to(root).as_posix(), _active()):
+                raise TacticException('Activate the plugin before changing its project resources')
+            if action == 'add_resource':
+                values = self.kwargs.get('values') or {}
+                if values.get('kind') == 'hooks':
+                    name = str(values.get('name') or '')
+                    if not re.fullmatch(r'[A-Za-z_][\w.-]{0,127}', name):
+                        raise TacticException('Choose a valid hook name')
+                    install, undo = name + '_install.py', name + '_uninstall.py'
+                    if (path / install).exists() or (path / undo).exists():
+                        raise TacticException('Hook files already exist')
+                    _write(path / install, '# Install hook. Use native APIs; the surrounding Command owns rollback.\n')
+                    _write(path / undo, '# Removal hook. Undo only the changes owned by this package.\n')
+                    tree = _manifest_xml(manifest).get_root_node()
+                    ET.SubElement(tree, 'python', path=install, undo_path=undo)
+                    manifest, key = ET.tostring(tree, encoding='unicode'), ''
+                else:
+                    manifest, key = Resources.add_resource(manifest, values)
+                _write(path / 'manifest.xml', manifest)
+                self._export_resources(base, data, manifest)
+                self.kwargs['resource'] = key
+            elif action == 'run_resource':
+                if self.kwargs.get('confirmation') is not True:
+                    raise TacticException('Confirm running trusted server Python')
+                resource = Resources.resource_document(manifest, self.kwargs.get('resource'))
+                if resource['kind'] != 'python':
+                    raise TacticException('Select a Python resource')
+                arguments = json.loads(self.kwargs.get('inputs') or '{}')
+                if not isinstance(arguments, dict) or set(arguments) & {'code', 'file_path', 'script_path'}:
+                    raise TacticException('Python inputs must be a JSON object without code/file_path/script_path')
+                from tactic.command import PythonCmd
+                row = Search.get_by_search_key(resource['key'])
+                command = PythonCmd(script_path=row.get_value('folder') + '/' + row.get_value('title'), **arguments)
+                self.kwargs['run_result'] = Command.execute_cmd(command)
+            else:
+                from pyasm.biz import ProjectSetting
+                view = ''
+                if action == 'apply_theme':
+                    item = Resources.resource_document(manifest, self.kwargs.get('resource'))
+                    if item['kind'] != 'theme':
+                        raise TacticException('Select a theme resource')
+                    if not item.get('palette'):
+                        raise TacticException(item.get('validationError') or 'Invalid theme palette')
+                    view = item['title']
+                ProjectSetting.create(Resources.THEME_SETTING, json.dumps(dict(view=view, plugin=data['code'])) if view else '')
         elif action == 'save':
             draft = self.kwargs.get('document')
             if not isinstance(draft, dict):
                 raise TacticException('Plugin document is required')
-            if draft.get('file'):
+            if draft.get('resource'):
+                manifest, data = _data(path)
+                if not _is_active(data, path.relative_to(root).as_posix(), _active()):
+                    raise TacticException('Activate the plugin before editing its project resources')
+                Resources.save_resource(manifest, draft['resource'])
+                self._export_resources(base, data, manifest)
+                self.kwargs['resource'] = draft['resource']['key']
+            elif draft.get('file'):
                 file = draft['file']
                 target = _file(path, file['path'])
                 if hashlib.sha256(target.read_bytes()).hexdigest() != file.get('revision'):
@@ -317,6 +385,13 @@ class PluginManagerCmd(Command):
         else:
             raise TacticException('Unknown plugin operation: ' + str(action))
         return identity
+
+    def _export_resources(self, base, data, manifest):
+        # The native dumper, filesystem journal and surrounding Command share one transaction.
+        Command.execute_cmd(PluginCreator(**base, manifest=manifest, register=False))
+        installed = Search.get_by_code('config/plugin', data['code'])
+        installed.set_value('manifest', manifest)
+        installed.commit()
 
     def _file_action(self, action, path):
         name = str(self.kwargs.get('path') or '')
@@ -425,13 +500,8 @@ class PluginManagerCmd(Command):
             config.set_value('view', view)
             config.set_value('search_type', 'ALL')
             config.set_value('widget_type', kind)
-            config.set_value('category', 'CustomLayoutWdg')
-            config_tree = ET.Element('config')
-            layout = ET.SubElement(config_tree, view, layout='sobject-layout', collection='grid')
-            title = ET.SubElement(layout, 'element', name='title', title='Title', tag='strong')
-            display = ET.SubElement(title, 'display', {'class': 'title'})
-            ET.SubElement(display, 'bind').text = 'node.title'
-            config.set_value('config', ET.tostring(config_tree, encoding='unicode'))
+            config.set_value('category', 'PluginTheme' if kind == 'theme' else 'CustomLayoutWdg')
+            config.set_value('config', Resources.scaffold(kind, view))
             config.commit()
             ET.SubElement(tree, 'sobject', search_type='config/widget_config', view=view,
                           path='config/config_widget_config.spt')

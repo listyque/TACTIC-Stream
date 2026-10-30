@@ -1,0 +1,24 @@
+#-- Start Entry --#
+insert = SearchType.create('studio/review')
+insert.set_value('code', 'STUDIO_REVIEW_001')
+insert.set_value('name', 'Lighting review')
+insert.set_value('description', 'Review the key and fill balance.')
+insert.set_value('status', 'In review')
+insert.set_value('progress', 65)
+#-- End Entry --#
+#-- Start Entry --#
+insert = SearchType.create('studio/review')
+insert.set_value('code', 'STUDIO_REVIEW_002')
+insert.set_value('name', 'Animation review')
+insert.set_value('description', 'Confirm timing and silhouettes.')
+insert.set_value('status', 'Changes requested')
+insert.set_value('progress', 35)
+#-- End Entry --#
+#-- Start Entry --#
+insert = SearchType.create('studio/review')
+insert.set_value('code', 'STUDIO_REVIEW_003')
+insert.set_value('name', 'Final delivery')
+insert.set_value('description', 'Validate the final approved version.')
+insert.set_value('status', 'Approved')
+insert.set_value('progress', 100)
+#-- End Entry --#
