@@ -60,3 +60,5 @@ The Projects page separates the catalogue and project actions into bordered surf
 AI providers opens the connection editor directly inside Configuration. Select or create a connection, edit its settings and use its own Save or Check connection actions. Switching configuration pages preserves the connection draft; hidden editors stop connection polling. Account changes clear the draft. The agent chat can still open the same editor as a separate window.
 
 In Stream windows, page Help appears in the top window title bar beside the window controls. It follows the current editor or configuration page; the duplicate content-header button is hidden. Help remains available on narrow screens.
+
+The new AI connection form remains open while you choose a provider, even before typing a name. Background checks and switching Configuration pages preserve it. Saving a provider profile does not start an external agent host: a waiting check needs a host connected to the same TACTIC account; the chat also requires that host in the current project.

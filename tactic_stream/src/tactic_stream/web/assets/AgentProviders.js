@@ -291,17 +291,21 @@ var _sfc_main = {
 		}
 		function schedule() {
 			clearTimeout(timer);
-			if (opened && model.value.profiles.some((row) => row.status === "waiting")) timer = setTimeout(() => {
-				if (!dirty(model.value) && !model.value.busy) call("state");
+			if (opened && model.value.selected && model.value.profiles.some((row) => row.status === "waiting")) timer = setTimeout(() => {
+				if (model.value.selected && !dirty(model.value) && !model.value.busy) call("state");
 				else schedule();
 			}, 2e3);
 		}
 		function event(action) {
 			if (model.value.busy) return;
 			if (action.type === "field") model.value = edit(model.value, action.field, action.value);
-			else if (action.type === "select" && !dirty(model.value)) model.value = select(model.value, action.value);
-			else if (action.type === "new" && !dirty(model.value)) model.value = select(model.value, "");
-			else if (action.type === "reset") model.value = select(model.value, model.value.selected);
+			else if (action.type === "select" && !dirty(model.value)) {
+				model.value = select(model.value, action.value);
+				schedule();
+			} else if (action.type === "new" && !dirty(model.value)) {
+				model.value = select(model.value, "");
+				schedule();
+			} else if (action.type === "reset") model.value = select(model.value, model.value.selected);
 			else if (action.type === "refresh" && !dirty(model.value)) call("state");
 			else if ([
 				"save",
@@ -321,7 +325,7 @@ var _sfc_main = {
 			};
 			opened = true;
 			if (!props.embedded) dialog.value.show();
-			if (!model.value.busy && (!dirty(model.value) || !model.value.revision)) await call("state");
+			if (!model.value.busy && (!dirty(model.value) || !model.value.revision) && (model.value.selected || !model.value.revision)) await call("state");
 		}
 		function closed() {
 			opened = false;

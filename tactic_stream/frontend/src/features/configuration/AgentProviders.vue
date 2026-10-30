@@ -131,9 +131,14 @@ async function call(action, values = {}) {
 }
 function schedule() {
   clearTimeout(timer);
-  if (opened && model.value.profiles.some((row) => row.status === 'waiting'))
+  if (
+    opened &&
+    model.value.selected &&
+    model.value.profiles.some((row) => row.status === 'waiting')
+  )
     timer = setTimeout(() => {
-      if (!UI.dirty(model.value) && !model.value.busy) call('state');
+      if (model.value.selected && !UI.dirty(model.value) && !model.value.busy)
+        call('state');
       else schedule();
     }, 2000);
 }
@@ -141,11 +146,13 @@ function event(action) {
   if (model.value.busy) return;
   if (action.type === 'field')
     model.value = UI.edit(model.value, action.field, action.value);
-  else if (action.type === 'select' && !UI.dirty(model.value))
+  else if (action.type === 'select' && !UI.dirty(model.value)) {
     model.value = UI.select(model.value, action.value);
-  else if (action.type === 'new' && !UI.dirty(model.value))
+    schedule();
+  } else if (action.type === 'new' && !UI.dirty(model.value)) {
     model.value = UI.select(model.value, '');
-  else if (action.type === 'reset')
+    schedule();
+  } else if (action.type === 'reset')
     model.value = UI.select(model.value, model.value.selected);
   else if (action.type === 'refresh' && !UI.dirty(model.value)) call('state');
   else if (['save', 'check', 'remove'].includes(action.type))
@@ -160,7 +167,11 @@ async function open() {
   context ||= { ticket: props.ticket, project: props.project };
   opened = true;
   if (!props.embedded) dialog.value.show();
-  if (!model.value.busy && (!UI.dirty(model.value) || !model.value.revision))
+  if (
+    !model.value.busy &&
+    (!UI.dirty(model.value) || !model.value.revision) &&
+    (model.value.selected || !model.value.revision)
+  )
     await call('state');
 }
 function closed() {

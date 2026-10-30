@@ -6,6 +6,7 @@ const [base, output] = process.argv.slice(2);
 await mkdir(output, { recursive: true });
 const browser = await chromium.launch({
   headless: true,
+  channel: process.env.STREAM_BROWSER_CHANNEL,
   ignoreDefaultArgs: ['--hide-scrollbars']
 });
 try {
@@ -45,7 +46,28 @@ try {
   await editor
     .getByRole('combobox', { name: 'AI connection', exact: true })
     .waitFor();
+  await editor
+    .getByRole('button', { name: 'Check connection', exact: true })
+    .click();
+  await editor
+    .getByText('Waiting for the external host', { exact: true })
+    .waitFor();
   await editor.getByRole('button', { name: 'New', exact: true }).click();
+  await page.waitForTimeout(2500);
+  assert.equal(
+    await editor
+      .getByRole('combobox', { name: 'AI connection', exact: true })
+      .inputValue(),
+    ''
+  );
+  await config.locator('[data-frame=configurationPage_server]').click();
+  await config.locator('[data-frame=configurationPage_ai]').click();
+  assert.equal(
+    await editor
+      .getByRole('combobox', { name: 'AI connection', exact: true })
+      .inputValue(),
+    ''
+  );
   await editor
     .getByRole('textbox', { name: 'Connection name', exact: true })
     .fill('Local fixture');
