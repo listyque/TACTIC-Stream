@@ -56,6 +56,7 @@ const emit = defineEmits([
   'hide',
   'view',
   'save-view',
+  'manage-views',
   'scroll',
   'toggle-group',
   'header-action',
@@ -162,7 +163,8 @@ function columnCommand(command) {
   }
 }
 function viewCommand(command) {
-  if (command === 'scroll_columns')
+  if (command === 'manage') emit('manage-views');
+  else if (command === 'scroll_columns')
     preference({ scrollColumns: !scrollColumns.value, autoFit: false });
   else if (command === 'configure') emit('column', '', 'definition');
   else if (command === 'save_as') savingView.value = true;

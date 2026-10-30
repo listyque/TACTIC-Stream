@@ -68,6 +68,7 @@ def read_widget_configuration(search_type, view='table'):
     sources = [dict(id=item.get_id(), xml=item.get_value('config'), priority=item.get_value('priority', no_exception=True))
                for item in records if item.get_value('search_type') == base and item.get_value('view') == view]
     sources.sort(key=lambda item: (item['priority'] is not None, item['priority'] or 0, item['id']), reverse=True)
+    from tactic.ui.table.views import table_node
     table_views = {view: dict(view=view, title=view, current=True), 'table': dict(view='table', title='table', current=view == 'table')}
     for item in records:
         if item.get_value('search_type') != base:
@@ -77,11 +78,7 @@ def read_widget_configuration(search_type, view='table'):
             root = ElementTree.fromstring(item.get_value('config'))
         except (ElementTree.ParseError, TypeError):
             continue
-        node = None
-        if isinstance(name, str) and re.fullmatch(r'[A-Za-z_][\w.@-]{0,127}', name):
-            node = root if root.tag == name or root.tag == 'view' and root.get('name') == name else next(
-                (child for child in root if child.tag == name or child.tag == 'view' and child.get('name') == name), None)
-        if node is not None and (name == 'table' or name.startswith('th_table_') or node.get('layout') in ('TableLayoutWdg', 'tactic.ui.panel.TableLayoutWdg') or node.find('element') is not None):
+        if table_node(item.get_value('config'), name) is not None:
             table_views[name] = dict(view=name, title=root.get('th_table_view_title') or name, current=name == view)
     return dict(schema_version=1, project=Project.get_project_code(), search_type=base, view=view,
                 table_views=sorted(table_views.values(), key=lambda row: (row['view'] != 'table', row['title'].casefold())),

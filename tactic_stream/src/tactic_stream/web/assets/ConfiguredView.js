@@ -1,9 +1,9 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ObjectCheckin.js","assets/vue.js","assets/AppButton.js","assets/locales.js","assets/icons.js","assets/AppButton.css","assets/index.js","assets/index.css","assets/resize.js","assets/resize.css","assets/sections.ui.js","assets/file_values.js","assets/files.js","assets/confirmation.ui.js","assets/AppDialog.js","assets/toggle.ui.js","assets/ObjectCheckin.css","assets/IngestFiles.js","assets/VirtualCollection.js","assets/VirtualCollection.css","assets/IngestFiles.css","assets/DuplicateSObject.js","assets/ObjectFieldFrame.js","assets/ObjectFieldFrame.css","assets/ContentLoadingOverlay.js","assets/ContentLoadingOverlay.css","assets/DuplicateSObject.css","assets/SnapshotCheckout.js","assets/files2.js","assets/FrameProgress.js","assets/FrameProgress.css","assets/SnapshotCheckout.css"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ObjectCheckin.js","assets/vue.js","assets/AppButton.js","assets/locales.js","assets/icons.js","assets/AppButton.css","assets/index.js","assets/index.css","assets/resize.js","assets/resize.css","assets/sections.ui.js","assets/file_values.js","assets/files.js","assets/confirmation.ui.js","assets/AppDialog.js","assets/toggle.ui.js","assets/ObjectCheckin.css","assets/IngestFiles.js","assets/VirtualCollection.js","assets/VirtualCollection.css","assets/IngestFiles.css","assets/DuplicateSObject.js","assets/ObjectFieldFrame.js","assets/ObjectFieldFrame.css","assets/ContentLoadingOverlay.js","assets/ContentLoadingOverlay.css","assets/DuplicateSObject.css","assets/TableViewsManager.js","assets/TableViewsManager.css","assets/SnapshotCheckout.js","assets/files2.js","assets/FrameProgress.js","assets/FrameProgress.css","assets/SnapshotCheckout.css"])))=>i.map(i=>d[i]);
 import { n as arrange, r as __exportAll } from "./ObjectFieldFrame.js";
 import { B as useId, C as h, D as nextTick, E as mergeProps, F as renderSlot, H as useSlots, I as resolveComponent, J as isRef, K as withCtx, L as resolveDirective, N as openBlock, P as renderList, R as resolveDynamicComponent, S as getCurrentInstance, U as watch, X as reactive, Y as markRaw, Z as ref, _ as createElementBlock, b as createVNode, c as withKeys, d as KeepAlive, et as toRaw, f as Teleport, g as createCommentVNode, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, nt as normalizeClass, o as vModelText, p as computed, q as withDirectives, rt as normalizeStyle, s as vShow, t as Transition, tt as unref, u as Fragment, v as createSlots, w as inject, y as createTextVNode } from "./vue.js";
 import { E as textStyles, I as BusyIndicator_default, L as _plugin_vue_export_helper_default, S as layout$3, a as _sfc_main$73, g as controls$1, k as preferences, o as t, p as readableText, s as appearance, t as _sfc_main$72, u as frameColors, v as cssRoles, w as metrics$3, x as fontMetricHeight, y as fontFamily } from "./AppButton.js";
 import { Ft as asyncComponent, G as transactionDetails, H as tableDependencies, K as uploadFormFile, N as searchConfiguration, O as resultItems, Ot as logRequest, U as tableDependencyFile, V as tableCells, W as tableParentGroup, Y as widgetConfiguration, _ as navigationLink, _t as mobile, a as __vitePreload, b as objectStatus, bt as debugLog, c as beginActivity, ct as notify, f as interfaceDefinition, ft as serverClock, h as messageFileRequest, k as rpc, m as linkPreviews, o as fileBlob, pt as serverTimestamp, u as endActivity, v as objectDeletion, y as objectRelations } from "./index.js";
-import { B as node, C as ItemPreview_default, D as _sfc_main$84, E as _sfc_main$82, F as _sfc_main$79, H as revealListOffset, L as button, N as _sfc_main$83, O as _sfc_main$76, P as _sfc_main$80, R as label, T as _sfc_main$75, U as virtualRange, V as rect, _ as readClipboardImages, a as _sfc_main$77, b as _sfc_main$81, f as javascriptTokens, g as copyText, h as copyImage, i as _sfc_main$78, m as xmlTokens, n as observeFrameSizes, o as _sfc_main$85, p as pythonTokens, r as _sfc_main$74, s as _sfc_main$86, t as frameContentWidth, v as translate, w as AppSearchField_default } from "./resize.js";
+import { B as node, C as ItemPreview_default, D as _sfc_main$84, E as _sfc_main$82, F as _sfc_main$79, H as revealListOffset, L as button, N as _sfc_main$83, O as _sfc_main$76, P as _sfc_main$80, R as label, T as _sfc_main$75, U as virtualRange, V as rect, _ as readClipboardImages, a as _sfc_main$77, b as _sfc_main$81, f as javascriptTokens, g as copyText, h as copyImage, i as _sfc_main$78, m as xmlTokens, n as observeFrameSizes, o as _sfc_main$85, p as pythonTokens, r as _sfc_main$74, s as _sfc_main$86, t as frameContentWidth, v as translate, w as AppSearchField_default, z as muted } from "./resize.js";
 import { n as qtLabelTextWidth, t as layoutTextWidth } from "./textMetrics.js";
 import { t as captionHeight } from "./sections.ui.js";
 import RecordForm_default, { a as fieldKind, o as unsupportedField, t as _sfc_main$87 } from "./RecordForm.js";
@@ -12,7 +12,7 @@ import { f as summary$1, r as prettySize } from "./file_values.js";
 import "./files.js";
 import { t as _sfc_main$90 } from "./CodeBlock.js";
 import { n as buttonWidth } from "./metrics.js";
-import { t as describe$23 } from "./confirmation.ui.js";
+import { t as describe$24 } from "./confirmation.ui.js";
 import { t as _sfc_main$91 } from "./AppDialog.js";
 import { t as MarkdownItCallable } from "./markdown-it.js";
 import { t as _sfc_main$92 } from "./VirtualCollection.js";
@@ -859,7 +859,7 @@ var MessageTableCell_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 }, [["__scopeId", "data-v-141aba48"]]);
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/table/parallel.ui.mjs
-function describe$22(cell, width, height, language, expanded = {}) {
+function describe$23(cell, width, height, language, expanded = {}) {
 	const children = [], inner = Math.max(1, width - 24), barHeight = (cell.barHeight || 1) + 1, steps = cell.steps || 6, labelHeight = 20, rowHeight = Math.max(28, steps * barHeight + labelHeight + 4);
 	let index = 0, left = 0;
 	function append(groups, parent) {
@@ -935,7 +935,7 @@ function droppedKeys(value, accepted) {
 	if (!value || value.searchType !== accepted || !Array.isArray(value.searchKeys) || value.searchKeys.length > 500 || value.searchKeys.some((key) => typeof key !== "string" || !key)) throw new Error("Dropped objects belong to another Search Type");
 	return [...new Set(value.searchKeys)];
 }
-function describe$21(cell, width, height, language, editable) {
+function describe$22(cell, width, height, language, editable) {
 	const inner = Math.max(0, width - 24), links = cell.links || [], children = [];
 	if (cell.available === false) children.push(label("dropDiagnostic", rect(4, 0, inner, 28), translate(cell.diagnostic, language), {
 		color: "secondaryText",
@@ -1151,7 +1151,7 @@ function serviceHeight(columns) {
 		return Math.max(height, Math.max(64, Number(options.icon_size) || 60) + 32);
 	}, 0);
 }
-function describe$20(model, width) {
+function describe$21(model, width) {
 	const available = Math.max(0, width - metrics$1.selection - metrics$1.actions);
 	const columns = model.scrollColumns ? model.columns || [] : visibleColumns(model.columns || [], available, model.overrides);
 	const fitted = model.autoFit && !model.scrollColumns ? fittedWidths(columns, available, model.overrides) : {};
@@ -1230,6 +1230,228 @@ function summarize(columns, records, cells = {}, mode = "bottom") {
 		hasSummary,
 		values
 	};
+}
+//#endregion
+//#region ../src/tactic_stream/shared_ui/features/table/views.ui.mjs
+var serviceViews = [
+	"definition",
+	"default_definition",
+	"edit_definition",
+	"edit",
+	"insert",
+	"search",
+	"filter",
+	"custom_filter",
+	"simple_filter"
+];
+function choices$1(views) {
+	return views.filter((row) => typeof row.view === "string" && !serviceViews.includes(row.view));
+}
+function initial$2() {
+	return {
+		query: "",
+		selected: "table",
+		mode: "",
+		title: ""
+	};
+}
+function loaded(ui, model) {
+	const selected = model.selected || ui.selected;
+	return Object.assign({}, ui, {
+		selected: model.views.some((row) => row.view === selected) ? selected : model.current || "table",
+		mode: "",
+		title: ""
+	});
+}
+function rows$3(model, ui) {
+	const query = ui.query.trim().toLocaleLowerCase();
+	return model.views.filter((row) => (row.title + " " + row.view).toLocaleLowerCase().includes(query));
+}
+function transition(ui, model, action) {
+	if (model.busy) return { ui };
+	const selected = model.views.find((row) => row.view === ui.selected);
+	if (action.type === "query") return { ui: Object.assign({}, ui, { query: action.value }) };
+	if (action.type === "title") return { ui: Object.assign({}, ui, { title: action.value }) };
+	if (action.type === "select") return { ui: Object.assign({}, ui, {
+		selected: action.view,
+		mode: "",
+		title: ""
+	}) };
+	if (action.type === "cancel") return { ui: Object.assign({}, ui, {
+		mode: "",
+		title: ""
+	}) };
+	if ([
+		"create",
+		"copy",
+		"rename",
+		"delete"
+	].includes(action.type)) {
+		if (!model.revision || model.uncertain) return { ui };
+		if (action.type !== "create" && !selected) return { ui };
+		if (["rename", "delete"].includes(action.type) && selected.protected) return { ui };
+		return { ui: Object.assign({}, ui, {
+			mode: action.type,
+			title: action.type === "rename" ? selected.title : ""
+		}) };
+	}
+	if (action.type === "apply") {
+		if (!model.revision || model.uncertain) return { ui };
+		if (!ui.mode || ui.mode !== "delete" && !ui.title.trim()) return { ui };
+		return {
+			ui,
+			command: {
+				action: ui.mode,
+				view: ui.selected,
+				title: ui.title.trim(),
+				revision: model.revision
+			}
+		};
+	}
+	if ([
+		"read",
+		"use",
+		"configure"
+	].includes(action.type)) return {
+		ui,
+		command: {
+			action: action.type,
+			view: ui.selected
+		}
+	};
+	return { ui };
+}
+function describe$20(model, ui, width, height, language) {
+	const tr = (key) => translate(key, language);
+	if (width < 600 || height < 540) return { nodes: [node("Scroll", "tableViewsWindowScroll", rect(0, 0, width, height), {
+		contentWidth: Math.max(600, width - 16),
+		contentHeight: Math.max(540, height),
+		scrollbarId: "tableViewsWindowScrollBar",
+		children: describe$20(model, ui, Math.max(600, width - 16), Math.max(540, height), language).nodes
+	})] };
+	const left = Math.min(320, width * .4), x = left + 24, inner = width - x - 16;
+	const selected = model.views.find((row) => row.view === ui.selected);
+	const enabled = !!model.revision && !model.busy && !model.uncertain && !ui.mode;
+	const nodes = [
+		node("Box", "tableViewsHeader", rect(0, 0, width, 50), {
+			background: "surfaceContainerHigh",
+			children: [label("tableViewsContext", rect(16, 8, width - 72, 34), (model.projectTitle || model.project) + " · " + (model.searchTitle || model.searchType), { weight: 600 }), button("tableViewsRefresh", rect(width - 48, 9, 32, 32), tr("Refresh"), "refresh", { type: "read" }, !model.busy, { iconOnly: true })]
+		}),
+		node("Box", "tableViewsCatalog", rect(12, 62, left, height - 124), {
+			background: "surfaceContainerLow",
+			border: "outlineVariant",
+			children: [node("Field", "tableViewsSearch", rect(10, 10, left - 20, 34), {
+				text: ui.query,
+				label: tr("Find a table view"),
+				placeholder: tr("Find a table view"),
+				enabled: !model.busy,
+				action: { type: "query" }
+			}), node("List", "tableViewsList", rect(10, 54, left - 20, height - 190), {
+				source: "views",
+				keyField: "view",
+				rowHeight: 52,
+				fields: [],
+				scrollbarId: "tableViewsListScrollBar"
+			})]
+		}),
+		node("Box", "tableViewsDetails", rect(x, 62, inner, height - 124), {
+			background: "surfaceContainerLow",
+			border: "outlineVariant",
+			children: []
+		})
+	];
+	const body = nodes[2].children;
+	if (selected) {
+		body.push(label("tableViewsTitle", rect(16, 14, inner - 32, 32), selected.view === "table" ? tr("Default table") : selected.title, {
+			fontRole: "section",
+			weight: 600
+		}));
+		body.push(label("tableViewsCode", rect(16, 52, inner - 32, 24), selected.view, muted));
+		body.push(label("tableViewsScope", rect(16, 86, inner - 32, 54), tr(selected.protected ? "The default table is protected. Create a copy to customize it." : "Project view. Renaming changes its label and keeps existing links."), {
+			wrap: true,
+			color: "secondaryText"
+		}));
+		body.push(label("tableViewsColumns", rect(16, 146, inner - 32, 26), tr("Columns") + ": " + selected.columns));
+		body.push(label("tableViewsCurrent", rect(16, 176, inner - 32, 24), selected.view === model.current ? tr("Current view") : "", { color: "action" }));
+	}
+	if (ui.mode) {
+		const deleting = ui.mode === "delete";
+		body.push(label("tableViewsEditHeading", rect(16, 218, inner - 32, 28), tr({
+			create: "New table view",
+			copy: "Duplicate table view",
+			rename: "Rename table view",
+			delete: "Delete table view"
+		}[ui.mode]), { weight: 600 }));
+		if (deleting) body.push(label("tableViewsDeleteWarning", rect(16, 250, inner - 32, 64), tr("Delete this project view and its saved layers? Existing links to it may stop working."), {
+			wrap: true,
+			color: "error"
+		}));
+		else body.push(node("Field", "tableViewsName", rect(16, 252, inner - 32, 36), {
+			text: ui.title,
+			label: tr("View name"),
+			enabled: !model.busy,
+			action: { type: "title" },
+			props: { maxLength: 120 }
+		}));
+		body.push(button("tableViewsApply", rect(16, 326, 124, 32), tr(deleting ? "Delete" : "Save"), deleting ? "delete" : "save", { type: "apply" }, !model.busy && !model.uncertain && (deleting || !!ui.title.trim()), {
+			highlighted: !deleting,
+			destructive: deleting
+		}));
+		body.push(button("tableViewsCancel", rect(150, 326, 112, 32), tr("Cancel"), "close", { type: "cancel" }, !model.busy));
+	} else {
+		for (const [index, entry] of [
+			[
+				"create",
+				"New view",
+				"add"
+			],
+			[
+				"copy",
+				"Duplicate",
+				"content-copy"
+			],
+			[
+				"rename",
+				"Rename",
+				"edit"
+			],
+			[
+				"delete",
+				"Delete",
+				"delete"
+			]
+		].entries()) nodes.push(button("tableViews_" + entry[0], rect(12 + index * 146, height - 48, 138, 32), tr(entry[1]), entry[2], { type: entry[0] }, enabled && (entry[0] === "create" || !!selected && (!["rename", "delete"].includes(entry[0]) || !selected.protected)), { destructive: entry[0] === "delete" }));
+		body.push(button("tableViewsUse", rect(16, 228, Math.min(inner - 32, 160), 34), tr("Use this view"), "check", { type: "use" }, enabled && !!selected, { highlighted: true }));
+		body.push(button("tableViewsConfigure", rect(16, 272, Math.min(inner - 32, 200), 34), tr("Configure columns"), "view-column", { type: "configure" }, enabled && !!selected));
+	}
+	if (model.error || model.busy) nodes.push(label("tableViewsStatus", rect(x + 16, height - 94, inner - 32, 30), model.error || tr("Working on the server…"), {
+		color: model.error ? "error" : "secondaryText",
+		wrap: true
+	}));
+	return { nodes };
+}
+function row$7(list, record, ui, model, language) {
+	const title = record.view === "table" ? translate("Default table", language) : record.title;
+	return { nodes: [node("Action", "tableView_" + record.view, rect(0, 0, list.width - 16, 50), {
+		text: title,
+		selected: ui.selected === record.view,
+		normalColor: "transparent",
+		selectedColor: "contentSelection",
+		rail: false,
+		enabled: !model.busy && !ui.mode,
+		action: {
+			type: "select",
+			view: record.view
+		},
+		children: [
+			node("Icon", "tableViewIcon", rect(8, 15, 20, 20), {
+				icon: record.view === model.current ? "check" : "table-view",
+				color: "action"
+			}),
+			label("tableViewTitle", rect(36, 4, list.width - 60, 24), title, { weight: 600 }),
+			label("tableViewCode", rect(36, 28, list.width - 60, 18), record.view, muted)
+		]
+	})] };
 }
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/table/menus.ui.mjs
@@ -1342,6 +1564,7 @@ function viewActions$1(views, enabled, language, scrollColumns = false) {
 	}];
 	for (let index = 0; index < views.length; index++) {
 		const view = views[index];
+		if (!choices$1([view]).length) continue;
 		actions.push({
 			title: view.view === "table" ? translate("Default table", language) : String(view.title || view.view || ""),
 			icon: "table-view",
@@ -1351,6 +1574,13 @@ function viewActions$1(views, enabled, language, scrollColumns = false) {
 		});
 	}
 	return actions.concat([
+		{ separator: true },
+		{
+			title: "Manage table views…",
+			icon: "view-column",
+			command: "manage",
+			enabled
+		},
 		{ separator: true },
 		{
 			title: "Horizontal scrolling",
@@ -4067,7 +4297,7 @@ var popupMetrics = {
 };
 function describe$13(model, width, height, language) {
 	const tr = (text) => translate(text, language);
-	if (model.confirmAction) return describe$23({
+	if (model.confirmAction) return describe$24({
 		message: tr(model.uncertain ? "Discard this draft? Some changes may already have been saved." : "Discard this draft?"),
 		accept: "Discard",
 		destructive: true
@@ -4255,8 +4485,8 @@ function describe$11(cell, width, height, language, editable = true, expanded = 
 		name: "layout-document"
 	}, true, { outlined: true })] };
 	if (cell.layoutNodes) return describe$15(cell, width, height, language, editable, server);
-	if (cell.groups && cell.steps) return describe$22(cell, width, height, language, expanded);
-	if (cell.links || cell.ingest) return describe$21(cell, width, height, language, editable);
+	if (cell.groups && cell.steps) return describe$23(cell, width, height, language, expanded);
+	if (cell.links || cell.ingest) return describe$22(cell, width, height, language, editable);
 	if (cell.label && !cell.text) cell = Object.assign({}, cell, { text: translate(cell.label, language) });
 	const actions = cell.actions || [];
 	const nested = expanded.__nested;
@@ -5057,6 +5287,7 @@ var _sfc_main$58 = {
 		"hide",
 		"view",
 		"save-view",
+		"manage-views",
 		"scroll",
 		"toggle-group",
 		"header-action",
@@ -5072,7 +5303,7 @@ var _sfc_main$58 = {
 		const preferences = computed(() => props.state?.table || {});
 		const autoFit = computed(() => !!preferences.value.autoFit);
 		const scrollColumns = computed(() => !!preferences.value.scrollColumns);
-		const layout = computed(() => describe$20({
+		const layout = computed(() => describe$21({
 			columns: props.columns,
 			overrides: overrides.value,
 			autoFit: autoFit.value,
@@ -5120,7 +5351,8 @@ var _sfc_main$58 = {
 			}
 		}
 		function viewCommand(command) {
-			if (command === "scroll_columns") preference({
+			if (command === "manage") emit("manage-views");
+			else if (command === "scroll_columns") preference({
 				scrollColumns: !scrollColumns.value,
 				autoFit: false
 			});
@@ -20599,7 +20831,7 @@ var TableServiceDialogs_default = /*#__PURE__*/ _plugin_vue_export_helper_defaul
 			height: 180
 		});
 		let resolve, observer;
-		const scene = computed(() => describe$23(model.value, size.value.width, size.value.height, appearance.language));
+		const scene = computed(() => describe$24(model.value, size.value.width, size.value.height, appearance.language));
 		function finish(accepted = false) {
 			const pending = resolve;
 			resolve = null;
@@ -21603,8 +21835,9 @@ function route(command) {
 //#endregion
 //#region src/features/interface/ConfiguredView.vue
 var CustomLayoutView = asyncComponent(() => __vitePreload(() => Promise.resolve().then(() => CustomLayoutView_exports), void 0));
+var TableViewsManager = asyncComponent(() => __vitePreload(() => import("./TableViewsManager.js"), __vite__mapDeps([27,1,2,3,4,5,6,7,8,9,14,28])));
 var RelatedObjects = asyncComponent(() => __vitePreload(() => Promise.resolve().then(() => RelatedObjects_exports), void 0));
-var SnapshotCheckout = asyncComponent(() => __vitePreload(() => import("./SnapshotCheckout.js"), __vite__mapDeps([27,1,2,3,4,5,6,7,8,9,10,11,28,13,29,30,31])));
+var SnapshotCheckout = asyncComponent(() => __vitePreload(() => import("./SnapshotCheckout.js"), __vite__mapDeps([29,1,2,3,4,5,6,7,8,9,10,11,30,13,31,32,33])));
 var ResultPresentation = asyncComponent(() => __vitePreload(() => Promise.resolve().then(() => ResultPresentation_exports), void 0));
 var _sfc_main = {
 	name: "ConfiguredView",
@@ -21625,6 +21858,7 @@ var _sfc_main = {
 		RelatedObjects,
 		TableInlineEditor: _sfc_main$3,
 		TableView: _sfc_main$58,
+		TableViewsManager,
 		TableCell: TableCell_default,
 		ObjectOperations: ObjectOperations_default,
 		ObjectAction: ObjectAction_default,
@@ -21705,6 +21939,7 @@ var _sfc_main = {
 	},
 	data() {
 		return {
+			viewsManagerVisited: false,
 			selected: "",
 			loaded: [],
 			busy: false,
@@ -22260,6 +22495,27 @@ var _sfc_main = {
 				view: target === "edit_definition" ? "edit_definition" : this.table.view || "table",
 				column: name,
 				target
+			});
+		},
+		async openTableViews() {
+			if (!this.columnEditable || !this.canLeave()) return;
+			await TableViewsManager.__asyncLoader();
+			this.viewsManagerVisited = true;
+			await this.$nextTick();
+			this.$refs.tableViewsManager.open();
+		},
+		async tableViewsChanged(info) {
+			this.tableConfig = null;
+			if (info.current !== (this.table.view || "table")) await this.selectTableView(info.current);
+			await this.loadTableConfig();
+		},
+		configureManagedView(view) {
+			this.$emit("column", {
+				project: this.project,
+				searchType: this.definition.search_type.split("?")[0],
+				view,
+				column: "",
+				target: "definition"
 			});
 		},
 		async loadTableConfig() {
@@ -23210,6 +23466,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 	const _component_RelatedObjects = resolveComponent("RelatedObjects");
 	const _component_TaskTableEditor = resolveComponent("TaskTableEditor");
 	const _component_TableInlineEditor = resolveComponent("TableInlineEditor");
+	const _component_TableViewsManager = resolveComponent("TableViewsManager");
 	return openBlock(), createElementBlock("div", {
 		class: "configured-view",
 		"data-result-mode": $options.displayedMode,
@@ -23501,6 +23758,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 					onHide: _cache[37] || (_cache[37] = ($event) => $options.changeColumns("hide", $event)),
 					onView: $options.selectTableView,
 					onSaveView: $options.saveTableView,
+					onManageViews: $options.openTableViews,
 					onToggleGroup: _cache[38] || (_cache[38] = ($event) => $data.closedGroups[$event] = !$data.closedGroups[$event]),
 					onEdit: $options.openCellEditor,
 					onHeaderAction: $options.tableHeaderAction,
@@ -23603,6 +23861,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 					"onSort",
 					"onView",
 					"onSaveView",
+					"onManageViews",
 					"onEdit",
 					"onHeaderAction",
 					"onCreateChild"
@@ -23837,11 +24096,30 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 			"uncertain",
 			"onSave",
 			"onCancel"
-		])
+		]),
+		$data.viewsManagerVisited && $props.definition?.search_type && $options.columnEditable ? (openBlock(), createBlock(_component_TableViewsManager, {
+			key: 10,
+			ref: "tableViewsManager",
+			ticket: $props.ticket,
+			project: $props.project,
+			"search-type": $props.definition.search_type,
+			current: $options.table.view || "table",
+			onUse: $options.selectTableView,
+			onConfigure: $options.configureManagedView,
+			onChanged: $options.tableViewsChanged
+		}, null, 8, [
+			"ticket",
+			"project",
+			"search-type",
+			"current",
+			"onUse",
+			"onConfigure",
+			"onChanged"
+		])) : createCommentVNode("", true)
 	], 8, _hoisted_1);
 }
 var ConfiguredView_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main, [["render", _sfc_render]]);
 //#endregion
-export { supports as $, sizing as $t, _sfc_main$32 as A, change$5 as At, gallery as B, change$6 as Bt, messageDate as C, _sfc_main$59 as Ct, _sfc_main$24 as D, sectionWidth as Dt, contextActions as E, key as Et, emojiCount as F, scope as Ft, _sfc_main$43 as G, geometry$1 as Gt, revision as H, duplicate as Ht, formatFileSize as I, type as It, selected as J, path as Jt, alignment as K, kinds as Kt, popup as L, add as Lt, bodyOrder as M, filter as Mt, bubbleContour as N, mode as Nt, _sfc_main$29 as O, tab as Ot, bubbleGeometry as P, options as Pt, describe$8 as Q, siblings as Qt, forward as R, appearances as Rt, messageAttachments as S, WorkspaceSearch_default as St, retainOlderMessages as T, dimensions$1 as Tt, _sfc_main$34 as U, fingerprint as Ut, heading as V, copy as Vt, _sfc_main$38 as W, geometries as Wt, itemScene as X, reorder as Xt, toggle as Y, remove$1 as Yt, spacingField as Z, reparent as Zt, canChangeMessage as _, sorts as _t, _sfc_main$7 as a, roles as at, initials as b, _sfc_main$52 as bt, ResultPresentation_exports as c, variants as ct, ObjectAction_default as d, defaultResultView as dt, spacing as en, visible as et, ObjectOperations_default as f, filterActions as ft, attachmentName as g, sortColumn as gt, _sfc_main$22 as h, sortActions as ht, displayWidgets as i, edit$1 as it, _sfc_main$33 as j, fields as jt, _sfc_main$30 as k, viewTabWidth as kt, RelatedObjects_default as l, widgets as lt, skeyPlaceholder as m, groups as mt, changeDefinition as n, binding as nt, controls as o, serialize as ot, NotesPanel_default as p, groupActions as pt, roots as q, layers as qt, definitionWizard as r, describe$9 as rt, zooms as s, template as st, ConfiguredView_default as t, _sfc_main$71 as tn, actions as tt, RelatedObjects_exports as u, _sfc_main$47 as ut, conversationAttachments as v, viewActions as vt, messageId as w, row$3 as wt, mergeMessages as x, _sfc_main$53 as xt, groupedMessages as y, views as yt, forwarding as z, block as zt };
+export { supports as $, sizing as $t, _sfc_main$32 as A, change$5 as At, gallery as B, change$6 as Bt, messageDate as C, _sfc_main$59 as Ct, _sfc_main$24 as D, sectionWidth as Dt, contextActions as E, key as Et, emojiCount as F, scope as Ft, _sfc_main$43 as G, geometry$1 as Gt, revision as H, duplicate as Ht, formatFileSize as I, type as It, selected as J, path as Jt, alignment as K, kinds as Kt, popup as L, add as Lt, bodyOrder as M, filter as Mt, bubbleContour as N, mode as Nt, _sfc_main$29 as O, tab as Ot, bubbleGeometry as P, options as Pt, describe$8 as Q, siblings as Qt, forward as R, appearances as Rt, messageAttachments as S, WorkspaceSearch_default as St, retainOlderMessages as T, dimensions$1 as Tt, _sfc_main$34 as U, fingerprint as Ut, heading as V, copy as Vt, _sfc_main$38 as W, geometries as Wt, itemScene as X, reorder as Xt, toggle as Y, remove$1 as Yt, spacingField as Z, reparent as Zt, canChangeMessage as _, sorts as _t, _sfc_main$7 as a, rows$3 as an, roles as at, initials as b, _sfc_main$52 as bt, ResultPresentation_exports as c, variants as ct, ObjectAction_default as d, defaultResultView as dt, spacing as en, visible as et, ObjectOperations_default as f, filterActions as ft, attachmentName as g, sortColumn as gt, _sfc_main$22 as h, sortActions as ht, displayWidgets as i, row$7 as in, edit$1 as it, _sfc_main$33 as j, fields as jt, _sfc_main$30 as k, viewTabWidth as kt, RelatedObjects_default as l, widgets as lt, skeyPlaceholder as m, groups as mt, changeDefinition as n, initial$2 as nn, binding as nt, controls as o, transition as on, serialize as ot, NotesPanel_default as p, groupActions as pt, roots as q, layers as qt, definitionWizard as r, loaded as rn, describe$9 as rt, zooms as s, _sfc_main$71 as sn, template as st, ConfiguredView_default as t, describe$20 as tn, actions as tt, RelatedObjects_exports as u, _sfc_main$47 as ut, conversationAttachments as v, viewActions as vt, messageId as w, row$3 as wt, mergeMessages as x, _sfc_main$53 as xt, groupedMessages as y, views as yt, forwarding as z, block as zt };
 
 //# sourceMappingURL=ConfiguredView.js.map

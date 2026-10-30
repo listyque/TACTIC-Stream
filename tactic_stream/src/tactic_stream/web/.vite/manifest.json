@@ -89,6 +89,7 @@
       "src/features/checkin/IngestFiles.vue",
       "src/features/objects/DuplicateSObject.vue",
       "_ConfiguredView.js",
+      "src/features/interface/TableViewsManager.vue",
       "src/features/checkin/SnapshotCheckout.vue"
     ],
     "css": [
@@ -826,6 +827,23 @@
     ],
     "css": [
       "assets/FileWorkspaceInspection.css"
+    ]
+  },
+  "src/features/interface/TableViewsManager.vue": {
+    "file": "assets/TableViewsManager.js",
+    "name": "TableViewsManager",
+    "src": "src/features/interface/TableViewsManager.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.js",
+      "_AppButton.js",
+      "index.html",
+      "_resize.js",
+      "_ConfiguredView.js",
+      "_AppDialog.js"
+    ],
+    "css": [
+      "assets/TableViewsManager.css"
     ]
   },
   "src/features/knowledge/KnowledgeBase.vue": {

@@ -26,6 +26,9 @@ import { fieldKind, unsupportedField } from '../objects/recordFields.js';
 import RecordForm from '../objects/RecordForm.vue';
 import { asyncComponent } from '../../controls/asyncComponent.js';
 const CustomLayoutView = asyncComponent(() => import('./CustomLayoutView.vue'));
+const TableViewsManager = asyncComponent(
+  () => import('./TableViewsManager.vue')
+);
 const RelatedObjects = asyncComponent(
   () => import('../objects/RelatedObjects.vue')
 );
@@ -70,6 +73,7 @@ export default {
     RelatedObjects,
     TableInlineEditor,
     TableView,
+    TableViewsManager,
     TableCell,
     ObjectOperations,
     ObjectAction,
@@ -126,6 +130,7 @@ export default {
   },
   data() {
     return {
+      viewsManagerVisited: false,
       selected: '',
       loaded: [],
       busy: false,
@@ -852,6 +857,28 @@ export default {
             : this.table.view || 'table',
         column: name,
         target
+      });
+    },
+    async openTableViews() {
+      if (!this.columnEditable || !this.canLeave()) return;
+      await TableViewsManager.__asyncLoader();
+      this.viewsManagerVisited = true;
+      await this.$nextTick();
+      this.$refs.tableViewsManager.open();
+    },
+    async tableViewsChanged(info) {
+      this.tableConfig = null;
+      if (info.current !== (this.table.view || 'table'))
+        await this.selectTableView(info.current);
+      await this.loadTableConfig();
+    },
+    configureManagedView(view) {
+      this.$emit('column', {
+        project: this.project,
+        searchType: this.definition.search_type.split('?')[0],
+        view,
+        column: '',
+        target: 'definition'
       });
     },
     async loadTableConfig() {
@@ -2337,6 +2364,7 @@ export default {
           @hide="changeColumns('hide', $event)"
           @view="selectTableView"
           @save-view="saveTableView"
+          @manage-views="openTableViews"
           @toggle-group="closedGroups[$event] = !closedGroups[$event]"
           @edit="openCellEditor"
           @header-action="tableHeaderAction"
@@ -2611,6 +2639,17 @@ export default {
       @save="saveCellEditor"
       @check="saveCellEditor($event, true)"
       @cancel="cancelCellEditor"
+    />
+    <TableViewsManager
+      v-if="viewsManagerVisited && definition?.search_type && columnEditable"
+      ref="tableViewsManager"
+      :ticket="ticket"
+      :project="project"
+      :search-type="definition.search_type"
+      :current="table.view || 'table'"
+      @use="selectTableView"
+      @configure="configureManagedView"
+      @changed="tableViewsChanged"
     />
   </div>
 </template>

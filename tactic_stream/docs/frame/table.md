@@ -267,3 +267,9 @@ Sticky tools paint above handles, reserve an 8-DIP leading gap and keep their
 gap; direct tool children remain interactive. The grip stays at the true column
 edge, and covered/off-viewport strips cannot replace tool input. Native and
 browser regressions start 3 DIP beyond the final divider beside the tool area.
+
+## Saved table view manager
+
+`features/table/views.ui.mjs` owns the common catalogue/search/form skeleton and local editor transitions. The browser uses `TableViewsManager.vue`; Handler uses `TableViewsController` and its registered native `table_views` window. Names are labels stored as `th_table_view_title`; renaming preserves the XML view identifier. Default views and service definitions are protected or excluded.
+
+The native API is `execute_cmd("tactic.ui.table.views.TableViewsCmd", values)` in the selected project. `values` contains `action` (`read`, `create`, `copy`, `rename`, `delete`), `search_type`, `current` and, for writes, the read catalogue `revision`, selected `view`, and `title` where required. Mutations use a collection lock and normal Command/SObject writes and deletes; ordinary transaction undo applies. A write returns the selected/current view identifiers. Read again after commit to obtain the journal-based revision. The manager operates on project-owned sources; personal overrides require the definitions editor.
