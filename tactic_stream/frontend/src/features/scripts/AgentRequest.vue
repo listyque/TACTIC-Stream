@@ -1,5 +1,13 @@
 <script setup>
-import { computed, markRaw, nextTick, onBeforeUnmount, ref, watch } from 'vue';
+import {
+  computed,
+  inject,
+  markRaw,
+  nextTick,
+  onBeforeUnmount,
+  ref,
+  watch
+} from 'vue';
 import { rpc } from '../../api.js';
 import { appearance } from '../../appearance.js';
 import AppDialog from '../../controls/AppDialog.vue';
@@ -14,10 +22,46 @@ import * as History from '../../../../src/tactic_stream/shared_ui/features/scrip
 
 const props = defineProps({ ticket: String, capture: Function });
 const emit = defineEmits(['providers', 'mcp']);
+const currentLogin = inject('currentLogin', () => '');
+function savedChoices() {
+  try {
+    if (!currentLogin()) return {};
+    const saved = JSON.parse(
+      localStorage.getItem('tactic_stream.agentChat.' + currentLogin()) ||
+        'null'
+    );
+    return Object.fromEntries(
+      Object.entries(saved || {}).filter(
+        ([key, value]) =>
+          (['provider', 'model', 'effort'].includes(key) &&
+            typeof value === 'string' &&
+            value.length <= 512) ||
+          (['allowChanges', 'allowWeb'].includes(key) &&
+            typeof value === 'boolean')
+      )
+    );
+  } catch {
+    return {};
+  }
+}
+function initial(context = {}) {
+  return Object.assign(UI.initial(context), savedChoices());
+}
+function rememberChoices(fields) {
+  try {
+    if (currentLogin())
+      localStorage.setItem(
+        'tactic_stream.agentChat.' + currentLogin(),
+        JSON.stringify({ ...savedChoices(), ...fields })
+      );
+  } catch (error) {
+    model.value.error = error.message;
+  }
+}
 const dialog = ref(null),
   body = ref(null),
   size = ref({ width: 900, height: 650 });
-const model = ref(UI.initial());
+const model = ref(initial());
 const fileInput = ref(null),
   previews = ref({});
 const attachmentCommand =
@@ -189,7 +233,8 @@ async function request(action = 'refresh') {
         if (model.value.context.project !== saved.document.context.project)
           clearPreviews();
         model.value.context = saved.document.context;
-        if (!operation.edit) Object.assign(model.value, History.restored());
+        if (!operation.edit)
+          Object.assign(model.value, History.restored(savedChoices()));
         if (!operation.edit && size.value.width < 940)
           model.value.history.mobile = false;
         model.value.history.query = '';
@@ -443,10 +488,16 @@ function event(action) {
     action.type === 'web'
   ) {
     if (model.value.pending) return;
+    if (action.type !== 'prompt' && UI.started(model.value)) return;
     if (action.type === 'prompt') model.value.prompt = action.value;
     else if (action.type === 'changes')
       model.value.allowChanges = !!action.value;
     else model.value.allowWeb = !!action.value;
+    if (action.type !== 'prompt')
+      rememberChoices({
+        [action.type === 'changes' ? 'allowChanges' : 'allowWeb']:
+          !!action.value
+      });
   } else if (action.type === 'select') {
     if (model.value.uploading || model.value.pending) return;
     if (
@@ -476,9 +527,12 @@ function event(action) {
     Object.assign(model.value, {
       selected: selected.request_id,
       request: {},
-      ...History.restored(
-        model.value.drafts[History.key(selected, model.value.context.project)]
-      ),
+      ...History.restored({
+        ...(selected.status === 'draft' ? savedChoices() : {}),
+        ...model.value.drafts[
+          History.key(selected, model.value.context.project)
+        ]
+      }),
       pending: null
     });
     model.value.history.edit = null;
@@ -491,11 +545,23 @@ function event(action) {
     model.value.provider = action.value;
     model.value.model = '';
     model.value.effort = '';
+    rememberChoices({ provider: action.value, model: '', effort: '' });
   } else if (action.type === 'model') {
     model.value.model = action.value;
     model.value.effort = '';
-  } else if (action.type === 'effort') model.value.effort = action.value;
-  else if (action.type === 'context')
+    rememberChoices({
+      provider: UI.provider(model.value),
+      model: action.value,
+      effort: ''
+    });
+  } else if (action.type === 'effort') {
+    model.value.effort = action.value;
+    rememberChoices({
+      provider: UI.provider(model.value),
+      model: model.value.model ?? model.value.request.model ?? '',
+      effort: action.value
+    });
+  } else if (action.type === 'context')
     model.value.contextExpanded = !model.value.contextExpanded;
   else if (action.type === 'remove' && !model.value.pending)
     model.value.attachments = model.value.attachments.filter(
@@ -639,7 +705,7 @@ async function open(context, fresh = false) {
     queuedAction = '';
     clearTimeout(timer);
     clearPreviews();
-    model.value = Object.assign(UI.initial(context), {
+    model.value = Object.assign(initial(context), {
       drafts: model.value.drafts,
       history: model.value.history
     });
@@ -651,7 +717,7 @@ async function open(context, fresh = false) {
     !model.value.pending &&
     !model.value.uploading
   )
-    model.value = Object.assign(UI.initial(context || props.capture()), {
+    model.value = Object.assign(initial(context || props.capture()), {
       history: model.value.history,
       drafts: model.value.drafts
     });
@@ -689,7 +755,7 @@ watch(
     close();
     contextTicket = '';
     clearPreviews();
-    model.value = UI.initial();
+    model.value = initial();
   }
 );
 onBeforeUnmount(() => {

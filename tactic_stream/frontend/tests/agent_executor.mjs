@@ -26,6 +26,7 @@ function snapshot() {
     }))
   };
 }
+const drafts = new Map();
 const controls = [],
   errors = [];
 let server, browser;
@@ -33,7 +34,7 @@ const html = `<!doctype html><html><head><link rel="icon" href="data:,"></head><
 import {createApp,h} from 'vue';import Chat from '/src/features/scripts/AgentRequest.vue';import Providers from '/src/features/configuration/AgentProviders.vue';
 import {appearance,initializeAppearance} from '/src/appearance.js';import {windowDirective} from '/src/controls/window.js';import '/src/theme.css';import '/src/style.css';
 Object.assign(appearance,{mode:'dark',language:'en',popupAnimations:false});initializeAppearance();
-createApp({mounted(){window.harness=this},render(){return h('main',[h(Chat,{ref:'chat',ticket:${JSON.stringify(ticket)},capture:()=>({client:'TS',project:${JSON.stringify(project)},page:'',title:'',search_type:'',view:'',search_keys:[]})}),h(Providers,{ref:'providers',ticket:${JSON.stringify(ticket)},project:${JSON.stringify(project)}})])}}).directive('window',windowDirective).mount('#app');
+createApp({provide:{currentLogin:()=>sessionStorage.getItem('fixtureLogin')||'fixture-user'},mounted(){window.harness=this},render(){return h('main',[h(Chat,{ref:'chat',ticket:${JSON.stringify(ticket)},capture:()=>({client:'TS',project:${JSON.stringify(project)},page:'',title:'',search_type:'',view:'',search_keys:[]})}),h(Providers,{ref:'providers',ticket:${JSON.stringify(ticket)},project:${JSON.stringify(project)}})])}}).directive('window',windowDirective).mount('#app');
 </script><style>html,body,#app{height:100%;width:100%;overflow:hidden}body{margin:0}</style></body></html>`;
 
 try {
@@ -121,6 +122,7 @@ try {
                           host_id: 'fixture',
                           capabilities: {
                             changes: true,
+                            web_search: true,
                             providers: [
                               { id: 'codex', name: 'Codex', kind: 'codex' }
                             ],
@@ -129,7 +131,8 @@ try {
                                 id: 'fixture',
                                 label: 'Fixture',
                                 provider: 'codex',
-                                is_default: true
+                                is_default: true,
+                                efforts: ['low', 'high']
                               }
                             ]
                           }
@@ -145,6 +148,46 @@ try {
                 delete info.hosts;
                 delete info.executor;
               }
+            }
+            if (
+              command.endsWith('AgentRequestCmd') &&
+              ['draft', 'read'].includes(values.action)
+            ) {
+              if (values.action === 'draft')
+                drafts.set(values.request_id, {
+                  request_id: values.request_id,
+                  status: 'draft',
+                  document: {
+                    context: values.context,
+                    allow_changes: false,
+                    allow_web: false
+                  },
+                  messages: [],
+                  events: []
+                });
+              info = drafts.get(values.request_id) || {
+                request_id: values.request_id,
+                status: 'completed',
+                provider: 'codex',
+                model: 'fixture',
+                effort: 'low',
+                messages: [],
+                events: [],
+                document: {
+                  context: {
+                    client: 'TS',
+                    project,
+                    page: '',
+                    title: '',
+                    search_type: '',
+                    view: '',
+                    search_keys: []
+                  },
+                  prompt: 'Old task',
+                  allow_changes: false,
+                  allow_web: false
+                }
+              };
             }
             res.setHeader('Content-Type', 'application/json');
             res.end(JSON.stringify({ result: { status: 'OK', info } }));
@@ -237,6 +280,155 @@ try {
       .getByRole('button', { name: 'Connect agent', exact: true })
       .waitFor({ timeout: 20000 });
     await dialog.getByRole('button', { name: 'Close', exact: true }).click();
+  }
+  if (!process.env.AGENT_EXECUTOR_SERVER) {
+    executor = {
+      state: 'connected',
+      managed: true,
+      error: '',
+      target: desktop
+    };
+    await page.reload();
+    await page.waitForFunction(() => !!window.harness);
+    await page.evaluate(() => window.harness.$refs.chat.open());
+    let chat = page.locator('.agent-request-dialog');
+    await chat
+      .getByRole('combobox', { name: 'Model', exact: true })
+      .selectOption('fixture');
+    await chat
+      .getByRole('combobox', { name: 'Reasoning effort', exact: true })
+      .selectOption('high');
+    for (const name of ['Allow requested changes', 'Allow internet access']) {
+      await chat.getByLabel('Agent permissions', { exact: true }).click();
+      await page.getByRole('menuitemcheckbox', { name, exact: true }).click();
+    }
+    const read = () =>
+      page.evaluate(() =>
+        JSON.parse(localStorage.getItem('tactic_stream.agentChat.fixture-user'))
+      );
+    assert.deepEqual(await read(), {
+      provider: 'codex',
+      model: 'fixture',
+      effort: 'high',
+      allowChanges: true,
+      allowWeb: true
+    });
+    await page.reload();
+    await page.waitForFunction(() => !!window.harness);
+    await page.evaluate(() => window.harness.$refs.chat.open());
+    chat = page.locator('.agent-request-dialog');
+    assert.equal(
+      await chat
+        .getByRole('combobox', { name: 'Model', exact: true })
+        .inputValue(),
+      'fixture'
+    );
+    assert.equal(
+      await chat
+        .getByRole('combobox', { name: 'Reasoning effort', exact: true })
+        .inputValue(),
+      'high'
+    );
+    await chat.getByLabel('Agent permissions', { exact: true }).click();
+    for (const name of ['Allow requested changes', 'Allow internet access'])
+      assert.equal(
+        await page
+          .getByRole('menuitemcheckbox', { name, exact: true })
+          .getAttribute('aria-checked'),
+        'true'
+      );
+    await page.keyboard.press('Escape');
+    const expected = await read();
+    await page.evaluate(
+      (project) =>
+        window.harness.$refs.chat.restoreWindowContext({
+          selected: 'old-chat',
+          context: {
+            client: 'TS',
+            project,
+            page: '',
+            title: '',
+            search_type: '',
+            view: '',
+            search_keys: []
+          },
+          draft: {}
+        }),
+      project
+    );
+    assert.equal(
+      await chat
+        .getByRole('combobox', { name: 'Reasoning effort', exact: true })
+        .inputValue(),
+      'low'
+    );
+    await chat.getByLabel('Agent permissions', { exact: true }).click();
+    assert.equal(
+      await page
+        .getByRole('menuitemcheckbox', {
+          name: 'Allow requested changes',
+          exact: true
+        })
+        .getAttribute('aria-checked'),
+      'false'
+    );
+    await page.keyboard.press('Escape');
+    assert.deepEqual(
+      await read(),
+      expected,
+      'Opening history must not replace remembered choices'
+    );
+    await chat.locator('[data-frame="agentRequestNew"]').click();
+    await chat
+      .getByRole('combobox', { name: 'Reasoning effort', exact: true })
+      .waitFor();
+    await page.waitForFunction(
+      () =>
+        document.querySelector('[aria-label="Reasoning effort"]').value ===
+        'high'
+    );
+    await chat.getByLabel('Agent permissions', { exact: true }).click();
+    assert.equal(
+      await page
+        .getByRole('menuitemcheckbox', {
+          name: 'Allow requested changes',
+          exact: true
+        })
+        .getAttribute('aria-checked'),
+      'true'
+    );
+    await page.keyboard.press('Escape');
+    await page.evaluate(() =>
+      sessionStorage.setItem('fixtureLogin', 'another-user')
+    );
+    await page.reload();
+    await page.waitForFunction(() => !!window.harness);
+    await page.evaluate(() => window.harness.$refs.chat.open());
+    chat = page.locator('.agent-request-dialog');
+    assert.equal(
+      await chat
+        .getByRole('combobox', { name: 'Model', exact: true })
+        .inputValue(),
+      ''
+    );
+    assert.equal(
+      await chat
+        .getByRole('combobox', { name: 'Reasoning effort', exact: true })
+        .inputValue(),
+      ''
+    );
+    await chat.getByLabel('Agent permissions', { exact: true }).click();
+    for (const name of ['Allow requested changes', 'Allow internet access'])
+      assert.equal(
+        await page
+          .getByRole('menuitemcheckbox', { name, exact: true })
+          .getAttribute('aria-checked'),
+        'false'
+      );
+    assert.equal((await read()).effort, 'high');
+    console.log(
+      'PASS: browser composer choices and permissions survive reload and stay account-scoped'
+    );
   }
   assert.deepEqual(errors, []);
   if (!process.env.AGENT_EXECUTOR_SERVER)

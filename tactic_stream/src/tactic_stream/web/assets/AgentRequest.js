@@ -1,4 +1,4 @@
-import { E as nextTick, G as withCtx, H as watch, J as markRaw, M as openBlock, N as renderList, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment } from "./vue.js";
+import { C as inject, E as nextTick, G as withCtx, H as watch, J as markRaw, M as openBlock, N as renderList, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment } from "./vue.js";
 import { a as _sfc_main$2, o as t, s as appearance, t as _sfc_main$3, v as cssRoles } from "./AppButton.js";
 import { Pt as randomUuid, ct as notify, k as rpc } from "./index.js";
 import { B as node, L as button, O as _sfc_main$4, R as label, V as rect, n as observeFrameSizes, r as _sfc_main$5, v as translate, z as muted } from "./resize.js";
@@ -1036,11 +1036,38 @@ var _sfc_main = {
 	setup(__props, { expose: __expose, emit: __emit }) {
 		const props = __props;
 		const emit = __emit;
+		const currentLogin = inject("currentLogin", () => "");
+		function savedChoices() {
+			try {
+				if (!currentLogin()) return {};
+				const saved = JSON.parse(localStorage.getItem("tactic_stream.agentChat." + currentLogin()) || "null");
+				return Object.fromEntries(Object.entries(saved || {}).filter(([key, value]) => [
+					"provider",
+					"model",
+					"effort"
+				].includes(key) && typeof value === "string" && value.length <= 512 || ["allowChanges", "allowWeb"].includes(key) && typeof value === "boolean"));
+			} catch {
+				return {};
+			}
+		}
+		function initial$2(context = {}) {
+			return Object.assign(initial(context), savedChoices());
+		}
+		function rememberChoices(fields) {
+			try {
+				if (currentLogin()) localStorage.setItem("tactic_stream.agentChat." + currentLogin(), JSON.stringify({
+					...savedChoices(),
+					...fields
+				}));
+			} catch (error) {
+				model.value.error = error.message;
+			}
+		}
 		const dialog = ref(null), body = ref(null), size = ref({
 			width: 900,
 			height: 650
 		});
-		const model = ref(initial());
+		const model = ref(initial$2());
 		const fileInput = ref(null), previews = ref({});
 		const views = computed(() => Object.fromEntries([
 			"context",
@@ -1146,7 +1173,7 @@ var _sfc_main = {
 						model.value.request = saved;
 						if (model.value.context.project !== saved.document.context.project) clearPreviews();
 						model.value.context = saved.document.context;
-						if (!operation.edit) Object.assign(model.value, restored());
+						if (!operation.edit) Object.assign(model.value, restored(savedChoices()));
 						if (!operation.edit && size.value.width < 940) model.value.history.mobile = false;
 						model.value.history.query = "";
 						model.value.history.archived = false;
@@ -1315,9 +1342,11 @@ var _sfc_main = {
 			}
 			if (action.type === "prompt" || action.type === "changes" || action.type === "web") {
 				if (model.value.pending) return;
+				if (action.type !== "prompt" && started(model.value)) return;
 				if (action.type === "prompt") model.value.prompt = action.value;
 				else if (action.type === "changes") model.value.allowChanges = !!action.value;
 				else model.value.allowWeb = !!action.value;
+				if (action.type !== "prompt") rememberChoices({ [action.type === "changes" ? "allowChanges" : "allowWeb"]: !!action.value });
 			} else if (action.type === "select") {
 				if (model.value.uploading || model.value.pending) return;
 				if (!model.value.selected && (model.value.prompt.trim() || model.value.attachments.length)) {
@@ -1335,7 +1364,10 @@ var _sfc_main = {
 				Object.assign(model.value, {
 					selected: selected.request_id,
 					request: {},
-					...restored(model.value.drafts[key(selected, model.value.context.project)]),
+					...restored({
+						...selected.status === "draft" ? savedChoices() : {},
+						...model.value.drafts[key(selected, model.value.context.project)]
+					}),
 					pending: null
 				});
 				model.value.history.edit = null;
@@ -1348,11 +1380,27 @@ var _sfc_main = {
 				model.value.provider = action.value;
 				model.value.model = "";
 				model.value.effort = "";
+				rememberChoices({
+					provider: action.value,
+					model: "",
+					effort: ""
+				});
 			} else if (action.type === "model") {
 				model.value.model = action.value;
 				model.value.effort = "";
-			} else if (action.type === "effort") model.value.effort = action.value;
-			else if (action.type === "context") model.value.contextExpanded = !model.value.contextExpanded;
+				rememberChoices({
+					provider: provider(model.value),
+					model: action.value,
+					effort: ""
+				});
+			} else if (action.type === "effort") {
+				model.value.effort = action.value;
+				rememberChoices({
+					provider: provider(model.value),
+					model: model.value.model ?? model.value.request.model ?? "",
+					effort: action.value
+				});
+			} else if (action.type === "context") model.value.contextExpanded = !model.value.contextExpanded;
 			else if (action.type === "remove" && !model.value.pending) model.value.attachments = model.value.attachments.filter((file) => file.attachment_id !== action.value);
 			else if (action.type === "attach") fileInput.value.click();
 			else if (action.type === "paste") pasteClipboard();
@@ -1456,12 +1504,12 @@ var _sfc_main = {
 				queuedAction = "";
 				clearTimeout(timer);
 				clearPreviews();
-				model.value = Object.assign(initial(context), {
+				model.value = Object.assign(initial$2(context), {
 					drafts: model.value.drafts,
 					history: model.value.history
 				});
 			}
-			if (!model.value.selected && !model.value.prompt && !model.value.attachments.length && !model.value.pending && !model.value.uploading) model.value = Object.assign(initial(context || props.capture()), {
+			if (!model.value.selected && !model.value.prompt && !model.value.attachments.length && !model.value.pending && !model.value.uploading) model.value = Object.assign(initial$2(context || props.capture()), {
 				history: model.value.history,
 				drafts: model.value.drafts
 			});
@@ -1494,7 +1542,7 @@ var _sfc_main = {
 			close();
 			contextTicket = "";
 			clearPreviews();
-			model.value = initial();
+			model.value = initial$2();
 		});
 		onBeforeUnmount(() => {
 			generation++;
