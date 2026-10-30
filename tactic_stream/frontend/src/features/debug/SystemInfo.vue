@@ -13,7 +13,6 @@ const dialog = ref(null),
   host = ref(null),
   size = ref({ width: 800, height: 600 });
 const model = ref(UI.initial());
-const emit = defineEmits(['navigation-cleared']);
 const scene = computed(() =>
   UI.describe(
     model.value,
@@ -129,7 +128,6 @@ async function run(kind, plan = UI.testPlan(model.value)) {
       ];
     } else {
       model.value.results[kind] = result;
-      if (kind === 'clear_sidebar') emit('navigation-cleared');
     }
   } catch (error) {
     stopped = true;

@@ -16,10 +16,10 @@ files. No environment/config dumps, database DSNs or secret-bearing files are
 returned. The existing API may record failures in its diagnostic log.
 
 `run_test` validates a finite action/input schema, invokes original
-EmailTriggerTestCmd or PythonCmd for email/saved-script tests, and invokes
-ClearSideBarCache for the fixed cache directory. SMTP connect/read timeout is
-30 seconds. Script writes retain native authorization, transactions and rollback.
-Cache clearing rejects arbitrary paths, files, symlinks and junctions.
+EmailTriggerTestCmd or PythonCmd for email/saved-script tests. SMTP connect/read
+timeout is 30 seconds. Script writes retain native authorization, transactions
+and rollback. Navigation is retained in client memory and refreshed through its
+normal owner; System Info does not clear an unused legacy filesystem cache.
 
 `get_links` retains the original project-definition/internal-definition ordering,
 separator removal and deduplication. `resolve_link` reads the configured target;
@@ -40,8 +40,8 @@ store with SQL writes prohibited during repeated reads. It covers pre-probe
 authorization, UTC timestamps and secret omission. `frontend/tests/system_info.mjs`
 exercises every Vue test button and editable field, keyboard/mouse input, narrow
 Russian layout, copy, errors, sign-out and stale completion. Backend tests use
-mock SMTP, a real saved Python script/rollback, fixed cache cleanup and configured
-page resolution on owned data. Browser client-folder checks are explicitly
+mock SMTP, a real saved Python script/rollback, rejected obsolete cache actions
+and configured page resolution on owned data. Browser client-folder checks are explicitly
 unavailable without the obsolete applet; actual local paths are checked in TH.
 Page-load tests open real Stream addresses in browser windows; popup blocking is
 reported and individual page buttons allow retry. No live email or user script

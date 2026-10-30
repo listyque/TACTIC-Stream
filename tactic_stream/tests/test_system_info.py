@@ -108,12 +108,10 @@ class SystemInfoTests(unittest.TestCase):
             cache.mkdir(parents=True);(cache/'fixture').write_text('regenerable cache')
             sibling=base/'cache/keep';sibling.write_text('keep')
             with patch.object(Environment,'get_tmp_dir',return_value=str(base)):
-                call('run_test',action='clear_sidebar',values={})
-                self.assertFalse(cache.exists());self.assertTrue(sibling.exists())
-                cache.write_text('not a directory')
-                with self.assertRaises(ValueError): call('run_test',action='clear_sidebar',values={})
-                cache.unlink()
-                with self.assertRaises(ValueError): call('run_test',action='clear_sidebar',values={'path':str(sibling)})
+                with self.assertRaisesRegex(ValueError, 'Unknown System Info test'):
+                    call('run_test', action='clear_sidebar', values={})
+                self.assertTrue(cache.is_dir())
+                self.assertTrue((cache/'fixture').is_file())
                 self.assertTrue(sibling.exists())
             for action,values in [('script',{'path':''}),('unknown',{}),('email',[]),('clear_sidebar',{'path':'outside'})]:
                 with self.assertRaises(ValueError): call('run_test',action=action,values=values)

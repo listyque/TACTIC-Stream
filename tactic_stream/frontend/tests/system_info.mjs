@@ -273,9 +273,11 @@ try {
     actions.find((row) => row.values?.action === 'script').values,
     { action: 'script', values: { path: 'tests/probe' } }
   );
-  await dialog.locator('[data-frame=systemClearSidebar]').click();
-  await dialog.locator('[data-frame=systemClearSidebarResult]').waitFor();
-  assert.ok(actions.some((row) => row.values?.action === 'clear_sidebar'));
+  assert.equal(
+    await dialog.locator('[data-frame=systemClearSidebar]').count(),
+    0
+  );
+  assert.ok(!actions.some((row) => row.values?.action === 'clear_sidebar'));
   if (output)
     await dialog.screenshot({ path: output + '/actions-browser.png' });
   fail = true;

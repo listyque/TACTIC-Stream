@@ -24184,8 +24184,7 @@ function describe$6(model, width, height, language) {
 			email: "send",
 			handoff: "folder",
 			links: "open-in-new",
-			script: "code",
-			clear_sidebar: "cached"
+			script: "code"
 		}[kind], Object.assign({
 			type: "test",
 			name: kind,
@@ -24254,9 +24253,6 @@ function describe$6(model, width, height, language) {
 	heading("Python Script Test");
 	field("systemScriptPath", "Script Path", model.scriptPath, "scriptPath");
 	test("systemScriptTest", "Run script", "script");
-	heading("Clear Side Bar Cache");
-	paragraph("systemClearExplanation", tr("Clear the Side Bar Cache for all users"));
-	test("systemClearSidebar", "Clear Side Bar Cache", "clear_sidebar");
 	const nodes = [button("systemRefresh", rect$1(pad, pad, 132, 36), tr("Refresh"), "refresh", { type: "refresh" }, enabled), button("systemCopy", rect$1(152, pad, 140, 36), tr("Copy"), "content_copy", { type: "copy" }, enabled && !!model.sections?.length)];
 	if (model.error) nodes.push(label("systemStatus", rect$1(pad, 56, inner, 44), tr(model.error), {
 		wrap: true,
@@ -24278,15 +24274,13 @@ var _sfc_main$36 = {
 		ticket: String,
 		project: String
 	},
-	emits: ["navigation-cleared"],
-	setup(__props, { expose: __expose, emit: __emit }) {
+	setup(__props, { expose: __expose }) {
 		const props = __props;
 		const dialog = ref(null), host = ref(null), size = ref({
 			width: 800,
 			height: 600
 		});
 		const model = ref(initial$1());
-		const emit = __emit;
 		const scene = computed(() => describe$6(model.value, size.value.width, size.value.height, appearance.language));
 		let generation = 0, observer;
 		watch(host, (element) => {
@@ -24379,10 +24373,7 @@ var _sfc_main$36 = {
 						title: "Browser",
 						fields: [["User Agent", navigator.userAgent], ["Time zone", Intl.DateTimeFormat().resolvedOptions().timeZone]]
 					}];
-				} else {
-					model.value.results[kind] = result;
-					if (kind === "clear_sidebar") emit("navigation-cleared");
-				}
+				} else model.value.results[kind] = result;
 			} catch (error) {
 				stopped = true;
 				if (id === generation) {
@@ -36255,13 +36246,8 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 			createVNode(_component_SystemInfo, {
 				ref: "systemInfo",
 				ticket: $data.session.ticket,
-				project: $data.workspaceProject,
-				onNavigationCleared: $options.loadNavigation
-			}, null, 8, [
-				"ticket",
-				"project",
-				"onNavigationCleared"
-			]),
+				project: $data.workspaceProject
+			}, null, 8, ["ticket", "project"]),
 			createVNode(_component_UiPerformance, {
 				ref: "uiPerformance",
 				onClosed: _cache[40] || (_cache[40] = ($event) => _ctx.$refs.settingsMenu?.focusTrigger())

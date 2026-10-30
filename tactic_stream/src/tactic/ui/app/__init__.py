@@ -5,5 +5,5 @@ from .page_nav_container_wdg import PageNavContainerWdg
 from .search_type_element_wdg import SearchTypeHasTableElementWdg
 
 from .message_wdg import MessageTableElementWdg
-from .system_info_wdg import SystemInfoWdg, ClearSideBarCache
+from .system_info_wdg import SystemInfoWdg
 from .plugin_wdg import PluginManagerCmd

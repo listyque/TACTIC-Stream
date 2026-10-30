@@ -172,27 +172,4 @@ class SystemInfoWdg:
             from tactic.command import PythonCmd
             Command.execute_cmd(PythonCmd(script_path=values['path']))
             return dict(message='Script completed')
-        if action == 'clear_sidebar':
-            if values:
-                raise ValueError('Sidebar cache has a fixed location')
-            Command.execute_cmd(ClearSideBarCache())
-            return dict(message='Side Bar cache cleared.')
         raise ValueError('Unknown System Info test')
-
-
-class ClearSideBarCache(Command):
-    @classmethod
-    def is_undoable(cls):
-        return False
-
-    def execute(self):
-        require_admin()
-        import shutil
-        root = (Path(Environment.get_tmp_dir()) / 'cache').resolve()
-        target = root / 'side_bar'
-        if target.is_symlink() or target.is_junction() or not target.resolve().is_relative_to(root):
-            raise ValueError('Sidebar cache must stay inside its cache directory')
-        if target.exists() and not target.is_dir():
-            raise ValueError('Sidebar cache is not a directory')
-        if target.is_dir():
-            shutil.rmtree(target)

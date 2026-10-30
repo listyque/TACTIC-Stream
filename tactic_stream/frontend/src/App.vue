@@ -2157,7 +2157,7 @@ export default {
       <header><h2>{{ t('Snapshot Browser') }}</h2><AppButton icon="close" label="Close" icon-only @click="$refs.snapshotPage.close()" /></header>
       <div id="dock-snapshot" class="snapshot-page-content"></div>
     </dialog>
-    <SystemInfo ref="systemInfo" :ticket="session.ticket" :project="workspaceProject" @navigation-cleared="loadNavigation" />
+    <SystemInfo ref="systemInfo" :ticket="session.ticket" :project="workspaceProject" />
     <UiPerformance ref="uiPerformance" @closed="$refs.settingsMenu?.focusTrigger()" />
     <component v-if="agentRequestComponent" :is="agentRequestComponent" ref="agentRequest" :ticket="session.ticket" :capture="agentContext" @providers="openAgentProviders" @mcp="openAgentMcp" />
     <component v-if="agentMcpComponent" :is="agentMcpComponent" ref="agentMcp" :ticket="session.ticket" :project="workspaceProject" />
