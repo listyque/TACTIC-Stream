@@ -105,10 +105,10 @@ async function request(action = 'refresh') {
   model.value.busy = action !== 'poll';
   if (action !== 'poll') model.value.error = '';
   try {
-    if (action === 'executor_start' || action === 'executor_stop')
+    if (action.startsWith('executor_'))
       await call(
-        action.slice('executor_'.length),
-        {},
+        action.split(':')[0].slice('executor_'.length),
+        { target: action.split(':')[1] },
         'tactic.ui.panel.agent_executor_cmd.AgentExecutorCmd'
       );
     if (action === 'send') {
@@ -301,8 +301,16 @@ function schedule() {
     timer = setTimeout(() => request('poll'), 2500);
 }
 function event(action) {
-  if (action.type === 'executor' && ['start', 'stop'].includes(action.value)) {
-    if (!model.value.busy) request('executor_' + action.value);
+  if (action.type === 'executorTarget') {
+    model.value.executorTarget = action.value;
+    return;
+  }
+  if (
+    action.type === 'executor' &&
+    ['start', 'stop'].includes(action.value?.action)
+  ) {
+    if (!model.value.busy)
+      request('executor_' + action.value.action + ':' + action.value.target);
     return;
   }
   if (action.type === 'mcp') {

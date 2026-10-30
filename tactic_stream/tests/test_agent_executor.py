@@ -4,6 +4,7 @@ from pathlib import Path
 import tempfile
 import time
 import unittest
+from uuid import uuid4
 from unittest.mock import patch
 
 from tactic_stream import agent_runtime as runtime
@@ -60,7 +61,50 @@ class Command(unittest.TestCase):
 
     def executor(self, action, **values):
         return self.api.dispatch('execute_cmd', (self.auth, 'tactic.ui.panel.agent_executor_cmd.AgentExecutorCmd',
-            dict(action=action, project_code='one') | values))['info']
+            dict(action=action, project_code='one', target='server') | values))['info']
+
+    def test_desktop_relay_explicit_scope_retry_stop_and_expiry(self):
+        self.call('disconnect', host_id=self.host)
+        device, other = str(uuid4()), str(uuid4())
+        self.assertEqual(self.executor('state')['target'], '')
+        with self.assertRaisesRegex(ValueError, 'Choose the computer'):
+            self.executor('start', target='')
+        def poll(**values):
+            return self.executor('desktop_poll', device=device, label='My workstation', **values)
+        self.assertEqual(poll()['commands'], [])
+        self.assertEqual(self.executor('state')['target'], device)
+        self.executor('start', target=device)
+        operation = poll()['commands'][0]
+        self.assertEqual(operation['action'], 'start')
+        self.assertEqual(operation['project'], 'one')
+        self.executor('start', target=device)
+        self.assertEqual(poll()['commands'], [operation])
+        with patch.object(runtime, 'start') as launch:
+            with self.assertRaisesRegex(ValueError, 'already connected'):
+                self.executor('start')
+            launch.assert_not_called()
+        with self.assertRaisesRegex(ValueError, 'sign in to the same account'):
+            self.executor('start', target=other)
+        poll(acks=[operation['operation']], reports={'one': dict(operation=operation['operation'], state='connected', error='')})
+        self.assertEqual(poll()['commands'], [])
+        self.assertEqual(self.executor('state')['state'], 'connected')
+        self.executor('stop', target=device)
+        stop = poll()['commands'][0]
+        self.assertNotEqual(stop['operation'], operation['operation'])
+        poll(reports={'one': dict(operation=operation['operation'], state='connected', error='')})
+        self.assertEqual(self.executor('state')['state'], 'stopping')
+        with patch('tactic_stream.server.agent_desktops.time.time', return_value=time.time() + 65):
+            self.assertEqual(poll()['commands'], [])
+            self.assertEqual(self.executor('state')['state'], 'failed')
+        with self.assertRaises(ValueError):
+            poll(reports={'one': dict(operation=stop['operation'], state='running', error='')})
+        from pyasm.common import Environment
+        with patch.object(Environment, 'get_user_name', return_value='another-admin'), \
+                patch.object(Environment, 'get_data_dir', return_value=self.store.data_dir):
+            from tactic_stream.server.agent_desktops import targets, control
+            self.assertEqual(targets('one'), [])
+            with self.assertRaisesRegex(ValueError, 'sign in to the same account'):
+                control(device, 'one', 'start')
 
     def test_scope_auth_external_host_and_private_environment(self):
         self.assertEqual(self.executor('state')['state'], 'external')

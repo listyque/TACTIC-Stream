@@ -4,7 +4,7 @@ import { k as rpc } from "./index.js";
 import { B as node, L as button, R as label, V as rect, n as observeFrameSizes, r as _sfc_main$1, v as translate, z as muted } from "./resize.js";
 import { t as _sfc_main$2 } from "./AppDialog.js";
 import { m as describe$1 } from "./App.js";
-import { n as status, t as control } from "./executor.ui.js";
+import { n as current, r as status, t as controls } from "./executor.ui.js";
 //#region ../src/tactic_stream/shared_ui/features/configuration/providers.ui.mjs
 function initial() {
 	return {
@@ -18,7 +18,8 @@ function initial() {
 		busy: false,
 		error: "",
 		notice: "",
-		executor: {}
+		executor: {},
+		executorTarget: null
 	};
 }
 function select(model, id) {
@@ -55,7 +56,7 @@ function edit(model, field, value) {
 	});
 }
 function describe(model, width, height, language) {
-	const tr = (key) => translate(key, language), locked = model.busy;
+	const tr = (key) => translate(key, language), locked = model.busy, executor = current(model);
 	const selected = model.profiles.find((item) => item.id === model.selected);
 	const narrow = width < 620, rowHeight = narrow ? 80 : 40, toolsWidth = narrow ? width - 24 : Math.min(320, width / 2);
 	const nodes = [node("Choice", "agentProviderProfile", rect(12, 8, narrow ? width - 24 : width - toolsWidth - 36, 32), {
@@ -98,17 +99,18 @@ function describe(model, width, height, language) {
 		destructive: type === "remove"
 	})));
 	nodes.push(label("agentProviderNotice", rect(12, rowHeight + 8, width - 24, 44), tr(model.error || ([
+		"preparing",
 		"starting",
 		"stopping",
 		"failed"
-	].includes(model.executor?.state) ? status(model.executor, language) : "") || (selected?.status === "waiting" && !["connected", "external"].includes(model.executor?.state) ? "Connect an agent to check this connection." : "") || model.notice || selected?.error || {
+	].includes(executor.state) ? status(executor, language) : "") || (selected?.status === "waiting" && !["connected", "external"].includes(executor.state) ? "Connect an agent to check this connection." : "") || model.notice || selected?.error || {
 		connected: "Connection checked",
 		failed: "Connection failed",
 		waiting: "Waiting for the external host",
 		unchecked: "Connection has not been checked"
 	}[selected?.status] || "Configure a connection, then check it from the external host."), Object.assign({}, muted, {
 		wrap: true,
-		color: model.error || model.executor?.error || selected?.status === "failed" ? "error" : "muted"
+		color: model.error || executor.error || selected?.status === "failed" ? "error" : "muted"
 	})));
 	const fields = [
 		{
@@ -187,11 +189,7 @@ function describe(model, width, height, language) {
 		title: "Project data",
 		description: "Chat messages, project context and attachments go only to the selected connection after Send. Connection checks do not send project data."
 	});
-	nodes.push(control(model.executor, rect(12, rowHeight + 56, 180, 32), language, !locked && !dirty(model) && !!model.selected));
-	nodes.push(label("agentProviderExecutorScope", rect(204, rowHeight + 56, Math.max(0, width - 216), 32), model.executor?.state === "external" ? status(model.executor, language) : tr("Runs on the TACTIC server for this project."), {
-		color: "secondaryText",
-		visible: !narrow
-	}));
+	nodes.push(...controls(model, width, rowHeight + 56, language, !locked && !dirty(model) && !!model.selected));
 	const contentY = rowHeight + 96;
 	nodes.push(node("Box", "agentProviderForm", rect(0, contentY, width, Math.max(80, height - contentY - 52)), { children: describe$1({
 		fields,
@@ -282,12 +280,14 @@ var _sfc_main = {
 						"tactic.ui.panel.agent_executor_cmd.AgentExecutorCmd",
 						{
 							action,
-							project_code: owner.project
+							project_code: owner.project,
+							target: values.target
 						}
 					], {}, true, true);
 					if (reply.status !== "OK") throw Error(reply.description || "Agent connection failed");
 					if (id !== generation || context !== owner) return;
 					action = "state";
+					values = {};
 				}
 				const reply = await rpc("execute_cmd", [
 					{
@@ -318,18 +318,15 @@ var _sfc_main = {
 		}
 		function schedule() {
 			clearTimeout(timer);
-			if (opened && model.value.selected && (model.value.profiles.some((row) => row.status === "waiting") || [
-				"starting",
-				"connected",
-				"stopping"
-			].includes(model.value.executor?.state))) timer = setTimeout(() => {
+			if (opened && model.value.selected) timer = setTimeout(() => {
 				if (model.value.selected && !dirty(model.value) && !model.value.busy) call("state");
 				else schedule();
 			}, 2e3);
 		}
 		function event(action) {
 			if (model.value.busy) return;
-			if (action.type === "field") model.value = edit(model.value, action.field, action.value);
+			if (action.type === "executorTarget") model.value.executorTarget = action.value;
+			else if (action.type === "field") model.value = edit(model.value, action.field, action.value);
 			else if (action.type === "select" && !dirty(model.value)) {
 				model.value = select(model.value, action.value);
 				schedule();
@@ -338,7 +335,7 @@ var _sfc_main = {
 				schedule();
 			} else if (action.type === "reset") model.value = select(model.value, model.value.selected);
 			else if (action.type === "refresh" && !dirty(model.value)) call("state");
-			else if (action.type === "executor" && ["start", "stop"].includes(action.value) && !dirty(model.value) && model.value.selected) call(action.value);
+			else if (action.type === "executor" && ["start", "stop"].includes(action.value?.action) && !dirty(model.value) && model.value.selected) call(action.value.action, { target: action.value.target });
 			else if ([
 				"save",
 				"check",

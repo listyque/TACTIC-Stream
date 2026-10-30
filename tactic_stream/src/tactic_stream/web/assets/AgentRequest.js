@@ -6,7 +6,7 @@ import { ut as _sfc_main$6, xt as _sfc_main$7 } from "./ConfiguredView.js";
 import { t as _sfc_main$8 } from "./AppDialog.js";
 import { t as listAction } from "./tree.ui.js";
 import { m as describe$2 } from "./App.js";
-import { n as status$1, t as control } from "./executor.ui.js";
+import { n as current, r as status$1, t as controls } from "./executor.ui.js";
 //#region ../src/tactic_stream/shared_ui/features/scripts/history.ui.mjs
 function initial$1() {
 	return {
@@ -462,6 +462,7 @@ function initial(context = {}) {
 		allowWeb: false,
 		hosts: [],
 		executor: {},
+		executorTarget: null,
 		requests: [],
 		selected: "",
 		request: {},
@@ -503,6 +504,7 @@ function host(model) {
 function canSend(model) {
 	const connected = host(model);
 	return !model.busy && ![
+		"preparing",
 		"starting",
 		"stopping",
 		"failed"
@@ -616,27 +618,27 @@ function contextItems(context, language) {
 	].filter((item) => item.value).map((item) => Object.assign({}, item, { width: Math.min(220, Math.max(80, item.value.length * 7 + 40)) }));
 }
 function status(model, language) {
-	const tr = (text) => translate(text, language), current = model.request || {};
-	if (model.refreshError || model.error || model.executor?.error || current.error) return {
-		text: tr(model.refreshError || model.error || model.executor?.error || current.error),
+	const tr = (text) => translate(text, language), current$1 = model.request || {}, executor = current(model);
+	if (model.refreshError || model.error || executor.error || current$1.error) return {
+		text: tr(model.refreshError || model.error || executor.error || current$1.error),
 		color: "error",
 		icon: "error"
 	};
-	if (current.library?.archived) return {
+	if (current$1.library?.archived) return {
 		text: tr("Archived conversation — restore it to continue"),
 		color: "secondaryText",
 		icon: "archive"
 	};
-	if (current.status === "completed") return current.outcome === "needs_input" ? {
+	if (current$1.status === "completed") return current$1.outcome === "needs_input" ? {
 		text: tr("Waiting for your reply"),
 		color: "action",
 		icon: "help"
-	} : current.outcome === "blocked" ? {
+	} : current$1.outcome === "blocked" ? {
 		text: tr("Task blocked — see the answer"),
 		color: "error",
 		icon: "warning"
 	} : {
-		text: tr(current.outcome === "completed" ? "Task completed" : "Agent finished — review the answer"),
+		text: tr(current$1.outcome === "completed" ? "Task completed" : "Agent finished — review the answer"),
 		color: "green",
 		icon: "check"
 	};
@@ -648,13 +650,13 @@ function status(model, language) {
 		failed: "Request failed",
 		interrupted: "Request interrupted"
 	};
-	if (!texts[current.status] && model.executor?.state === "connected" && Array.isArray(host(model)?.capabilities.providers) && !availableModels(model).length) return {
+	if (!texts[current$1.status] && executor.state === "connected" && Array.isArray(host(model)?.capabilities.providers) && !availableModels(model).length) return {
 		text: tr("No available models. Check AI providers."),
 		color: "error",
 		icon: "warning"
 	};
 	return {
-		text: tr(texts[current.status] || (model.executor?.state || model.executor?.error ? status$1(model.executor, language) : model.hosts.length ? "External agent connected" : "External agent is offline")),
+		text: tr(texts[current$1.status] || (executor.state || executor.error ? status$1(executor, language) : model.hosts.length ? "External agent connected" : "External agent is offline")),
 		color: "secondaryText",
 		icon: active(model) ? "sync" : "chat"
 	};
@@ -706,11 +708,7 @@ function describeChat(model, width, height, language, sidebarVisible) {
 	const sources = current.related_conversations || [];
 	const transcriptTop = 94 + (current.undo_operation ? 32 : 0) + (sources.length ? 26 : 0);
 	const nodes = [
-		control(model.executor, rect(inset, 52, 180, 32), language, !model.busy),
-		label("agentExecutorScope", rect(204, 52, Math.max(0, width - 216), 32), model.executor?.error || ["starting", "stopping"].includes(model.executor?.state) ? status$1(model.executor, language) : tr("Runs on the TACTIC server for this project."), {
-			color: model.executor?.error ? "error" : "secondaryText",
-			visible: width >= 620
-		}),
+		...controls(model, width, 52, language, !model.busy),
 		button("agentRequestHistoryToggle", rect(inset, 10, 32, 32), tr(sidebarVisible ? "Hide conversations" : "Show conversations"), "history", {
 			type: "historyToggle",
 			value: sidebarVisible
@@ -1099,7 +1097,7 @@ var _sfc_main = {
 			model.value.busy = action !== "poll";
 			if (action !== "poll") model.value.error = "";
 			try {
-				if (action === "executor_start" || action === "executor_stop") await call(action.slice(9), {}, "tactic.ui.panel.agent_executor_cmd.AgentExecutorCmd");
+				if (action.startsWith("executor_")) await call(action.split(":")[0].slice(9), { target: action.split(":")[1] }, "tactic.ui.panel.agent_executor_cmd.AgentExecutorCmd");
 				if (action === "send") {
 					model.value.pending ||= started(model.value) ? {
 						message_id: randomUuid(),
@@ -1221,8 +1219,12 @@ var _sfc_main = {
 			if (dialog.value?.open || active(model.value)) timer = setTimeout(() => request("poll"), 2500);
 		}
 		function event(action) {
-			if (action.type === "executor" && ["start", "stop"].includes(action.value)) {
-				if (!model.value.busy) request("executor_" + action.value);
+			if (action.type === "executorTarget") {
+				model.value.executorTarget = action.value;
+				return;
+			}
+			if (action.type === "executor" && ["start", "stop"].includes(action.value?.action)) {
+				if (!model.value.busy) request("executor_" + action.value.action + ":" + action.value.target);
 				return;
 			}
 			if (action.type === "mcp") {

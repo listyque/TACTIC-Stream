@@ -11,7 +11,21 @@ const output =
   root + '/../tools/frame_scripts/output/executor';
 const project = process.env.AGENT_EXECUTOR_PROJECT || 'one';
 const ticket = process.env.AGENT_EXECUTOR_TICKET || 'fixture';
-let executor = { state: 'stopped', managed: false, error: '' };
+const desktop = '11111111-1111-4111-8111-111111111111';
+let executor = { state: 'stopped', managed: false, error: '', target: '' };
+function snapshot() {
+  return {
+    ...executor,
+    targets: [
+      { id: desktop, kind: 'desktop', label: 'My computer' },
+      { id: 'server', kind: 'server', label: 'TACTIC server' }
+    ].map((row) => ({
+      ...row,
+      state: row.id === executor.target ? executor.state : 'stopped',
+      error: ''
+    }))
+  };
+}
 const controls = [],
   errors = [];
 let server, browser;
@@ -65,12 +79,13 @@ try {
               executor = {
                 state: values.action === 'start' ? 'connected' : 'stopped',
                 managed: true,
-                error: ''
+                error: '',
+                target: values.target
               };
-              info = executor;
+              info = snapshot();
             } else if (command.endsWith('AgentProviderCmd')) {
               info = {
-                executor,
+                executor: snapshot(),
                 default: 'codex',
                 revision: 'r1',
                 profiles: [
@@ -87,7 +102,7 @@ try {
               };
             } else {
               info = {
-                executor,
+                executor: snapshot(),
                 requests: [
                   {
                     request_id: 'row-fixture',
@@ -189,6 +204,22 @@ try {
         'Conversation lines must reserve the same action space'
       );
     }
+    if (kind === 'chat' && !process.env.AGENT_EXECUTOR_SERVER)
+      assert(
+        await dialog
+          .getByRole('button', { name: 'Connect agent', exact: true })
+          .isDisabled(),
+        'No silent server launch'
+      );
+    await dialog
+      .getByRole('combobox', { name: 'Run agent on', exact: true })
+      .selectOption(
+        process.env.AGENT_EXECUTOR_SERVER
+          ? process.env.AGENT_EXECUTOR_TARGET || 'server'
+          : kind === 'providers'
+            ? 'server'
+            : desktop
+      );
     await dialog
       .getByRole('button', { name: 'Connect agent', exact: true })
       .tap();
@@ -212,6 +243,11 @@ try {
     assert.deepEqual(
       controls.map((value) => value.action),
       ['start', 'stop', 'start', 'stop']
+    );
+  if (!process.env.AGENT_EXECUTOR_SERVER)
+    assert.deepEqual(
+      controls.map((value) => value.target),
+      [desktop, desktop, 'server', 'server']
     );
   console.log(
     'PASS: connect/disconnect from browser chat and AI providers through captured project API'

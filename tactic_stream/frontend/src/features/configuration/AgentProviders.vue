@@ -96,7 +96,7 @@ async function call(action, values = {}) {
         [
           { ticket: owner.ticket, project: owner.project },
           'tactic.ui.panel.agent_executor_cmd.AgentExecutorCmd',
-          { action, project_code: owner.project }
+          { action, project_code: owner.project, target: values.target }
         ],
         {},
         true,
@@ -106,6 +106,7 @@ async function call(action, values = {}) {
         throw Error(reply.description || 'Agent connection failed');
       if (id !== generation || context !== owner) return;
       action = 'state';
+      values = {};
     }
     const reply = await rpc(
       'execute_cmd',
@@ -148,14 +149,7 @@ async function call(action, values = {}) {
 }
 function schedule() {
   clearTimeout(timer);
-  if (
-    opened &&
-    model.value.selected &&
-    (model.value.profiles.some((row) => row.status === 'waiting') ||
-      ['starting', 'connected', 'stopping'].includes(
-        model.value.executor?.state
-      ))
-  )
+  if (opened && model.value.selected)
     timer = setTimeout(() => {
       if (model.value.selected && !UI.dirty(model.value) && !model.value.busy)
         call('state');
@@ -164,7 +158,9 @@ function schedule() {
 }
 function event(action) {
   if (model.value.busy) return;
-  if (action.type === 'field')
+  if (action.type === 'executorTarget')
+    model.value.executorTarget = action.value;
+  else if (action.type === 'field')
     model.value = UI.edit(model.value, action.field, action.value);
   else if (action.type === 'select' && !UI.dirty(model.value)) {
     model.value = UI.select(model.value, action.value);
@@ -177,11 +173,11 @@ function event(action) {
   else if (action.type === 'refresh' && !UI.dirty(model.value)) call('state');
   else if (
     action.type === 'executor' &&
-    ['start', 'stop'].includes(action.value) &&
+    ['start', 'stop'].includes(action.value?.action) &&
     !UI.dirty(model.value) &&
     model.value.selected
   )
-    call(action.value);
+    call(action.value.action, { target: action.value.target });
   else if (['save', 'check', 'remove'].includes(action.type))
     call(action.type, {
       provider: model.value.selected,

@@ -33,27 +33,47 @@ an explicit interrupted state. Refresh/reopen does not resubmit anything.
 
 ## Connect the existing Codex host
 
-Use **Connect agent** in the chat or Configuration → AI providers in either client.
-The authenticated `tactic.ui.panel.agent_executor_cmd.AgentExecutorCmd` accepts
-`state`, `start` and `stop` with the current `project_code`, and requires an
-administrator. It starts one separate process on the TACTIC server under the
-server OS account, scoped to the current TACTIC login and project. This account
-must have the optional agent dependencies and the configured provider/Codex login.
-It never starts automatically or on Send. The browser does not launch a process
-on the browser machine. TH calls the same server command; neither UI runs model code.
+Use **Run agent on** and **Connect agent** in the chat or AI providers.
+TH prefers its own registered desktop when no executor is active. TS offers the
+current account's connected desktops. The server is an explicit alternative,
+never a default/fallback. Existing active connections retain their target.
 
-**Disconnect agent** stops the managed host and its owned model/MCP children.
-An active turn is interrupted; committed changes remain and are not replayed.
-Closing a chat or client leaves an explicitly connected executor running.
+`AgentExecutorCmd` requires an administrator and the current `project_code`.
+`state` returns `targets` (id/kind/label/state/error) and the active/default desktop
+`target`; `start`/`stop` require an explicit target UUID or `server`. An unselected
+or unavailable target is rejected. Starts across targets are serialized per owner;
+repeated starts are idempotent and a running project must be disconnected first.
+These controls are not exposed as model tools.
+
+TH registers its ephemeral device UUID using `desktop_poll` in the authenticated
+admin project. The server returns only fixed start/stop operations for that same
+login. Reports and acknowledgements carry an operation UUID; stale reports cannot
+overwrite newer commands and retries do not create a second process. Devices expire
+from the selector after 20 seconds without a poll; unaccepted commands expire after
+60 seconds. Relay metadata under `data/agent_desktops` contains no credentials.
+The desktop uses its own captured session and server address, never a browser-supplied
+command, path, URL or ticket. Signing out invalidates pending callbacks and stops
+owned local processes; a server outage does not replay completed work.
+
+TH owns a separate `tactic_stream.agent_worker` subprocess, using the portable
+HTTP/MCP modules bundled under `thlib/agent_runtime`. It never imports a sibling
+Stream checkout or its server/database packages. `tools/sync_agent_runtime.py
+--stream-root <TS/tactic_stream> --check` verifies the exact source/reference copies.
+First explicit Connect prepares a private cached venv (`cache/agent_python`) with
+its own cross-process installation lock. No dependencies are installed on normal
+TH startup and global Python is unchanged. Codex CLI and its sign-in must exist
+on the selected machine. Provider localhost addresses are relative to that machine.
+
+The optional server runner still uses its own OS account, optional agent dependencies
+and Codex/provider setup. It receives the session through private process environment,
+with metadata/stop markers under `data/agent_executors` and an OS lease preventing
+duplicates. Neither runner writes tickets/passwords into command lines or state files.
+
+Disconnect stops owned model/MCP children, interrupting an active turn while preserving
+committed changes. Closing the chat leaves either runner connected. Closing/signing
+out of TH stops its local runners; the server runner continues independently.
 Externally launched hosts are detected but cannot be stopped by this control.
-The command is not exposed as a model tool.
-
-The managed runner receives the current session only through its private process
-environment. No ticket/password is written to its state files or command line.
-Per-login/project metadata and stop markers live under `data/agent_executors`;
-an OS lease and a cooperative start lock prevent duplicate processes across web
-workers. Errors are redacted and returned in the UI. Session revocation removes
-API access. There is no OS autostart or service installation.
+There is no autostart on Send, OS service installation or silent server fallback.
 
 The same host can also be started manually. The web worker never runs a
 model or imports Handler. Provider credentials are stored encrypted on TS and
