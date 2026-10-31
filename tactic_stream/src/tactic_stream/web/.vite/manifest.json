@@ -456,6 +456,7 @@
       "src/features/administration/SecurityUsers.vue",
       "src/features/administration/SecurityGroups.vue",
       "src/features/administration/SecurityRules.vue",
+      "src/features/administration/ComponentShowcase.vue",
       "src/features/administration/Plugins.vue",
       "src/features/scripts/AgentRequest.vue",
       "src/features/configuration/AgentProviders.vue",
@@ -501,6 +502,21 @@
       "_sections.ui.js",
       "_admin.document.js",
       "_ConfiguredView.js"
+    ]
+  },
+  "src/features/administration/ComponentShowcase.vue": {
+    "file": "assets/ComponentShowcase.js",
+    "name": "ComponentShowcase",
+    "src": "src/features/administration/ComponentShowcase.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.js",
+      "_AppButton.js",
+      "_resize.js",
+      "_tree.ui.js"
+    ],
+    "css": [
+      "assets/ComponentShowcase.css"
     ]
   },
   "src/features/administration/LayoutEditor.vue": {

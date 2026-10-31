@@ -1,5 +1,9 @@
 [
   {
+    "id": "frame_showcase",
+    "languages": ["en", "ru"]
+  },
+  {
     "id": "plugins",
     "languages": [
       "en",

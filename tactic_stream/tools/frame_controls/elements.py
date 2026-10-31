@@ -358,7 +358,11 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--handler-root", type=Path, default=Path("D:/grav/Tactic Stream/TH"))
     args = parser.parse_args()
-    registry = json.loads((HERE / "element_catalog.json").read_text(encoding="utf-8"))
+    registry = json.loads(subprocess.check_output([
+        "node", "--input-type=module", "--eval",
+        "import {pathToFileURL} from 'node:url'; const m=await import(pathToFileURL(process.argv[1])); console.log(JSON.stringify(m.catalogue));",
+        str(HERE.parents[1] / "src/tactic_stream/shared_ui/controls/catalog.data.mjs"),
+    ], text=True, encoding="utf-8"))
     families = registry["families"]
     assert len({f["id"] for f in families}) == len(families)
     fixture = 'Button { text: "} Fake {" // X {\n}'
