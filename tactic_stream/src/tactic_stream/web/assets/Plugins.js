@@ -1,7 +1,7 @@
 import { A as onMounted, H as watch, K as withDirectives, M as openBlock, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, m as createBaseVNode, nt as normalizeStyle, p as computed, s as vShow } from "./vue.js";
 import { D as spacing, s as appearance } from "./AppButton.js";
 import { A as rpc, J as uploadFormFile } from "./index.js";
-import { C as translate$1, G as label, J as node, K as listRowHeight, V as observeFrameSizes, W as button, Y as rect, t as _sfc_main$1 } from "./FrameView.js";
+import { G as button, H as observeFrameSizes, K as label, X as rect, Y as node, q as listRowHeight, t as _sfc_main$1, w as translate$1 } from "./FrameView.js";
 import { Tt as describe$2 } from "./ConfiguredView.js";
 import { t as _sfc_main$2 } from "./PageEditorTools.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/plugins/plugins.resources.mjs

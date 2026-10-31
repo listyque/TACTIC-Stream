@@ -1,7 +1,7 @@
 import { F as resolveComponent, K as withDirectives, M as openBlock, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, m as createBaseVNode, nt as normalizeStyle, s as vShow } from "./vue.js";
 import { s as appearance, z as _plugin_vue_export_helper_default } from "./AppButton.js";
 import { A as rpc, It as randomUuid } from "./index.js";
-import { C as translate, G as label, J as node, V as observeFrameSizes, W as button, Y as rect, t as _sfc_main$1 } from "./FrameView.js";
+import { G as button, H as observeFrameSizes, K as label, X as rect, Y as node, t as _sfc_main$1, w as translate } from "./FrameView.js";
 import { n as sections } from "./sections.ui.js";
 import { T as projectPath, i as sectionSelector, n as notices, o as toolbar$1, t as documentEvent } from "./admin.document.js";
 import { $t as kinds, Bt as mode, Gt as appearances, Ht as scope$1, J as roots, Jt as copy, Kt as block, Lt as change$1, Q as spacingField, Qt as geometry$1, Rt as fields$1, Ut as type, Vt as options, Wt as add, X as toggle, Xt as fingerprint, Y as selected, Yt as duplicate, Zt as geometries, an as siblings, c as zooms, en as layers, in as reparent, nn as remove, o as _sfc_main$2, on as sizing, q as alignment, qt as change, rn as reorder, s as controls, sn as spacing, tn as path, zt as filter } from "./ConfiguredView.js";

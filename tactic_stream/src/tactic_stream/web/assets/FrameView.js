@@ -8348,7 +8348,7 @@ function paint(c, g, color, hovered = -1) {
 		c.stroke();
 		for (const mark of g.marks) if (mark.value > 0 && g.valid) {
 			const gap = Math.min(.025, (mark.end - mark.start) / 4);
-			c.strokeStyle = color(palette[mark.index % palette.length]);
+			c.strokeStyle = mark.color || color(palette[mark.index % palette.length]);
 			c.lineWidth = g.radius - g.inner + (hovered === mark.index ? 3 : 0);
 			c.beginPath();
 			c.arc(g.cx, g.cy, (g.radius + g.inner) / 2, mark.start + gap, mark.end - gap);
@@ -8410,7 +8410,11 @@ function paint(c, g, color, hovered = -1) {
 }
 //#endregion
 //#region src/frame/controls/charts/FrameChart.vue
-var _hoisted_1$9 = ["data-frame", "aria-label"];
+var _hoisted_1$9 = [
+	"data-frame",
+	"tabindex",
+	"aria-label"
+];
 var _sfc_main$9 = {
 	__name: "FrameChart",
 	props: { node: {
@@ -8468,7 +8472,7 @@ var _sfc_main$9 = {
 				ref: canvas,
 				"data-frame": __props.node.id,
 				role: "img",
-				tabindex: "0",
+				tabindex: __props.node.focusable === false ? -1 : 0,
 				"aria-label": __props.node.text,
 				onPointermove: move,
 				onPointerleave: _cache[0] || (_cache[0] = ($event) => hovered.value = -1)
@@ -11212,6 +11216,6 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 	}
 });
 //#endregion
-export { _sfc_main$23 as A, frameContentWidth as B, translate as C, ItemPreview_default as D, _sfc_main$19 as E, monthLabel as F, label as G, _sfc_main$31 as H, parse as I, node as J, listRowHeight as K, _sfc_main$27 as L, _sfc_main$25 as M, _sfc_main$26 as N, AppSearchField_default as O, localDate as P, _sfc_main$29 as R, _sfc_main$16 as S, AppProgress_default as T, _sfc_main$32 as U, observeFrameSizes as V, button as W, revealListOffset as X, rect as Y, virtualRange as Z, describe as _, _sfc_main$4 as a, matchesUser as b, _sfc_main$8 as c, javascriptTokens as d, pythonTokens as f, readClipboardImages as g, copyText as h, _sfc_main$3 as i, _sfc_main$24 as j, _sfc_main$22 as k, completions as l, copyImage as m, _sfc_main$1 as n, _sfc_main$5 as o, xmlTokens as p, muted as q, _sfc_main$2 as r, toolbar as s, _sfc_main as t, documentSymbols as u, _sfc_main$13 as v, _sfc_main$17 as w, _sfc_main$15 as x, _sfc_main$14 as y, _sfc_main$30 as z };
+export { _sfc_main$22 as A, _sfc_main$30 as B, _sfc_main$16 as C, _sfc_main$19 as D, AppProgress_default as E, localDate as F, button as G, observeFrameSizes as H, monthLabel as I, muted as J, label as K, parse as L, _sfc_main$24 as M, _sfc_main$25 as N, ItemPreview_default as O, _sfc_main$26 as P, virtualRange as Q, _sfc_main$27 as R, _sfc_main$15 as S, _sfc_main$17 as T, _sfc_main$31 as U, frameContentWidth as V, _sfc_main$32 as W, rect as X, node as Y, revealListOffset as Z, describe as _, _sfc_main$4 as a, _sfc_main$14 as b, _sfc_main$8 as c, javascriptTokens as d, pythonTokens as f, readClipboardImages as g, copyText as h, _sfc_main$3 as i, _sfc_main$23 as j, AppSearchField_default as k, completions as l, copyImage as m, _sfc_main$1 as n, _sfc_main$5 as o, xmlTokens as p, listRowHeight as q, _sfc_main$2 as r, toolbar as s, _sfc_main as t, documentSymbols as u, geometry as v, translate as w, matchesUser as x, _sfc_main$13 as y, _sfc_main$29 as z };
 
 //# sourceMappingURL=FrameView.js.map

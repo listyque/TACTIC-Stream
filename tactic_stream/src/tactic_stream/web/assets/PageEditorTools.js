@@ -1,5 +1,5 @@
 import { G as withCtx, M as openBlock, X as ref, _ as createElementBlock, b as createVNode, p as computed } from "./vue.js";
-import { N as _sfc_main$2, W as button, Y as rect, t as _sfc_main$1 } from "./FrameView.js";
+import { G as button, P as _sfc_main$2, X as rect, t as _sfc_main$1 } from "./FrameView.js";
 import { yt as _sfc_main$3 } from "./ConfiguredView.js";
 //#region src/features/administration/PageEditorTools.vue
 var _sfc_main = {

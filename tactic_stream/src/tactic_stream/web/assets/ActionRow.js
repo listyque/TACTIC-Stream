@@ -1,6 +1,6 @@
 import { A as onMounted, G as withCtx, H as watch, M as openBlock, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, g as createCommentVNode, h as createBlock, m as createBaseVNode, nt as normalizeStyle, p as computed } from "./vue.js";
 import { T as metrics, b as fontFamily, o as t, s as appearance, t as _sfc_main$1 } from "./AppButton.js";
-import { J as node, V as observeFrameSizes, Y as rect, t as _sfc_main$2 } from "./FrameView.js";
+import { H as observeFrameSizes, X as rect, Y as node, t as _sfc_main$2 } from "./FrameView.js";
 //#region ../src/tactic_stream/shared_ui/controls/menus/action.ui.mjs
 function height(record, extent) {
 	return record.separator ? 5 : record.header ? 28 : record.status ? 48 : extent;

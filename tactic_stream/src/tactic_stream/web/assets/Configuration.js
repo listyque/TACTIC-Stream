@@ -1,7 +1,7 @@
 import { A as onMounted, D as onActivated, E as nextTick, F as resolveComponent, G as withCtx, H as watch, I as resolveDirective, K as withDirectives, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, X as ref, Y as reactive, _ as createElementBlock, b as createVNode, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, k as onDeactivated, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, s as vShow, tt as normalizeClass, u as Fragment, y as createTextVNode } from "./vue.js";
 import { A as normalizePreferences, F as accentPresets, I as iconSets, L as themes, M as savePreferencePage, _ as controls, a as _sfc_main$7, c as colorModes, f as languages, h as saveAppearance, j as preferences, k as configurationPreview, l as effectiveColorMode, o as t, s as appearance, t as _sfc_main$8, z as _plugin_vue_export_helper_default } from "./AppButton.js";
 import { A as rpc, Ct as debugSettings, It as randomUuid, O as restartServer, R as serverConfiguration, j as saveServerConfiguration, x as projectCatalog, z as serverRuntime } from "./index.js";
-import { C as translate, G as label, H as _sfc_main$10, J as node, O as AppSearchField_default, V as observeFrameSizes, W as button, Y as rect, q as muted, t as _sfc_main$9 } from "./FrameView.js";
+import { G as button, H as observeFrameSizes, J as muted, K as label, U as _sfc_main$10, X as rect, Y as node, k as AppSearchField_default, t as _sfc_main$9, w as translate } from "./FrameView.js";
 import { n as _sfc_main$11 } from "./AppearanceControls.js";
 import RecordForm_default, { a as unsupportedField, i as fieldKind, r as ImagePicker_default } from "./RecordForm.js";
 import { _ as timestampFullLabel } from "./admin.document.js";

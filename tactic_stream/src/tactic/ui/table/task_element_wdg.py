@@ -995,17 +995,85 @@ class TaskElementWdg(BaseTableElementWdg):
                 return str(task.get_value(name, no_exception=True) or '')
             colors = self.status_colors.get(value('pipeline_code') or 'task', {})
             node = pipeline.get_process(value('process')) if pipeline else None
-            records.append(dict(taskSearchKey='' if task.is_insert() else task.get_search_key(),
+            record = dict(taskSearchKey='' if task.is_insert() else task.get_search_key(),
                 taskCode='' if task.is_insert() else task.get_code(), hasTask=not task.is_insert(),
                 processType=node.get_type() if node else 'manual',
                 process=value('process'), context=value('context'), status=value('status'),
                 statusColor=colors.get(value('status'), ''), assigned=value('assigned'),
                 assignedIdentity=self.identities.get(value('assigned')),
                 processColor=node.get_color() if node else '', processLabel=node.get_label() if node else value('process'),
-                bidStart=value('bid_start_date'), bidEnd=value('bid_end_date')))
+                bidStart=value('bid_start_date'), bidEnd=value('bid_end_date'))
+            if node and node.get_type() == 'progress':
+                if any(item['process'] == record['process'] for item in records):
+                    continue
+                record['progress'] = self.get_progress_value(parent, pipeline, record['process'])
+            records.append(record)
         return dict(text=','.join(':'.join((record['context'], record['status'], record['assigned']))
                                   for record in records), tasks=records,
                     count=sum(record['hasTask'] for record in records))
+
+    @staticmethod
+    def get_progress_value(parent, pipeline, process):
+        """Legacy TaskElementWdg progress nodes count complete related objects."""
+        node = pipeline.get_process(process)
+        fields = ('search_type', 'pipeline_code', 'process', 'scope')
+        values = {name: node.get_attribute(name) for name in fields}
+        if not values['search_type']:
+            config = pipeline.get_process_sobject(process)
+            workflow = config.get_json_value('workflow', {}) if config else {}
+            source = workflow.get('default', {}) if workflow.get('version') in (2, '2') else workflow
+            for source in (source, workflow.get('properties') or {}):
+                for name in fields:
+                    if source.get(name) not in (None, ''):
+                        values[name] = source[name]
+        result = dict(state='unconfigured', complete=0, total=0, searchKeys=[])
+        target = values['search_type']
+        if not target:
+            return result
+        definition = SearchType.get(target, no_exception=True)
+        if definition is None:
+            result['state'] = 'unavailable'
+            return result
+        target_project = SearchType.breakup_search_type(target).get('project')
+        if target_project and target_project != Project.get_project_code():
+            raise SecurityException('Related objects belong to another project')
+        if values['scope'] != 'global' and not Schema.get().get_relationship(parent.get_base_search_type(), target):
+            result['state'] = 'unavailable'
+            return result
+        related_process = values['process'] or process
+        if not TaskElementWdg.can_view_process(related_process):
+            result['state'] = 'unavailable'
+            return result
+        has_pipeline = SearchType.column_exists(target, 'pipeline_code')
+        search = Search(target)
+        if has_pipeline and values['pipeline_code']:
+            search.add_filter('pipeline_code', values['pipeline_code'])
+        # Legacy misspelled its default; an omitted scope must remain local.
+        if values['scope'] != 'global':
+            search.add_relationship_filter(parent)
+        objects = search.get_sobjects()
+        keys = {item.get_search_key() + '|' + related_process + '|status': item for item in objects}
+        complete = set()
+        if keys and has_pipeline:
+            messages = Search('sthpw/message')
+            messages.add_filters('code', list(keys))
+            complete = {item.get_code() for item in messages.get_sobjects()
+                        if item.get_value('message') == 'complete'}
+        elif objects:
+            tasks = Search.get_related_by_sobjects(objects, 'sthpw/task',
+                                                    filters=[('process', related_process)])
+            completed_parents = {key for key, rows in tasks.items()
+                                 if any(str(task.get_value('status') or '').lower() == 'complete'
+                                        for task in rows)}
+            complete = {key for key, item in keys.items()
+                        if str(item.get_value('status', no_exception=True) or '').lower() == 'complete'
+                        or item.get_search_key() in completed_parents}
+        result.update(state='ready', complete=len(complete), total=len(objects),
+                      searchKeys=[item.get_search_key() for item in objects])
+        status_message = Search.get_by_code('sthpw/message', parent.get_search_key() + '|' + process + '|status')
+        status = str(status_message.get_value('message') or 'pending') if status_message else 'pending'
+        result.update(status=status, color=Task.get_default_color(status) or '')
+        return result
 
 
 class TaskSummaryElementWdg(TaskElementWdg):

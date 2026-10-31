@@ -1,8 +1,10 @@
 <script setup>
 import { computed } from 'vue';
 import * as Cells from '../../../../src/tactic_stream/shared_ui/features/table/cells.ui.mjs';
+import { cardMetrics } from '../../../../src/tactic_stream/shared_ui/features/tasks/cells.ui.mjs';
 import AppButton from '../../controls/AppButton.vue';
 import TaskCellDisplay from '../tasks/TaskCellDisplay.vue';
+import FrameView from '../../frame/FrameView.vue';
 import { t } from '../../i18n.js';
 import { appearance } from '../../appearance.js';
 
@@ -37,7 +39,10 @@ function edit(task, field, event) {
       '--task-heading-height': layout.headingHeight + 'px',
       '--task-dates-height': layout.datesHeight + 'px',
       '--task-card-padding': layout.padding + 'px',
-      '--task-card-gap': layout.gap + 'px'
+      '--task-card-gap': layout.gap + 'px',
+      '--task-content-inset': cardMetrics.inset + 'px',
+      '--task-content-icon': cardMetrics.avatar + 'px',
+      '--task-content-gap': cardMetrics.gap + 'px'
     }"
   >
     <article
@@ -55,9 +60,31 @@ function edit(task, field, event) {
         label="Task Inspector"
         :icon="task.processType === 'progress' ? 'MDI_CHART_DONUT' : undefined"
         @click="emit('inspect', task)"
-        >{{ task.processLabel || task.process || task.context }}</AppButton
+        ><span>{{
+          task.processLabel || task.process || task.context
+        }}</span></AppButton
       >
+      <FrameView
+        v-if="task.processType === 'progress'"
+        class="task-card-progress"
+        :scene="
+          Cells.processProgress(
+            task,
+            (expanded
+              ? Cells.metrics.taskPreviewWidth
+              : Cells.metrics.taskWidth) -
+              (expanded ? layout.padding * 2 : 6 + layout.padding),
+            layout.cardHeight -
+              layout.padding * 2 -
+              layout.headingHeight -
+              layout.gap,
+            appearance.language
+          )
+        "
+        @event="emit('inspect', task)"
+      />
       <AppButton
+        v-if="task.processType !== 'progress'"
         class="task-card-status frame-hit-target"
         label="Edit task status"
         :disabled="!Cells.taskEditable(task, 'status', editable)"
@@ -68,12 +95,14 @@ function edit(task, field, event) {
             text: task.status || t('Select status'),
             enabled: Cells.taskEditable(task, 'status', editable),
             actionField: true,
+            cardField: true,
             showAccent: true,
             accent: task.statusColor || task.processColor || 'action',
             fontRole: 'caption'
           }"
       /></AppButton>
       <AppButton
+        v-if="task.processType !== 'progress'"
         class="task-card-assignee frame-hit-target"
         label="Edit task assignee"
         :disabled="!Cells.taskEditable(task, 'assigned', editable)"
@@ -85,6 +114,7 @@ function edit(task, field, event) {
             text: Cells.assigneeLabel(task, appearance.language),
             enabled: Cells.taskEditable(task, 'assigned', editable),
             actionField: true,
+            cardField: true,
             avatar: true,
             avatarLabel: task.assigned
               ? Cells.assigneeLabel(task, appearance.language)
@@ -93,13 +123,15 @@ function edit(task, field, event) {
           }"
       /></AppButton>
       <AppButton
-        v-if="layout.dates"
+        v-if="layout.dates && task.processType !== 'progress'"
         class="task-card-dates"
         label="Edit task dates"
         icon="calendar"
         :disabled="!Cells.taskEditable(task, 'bid_start_date', editable)"
         @click="edit(task, 'bid_start_date', $event)"
-        ><span>{{ Cells.taskDateRange(task) }}</span></AppButton
+        ><span>{{
+          Cells.taskDateRange(task, appearance.language)
+        }}</span></AppButton
       >
     </article>
   </div>
@@ -120,6 +152,9 @@ function edit(task, field, event) {
   position: relative;
   border-left-width: 1px;
   overflow: visible;
+  border-color: var(--outline-variant);
+  border-radius: var(--field-radius);
+  background: var(--surface-high);
 }
 
 .task-cards .task-card::before {
@@ -142,14 +177,20 @@ function edit(task, field, event) {
   border-radius: var(--field-radius);
   justify-content: flex-start;
   color: var(--on-surface);
+  background: transparent;
+}
+.task-cards .task-card .app-button:disabled {
+  color: var(--muted);
+  background: transparent;
 }
 .task-cards .task-card .task-card-heading {
   flex: 0 0 var(--task-heading-height);
   height: var(--task-heading-height);
-  justify-content: center;
+  justify-content: flex-start;
   font-weight: 600;
-  text-transform: uppercase;
-  padding: 0;
+  font-size: var(--text-caption);
+  padding: 0 var(--task-content-inset);
+  gap: var(--task-content-gap);
   background: transparent;
 }
 .task-cards .task-card .app-button.frame-hit-target {
@@ -159,14 +200,20 @@ function edit(task, field, event) {
 .task-cards .task-card .task-card-dates {
   flex: 0 0 var(--task-dates-height);
   height: var(--task-dates-height);
-  padding: 0 7px;
-  gap: 4px;
+  padding: 0 var(--task-content-inset);
+  gap: var(--task-content-gap);
+  background: transparent;
   color: var(--muted);
 }
 .task-cards .task-card-dates .app-icon {
-  width: 11px;
-  height: 11px;
-  font-size: 11px;
+  width: var(--task-content-icon);
+  height: var(--task-content-icon);
+  font-size: var(--task-content-icon);
+}
+.task-cards .task-card-heading > .app-icon {
+  width: var(--task-content-icon);
+  height: var(--task-content-icon);
+  font-size: var(--task-content-icon);
 }
 .task-cards .task-card.expanded {
   padding: calc(var(--task-card-padding) - 1px);
@@ -174,6 +221,10 @@ function edit(task, field, event) {
 }
 .task-cards .task-card.expanded .app-button {
   font-size: var(--text-caption);
+}
+.task-cards .task-card .task-card-progress {
+  flex: 1;
+  min-height: 0;
 }
 .handler-table-cell .table-task-cell {
   gap: 0;

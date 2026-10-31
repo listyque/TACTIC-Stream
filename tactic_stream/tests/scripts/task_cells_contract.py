@@ -956,6 +956,36 @@ def exercise_related(api, auth):
     assert result['process_type'] == 'progress' and not result['fields'] and not result['selected_task']
     assert related['state'] == 'ready' and related['object_count'] == 2, related
     assert (related['approved'], related['total']) == (3, 2), related  # Native Handler counts tasks, not a capped percentage.
+    # The legacy pipeline progress ring counts completed objects, not matching tasks.
+    def progress_cell(process='linked'):
+        return record('execute_python_script', '', dict(code='''
+from pyasm.search import Search
+from tactic.ui.table.task_element_wdg import TaskSummaryElementWdg
+widget = TaskSummaryElementWdg(pipeline_code=%r)
+widget.set_sobjects([Search.get_by_search_key(%r)])
+widget.preprocess()
+return next(item for item in widget.get_cell_value()['tasks'] if item['process'] == %r)['progress']
+''' % (project+'/RELATED', parent, process)))['info']
+    progress = progress_cell()
+    assert (progress['complete'], progress['total']) == (0, 2), progress
+    complete_message = record('insert', 'sthpw/message', dict(
+        code=children[0]+'|model|status', message='complete'))
+    progress = progress_cell()
+    assert (progress['complete'], progress['total']) == (1, 2), progress
+    assert set(progress['searchKeys']) == set(children[:2]), progress
+    assert progress_cell('empty')['state'] == 'unconfigured'
+    assert progress_cell('missing')['state'] == 'unavailable'
+    config = record('query', 'config/process', [['pipeline_code', project+'/RELATED'], ['process', 'linked']])[0]
+    original_workflow = config['workflow']
+    record('update', config['__search_key__'], dict(workflow=json.dumps(dict(version=2, default=dict(
+        search_type='contract/task_child', pipeline_code=project+'/task_child', process='model', scope='global')))))
+    assert progress_cell()['total'] == 3
+    record('update', config['__search_key__'], dict(workflow=json.dumps(dict(
+        search_type='contract/task_child', pipeline_code=project+'/empty', process='model'))))
+    empty_progress = progress_cell()
+    assert (empty_progress['complete'], empty_progress['total'], empty_progress['state']) == (0, 0, 'ready')
+    record('update', config['__search_key__'], dict(workflow=original_workflow))
+    record('delete_sobject', complete_message['__search_key__'])
     assert len(related['items']) == 5 and set(related['parent_keys']) == set(children[:2])
     assert {item['task_key'] for item in related['items']} == {task['__search_key__'] for task in tasks[:4]} | {
         task['__search_key__'] for task in record('query', 'sthpw/task', [['search_code', 'LINK_A'], ['search_type', 'contract/task_child?project='+project], ['process', 'review']])}

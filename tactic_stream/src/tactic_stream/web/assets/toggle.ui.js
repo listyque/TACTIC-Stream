@@ -1,5 +1,5 @@
 import { _ as controls } from "./AppButton.js";
-import { G as label, J as node, Y as rect } from "./FrameView.js";
+import { K as label, X as rect, Y as node } from "./FrameView.js";
 //#region ../src/tactic_stream/shared_ui/controls/forms/toggle.ui.mjs
 function captionedSwitch(id, bounds, properties) {
 	const enabled = properties.enabled !== false, textX = controls.switch.width + controls.switch.spacing;

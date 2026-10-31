@@ -80,7 +80,7 @@ onBeforeUnmount(() => {
     v-tooltip="tip"
     :data-frame="node.id"
     role="img"
-    tabindex="0"
+    :tabindex="node.focusable === false ? -1 : 0"
     :aria-label="node.text"
     @pointermove="move"
     @pointerleave="hovered = -1"

@@ -1,4 +1,4 @@
-import { C as translate, G as label, J as node, W as button, Y as rect } from "./FrameView.js";
+import { G as button, K as label, X as rect, Y as node, w as translate } from "./FrameView.js";
 //#region ../src/tactic_stream/shared_ui/features/scripts/executor.ui.mjs
 var busy = [
 	"preparing",

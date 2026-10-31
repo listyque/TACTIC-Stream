@@ -3,7 +3,7 @@ import { n as arrange, r as __exportAll } from "./ObjectFieldFrame.js";
 import { $ as toRaw, A as onMounted, C as inject, E as nextTick, F as resolveComponent, G as withCtx, H as watch, I as resolveDirective, J as markRaw, K as withDirectives, L as resolveDynamicComponent, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, S as h, T as mergeProps, V as useSlots, X as ref, Y as reactive, _ as createElementBlock, b as createVNode, c as withKeys, d as KeepAlive, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, o as vModelText, p as computed, q as isRef, rt as toDisplayString, s as vShow, t as Transition, tt as normalizeClass, u as Fragment, v as createSlots, y as createTextVNode, z as useId } from "./vue.js";
 import { D as spacing$1, O as textStyles, R as BusyIndicator_default, S as fontMetricHeight, T as metrics$3, _ as controls$1, a as _sfc_main$70, b as fontFamily, j as preferences, m as readableText, o as t, s as appearance, t as _sfc_main$69, u as frameColors, y as cssRoles, z as _plugin_vue_export_helper_default } from "./AppButton.js";
 import { A as rpc, At as logRequest, G as tableDependencyFile, J as uploadFormFile, K as tableParentGroup, Lt as asyncComponent, P as searchConfiguration, St as debugLog, U as tableCells, W as tableDependencies, Z as widgetConfiguration, _ as navigationLink, a as __vitePreload, b as objectStatus, c as beginActivity, f as interfaceDefinition, h as messageFileRequest, ht as serverTimestamp, k as resultItems, m as linkPreviews, mt as serverClock, o as fileBlob, q as transactionDetails, u as endActivity, ut as notify, v as objectDeletion, y as objectRelations, yt as mobile } from "./index.js";
-import { B as frameContentWidth, C as translate, D as ItemPreview_default, E as _sfc_main$76, G as label, H as _sfc_main$77, J as node, M as _sfc_main$82, N as _sfc_main$74, O as AppSearchField_default, R as _sfc_main$81, V as observeFrameSizes, W as button, X as revealListOffset, Y as rect, Z as virtualRange, _ as describe$24, a as _sfc_main$83, g as readClipboardImages, h as copyText, j as _sfc_main$80, k as _sfc_main$72, m as copyImage, n as _sfc_main$73, o as _sfc_main$84, q as muted, r as _sfc_main$75, t as _sfc_main$71, y as _sfc_main$79, z as _sfc_main$78 } from "./FrameView.js";
+import { A as _sfc_main$72, B as _sfc_main$78, D as _sfc_main$76, G as button, H as observeFrameSizes, J as muted, K as label, M as _sfc_main$80, N as _sfc_main$82, O as ItemPreview_default, P as _sfc_main$74, Q as virtualRange, U as _sfc_main$77, V as frameContentWidth, X as rect, Y as node, Z as revealListOffset, _ as describe$24, a as _sfc_main$83, b as _sfc_main$79, g as readClipboardImages, h as copyText, k as AppSearchField_default, m as copyImage, n as _sfc_main$73, o as _sfc_main$84, r as _sfc_main$75, t as _sfc_main$71, v as geometry$2, w as translate, z as _sfc_main$81 } from "./FrameView.js";
 import { n as qtLabelTextWidth, t as layoutTextWidth } from "./textMetrics.js";
 import { t as captionHeight } from "./sections.ui.js";
 import RecordForm_default, { a as unsupportedField, i as fieldKind, t as _sfc_main$85 } from "./RecordForm.js";
@@ -150,10 +150,49 @@ function taskDate(value, simple) {
 	const date = value ? String(value).slice(0, 10) : "—";
 	return simple && date.length === 10 ? date.slice(5) : date;
 }
-function taskDateRange(task) {
+function taskDateRange(task, language) {
+	if (!task.bidStart && !task.bidEnd && !task.bidStartLabel && !task.bidEndLabel) return translate("Not set", language);
 	const start = task.simpleDates === void 0 && task.bidStartLabel ? task.bidStartLabel : taskDate(task.bidStart, task.simpleDates);
 	const end = task.simpleDates === void 0 && task.bidEndLabel ? task.bidEndLabel : taskDate(task.bidEnd, task.simpleDates);
 	return start + " – " + end;
+}
+function processProgress(task, width, height, language) {
+	const summary = task.progress || {}, ready = summary.state === "ready", total = Math.max(0, Number(summary.total) || 0), complete = Math.max(0, Math.min(total, Number(summary.complete) || 0)), text = ready ? complete + "/" + total : "N/A", chart = geometry$2({
+		type: "donut",
+		values: [complete, total - complete]
+	}, width, height), radius = Math.max(0, Math.min(width, height) / 2 - 2);
+	Object.assign(chart, {
+		cx: width / 2,
+		cy: height / 2,
+		radius,
+		inner: Math.max(0, radius - 4),
+		marks: chart.marks.slice(0, 1)
+	});
+	if (/^#[0-9a-f]{6}([0-9a-f]{2})?$/i.test(summary.color || "")) chart.marks[0].color = summary.color;
+	const children = ready ? [node("Chart", "processProgressRing", rect(0, 0, width, height), {
+		chart,
+		labels: [translate("Completed", language)],
+		text,
+		language,
+		focusable: false
+	})] : [];
+	children.push(label("processProgressCount", rect(width / 2 - Math.max(24, chart.inner), height / 2 - 10, Math.max(48, chart.inner * 2), 20), text, {
+		fontRole: "caption",
+		weight: 600,
+		align: "center",
+		color: ready ? "primaryText" : "secondaryText"
+	}));
+	return {
+		width,
+		height,
+		nodes: [node("Action", "processProgressOpen", rect(0, 0, width, height), {
+			text: translate("Related tasks", language),
+			enabled: true,
+			radius: 4,
+			action: { type: "inspect" },
+			children
+		})]
+	};
 }
 function taskEditable(task, field, editable = true) {
 	if (!editable || task.processType === "progress") return false;
@@ -271,32 +310,41 @@ function keyValues(entries, width, height, language) {
 }
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/tasks/cells.ui.mjs
+var cardMetrics = {
+	inset: 6,
+	avatar: 16,
+	gap: 8
+};
 function initials$1(label) {
 	const words = String(label || "").trim().split(/\s+/).filter(Boolean);
 	return words.length ? (words[0][0] + (words[1]?.[0] || "")).toUpperCase() : "?";
 }
 function choiceStyle(model) {
 	return {
-		background: model.enabled && model.hovered ? "surfaceContainerHigh" : "surfaceContainerLow",
+		background: model.enabled && model.hovered ? "surfaceContainerHigh" : model.cardField ? void 0 : "surfaceContainerLow",
 		border: model.actionField === false ? "outlineVariant" : void 0,
-		radiusRole: model.actionField === false ? "fieldRadius" : "itemRadius",
-		textColor: model.enabled ? "primaryText" : "disabledText",
+		radiusRole: model.cardField || model.actionField === false ? "fieldRadius" : "itemRadius",
+		textColor: model.enabled ? "primaryText" : model.cardField ? "secondaryText" : "disabledText",
 		indicatorColor: model.enabled ? "secondaryText" : "disabledText",
 		indicatorIcon: "expand-more"
 	};
 }
 function choiceLayout(model, width, height) {
-	let left = 11;
-	const avatarSize = Math.max(0, Math.min(22, height - 4));
-	const avatar = model.avatar ? rect(left, (height - avatarSize) / 2, avatarSize, avatarSize) : null;
+	let left = model.cardField ? cardMetrics.inset : 11;
+	const avatarSize = Math.max(0, Math.min(model.cardField ? cardMetrics.avatar : 22, height - 4));
+	const avatar = model.avatar ? rect(model.cardField ? cardMetrics.inset + (cardMetrics.avatar - avatarSize) / 2 : left, (height - avatarSize) / 2, avatarSize, avatarSize) : null;
 	if (avatar) left += avatar.width + 7;
-	const accent = model.showAccent && model.accent ? Object.assign(rect(left, (height - 9) / 2, 9, 9), { radius: 4.5 }) : null;
+	const accent = model.showAccent && model.accent ? Object.assign(rect(model.cardField ? cardMetrics.inset + (cardMetrics.avatar - 9) / 2 : left, (height - 9) / 2, 9, 9), { radius: 4.5 }) : null;
 	if (accent) left += 16;
+	if (model.cardField && (avatar || accent)) left = cardMetrics.inset + cardMetrics.avatar + cardMetrics.gap;
 	const textHeight = Math.min(height, model.textHeight || fontMetricHeight(textStyles[model.fontRole || "body"]));
 	return {
 		avatar,
 		accent,
-		label: label("taskTableCellDisplayLabel", rect(left, Math.round((height - textHeight) / 2), width - left - (model.indicator ? 33 : 12), textHeight), model.text || "", { fontRole: model.fontRole || "body" }),
+		label: label("taskTableCellDisplayLabel", rect(left, Math.round((height - textHeight) / 2), width - left - (model.indicator ? 33 : 12), textHeight), model.text || "", {
+			fontRole: model.fontRole || "body",
+			weight: model.cardField ? 400 : void 0
+		}),
 		indicator: model.indicator ? rect(width - 26, (height - 17) / 2, 17, 17) : null
 	};
 }
@@ -349,7 +397,7 @@ var _sfc_main$68 = {
 				fallbackText: props.user?.initials || (props.model.avatarLabel === "" ? "" : initials$1(props.model.avatarLabel ?? props.model.text)),
 				fallbackIcon: "user",
 				accent: props.user?.avatarColor,
-				previewSize: Math.max(0, Math.min(22, props.height - 4)),
+				previewSize: Math.max(0, Math.min(props.model.cardField ? cardMetrics.avatar : 22, props.height - 4)),
 				round: true,
 				outlined: true
 			}
@@ -414,7 +462,10 @@ var _sfc_main$67 = {
 					"--task-heading-height": layout.value.headingHeight + "px",
 					"--task-dates-height": layout.value.datesHeight + "px",
 					"--task-card-padding": layout.value.padding + "px",
-					"--task-card-gap": layout.value.gap + "px"
+					"--task-card-gap": layout.value.gap + "px",
+					"--task-content-inset": unref(cardMetrics).inset + "px",
+					"--task-content-icon": unref(cardMetrics).avatar + "px",
+					"--task-content-gap": unref(cardMetrics).gap + "px"
 				})
 			}, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.tasks, (task) => {
 				return openBlock(), createElementBlock("article", {
@@ -431,10 +482,17 @@ var _sfc_main$67 = {
 						icon: task.processType === "progress" ? "MDI_CHART_DONUT" : void 0,
 						onClick: ($event) => emit("inspect", task)
 					}, {
-						default: withCtx(() => [createTextVNode(toDisplayString(task.processLabel || task.process || task.context), 1)]),
+						default: withCtx(() => [createBaseVNode("span", null, toDisplayString(task.processLabel || task.process || task.context), 1)]),
 						_: 2
 					}, 1032, ["icon", "onClick"]),
-					createVNode(_sfc_main$69, {
+					task.processType === "progress" ? (openBlock(), createBlock(_sfc_main$71, {
+						key: 0,
+						class: "task-card-progress",
+						scene: processProgress(task, (__props.expanded ? metrics$2.taskPreviewWidth : metrics$2.taskWidth) - (__props.expanded ? layout.value.padding * 2 : 6 + layout.value.padding), layout.value.cardHeight - layout.value.padding * 2 - layout.value.headingHeight - layout.value.gap, unref(appearance).language),
+						onEvent: ($event) => emit("inspect", task)
+					}, null, 8, ["scene", "onEvent"])) : createCommentVNode("", true),
+					task.processType !== "progress" ? (openBlock(), createBlock(_sfc_main$69, {
+						key: 1,
 						class: "task-card-status frame-hit-target",
 						label: "Edit task status",
 						disabled: !taskEditable(task, "status", __props.editable),
@@ -446,14 +504,16 @@ var _sfc_main$67 = {
 								text: task.status || unref(t)("Select status"),
 								enabled: taskEditable(task, "status", __props.editable),
 								actionField: true,
+								cardField: true,
 								showAccent: true,
 								accent: task.statusColor || task.processColor || "action",
 								fontRole: "caption"
 							}
 						}, null, 8, ["height", "model"])]),
 						_: 2
-					}, 1032, ["disabled", "onClick"]),
-					createVNode(_sfc_main$69, {
+					}, 1032, ["disabled", "onClick"])) : createCommentVNode("", true),
+					task.processType !== "progress" ? (openBlock(), createBlock(_sfc_main$69, {
+						key: 2,
 						class: "task-card-assignee frame-hit-target",
 						label: "Edit task assignee",
 						disabled: !taskEditable(task, "assigned", __props.editable),
@@ -466,6 +526,7 @@ var _sfc_main$67 = {
 								text: assigneeLabel(task, unref(appearance).language),
 								enabled: taskEditable(task, "assigned", __props.editable),
 								actionField: true,
+								cardField: true,
 								avatar: true,
 								avatarLabel: task.assigned ? assigneeLabel(task, unref(appearance).language) : "",
 								fontRole: "caption"
@@ -476,16 +537,16 @@ var _sfc_main$67 = {
 							"model"
 						])]),
 						_: 2
-					}, 1032, ["disabled", "onClick"]),
-					layout.value.dates ? (openBlock(), createBlock(_sfc_main$69, {
-						key: 0,
+					}, 1032, ["disabled", "onClick"])) : createCommentVNode("", true),
+					layout.value.dates && task.processType !== "progress" ? (openBlock(), createBlock(_sfc_main$69, {
+						key: 3,
 						class: "task-card-dates",
 						label: "Edit task dates",
 						icon: "calendar",
 						disabled: !taskEditable(task, "bid_start_date", __props.editable),
 						onClick: ($event) => edit(task, "bid_start_date", $event)
 					}, {
-						default: withCtx(() => [createBaseVNode("span", null, toDisplayString(taskDateRange(task)), 1)]),
+						default: withCtx(() => [createBaseVNode("span", null, toDisplayString(taskDateRange(task, unref(appearance).language)), 1)]),
 						_: 2
 					}, 1032, ["disabled", "onClick"])) : createCommentVNode("", true)
 				], 6);
@@ -13603,12 +13664,12 @@ var _sfc_main$26 = {
 		const emit = __emit;
 		const host = ref(null), body = ref(null), width = ref(0), bodyHeight = ref(0), hovered = ref(false);
 		let observer;
-		const geometry$2 = computed(() => geometry(props.model, width.value));
+		const geometry$3 = computed(() => geometry(props.model, width.value));
 		const height = computed(() => Math.max(52, 48 + (bodyHeight.value ? 6 + bodyHeight.value : 0)));
 		const header$2 = computed(() => header({
 			...props.model,
 			actionsVisible: hovered.value || mobile.value
-		}, geometry$2.value.contentWidth, appearance.language));
+		}, geometry$3.value.contentWidth, appearance.language));
 		onMounted(() => {
 			const measure = () => {
 				const parent = host.value?.parentElement;
@@ -13629,19 +13690,19 @@ var _sfc_main$26 = {
 				ref: host,
 				class: "note-entry shared-note-entry",
 				style: normalizeStyle({
-					width: geometry$2.value.width + "px",
+					width: geometry$3.value.width + "px",
 					height: height.value + "px",
-					marginLeft: geometry$2.value.x + "px"
+					marginLeft: geometry$3.value.x + "px"
 				}),
 				onPointerenter: _cache[1] || (_cache[1] = ($event) => hovered.value = true),
 				onPointerleave: _cache[2] || (_cache[2] = ($event) => hovered.value = false)
 			}, [
-				createVNode(_sfc_main$71, { scene: card(__props.model, geometry$2.value.width, height.value) }, null, 8, ["scene"]),
+				createVNode(_sfc_main$71, { scene: card(__props.model, geometry$3.value.width, height.value) }, null, 8, ["scene"]),
 				createBaseVNode("div", {
 					class: "shared-note-header",
 					style: normalizeStyle({
-						left: geometry$2.value.contentX + "px",
-						width: geometry$2.value.contentWidth + "px"
+						left: geometry$3.value.contentX + "px",
+						width: geometry$3.value.contentWidth + "px"
 					})
 				}, [createVNode(_sfc_main$71, {
 					scene: header$2.value,
@@ -13652,8 +13713,8 @@ var _sfc_main$26 = {
 					ref: body,
 					class: "shared-note-content",
 					style: normalizeStyle({
-						left: geometry$2.value.contentX + "px",
-						width: geometry$2.value.contentWidth + "px"
+						left: geometry$3.value.contentX + "px",
+						width: geometry$3.value.contentWidth + "px"
 					})
 				}, [renderSlot(_ctx.$slots, "default")], 4),
 				renderSlot(_ctx.$slots, "menu")

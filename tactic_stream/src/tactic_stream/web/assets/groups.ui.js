@@ -1,5 +1,5 @@
 import { D as spacing } from "./AppButton.js";
-import { J as node } from "./FrameView.js";
+import { Y as node } from "./FrameView.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/groups/groups.state.mjs
 function initial() {
 	return {

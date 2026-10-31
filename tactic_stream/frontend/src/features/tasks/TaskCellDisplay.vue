@@ -33,7 +33,13 @@ const views = computed(() => ({
           : UI.initials(props.model.avatarLabel ?? props.model.text)),
       fallbackIcon: 'user',
       accent: props.user?.avatarColor,
-      previewSize: Math.max(0, Math.min(22, props.height - 4)),
+      previewSize: Math.max(
+        0,
+        Math.min(
+          props.model.cardField ? UI.cardMetrics.avatar : 22,
+          props.height - 4
+        )
+      ),
       round: true,
       outlined: true
     }

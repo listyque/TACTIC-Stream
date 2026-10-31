@@ -1,7 +1,7 @@
 import { C as inject, E as nextTick, G as withCtx, H as watch, J as markRaw, M as openBlock, N as renderList, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment } from "./vue.js";
 import { D as spacing, a as _sfc_main$2, o as t, s as appearance, t as _sfc_main$3, y as cssRoles } from "./AppButton.js";
 import { A as rpc, It as randomUuid, ut as notify } from "./index.js";
-import { C as translate, G as label, J as node, N as _sfc_main$4, V as observeFrameSizes, W as button, Y as rect, q as muted, t as _sfc_main$5 } from "./FrameView.js";
+import { G as button, H as observeFrameSizes, J as muted, K as label, P as _sfc_main$4, X as rect, Y as node, t as _sfc_main$5, w as translate } from "./FrameView.js";
 import { $ as _sfc_main$6 } from "./ConfiguredView.js";
 import { t as _sfc_main$7 } from "./AppDialog.js";
 import { t as _sfc_main$8 } from "./MarkdownText.js";
