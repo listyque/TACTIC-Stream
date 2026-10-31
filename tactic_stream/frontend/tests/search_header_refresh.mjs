@@ -16,6 +16,15 @@ for (const reserveGrip of [true, false]) {
       assert.equal(refresh.visible, true);
       assert.equal(refresh.enabled, !busy);
       assert.equal(refresh.action.type, 'refresh');
+      for (const id of [
+        'searchRefreshButton',
+        'scriptShelfButton',
+        'searchWorkspaceHelpButton'
+      ]) {
+        const button = scene.nodes.find((node) => node.id === id);
+        assert.equal(button.round, true, id);
+        assert.equal(button.width, button.height, id);
+      }
       assert(refresh.x >= 0 && refresh.x + refresh.width <= field.x);
       assert(field.width > 0 && field.x + field.width <= width);
     }

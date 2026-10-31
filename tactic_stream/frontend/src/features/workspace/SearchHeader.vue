@@ -19,7 +19,11 @@ const views = Object.fromEntries(
   ])
 );
 const scene = computed(() =>
-  UI.describe({ ...props.model, reserveGrip: false }, width.value, appearance.language)
+  UI.describe(
+    { ...props.model, reserveGrip: false },
+    width.value,
+    appearance.language
+  )
 );
 let observer;
 onMounted(() => {
@@ -58,6 +62,15 @@ onBeforeUnmount(() => observer?.disconnect());
 .frame-search-header .search-header-slot {
   min-width: 0;
   min-height: 0;
+}
+.frame-search-header .search-header-slot > .tag-cloud > summary,
+.frame-search-header
+  .search-header-slot
+  > .search-quick-filter-host
+  > .search-quick-filters
+  > summary,
+.frame-search-header #workspace-dock-actions > .workspace-menu > summary {
+  border-radius: 50%;
 }
 .frame-search-header
   .search-header-slot

@@ -22741,6 +22741,7 @@ function describe$10(model, width, language) {
 	if (!compact) right -= 38;
 	nodes.push(button("searchWorkspaceHelpButton", rect$1(right, 5, 38, 38), text("Search help"), "help", { type: "help" }, true, {
 		iconOnly: true,
+		round: true,
 		visible: !compact
 	}));
 	if (!compact) right -= spacing$1.tight;
@@ -22751,7 +22752,7 @@ function describe$10(model, width, language) {
 		iconOnly: true,
 		visible: !compact && model.shelf !== false,
 		iconAction: true,
-		round: false,
+		round: true,
 		iconColor: model.shelfOpen ? "action" : "secondaryText"
 	}));
 	if (!compact && model.shelf !== false) right -= spacing$1.tight;
@@ -22763,6 +22764,7 @@ function describe$10(model, width, language) {
 	}));
 	nodes.push(button("searchRefreshButton", rect$1(refreshLeft, 5, 38, 38), text("Refresh"), "refresh", { type: "refresh" }, !model.busy, {
 		iconOnly: true,
+		round: true,
 		visible: !compact || !model.collapseSearch || !!model.searchOpen
 	}));
 	return { nodes };
