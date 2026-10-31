@@ -1559,7 +1559,11 @@ var rect = (x, y, width, height) => ({
 	height: Math.max(0, height)
 });
 function availableSections(model) {
-	return sections.filter((row) => model.streamApi !== false || !["dashboards", "layouts"].includes(row.id));
+	return sections.filter((row) => model.streamApi !== false || ![
+		"dashboards",
+		"layouts",
+		"plugins"
+	].includes(row.id));
 }
 function geometry(width, height, collapsed, sectionCount = sections.length) {
 	const mobile = width < 1e3, nav = mobile ? 0 : collapsed ? 56 : 250, body = width - nav, pad = spacing$1.content;

@@ -87,6 +87,7 @@ try {
       await section('groups').waitFor();
       assert.equal(await section('dashboards').count(), stream ? 1 : 0);
       assert.equal(await section('layouts').count(), stream ? 1 : 0);
+      assert.equal(await section('plugins').count(), stream ? 1 : 0);
       await section('groups').click();
       assert.equal(await page.evaluate(() => window.selected), 'groups');
     }
@@ -99,7 +100,7 @@ try {
   await selector.waitFor();
   assert(
     !(await selector.evaluate((el) =>
-      /Page layouts|Item layouts/.test(el.textContent)
+      /Page layouts|Item layouts|Plugins/.test(el.textContent)
     ))
   );
   assert.deepEqual(errors, []);

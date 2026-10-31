@@ -12,7 +12,7 @@ const model = {
   drafts: [],
   streamApi: false
 };
-const unavailable = ['dashboards', 'layouts'];
+const unavailable = ['dashboards', 'layouts', 'plugins'];
 const ids = UI.availableSections(model).map((row) => row.id);
 for (const id of unavailable) assert(!ids.includes(id));
 for (const id of [

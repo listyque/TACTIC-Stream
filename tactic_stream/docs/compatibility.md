@@ -6,6 +6,12 @@ successful modern-client screen is not proof of complete legacy compatibility.
 Use live API discovery for the selected installation and check actual arguments,
 results, authorization, revisions, transaction effects and failure paths.
 
+`PluginManagerCmd` is a Stream extension even though original TACTIC has plugin
+installation commands and widgets. Handler hides the Stream manager for Legacy
+and unidentified API sessions, blocking uploads and queued command execution
+before server contact. Shared administration navigation applies this same
+filter; Stream keeps the manager and legacy plugins remain usable independently.
+
 DashboardCmd and Stream widget-configuration authoring are Stream extensions.
 Handler hides page/item layout editors for Legacy and unidentified API sessions;
 native and browser administration descriptions use the same section filtering.
