@@ -55,6 +55,14 @@ for (const language of ['en', 'ru'])
         });
         const content = scene.nodes.find((n) => n.id === 'showcaseContent');
         assert.equal(content.x + content.width <= width, true);
+        const title = content.children.find((n) => n.id === 'showcaseTitle');
+        const scope = content.children.find((n) => n.id === 'showcaseScope');
+        if (width < 740)
+          assert(title.height >= 64, 'Two full heading lines fit');
+        assert(
+          scope.y >= title.y + title.height,
+          'Subtitle follows the whole heading'
+        );
       }
 const initial = UI.initial(),
   changed = UI.transition(

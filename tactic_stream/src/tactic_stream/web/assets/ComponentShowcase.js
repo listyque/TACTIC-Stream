@@ -2190,20 +2190,21 @@ function describe(model, catalog, width, height, language = "en") {
 		selected: model.code,
 		radio: true
 	}));
-	const content = [], inner = Math.max(0, w - 32);
-	content.push(label("showcaseTitle", rect(16, 12, inner, 46), language === "ru" ? family.title : family.label, {
+	const content = [], inner = Math.max(0, w - 32), titleHeight = narrow ? lineHeights.hero * 2 : 46;
+	content.push(label("showcaseTitle", rect(16, 12, inner, titleHeight), language === "ru" ? family.title : family.label, {
 		fontRole: "hero",
 		weight: 600,
 		wrap: true,
+		maxLines: 2,
 		role: "heading",
 		level: 2
 	}));
-	content.push(label("showcaseScope", rect(16, 62, inner, 32), tr(live.includes(family.id) ? "Local demo; project data stays unchanged" : "Standalone example not added yet"), {
+	content.push(label("showcaseScope", rect(16, titleHeight + 16, inner, 32), tr(live.includes(family.id) ? "Local demo; project data stays unchanged" : "Standalone example not added yet"), {
 		fontRole: "secondary",
 		color: "secondaryText",
 		wrap: true
 	}));
-	let y = 110;
+	let y = titleHeight + 64;
 	if (!visible.length) {
 		content.push(label("showcaseNoResults", rect(16, y, inner, 48), tr("No matching components"), { wrap: true }));
 		y += 64;
