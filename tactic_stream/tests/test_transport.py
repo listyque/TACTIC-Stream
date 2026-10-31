@@ -115,6 +115,65 @@ class Transport(unittest.TestCase):
         self.addCleanup(proxy.__exit__, None, None, None)
         return proxy
 
+    def test_legacy_handler_hook_api_and_optional_stream_commands(self):
+        spec = importlib.util.spec_from_file_location(
+            'legacy_handler_hooks_client',
+            LEGACY / 'src/client/tactic_client_lib/tactic_server_stub.py',
+        )
+        original = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(original)
+        client = original.TacticServerStub(setup=False, protocol='xmlrpc')
+        set_server = client.set_server
+
+        def reconnect(url):
+            if client.server is not None:
+                client.server.__exit__(None, None, None)
+            set_server(url)
+            self.addCleanup(client.server.__exit__, None, None, None)
+
+        self.enterContext(patch.object(client, 'set_server', side_effect=reconnect))
+        client.set_server(self.url)
+        client.set_project('one')
+        client.set_ticket(client.get_ticket('admin', 'private-test-password'))
+        executor = 'tactic.ui.panel.agent_executor_cmd.AgentExecutorCmd'
+        automation = 'tactic.ui.panel.handler_automation_cmd.HandlerAutomationCmd'
+        self.assertTrue(client.class_exists(executor))
+        self.assertTrue(client.class_exists(automation))
+        self.assertFalse(client.class_exists('tactic.ui.panel.missing_optional_cmd.MissingCmd'))
+        result = client.execute_cmd(automation, dict(action='read', project_code='one'))
+        self.assertIn('records', result['info'])
+        self.assertTrue(result['info']['revision'])
+        device = 'b6037f72-0d7a-48a8-87f1-307c95831ca3'
+        poll = client.execute_cmd(executor, dict(
+            action='desktop_poll', project_code='one', device=device,
+            label='Compatibility fixture', reports={}, acks=[],
+        ))
+        self.assertEqual(poll['info']['commands'], [])
+        data = dict(title='Legacy hook', event='handler|before|object|update',
+                    script_path='tools/one', trigger_type='handler_script_hook',
+                    data=json.dumps(dict(version=1, action='object.update', phase='before')))
+        created = client.insert('config/trigger', data)
+        key = client.build_search_key('config/trigger', created['code'], project_code='one')
+        client.start('Legacy hook rollback')
+        try:
+            client.update(key, dict(title='Must roll back'), triggers=True)
+            client.insert('config/trigger', dict(data, title='Must disappear'), triggers=True)
+        finally:
+            client.abort()
+            client.set_login_ticket(client.get_login_ticket())
+        records = client.query('config/trigger', [('trigger_type', 'handler_script_hook')], show_retired=True)
+        self.assertEqual([(row['code'], row['title']) for row in records], [(created['code'], 'Legacy hook')])
+        client.start('Legacy hook save')
+        try:
+            client.update(key, dict(title='Saved legacy hook'), triggers=True)
+            client.finish()
+        except Exception:
+            client.abort()
+            raise
+        self.assertEqual(client.get_by_search_key(key)['title'], 'Saved legacy hook')
+        client.delete_sobject(key)
+        self.assertEqual(client.query('config/trigger', [('trigger_type', 'handler_script_hook')], show_retired=True), [])
+
     def test_result_branch_query_http_contract(self):
         with self.proxy() as proxy:
             token = proxy.get_ticket('admin', 'private-test-password')
