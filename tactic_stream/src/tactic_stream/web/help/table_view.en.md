@@ -196,3 +196,5 @@ Item lists keep equal left and right insets while their contents fit. Extra spac
 In Stream, open Commit Queue from the main top toolbar. The results footer keeps pagination, view loading and record creation controls; it has no duplicate queue button or Repository Sync action.
 
 Related-table counts and their arrow form one compact button. Click the count, label or arrow to expand or collapse the same related table; keyboard activation and loading feedback stay within that row and column.
+
+On phones, item cards keep titles, descriptions and complete thumbnails in a compact flowing layout. Tasks, notes and file actions sit below the text; the item menu and navigation arrow remain separate. Tap a card to browse its children and Back to return. Resizing preserves the desktop layout.

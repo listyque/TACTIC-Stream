@@ -231,13 +231,16 @@ const previewOverlay = computed(() =>
   )
 );
 const geometry = computed(() => Card.layout(cardModel.value, hostWidth.value));
-const bounds = (part) => ({
-  position: 'absolute',
-  left: part.x + 'px',
-  top: part.y + 'px',
-  width: part.width + 'px',
-  height: part.height + 'px'
-});
+const bounds = (part) =>
+  mobile.value
+    ? undefined
+    : {
+        position: 'absolute',
+        left: part.x + 'px',
+        top: part.y + 'px',
+        width: part.width + 'px',
+        height: part.height + 'px'
+      };
 let sizeObserver;
 onMounted(() => {
   hostWidth.value = host.value.clientWidth;
@@ -301,9 +304,9 @@ onBeforeUnmount(() => clearTimeout(hoverTimer));
     :style="{
       '--result-depth': node.depth || 0,
       '--result-accent': accent,
-      height: geometry.height + 'px',
-      minHeight: geometry.height + 'px',
-      padding: 0
+      height: mobile ? undefined : geometry.height + 'px',
+      minHeight: mobile ? undefined : geometry.height + 'px',
+      padding: mobile ? undefined : 0
     }"
     :data-result-key="record.__search_key__"
     :data-node-id="node.id"

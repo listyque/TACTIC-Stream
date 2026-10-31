@@ -14,8 +14,26 @@ const views = Object.fromEntries(
 );
 const scene = computed(() => UI.body(props.model, props.width, props.height));
 </script>
-<template><FrameView :scene="scene" :views="views" /></template>
+<template>
+  <div v-if="model.mobile" class="result-mobile-body">
+    <slot name="title" />
+    <template v-if="model.kind === 'object'">
+      <span v-if="model.subtitle" class="result-description">{{
+        model.subtitle
+      }}</span>
+      <slot v-if="model.hasMetadata" name="metadata" />
+    </template>
+    <slot v-else name="technical" />
+  </div>
+  <FrameView v-else :scene="scene" :views="views" />
+</template>
 <style>
+.result-mobile-body {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+  white-space: normal;
+}
 .result-body-slot {
   display: flex;
   align-items: center;

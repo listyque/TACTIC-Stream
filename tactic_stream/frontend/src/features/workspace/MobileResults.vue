@@ -187,6 +187,7 @@ const snapshotFooter = ref(null);
       <VirtualCollection
         v-show="parent || !closedGroups[group.key]"
         class="mobile-result-list"
+        :row-gap="6"
         :items="
           group.nodes.map((node) => ({
             key: node.id,
@@ -340,9 +341,7 @@ const snapshotFooter = ref(null);
   height: auto;
 }
 .mobile-result-list {
-  display: grid;
-  gap: 6px;
-  padding: 6px 4px;
+  margin: 6px;
 }
 .mobile-result-screen .result-item > .result-surface {
   border: 0;
@@ -435,9 +434,9 @@ const snapshotFooter = ref(null);
 .mobile-results .result-preview {
   position: static;
   grid-column: 1;
-  grid-row: 1;
-  justify-self: end;
-  align-self: start;
+  grid-row: 1 / 3;
+  justify-self: center;
+  align-self: center;
 }
 .mobile-results .result-preview .image-picker-preview {
   width: 42px;
@@ -455,6 +454,7 @@ const snapshotFooter = ref(null);
   grid-column: 2;
   grid-row: 1;
   grid-template-columns: minmax(0, 1fr);
+  position: static;
   min-height: 42px;
   align-content: center;
 }
@@ -469,6 +469,9 @@ const snapshotFooter = ref(null);
 .mobile-results .result-title-line > :is(strong, h2) {
   min-width: 0;
   max-width: 100%;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   white-space: normal;
   overflow-wrap: anywhere;
 }
@@ -564,6 +567,9 @@ const snapshotFooter = ref(null);
 .mobile-results .result-mobile-header.result-item-branch {
   --mobile-leading: 54px;
 }
+.mobile-results .result-mobile-header > .result-preview {
+  justify-self: end;
+}
 .mobile-results .result-mobile-back {
   position: absolute;
   left: 4px;
@@ -590,84 +596,6 @@ const snapshotFooter = ref(null);
   -webkit-box-orient: vertical;
   white-space: normal;
   font-size: var(--text-caption);
-}
-.mobile-results .result-item-object > .result-preview {
-  --mobile-preview-center: calc(12px + 42px / 2 - 3px);
-  position: absolute;
-  inset: 0 auto auto 3px;
-  width: min(55%, 180px);
-  height: 100%;
-  grid-area: auto;
-  justify-self: start;
-  align-self: stretch;
-  z-index: -1;
-  pointer-events: none;
-  overflow: hidden;
-  border-radius: var(--surface-radius) 0 0 var(--surface-radius);
-}
-.mobile-results .result-item-object > .result-preview .image-picker-preview {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  flex-basis: auto;
-  border-radius: 0;
-  background: transparent;
-}
-.mobile-results .result-item-object .image-picker-preview img {
-  position: absolute;
-  left: var(--mobile-preview-center);
-  top: 0;
-  transform: translateX(-50%);
-}
-.mobile-results .result-item-object .image-picker-preview:has(img) {
-  mask-image: linear-gradient(
-    to right,
-    black 0%,
-    rgb(0 0 0 / 0.6) var(--mobile-preview-center),
-    transparent calc(50% + var(--mobile-preview-center))
-  );
-}
-.mobile-results .result-item-object .image-picker-preview:has(img)::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  backdrop-filter: blur(8px);
-  mask-image: linear-gradient(to right, transparent, black 75%);
-}
-.mobile-results
-  .result-item-object
-  > .result-preview
-  .image-picker-preview:not(:has(img)) {
-  background: linear-gradient(
-    to right,
-    color-mix(
-      in srgb,
-      var(--preview-accent, var(--primary)),
-      var(--surface) 65%
-    ),
-    transparent 90%
-  );
-}
-.mobile-results
-  .result-item-object
-  .image-picker-preview
-  > span:not(.app-icon) {
-  position: absolute;
-  left: calc(var(--mobile-preview-center) - 42px / 2);
-  top: 50%;
-  transform: translateY(-50%);
-  width: 42px;
-  text-align: center;
-  color: var(--on-surface);
-  font-size: var(--text-body-large);
-  font-weight: 600;
-  letter-spacing: 0.06em;
-}
-.mobile-result-header .result-item-object > .result-preview {
-  --mobile-preview-center: calc(4px + var(--mobile-leading) - 42px / 2);
-  inset: 0 auto auto 0;
-  height: 100%;
-  border-radius: 0;
 }
 @media (max-width: 700px) {
   .workspace-browser > .search-header.mobile-search-header {
