@@ -12,6 +12,7 @@ const props = defineProps({
   translateLabel: { type: Boolean, default: true },
   tooltip: String,
   icon: String,
+  iconAtEnd: Boolean,
   iconOnly: Boolean,
   compact: Boolean,
   round: Boolean,
@@ -44,7 +45,8 @@ const paint = computed(() => buttonVariables(props));
       primary: highlighted,
       'filled-action': filledAction,
       danger: destructive,
-      tonal
+      tonal,
+      'icon-at-end': iconAtEnd
     }"
     v-tooltip="
       tooltip
@@ -76,6 +78,9 @@ const paint = computed(() => buttonVariables(props));
   </component>
 </template>
 <style>
+.app-button.icon-at-end > .app-icon {
+  order: 1;
+}
 .app-button:not(.icon-button) {
   gap: var(--button-spacing);
   min-width: var(--button-minimum-width);

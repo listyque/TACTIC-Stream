@@ -1495,6 +1495,7 @@ var _sfc_main = {
 		},
 		tooltip: String,
 		icon: String,
+		iconAtEnd: Boolean,
 		iconOnly: Boolean,
 		compact: Boolean,
 		round: Boolean,
@@ -1528,7 +1529,8 @@ var _sfc_main = {
 					primary: __props.highlighted,
 					"filled-action": __props.filledAction,
 					danger: __props.destructive,
-					tonal: __props.tonal
+					tonal: __props.tonal,
+					"icon-at-end": __props.iconAtEnd
 				}]),
 				style: normalizeStyle([paint.value, __props.badgeColor ? { "--badge-color": __props.badgeColor } : null]),
 				href: __props.href,

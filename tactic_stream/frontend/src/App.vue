@@ -2254,9 +2254,9 @@ export default {
         <TagCloud v-if="!administrationOpen" ref="tagCloud" :overlay="compactShortcuts" :external-trigger="compactShortcuts" :ticket="session.ticket" :project="project" :search-type="type" :tab-id="activeSearchTab?.id" :selected="selectedTags" :disabled="busy" :boundary="$refs.results?.parentElement" @apply="applyTags" @toggle="menuToggled" />
         </Teleport>
         </template>
-        <template #quick>
+        <template #quick="{ budget, resize }">
         <Teleport defer to="#workspace-mobile-search-tools" :disabled="!compactShortcuts || administrationOpen">
-        <SearchQuickFilters v-if="!administrationOpen" ref="quickFilters" :overlay="compactShortcuts"
+        <SearchQuickFilters v-if="!administrationOpen" ref="quickFilters" :overlay="compactShortcuts" :budget="budget" @resize="resize"
           :ticket="session.ticket" :project="project" :search-type="type" :tab-id="activeSearchTab?.id" :scope="scopeKey || type.split('?')[0]" :login="session.login"
           :selections="quickSelections" :layout="quickLayout" :disabled="busy" :boundary="$refs.results?.parentElement"
           @apply="applyQuickFilters" @reset="quickLayout = null; quickSelections = $event; page = 0; loadRows()" @edit="$refs.quickFilterEditor.open($event)" @toggle="menuToggled">

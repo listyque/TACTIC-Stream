@@ -8,19 +8,36 @@ const props = defineProps({ model: Object });
 const emit = defineEmits(['event']);
 const slots = useSlots(),
   host = ref(null),
-  width = ref(0);
+  width = ref(0),
+  quickWidth = ref(38);
 const views = Object.fromEntries(
   ['field', 'panels', 'quick', 'tags'].map((name) => [
     name,
     {
       component: () =>
-        h('div', { class: 'search-header-slot' }, slots[name]?.())
+        h(
+          'div',
+          { class: 'search-header-slot' },
+          slots[name]?.(
+            name === 'quick'
+              ? {
+                  budget: UI.quickBudget(
+                    { ...props.model, reserveGrip: false },
+                    width.value
+                  ),
+                  resize: (value) => {
+                    quickWidth.value = value;
+                  }
+                }
+              : {}
+          )
+        )
     }
   ])
 );
 const scene = computed(() =>
   UI.describe(
-    { ...props.model, reserveGrip: false },
+    { ...props.model, reserveGrip: false, quickWidth: quickWidth.value },
     width.value,
     appearance.language
   )

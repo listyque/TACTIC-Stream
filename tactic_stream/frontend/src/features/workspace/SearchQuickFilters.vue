@@ -5,6 +5,12 @@ import { searchConfiguration, userProfile } from '../../api.js';
 import FrameView from '../../frame/FrameView.vue';
 import { appearance } from '../../appearance.js';
 import * as UI from '../../../../src/tactic_stream/shared_ui/features/search/popups.ui.mjs';
+import * as Header from '../../../../src/tactic_stream/shared_ui/features/search/header.ui.mjs';
+import {
+  fontFamily,
+  textStyles
+} from '../../../../src/tactic_stream/shared_ui/core/foundation.mjs';
+import { qtLabelTextWidth } from '../../controls/typography/textMetrics.js';
 import { t } from '../../i18n.js';
 import AppButton from '../../controls/AppButton.vue';
 import QuickFilterChip from '../../controls/display/QuickFilterChip.vue';
@@ -35,9 +41,10 @@ export default {
     layout: Object,
     disabled: Boolean,
     boundary: Object,
-    overlay: Boolean
+    overlay: Boolean,
+    budget: { type: Number, default: 0 }
   },
-  emits: ['apply', 'reset', 'edit', 'toggle'],
+  emits: ['apply', 'reset', 'edit', 'toggle', 'resize'],
   data() {
     return {
       headerWidth: 400,
@@ -53,10 +60,34 @@ export default {
       users: null,
       usersBusy: false,
       usersError: '',
-      usersRequest: 0
+      usersRequest: 0,
+      groupKey: '',
+      groupAnchor: null
     };
   },
   computed: {
+    strip() {
+      if (this.budget <= 0)
+        return Header.quickStrip([], 0, appearance.language);
+      const groups = this.groups.slice(0, 3).map((group) => {
+        const item = {
+          ...group,
+          count: group.values.length,
+          disabled: this.disabled || this.busy
+        };
+        item.textWidth = qtLabelTextWidth(
+          Header.quickLabel(item, appearance.language),
+          `600 ${textStyles.body}px "${fontFamily}"`
+        );
+        return item;
+      });
+      return Header.quickStrip(groups, this.budget, appearance.language);
+    },
+    shownGroups() {
+      return this.groupKey
+        ? this.groups.filter((group) => group.key === this.groupKey)
+        : this.groups;
+    },
     headerScene() {
       return UI.quickHeader(
         {
@@ -141,6 +172,16 @@ export default {
     }
   },
   watch: {
+    'strip.width': {
+      immediate: true,
+      handler(width) {
+        this.$emit('resize', width);
+      }
+    },
+    budget(value) {
+      this.close();
+      if (value > 0 && this.ticket && this.searchType) this.load();
+    },
     context() {
       this.request++;
       this.usersRequest++;
@@ -150,12 +191,16 @@ export default {
       this.error = this.usersError = '';
       this.$refs.menu.close();
       this.$refs.assignees.close();
+      this.groupKey = '';
+      this.groupAnchor = null;
+      if (this.budget > 0 && this.ticket && this.searchType) this.load();
     }
   },
   mounted() {
     this.menuBoundary = this.boundary || this.$el.closest('.workspace-browser');
     this.resize = new ResizeObserver(this.scrolled);
     this.resize.observe(this.$refs.viewport);
+    if (this.budget > 0 && this.ticket && this.searchType) this.load();
   },
   beforeUnmount() {
     this.request++;
@@ -164,6 +209,20 @@ export default {
   },
   methods: {
     t,
+    async openGroup(action, source) {
+      this.groupKey = action.key;
+      this.groupAnchor = source;
+      await nextTick();
+      this.$refs.menu.open = true;
+    },
+    fullMenu(event) {
+      if (
+        event.target.closest('summary')?.parentElement === this.$refs.menu?.$el
+      ) {
+        this.groupKey = '';
+        this.groupAnchor = null;
+      }
+    },
     groupHeader(group) {
       return UI.groupHeader(
         group.source === 'task' ? t(group.title) : group.title,
@@ -175,7 +234,7 @@ export default {
       else if (action.type === 'reset') this.reset();
       else if (action.type === 'clear') this.clear();
       else if (action.type === 'lastGroup')
-        this.focusGroup(this.groups.length - 1, -1);
+        this.focusGroup(this.shownGroups.length - 1, -1);
     },
     open() {
       this.$refs.menu.open = true;
@@ -295,7 +354,7 @@ export default {
       this.$emit('edit', this.catalog);
     },
     focusGroup(index, direction) {
-      const group = this.groups[index],
+      const group = this.shownGroups[index],
         flow = group && this.flows[group.key];
       if (!flow) {
         this.$refs.viewport.scrollTop = 0;
@@ -335,7 +394,17 @@ export default {
 };
 </script>
 <template>
-  <div class="search-quick-filter-host">
+  <div
+    class="search-quick-filter-host"
+    @pointerdown.capture="fullMenu"
+    @keydown.capture="fullMenu"
+  >
+    <FrameView
+      v-if="strip.nodes.length"
+      :scene="strip"
+      :style="{ width: strip.width - 38 + 'px', height: '38px', flex: 'none' }"
+      @event="openGroup"
+    />
     <AppMenu
       ref="menu"
       class="search-quick-filters"
@@ -347,6 +416,7 @@ export default {
       :overlay="overlay"
       :close-on-select="false"
       :boundary="boundary || menuBoundary"
+      :anchor="groupAnchor"
       @toggle="toggled"
     >
       <template #trigger
@@ -372,7 +442,7 @@ export default {
           ><AppButton v-if="error" label="Retry" @click="load(true)" />
         </p>
         <section
-          v-for="(group, index) in groups"
+          v-for="(group, index) in shownGroups"
           :key="group.key"
           class="quick-filter-group"
           :aria-label="group.source === 'task' ? t(group.title) : group.title"
@@ -397,7 +467,7 @@ export default {
         <p v-if="catalog && !groups.length && !busy && !error" class="muted">
           {{ t('No filters available') }}
         </p>
-        <slot :close="close" />
+        <slot v-if="!groupKey" :close="close" />
       </div>
     </AppMenu>
     <AppMenu
@@ -406,7 +476,7 @@ export default {
       label="ASSIGNED TO"
       icon="groups"
       :overlay="overlay"
-      :anchor="$refs.menu?.$el.querySelector('summary')"
+      :anchor="groupAnchor || $refs.menu?.$el.querySelector('summary')"
       :close-on-select="false"
       :boundary="boundary || menuBoundary"
       @toggle="$emit('toggle', $event)"
@@ -448,6 +518,8 @@ export default {
 <style>
 .search-quick-filter-host {
   position: relative;
+  display: flex;
+  align-items: center;
 }
 .search-quick-filters:not(.labelled-menu) > summary {
   width: 38px;

@@ -842,7 +842,7 @@ var _hoisted_7$11 = {
 	key: 0,
 	role: "status"
 };
-var _hoisted_8$10 = {
+var _hoisted_8$9 = {
 	key: 1,
 	class: "xml-diff"
 };
@@ -917,7 +917,7 @@ function _sfc_render$10(_ctx, _cache, $props, $setup, $data, $options) {
 			}, null, 8, _hoisted_5$12), [[vModelText, $data.xml]])]),
 			createBaseVNode("p", _hoisted_6$12, toDisplayString($options.t("XML validation does not execute widgets or scripts.")), 1),
 			$data.checked ? (openBlock(), createElementBlock("p", _hoisted_7$11, toDisplayString($options.t("XML is valid. Review the diff before saving.")), 1)) : createCommentVNode("", true),
-			$data.diff ? (openBlock(), createElementBlock("pre", _hoisted_8$10, toDisplayString($data.diff), 1)) : createCommentVNode("", true),
+			$data.diff ? (openBlock(), createElementBlock("pre", _hoisted_8$9, toDisplayString($data.diff), 1)) : createCommentVNode("", true),
 			$data.preview && $options.contextValid ? (openBlock(), createElementBlock("section", {
 				key: 2,
 				class: "interface-preview",
@@ -6959,7 +6959,7 @@ var _hoisted_7$10 = {
 	key: 0,
 	class: "task-expanded-row"
 };
-var _hoisted_8$9 = ["colspan"];
+var _hoisted_8$8 = ["colspan"];
 var _sfc_main$82 = {
 	__name: "TaskWorkspaceTable",
 	props: {
@@ -7187,7 +7187,7 @@ var _sfc_main$82 = {
 							"columns",
 							"busy",
 							"onChange"
-						])], 8, _hoisted_8$9)])) : createCommentVNode("", true)], 64);
+						])], 8, _hoisted_8$8)])) : createCommentVNode("", true)], 64);
 					}), 128))]);
 				}), 128))
 			], 12, _hoisted_1$46)], 544);
@@ -11372,7 +11372,7 @@ var _hoisted_7$8 = {
 	class: "notice",
 	role: "status"
 };
-var _hoisted_8$8 = {
+var _hoisted_8$7 = {
 	key: 7,
 	class: "error",
 	role: "alert"
@@ -11622,7 +11622,7 @@ function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
 				$data.error ? (openBlock(), createElementBlock("p", _hoisted_5$9, toDisplayString($options.t($data.error)), 1)) : createCommentVNode("", true),
 				$data.uncertain ? (openBlock(), createElementBlock("p", _hoisted_6$9, toDisplayString($options.t("The server may have saved these tasks. Saving is blocked; inspect the refreshed data before discarding the draft.")), 1)) : createCommentVNode("", true),
 				$options.liveChanged && !$options.refreshing && !$data.loading ? (openBlock(), createElementBlock("p", _hoisted_7$8, toDisplayString($options.t("Tasks changed on the server. Refresh to review current values; your draft keeps its original revisions.")), 1)) : createCommentVNode("", true),
-				$data.surface === "workspace" && $data.projectionError && $options.displayedView !== "table" ? (openBlock(), createElementBlock("p", _hoisted_8$8, toDisplayString($options.t($data.projectionError)), 1)) : createCommentVNode("", true),
+				$data.surface === "workspace" && $data.projectionError && $options.displayedView !== "table" ? (openBlock(), createElementBlock("p", _hoisted_8$7, toDisplayString($options.t($data.projectionError)), 1)) : createCommentVNode("", true),
 				$data.surface === "workspace" && $options.displayedView !== "table" && $data.result?.hasMore ? (openBlock(), createElementBlock("small", _hoisted_9$5, toDisplayString($options.t("Calendar and Gantt show loaded tasks. Use Load more tasks to include the remaining tasks.")), 1)) : createCommentVNode("", true),
 				createBaseVNode("div", {
 					class: "task-manager-results",
@@ -13116,7 +13116,7 @@ var _hoisted_7$7 = {
 	class: "workspace-tab-history-count",
 	"aria-hidden": "true"
 };
-var _hoisted_8$7 = ["aria-label"];
+var _hoisted_8$6 = ["aria-label"];
 var _sfc_main$62 = {
 	__name: "WorkspaceTabs",
 	props: {
@@ -13747,7 +13747,7 @@ var _sfc_main$62 = {
 								"disabled",
 								"onClick"
 							]);
-						}), 128))], 8, _hoisted_8$7)
+						}), 128))], 8, _hoisted_8$6)
 					]),
 					_: 1
 				}, 8, ["label"])) : createCommentVNode("", true)
@@ -17820,7 +17820,7 @@ var _hoisted_6$7 = {
 	role: "alert"
 };
 var _hoisted_7$6 = ["value", "aria-label"];
-var _hoisted_8$6 = { key: 2 };
+var _hoisted_8$5 = { key: 2 };
 var _hoisted_9$4 = ["aria-label"];
 var _hoisted_10$4 = {
 	key: 0,
@@ -17922,7 +17922,7 @@ function _sfc_render$6(_ctx, _cache, $props, $setup, $data, $options) {
 						else if (action.type === "rename" && $data.catalog) _ctx.$emit("rename", action.value);
 					})
 				}, null, 8, ["model"])) : createCommentVNode("", true),
-				!$data.docked ? (openBlock(), createElementBlock("footer", _hoisted_8$6, [createVNode(_component_AppButton, {
+				!$data.docked ? (openBlock(), createElementBlock("footer", _hoisted_8$5, [createVNode(_component_AppButton, {
 					label: "Apply filters",
 					icon: "search",
 					highlighted: "",
@@ -19424,7 +19424,7 @@ var _hoisted_7$5 = {
 	class: "notice",
 	role: "alert"
 };
-var _hoisted_8$5 = {
+var _hoisted_8$4 = {
 	key: 4,
 	class: "search-library-conditions"
 };
@@ -19479,7 +19479,7 @@ function _sfc_render$5(_ctx, _cache, $props, $setup, $data, $options) {
 				})
 			})
 		])) : createCommentVNode("", true),
-		$data.catalog ? (openBlock(), createElementBlock("div", _hoisted_8$5, [
+		$data.catalog ? (openBlock(), createElementBlock("div", _hoisted_8$4, [
 			createVNode(_component_SearchEditorPart, {
 				part: "selection",
 				model: {
@@ -19646,6 +19646,90 @@ function groupHeader(title, width) {
 		fontRole: "bodyLarge",
 		weight: 600
 	})] };
+}
+//#endregion
+//#region ../src/tactic_stream/shared_ui/features/search/header.ui.mjs
+function quickBudget(model, width) {
+	if (model.compact || model.quick === false || width < 1e3) return 0;
+	const actions = [
+		model.panels,
+		true,
+		model.tags,
+		model.shelf
+	].filter((visible) => visible !== false).length;
+	const left = (model.reserveGrip === false ? spacing$1.compact : 38) + 44;
+	return Math.max(0, width - left - actions * 44 - 54 - Math.max(360, Math.min(640, width * .42)));
+}
+function quickLabel(group, language) {
+	return (group.source === "task" ? translate({
+		status: "Status",
+		assigned: "Assignee",
+		process: "Process"
+	}[group.key] || group.title, language) : group.title) + (group.count ? " · " + group.count : "");
+}
+function quickStrip(groups, budget, language) {
+	const nodes = [];
+	let left = 0;
+	for (const group of groups.slice(0, 3)) {
+		const width = Math.max(104, Math.ceil(group.textWidth) + 56);
+		if (left + width + spacing$1.tight > budget) break;
+		nodes.push(button("searchQuickGroup_" + group.key, rect$1(left, 0, width, 38), quickLabel(group, language), "expand-more", {
+			type: "quickGroup",
+			key: group.key
+		}, !group.disabled, {
+			iconAtEnd: true,
+			tonal: !!group.count
+		}));
+		left += width + spacing$1.tight;
+	}
+	return {
+		nodes,
+		width: left + 38,
+		contentHeight: 38
+	};
+}
+function describe$12(model, width, language) {
+	const text = (key) => translate(key, language), compact = !!model.compact, nodes = [];
+	let right = width - spacing$1.compact;
+	const view = (id, name, show, extent = 38) => {
+		if (show) right -= extent;
+		nodes.push(node("View", id, rect$1(right, 5, extent, 38), {
+			view: name,
+			visible: show
+		}));
+		if (show) right -= spacing$1.tight;
+	};
+	view("searchHeaderPanels", "panels", model.panels !== false);
+	if (!compact) right -= 38;
+	nodes.push(button("searchWorkspaceHelpButton", rect$1(right, 5, 38, 38), text("Search help"), "help", { type: "help" }, true, {
+		iconOnly: true,
+		round: true,
+		visible: !compact
+	}));
+	if (!compact) right -= spacing$1.tight;
+	view("searchHeaderTags", "tags", !compact && model.tags !== false);
+	right -= !compact && model.shelf !== false ? 38 : 0;
+	nodes.push(button("scriptShelfButton", rect$1(right, 5, 38, 38), text("Script shelf"), "code", { type: "shelf" }, true, {
+		iconOnly: true,
+		visible: !compact && model.shelf !== false,
+		iconAction: true,
+		round: true,
+		iconColor: model.shelfOpen ? "action" : "secondaryText"
+	}));
+	if (!compact && model.shelf !== false) right -= spacing$1.tight;
+	view("searchHeaderQuick", "quick", model.quick !== false && (!compact || !model.collapseSearch), compact ? 38 : model.quickWidth || 38);
+	const refreshLeft = model.reserveGrip === false ? spacing$1.compact : 38;
+	const left = refreshLeft + 38 + spacing$1.tight;
+	nodes.push(node("View", "searchHeaderField", rect$1(left, 5, right - left - spacing$1.compact, 38), {
+		view: "field",
+		visible: !compact || !model.collapseSearch || !!model.searchOpen
+	}));
+	nodes.push(button("searchRefreshButton", rect$1(refreshLeft, 5, 38, 38), text("Refresh"), "refresh", { type: "refresh" }, !model.busy, {
+		iconOnly: true,
+		round: true,
+		visible: !compact || !model.collapseSearch || !!model.searchOpen
+	}));
+	return { nodes };
 }
 //#endregion
 //#region ../src/tactic_stream/shared_ui/controls/forms/people.ui.mjs
@@ -19953,13 +20037,18 @@ var _sfc_main$46 = {
 		layout: Object,
 		disabled: Boolean,
 		boundary: Object,
-		overlay: Boolean
+		overlay: Boolean,
+		budget: {
+			type: Number,
+			default: 0
+		}
 	},
 	emits: [
 		"apply",
 		"reset",
 		"edit",
-		"toggle"
+		"toggle",
+		"resize"
 	],
 	data() {
 		return {
@@ -19976,10 +20065,27 @@ var _sfc_main$46 = {
 			users: null,
 			usersBusy: false,
 			usersError: "",
-			usersRequest: 0
+			usersRequest: 0,
+			groupKey: "",
+			groupAnchor: null
 		};
 	},
 	computed: {
+		strip() {
+			if (this.budget <= 0) return quickStrip([], 0, appearance.language);
+			return quickStrip(this.groups.slice(0, 3).map((group) => {
+				const item = {
+					...group,
+					count: group.values.length,
+					disabled: this.disabled || this.busy
+				};
+				item.textWidth = qtLabelTextWidth(quickLabel(item, appearance.language), `600 ${textStyles.body}px "${fontFamily}"`);
+				return item;
+			}), this.budget, appearance.language);
+		},
+		shownGroups() {
+			return this.groupKey ? this.groups.filter((group) => group.key === this.groupKey) : this.groups;
+		},
 		headerScene() {
 			return quickHeader({
 				busy: this.busy,
@@ -20040,20 +20146,36 @@ var _sfc_main$46 = {
 			return this.layout !== null && this.layout !== void 0;
 		}
 	},
-	watch: { context() {
-		this.request++;
-		this.usersRequest++;
-		this.busy = this.usersBusy = false;
-		this.catalog = null;
-		this.users = null;
-		this.error = this.usersError = "";
-		this.$refs.menu.close();
-		this.$refs.assignees.close();
-	} },
+	watch: {
+		"strip.width": {
+			immediate: true,
+			handler(width) {
+				this.$emit("resize", width);
+			}
+		},
+		budget(value) {
+			this.close();
+			if (value > 0 && this.ticket && this.searchType) this.load();
+		},
+		context() {
+			this.request++;
+			this.usersRequest++;
+			this.busy = this.usersBusy = false;
+			this.catalog = null;
+			this.users = null;
+			this.error = this.usersError = "";
+			this.$refs.menu.close();
+			this.$refs.assignees.close();
+			this.groupKey = "";
+			this.groupAnchor = null;
+			if (this.budget > 0 && this.ticket && this.searchType) this.load();
+		}
+	},
 	mounted() {
 		this.menuBoundary = this.boundary || this.$el.closest(".workspace-browser");
 		this.resize = new ResizeObserver(this.scrolled);
 		this.resize.observe(this.$refs.viewport);
+		if (this.budget > 0 && this.ticket && this.searchType) this.load();
 	},
 	beforeUnmount() {
 		this.request++;
@@ -20062,6 +20184,18 @@ var _sfc_main$46 = {
 	},
 	methods: {
 		t,
+		async openGroup(action, source) {
+			this.groupKey = action.key;
+			this.groupAnchor = source;
+			await nextTick();
+			this.$refs.menu.open = true;
+		},
+		fullMenu(event) {
+			if (event.target.closest("summary")?.parentElement === this.$refs.menu?.$el) {
+				this.groupKey = "";
+				this.groupAnchor = null;
+			}
+		},
 		groupHeader(group) {
 			return groupHeader(group.source === "task" ? t(group.title) : group.title, this.headerWidth);
 		},
@@ -20069,7 +20203,7 @@ var _sfc_main$46 = {
 			if (action.type === "edit") this.edit();
 			else if (action.type === "reset") this.reset();
 			else if (action.type === "clear") this.clear();
-			else if (action.type === "lastGroup") this.focusGroup(this.groups.length - 1, -1);
+			else if (action.type === "lastGroup") this.focusGroup(this.shownGroups.length - 1, -1);
 		},
 		open() {
 			this.$refs.menu.open = true;
@@ -20167,7 +20301,7 @@ var _sfc_main$46 = {
 			this.$emit("edit", this.catalog);
 		},
 		focusGroup(index, direction) {
-			const group = this.groups[index], flow = group && this.flows[group.key];
+			const group = this.shownGroups[index], flow = group && this.flows[group.key];
 			if (!flow) {
 				this.$refs.viewport.scrollTop = 0;
 				this.scrolled();
@@ -20201,182 +20335,204 @@ var _sfc_main$46 = {
 		}
 	}
 };
-var _hoisted_1$25 = { class: "search-quick-filter-host" };
-var _hoisted_2$15 = { key: 0 };
-var _hoisted_3$12 = {
+var _hoisted_1$25 = { key: 0 };
+var _hoisted_2$15 = {
 	key: 1,
 	class: "action-count"
 };
-var _hoisted_4$8 = ["aria-busy"];
-var _hoisted_5$5 = ["aria-label"];
-var _hoisted_6$5 = {
+var _hoisted_3$12 = ["aria-busy"];
+var _hoisted_4$8 = ["aria-label"];
+var _hoisted_5$5 = {
 	key: 1,
 	class: "muted"
 };
-var _hoisted_7$4 = { class: "quick-assignee-body" };
-var _hoisted_8$4 = {
+var _hoisted_6$5 = { class: "quick-assignee-body" };
+var _hoisted_7$4 = {
 	key: 0,
 	role: "status"
 };
 function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
-	const _component_AppIcon = resolveComponent("AppIcon");
 	const _component_FrameView = resolveComponent("FrameView");
+	const _component_AppIcon = resolveComponent("AppIcon");
 	const _component_AppButton = resolveComponent("AppButton");
 	const _component_QuickFilterOptions = resolveComponent("QuickFilterOptions");
 	const _component_AppMenu = resolveComponent("AppMenu");
 	const _component_QuickFilterChip = resolveComponent("QuickFilterChip");
 	const _component_UserPicker = resolveComponent("UserPicker");
-	return openBlock(), createElementBlock("div", _hoisted_1$25, [createVNode(_component_AppMenu, {
-		ref: "menu",
-		class: normalizeClass(["search-quick-filters", { "has-selection": $options.count > 0 }]),
-		label: "Quick filters",
-		icon: "filter",
-		"max-height": 400,
-		"show-label": $props.overlay,
-		overlay: $props.overlay,
-		"close-on-select": false,
-		boundary: $props.boundary || $data.menuBoundary,
-		onToggle: $options.toggled
-	}, {
-		trigger: withCtx(() => [
-			createVNode(_component_AppIcon, { name: "filter" }),
-			$props.overlay ? (openBlock(), createElementBlock("span", _hoisted_2$15, toDisplayString($options.t("Quick filters")), 1)) : createCommentVNode("", true),
-			$options.count ? (openBlock(), createElementBlock("small", _hoisted_3$12, toDisplayString($options.count), 1)) : createCommentVNode("", true)
-		]),
-		default: withCtx(() => [createBaseVNode("div", {
-			ref: "viewport",
-			class: "quick-filter-viewport",
-			"aria-busy": $data.busy,
-			onScrollPassive: _cache[1] || (_cache[1] = (...args) => $options.scrolled && $options.scrolled(...args))
-		}, [
-			createVNode(_component_FrameView, {
-				ref: "header",
-				scene: $options.headerScene,
-				style: normalizeStyle({
-					height: $options.headerScene.contentHeight + "px",
-					flex: "none"
-				}),
-				onEvent: $options.headerEvent
-			}, null, 8, [
-				"scene",
-				"style",
-				"onEvent"
+	return openBlock(), createElementBlock("div", {
+		class: "search-quick-filter-host",
+		onPointerdownCapture: _cache[5] || (_cache[5] = (...args) => $options.fullMenu && $options.fullMenu(...args)),
+		onKeydownCapture: _cache[6] || (_cache[6] = (...args) => $options.fullMenu && $options.fullMenu(...args))
+	}, [
+		$options.strip.nodes.length ? (openBlock(), createBlock(_component_FrameView, {
+			key: 0,
+			scene: $options.strip,
+			style: normalizeStyle({
+				width: $options.strip.width - 38 + "px",
+				height: "38px",
+				flex: "none"
+			}),
+			onEvent: $options.openGroup
+		}, null, 8, [
+			"scene",
+			"style",
+			"onEvent"
+		])) : createCommentVNode("", true),
+		createVNode(_component_AppMenu, {
+			ref: "menu",
+			class: normalizeClass(["search-quick-filters", { "has-selection": $options.count > 0 }]),
+			label: "Quick filters",
+			icon: "filter",
+			"max-height": 400,
+			"show-label": $props.overlay,
+			overlay: $props.overlay,
+			"close-on-select": false,
+			boundary: $props.boundary || $data.menuBoundary,
+			anchor: $data.groupAnchor,
+			onToggle: $options.toggled
+		}, {
+			trigger: withCtx(() => [
+				createVNode(_component_AppIcon, { name: "filter" }),
+				$props.overlay ? (openBlock(), createElementBlock("span", _hoisted_1$25, toDisplayString($options.t("Quick filters")), 1)) : createCommentVNode("", true),
+				$options.count ? (openBlock(), createElementBlock("small", _hoisted_2$15, toDisplayString($options.count), 1)) : createCommentVNode("", true)
 			]),
-			$data.busy || $data.error ? (openBlock(), createElementBlock("p", {
-				key: 0,
-				class: normalizeClass({ error: $data.error }),
-				role: "status"
-			}, [createBaseVNode("span", null, toDisplayString($options.t($data.busy ? "Loading filters…" : $data.error)), 1), $data.error ? (openBlock(), createBlock(_component_AppButton, {
-				key: 0,
-				label: "Retry",
-				onClick: _cache[0] || (_cache[0] = ($event) => $options.load(true))
-			})) : createCommentVNode("", true)], 2)) : createCommentVNode("", true),
-			(openBlock(true), createElementBlock(Fragment, null, renderList($options.groups, (group, index) => {
-				return openBlock(), createElementBlock("section", {
-					key: group.key,
-					class: "quick-filter-group",
-					"aria-label": group.source === "task" ? $options.t(group.title) : group.title
-				}, [createVNode(_component_FrameView, {
-					scene: $options.groupHeader(group),
-					style: {
-						height: "24px",
-						marginBottom: "9px",
+			default: withCtx(() => [createBaseVNode("div", {
+				ref: "viewport",
+				class: "quick-filter-viewport",
+				"aria-busy": $data.busy,
+				onScrollPassive: _cache[1] || (_cache[1] = (...args) => $options.scrolled && $options.scrolled(...args))
+			}, [
+				createVNode(_component_FrameView, {
+					ref: "header",
+					scene: $options.headerScene,
+					style: normalizeStyle({
+						height: $options.headerScene.contentHeight + "px",
 						flex: "none"
-					}
-				}, null, 8, ["scene"]), createVNode(_component_QuickFilterOptions, {
-					ref_for: true,
-					ref: (flow) => $data.flows[group.key] = flow,
-					options: $options.optionsFor(group),
-					viewport: _ctx.$refs.viewport,
-					top: $data.top,
-					height: $data.height,
-					active: $data.visible,
-					disabled: $props.disabled,
-					onActivate: ($event) => $options.select(group.key, $event),
-					onScroll: $options.scrolled,
-					onAdjacent: ($event) => $options.focusGroup(index + $event, $event)
+					}),
+					onEvent: $options.headerEvent
 				}, null, 8, [
-					"options",
-					"viewport",
-					"top",
-					"height",
-					"active",
+					"scene",
+					"style",
+					"onEvent"
+				]),
+				$data.busy || $data.error ? (openBlock(), createElementBlock("p", {
+					key: 0,
+					class: normalizeClass({ error: $data.error }),
+					role: "status"
+				}, [createBaseVNode("span", null, toDisplayString($options.t($data.busy ? "Loading filters…" : $data.error)), 1), $data.error ? (openBlock(), createBlock(_component_AppButton, {
+					key: 0,
+					label: "Retry",
+					onClick: _cache[0] || (_cache[0] = ($event) => $options.load(true))
+				})) : createCommentVNode("", true)], 2)) : createCommentVNode("", true),
+				(openBlock(true), createElementBlock(Fragment, null, renderList($options.shownGroups, (group, index) => {
+					return openBlock(), createElementBlock("section", {
+						key: group.key,
+						class: "quick-filter-group",
+						"aria-label": group.source === "task" ? $options.t(group.title) : group.title
+					}, [createVNode(_component_FrameView, {
+						scene: $options.groupHeader(group),
+						style: {
+							height: "24px",
+							marginBottom: "9px",
+							flex: "none"
+						}
+					}, null, 8, ["scene"]), createVNode(_component_QuickFilterOptions, {
+						ref_for: true,
+						ref: (flow) => $data.flows[group.key] = flow,
+						options: $options.optionsFor(group),
+						viewport: _ctx.$refs.viewport,
+						top: $data.top,
+						height: $data.height,
+						active: $data.visible,
+						disabled: $props.disabled,
+						onActivate: ($event) => $options.select(group.key, $event),
+						onScroll: $options.scrolled,
+						onAdjacent: ($event) => $options.focusGroup(index + $event, $event)
+					}, null, 8, [
+						"options",
+						"viewport",
+						"top",
+						"height",
+						"active",
+						"disabled",
+						"onActivate",
+						"onScroll",
+						"onAdjacent"
+					])], 8, _hoisted_4$8);
+				}), 128)),
+				$data.catalog && !$options.groups.length && !$data.busy && !$data.error ? (openBlock(), createElementBlock("p", _hoisted_5$5, toDisplayString($options.t("No filters available")), 1)) : createCommentVNode("", true),
+				!$data.groupKey ? renderSlot(_ctx.$slots, "default", { close: $options.close }, void 0, void 0, 2) : createCommentVNode("", true)
+			], 40, _hoisted_3$12)]),
+			_: 3
+		}, 8, [
+			"class",
+			"show-label",
+			"overlay",
+			"boundary",
+			"anchor",
+			"onToggle"
+		]),
+		createVNode(_component_AppMenu, {
+			ref: "assignees",
+			class: "quick-filter-assignees",
+			label: "ASSIGNED TO",
+			icon: "groups",
+			overlay: $props.overlay,
+			anchor: $data.groupAnchor || _ctx.$refs.menu?.$el.querySelector("summary"),
+			"close-on-select": false,
+			boundary: $props.boundary || $data.menuBoundary,
+			onToggle: _cache[4] || (_cache[4] = ($event) => _ctx.$emit("toggle", $event))
+		}, {
+			default: withCtx(() => [createBaseVNode("div", _hoisted_6$5, [
+				createBaseVNode("header", null, [createBaseVNode("strong", null, toDisplayString($options.t("ASSIGNED TO")), 1), createVNode(_component_QuickFilterChip, {
+					checked: !($props.selections?.assigned || []).length,
+					text: $options.t("ALL"),
+					disabled: $props.disabled,
+					onClick: _cache[2] || (_cache[2] = ($event) => $options.select("assigned", ""))
+				}, null, 8, [
+					"checked",
+					"text",
+					"disabled"
+				])]),
+				createVNode(_component_QuickFilterChip, {
+					icon: "user",
+					text: $options.t("MY TASKS"),
+					checked: ($props.selections?.assigned || []).includes("__current_login__"),
+					disabled: $props.disabled,
+					onClick: _cache[3] || (_cache[3] = ($event) => $options.select("assigned", "__current_login__"))
+				}, null, 8, [
+					"text",
+					"checked",
+					"disabled"
+				]),
+				_cache[7] || (_cache[7] = createBaseVNode("hr", null, null, -1)),
+				$data.usersBusy || $data.usersError ? (openBlock(), createElementBlock("p", _hoisted_7$4, [createBaseVNode("span", null, toDisplayString($options.t($data.usersBusy ? "Loading data…" : $data.usersError)), 1), $data.usersError ? (openBlock(), createBlock(_component_AppButton, {
+					key: 0,
+					label: "Retry",
+					onClick: $options.openUsers
+				}, null, 8, ["onClick"])) : createCommentVNode("", true)])) : createCommentVNode("", true),
+				$data.users ? (openBlock(), createBlock(_component_UserPicker, {
+					key: 1,
+					users: $data.users,
+					"current-login": $props.login,
+					"model-value": $options.selectedUsers,
+					disabled: $props.disabled,
+					"onUpdate:modelValue": $options.setUsers
+				}, null, 8, [
+					"users",
+					"current-login",
+					"model-value",
 					"disabled",
-					"onActivate",
-					"onScroll",
-					"onAdjacent"
-				])], 8, _hoisted_5$5);
-			}), 128)),
-			$data.catalog && !$options.groups.length && !$data.busy && !$data.error ? (openBlock(), createElementBlock("p", _hoisted_6$5, toDisplayString($options.t("No filters available")), 1)) : createCommentVNode("", true),
-			renderSlot(_ctx.$slots, "default", { close: $options.close })
-		], 40, _hoisted_4$8)]),
-		_: 3
-	}, 8, [
-		"class",
-		"show-label",
-		"overlay",
-		"boundary",
-		"onToggle"
-	]), createVNode(_component_AppMenu, {
-		ref: "assignees",
-		class: "quick-filter-assignees",
-		label: "ASSIGNED TO",
-		icon: "groups",
-		overlay: $props.overlay,
-		anchor: _ctx.$refs.menu?.$el.querySelector("summary"),
-		"close-on-select": false,
-		boundary: $props.boundary || $data.menuBoundary,
-		onToggle: _cache[4] || (_cache[4] = ($event) => _ctx.$emit("toggle", $event))
-	}, {
-		default: withCtx(() => [createBaseVNode("div", _hoisted_7$4, [
-			createBaseVNode("header", null, [createBaseVNode("strong", null, toDisplayString($options.t("ASSIGNED TO")), 1), createVNode(_component_QuickFilterChip, {
-				checked: !($props.selections?.assigned || []).length,
-				text: $options.t("ALL"),
-				disabled: $props.disabled,
-				onClick: _cache[2] || (_cache[2] = ($event) => $options.select("assigned", ""))
-			}, null, 8, [
-				"checked",
-				"text",
-				"disabled"
+					"onUpdate:modelValue"
+				])) : createCommentVNode("", true)
 			])]),
-			createVNode(_component_QuickFilterChip, {
-				icon: "user",
-				text: $options.t("MY TASKS"),
-				checked: ($props.selections?.assigned || []).includes("__current_login__"),
-				disabled: $props.disabled,
-				onClick: _cache[3] || (_cache[3] = ($event) => $options.select("assigned", "__current_login__"))
-			}, null, 8, [
-				"text",
-				"checked",
-				"disabled"
-			]),
-			_cache[5] || (_cache[5] = createBaseVNode("hr", null, null, -1)),
-			$data.usersBusy || $data.usersError ? (openBlock(), createElementBlock("p", _hoisted_8$4, [createBaseVNode("span", null, toDisplayString($options.t($data.usersBusy ? "Loading data…" : $data.usersError)), 1), $data.usersError ? (openBlock(), createBlock(_component_AppButton, {
-				key: 0,
-				label: "Retry",
-				onClick: $options.openUsers
-			}, null, 8, ["onClick"])) : createCommentVNode("", true)])) : createCommentVNode("", true),
-			$data.users ? (openBlock(), createBlock(_component_UserPicker, {
-				key: 1,
-				users: $data.users,
-				"current-login": $props.login,
-				"model-value": $options.selectedUsers,
-				disabled: $props.disabled,
-				"onUpdate:modelValue": $options.setUsers
-			}, null, 8, [
-				"users",
-				"current-login",
-				"model-value",
-				"disabled",
-				"onUpdate:modelValue"
-			])) : createCommentVNode("", true)
-		])]),
-		_: 1
-	}, 8, [
-		"overlay",
-		"anchor",
-		"boundary"
-	])]);
+			_: 1
+		}, 8, [
+			"overlay",
+			"anchor",
+			"boundary"
+		])
+	], 32);
 }
 var SearchQuickFilters_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$46, [["render", _sfc_render$3]]);
 //#endregion
@@ -20470,7 +20626,7 @@ var dimensions = {
 	floatingSurfaceInset: 6,
 	surfaceBorder: 1
 };
-function describe$12(model) {
+function describe$11(model) {
 	const width = Math.max(0, model.width);
 	const capabilities = model.capabilities || {};
 	const stacked = model.stackSize > 1;
@@ -21147,7 +21303,7 @@ var _sfc_main$43 = {
 			for (const panel of dockPanels) {
 				const floating = !compact.value && state.value.panels[panel.id].floating;
 				const inset = (floating ? dimensions.floatingSurfaceInset : dimensions.surfaceInset) + dimensions.surfaceBorder;
-				const scene = describe$12({
+				const scene = describe$11({
 					width: Math.max(0, parseFloat(rectangle(panel.id).width) - inset * 2),
 					kind: panel.id,
 					stackSize: stackFor(panel.id)?.panels.length || 1,
@@ -22576,7 +22732,7 @@ function menu(kind, model) {
 		enabled: !model.busy
 	})));
 }
-function describe$11(model, width, height, language) {
+function describe$10(model, width, height, language) {
 	const text = (key, values) => translate(key, language, values), compact = width < 1200, narrow = width < 520, y = (height - 36) / 2, nodes = [], pages = model.mode !== "infinite";
 	let right = width - 8;
 	const add = (id, title, icon, type, size, enabled, extra) => {
@@ -22670,7 +22826,7 @@ var _sfc_main$41 = {
 		const props = __props;
 		const emit = __emit;
 		const host = ref(null), frame = ref(null), popup = ref(null), anchor = ref(null), width = ref(0), height = ref(58), kind = ref(""), draft = ref("");
-		const scene = computed(() => describe$11({
+		const scene = computed(() => describe$10({
 			...props.model,
 			countWidth: qtLabelTextWidth(countText(props.model, width.value, appearance.language), "400 14px \"" + fontFamily + "\"")
 		}, width.value, height.value, appearance.language));
@@ -22778,51 +22934,6 @@ var _sfc_main$41 = {
 	}
 };
 //#endregion
-//#region ../src/tactic_stream/shared_ui/features/search/header.ui.mjs
-function describe$10(model, width, language) {
-	const text = (key) => translate(key, language), compact = !!model.compact, nodes = [];
-	let right = width - spacing$1.compact;
-	const view = (id, name, show) => {
-		if (show) right -= 38;
-		nodes.push(node("View", id, rect$1(right, 5, 38, 38), {
-			view: name,
-			visible: show
-		}));
-		if (show) right -= spacing$1.tight;
-	};
-	view("searchHeaderPanels", "panels", model.panels !== false);
-	if (!compact) right -= 38;
-	nodes.push(button("searchWorkspaceHelpButton", rect$1(right, 5, 38, 38), text("Search help"), "help", { type: "help" }, true, {
-		iconOnly: true,
-		round: true,
-		visible: !compact
-	}));
-	if (!compact) right -= spacing$1.tight;
-	view("searchHeaderQuick", "quick", model.quick !== false && (!compact || !model.collapseSearch));
-	view("searchHeaderTags", "tags", !compact && model.tags !== false);
-	right -= !compact && model.shelf !== false ? 38 : 0;
-	nodes.push(button("scriptShelfButton", rect$1(right, 5, 38, 38), text("Script shelf"), "code", { type: "shelf" }, true, {
-		iconOnly: true,
-		visible: !compact && model.shelf !== false,
-		iconAction: true,
-		round: true,
-		iconColor: model.shelfOpen ? "action" : "secondaryText"
-	}));
-	if (!compact && model.shelf !== false) right -= spacing$1.tight;
-	const refreshLeft = model.reserveGrip === false ? spacing$1.compact : 38;
-	const left = refreshLeft + 38 + spacing$1.tight;
-	nodes.push(node("View", "searchHeaderField", rect$1(left, 5, right - left - spacing$1.compact, 38), {
-		view: "field",
-		visible: !compact || !model.collapseSearch || !!model.searchOpen
-	}));
-	nodes.push(button("searchRefreshButton", rect$1(refreshLeft, 5, 38, 38), text("Refresh"), "refresh", { type: "refresh" }, !model.busy, {
-		iconOnly: true,
-		round: true,
-		visible: !compact || !model.collapseSearch || !!model.searchOpen
-	}));
-	return { nodes };
-}
-//#endregion
 //#region src/features/workspace/SearchHeader.vue
 var _sfc_main$40 = {
 	__name: "SearchHeader",
@@ -22831,16 +22942,25 @@ var _sfc_main$40 = {
 	setup(__props, { emit: __emit }) {
 		const props = __props;
 		const emit = __emit;
-		const slots = useSlots(), host = ref(null), width = ref(0);
+		const slots = useSlots(), host = ref(null), width = ref(0), quickWidth = ref(38);
 		const views = Object.fromEntries([
 			"field",
 			"panels",
 			"quick",
 			"tags"
-		].map((name) => [name, { component: () => h("div", { class: "search-header-slot" }, slots[name]?.()) }]));
-		const scene = computed(() => describe$10({
+		].map((name) => [name, { component: () => h("div", { class: "search-header-slot" }, slots[name]?.(name === "quick" ? {
+			budget: quickBudget({
+				...props.model,
+				reserveGrip: false
+			}, width.value),
+			resize: (value) => {
+				quickWidth.value = value;
+			}
+		} : {})) }]));
+		const scene = computed(() => describe$12({
 			...props.model,
-			reserveGrip: false
+			reserveGrip: false,
+			quickWidth: quickWidth.value
 		}, width.value, appearance.language));
 		let observer;
 		onMounted(() => {
@@ -37140,7 +37260,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 								"onApply",
 								"onToggle"
 							])) : createCommentVNode("", true)], 8, ["disabled"]))]),
-							quick: withCtx(() => [(openBlock(), createBlock(Teleport, {
+							quick: withCtx(({ budget, resize }) => [(openBlock(), createBlock(Teleport, {
 								defer: "",
 								to: "#workspace-mobile-search-tools",
 								disabled: !$data.compactShortcuts || $data.administrationOpen
@@ -37148,6 +37268,8 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 								key: 0,
 								ref: "quickFilters",
 								overlay: $data.compactShortcuts,
+								budget,
+								onResize: resize,
 								ticket: $data.session.ticket,
 								project: $data.project,
 								"search-type": $data.type,
@@ -37197,6 +37319,8 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 								_: 1
 							}, 8, [
 								"overlay",
+								"budget",
+								"onResize",
 								"ticket",
 								"project",
 								"search-type",

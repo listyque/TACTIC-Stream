@@ -546,6 +546,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         "
         :icon="node.icon"
         :icon-only="node.iconOnly"
+        :icon-at-end="node.iconAtEnd"
         :round="!!node.round"
         :href="node.href"
         :target="node.target"
