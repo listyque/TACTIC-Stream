@@ -248,7 +248,19 @@ try {
   await page.waitForFunction(
     () => !document.querySelector('[data-frame="searchQuickGroup_status"]')
   );
+  await page.evaluate(() => {
+    window.host.quickLayout = {
+      groups: [{ key: 'status', enabled: false }]
+    };
+  });
   await page.evaluate(() => (window.host.width = 1460));
+  await button('assigned').waitFor();
+  assert.equal(
+    await button('status').count(),
+    0,
+    'cached settings replace inline groups when the header expands'
+  );
+  await page.evaluate(() => (window.host.quickLayout = null));
   await button('status').waitFor();
   assert.equal(reads.length, 1, 'resizing reuses catalog without querying');
   await button('status').focus();
