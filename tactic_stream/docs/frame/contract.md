@@ -339,7 +339,7 @@ Preview nodes accept an optional `color` foreground override through the house I
 
 Expanded related tables share `nested.ui.mjs` focus geometry: the active child remains clear, shared scrim actions cover its parent viewport and close the same scope. Shadow paint reuses the Frame Box. Disabled search reserves no toolbar; its actions move to the existing footer. Enabled search uses the main suggestion presenters and preserves nested scope.
 
-Round buttons are reserved for main-menu and main-window chrome. Local service tools use the shared square icon-action control (`iconAction:true`, `round:false`), preserving icon centering and keyboard/touch input.
+Round buttons are used for main-menu controls and all window/dock title-bar actions. Local service tools use the shared square icon-action control (`iconAction:true`, `round:false`), preserving icon centering and keyboard/touch input.
 
 Panel surfaces and control interiors are separate geometry. A full-width panel
 keeps its background at the edge; header, content and footer children keep symmetric
@@ -347,7 +347,7 @@ keeps its background at the edge; header, content and footer children keep symme
 apply this interior once without rewriting authored page/card padding.
 Verify both boundaries in native and browser rendering.
 
-Service Button and icon-action controls default to 4 DIP corners in all themes. Frame titlebar Boxes explicitly mark their direct Button children round; native Button and AppButton honor that flag. Primary navigation/window chrome opts in, while table, search, dock and editor controls never force circular rounding. Media, avatars, static chips, status/radio/switch indicators and ripples are separate paint roles.
+Service Button and icon-action controls default to 4 DIP corners in all themes. Frame titlebar Boxes explicitly mark their direct Button children round; native Button and AppButton honor that flag. Primary navigation/window chrome opts in, while local table and editor service controls remain square. Dock chrome declares round actions in shell/dock_chrome.ui.mjs; its drag grip keeps its separate geometry. Browser window hosts also round retained icon actions in the outer title bar, including feature-owned Help and Close. Media, avatars, static chips, status/radio/switch indicators and ripples are separate paint roles.
 
 Shared dashboard filters use the house search presenter through the `pageFilterSearch`
 port. `page.filters.mjs` owns field matching, typed submission, condition chips and

@@ -339,8 +339,8 @@ h2 { font-size: var(--text-heading); }
 .dock-titlebar > strong { display:flex; align-items:center; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: var(--text-label); font-weight:600; letter-spacing:.55px; text-transform: uppercase; }
 .dock-titlebar > .app-icon { color: var(--primary); font-size: 16px; }
 .dock-titlebar > .icon-button, .dock-titlebar > .workspace-menu > summary { min-width:0; min-height:0; margin:0; padding:0; border:0; background:transparent; }
-.dock-titlebar > .workspace-menu > summary { position:relative; display:flex; align-items:center; justify-content:center; width:100%; height:100%; border-radius: var(--button-radius); }
-.dock-titlebar > .icon-button::before, .dock-titlebar > .workspace-menu > summary::before { content:''; position:absolute; inset:1px; border-radius: var(--button-radius); background:var(--surface-high); pointer-events:none; }
+.dock-titlebar > .workspace-menu > summary { position:relative; display:flex; align-items:center; justify-content:center; width:100%; height:100%; border-radius: 50%; }
+.dock-titlebar > .icon-button::before, .dock-titlebar > .workspace-menu > summary::before { content:''; position:absolute; inset:1px; border-radius: 50%; background:var(--surface-high); pointer-events:none; }
 .dock-titlebar > .icon-button:hover::before, .dock-titlebar > .workspace-menu > summary:hover::before { background:color-mix(in srgb,var(--muted) 8%,var(--surface-high)); }
 .dock-titlebar > .icon-button:active::before, .dock-titlebar > .workspace-menu > summary:active::before { background:color-mix(in srgb,var(--muted) 12%,var(--surface-high)); }
 .dock-titlebar .icon-button .app-icon { position:relative; width:var(--dock-action-icon); height:var(--dock-action-icon); font-size:var(--dock-action-icon); color:var(--muted); }

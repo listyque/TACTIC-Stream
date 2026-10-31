@@ -181,3 +181,5 @@ pages retain room for their outer scrollbar.
 On browser HTTP connections or denied clipboard permission, the clipboard button focuses the
 note field and shows a Ctrl+V / Paste hint instead of an access error. Existing text and
 attachments stay intact. HTTPS with clipboard permission supports direct insertion.
+
+All window and dock title-bar actions use round buttons, including Help, maximize/restore, detach and Close. Local controls inside the panel keep their service styling.

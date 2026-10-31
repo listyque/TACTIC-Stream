@@ -20719,7 +20719,8 @@ function describe$11(model) {
 	for (const [id, visible, itemHeight] of actions) {
 		nodes.push(node("View", id, rect$1(position, (height - itemHeight) / 2, dimensions.actionExtent, itemHeight), {
 			view: id.slice(4),
-			visible
+			visible,
+			round: id !== "dockGrip"
 		}));
 		if (visible) position += dimensions.actionExtent + dimensions.spacing;
 	}
@@ -21364,6 +21365,7 @@ var _sfc_main$43 = {
 				top: geometry.y + "px",
 				width: geometry.width + "px",
 				height: geometry.height + "px",
+				borderRadius: geometry.round ? "50%" : void 0,
 				display: geometry.visible === false ? "none" : void 0
 			};
 		}
@@ -21977,21 +21979,28 @@ var _sfc_main$43 = {
 							createVNode(_sfc_main$103, {
 								style: normalizeStyle(chromeStyle(panel.id, "dockHelp")),
 								"data-dock-control": "dockHelp",
+								round: chrome.value[panel.id].controls.dockHelp.round,
 								"icon-only": "",
 								icon: "help",
 								label: "Help",
 								onClick: ($event) => emit("help", "dock." + panel.id)
-							}, null, 8, ["style", "onClick"]),
+							}, null, 8, [
+								"style",
+								"round",
+								"onClick"
+							]),
 							!__props.mobile ? (openBlock(), createBlock(_sfc_main$103, {
 								key: 3,
 								style: normalizeStyle(chromeStyle(panel.id, "dockMaximize")),
 								"data-dock-control": "dockMaximize",
+								round: chrome.value[panel.id].controls.dockMaximize.round,
 								"icon-only": "",
 								icon: maximized.value === panel.id ? "MDI_FIT_TO_SCREEN_OUTLINE" : "MDI_FIT_TO_SCREEN",
 								label: maximized.value === panel.id ? "Restore panel" : "Maximize panel",
 								onClick: ($event) => maximize(panel.id)
 							}, null, 8, [
 								"style",
+								"round",
 								"icon",
 								"label",
 								"onClick"
@@ -22045,12 +22054,14 @@ var _sfc_main$43 = {
 								key: 5,
 								style: normalizeStyle(chromeStyle(panel.id, "dockClose")),
 								"data-dock-control": "dockClose",
+								round: chrome.value[panel.id].controls.dockClose.round,
 								"icon-only": "",
 								icon: "close",
 								label: unref(t)("Close panel: {name}", { name: unref(t)(panel.title) }),
 								onClick: ($event) => hide(panel.id)
 							}, null, 8, [
 								"style",
+								"round",
 								"label",
 								"onClick"
 							])) : createCommentVNode("", true)

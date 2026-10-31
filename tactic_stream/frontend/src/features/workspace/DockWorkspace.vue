@@ -290,6 +290,7 @@ function chromeStyle(id, control) {
     top: geometry.y + 'px',
     width: geometry.width + 'px',
     height: geometry.height + 'px',
+    borderRadius: geometry.round ? '50%' : undefined,
     display: geometry.visible === false ? 'none' : undefined
   };
 }
@@ -1119,6 +1120,7 @@ defineExpose({
         <AppButton
           :style="chromeStyle(panel.id, 'dockHelp')"
           data-dock-control="dockHelp"
+          :round="chrome[panel.id].controls.dockHelp.round"
           icon-only
           icon="help"
           label="Help"
@@ -1128,6 +1130,7 @@ defineExpose({
           v-if="!mobile"
           :style="chromeStyle(panel.id, 'dockMaximize')"
           data-dock-control="dockMaximize"
+          :round="chrome[panel.id].controls.dockMaximize.round"
           icon-only
           :icon="
             maximized === panel.id
@@ -1193,6 +1196,7 @@ defineExpose({
           v-if="panel.closable"
           :style="chromeStyle(panel.id, 'dockClose')"
           data-dock-control="dockClose"
+          :round="chrome[panel.id].controls.dockClose.round"
           icon-only
           icon="close"
           :label="t('Close panel: {name}', { name: t(panel.title) })"

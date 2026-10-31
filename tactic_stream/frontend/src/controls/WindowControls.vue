@@ -465,6 +465,9 @@ onBeforeUnmount(() => {
   user-select: none;
   outline: none;
 }
+.app-window-titlebar > .icon-button {
+  border-radius: 50%;
+}
 .app-window:not(.app-window-maximized) {
   border: 1px solid var(--outline);
   border-radius: 8px !important;
