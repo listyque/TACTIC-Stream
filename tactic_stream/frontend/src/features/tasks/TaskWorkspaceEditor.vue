@@ -66,6 +66,7 @@ const port = markRaw({
             field: p.frameNode.field,
             value: props.editor.values[p.frameNode.field.name],
             statuses: props.editor.statuses,
+            statusChoices: props.editor.statusChoices,
             users: props.editor.users,
             catalog: props.editor.catalog,
             busy: !p.frameNode.enabled,

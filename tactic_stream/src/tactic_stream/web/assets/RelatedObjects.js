@@ -2,13 +2,13 @@ import { n as arrange, r as __exportAll$1 } from "./ObjectFieldFrame.js";
 import { A as onMounted, E as nextTick, F as resolveComponent, G as withCtx, H as watch, I as resolveDirective, K as withDirectives, L as resolveDynamicComponent, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, T as mergeProps, X as ref, _ as createElementBlock, b as createVNode, c as withKeys, et as unref, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment, v as createSlots, y as createTextVNode } from "./vue.js";
 import { D as spacing, R as BusyIndicator_default, T as metrics, _ as controls, a as _sfc_main$17, b as fontFamily, o as t, s as appearance, t as _sfc_main$16, z as _plugin_vue_export_helper_default } from "./AppButton.js";
 import { A as rpc, a as __vitePreload, b as objectStatus, ht as serverTimestamp, mt as serverClock, v as objectDeletion, yt as mobile } from "./index.js";
-import { G as button, H as observeFrameSizes, J as muted, K as label, O as ItemPreview_default, P as _sfc_main$19, Q as virtualRange, U as _sfc_main$20, X as rect, Y as node, Z as revealListOffset, a as _sfc_main$21, d as javascriptTokens, f as pythonTokens, p as xmlTokens, t as _sfc_main$18, w as translate } from "./FrameView.js";
+import { G as button, H as observeFrameSizes, J as muted, K as label, O as ItemPreview_default, P as _sfc_main$19, Q as virtualRange, X as rect, Y as node, Z as revealListOffset, a as _sfc_main$20, d as javascriptTokens, f as pythonTokens, p as xmlTokens, t as _sfc_main$18, w as translate } from "./FrameView.js";
 import { n as qtLabelTextWidth } from "./textMetrics.js";
-import { j as escapeHtml$1, u as _sfc_main$22, v as timestampLabel, x as browserLink } from "./admin.document.js";
+import { j as escapeHtml$1, u as _sfc_main$21, v as timestampLabel, x as browserLink } from "./admin.document.js";
 import { f as summary } from "./file_values.js";
 import { s as RelatedObjects_default } from "./ConfiguredView.js";
-import { t as _sfc_main$23 } from "./VirtualCollection.js";
-import { t as _sfc_main$24 } from "./ContentLoadingOverlay.js";
+import { t as _sfc_main$22 } from "./VirtualCollection.js";
+import { t as _sfc_main$23 } from "./ContentLoadingOverlay.js";
 //#region ../src/tactic_stream/shared_ui/controls/buttons/metrics.mjs
 function buttonWidth(advance, icon = false) {
 	const metrics = controls.button;
@@ -1088,7 +1088,7 @@ function row$1(record, width, options) {
 }
 //#endregion
 //#region src/controls/ActionRow.vue
-var _hoisted_1$10 = ["data-menu-command"];
+var _hoisted_1$11 = ["data-menu-command"];
 var _sfc_main$15 = {
 	__name: "ActionRow",
 	props: {
@@ -1179,13 +1179,13 @@ var _sfc_main$15 = {
 				"disabled",
 				"role",
 				"aria-checked"
-			])) : createCommentVNode("", true)], 12, _hoisted_1$10);
+			])) : createCommentVNode("", true)], 12, _hoisted_1$11);
 		};
 	}
 };
 //#endregion
 //#region src/controls/ActionRows.vue
-var _hoisted_1$9 = { class: "action-rows" };
+var _hoisted_1$10 = { class: "action-rows" };
 var _sfc_main$14 = {
 	__name: "ActionRows",
 	props: { actions: {
@@ -1196,7 +1196,7 @@ var _sfc_main$14 = {
 	setup(__props) {
 		const hovered = ref(null);
 		return (_ctx, _cache) => {
-			return openBlock(), createElementBlock("div", _hoisted_1$9, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.actions, (record, index) => {
+			return openBlock(), createElementBlock("div", _hoisted_1$10, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.actions, (record, index) => {
 				return openBlock(), createBlock(_sfc_main$15, {
 					key: record.command || index,
 					record,
@@ -6985,7 +6985,7 @@ function renderMarkdown(text) {
 }
 //#endregion
 //#region src/controls/MarkdownText.vue
-var _hoisted_1$8 = ["innerHTML"];
+var _hoisted_1$9 = ["innerHTML"];
 var _sfc_main$13 = {
 	__name: "MarkdownText",
 	props: { text: {
@@ -7014,18 +7014,18 @@ var _sfc_main$13 = {
 				class: "markdown-text",
 				innerHTML: html.value,
 				onClick: activate
-			}, null, 8, _hoisted_1$8);
+			}, null, 8, _hoisted_1$9);
 		};
 	}
 };
 //#endregion
 //#region src/controls/DocumentPane.vue
-var _hoisted_1$7 = {
+var _hoisted_1$8 = {
 	key: 0,
 	class: "error",
 	role: "alert"
 };
-var _hoisted_2$6 = {
+var _hoisted_2$7 = {
 	key: 1,
 	class: "document-notice muted"
 };
@@ -7115,8 +7115,8 @@ var _sfc_main$12 = {
 				ref: article,
 				tabindex: "0"
 			}, [
-				__props.error ? (openBlock(), createElementBlock("p", _hoisted_1$7, toDisplayString(__props.error), 1)) : createCommentVNode("", true),
-				__props.notice ? (openBlock(), createElementBlock("p", _hoisted_2$6, toDisplayString(__props.notice), 1)) : createCommentVNode("", true),
+				__props.error ? (openBlock(), createElementBlock("p", _hoisted_1$8, toDisplayString(__props.error), 1)) : createCommentVNode("", true),
+				__props.notice ? (openBlock(), createElementBlock("p", _hoisted_2$7, toDisplayString(__props.notice), 1)) : createCommentVNode("", true),
 				__props.summary && !__props.error ? (openBlock(), createElementBlock("div", _hoisted_3$3, [createVNode(_sfc_main$17, { name: "info" }), createVNode(_sfc_main$13, {
 					text: __props.summary,
 					onTopic: _cache[0] || (_cache[0] = ($event) => emit("link", $event))
@@ -7395,8 +7395,8 @@ function groupRecords(records, mode, nodes = [], organization = {}) {
 }
 //#endregion
 //#region src/controls/layout/InfoValueStrip.vue
-var _hoisted_1$6 = { class: "info-value-strip" };
-var _hoisted_2$5 = {
+var _hoisted_1$7 = { class: "info-value-strip" };
+var _hoisted_2$6 = {
 	key: 0,
 	class: "info-separator"
 };
@@ -7427,8 +7427,8 @@ var _sfc_main$11 = {
 			return /^(https?:\/\/|ftp:\/\/|mailto:)/i.test(url || "") && !/[\u0000-\u001f]/.test(url);
 		}
 		return (_ctx, _cache) => {
-			return openBlock(), createElementBlock("span", _hoisted_1$6, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.maximumItems > 0 ? __props.items.slice(0, __props.maximumItems) : __props.items, (item, index) => {
-				return openBlock(), createElementBlock(Fragment, { key: index }, [index ? (openBlock(), createElementBlock("span", _hoisted_2$5, toDisplayString(__props.separator), 1)) : createCommentVNode("", true), (openBlock(), createBlock(resolveDynamicComponent(external(item.url) ? "a" : "span"), {
+			return openBlock(), createElementBlock("span", _hoisted_1$7, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.maximumItems > 0 ? __props.items.slice(0, __props.maximumItems) : __props.items, (item, index) => {
+				return openBlock(), createElementBlock(Fragment, { key: index }, [index ? (openBlock(), createElementBlock("span", _hoisted_2$6, toDisplayString(__props.separator), 1)) : createCommentVNode("", true), (openBlock(), createBlock(resolveDynamicComponent(external(item.url) ? "a" : "span"), {
 					href: external(item.url) ? item.url : void 0,
 					target: "_blank",
 					rel: "noopener noreferrer",
@@ -7527,8 +7527,8 @@ var _sfc_main$10 = {
 };
 //#endregion
 //#region src/controls/AppMenuItem.vue
-var _hoisted_1$5 = { class: "app-menu-item" };
-var _hoisted_2$4 = { class: "app-menu-item-label" };
+var _hoisted_1$6 = { class: "app-menu-item" };
+var _hoisted_2$5 = { class: "app-menu-item-label" };
 var _sfc_main$9 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 	__name: "AppMenuItem",
 	props: {
@@ -7555,7 +7555,7 @@ var _sfc_main$9 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 	setup(__props, { emit: __emit }) {
 		const emit = __emit;
 		return (_ctx, _cache) => {
-			return openBlock(), createElementBlock("div", _hoisted_1$5, [createVNode(_sfc_main$16, mergeProps(_ctx.$attrs, {
+			return openBlock(), createElementBlock("div", _hoisted_1$6, [createVNode(_sfc_main$16, mergeProps(_ctx.$attrs, {
 				"data-menu-primary": "",
 				icon: __props.icon,
 				label: __props.label,
@@ -7567,7 +7567,7 @@ var _sfc_main$9 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 				disabled: __props.disabled,
 				onClick: _cache[0] || (_cache[0] = ($event) => emit("click", $event))
 			}), {
-				default: withCtx(() => [createBaseVNode("span", _hoisted_2$4, toDisplayString(__props.translate ? unref(t)(__props.label) : __props.label), 1), __props.checked ? (openBlock(), createBlock(_sfc_main$17, {
+				default: withCtx(() => [createBaseVNode("span", _hoisted_2$5, toDisplayString(__props.translate ? unref(t)(__props.label) : __props.label), 1), __props.checked ? (openBlock(), createBlock(_sfc_main$17, {
 					key: 0,
 					name: "check-circle",
 					class: "menu-check"
@@ -7850,8 +7850,8 @@ function drag(boxes, handle, dx, dy, candidates, scale, snap) {
 }
 //#endregion
 //#region src/features/administration/CanvasSelection.vue
-var _hoisted_1$4 = ["data-canvas-guide"];
-var _hoisted_2$3 = [
+var _hoisted_1$5 = ["data-canvas-guide"];
+var _hoisted_2$4 = [
 	"data-canvas-key",
 	"aria-label",
 	"onPointerdown",
@@ -8069,7 +8069,7 @@ var _sfc_main$8 = {
 							width: guide.end - guide.start + "px",
 							height: 0
 						})
-					}, null, 12, _hoisted_1$4);
+					}, null, 12, _hoisted_1$5);
 				}), 128)),
 				rubber.value ? (openBlock(), createElementBlock("div", {
 					key: 1,
@@ -8094,7 +8094,7 @@ var _sfc_main$8 = {
 						onPointerup: finish,
 						onPointercancel: cancel,
 						onKeydown: ($event) => key($event, box)
-					}, null, 44, _hoisted_2$3);
+					}, null, 44, _hoisted_2$4);
 				}), 128)),
 				chosen.value ? (openBlock(), createElementBlock("div", {
 					key: 2,
@@ -8202,11 +8202,11 @@ function cell(model, size, phone = false) {
 }
 //#endregion
 //#region src/controls/EmojiPicker.vue
-var _hoisted_1$3 = {
+var _hoisted_1$4 = {
 	key: 0,
 	role: "alert"
 };
-var _hoisted_2$2 = { key: 1 };
+var _hoisted_2$3 = { key: 1 };
 var _sfc_main$7 = {
 	__name: "EmojiPicker",
 	props: {
@@ -8308,7 +8308,7 @@ var _sfc_main$7 = {
 						}, bounds.value.width - 20, unref(appearance).language),
 						onEvent: heading$2
 					}, null, 8, ["scene"]),
-					error.value ? (openBlock(), createElementBlock("p", _hoisted_1$3, [createTextVNode(toDisplayString(unref(t)(error.value)) + " ", 1), createVNode(_sfc_main$16, {
+					error.value ? (openBlock(), createElementBlock("p", _hoisted_1$4, [createTextVNode(toDisplayString(unref(t)(error.value)) + " ", 1), createVNode(_sfc_main$16, {
 						label: "Retry",
 						onClick: load
 					})])) : createCommentVNode("", true),
@@ -8349,7 +8349,7 @@ var _sfc_main$7 = {
 							"onClick"
 						]);
 					}), 128))], 4)], 36),
-					entries.value.length && !shown.value.length ? (openBlock(), createElementBlock("p", _hoisted_2$2, toDisplayString(unref(t)("No matching emoji")), 1)) : createCommentVNode("", true)
+					entries.value.length && !shown.value.length ? (openBlock(), createElementBlock("p", _hoisted_2$3, toDisplayString(unref(t)("No matching emoji")), 1)) : createCommentVNode("", true)
 				]),
 				_: 2
 			}, [__props.textTrigger ? {
@@ -8535,47 +8535,112 @@ function popup(mode) {
 }
 //#endregion
 //#region src/controls/StatusSelect.vue
+var _hoisted_1$3 = { class: "status-select-label" };
+var _hoisted_2$2 = { class: "status-select-label" };
 var _sfc_main$6 = {
 	__name: "StatusSelect",
 	props: {
 		value: String,
-		options: Array,
+		options: {
+			type: Array,
+			default: () => []
+		},
 		disabled: Boolean,
-		placeholder: String
+		placeholder: String,
+		actionField: {
+			type: Boolean,
+			default: true
+		}
 	},
 	emits: ["change"],
-	setup(__props) {
+	setup(__props, { emit: __emit }) {
 		const props = __props;
+		const emit = __emit;
+		const menu = ref(null);
 		const current = computed(() => props.options.find((option) => option.value === props.value));
+		const emptyLabel = computed(() => props.placeholder || t("Select status"));
+		const caption = computed(() => current.value?.label || props.value || emptyLabel.value);
 		const choices = computed(() => {
 			const rows = props.options.map((option) => option.value === "" && !option.label ? {
 				...option,
-				label: props.placeholder || t("Select status"),
+				label: emptyLabel.value,
 				disabled: true
 			} : option);
 			return rows.some((option) => option.value === "") ? rows : [{
 				value: "",
-				label: props.placeholder || t("Select status"),
+				label: emptyLabel.value,
 				disabled: true
 			}, ...rows];
 		});
+		function choose(option) {
+			if (props.disabled || option.disabled || option.enabled === false) return;
+			emit("change", option.value);
+			menu.value?.close(true);
+		}
 		return (_ctx, _cache) => {
-			return openBlock(), createElementBlock("div", { class: normalizeClass(["status-select", { empty: !current.value }]) }, [current.value?.color ? (openBlock(), createElementBlock("span", {
-				key: 0,
-				class: "status-select-dot",
-				style: normalizeStyle({ backgroundColor: current.value.color })
-			}, null, 4)) : createCommentVNode("", true), createVNode(_sfc_main$20, {
-				"model-value": __props.value || "",
+			return openBlock(), createBlock(_sfc_main$19, {
+				ref_key: "menu",
+				ref: menu,
+				class: normalizeClass(["status-select", { "status-select-field": !__props.actionField }]),
+				"data-value": __props.value || "",
 				label: "Status",
-				options: choices.value,
-				"translate-labels": false,
 				disabled: __props.disabled,
-				"onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => _ctx.$emit("change", $event))
-			}, null, 8, [
-				"model-value",
-				"options",
+				overlay: "",
+				"align-start": "",
+				"close-on-select": false
+			}, {
+				trigger: withCtx(() => [
+					createBaseVNode("span", {
+						class: "status-select-dot",
+						style: normalizeStyle({ backgroundColor: current.value?.color || "var(--primary)" }),
+						"aria-hidden": "true"
+					}, null, 4),
+					createBaseVNode("span", _hoisted_1$3, toDisplayString(caption.value), 1),
+					!__props.actionField ? (openBlock(), createBlock(_sfc_main$17, {
+						key: 0,
+						class: "status-select-indicator",
+						name: "expand_more"
+					})) : createCommentVNode("", true)
+				]),
+				default: withCtx(() => [(openBlock(true), createElementBlock(Fragment, null, renderList(choices.value, (option) => {
+					return openBlock(), createBlock(_sfc_main$16, {
+						key: option.value,
+						class: "status-select-option",
+						"data-value": option.value,
+						label: option.label,
+						"translate-label": false,
+						role: "menuitemradio",
+						"aria-checked": (__props.value || "") === option.value,
+						disabled: __props.disabled || option.disabled || option.enabled === false,
+						onClick: ($event) => choose(option)
+					}, {
+						default: withCtx(() => [
+							createBaseVNode("span", {
+								class: "status-select-dot",
+								style: normalizeStyle({ backgroundColor: option.color || "var(--primary)" }),
+								"aria-hidden": "true"
+							}, null, 4),
+							createBaseVNode("span", _hoisted_2$2, toDisplayString(option.label), 1),
+							(__props.value || "") === option.value ? (openBlock(), createBlock(_sfc_main$17, {
+								key: 0,
+								name: "check"
+							})) : createCommentVNode("", true)
+						]),
+						_: 2
+					}, 1032, [
+						"data-value",
+						"label",
+						"aria-checked",
+						"disabled",
+						"onClick"
+					]);
+				}), 128))]),
+				_: 1
+			}, 8, [
+				"data-value",
+				"class",
 				"disabled"
-			])], 2);
+			]);
 		};
 	}
 };
@@ -8858,7 +8923,7 @@ var _sfc_main$3 = {
 		}
 		return (_ctx, _cache) => {
 			const _component_SKeyPreviewCard = resolveComponent("SKeyPreviewCard", true);
-			return withDirectives((openBlock(), createBlock(resolveDynamicComponent(__props.compact ? _sfc_main$21 : "article"), {
+			return withDirectives((openBlock(), createBlock(resolveDynamicComponent(__props.compact ? _sfc_main$20 : "article"), {
 				class: normalizeClass(["skey-preview-card", [__props.preview.kind, {
 					failed: failed.value,
 					compact: __props.compact,
@@ -8922,7 +8987,7 @@ var _sfc_main$3 = {
 						"maximum-columns": 2
 					}, {
 						default: withCtx(() => [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.preview.attachments, (file) => {
-							return openBlock(), createBlock(_sfc_main$22, {
+							return openBlock(), createBlock(_sfc_main$21, {
 								key: file.searchKey + file.title,
 								title: file.title,
 								extension: file.extension,
@@ -9267,7 +9332,7 @@ var _sfc_main$2 = {
 			height: dependencyHeight(row)
 		})));
 		return (_ctx, _cache) => {
-			return openBlock(), createElementBlock("div", _hoisted_1$1, [createVNode(_sfc_main$23, { items: items.value }, {
+			return openBlock(), createElementBlock("div", _hoisted_1$1, [createVNode(_sfc_main$22, { items: items.value }, {
 				default: withCtx(({ item }) => [createVNode(_sfc_main$18, {
 					scene: dependency(item, __props.frameNode.width),
 					style: normalizeStyle({ height: dependencyHeight(item) + "px" })
@@ -9329,7 +9394,7 @@ var _sfc_main = {
 						"models",
 						"views",
 						"describe-row"
-					]), scene.value.loading ? (openBlock(), createBlock(_sfc_main$24, {
+					]), scene.value.loading ? (openBlock(), createBlock(_sfc_main$23, {
 						key: 0,
 						message: scene.value.loading.message,
 						cancellable: scene.value.loading.cancellable,

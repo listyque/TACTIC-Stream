@@ -66,7 +66,7 @@ function outside(event) {
   if (
     compact.value &&
     !popup.value?.contains(event.target) &&
-    !event.target.closest('.user-combo-box')
+    !event.target.closest('.user-combo-box, .status-select')
   )
     close();
 }
@@ -123,6 +123,7 @@ defineExpose({ open, close });
             :compact="compact"
             :value="editor.values[field.name]"
             :statuses="editor.statuses"
+            :status-choices="editor.statusChoices"
             :users="editor.users"
             :catalog="editor.catalog"
             :busy="busy"
@@ -157,11 +158,14 @@ defineExpose({ open, close });
   gap: 4px;
   margin: 0;
 }
-.task-table-editor.in-cell :is(select, .user-combo-box) {
+.task-table-editor.in-cell :is(select, .user-combo-box, .status-select) {
   width: 100%;
   min-height: var(--editor-height);
   height: var(--editor-height);
   font-size: var(--text-caption);
+}
+.task-table-editor.in-cell .status-select {
+  font-size: var(--control-text-size);
 }
 .task-table-editor.in-cell select {
   padding: 0 4px;

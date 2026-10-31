@@ -1,5 +1,6 @@
 <script setup>
 import AppSelect from '../../controls/AppSelect.vue';
+import StatusSelect from '../../controls/StatusSelect.vue';
 import AppTextArea from '../../controls/AppTextArea.vue';
 import AppTextField from '../../controls/AppTextField.vue';
 import AppDateField from '../../controls/AppDateField.vue';
@@ -13,6 +14,7 @@ const props = defineProps({
   field: Object,
   value: [String, Number],
   statuses: Array,
+  statusChoices: Array,
   users: Array,
   busy: Boolean,
   catalog: Object,
@@ -61,17 +63,18 @@ const numericValue = () =>
     :disabled="busy || !field.editable"
     @change="emit('change', $event)"
   />
-  <AppSelect
+  <StatusSelect
     v-else-if="field.name === 'status'"
-    :model-value="value ?? ''"
-    :label="titles[field.name]"
-    :translate-labels="false"
-    :options="[
-      { value: '', label: t('Select status'), disabled: true },
-      ...statuses.map((value) => ({ value, label: value }))
-    ]"
+    :value="value ?? ''"
+    :action-field="compact"
+    :placeholder="t(compact ? 'No status' : 'Select status')"
+    :options="
+      statusChoices?.length
+        ? statusChoices
+        : (statuses || []).map((value) => ({ value, label: value }))
+    "
     :disabled="busy || !field.editable"
-    @update:model-value="emit('change', $event)"
+    @change="emit('change', $event)"
   />
   <AppTextArea
     v-else-if="field.name === 'description'"

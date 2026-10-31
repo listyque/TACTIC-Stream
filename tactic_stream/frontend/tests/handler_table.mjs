@@ -1,3 +1,4 @@
+import { chooseStatus } from './status_picker_helpers.mjs';
 import assert from 'node:assert/strict';
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
@@ -656,24 +657,25 @@ try {
     .getByRole('button', { name: 'Edit task status', exact: true })
     .first()
     .click();
-  const status = taskEditor.locator('select'),
-    unsetStatus = status.locator('option').first();
-  assert.equal(await unsetStatus.textContent(), 'Select status');
-  assert.equal(await unsetStatus.getAttribute('value'), '');
+  const status = taskEditor.locator('.status-select'),
+    unsetStatus = status.locator('.status-select-option').first();
+  assert.equal(await unsetStatus.locator('.status-select-label').textContent(), 'No status');
+  assert.equal(await unsetStatus.getAttribute('data-value'), '');
   assert.equal(
     await unsetStatus.evaluate((el) => el.disabled),
     true,
     await unsetStatus.evaluate((el) => el.outerHTML)
   );
-  assert.equal(await status.inputValue(), '');
+  assert.equal(await status.getAttribute('data-value'), '');
   assert.equal(
     await page.evaluate(() => window.host.$refs.table.dirtyTaskCount),
     0
   );
   await page.evaluate(() => (window.appearance.language = 'ru'));
-  assert.equal(await unsetStatus.textContent(), 'Выберите статус');
-  assert.equal(await status.inputValue(), '');
+  assert.equal(await unsetStatus.locator('.status-select-label').textContent(), 'Без статуса');
+  assert.equal(await status.getAttribute('data-value'), '');
   await page.evaluate(() => (window.appearance.language = 'en'));
+  await page.keyboard.press('Escape');
   await page.keyboard.press('Escape');
   await taskEditor.waitFor({ state: 'hidden' });
   await rows
@@ -681,7 +683,7 @@ try {
     .getByRole('button', { name: 'Edit task status', exact: true })
     .first()
     .click();
-  await status.selectOption('Waiting');
+  await chooseStatus(status, 'Waiting');
   await page
     .getByRole('region', { name: 'Pending task changes', exact: true })
     .waitFor();

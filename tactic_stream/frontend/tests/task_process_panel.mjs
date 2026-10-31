@@ -1,3 +1,4 @@
+import { chooseStatus, statusValues } from './status_picker_helpers.mjs';
 import { closeInspector } from './inspector_helpers.mjs';
 import assert from 'node:assert/strict';
 import { mkdirSync } from 'node:fs';
@@ -134,21 +135,19 @@ try {
   assert.ok(
     await review.evaluate((element) => element.classList.contains('missing'))
   );
-  const modelStatus = model.getByLabel('Status', { exact: true });
-  const oldStatus = await modelStatus.inputValue();
-  const statuses = await modelStatus
-    .locator('option:not([disabled])')
-    .evaluateAll((options) => options.map((option) => option.value));
+  const modelStatus = model.locator('.status-select');
+  const oldStatus = await modelStatus.getAttribute('data-value');
+  const statuses = await statusValues(modelStatus);
   const changedStatus = statuses.find((value) => value !== oldStatus);
   assert.ok(changedStatus);
-  await modelStatus.selectOption(changedStatus);
-  await review.getByLabel('Status', { exact: true }).selectOption(statuses[0]);
+  await chooseStatus(modelStatus, changedStatus);
+  await chooseStatus(review.locator('.status-select'), statuses[0]);
   await review.getByLabel('Assigned to', { exact: true }).tap();
   await review.getByLabel('Search users', { exact: true }).fill('admin');
   await review.getByRole('radio', { name: 'admin', exact: true }).tap();
   await surface('Compact task list');
   assert.equal(
-    await model.getByLabel('Status', { exact: true }).inputValue(),
+    await model.locator('.status-select').getAttribute('data-value'),
     changedStatus
   );
   assert.equal(
@@ -210,7 +209,7 @@ try {
   await model
     .getByRole('button', { name: 'model/second / admin', exact: true })
     .tap();
-  await model.getByLabel('Status', { exact: true }).selectOption(changedStatus);
+  await chooseStatus(model.locator('.status-select'), changedStatus);
   await model.getByRole('button', { name: 'Task actions', exact: true }).tap();
   await model.getByRole('button', { name: 'model / admin', exact: true }).tap();
   assert.equal(
@@ -227,7 +226,7 @@ try {
     .getByRole('button', { name: 'Reset task changes', exact: true })
     .waitFor();
   assert.equal(
-    await model.getByLabel('Status', { exact: true }).inputValue(),
+    await model.locator('.status-select').getAttribute('data-value'),
     changedStatus
   );
   await model
@@ -284,9 +283,10 @@ try {
   await model.getByRole('button', { name: 'Add task', exact: true }).tap();
   await editor.waitFor();
   await editor.locator('[data-task-field="context"] input').fill('model/third');
-  await editor
-    .locator('[data-task-field="status"] select')
-    .selectOption(statuses[0]);
+  await chooseStatus(
+    editor.locator('[data-task-field="status"] .status-select'),
+    statuses[0]
+  );
   await editor
     .getByRole('button', { name: 'Apply to draft', exact: true })
     .tap();

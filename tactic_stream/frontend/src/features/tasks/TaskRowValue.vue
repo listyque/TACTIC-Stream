@@ -87,6 +87,7 @@ const painted = computed(
   padding: 0;
   background: transparent;
   border: 0;
+  font-weight: 400;
 }
 .task-row-value > .task-cell-input {
   opacity: 0;

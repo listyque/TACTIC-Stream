@@ -1,3 +1,4 @@
+import { chooseStatus, statusValues } from './status_picker_helpers.mjs';
 import { closeInspector } from './inspector_helpers.mjs';
 import assert from 'node:assert/strict';
 import { mkdir, writeFile } from 'node:fs/promises';
@@ -345,15 +346,13 @@ try {
       exact: true
     })
     .tap();
-  const status = manager.getByRole('combobox', { name: 'Status', exact: true });
+  const status = manager.locator('.status-select');
   await status.waitFor();
-  const choices = await status
-    .locator('option:not([disabled])')
-    .evaluateAll((options) => options.map((row) => row.value));
-  const previous = await status.inputValue(),
+  const choices = await statusValues(status);
+  const previous = await status.getAttribute('data-value'),
     changed = choices.find((value) => value && value !== previous);
   assert(changed);
-  await status.selectOption(changed);
+  await chooseStatus(status, changed);
   await manager
     .getByRole('region', { name: 'Pending task changes', exact: true })
     .waitFor();
@@ -366,7 +365,7 @@ try {
   await page.setViewportSize({ width: 320, height: 740 });
   await manager.locator('.mobile-task-heading').waitFor();
   assert.equal(
-    await status.inputValue(),
+    await status.getAttribute('data-value'),
     changed,
     'Phone keeps the task detail and staged status'
   );

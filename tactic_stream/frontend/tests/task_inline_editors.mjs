@@ -1,3 +1,4 @@
+import { chooseStatus } from './status_picker_helpers.mjs';
 import assert from 'node:assert/strict';
 import { fileURLToPath } from 'node:url';
 import { mkdir } from 'node:fs/promises';
@@ -109,14 +110,14 @@ try {
     assert.equal(await popup.count(), 0);
   }
   await page.locator('#status').click();
-  const status = popup.getByRole('combobox');
+  const status = popup.locator('.status-select');
   await status.waitFor();
   assert.equal(
-    await status.evaluate((el) => el.matches(':open')),
+    await status.evaluate((el) => el.open),
     true,
     'Status choices open without a second click'
   );
-  await status.selectOption('Complete');
+  await chooseStatus(status, 'Complete');
   await page.waitForFunction(
     () => window.manager.tasks[0].status === 'Complete'
   );

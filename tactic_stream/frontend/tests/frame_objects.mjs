@@ -1,3 +1,4 @@
+import { chooseStatus } from './status_picker_helpers.mjs';
 import assert from 'node:assert/strict';
 import { readFile, writeFile, readdir } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
@@ -162,13 +163,17 @@ try {
     })
   );
   await page.locator('textarea').fill('Unlabelled textarea still renders');
-  const status = page.getByRole('combobox', { name: 'Status', exact: true });
+  const status = page.locator('.status-select');
   assert.equal(
-    await status.locator('option').first().innerText(),
+    await status
+      .locator('.status-select-option')
+      .first()
+      .locator('.status-select-label')
+      .innerText(),
     'Select status'
   );
-  assert(await status.locator('option').first().isDisabled());
-  await status.selectOption('Ready');
+  assert(await status.locator('.status-select-option').first().isDisabled());
+  await chooseStatus(status, 'Ready');
   assert.equal(
     await page.evaluate(() => window.objectsFixture.model.value.status),
     'Ready'

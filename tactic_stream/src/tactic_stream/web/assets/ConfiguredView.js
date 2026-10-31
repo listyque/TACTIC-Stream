@@ -3,7 +3,7 @@ import { r as __exportAll } from "./ObjectFieldFrame.js";
 import { $ as toRaw, A as onMounted, C as inject, E as nextTick, F as resolveComponent, G as withCtx, H as watch, I as resolveDirective, J as markRaw, K as withDirectives, L as resolveDynamicComponent, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, S as h, T as mergeProps, V as useSlots, X as ref, Y as reactive, _ as createElementBlock, b as createVNode, c as withKeys, d as KeepAlive, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, o as vModelText, p as computed, q as isRef, rt as toDisplayString, s as vShow, t as Transition, tt as normalizeClass, u as Fragment, v as createSlots, y as createTextVNode, z as useId } from "./vue.js";
 import { D as spacing$1, O as textStyles, R as BusyIndicator_default, S as fontMetricHeight, _ as controls$1, a as _sfc_main$56, b as fontFamily, j as preferences, m as readableText, o as t, s as appearance, t as _sfc_main$55, u as frameColors, y as cssRoles, z as _plugin_vue_export_helper_default } from "./AppButton.js";
 import { A as rpc, At as logRequest, G as tableDependencyFile, J as uploadFormFile, K as tableParentGroup, Lt as asyncComponent, P as searchConfiguration, St as debugLog, U as tableCells, W as tableDependencies, Z as widgetConfiguration, _ as navigationLink, a as __vitePreload, c as beginActivity, f as interfaceDefinition, h as messageFileRequest, k as resultItems, m as linkPreviews, o as fileBlob, q as transactionDetails, u as endActivity, ut as notify, y as objectRelations, yt as mobile } from "./index.js";
-import { A as _sfc_main$58, B as _sfc_main$63, D as _sfc_main$62, G as button, H as observeFrameSizes, K as label, M as _sfc_main$66, N as _sfc_main$68, O as ItemPreview_default, P as _sfc_main$60, Q as virtualRange, U as _sfc_main$65, V as frameContentWidth, X as rect, Y as node, _ as describe$19, b as _sfc_main$64, g as readClipboardImages, h as copyText, k as AppSearchField_default, m as copyImage, n as _sfc_main$59, o as _sfc_main$69, r as _sfc_main$61, t as _sfc_main$57, v as geometry$2, w as translate, z as _sfc_main$67 } from "./FrameView.js";
+import { A as _sfc_main$58, B as _sfc_main$63, D as _sfc_main$62, G as button, H as observeFrameSizes, K as label, M as _sfc_main$65, N as _sfc_main$68, O as ItemPreview_default, P as _sfc_main$60, Q as virtualRange, U as _sfc_main$66, V as frameContentWidth, X as rect, Y as node, _ as describe$19, b as _sfc_main$64, g as readClipboardImages, h as copyText, k as AppSearchField_default, m as copyImage, n as _sfc_main$59, o as _sfc_main$69, r as _sfc_main$61, t as _sfc_main$57, v as geometry$2, w as translate, z as _sfc_main$67 } from "./FrameView.js";
 import { n as qtLabelTextWidth, t as layoutTextWidth } from "./textMetrics.js";
 import { t as captionHeight } from "./sections.ui.js";
 import RecordForm_default, { a as unsupportedField, i as fieldKind, t as _sfc_main$70 } from "./RecordForm.js";
@@ -10281,6 +10281,7 @@ var _sfc_main$25 = {
 		field: Object,
 		value: [String, Number],
 		statuses: Array,
+		statusChoices: Array,
 		users: Array,
 		busy: Boolean,
 		catalog: Object,
@@ -10327,34 +10328,31 @@ var _sfc_main$25 = {
 				"label",
 				"action-field",
 				"disabled"
-			])) : __props.field.name === "status" ? (openBlock(), createBlock(_sfc_main$65, {
+			])) : __props.field.name === "status" ? (openBlock(), createBlock(_sfc_main$84, {
 				key: 1,
-				"model-value": __props.value ?? "",
-				label: titles[__props.field.name],
-				"translate-labels": false,
-				options: [{
-					value: "",
-					label: unref(t)("Select status"),
-					disabled: true
-				}, ...__props.statuses.map((value) => ({
+				value: __props.value ?? "",
+				"action-field": __props.compact,
+				placeholder: unref(t)(__props.compact ? "No status" : "Select status"),
+				options: __props.statusChoices?.length ? __props.statusChoices : (__props.statuses || []).map((value) => ({
 					value,
 					label: value
-				}))],
+				})),
 				disabled: __props.busy || !__props.field.editable,
-				"onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => emit("change", $event))
+				onChange: _cache[1] || (_cache[1] = ($event) => emit("change", $event))
 			}, null, 8, [
-				"model-value",
-				"label",
+				"value",
+				"action-field",
+				"placeholder",
 				"options",
 				"disabled"
-			])) : __props.field.name === "description" ? (openBlock(), createBlock(_sfc_main$66, {
+			])) : __props.field.name === "description" ? (openBlock(), createBlock(_sfc_main$65, {
 				key: 2,
 				"model-value": __props.value || "",
 				label: "Description",
 				rows: "2",
 				disabled: __props.busy || !__props.field.editable,
 				"onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => emit("change", $event))
-			}, null, 8, ["model-value", "disabled"])) : ["priority", "milestone_code"].includes(__props.field.name) || __props.field.name === "process" && __props.catalog?.processes?.length ? (openBlock(), createBlock(_sfc_main$65, {
+			}, null, 8, ["model-value", "disabled"])) : ["priority", "milestone_code"].includes(__props.field.name) || __props.field.name === "process" && __props.catalog?.processes?.length ? (openBlock(), createBlock(_sfc_main$66, {
 				key: 3,
 				"model-value": __props.value ?? "",
 				label: titles[__props.field.name],
@@ -10575,6 +10573,7 @@ var _sfc_main$24 = {
 						field: p.frameNode.field,
 						value: props.editor.values[p.frameNode.field.name],
 						statuses: props.editor.statuses,
+						statusChoices: props.editor.statusChoices,
 						users: props.editor.users,
 						catalog: props.editor.catalog,
 						busy: !p.frameNode.enabled,
@@ -11340,9 +11339,9 @@ var _sfc_main$17 = {
 	},
 	components: {
 		AppButton: _sfc_main$55,
-		AppSelect: _sfc_main$65,
+		AppSelect: _sfc_main$66,
 		AppIcon: _sfc_main$56,
-		AppTextArea: _sfc_main$66,
+		AppTextArea: _sfc_main$65,
 		AppMenu: _sfc_main$60,
 		AttachmentCard: _sfc_main$71,
 		FilePreview: FilePreview_default,
@@ -14491,7 +14490,7 @@ var _sfc_main$10 = {
 		ResultItem: _sfc_main$36,
 		AppButton: _sfc_main$55,
 		BusyIndicator: BusyIndicator_default,
-		AppSelect: _sfc_main$65,
+		AppSelect: _sfc_main$66,
 		AppSplitter: _sfc_main$69,
 		AppMenu: _sfc_main$60,
 		AppMenuItem: _sfc_main$81,
@@ -17849,7 +17848,7 @@ var _sfc_main$2 = {
 			if (!(event.target instanceof Node) || !popup.value?.contains(event.target)) close();
 		}
 		function outside(event) {
-			if (compact.value && !popup.value?.contains(event.target) && !event.target.closest(".user-combo-box")) close();
+			if (compact.value && !popup.value?.contains(event.target) && !event.target.closest(".user-combo-box, .status-select")) close();
 		}
 		onMounted(() => {
 			window.addEventListener("resize", close);
@@ -17899,6 +17898,7 @@ var _sfc_main$2 = {
 							compact: compact.value,
 							value: __props.editor.values[field.name],
 							statuses: __props.editor.statuses,
+							"status-choices": __props.editor.statusChoices,
 							users: __props.editor.users,
 							catalog: __props.editor.catalog,
 							busy: __props.busy,
@@ -17908,6 +17908,7 @@ var _sfc_main$2 = {
 							"compact",
 							"value",
 							"statuses",
+							"status-choices",
 							"users",
 							"catalog",
 							"busy",
@@ -18125,7 +18126,7 @@ var _sfc_main = {
 		ObjectAction: ObjectAction_default,
 		AppButton: _sfc_main$55,
 		AppMenu: _sfc_main$60,
-		AppSelect: _sfc_main$65,
+		AppSelect: _sfc_main$66,
 		AppSearchField: AppSearchField_default,
 		FilePreview: FilePreview_default,
 		NotesPanel: NotesPanel_default,
