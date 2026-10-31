@@ -91,6 +91,7 @@ function definition() {
         attributes: { width: column.width },
         cell: {
           ...column.cell,
+          supported: column.supported !== false,
           field: column.name,
           sortable: column.name === 'code'
         }
