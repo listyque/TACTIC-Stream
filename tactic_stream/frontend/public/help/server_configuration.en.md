@@ -153,7 +153,7 @@ Handler updates keep the existing release controller, changelog, portable-instal
 
 ## Server processes and restart
 
-Administrators can open **Administration → Backend server** in Handler or Stream.
+Administrators can open **Configuration → Server** in Handler or Stream.
 **Web workers** edits the installation's `services/process_count`; **Running web
 workers** shows the ready processes reported by its monitor. Save first, then use
 **Restart TACTIC Stream** and confirm the connection interruption. Saving alone
@@ -168,3 +168,5 @@ account must be an administrator. Explicit startup overrides still take priority
 If network settings changed, open the new address and reconnect. Closing the
 interface does not cancel an accepted restart; the short interruption affects
 other clients too. Schedule it when no critical operations are in progress.
+
+Worker settings and the explicit restart action belong to **Configuration → Server**. They are not project administration. In Handler this card is followed by the local connection settings. The Configuration close guard includes unsaved worker changes and waits for a remote save acknowledgement; a failed or uncertain write keeps the window open.

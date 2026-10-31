@@ -491,7 +491,6 @@
       "src/features/administration/SecurityGroups.vue",
       "src/features/administration/SecurityRules.vue",
       "src/features/administration/ComponentShowcase.vue",
-      "src/features/configuration/ServerConfiguration.vue",
       "src/features/administration/Plugins.vue",
       "src/features/scripts/AgentRequest.vue",
       "src/features/configuration/AgentProviders.vue",
@@ -872,32 +871,13 @@
       "_FrameView.js",
       "_AppearanceControls.js",
       "src/features/objects/RecordForm.vue",
+      "_admin.document.js",
       "_ConfiguredView.js",
       "src/App.vue",
-      "src/features/configuration/AgentProviders.vue",
-      "src/features/configuration/ServerConfiguration.vue"
+      "src/features/configuration/AgentProviders.vue"
     ],
     "css": [
       "assets/Configuration.css"
-    ]
-  },
-  "src/features/configuration/ServerConfiguration.vue": {
-    "file": "assets/ServerConfiguration.js",
-    "name": "ServerConfiguration",
-    "src": "src/features/configuration/ServerConfiguration.vue",
-    "isDynamicEntry": true,
-    "imports": [
-      "_vue.js",
-      "_AppButton.js",
-      "index.html",
-      "_FrameView.js",
-      "_AppearanceControls.js",
-      "_admin.document.js",
-      "_confirmation.ui.js",
-      "src/App.vue"
-    ],
-    "css": [
-      "assets/ServerConfiguration.css"
     ]
   },
   "src/features/documentation/ApiDocumentation.vue": {

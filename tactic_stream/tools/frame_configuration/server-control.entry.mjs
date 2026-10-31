@@ -12,6 +12,5 @@ appearance.language =
 appearance.mode = 'dark';
 createApp(ServerConfiguration, {
   ticket: 'fixture-ticket',
-  workersOnly: true,
   groupTitles: ['Services and workers']
 }).mount('#app');

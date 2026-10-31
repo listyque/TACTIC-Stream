@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/NamingEditor.js","assets/ObjectFieldFrame.js","assets/vue.js","assets/AppButton.js","assets/locales.js","assets/icons.js","assets/AppButton.css","assets/FrameView.js","assets/FrameView.css","assets/ObjectFieldFrame.css","assets/index.js","assets/index.css","assets/sections.ui.js","assets/admin.document.js","assets/textMetrics.js","assets/file_values.js","assets/files.js","assets/files2.js","assets/admin.css","assets/MatchingTemplates.js","assets/MatchingTemplates.css","assets/TaskGanttView.js","assets/TaskGanttView.css","assets/TaskCalendarView.js","assets/TaskCalendarView.css","assets/TaskProcessPanel.js","assets/ConfiguredView.js","assets/RecordForm.js","assets/previewImage.js","assets/RecordForm.css","assets/CodeBlock.js","assets/metrics.js","assets/confirmation.ui.js","assets/ActionRow.js","assets/ActionRow.css","assets/AppDialog.js","assets/MarkdownText.js","assets/markdown-it.js","assets/MarkdownText.css","assets/VirtualCollection.js","assets/VirtualCollection.css","assets/Timesheet.js","assets/Timesheet.css","assets/ContentLoadingOverlay.js","assets/ContentLoadingOverlay.css","assets/ConfiguredView.css","assets/TaskProcessPanel.css","assets/FileWorkspaceInspection.js","assets/FileWorkspaceInspection.css","assets/DescriptionEditor.js","assets/DescriptionEditor.css","assets/SnapshotBrowser.js","assets/SnapshotBrowser.css","assets/KnowledgeBase.js","assets/KnowledgeBase.css","assets/Configuration.js","assets/AppearanceControls.js","assets/AppearanceControls.css","assets/AgentProviders.js","assets/executor.ui.js","assets/AgentProviders.css","assets/ServerConfiguration.js","assets/ServerConfiguration.css","assets/Configuration.css","assets/SearchTypes.js","assets/SchemaEditor.js","assets/graphFrame.js","assets/tree.ui.js","assets/SchemaEditor.css","assets/WorkflowEditor.js","assets/ProcessRules.js","assets/ProcessRules.css","assets/SidebarEditor.js","assets/PageLayoutEditor.js","assets/PageEditorTools.js","assets/LayoutEditor.js","assets/LayoutEditor.css","assets/ColumnsEditor.js","assets/RawDatabase.js","assets/RawDatabase.css","assets/SecurityUsers.js","assets/groups.ui.js","assets/SecurityGroups.js","assets/SecurityRules.js","assets/ComponentShowcase.js","assets/ComponentShowcase.css","assets/Plugins.js","assets/AgentRequest.js","assets/AgentRequest.css","assets/AgentMcp.js","assets/AgentMcp.css","assets/ScriptEditor.js","assets/ScriptEditor.css"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/NamingEditor.js","assets/ObjectFieldFrame.js","assets/vue.js","assets/AppButton.js","assets/locales.js","assets/icons.js","assets/AppButton.css","assets/FrameView.js","assets/FrameView.css","assets/ObjectFieldFrame.css","assets/index.js","assets/index.css","assets/sections.ui.js","assets/admin.document.js","assets/textMetrics.js","assets/file_values.js","assets/files.js","assets/files2.js","assets/admin.css","assets/MatchingTemplates.js","assets/MatchingTemplates.css","assets/TaskGanttView.js","assets/TaskGanttView.css","assets/TaskCalendarView.js","assets/TaskCalendarView.css","assets/TaskProcessPanel.js","assets/ConfiguredView.js","assets/RecordForm.js","assets/previewImage.js","assets/RecordForm.css","assets/CodeBlock.js","assets/metrics.js","assets/confirmation.ui.js","assets/ActionRow.js","assets/ActionRow.css","assets/AppDialog.js","assets/MarkdownText.js","assets/markdown-it.js","assets/MarkdownText.css","assets/VirtualCollection.js","assets/VirtualCollection.css","assets/Timesheet.js","assets/Timesheet.css","assets/ContentLoadingOverlay.js","assets/ContentLoadingOverlay.css","assets/ConfiguredView.css","assets/TaskProcessPanel.css","assets/FileWorkspaceInspection.js","assets/FileWorkspaceInspection.css","assets/DescriptionEditor.js","assets/DescriptionEditor.css","assets/SnapshotBrowser.js","assets/SnapshotBrowser.css","assets/KnowledgeBase.js","assets/KnowledgeBase.css","assets/Configuration.js","assets/AppearanceControls.js","assets/AppearanceControls.css","assets/AgentProviders.js","assets/executor.ui.js","assets/AgentProviders.css","assets/Configuration.css","assets/SearchTypes.js","assets/SchemaEditor.js","assets/graphFrame.js","assets/tree.ui.js","assets/SchemaEditor.css","assets/WorkflowEditor.js","assets/ProcessRules.js","assets/ProcessRules.css","assets/SidebarEditor.js","assets/PageLayoutEditor.js","assets/PageEditorTools.js","assets/LayoutEditor.js","assets/LayoutEditor.css","assets/ColumnsEditor.js","assets/RawDatabase.js","assets/RawDatabase.css","assets/SecurityUsers.js","assets/groups.ui.js","assets/SecurityGroups.js","assets/SecurityRules.js","assets/ComponentShowcase.js","assets/ComponentShowcase.css","assets/Plugins.js","assets/AgentRequest.js","assets/AgentRequest.css","assets/AgentMcp.js","assets/AgentMcp.css","assets/ScriptEditor.js","assets/ScriptEditor.css"])))=>i.map(i=>d[i]);
 import { r as __exportAll } from "./ObjectFieldFrame.js";
 import { $ as toRaw, A as onMounted, B as useModel, C as inject, E as nextTick, F as resolveComponent, G as withCtx, H as watch, I as resolveDirective, J as markRaw, K as withDirectives, L as resolveDynamicComponent, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, Q as shallowRef, S as h, T as mergeProps, V as useSlots, X as ref, Y as reactive, Z as shallowReactive, _ as createElementBlock, b as createVNode, c as withKeys, d as KeepAlive, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, o as vModelText, p as computed, q as isRef, rt as toDisplayString, s as vShow, t as Transition, tt as normalizeClass, u as Fragment, v as createSlots, w as mergeModels, y as createTextVNode, z as useId } from "./vue.js";
 import { C as layout$6, D as spacing$1, E as readableText, M as savePreferencePage, N as normalizeColumns, O as textStyles, P as taskColumns, R as BusyIndicator_default, S as fontMetricHeight, T as metrics$9, _ as controls$1, a as _sfc_main$104, b as fontFamily, g as blend, h as saveAppearance, j as preferences, k as configurationPreview, o as t, p as projectPalette, s as appearance, t as _sfc_main$103, u as frameColors, w as lineHeights, x as fontLineHeight, z as _plugin_vue_export_helper_default } from "./AppButton.js";
@@ -14,7 +14,7 @@ import { a as sourcePath, i as repositories, n as droppedFiles, r as prepareFile
 import { t as downloadBlob } from "./files2.js";
 import { A as _sfc_main$123, B as gallery, C as messageDate, Ct as viewTabWidth, D as _sfc_main$131, E as contextActions, F as emojiCount, H as revision, I as formatFileSize, L as popup$2, M as bodyOrder, N as bubbleContour, O as _sfc_main$126, P as bubbleGeometry, Q as _sfc_main$129, R as forward, S as messageAttachments, St as tab, T as retainOlderMessages, U as _sfc_main$132, V as heading$1, W as _sfc_main$127, _ as canChangeMessage, at as sortActions, b as initials$1, bt as key$1, ct as viewActions, d as ObjectAction_default, dt as WorkspaceSearch_default, f as ObjectOperations_default, g as attachmentName, h as _sfc_main$130, it as groups$1, j as _sfc_main$133, k as _sfc_main$124, l as RelatedObjects_default, lt as views, m as skeyPlaceholder, nt as filterActions, ot as sortColumn, p as NotesPanel_default, rt as groupActions, sn as _sfc_main$125, st as sorts$1, t as ConfiguredView_default, tt as defaultResultView, ut as _sfc_main$134, v as conversationAttachments, vt as _sfc_main$128, w as messageId, x as mergeMessages, xt as sectionWidth, y as groupedMessages, yt as dimensions$4, z as forwarding } from "./ConfiguredView.js";
 import { t as _sfc_main$135 } from "./CodeBlock.js";
-import { t as describe$40 } from "./confirmation.ui.js";
+import { t as describe$41 } from "./confirmation.ui.js";
 import { n as row$15 } from "./ActionRow.js";
 import { t as _sfc_main$136 } from "./AppDialog.js";
 import { t as Timesheet_default } from "./Timesheet.js";
@@ -30,7 +30,7 @@ var dimensions$3 = {
 	projectPreviewExtent: 28,
 	projectPreviewRadius: 6
 };
-function describe$39(model) {
+function describe$40(model) {
 	const width = Math.max(0, model.width);
 	const compact = !!model.compact;
 	const height = layout$6.appBarHeight;
@@ -113,7 +113,7 @@ function positions$1(scene) {
 }
 //#endregion
 //#region ../src/tactic_stream/shared_ui/shell/workspace.ui.mjs
-function describe$38(width, height, compact = false) {
+function describe$39(width, height, compact = false) {
 	const toolbar = Math.min(height, layout$6.appBarHeight);
 	const rail = compact ? 0 : Math.min(width, layout$6.sectionRailWidth);
 	const body = Math.max(0, height - toolbar);
@@ -224,7 +224,7 @@ var dimensions$2 = {
 	edgeGap: 56,
 	exitDistance: 120
 };
-function describe$37(model, translate = (text) => text) {
+function describe$38(model, translate = (text) => text) {
 	const width = Math.min(Math.max(0, model.width), dimensions$2.maximumWidth, Math.max(dimensions$2.minimumWidth, model.width - dimensions$2.edgeGap));
 	const height = Math.max(0, model.height);
 	const closeX = width - 48;
@@ -981,7 +981,7 @@ function _sfc_render$10(_ctx, _cache, $props, $setup, $data, $options) {
 var WidgetConfiguration_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$100, [["render", _sfc_render$10]]);
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/table/page.ui.mjs
-function describe$36(model, width, height, language) {
+function describe$37(model, width, height, language) {
 	const tr = (text) => translate(text, language);
 	const nodes = [
 		node("Box", "workspacePageBackground", rect$1(0, 0, width, height), {
@@ -1050,7 +1050,7 @@ var _sfc_main$99 = {
 			width: 800,
 			height: 600
 		}), model = ref(null), renderRevision = ref(0), busy = ref(false), error = ref("");
-		const scene = computed(() => describe$36({
+		const scene = computed(() => describe$37({
 			title: props.title,
 			busy: busy.value,
 			error: error.value,
@@ -1441,7 +1441,7 @@ var AdminProjectPicker_default = /*#__PURE__*/ _plugin_vue_export_helper_default
 		};
 	}
 }, [["__scopeId", "data-v-9a9b2858"]]);
-function describe$35(id, width, height, children) {
+function describe$36(id, width, height, children) {
 	return node("Box", id, rect$1(0, 0, width, height), {
 		background: "surfaceContainerLow",
 		radius: 0,
@@ -1455,13 +1455,6 @@ function describe$35(id, width, height, children) {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/administration/administration.ui.mjs
 var sections = [
-	{
-		id: "server",
-		title: "Backend server",
-		description: "Worker processes and server restart",
-		icon: "cloud",
-		type: ""
-	},
 	{
 		id: "types",
 		title: "Search Types",
@@ -1577,7 +1570,7 @@ function geometry(width, height, collapsed) {
 		content: rect(nav + pad, header + pad, body - pad * 2, height - header - pad * 2)
 	};
 }
-function describe$34(model, ui, width, height, language) {
+function describe$35(model, ui, width, height, language) {
 	const tr = (text) => translate(text, language), g = geometry(width, height, ui.collapsed), nodes = [], branding = [], current = sections.find((row) => row.id === model.section) || sections[0];
 	const label = (id, r, text, props) => node("Label", id, r, Object.assign({ text: tr(text) }, props || {}));
 	const button = (id, r, text, icon, action, enabled) => node("Button", id, r, {
@@ -1667,7 +1660,7 @@ function describe$34(model, ui, width, height, language) {
 	for (const item of head) item.x += g.nav;
 	head.unshift(...branding);
 	head.push(node("Box", "administrationHeaderDivider", rect(0, g.header - 1, width, 1), { background: "outlineVariant" }));
-	nodes.push(describe$35("administrationHeader", width, g.header, head));
+	nodes.push(describe$36("administrationHeader", width, g.header, head));
 	nodes.push(node("View", "administrationContent", g.content, { view: "content" }));
 	return {
 		nodes,
@@ -1771,7 +1764,7 @@ var AdministrationShell_default = /*#__PURE__*/ _plugin_vue_export_helper_defaul
 			width: 1,
 			height: 1
 		}), ui = ref(initial$2());
-		const scene = computed(() => describe$34(props.model, ui.value, size.value.width, size.value.height, appearance.language));
+		const scene = computed(() => describe$35(props.model, ui.value, size.value.width, size.value.height, appearance.language));
 		const views = computed(() => ({
 			projectPicker: {
 				component: markRaw(AdminProjectPicker_default),
@@ -2190,7 +2183,7 @@ function presentation(model, language) {
 		status: !managed ? "" : model.saving ? tr("Saving…") : model.pinned ? tr("Used for check-in") : model.editing ? tr(model.dirty ? "Unsaved" : "Editing") : ""
 	};
 }
-function describe$33(model, width, height, language) {
+function describe$34(model, width, height, language) {
 	const tr = (text) => translate(text, language);
 	const state = presentation(model, language);
 	const margin = model.compact ? metrics$8.compactMargin : metrics$8.margin;
@@ -2377,7 +2370,7 @@ var _sfc_main$93 = {
 			width: 0,
 			height: 0
 		}), editor = ref(null);
-		const scene = computed(() => describe$33(props.model, viewport.value.width, viewport.value.height, appearance.language));
+		const scene = computed(() => describe$34(props.model, viewport.value.width, viewport.value.height, appearance.language));
 		const valueComponent = markRaw(_sfc_main$94);
 		const views = computed(() => ({ value: {
 			component: valueComponent,
@@ -2452,7 +2445,7 @@ var _sfc_main$92 = {
 };
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/files/queue/progress.ui.mjs
-function describe$32(progress, width, language) {
+function describe$33(progress, width, language) {
 	if (!progress || !Object.keys(progress).length) return {
 		nodes: [],
 		height: 0
@@ -2653,7 +2646,7 @@ function toolbar$2(model) {
 }
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/files/queue/list.ui.mjs
-function describe$31(model, width, height, language) {
+function describe$32(model, width, height, language) {
 	const tr = (text, values) => translate(text, language, values);
 	const w = width, h = height, children = [], actions = toolbar$2(model).filter((action) => action.visible), toolsWidth = (actions.length + 1) * 33, titleWidth = w >= 330 ? 85 : 0, countWidth = Math.max(32, 20 + String(model.count).length * 7);
 	if (titleWidth) {
@@ -2798,7 +2791,7 @@ function describe$31(model, width, height, language) {
 }
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/files/queue/summary.ui.mjs
-function describe$30(model, width, language) {
+function describe$31(model, width, language) {
 	const tr = (text, values) => translate(text, language, values), record = model.record || {}, compact = width < 620, stacked = width < 460, height = stacked ? 140 : 98, actionsWidth = compact ? 68 : 340, titleWidth = Math.max(0, width - 108 - actionsWidth), nodes = [
 		node("View", "commitQueueSummaryPreview", rect$1(12, 12, 72, 72), {
 			view: "preview",
@@ -2923,7 +2916,7 @@ function namingRow(record, width) {
 		toolTip: record.text
 	})] };
 }
-function describe$29(model, width, language) {
+function describe$30(model, width, language) {
 	const tr = (text, values) => translate(text, language, values), record = model.record || {}, nodes = [], editable = !model.busy && !!record.canEdit, inner = Math.max(0, width - 22);
 	let y = 0;
 	if (model.count > 1) {
@@ -2941,7 +2934,7 @@ function describe$29(model, width, language) {
 		}));
 		y += h + 8;
 	}
-	const header = describe$30(model, width, language);
+	const header = describe$31(model, width, language);
 	nodes.push(node("Box", "commitQueueSummarySlot", rect$1(0, y, width, header.height), { children: header.nodes }));
 	y += header.height + 8;
 	const settings = [], top = y;
@@ -3172,7 +3165,7 @@ function describe$29(model, width, language) {
 }
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/files/queue/details.ui.mjs
-function describe$28(model, width, height, language) {
+function describe$29(model, width, height, language) {
 	const tr = (text, values) => translate(text, language, values);
 	const w = width, h = height, children = [], record = model.record || {}, showRetry = !!record.canRetry || !!model.resumeAvailable, splitAuxiliary = w < 410 && model.busy && showRetry, footerHeight = splitAuxiliary ? 142 : w < 410 ? 96 : 52;
 	let top = 0;
@@ -3202,7 +3195,7 @@ function describe$28(model, width, height, language) {
 		top = duplicateHeight + 8;
 	}
 	if (model.selected >= 0) {
-		const form = describe$29(model, Math.max(0, w - 16), language);
+		const form = describe$30(model, Math.max(0, w - 16), language);
 		children.push(node("Scroll", "commitQueueEditorScroll", rect$1(0, top, w, Math.max(0, h - top - footerHeight - 8)), {
 			contentHeight: form.height,
 			children: form.nodes
@@ -3403,7 +3396,7 @@ function sourceRow(model, record, width, language) {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/files/queue/queue.ui.mjs
 function layout$5(model, width, height, language) {
-	const compact = width < 700, margin = spacing$1.content, gap = 10, progress = describe$32(model.progress, width - margin * 2, language), top = margin + (progress.height ? progress.height + gap : 0) + (compact ? 44 : 0), available = Math.max(0, width - margin * 2 - gap), pane = compact ? width - margin * 2 : Math.max(Math.min(270, available * .45), Math.min(model.paneWidth || available * .36, available - Math.min(320, available * .5))), bodyHeight = Math.max(0, height - top - margin);
+	const compact = width < 700, margin = spacing$1.content, gap = 10, progress = describe$33(model.progress, width - margin * 2, language), top = margin + (progress.height ? progress.height + gap : 0) + (compact ? 44 : 0), available = Math.max(0, width - margin * 2 - gap), pane = compact ? width - margin * 2 : Math.max(Math.min(270, available * .45), Math.min(model.paneWidth || available * .36, available - Math.min(320, available * .5))), bodyHeight = Math.max(0, height - top - margin);
 	return {
 		compact,
 		progress,
@@ -3416,7 +3409,7 @@ function layout$5(model, width, height, language) {
 		details: rect$1(compact ? margin : margin + pane + gap, top, compact ? width - margin * 2 : available - pane, bodyHeight)
 	};
 }
-function describe$27(model, width, height, language) {
+function describe$28(model, width, height, language) {
 	const tr = (text, values) => translate(text, language, values), bounds = layout$5(model, width, height, language), nodes = [node("Box", "commitQueueBackground", rect$1(0, 0, width, height), {
 		background: "workspace",
 		radius: 0
@@ -3437,7 +3430,7 @@ function describe$27(model, width, height, language) {
 		}],
 		action: { type: "navigate" }
 	}));
-	if (bounds.showQueue) nodes.push(node("Box", "commitQueueListSlot", bounds.queue, { children: describe$31(model, bounds.queue.width, bounds.queue.height, language).nodes }));
+	if (bounds.showQueue) nodes.push(node("Box", "commitQueueListSlot", bounds.queue, { children: describe$32(model, bounds.queue.width, bounds.queue.height, language).nodes }));
 	if (!bounds.compact) nodes.push(node("Splitter", "commitQueueMainSplitter", bounds.splitter, {
 		label: tr("Queue pane width"),
 		value: bounds.pane,
@@ -3447,7 +3440,7 @@ function describe$27(model, width, height, language) {
 		commitAction: { type: "paneWidth" },
 		cancelAction: { type: "paneWidthCancel" }
 	}));
-	if (bounds.showDetails) nodes.push(node("Box", "commitQueueDetailsSlot", bounds.details, { children: describe$28(model, bounds.details.width, bounds.details.height, language).nodes }));
+	if (bounds.showDetails) nodes.push(node("Box", "commitQueueDetailsSlot", bounds.details, { children: describe$29(model, bounds.details.width, bounds.details.height, language).nodes }));
 	return { nodes };
 }
 //#endregion
@@ -3470,7 +3463,7 @@ var _sfc_main$91 = {
 			width: 1e3,
 			height: 700
 		});
-		const scene = computed(() => describe$27(props.model, viewport.value.width, viewport.value.height, appearance.language));
+		const scene = computed(() => describe$28(props.model, viewport.value.width, viewport.value.height, appearance.language));
 		const naming = computed(() => namingRows(props.model.record || {}, appearance.language));
 		const models = computed(() => ({
 			operations: props.operations,
@@ -3621,7 +3614,7 @@ var metrics$7 = {
 	ownerMargin: 32,
 	clearWidth: 420
 };
-function describe$26(model, width, height, language) {
+function describe$27(model, width, height, language) {
 	const tr = (text) => translate(text, language), compact = width < 420, footerHeight = compact ? 142 : 52, nodes = [node("List", "commitQueuePreviewList", rect$1(0, 0, width, Math.max(0, height - footerHeight - 8)), {
 		source: "previews",
 		keyField: "key",
@@ -3718,13 +3711,13 @@ var _sfc_main$90 = {
 			width: 480,
 			height: 346
 		}), previewsOpen = ref(false);
-		const confirmation = computed(() => describe$40({
+		const confirmation = computed(() => describe$41({
 			message: t("All prepared, failed and completed operations will be removed from the queue."),
 			accept: "Clear queue",
 			destructive: true,
 			busy: props.model.busy
 		}, clearWidth.value, 170, appearance.language));
-		const scene = computed(() => describe$26({
+		const scene = computed(() => describe$27({
 			count: props.rows.length,
 			canEdit: !props.model.busy && props.model.record?.canPreview
 		}, viewport.value.width, viewport.value.height, appearance.language));
@@ -4960,7 +4953,7 @@ function actions$3(model) {
 		}
 	];
 }
-function describe$25(model, width, height, language) {
+function describe$26(model, width, height, language) {
 	const tr = (text) => translate(text, language), inner = Math.max(0, width - 20), wide = width >= 940, nodes = [node("Box", "dropPlateBackground", rect$1(0, 0, width, height), {
 		background: "panelDeep",
 		radius: 0
@@ -5362,7 +5355,7 @@ var _sfc_main$88 = {
 			context: context.value,
 			error: t(error.value)
 		}));
-		const scene = computed(() => describe$25(frameModel.value, viewport.value.width, viewport.value.height, appearance.language));
+		const scene = computed(() => describe$26(frameModel.value, viewport.value.width, viewport.value.height, appearance.language));
 		const presentedRows = computed(() => visible.value.map((group) => ({
 			...group,
 			groupId: String(group.id),
@@ -5927,7 +5920,7 @@ var titles$1 = {
 function columnCount(width) {
 	return width >= 1280 ? 5 : width >= 960 ? 4 : width >= 720 ? 3 : width >= 440 ? 2 : 1;
 }
-function describe$24(model, width, language) {
+function describe$25(model, width, language) {
 	const tr = (text) => translate(text, language);
 	const left = model.left === void 0 ? 12 : model.left;
 	const right = model.right === void 0 ? 12 : model.right;
@@ -6159,7 +6152,7 @@ var _sfc_main$86 = {
 			event.target.blur();
 		}
 		const host = ref(null), width = ref(0);
-		const scene = computed(() => describe$24({
+		const scene = computed(() => describe$25({
 			fields: fields.value.map((field) => ({
 				name: field.name,
 				value: props.editor?.values[field.name]
@@ -7240,7 +7233,7 @@ function actions$2(model, language) {
 		enabled: !model.blocked && (value !== "search_type" || model.searchTypeAvailable !== false)
 	}));
 }
-function describe$23(model, width, language) {
+function describe$24(model, width, language) {
 	const tr = (text) => translate(text, language), nodes = [];
 	let y = 0;
 	for (const record of actions$2(model, language)) {
@@ -8083,7 +8076,7 @@ var _sfc_main$80 = {
 };
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/tasks/empty.ui.mjs
-function describe$22(model, width, height, language) {
+function describe$23(model, width, height, language) {
 	const tr = (text) => translate(text, language);
 	const title = model.busy ? "Loading data…" : model.filtered ? "No tasks match the current filters" : "Create a task";
 	const hint = model.filtered ? "Clear filters to see all tasks" : model.canCreate ? "Use the + button above" : "Select a parent object before creating a task.";
@@ -8147,7 +8140,7 @@ var _sfc_main$79 = {
 				embedded: true,
 				controlHeight: metrics$9(appearance.theme).controlHeight
 			}, props.toolbarWidth || width.value + 12, appearance.language), bounds = toolbar.createBounds;
-			return describe$22({
+			return describe$23({
 				...props,
 				target: target.value || {
 					x: bounds.x + bounds.width / 2 - 6,
@@ -8214,7 +8207,7 @@ var _sfc_main$79 = {
 };
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/tasks/columns.ui.mjs
-function describe$21(model, width, language) {
+function describe$22(model, width, language) {
 	const tr = (text, values) => translate(text, language, values), nodes = [label("taskColumnsTitle", rect$1(0, 0, width, 24), tr("Task columns"), {
 		fontRole: "secondary",
 		weight: 600
@@ -8289,7 +8282,7 @@ var _sfc_main$78 = {
 		const props = __props;
 		const emit = __emit;
 		const host = ref(null), width = ref(0);
-		const scene = computed(() => describe$21(props, width.value, appearance.language));
+		const scene = computed(() => describe$22(props, width.value, appearance.language));
 		const views = { width: {
 			component: markRaw({
 				props: { frameNode: Object },
@@ -8960,7 +8953,7 @@ function fromFacets(facets, quick, scope) {
 		};
 	}).filter((group) => group.options.length);
 }
-function describe$20(model, width, language, measure) {
+function describe$21(model, width, language, measure) {
 	const tr = (text) => translate(text, language), nodes = [], options = model.groups || [];
 	const chip = (id, bounds, record, action, marker) => node("View", id, bounds, {
 		view: "chip",
@@ -9097,7 +9090,7 @@ var _sfc_main$69 = {
 		const emit = __emit;
 		const host = ref(null), width = ref(0), advanced = ref(false);
 		const groups = computed(() => fromFacets(props.facets, props.quick, props.scope));
-		const scene = computed(() => describe$20({
+		const scene = computed(() => describe$21({
 			groups: groups.value,
 			filters: props.filters,
 			busy: props.busy,
@@ -9178,7 +9171,7 @@ var _sfc_main$68 = {
 		const props = __props;
 		const emit = __emit;
 		const host = ref(null), width = ref(0), chooseTeam = ref(false);
-		const scene = computed(() => describe$23({
+		const scene = computed(() => describe$24({
 			scope: props.scope,
 			identity: props.identity,
 			personal: props.identity === props.currentUser,
@@ -9236,7 +9229,7 @@ var _sfc_main$68 = {
 };
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/tasks/schedule.ui.mjs
-function describe$19(model, width, language) {
+function describe$20(model, width, language) {
 	const tr = (text) => translate(text, language), nodes = [];
 	let y = 0;
 	function field(id, title, value, kind, enabled, field) {
@@ -9316,7 +9309,7 @@ var _sfc_main$67 = {
 		const emit = __emit;
 		const root = ref(null), width = ref(360);
 		let observer;
-		const scene = computed(() => describe$19({
+		const scene = computed(() => describe$20({
 			...props.model,
 			workingDays: props.workingDays,
 			multi: props.multi,
@@ -13761,7 +13754,7 @@ var _sfc_main$61 = {
 		const dialog = ref(null), extras = ref(null), opened = ref(false);
 		const width = ref(innerWidth), height = ref(innerHeight), extraHeight = ref(0), top = ref(0);
 		let entered = false, opener, observer;
-		const scene = computed(() => describe$37({
+		const scene = computed(() => describe$38({
 			width: width.value,
 			height: height.value,
 			editable: props.editable,
@@ -13894,7 +13887,7 @@ var _sfc_main$61 = {
 //#region ../src/tactic_stream/shared_ui/features/configuration/configuration.ui.mjs
 function confirmation$1(model, width, height, language) {
 	const text = (key) => translate(key, language);
-	if (model.kind === "clear") return describe$40({
+	if (model.kind === "clear") return describe$41({
 		message: text(model.scope === "tabs" ? "Object, process and version branches will collapse. Search tabs, filters and dock layouts remain unchanged." : "Projects, Search Types, search results and navigation will be downloaded again. Saved layouts and preferences remain unchanged."),
 		reject: "Cancel",
 		accept: model.scope === "tabs" ? "Clear tabs cache" : "Clear cache",
@@ -13982,7 +13975,7 @@ var pages = [
 		help: "configuration.tasks"
 	}
 ];
-function describe$18(model, width, height, language) {
+function describe$19(model, width, height, language) {
 	const text = (key) => translate(key, language);
 	const entries = model.pages || pages;
 	const current = entries.find((page) => page.id === model.page) || entries[0];
@@ -14088,7 +14081,7 @@ function describe$18(model, width, height, language) {
 	if (!phone) nodes.push(label("configurationPageDescription", rect$1(sidebar + spacing$1.content, 46, contentWidth - spacing$1.content * 2, 20), text(current.description), muted));
 	nodes.push(node("Box", "configurationHeaderDivider", rect$1(0, header - 1, width, 1), { background: "outlineVariant" }));
 	const headerNodes = nodes.filter((item) => item.id !== "configurationSurface" && item.id !== "configurationSidebar" && item.y < header);
-	const headerBox = describe$35("configurationHeader", width, header, headerNodes);
+	const headerBox = describe$36("configurationHeader", width, header, headerNodes);
 	const contentNodes = nodes.filter((item) => item !== headerBox && !headerNodes.includes(item));
 	for (const item of contentNodes) if (["configurationSurface", "configurationSidebar"].includes(item.id)) item.radius = 0;
 	const sidebarBox = contentNodes.findIndex((item) => item.id === "configurationSidebar");
@@ -15128,6 +15121,61 @@ var definitions = {
 	]
 };
 //#endregion
+//#region ../src/tactic_stream/shared_ui/features/configuration/server_control.ui.mjs
+function describe$18(model, width, language) {
+	const tr = (text) => translate(text, language);
+	const compact = width < 480;
+	const height = compact ? 344 : 250;
+	if (model.confirm) {
+		const scene = describe$41({
+			message: tr("Restart TACTIC Stream? Connections and running operations may be interrupted while saved settings are applied. Unsaved changes will not be applied."),
+			accept: "Restart TACTIC Stream",
+			reject: "Cancel",
+			busy: model.busy,
+			acceptId: "serverRestartAccept",
+			rejectId: "serverRestartCancel"
+		}, width, height, language);
+		return Object.assign(scene, { height });
+	}
+	const runtime = model.runtime || {};
+	const enabled = !model.busy && !model.restarting;
+	const nodes = [
+		node("Box", "serverControlSurface", rect$1(0, 0, width, height), {
+			color: "panel",
+			border: "outline",
+			borderWidth: 1,
+			radius: 6
+		}),
+		label("serverControlTitle", rect$1(12, 12, width - 112, 24), tr("Server processes"), { bold: true }),
+		button("serverControlDiscard", rect$1(width - 88, 8, 36, 36), tr("Discard changes"), "undo", { type: "discard" }, enabled && model.dirty, { iconOnly: true }),
+		button("serverControlRefresh", rect$1(width - 48, 8, 36, 36), tr("Refresh"), "refresh", { type: "refresh" }, enabled && !model.dirty, { iconOnly: true }),
+		label("serverWorkerLabel", rect$1(12, 50, width - 24, 22), tr("Web workers")),
+		node("Field", "serverWorkerCount", rect$1(12, 76, Math.min(144, width - 24), 38), {
+			text: String(model.workers || ""),
+			label: tr("Web workers"),
+			enabled,
+			inputMode: "numeric",
+			action: { type: "workers" }
+		}),
+		label("serverRunningWorkers", rect$1(compact ? 12 : 172, compact ? 124 : 82, compact ? width - 24 : width - 184, 44), tr("Running web workers") + ": " + (runtime.web_workers ?? "—"), {
+			wrap: true,
+			color: "secondaryText"
+		}),
+		label("serverControlNotice", rect$1(12, compact ? 176 : 132, width - 24, compact ? 64 : 54), tr(model.error || (model.restarting ? "Restarting TACTIC Stream…" : model.dirty ? "Save changes before restarting." : model.notice) || (!runtime.available ? runtime.reason || "The server monitor is unavailable or outdated." : "Saved settings are applied only after restarting the server.")) || "", {
+			wrap: true,
+			color: model.error ? "red" : "secondaryText",
+			role: model.error ? "alert" : "status"
+		})
+	];
+	const buttonWidth = compact ? width - 24 : Math.min(220, (width - 32) / 2);
+	nodes.push(button("serverWorkersSave", rect$1(12, height - (compact ? 88 : 50), buttonWidth, 36), tr("Save"), "save", { type: "save" }, enabled && model.dirty));
+	nodes.push(button("serverRestart", rect$1(compact ? 12 : 20 + buttonWidth, height - 50, buttonWidth, 36), tr("Restart TACTIC Stream"), "refresh", { type: "restart" }, enabled && !model.dirty && runtime.available && runtime.state === "running"));
+	return {
+		nodes,
+		height
+	};
+}
+//#endregion
 //#region ../src/tactic_stream/shared_ui/features/configuration/settings.ui.mjs
 function fieldsFor(page, model) {
 	const native = model.native === true;
@@ -15355,6 +15403,11 @@ function describe$17(model, width, height, language) {
 			role: id === "Error" ? "alert" : "status"
 		}));
 		top += rows * 20 + 12;
+	}
+	if (model.serverControls) {
+		const height = describe$18({}, inner, language).height;
+		nodes.push(node("View", "configurationServerControl", rect$1(0, top, inner, height), { view: "serverControl" }));
+		top += height + spacing$1.section;
 	}
 	for (const item of form.nodes) nodes.push(Object.assign({}, item, { y: item.y + top }));
 	let bottom = top + form.height;
@@ -15607,7 +15660,7 @@ function wizardFields(model, language) {
 }
 function wizard(model, width, height, language) {
 	const text = (key) => translate(key, language), footer = model.discard ? 118 : 62;
-	const scene = describe$18({
+	const scene = describe$19({
 		title: "Create project",
 		product: model.product,
 		page: String(model.step),
@@ -18565,7 +18618,7 @@ function describe$13(model, width, viewportHeight, language) {
 		noticeY += 44;
 	}
 	if (model.confirmClose) {
-		const confirmation = describe$40({
+		const confirmation = describe$41({
 			message: text("Discard unsaved user changes?"),
 			accept: "Discard changes",
 			reject: "Keep editing",
@@ -32401,26 +32454,24 @@ var FileWorkspace = asyncComponent(() => __vitePreload(() => import("./FileWorks
 var DescriptionEditor = asyncComponent(() => __vitePreload(() => import("./DescriptionEditor.js"), __vite__mapDeps([49,2,3,4,5,6,10,11,13,7,8,14,15,16,17,18,50])));
 var SnapshotBrowser = asyncComponent(() => __vitePreload(() => import("./SnapshotBrowser.js"), __vite__mapDeps([51,2,3,4,5,6,10,11,7,8,27,1,9,28,14,12,29,13,15,16,17,18,26,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,52])));
 var KnowledgeBase = asyncComponent(() => __vitePreload(() => import("./KnowledgeBase.js"), __vite__mapDeps([53,2,3,4,5,6,10,11,7,8,13,14,15,16,17,18,26,1,9,12,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,54])));
-var Configuration = asyncComponent(() => __vitePreload(() => import("./Configuration.js"), __vite__mapDeps([55,2,3,4,5,6,10,11,7,8,56,57,27,1,9,28,14,12,29,26,13,15,16,17,18,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,58,59,60,61,62,63])));
-var SearchTypes = asyncComponent(() => __vitePreload(() => import("./SearchTypes.js"), __vite__mapDeps([64,2,3,4,5,6,10,11,7,8,28,12,13,14,15,16,17,18,0,1,9])));
-var SchemaEditor = asyncComponent(() => __vitePreload(() => import("./SchemaEditor.js"), __vite__mapDeps([65,2,3,4,5,6,10,11,7,8,13,14,15,16,17,18,64,28,12,0,1,9,66,67,68])));
-var WorkflowEditor = asyncComponent(() => __vitePreload(() => import("./WorkflowEditor.js"), __vite__mapDeps([69,2,3,4,5,6,10,11,7,8,70,12,13,14,15,16,17,18,71,66,67])));
-var SidebarEditor = asyncComponent(() => __vitePreload(() => import("./SidebarEditor.js"), __vite__mapDeps([72,2,3,4,5,6,10,11,7,8,12,13,14,15,16,17,18,67])));
-var PageLayoutEditor = asyncComponent(() => __vitePreload(() => import("./PageLayoutEditor.js"), __vite__mapDeps([73,2,3,4,5,6,10,11,7,8,12,13,14,15,16,17,18,26,1,9,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,67,74])));
-var LayoutEditor = asyncComponent(() => __vitePreload(() => import("./LayoutEditor.js"), __vite__mapDeps([75,2,3,4,5,6,10,11,7,8,12,13,14,15,16,17,18,26,1,9,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,76])));
-var ColumnsEditor = asyncComponent(() => __vitePreload(() => import("./ColumnsEditor.js"), __vite__mapDeps([77,2,3,4,5,6,10,11,7,8,12,13,14,15,16,17,18,26,1,9,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45])));
-var RawDatabase = asyncComponent(() => __vitePreload(() => import("./RawDatabase.js"), __vite__mapDeps([78,2,3,4,5,6,10,11,7,8,13,14,15,16,17,18,79])));
-var SecurityUsers = asyncComponent(() => __vitePreload(() => import("./SecurityUsers.js"), __vite__mapDeps([80,2,3,4,5,6,10,11,7,8,81])));
-var SecurityGroups = asyncComponent(() => __vitePreload(() => import("./SecurityGroups.js"), __vite__mapDeps([82,2,3,4,5,6,10,11,7,8,81])));
-var SecurityRules = asyncComponent(() => __vitePreload(() => import("./SecurityRules.js"), __vite__mapDeps([83,2,3,4,5,6,10,11,7,8,13,14,15,16,17,18])));
-var ComponentShowcase = asyncComponent(() => __vitePreload(() => import("./ComponentShowcase.js"), __vite__mapDeps([84,2,3,4,5,6,7,8,56,57,27,1,9,10,11,28,14,12,29,13,15,16,17,18,26,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,67,85])));
-var BackendServer = asyncComponent(() => __vitePreload(() => import("./ServerConfiguration.js"), __vite__mapDeps([61,2,3,4,5,6,10,11,7,8,56,57,13,14,15,16,17,18,32,62])));
-var Plugins = asyncComponent(() => __vitePreload(() => import("./Plugins.js"), __vite__mapDeps([86,2,3,4,5,6,10,11,7,8,26,1,9,14,12,27,28,29,13,15,16,17,18,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,74])));
+var Configuration = asyncComponent(() => __vitePreload(() => import("./Configuration.js"), __vite__mapDeps([55,2,3,4,5,6,10,11,7,8,56,57,27,1,9,28,14,12,29,13,15,16,17,18,26,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,58,59,60,61])));
+var SearchTypes = asyncComponent(() => __vitePreload(() => import("./SearchTypes.js"), __vite__mapDeps([62,2,3,4,5,6,10,11,7,8,28,12,13,14,15,16,17,18,0,1,9])));
+var SchemaEditor = asyncComponent(() => __vitePreload(() => import("./SchemaEditor.js"), __vite__mapDeps([63,2,3,4,5,6,10,11,7,8,13,14,15,16,17,18,62,28,12,0,1,9,64,65,66])));
+var WorkflowEditor = asyncComponent(() => __vitePreload(() => import("./WorkflowEditor.js"), __vite__mapDeps([67,2,3,4,5,6,10,11,7,8,68,12,13,14,15,16,17,18,69,64,65])));
+var SidebarEditor = asyncComponent(() => __vitePreload(() => import("./SidebarEditor.js"), __vite__mapDeps([70,2,3,4,5,6,10,11,7,8,12,13,14,15,16,17,18,65])));
+var PageLayoutEditor = asyncComponent(() => __vitePreload(() => import("./PageLayoutEditor.js"), __vite__mapDeps([71,2,3,4,5,6,10,11,7,8,12,13,14,15,16,17,18,26,1,9,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,65,72])));
+var LayoutEditor = asyncComponent(() => __vitePreload(() => import("./LayoutEditor.js"), __vite__mapDeps([73,2,3,4,5,6,10,11,7,8,12,13,14,15,16,17,18,26,1,9,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,74])));
+var ColumnsEditor = asyncComponent(() => __vitePreload(() => import("./ColumnsEditor.js"), __vite__mapDeps([75,2,3,4,5,6,10,11,7,8,12,13,14,15,16,17,18,26,1,9,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45])));
+var RawDatabase = asyncComponent(() => __vitePreload(() => import("./RawDatabase.js"), __vite__mapDeps([76,2,3,4,5,6,10,11,7,8,13,14,15,16,17,18,77])));
+var SecurityUsers = asyncComponent(() => __vitePreload(() => import("./SecurityUsers.js"), __vite__mapDeps([78,2,3,4,5,6,10,11,7,8,79])));
+var SecurityGroups = asyncComponent(() => __vitePreload(() => import("./SecurityGroups.js"), __vite__mapDeps([80,2,3,4,5,6,10,11,7,8,79])));
+var SecurityRules = asyncComponent(() => __vitePreload(() => import("./SecurityRules.js"), __vite__mapDeps([81,2,3,4,5,6,10,11,7,8,13,14,15,16,17,18])));
+var ComponentShowcase = asyncComponent(() => __vitePreload(() => import("./ComponentShowcase.js"), __vite__mapDeps([82,2,3,4,5,6,7,8,56,57,27,1,9,10,11,28,14,12,29,13,15,16,17,18,26,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,65,83])));
+var Plugins = asyncComponent(() => __vitePreload(() => import("./Plugins.js"), __vite__mapDeps([84,2,3,4,5,6,10,11,7,8,26,1,9,14,12,27,28,29,13,15,16,17,18,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,72])));
 var compactLayout = window.matchMedia("(max-width: 900px)");
 var shortcutLayout = mobileLayout;
 var _sfc_main = {
 	components: {
-		BackendServer,
 		ComponentShowcase,
 		Plugins,
 		ObjectReport: _sfc_main$122,
@@ -32700,7 +32751,7 @@ var _sfc_main = {
 			return compose(main_menus_default.user, this.mainMenuContext);
 		},
 		mainToolbar() {
-			return describe$39({
+			return describe$40({
 				width: this.toolbarWidth,
 				compact: this.compactShortcuts,
 				progressReveal: this.activityProgress ? 1 : 0,
@@ -32711,7 +32762,7 @@ var _sfc_main = {
 			return positions$1(this.mainToolbar);
 		},
 		workspaceStyle() {
-			const scene = describe$38(this.toolbarWidth, window.innerHeight, this.compactShortcuts);
+			const scene = describe$39(this.toolbarWidth, window.innerHeight, this.compactShortcuts);
 			return {
 				gridTemplateAreas: scene.grid.areas,
 				gridTemplateColumns: scene.grid.columns,
@@ -33305,7 +33356,7 @@ var _sfc_main = {
 				context.search_keys = [...new Set(records.map((record) => record.__search_key__))];
 			}
 			try {
-				const module = await __vitePreload(() => import("./AgentRequest.js"), __vite__mapDeps([87,2,3,4,5,6,10,11,7,8,26,1,9,14,12,27,28,29,13,15,16,17,18,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,67,59,88]));
+				const module = await __vitePreload(() => import("./AgentRequest.js"), __vite__mapDeps([85,2,3,4,5,6,10,11,7,8,26,1,9,14,12,27,28,29,13,15,16,17,18,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,65,59,86]));
 				if (this.session !== session) return;
 				this.agentRequestComponent ||= markRaw(module.default);
 				await nextTick();
@@ -33329,7 +33380,7 @@ var _sfc_main = {
 		async openAgentMcp(context, connectionId = "") {
 			const session = this.session;
 			try {
-				const module = await __vitePreload(() => import("./AgentMcp.js"), __vite__mapDeps([89,2,3,4,5,6,10,11,7,8,35,90]));
+				const module = await __vitePreload(() => import("./AgentMcp.js"), __vite__mapDeps([87,2,3,4,5,6,10,11,7,8,35,88]));
 				if (this.session !== session) return;
 				this.agentMcpComponent ||= markRaw(module.default);
 				await nextTick();
@@ -33345,7 +33396,7 @@ var _sfc_main = {
 			const current = () => this.session === session && this.workspaceProject === project;
 			this.scriptEditorLoading = true;
 			try {
-				const module = await __vitePreload(() => import("./ScriptEditor.js"), __vite__mapDeps([91,2,3,4,5,6,10,11,7,8,92]));
+				const module = await __vitePreload(() => import("./ScriptEditor.js"), __vite__mapDeps([89,2,3,4,5,6,10,11,7,8,90]));
 				if (!current()) return;
 				this.scriptEditorComponent ||= markRaw(module.default);
 				await nextTick();
@@ -35723,58 +35774,54 @@ var _hoisted_31 = {
 	class: "administration-page"
 };
 var _hoisted_32 = {
-	key: 13,
-	class: "administration-page"
-};
-var _hoisted_33 = {
 	key: 0,
 	class: "content workspace-browser"
 };
-var _hoisted_34 = { class: "quick-filter-field" };
-var _hoisted_35 = ["aria-label", "title"];
-var _hoisted_36 = { class: "mobile-section-title" };
-var _hoisted_37 = { id: "workspace-mobile-search-tools" };
-var _hoisted_38 = {
+var _hoisted_33 = { class: "quick-filter-field" };
+var _hoisted_34 = ["aria-label", "title"];
+var _hoisted_35 = { class: "mobile-section-title" };
+var _hoisted_36 = { id: "workspace-mobile-search-tools" };
+var _hoisted_37 = {
 	key: 2,
 	class: "error",
 	role: "alert"
 };
-var _hoisted_39 = ["aria-label"];
-var _hoisted_40 = [
+var _hoisted_38 = ["aria-label"];
+var _hoisted_39 = [
 	"aria-busy",
 	"id",
 	"role",
 	"aria-labelledby"
 ];
-var _hoisted_41 = {
+var _hoisted_40 = {
 	key: 0,
 	class: "table-message",
 	role: "status"
 };
-var _hoisted_42 = {
+var _hoisted_41 = {
 	key: 2,
 	class: "workspace-load-more"
 };
-var _hoisted_43 = {
+var _hoisted_42 = {
 	key: 0,
 	role: "status"
 };
-var _hoisted_44 = {
-	key: 14,
+var _hoisted_43 = {
+	key: 13,
 	class: "workspace-empty"
 };
-var _hoisted_45 = {
+var _hoisted_44 = {
 	key: 0,
 	class: "muted"
 };
-var _hoisted_46 = ["aria-label"];
-var _hoisted_47 = { class: "sidebar-search-shell" };
-var _hoisted_48 = {
+var _hoisted_45 = ["aria-label"];
+var _hoisted_46 = { class: "sidebar-search-shell" };
+var _hoisted_47 = {
 	id: "sidebar-search-actions",
 	class: "configuration-actions"
 };
-var _hoisted_49 = ["aria-label"];
-var _hoisted_50 = { class: "app-dialog-titlebar" };
+var _hoisted_48 = ["aria-label"];
+var _hoisted_49 = { class: "app-dialog-titlebar" };
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 	const _component_AppButton = resolveComponent("AppButton");
 	const _component_AppearanceControls = resolveComponent("AppearanceControls");
@@ -35805,7 +35852,6 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 	const _component_DockWorkspace = resolveComponent("DockWorkspace");
 	const _component_Configuration = resolveComponent("Configuration");
 	const _component_AdministrationShell = resolveComponent("AdministrationShell");
-	const _component_BackendServer = resolveComponent("BackendServer");
 	const _component_ComponentShowcase = resolveComponent("ComponentShowcase");
 	const _component_Plugins = resolveComponent("Plugins");
 	const _component_SearchTypes = resolveComponent("SearchTypes");
@@ -35882,8 +35928,8 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 			ref: "workspace",
 			class: normalizeClass(["workspace", { "window-page": !!$data.windowPage }]),
 			style: normalizeStyle($options.workspaceStyle),
-			onPointerdown: _cache[173] || (_cache[173] = (...args) => $options.dismissMenus && $options.dismissMenus(...args)),
-			onKeydown: _cache[174] || (_cache[174] = withKeys((...args) => $options.dismissMenus && $options.dismissMenus(...args), ["esc"]))
+			onPointerdown: _cache[172] || (_cache[172] = (...args) => $options.dismissMenus && $options.dismissMenus(...args)),
+			onKeydown: _cache[173] || (_cache[173] = withKeys((...args) => $options.dismissMenus && $options.dismissMenus(...args), ["esc"]))
 		}, [
 			$data.windowPage && ($data.windowPageClosed || $data.error) ? (openBlock(), createElementBlock("section", _hoisted_4, [
 				createBaseVNode("p", null, toDisplayString($data.error || $options.t("Window closed")), 1),
@@ -36019,8 +36065,8 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 								onTriggered: $options.invokeMainMenu
 							}, null, 8, ["actions", "onTriggered"]),
 							$data.compactShortcuts ? (openBlock(), createElementBlock("p", _hoisted_8, toDisplayString($options.t("Schema, interface and script editors are available on a desktop screen.")), 1)) : createCommentVNode("", true),
-							_cache[178] || (_cache[178] = createBaseVNode("div", { id: "compact-connection-menu" }, null, -1)),
-							createBaseVNode("div", _hoisted_9, [_cache[177] || (_cache[177] = createBaseVNode("div", { id: "compact-system-activity" }, null, -1)), createVNode(_component_AppButton, {
+							_cache[177] || (_cache[177] = createBaseVNode("div", { id: "compact-connection-menu" }, null, -1)),
+							createBaseVNode("div", _hoisted_9, [_cache[176] || (_cache[176] = createBaseVNode("div", { id: "compact-system-activity" }, null, -1)), createVNode(_component_AppButton, {
 								label: "Activity Feed",
 								icon: "activity-feed",
 								onClick: _cache[7] || (_cache[7] = ($event) => {
@@ -36276,7 +36322,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 				label: "Close",
 				"icon-only": "",
 				onClick: _cache[39] || (_cache[39] = ($event) => _ctx.$refs.snapshotPage.close())
-			})]), _cache[179] || (_cache[179] = createBaseVNode("div", {
+			})]), _cache[178] || (_cache[178] = createBaseVNode("div", {
 				id: "dock-snapshot",
 				class: "snapshot-page-content"
 			}, null, -1))], 8, _hoisted_13)), [[_directive_window, {
@@ -36697,17 +36743,8 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 					disabled: !!$data.windowPage && !$data.administrationOpen,
 					to: $data.administrationOpen ? "#administration-pages" : "#workspace-data"
 				}, [
-					$data.administrationOpen && $data.administrationVisited.includes("server") ? withDirectives((openBlock(), createElementBlock("div", _hoisted_19, [createVNode(_component_BackendServer, {
-						"workers-only": "",
-						ref: (editor) => {
-							if (editor) $data.administrationInstances.server = editor;
-						},
-						ticket: $data.session.ticket,
-						"group-titles": ["Services and workers"],
-						onSessionExpired: _cache[76] || (_cache[76] = ($event) => $options.logout("Session ended. Sign in again."))
-					}, null, 8, ["ticket"])], 512)), [[vShow, $data.administrationSection === "server"]]) : createCommentVNode("", true),
-					$data.administrationOpen && $data.administrationVisited.includes("showcase") ? withDirectives((openBlock(), createElementBlock("div", _hoisted_20, [createVNode(_component_ComponentShowcase)], 512)), [[vShow, $data.administrationSection === "showcase"]]) : createCommentVNode("", true),
-					$data.administrationOpen && $data.administrationVisited.includes("plugins") ? withDirectives((openBlock(), createElementBlock("div", _hoisted_21, [createVNode(_component_Plugins, {
+					$data.administrationOpen && $data.administrationVisited.includes("showcase") ? withDirectives((openBlock(), createElementBlock("div", _hoisted_19, [createVNode(_component_ComponentShowcase)], 512)), [[vShow, $data.administrationSection === "showcase"]]) : createCommentVNode("", true),
+					$data.administrationOpen && $data.administrationVisited.includes("plugins") ? withDirectives((openBlock(), createElementBlock("div", _hoisted_20, [createVNode(_component_Plugins, {
 						"presentation-visible": $data.administrationSection === "plugins",
 						ref: (editor) => {
 							if (editor) $data.administrationInstances.plugins = editor;
@@ -36715,20 +36752,20 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 						ticket: $data.session.ticket,
 						project: $data.project,
 						"toolbar-target": "#administration-actions",
-						onSaved: _cache[77] || (_cache[77] = ($event) => {
+						onSaved: _cache[76] || (_cache[76] = ($event) => {
 							$options.refreshTypes();
 							$options.loadNavigation();
 							$data.refreshAfterAdministration = true;
 						}),
-						onHelp: _cache[78] || (_cache[78] = ($event) => _ctx.$refs.help.open("plugins"))
+						onHelp: _cache[77] || (_cache[77] = ($event) => _ctx.$refs.help.open("plugins"))
 					}, null, 8, [
 						"presentation-visible",
 						"ticket",
 						"project"
 					])], 512)), [[vShow, $data.administrationSection === "plugins"]]) : createCommentVNode("", true),
-					$data.administrationOpen && $data.administrationVisited.includes("types") ? withDirectives((openBlock(), createElementBlock("div", _hoisted_22, [createVNode(_component_SearchTypes, {
+					$data.administrationOpen && $data.administrationVisited.includes("types") ? withDirectives((openBlock(), createElementBlock("div", _hoisted_21, [createVNode(_component_SearchTypes, {
 						"presentation-visible": $data.administrationSection === "types",
-						onVnodeMounted: _cache[79] || (_cache[79] = ($event) => $data.administrationInstances.types = $event.component.proxy),
+						onVnodeMounted: _cache[78] || (_cache[78] = ($event) => $data.administrationInstances.types = $event.component.proxy),
 						ref: "searchTypes",
 						onOpenWorkflow: $options.openAdministrationWorkflow,
 						ticket: $data.session.ticket,
@@ -36737,7 +36774,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 						"queue-preview": $options.queuePreview,
 						checkins: $data.checkins,
 						onSaved: $options.refreshTypes,
-						onOpenCommitQueue: _cache[80] || (_cache[80] = ($event) => $options.openCommitQueue())
+						onOpenCommitQueue: _cache[79] || (_cache[79] = ($event) => $options.openCommitQueue())
 					}, null, 8, [
 						"presentation-visible",
 						"onOpenWorkflow",
@@ -36747,19 +36784,19 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 						"checkins",
 						"onSaved"
 					])], 512)), [[vShow, $data.administrationSection === "types"]]) : createCommentVNode("", true),
-					$data.administrationOpen && $data.administrationVisited.includes("schema") ? withDirectives((openBlock(), createElementBlock("div", _hoisted_23, [createVNode(_component_SchemaEditor, {
+					$data.administrationOpen && $data.administrationVisited.includes("schema") ? withDirectives((openBlock(), createElementBlock("div", _hoisted_22, [createVNode(_component_SchemaEditor, {
 						"presentation-visible": $data.administrationSection === "schema",
-						onVnodeMounted: _cache[81] || (_cache[81] = ($event) => $data.administrationInstances.schema = $event.component.proxy),
+						onVnodeMounted: _cache[80] || (_cache[80] = ($event) => $data.administrationInstances.schema = $event.component.proxy),
 						ref: "schema",
 						onNodeWorkflows: $options.schemaNodeWorkflows,
-						onTypeWorkflow: _cache[82] || (_cache[82] = (values) => $options.openAdministrationWorkflow(values, "schema")),
+						onTypeWorkflow: _cache[81] || (_cache[81] = (values) => $options.openAdministrationWorkflow(values, "schema")),
 						ticket: $data.session.ticket,
 						project: $data.project,
 						"toolbar-target": "#administration-actions",
 						"queue-preview": $options.queuePreview,
 						checkins: $data.checkins,
 						onSaved: $options.refreshTypes,
-						onOpenCommitQueue: _cache[83] || (_cache[83] = ($event) => $options.openCommitQueue())
+						onOpenCommitQueue: _cache[82] || (_cache[82] = ($event) => $options.openCommitQueue())
 					}, null, 8, [
 						"presentation-visible",
 						"onNodeWorkflows",
@@ -36769,9 +36806,9 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 						"checkins",
 						"onSaved"
 					])], 512)), [[vShow, $data.administrationSection === "schema"]]) : createCommentVNode("", true),
-					$data.administrationOpen && $data.administrationVisited.includes("workflow") ? withDirectives((openBlock(), createElementBlock("div", _hoisted_24, [createVNode(_component_WorkflowEditor, {
+					$data.administrationOpen && $data.administrationVisited.includes("workflow") ? withDirectives((openBlock(), createElementBlock("div", _hoisted_23, [createVNode(_component_WorkflowEditor, {
 						"presentation-visible": $data.administrationSection === "workflow",
-						onVnodeMounted: _cache[84] || (_cache[84] = ($event) => $options.administrationWorkflowMounted($event.component.proxy)),
+						onVnodeMounted: _cache[83] || (_cache[83] = ($event) => $options.administrationWorkflowMounted($event.component.proxy)),
 						ref: "workflow",
 						ticket: $data.session.ticket,
 						project: $data.project,
@@ -36785,9 +36822,9 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 						"project",
 						"onSaved"
 					])], 512)), [[vShow, $data.administrationSection === "workflow"]]) : createCommentVNode("", true),
-					$data.administrationOpen && $data.administrationVisited.includes("rules") ? withDirectives((openBlock(), createElementBlock("div", _hoisted_25, [createVNode(_component_SecurityRules, {
+					$data.administrationOpen && $data.administrationVisited.includes("rules") ? withDirectives((openBlock(), createElementBlock("div", _hoisted_24, [createVNode(_component_SecurityRules, {
 						"presentation-visible": $data.administrationSection === "rules",
-						onVnodeMounted: _cache[85] || (_cache[85] = ($event) => $data.administrationInstances.rules = $event.component.proxy),
+						onVnodeMounted: _cache[84] || (_cache[84] = ($event) => $data.administrationInstances.rules = $event.component.proxy),
 						ref: "rules",
 						ticket: $data.session.ticket,
 						project: $data.project,
@@ -36799,21 +36836,21 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 						"project",
 						"onSaved"
 					])], 512)), [[vShow, $data.administrationSection === "rules"]]) : createCommentVNode("", true),
-					$data.administrationOpen && $data.administrationVisited.includes("raw") ? withDirectives((openBlock(), createElementBlock("div", _hoisted_26, [createVNode(_component_RawDatabase, {
+					$data.administrationOpen && $data.administrationVisited.includes("raw") ? withDirectives((openBlock(), createElementBlock("div", _hoisted_25, [createVNode(_component_RawDatabase, {
 						"presentation-visible": $data.administrationSection === "raw",
-						onVnodeMounted: _cache[86] || (_cache[86] = ($event) => $data.administrationInstances.raw = $event.component.proxy),
+						onVnodeMounted: _cache[85] || (_cache[85] = ($event) => $data.administrationInstances.raw = $event.component.proxy),
 						ticket: $data.session.ticket,
 						project: $data.project,
 						"toolbar-target": "#administration-actions",
-						onSaved: _cache[87] || (_cache[87] = ($event) => $data.refreshAfterAdministration = true)
+						onSaved: _cache[86] || (_cache[86] = ($event) => $data.refreshAfterAdministration = true)
 					}, null, 8, [
 						"presentation-visible",
 						"ticket",
 						"project"
 					])], 512)), [[vShow, $data.administrationSection === "raw"]]) : createCommentVNode("", true),
-					$data.administrationOpen && $data.administrationVisited.includes("dashboards") ? withDirectives((openBlock(), createElementBlock("div", _hoisted_27, [createVNode(_component_PageLayoutEditor, {
+					$data.administrationOpen && $data.administrationVisited.includes("dashboards") ? withDirectives((openBlock(), createElementBlock("div", _hoisted_26, [createVNode(_component_PageLayoutEditor, {
 						"presentation-visible": $data.administrationSection === "dashboards",
-						onVnodeMounted: _cache[88] || (_cache[88] = ($event) => $data.administrationInstances.dashboards = $event.component.proxy),
+						onVnodeMounted: _cache[87] || (_cache[87] = ($event) => $data.administrationInstances.dashboards = $event.component.proxy),
 						ticket: $data.session.ticket,
 						project: $data.project,
 						"search-types": $data.types,
@@ -36834,9 +36871,9 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 						"onColumns",
 						"onLinkedPage"
 					])], 512)), [[vShow, $data.administrationSection === "dashboards"]]) : createCommentVNode("", true),
-					$data.administrationOpen && $data.administrationVisited.includes("layouts") ? withDirectives((openBlock(), createElementBlock("div", _hoisted_28, [createVNode(_component_LayoutEditor, {
+					$data.administrationOpen && $data.administrationVisited.includes("layouts") ? withDirectives((openBlock(), createElementBlock("div", _hoisted_27, [createVNode(_component_LayoutEditor, {
 						"presentation-visible": $data.administrationSection === "layouts",
-						onVnodeMounted: _cache[89] || (_cache[89] = ($event) => $data.administrationInstances.layouts = $event.component.proxy),
+						onVnodeMounted: _cache[88] || (_cache[88] = ($event) => $data.administrationInstances.layouts = $event.component.proxy),
 						ticket: $data.session.ticket,
 						project: $data.project,
 						"initial-focus": $data.layoutsFocus,
@@ -36849,9 +36886,9 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 						"initial-focus",
 						"onSaved"
 					])], 512)), [[vShow, $data.administrationSection === "layouts"]]) : createCommentVNode("", true),
-					$data.administrationOpen && $data.administrationVisited.includes("columns") ? withDirectives((openBlock(), createElementBlock("div", _hoisted_29, [createVNode(_component_ColumnsEditor, {
+					$data.administrationOpen && $data.administrationVisited.includes("columns") ? withDirectives((openBlock(), createElementBlock("div", _hoisted_28, [createVNode(_component_ColumnsEditor, {
 						"presentation-visible": $data.administrationSection === "columns",
-						onVnodeMounted: _cache[90] || (_cache[90] = ($event) => $data.administrationInstances.columns = $event.component.proxy),
+						onVnodeMounted: _cache[89] || (_cache[89] = ($event) => $data.administrationInstances.columns = $event.component.proxy),
 						ref: "columnsEditor",
 						ticket: $data.session.ticket,
 						project: $data.project,
@@ -36865,9 +36902,9 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 						"initial-focus",
 						"onSaved"
 					])], 512)), [[vShow, $data.administrationSection === "columns"]]) : createCommentVNode("", true),
-					$data.administrationOpen && $data.administrationVisited.includes("users") ? withDirectives((openBlock(), createElementBlock("div", _hoisted_30, [createVNode(_component_SecurityUsers, {
+					$data.administrationOpen && $data.administrationVisited.includes("users") ? withDirectives((openBlock(), createElementBlock("div", _hoisted_29, [createVNode(_component_SecurityUsers, {
 						"presentation-visible": $data.administrationSection === "users",
-						onVnodeMounted: _cache[91] || (_cache[91] = ($event) => $data.administrationInstances.users = $event.component.proxy),
+						onVnodeMounted: _cache[90] || (_cache[90] = ($event) => $data.administrationInstances.users = $event.component.proxy),
 						ref: "users",
 						ticket: $data.session.ticket,
 						project: $data.project,
@@ -36879,9 +36916,9 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 						"project",
 						"onSaved"
 					])], 512)), [[vShow, $data.administrationSection === "users"]]) : createCommentVNode("", true),
-					$data.administrationOpen && $data.administrationVisited.includes("groups") ? withDirectives((openBlock(), createElementBlock("div", _hoisted_31, [createVNode(_component_SecurityGroups, {
+					$data.administrationOpen && $data.administrationVisited.includes("groups") ? withDirectives((openBlock(), createElementBlock("div", _hoisted_30, [createVNode(_component_SecurityGroups, {
 						"presentation-visible": $data.administrationSection === "groups",
-						onVnodeMounted: _cache[92] || (_cache[92] = ($event) => $data.administrationInstances.groups = $event.component.proxy),
+						onVnodeMounted: _cache[91] || (_cache[91] = ($event) => $data.administrationInstances.groups = $event.component.proxy),
 						ref: "groups",
 						ticket: $data.session.ticket,
 						project: $data.project,
@@ -36893,14 +36930,14 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 						"project",
 						"onSaved"
 					])], 512)), [[vShow, $data.administrationSection === "groups"]]) : createCommentVNode("", true),
-					$data.administrationOpen && $data.administrationVisited.includes("sidebar") ? withDirectives((openBlock(), createElementBlock("div", _hoisted_32, [createVNode(_component_SidebarEditor, {
+					$data.administrationOpen && $data.administrationVisited.includes("sidebar") ? withDirectives((openBlock(), createElementBlock("div", _hoisted_31, [createVNode(_component_SidebarEditor, {
 						"presentation-visible": $data.administrationSection === "sidebar",
-						onVnodeMounted: _cache[93] || (_cache[93] = ($event) => $data.administrationInstances.sidebar = $event.component.proxy),
+						onVnodeMounted: _cache[92] || (_cache[92] = ($event) => $data.administrationInstances.sidebar = $event.component.proxy),
 						ref: "sidebar",
 						ticket: $data.session.ticket,
 						project: $data.project,
 						"toolbar-target": "#administration-actions",
-						onManageGroups: _cache[94] || (_cache[94] = ($event) => $options.selectAdministration("groups")),
+						onManageGroups: _cache[93] || (_cache[93] = ($event) => $options.selectAdministration("groups")),
 						onSaved: $options.sidebarSaved,
 						onConfigureSearch: $options.configureSidebarSearch,
 						onPageLayout: $options.openPageLayout
@@ -36928,7 +36965,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 							title: entry.tab.title || entry.section.title,
 							"workspace-id": entry.tab.id,
 							"can-administer": $data.canAdminister,
-							onEdit: _cache[95] || (_cache[95] = (name) => {
+							onEdit: _cache[94] || (_cache[94] = (name) => {
 								$data.pagesFocus = name;
 								$options.showAdministration("dashboards");
 							}),
@@ -36938,8 +36975,8 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 							onFocus: $options.focusDescription,
 							onLoaded: ($event) => $options.publishDashboardResults(entry.tab, $event),
 							onInspect: $options.inspect,
-							onOperate: _cache[96] || (_cache[96] = (record, event, node) => _ctx.$refs.objectOperations.open(record, event, node)),
-							onColumn: _cache[97] || (_cache[97] = ($event) => $options.showColumnsEditor(false, $event)),
+							onOperate: _cache[95] || (_cache[95] = (record, event, node) => _ctx.$refs.objectOperations.open(record, event, node)),
+							onColumn: _cache[96] || (_cache[96] = ($event) => $options.showColumnsEditor(false, $event)),
 							onClose: ($event) => $options.closeSection(entry.section.id)
 						}, null, 8, [
 							"ticket",
@@ -36957,7 +36994,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 							"onInspect",
 							"onClose"
 						])), [[vShow, !$data.administrationOpen && $data.section === "data" && entry.tab === $options.displayedSearchTab]]) : createCommentVNode("", true)], 64);
-					}), 128)), $options.retainedSearchTabs.length || $data.administrationOpen ? withDirectives((openBlock(), createElementBlock("section", _hoisted_33, [
+					}), 128)), $options.retainedSearchTabs.length || $data.administrationOpen ? withDirectives((openBlock(), createElementBlock("section", _hoisted_32, [
 						createVNode(_component_SearchHeader, {
 							model: {
 								compact: $data.compactShortcuts && !$data.administrationOpen,
@@ -36970,7 +37007,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 								quick: true,
 								panels: true
 							},
-							onEvent: _cache[111] || (_cache[111] = (action) => {
+							onEvent: _cache[110] || (_cache[110] = (action) => {
 								if (action.type === "refresh") $options.loadRows();
 								else if (action.type === "shelf") $data.shelfOpen = !$data.shelfOpen;
 								else if (action.type === "help") _ctx.$refs.help.open("search");
@@ -36985,14 +37022,14 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 								"search-type": $data.type,
 								"tab-id": $options.activeSearchTab?.id,
 								disabled: $data.busy,
-								"onUpdate:modelValue": _cache[98] || (_cache[98] = ($event) => {
+								"onUpdate:modelValue": _cache[97] || (_cache[97] = ($event) => {
 									$data.searchText = $event;
 									$data.searchRelation = "contains";
 								}),
 								onSearch: $options.submitSearch,
 								onAccept: $options.acceptSuggestion,
 								onOpen: $options.openSuggestion,
-								onDismiss: _cache[99] || (_cache[99] = ($event) => $data.mobileSearchOpen = false)
+								onDismiss: _cache[98] || (_cache[98] = ($event) => $data.mobileSearchOpen = false)
 							}, null, 8, [
 								"model-value",
 								"placeholder",
@@ -37054,24 +37091,24 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 								disabled: $data.busy,
 								boundary: _ctx.$refs.results?.parentElement,
 								onApply: $options.applyQuickFilters,
-								onReset: _cache[103] || (_cache[103] = ($event) => {
+								onReset: _cache[102] || (_cache[102] = ($event) => {
 									$data.quickLayout = null;
 									$data.quickSelections = $event;
 									$data.page = 0;
 									$options.loadRows();
 								}),
-								onEdit: _cache[104] || (_cache[104] = ($event) => _ctx.$refs.quickFilterEditor.open($event)),
+								onEdit: _cache[103] || (_cache[103] = ($event) => _ctx.$refs.quickFilterEditor.open($event)),
 								onToggle: $options.menuToggled
 							}, {
-								default: withCtx(({ close }) => [createBaseVNode("details", _hoisted_34, [createBaseVNode("summary", null, toDisplayString($options.t("Filter by field")), 1), createVNode(_component_FieldFilter, {
+								default: withCtx(({ close }) => [createBaseVNode("details", _hoisted_33, [createBaseVNode("summary", null, toDisplayString($options.t("Filter by field")), 1), createVNode(_component_FieldFilter, {
 									field: $data.filterField,
-									"onUpdate:field": _cache[100] || (_cache[100] = ($event) => $data.filterField = $event),
+									"onUpdate:field": _cache[99] || (_cache[99] = ($event) => $data.filterField = $event),
 									value: $data.filterValue,
-									"onUpdate:value": _cache[101] || (_cache[101] = ($event) => $data.filterValue = $event),
+									"onUpdate:value": _cache[100] || (_cache[100] = ($event) => $data.filterValue = $event),
 									retired: $data.showRetired,
 									columns: $options.columnNames,
 									disabled: $data.busy,
-									"onUpdate:retired": _cache[102] || (_cache[102] = ($event) => {
+									"onUpdate:retired": _cache[101] || (_cache[101] = ($event) => {
 										$data.showRetired = $event;
 										$data.page = 0;
 										$options.loadRows();
@@ -37108,26 +37145,26 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 								key: 1,
 								ref: "searchFilters",
 								class: "search-filters",
-								onToggle: _cache[109] || (_cache[109] = (...args) => $options.menuToggled && $options.menuToggled(...args))
+								onToggle: _cache[108] || (_cache[108] = (...args) => $options.menuToggled && $options.menuToggled(...args))
 							}, [createBaseVNode("summary", {
 								class: normalizeClass(["icon-button", { "is-active": $data.filterValue || $data.showRetired }]),
 								"aria-label": $options.t("Search filters"),
 								title: $options.t("Search filters")
-							}, [createVNode(_component_AppIcon, { name: "filter" })], 10, _hoisted_35), createVNode(_component_FieldFilter, {
+							}, [createVNode(_component_AppIcon, { name: "filter" })], 10, _hoisted_34), createVNode(_component_FieldFilter, {
 								class: "account-panel",
 								field: $data.filterField,
-								"onUpdate:field": _cache[105] || (_cache[105] = ($event) => $data.filterField = $event),
+								"onUpdate:field": _cache[104] || (_cache[104] = ($event) => $data.filterField = $event),
 								value: $data.filterValue,
-								"onUpdate:value": _cache[106] || (_cache[106] = ($event) => $data.filterValue = $event),
+								"onUpdate:value": _cache[105] || (_cache[105] = ($event) => $data.filterValue = $event),
 								retired: $data.showRetired,
 								columns: $options.columnNames,
 								disabled: $data.busy,
-								"onUpdate:retired": _cache[107] || (_cache[107] = ($event) => {
+								"onUpdate:retired": _cache[106] || (_cache[106] = ($event) => {
 									$data.showRetired = $event;
 									$data.page = 0;
 									$options.loadRows();
 								}),
-								onApply: _cache[108] || (_cache[108] = ($event) => {
+								onApply: _cache[107] || (_cache[107] = ($event) => {
 									$options.applyFilter();
 									_ctx.$refs.searchFilters.open = false;
 								})
@@ -37146,11 +37183,11 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 								"icon-only": "",
 								label: "Close search",
 								icon: "close",
-								onClick: _cache[110] || (_cache[110] = ($event) => $data.mobileSearchOpen = false)
+								onClick: _cache[109] || (_cache[109] = ($event) => $data.mobileSearchOpen = false)
 							}, null, 512)), [[vShow, $data.mobileSearchOpen]]) : createCommentVNode("", true)]),
 							_: 1
 						}, 8, ["model"]),
-						_cache[182] || (_cache[182] = createBaseVNode("div", { id: "workspace-script-shelf" }, null, -1)),
+						_cache[181] || (_cache[181] = createBaseVNode("div", { id: "workspace-script-shelf" }, null, -1)),
 						!$data.administrationOpen ? (openBlock(), createBlock(_component_WorkspaceTabs, {
 							key: 0,
 							mobile: $data.compactShortcuts,
@@ -37170,7 +37207,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 								label: "Search filters and presets",
 								"icon-only": "",
 								model: $options.searchFilterMenuModel,
-								onOpening: _cache[112] || (_cache[112] = ($event) => _ctx.$refs.searchLibrary.ensureCatalog()),
+								onOpening: _cache[111] || (_cache[111] = ($event) => _ctx.$refs.searchLibrary.ensureCatalog()),
 								onCommand: $options.searchFilterCommand
 							}, null, 8, ["model", "onCommand"])]),
 							"mobile-leading": withCtx(() => [$options.activeWorkspaceSection ? (openBlock(), createBlock(_component_ItemPreview, {
@@ -37214,7 +37251,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 												"preview-size": 24,
 												round: ""
 											}, null, 8, ["fallback-icon", "accent"]),
-											createBaseVNode("span", _hoisted_36, toDisplayString(item.title), 1),
+											createBaseVNode("span", _hoisted_35, toDisplayString(item.title), 1),
 											item.id === $options.activeWorkspace?.current ? (openBlock(), createBlock(_component_AppIcon, {
 												key: 0,
 												name: "check-circle",
@@ -37228,7 +37265,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 										"onClick"
 									]);
 								}), 128)),
-								_cache[180] || (_cache[180] = createBaseVNode("hr", null, null, -1))
+								_cache[179] || (_cache[179] = createBaseVNode("hr", null, null, -1))
 							], 64)) : createCommentVNode("", true)]),
 							actions: withCtx(({ compact }) => [$data.compactShortcuts ? (openBlock(), createBlock(_component_AppButton, {
 								key: 0,
@@ -37239,7 +37276,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 								"aria-expanded": $data.mobileSearchOpen,
 								highlighted: !!$data.searchText,
 								disabled: $data.busy,
-								onClick: _cache[113] || (_cache[113] = ($event) => {
+								onClick: _cache[112] || (_cache[112] = ($event) => {
 									$data.mobileSearchOpen = !$data.mobileSearchOpen;
 									$data.mobileSearchOpen && _ctx.$nextTick(() => _ctx.$refs.workspaceSearch.focus());
 								})
@@ -37257,14 +37294,14 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 								onToggle: $options.menuToggled
 							}, {
 								default: withCtx(() => [
-									_cache[181] || (_cache[181] = createBaseVNode("div", { id: "workspace-sort-actions" }, null, -1)),
-									withDirectives(createBaseVNode("div", _hoisted_37, null, 512), [[vShow, $data.compactShortcuts]]),
+									_cache[180] || (_cache[180] = createBaseVNode("div", { id: "workspace-sort-actions" }, null, -1)),
+									withDirectives(createBaseVNode("div", _hoisted_36, null, 512), [[vShow, $data.compactShortcuts]]),
 									$data.compactShortcuts ? (openBlock(), createBlock(_component_AppButton, {
 										key: 0,
 										label: "Saved searches",
 										icon: "filter",
 										disabled: $data.busy,
-										onClick: _cache[114] || (_cache[114] = ($event) => {
+										onClick: _cache[113] || (_cache[113] = ($event) => {
 											$options.openAdvancedSearch();
 											_ctx.$refs.resultActions.close(true);
 										})
@@ -37342,17 +37379,17 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 								"onCommand"
 							])) : createCommentVNode("", true)
 						])) : createCommentVNode("", true),
-						$data.error ? (openBlock(), createElementBlock("p", _hoisted_38, toDisplayString($options.t($data.error)), 1)) : createCommentVNode("", true),
+						$data.error ? (openBlock(), createElementBlock("p", _hoisted_37, toDisplayString($options.t($data.error)), 1)) : createCommentVNode("", true),
 						$options.selectedRecords.length && ($data.resultMode !== "continious" || $options.selectedRecords.length > 1 || _ctx.mobile) ? (openBlock(), createElementBlock("div", {
 							key: 3,
 							class: "selection-actions",
 							role: "group",
 							"aria-label": $options.t("Selected record actions"),
-							onToggleCapture: _cache[121] || (_cache[121] = (...args) => $options.menuToggled && $options.menuToggled(...args))
+							onToggleCapture: _cache[120] || (_cache[120] = (...args) => $options.menuToggled && $options.menuToggled(...args))
 						}, [createVNode(_component_AppButton, {
 							label: $options.t($options.selectedRecords.length === 1 ? "Deselect {count} item" : "Deselect {count} items", { count: $options.selectedRecords.length }),
 							"translate-label": false,
-							onClick: _cache[115] || (_cache[115] = ($event) => $data.selectedKeys = [])
+							onClick: _cache[114] || (_cache[114] = ($event) => $data.selectedKeys = [])
 						}, null, 8, ["label"]), createVNode(_component_AppMenu, {
 							ref: "selectionMenu",
 							label: "Selected record actions"
@@ -37362,50 +37399,50 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 									key: 0,
 									label: "Tasks for selected objects",
 									icon: "MDI_CLIPBOARD_TEXT_OUTLINE",
-									onClick: _cache[116] || (_cache[116] = ($event) => _ctx.$refs.taskManager.open(true))
+									onClick: _cache[115] || (_cache[115] = ($event) => _ctx.$refs.taskManager.open(true))
 								})) : createCommentVNode("", true),
 								$data.interfaceConfig?.operations?.edit ? (openBlock(), createBlock(_component_AppButton, {
 									key: 1,
 									label: "Edit selected",
 									icon: "edit",
-									onClick: _cache[117] || (_cache[117] = ($event) => _ctx.$refs.recordForm.open($data.selectedKeys))
+									onClick: _cache[116] || (_cache[116] = ($event) => _ctx.$refs.recordForm.open($data.selectedKeys))
 								})) : createCommentVNode("", true),
 								$data.interfaceConfig?.operations?.retire && $options.selectedRecords.some((record) => record[$data.interfaceConfig.operations.retire_column] !== "retired") ? (openBlock(), createBlock(_component_AppButton, {
 									key: 2,
 									label: "Retire selected",
 									icon: "archive",
-									onClick: _cache[118] || (_cache[118] = ($event) => _ctx.$refs.objectAction.open($options.selectedRecords, "retire"))
+									onClick: _cache[117] || (_cache[117] = ($event) => _ctx.$refs.objectAction.open($options.selectedRecords, "retire"))
 								})) : createCommentVNode("", true),
 								$data.interfaceConfig?.operations?.retire && $options.selectedRecords.some((record) => record[$data.interfaceConfig.operations.retire_column] === "retired") ? (openBlock(), createBlock(_component_AppButton, {
 									key: 3,
 									label: "Reactivate selected",
 									icon: "refresh",
-									onClick: _cache[119] || (_cache[119] = ($event) => _ctx.$refs.objectAction.open($options.selectedRecords, "reactivate"))
+									onClick: _cache[118] || (_cache[118] = ($event) => _ctx.$refs.objectAction.open($options.selectedRecords, "reactivate"))
 								})) : createCommentVNode("", true),
 								$data.interfaceConfig?.operations?.delete ? (openBlock(), createBlock(_component_AppButton, {
 									key: 4,
 									label: "Delete selected",
 									icon: "delete",
 									destructive: "",
-									onClick: _cache[120] || (_cache[120] = ($event) => _ctx.$refs.objectAction.open($options.selectedRecords, "delete"))
+									onClick: _cache[119] || (_cache[119] = ($event) => _ctx.$refs.objectAction.open($options.selectedRecords, "delete"))
 								})) : createCommentVNode("", true)
 							]),
 							_: 1
-						}, 512)], 40, _hoisted_39)) : createCommentVNode("", true),
+						}, 512)], 40, _hoisted_38)) : createCommentVNode("", true),
 						createBaseVNode("div", {
 							ref: "results",
 							class: "table-container workspace-results",
 							"aria-busy": $data.busy || $data.loadingMore || !$data.administrationOpen && $options.activeSearchTab && !$options.activeSearchTab.loaded && !$data.error,
-							onWheelPassive: _cache[127] || (_cache[127] = (...args) => $options.armResultPagination && $options.armResultPagination(...args)),
-							onTouchstartPassive: _cache[128] || (_cache[128] = (...args) => $options.armResultPagination && $options.armResultPagination(...args)),
-							onPointerdown: _cache[129] || (_cache[129] = (...args) => $options.armResultPagination && $options.armResultPagination(...args)),
-							onKeydown: _cache[130] || (_cache[130] = (...args) => $options.armResultPagination && $options.armResultPagination(...args)),
-							onScrollPassive: _cache[131] || (_cache[131] = (...args) => $options.scrollResults && $options.scrollResults(...args)),
+							onWheelPassive: _cache[126] || (_cache[126] = (...args) => $options.armResultPagination && $options.armResultPagination(...args)),
+							onTouchstartPassive: _cache[127] || (_cache[127] = (...args) => $options.armResultPagination && $options.armResultPagination(...args)),
+							onPointerdown: _cache[128] || (_cache[128] = (...args) => $options.armResultPagination && $options.armResultPagination(...args)),
+							onKeydown: _cache[129] || (_cache[129] = (...args) => $options.armResultPagination && $options.armResultPagination(...args)),
+							onScrollPassive: _cache[130] || (_cache[130] = (...args) => $options.scrollResults && $options.scrollResults(...args)),
 							id: !$data.administrationOpen && $options.activeSearchTab ? "panel-" + $options.activeSearchTab.id : void 0,
 							role: !$data.administrationOpen ? "tabpanel" : void 0,
 							"aria-labelledby": !$data.administrationOpen && $options.activeSearchTab ? "tab-" + $options.activeSearchTab.id : void 0
 						}, [
-							$data.busy ? (openBlock(), createElementBlock("div", _hoisted_41, toDisplayString($options.t("Loading data…")), 1)) : createCommentVNode("", true),
+							$data.busy ? (openBlock(), createElementBlock("div", _hoisted_40, toDisplayString($options.t("Loading data…")), 1)) : createCommentVNode("", true),
 							$data.administrationOpen && $data.interfaceConfig ? withDirectives((openBlock(), createBlock(_component_ConfiguredView, {
 								key: 1,
 								ref: "adminTaskView",
@@ -37422,9 +37459,9 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 								"selected-keys": $data.selectedKeys,
 								onFocus: $options.focusDescription,
 								onSelect: $options.selectRecords,
-								onColumn: _cache[122] || (_cache[122] = ($event) => $options.showColumnsEditor(false, $event)),
+								onColumn: _cache[121] || (_cache[121] = ($event) => $options.showColumnsEditor(false, $event)),
 								onSaved: $options.tableRecordsSaved,
-								onOperate: _cache[123] || (_cache[123] = (record, event, node) => _ctx.$refs.objectOperations.open(record, event, node))
+								onOperate: _cache[122] || (_cache[122] = (record, event, node) => _ctx.$refs.objectOperations.open(record, event, node))
 							}, null, 8, [
 								"definition",
 								"rows",
@@ -37468,9 +37505,9 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 									onInspect: $options.inspect,
 									onFocus: ($event) => entry.tab === $options.displayedSearchTab && $options.focusDescription($event),
 									onSelect: $options.selectRecords,
-									onColumn: _cache[124] || (_cache[124] = ($event) => $options.showColumnsEditor(false, $event)),
+									onColumn: _cache[123] || (_cache[123] = ($event) => $options.showColumnsEditor(false, $event)),
 									onSaved: $options.tableRecordsSaved,
-									onOperate: _cache[125] || (_cache[125] = (record, event, node) => _ctx.$refs.objectOperations.open(record, event, node))
+									onOperate: _cache[124] || (_cache[124] = (record, event, node) => _ctx.$refs.objectOperations.open(record, event, node))
 								}, null, 8, [
 									"onOrganization",
 									"workspace-id",
@@ -37497,13 +37534,13 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 									"onSaved"
 								])), [[vShow, !$data.administrationOpen && !$data.busy && entry.tab === $options.displayedSearchTab]]) : createCommentVNode("", true)], 64);
 							}), 128)),
-							$options.continuous && ($data.hasNext || $data.loadingMore || !$options.activeSearchTab?.loaded && $data.error) ? (openBlock(), createElementBlock("div", _hoisted_42, [$data.loadingMore ? (openBlock(), createElementBlock("span", _hoisted_43, toDisplayString($options.t("Loading more…")), 1)) : (openBlock(), createBlock(_component_AppButton, {
+							$options.continuous && ($data.hasNext || $data.loadingMore || !$options.activeSearchTab?.loaded && $data.error) ? (openBlock(), createElementBlock("div", _hoisted_41, [$data.loadingMore ? (openBlock(), createElementBlock("span", _hoisted_42, toDisplayString($options.t("Loading more…")), 1)) : (openBlock(), createBlock(_component_AppButton, {
 								key: 1,
 								label: $data.error ? "Retry" : "Load more",
 								icon: $data.error ? "refresh" : "next",
-								onClick: _cache[126] || (_cache[126] = ($event) => $options.loadMore(true))
+								onClick: _cache[125] || (_cache[125] = ($event) => $options.loadMore(true))
 							}, null, 8, ["label", "icon"]))])) : createCommentVNode("", true)
-						], 40, _hoisted_40),
+						], 40, _hoisted_39),
 						createVNode(_component_DockWorkspaceFooter, { class: "pagination workspace-footer frame-search-footer" }, {
 							default: withCtx(() => [createVNode(_component_SearchFooter, {
 								boundary: _ctx.$refs.results?.parentElement,
@@ -37531,7 +37568,6 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 							_: 1
 						})
 					], 512)), [[vShow, ($data.administrationOpen || !$data.layoutView) && ($data.sidebarSearch || ($data.administrationOpen ? ![
-						"server",
 						"types",
 						"schema",
 						"workflow",
@@ -37544,10 +37580,10 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 						"groups",
 						"rules"
 					].includes($data.administrationSection) : !!$options.activeSearchTab))]]) : createCommentVNode("", true)], 8, ["disabled"])),
-					!$data.windowPage && $data.section === "data" && !$options.activeSearchTab ? (openBlock(), createElementBlock("section", _hoisted_44, [
+					!$data.windowPage && $data.section === "data" && !$options.activeSearchTab ? (openBlock(), createElementBlock("section", _hoisted_43, [
 						createVNode(_component_AppIcon, { name: "search" }),
 						createBaseVNode("h1", null, toDisplayString($options.t("No Search Type open")), 1),
-						$data.workspaceProject ? (openBlock(), createElementBlock("p", _hoisted_45, toDisplayString($options.t("Open navigation and choose a Search Type to start searching.")), 1)) : createCommentVNode("", true),
+						$data.workspaceProject ? (openBlock(), createElementBlock("p", _hoisted_44, toDisplayString($options.t("Open navigation and choose a Search Type to start searching.")), 1)) : createCommentVNode("", true),
 						$data.workspaceProject ? (openBlock(), createBlock(_component_AppButton, {
 							key: 1,
 							icon: "menu",
@@ -37567,32 +37603,32 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 				ref: "sidebarSearchDialog",
 				class: "configuration-dialog sidebar-search-dialog",
 				"aria-label": $options.t("Configure search"),
-				onCancel: _cache[134] || (_cache[134] = withModifiers((...args) => $options.closeSidebarSearch && $options.closeSidebarSearch(...args), ["prevent"]))
-			}, [createBaseVNode("div", _hoisted_47, [createBaseVNode("header", null, [
+				onCancel: _cache[133] || (_cache[133] = withModifiers((...args) => $options.closeSidebarSearch && $options.closeSidebarSearch(...args), ["prevent"]))
+			}, [createBaseVNode("div", _hoisted_46, [createBaseVNode("header", null, [
 				createBaseVNode("div", null, [createBaseVNode("h2", null, toDisplayString($options.t("Configure search")), 1), createBaseVNode("p", null, toDisplayString($data.sidebarSearch?.entry.title) + " В· " + toDisplayString($data.sidebarSearch?.entry.searchType), 1)]),
-				createBaseVNode("div", _hoisted_48, [createVNode(_component_AppButton, {
+				createBaseVNode("div", _hoisted_47, [createVNode(_component_AppButton, {
 					"icon-only": "",
 					label: "Quick filters",
 					icon: "filter",
 					disabled: $data.busy,
-					onClick: _cache[132] || (_cache[132] = ($event) => _ctx.$refs.quickFilterEditor.open())
+					onClick: _cache[131] || (_cache[131] = ($event) => _ctx.$refs.quickFilterEditor.open())
 				}, null, 8, ["disabled"]), createVNode(_component_AppButton, {
 					label: "Saved searches",
 					icon: "save",
 					disabled: $data.busy,
-					onClick: _cache[133] || (_cache[133] = ($event) => _ctx.$refs.searchLibrary.open())
+					onClick: _cache[132] || (_cache[132] = ($event) => _ctx.$refs.searchLibrary.open())
 				}, null, 8, ["disabled"])]),
 				createVNode(_component_AppButton, {
 					label: "Close",
 					icon: "close",
 					onClick: $options.closeSidebarSearch
 				}, null, 8, ["onClick"])
-			]), _cache[183] || (_cache[183] = createBaseVNode("div", { id: "sidebar-search-pages" }, null, -1))])], 40, _hoisted_46)), [[_directive_window, { kind: "sidebar_search_preview" }]]),
+			]), _cache[182] || (_cache[182] = createBaseVNode("div", { id: "sidebar-search-pages" }, null, -1))])], 40, _hoisted_45)), [[_directive_window, { kind: "sidebar_search_preview" }]]),
 			createVNode(_component_SearchLibrary, {
 				ref: "searchLibrary",
 				selections: $data.quickSelections,
 				active: $data.searchEditorActive,
-				onClosed: _cache[135] || (_cache[135] = ($event) => $event && _ctx.$refs.docks?.hide("advanced_search")),
+				onClosed: _cache[134] || (_cache[134] = ($event) => $event && _ctx.$refs.docks?.hide("advanced_search")),
 				"tab-id": $options.activeSearchTab?.id,
 				"tab-title": $options.activeSearchTab ? $options.searchTabTitle($options.activeSearchTab) : "",
 				onRename: $options.renameCurrentSearchTab,
@@ -37636,7 +37672,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 				layout: $data.quickLayout,
 				"can-manage": $data.canAdminister,
 				onApply: $options.applyQuickFilters,
-				onChanged: _cache[136] || (_cache[136] = ($event) => {
+				onChanged: _cache[135] || (_cache[135] = ($event) => {
 					$options.searchConfigurationChanged();
 					_ctx.$refs.quickFilters?.load(true);
 				})
@@ -37655,31 +37691,31 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 				ref: "details",
 				class: "app-dialog object-details",
 				"aria-label": $options.t("Object details")
-			}, [$data.detail ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createBaseVNode("header", _hoisted_50, [
+			}, [$data.detail ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createBaseVNode("header", _hoisted_49, [
 				createBaseVNode("h2", null, toDisplayString($options.detailTitle), 1),
 				$data.interfaceConfig?.operations?.edit ? (openBlock(), createBlock(_component_AppButton, {
 					key: 0,
 					label: "Edit record",
 					icon: "edit",
 					"icon-only": "",
-					onClick: _cache[137] || (_cache[137] = ($event) => $options.editRecord())
+					onClick: _cache[136] || (_cache[136] = ($event) => $options.editRecord())
 				})) : createCommentVNode("", true),
 				createVNode(_component_AppButton, {
 					label: "Close details",
 					icon: "close",
 					"icon-only": "",
-					onClick: _cache[138] || (_cache[138] = ($event) => _ctx.$refs.details.close())
+					onClick: _cache[137] || (_cache[137] = ($event) => _ctx.$refs.details.close())
 				})
 			]), createVNode(_component_ObjectReport, {
 				ticket: $data.session.ticket,
 				project: $data.detail.project_code || $data.workspaceProject,
 				record: $data.detail,
-				onLeave: _cache[139] || (_cache[139] = ($event) => _ctx.$refs.details.close())
+				onLeave: _cache[138] || (_cache[138] = ($event) => _ctx.$refs.details.close())
 			}, null, 8, [
 				"ticket",
 				"project",
 				"record"
-			])], 64)) : createCommentVNode("", true)], 8, _hoisted_49)), [[_directive_window, { kind: "sobject_info" }]]),
+			])], 64)) : createCommentVNode("", true)], 8, _hoisted_48)), [[_directive_window, { kind: "sobject_info" }]]),
 			createVNode(_component_ObjectOperations, {
 				ref: "objectOperations",
 				ticket: $data.session.ticket,
@@ -37687,16 +37723,16 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 				"search-type": $data.type,
 				operations: $data.interfaceConfig?.operations,
 				selection: $data.rows.filter((record) => $data.selectedKeys.includes(record.__search_key__)),
-				onEditSelected: _cache[140] || (_cache[140] = (records) => _ctx.$refs.recordForm.open(records.map((record) => record.__search_key__))),
+				onEditSelected: _cache[139] || (_cache[139] = (records) => _ctx.$refs.recordForm.open(records.map((record) => record.__search_key__))),
 				onInspect: $options.inspect,
 				onEdit: $options.editRecord,
 				onCreate: $options.createRecord,
-				onRelated: _cache[141] || (_cache[141] = (record) => _ctx.$refs.relatedObjects.open(record)),
-				onDuplicate: _cache[142] || (_cache[142] = (record) => _ctx.$refs.recordForm.open(null, record.__search_key__)),
-				onDuplicated: _cache[143] || (_cache[143] = ($event) => $options.reloadWorkspace({ restore: true })),
-				onRetire: _cache[144] || (_cache[144] = (record) => _ctx.$refs.objectAction.open(record, "retire")),
-				onReactivate: _cache[145] || (_cache[145] = (record) => _ctx.$refs.objectAction.open(record, "reactivate")),
-				onDelete: _cache[146] || (_cache[146] = (record) => _ctx.$refs.objectAction.open(record, "delete"))
+				onRelated: _cache[140] || (_cache[140] = (record) => _ctx.$refs.relatedObjects.open(record)),
+				onDuplicate: _cache[141] || (_cache[141] = (record) => _ctx.$refs.recordForm.open(null, record.__search_key__)),
+				onDuplicated: _cache[142] || (_cache[142] = ($event) => $options.reloadWorkspace({ restore: true })),
+				onRetire: _cache[143] || (_cache[143] = (record) => _ctx.$refs.objectAction.open(record, "retire")),
+				onReactivate: _cache[144] || (_cache[144] = (record) => _ctx.$refs.objectAction.open(record, "reactivate")),
+				onDelete: _cache[145] || (_cache[145] = (record) => _ctx.$refs.objectAction.open(record, "delete"))
 			}, null, 8, [
 				"ticket",
 				"project",
@@ -37779,7 +37815,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 				ticket: $data.session.ticket,
 				project: $data.workspaceProject,
 				target: $data.descriptionTarget,
-				onSaved: _cache[147] || (_cache[147] = ($event) => $options.reloadWorkspace({ restore: true })),
+				onSaved: _cache[146] || (_cache[146] = ($event) => $options.reloadWorkspace({ restore: true })),
 				onSessionExpired: $options.logout
 			}, null, 8, [
 				"ticket",
@@ -37793,7 +37829,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 				project: $data.workspaceProject,
 				target: $data.snapshotTarget,
 				active: $data.snapshotActive,
-				onChanged: _cache[148] || (_cache[148] = ($event) => $options.reloadWorkspace({ restore: true })),
+				onChanged: _cache[147] || (_cache[147] = ($event) => $options.reloadWorkspace({ restore: true })),
 				onSessionExpired: $options.logout
 			}, null, 8, [
 				"ticket",
@@ -37814,8 +37850,8 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 				active: $data.knowledgeActive,
 				target: $data.knowledgeTarget,
 				selection: ($options.workspaceView.rows || []).filter((record) => ($options.workspaceView.selectedKeys || []).includes(record.__search_key__)),
-				onChanged: _cache[149] || (_cache[149] = ($event) => $options.reloadWorkspace({ restore: true })),
-				onLocation: _cache[150] || (_cache[150] = ($event) => {
+				onChanged: _cache[148] || (_cache[148] = ($event) => $options.reloadWorkspace({ restore: true })),
+				onLocation: _cache[149] || (_cache[149] = ($event) => {
 					$data.navigationLink = $event;
 					$options.writeLocation(true);
 				}),
@@ -37841,7 +37877,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 					searchKey: $data.snapshotTarget.key,
 					process: $data.snapshotTarget.process
 				} : $data.descriptionTarget),
-				onHelp: _cache[151] || (_cache[151] = ($event) => _ctx.$refs.help.open($event))
+				onHelp: _cache[150] || (_cache[150] = ($event) => _ctx.$refs.help.open($event))
 			}, null, 8, [
 				"ticket",
 				"project",
@@ -37855,15 +37891,15 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 				login: $data.session.login,
 				ticket: $data.session.ticket,
 				project: $data.workspaceProject,
-				onChanged: _cache[152] || (_cache[152] = ($event) => $data.checkins = $event),
-				onCompleted: _cache[153] || (_cache[153] = ($event) => {
+				onChanged: _cache[151] || (_cache[151] = ($event) => $data.checkins = $event),
+				onCompleted: _cache[152] || (_cache[152] = ($event) => {
 					_ctx.$refs.dropPlate.completed($event);
 					$options.reloadWorkspace({ restore: true });
 				}),
-				onOpened: _cache[154] || (_cache[154] = ($event) => $event ? _ctx.$refs.docks?.show("commit_queue") : _ctx.$refs.docks?.hide("commit_queue")),
-				onClosed: _cache[155] || (_cache[155] = ($event) => _ctx.$refs.docks?.hide("commit_queue")),
-				onHelp: _cache[156] || (_cache[156] = ($event) => _ctx.$refs.help.open($event)),
-				onSnapshot: _cache[157] || (_cache[157] = ($event) => {
+				onOpened: _cache[153] || (_cache[153] = ($event) => $event ? _ctx.$refs.docks?.show("commit_queue") : _ctx.$refs.docks?.hide("commit_queue")),
+				onClosed: _cache[154] || (_cache[154] = ($event) => _ctx.$refs.docks?.hide("commit_queue")),
+				onHelp: _cache[155] || (_cache[155] = ($event) => _ctx.$refs.help.open($event)),
+				onSnapshot: _cache[156] || (_cache[156] = ($event) => {
 					$data.snapshotTarget = {
 						project: $event.project,
 						key: $event.snapshot?.__search_key__ || $event.searchKey,
@@ -37888,9 +37924,9 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 				ticket: $data.session.ticket,
 				project: $data.workHoursProjects.week || $options.workspaceView.project,
 				"current-user": $data.session.login,
-				onOpened: _cache[158] || (_cache[158] = ($event) => _ctx.$refs.docks?.show("timesheet")),
-				onClosed: _cache[159] || (_cache[159] = ($event) => _ctx.$refs.docks?.hide("timesheet")),
-				onOpenDock: _cache[160] || (_cache[160] = ($event) => $options.openWorkHours($event, _ctx.$refs.timesheet.task, $data.workHoursProjects.week)),
+				onOpened: _cache[157] || (_cache[157] = ($event) => _ctx.$refs.docks?.show("timesheet")),
+				onClosed: _cache[158] || (_cache[158] = ($event) => _ctx.$refs.docks?.hide("timesheet")),
+				onOpenDock: _cache[159] || (_cache[159] = ($event) => $options.openWorkHours($event, _ctx.$refs.timesheet.task, $data.workHoursProjects.week)),
 				onSaved: $options.reloadWorkspace
 			}, null, 8, [
 				"ticket",
@@ -37906,9 +37942,9 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 				ticket: $data.session.ticket,
 				project: $data.workHoursProjects.report || $options.workspaceView.project,
 				"current-user": $data.session.login,
-				onOpened: _cache[161] || (_cache[161] = ($event) => _ctx.$refs.docks?.show("work_reports")),
-				onClosed: _cache[162] || (_cache[162] = ($event) => _ctx.$refs.docks?.hide("work_reports")),
-				onOpenDock: _cache[163] || (_cache[163] = ($event) => $options.openWorkHours($event, _ctx.$refs.workReports.task, $data.workHoursProjects.report)),
+				onOpened: _cache[160] || (_cache[160] = ($event) => _ctx.$refs.docks?.show("work_reports")),
+				onClosed: _cache[161] || (_cache[161] = ($event) => _ctx.$refs.docks?.hide("work_reports")),
+				onOpenDock: _cache[162] || (_cache[162] = ($event) => $options.openWorkHours($event, _ctx.$refs.workReports.task, $data.workHoursProjects.report)),
 				onSaved: $options.reloadWorkspace
 			}, null, 8, [
 				"ticket",
@@ -37925,9 +37961,9 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 				ticket: $data.session.ticket,
 				project: $data.workHoursProjects.cost || $options.workspaceView.project,
 				"current-user": $data.session.login,
-				onOpened: _cache[164] || (_cache[164] = ($event) => _ctx.$refs.docks?.show("cost_reports")),
-				onClosed: _cache[165] || (_cache[165] = ($event) => _ctx.$refs.docks?.hide("cost_reports")),
-				onOpenDock: _cache[166] || (_cache[166] = ($event) => $options.openWorkHours($event, _ctx.$refs.costReports.task, $data.workHoursProjects.cost)),
+				onOpened: _cache[163] || (_cache[163] = ($event) => _ctx.$refs.docks?.show("cost_reports")),
+				onClosed: _cache[164] || (_cache[164] = ($event) => _ctx.$refs.docks?.hide("cost_reports")),
+				onOpenDock: _cache[165] || (_cache[165] = ($event) => $options.openWorkHours($event, _ctx.$refs.costReports.task, $data.workHoursProjects.cost)),
 				onSaved: $options.reloadWorkspace
 			}, null, 8, [
 				"ticket",
@@ -37941,7 +37977,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 				docked: !$data.windowPage,
 				"calendar-target": $data.windowPage ? void 0 : "#dock-task_calendar",
 				"calendar-active": $data.taskCalendarActive,
-				onCalendar: _cache[167] || (_cache[167] = ($event) => {
+				onCalendar: _cache[166] || (_cache[166] = ($event) => {
 					_ctx.$refs.docks?.show("task_calendar");
 					$options.openDock("task_calendar");
 				}),
@@ -37950,18 +37986,18 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 				"current-user": $data.session.login,
 				"search-type": $options.workspaceView.type,
 				"search-type-title": ($options.workspaceView.types || $data.types).find((item) => item.search_type === $options.workspaceView.type)?.title || "",
-				onOpened: _cache[168] || (_cache[168] = ($event) => {
+				onOpened: _cache[167] || (_cache[167] = ($event) => {
 					$data.updatesTasksOpen = true;
 					_ctx.$refs.docks?.show("tasks");
 				}),
-				onClosed: _cache[169] || (_cache[169] = ($event) => {
+				onClosed: _cache[168] || (_cache[168] = ($event) => {
 					$data.updatesTasksOpen = $data.taskCalendarActive;
 					_ctx.$refs.docks?.hide("tasks");
 				}),
-				onSnapshotContext: _cache[170] || (_cache[170] = ($event) => $data.snapshotTarget = $event),
-				onTaskContext: _cache[171] || (_cache[171] = ($event) => $options.followInspector($event.parent, $event.process, $event.__search_key__)),
+				onSnapshotContext: _cache[169] || (_cache[169] = ($event) => $data.snapshotTarget = $event),
+				onTaskContext: _cache[170] || (_cache[170] = ($event) => $options.followInspector($event.parent, $event.process, $event.__search_key__)),
 				parents: ($options.workspaceView.rows || []).filter((record) => ($options.workspaceView.selectedKeys || []).includes(record.__search_key__)),
-				onSaved: _cache[172] || (_cache[172] = ($event) => $options.reloadWorkspace({ restore: true })),
+				onSaved: _cache[171] || (_cache[171] = ($event) => $options.reloadWorkspace({ restore: true })),
 				onObject: $options.inspect
 			}, null, 8, [
 				"docked",
@@ -37984,13 +38020,13 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 		createVNode(_component_HelpView, { ref: "help" }, null, 512),
 		createVNode(_component_DebugLog, {
 			ref: "debugLog",
-			onHelp: _cache[175] || (_cache[175] = ($event) => _ctx.$refs.help.open($event)),
-			onClosed: _cache[176] || (_cache[176] = ($event) => _ctx.$refs.settingsMenu?.focusTrigger())
+			onHelp: _cache[174] || (_cache[174] = ($event) => _ctx.$refs.help.open($event)),
+			onClosed: _cache[175] || (_cache[175] = ($event) => _ctx.$refs.settingsMenu?.focusTrigger())
 		}, null, 512)
 	], 64);
 }
 var App_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main, [["render", _sfc_render]]);
 //#endregion
-export { QuickFilterChip_default as C, _sfc_main$101 as D, _sfc_main$93 as E, _sfc_main$62 as S, surfaces as T, editColumn as _, updateModes as a, describe$18 as b, runBrowserScript as c, _sfc_main$48 as d, App_default as default, lifecycle as f, describe$17 as g, contentWidth as h, updateIntervals as i, scriptTree as l, change as m, networkSettings as n, _sfc_main$26 as o, ProjectCreation_default as p, updateBatchDelays as r, buttonId as s, App_exports as t, QuickFilterOptions_default as u, fieldsFor as v, filterGeometry as w, pages as x, confirmation$1 as y };
+export { _sfc_main$62 as C, _sfc_main$93 as D, surfaces as E, _sfc_main$101 as O, pages as S, filterGeometry as T, editColumn as _, updateModes as a, confirmation$1 as b, runBrowserScript as c, _sfc_main$48 as d, App_default as default, lifecycle as f, describe$17 as g, contentWidth as h, updateIntervals as i, scriptTree as l, change as m, networkSettings as n, _sfc_main$26 as o, ProjectCreation_default as p, updateBatchDelays as r, buttonId as s, App_exports as t, QuickFilterOptions_default as u, fieldsFor as v, QuickFilterChip_default as w, describe$19 as x, describe$18 as y };
 
 //# sourceMappingURL=App.js.map

@@ -267,3 +267,20 @@ assert.equal(
 console.log(
   `Configuration/project contracts: ${scenes} valid shared scenes and draft/column decisions passed`
 );
+
+for (const width of [320, 800]) {
+  const scene = Settings.describe(
+    { fields: [], values: {}, serverControls: true },
+    width,
+    700,
+    'en'
+  );
+  validateScene(scene, {}, { serverControl: true });
+  const scroll = scene.nodes[0];
+  const panel = scroll.children.find(
+    (node) => node.id === 'configurationServerControl'
+  );
+  assert(panel, 'Worker controls are inside the Configuration settings scroll');
+  assert(panel.x + panel.width <= scroll.width);
+  assert(panel.y + panel.height <= scroll.contentHeight);
+}

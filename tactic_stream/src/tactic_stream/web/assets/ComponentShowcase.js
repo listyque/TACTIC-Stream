@@ -9,7 +9,7 @@ import { t as _sfc_main$41 } from "./ActionRow.js";
 import { t as _sfc_main$42 } from "./AppDialog.js";
 import { t as _sfc_main$43 } from "./ContentLoadingOverlay.js";
 import { a as visibleRows, i as row$3, n as navigate, t as listAction } from "./tree.ui.js";
-import { C as QuickFilterChip_default, T as surfaces, d as _sfc_main$44, u as QuickFilterOptions_default, w as filterGeometry } from "./App.js";
+import { E as surfaces, T as filterGeometry, d as _sfc_main$44, u as QuickFilterOptions_default, w as QuickFilterChip_default } from "./App.js";
 //#region src/features/administration/ShowcaseMenu.vue
 var _sfc_main$13 = {
 	__name: "ShowcaseMenu",

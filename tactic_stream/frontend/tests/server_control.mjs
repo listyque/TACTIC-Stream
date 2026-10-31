@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { mkdir, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { createServer } from 'vite';
 import vue from '@vitejs/plugin-vue';
@@ -69,6 +70,9 @@ try {
       }
     ]
   });
+  await page.route('**/admin/**', (route) =>
+    route.fulfill({ json: { result: [] } })
+  );
   await page.route('**/admin/configuration{,/**}', async (route) => {
     const body = route.request().postDataJSON();
     assert.equal(body.ticket, 'fixture-ticket');
@@ -93,10 +97,96 @@ try {
       body: JSON.stringify({ result })
     });
   });
-  await page.goto(
-    server.resolvedUrls.local[0] +
-      'tools/frame_configuration/server-control.html'
+  await page.route('**/admin/rpc', (route) =>
+    route.fulfill({ json: { result: [] } })
   );
+  await page.route('**/server-placement-fixture', (route) =>
+    route.fulfill({ contentType: 'text/html', body: '<div id="app"></div>' })
+  );
+  await page.goto(server.resolvedUrls.local[0] + 'server-placement-fixture');
+  const entry = await server.transformRequest('/frontend/src/main.js');
+  const vueUrl = entry.code.match(/from "([^"]+)"/)[1];
+  await page.evaluate(async (vueUrl) => {
+    const { createApp } = await import(vueUrl);
+    const { default: App } = await import('/frontend/src/App.vue');
+    const { windowDirective } = await import(
+      '/frontend/src/controls/window.js'
+    );
+    await import('/frontend/src/theme.css');
+    await import('/frontend/src/style.css');
+    const { appearance, initializeAppearance } = await import(
+      '/frontend/src/appearance.js'
+    );
+    initializeAppearance();
+    Object.assign(appearance, {
+      mode: 'dark',
+      theme: 'md3',
+      clickAnimations: false,
+      hoverAnimations: false
+    });
+    window.placement = createApp({
+      ...App,
+      created() {
+        this.session = { ticket: 'fixture-ticket', login: 'admin' };
+        this.project = this.workspaceProject = 'one';
+        this.projects = [{ code: 'one', title: 'One' }];
+        this.canAdminister = true;
+        this.ready = true;
+        this.restoringSession = false;
+      }
+    })
+      .directive('window', windowDirective)
+      .mount('#app');
+    const { sections } = await import(
+      '/src/tactic_stream/shared_ui/features/administration/administration.ui.mjs'
+    );
+    if (sections.some((section) => section.id === 'server'))
+      throw Error('Backend server remains in Administration');
+    window.placement.showAdministration('showcase');
+  }, vueUrl);
+  await page
+    .locator('dialog.administration-dialog')
+    .waitFor({ state: 'visible' });
+  assert.equal(
+    await page.getByText('Backend server', { exact: true }).count(),
+    0
+  );
+  await page.evaluate(() => window.placement.leaveAdministration());
+  await page.evaluate(() => window.placement.showConfiguration());
+  await page
+    .locator('dialog[data-window-kind="configuration"]')
+    .waitFor({ state: 'visible' });
+  if (process.env.SERVER_PLACEMENT_CAPTURE) {
+    const output = process.env.SERVER_PLACEMENT_CAPTURE;
+    await mkdir(output, { recursive: true });
+    const surface = page.locator('[data-frame=serverControlSurface]');
+    await surface.waitFor();
+    const box = await surface.boundingBox();
+    const controls = [];
+    for (const id of [
+      'serverWorkerCount',
+      'serverRunningWorkers',
+      'serverWorkersSave',
+      'serverRestart',
+      'serverControlRefresh'
+    ]) {
+      const bounds = await page
+        .locator('[data-frame="' + id + '"]')
+        .boundingBox();
+      controls.push({
+        id,
+        x: bounds.x - box.x,
+        y: bounds.y - box.y,
+        width: bounds.width,
+        height: bounds.height
+      });
+    }
+    await surface.screenshot({ path: output + '/browser.png' });
+    await writeFile(
+      output + '/browser.json',
+      JSON.stringify({ width: box.width, height: box.height, controls })
+    );
+  }
   const count = page.locator('[data-frame=serverWorkerCount]');
   await count.fill('3');
   assert.ok(await page.locator('[data-frame=serverRestart]').isDisabled());

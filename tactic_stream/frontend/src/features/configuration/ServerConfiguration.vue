@@ -22,8 +22,7 @@ export default {
   props: {
     ticket: { type: String, required: true },
     showDetails: Boolean,
-    groupTitles: Array,
-    workersOnly: Boolean
+    groupTitles: Array
   },
   emits: ['session-expired'],
   data() {
@@ -481,19 +480,11 @@ export default {
 
 <template>
   <section class="content server-configuration" :aria-busy="loading || saving">
-    <p
-      v-if="error && (!workersOnly || !configuration)"
-      class="error"
-      role="alert"
-    >
+    <p v-if="error" class="error" role="alert">
       <strong v-if="failedSetting">{{ t(failedSetting) }}: </strong
       >{{ t(error) }}
     </p>
-    <p
-      v-if="notice && !hasChanges && !workersOnly"
-      class="notice"
-      role="status"
-    >
+    <p v-if="notice && !hasChanges" class="notice" role="status">
       {{ t(notice) }}
     </p>
     <p v-if="loading" class="muted" role="status">{{ t('Loading data…') }}</p>
@@ -507,7 +498,7 @@ export default {
         <FrameView :scene="controlScene" @event="controlAction" />
       </div>
       <section
-        v-if="!workersOnly && activeGroup === 'Services and workers' && !search"
+        v-if="activeGroup === 'Services and workers' && !search"
         class="settings-section event-clients"
       >
         <header>
@@ -571,7 +562,7 @@ export default {
           <p v-else class="muted">{{ t('No open SSE connections') }}</p>
         </div>
       </section>
-      <details v-if="showDetails && !workersOnly" class="configuration-source">
+      <details v-if="showDetails" class="configuration-source">
         <summary>{{ t('Configuration source') }}</summary>
         <button :disabled="loading || saving || hasChanges" @click="load">
           <AppIcon name="refresh" />{{ t('Refresh') }}
@@ -595,7 +586,7 @@ export default {
           }}
         </p>
       </details>
-      <div v-if="!workersOnly" class="configuration-groups">
+      <div class="configuration-groups">
         <FrameSettings
           :fields="fields"
           :values="frameValues"
