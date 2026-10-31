@@ -1,8 +1,8 @@
-import { n as arrange, r as __exportAll, t as _sfc_main$6 } from "./ObjectFieldFrame.js";
+import { n as arrange, r as __exportAll, t as _sfc_main$5 } from "./ObjectFieldFrame.js";
 import { A as onMounted, E as nextTick, F as resolveComponent, G as withCtx, H as watch, I as resolveDirective, K as withDirectives, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, S as h, X as ref, _ as createElementBlock, a as vModelSelect, b as createVNode, g as createCommentVNode, h as createBlock, i as vModelCheckbox, j as onUpdated, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, o as vModelText, p as computed, rt as toDisplayString, s as vShow, tt as normalizeClass, u as Fragment, y as createTextVNode, z as useId } from "./vue.js";
-import { D as textStyles, R as _plugin_vue_export_helper_default, _ as controls, o as t, s as appearance, t as _sfc_main$7 } from "./AppButton.js";
+import { D as textStyles, R as _plugin_vue_export_helper_default, _ as controls, o as t, s as appearance, t as _sfc_main$6 } from "./AppButton.js";
 import { K as uploadFormFile, _t as mobile, d as formDefinition, k as rpc } from "./index.js";
-import { D as _sfc_main$13, H as node, I as _sfc_main$14, L as _sfc_main$11, N as _sfc_main$12, O as _sfc_main$10, P as _sfc_main$9, R as button, U as rect, n as observeFrameSizes, r as _sfc_main$8, w as ItemPreview_default, y as translate, z as label } from "./resize.js";
+import { A as _sfc_main$12, B as _sfc_main$10, D as ItemPreview_default, G as node, H as label, I as _sfc_main$11, K as rect, L as _sfc_main$7, S as translate, V as button, j as _sfc_main$9, t as _sfc_main$8, w as observeFrameSizes, x as _sfc_main$14, z as _sfc_main$13 } from "./FrameView.js";
 import { n as qtLabelTextWidth } from "./textMetrics.js";
 import { t as captionHeight } from "./sections.ui.js";
 //#region src/features/objects/recordFields.js
@@ -117,7 +117,7 @@ function unsupportedField(field) {
 }
 //#endregion
 //#region src/features/objects/ObjectFieldGrid.vue
-var _sfc_main$5 = {
+var _sfc_main$4 = {
 	__name: "ObjectFieldGrid",
 	setup(__props) {
 		const host = ref(null), height = ref(0);
@@ -170,97 +170,6 @@ var _sfc_main$5 = {
 	}
 };
 //#endregion
-//#region ../src/tactic_stream/shared_ui/controls/forms/file.ui.mjs
-function describe(value, width, language, enabled = true) {
-	const tr = (text) => translate(text, language), name = String(value || "").replace(/\\/g, "/").split("/").pop(), actions = name ? 76 : 40;
-	const nodes = [
-		node("Box", "fileInputSurface", rect(0, 0, width, 44), { background: "surfaceContainerHigh" }),
-		label("fileInputName", rect(12, 10, Math.max(0, width - actions - 20), 24), name || tr("No file selected"), {
-			color: name ? "primaryText" : "secondaryText",
-			toolTip: name || "",
-			elideMiddle: true
-		}),
-		button("fileInputChoose", rect(Math.max(0, width - actions), 6, 32, 32), tr("Choose file"), "attach-file", { type: "choose" }, enabled, {
-			iconOnly: true,
-			iconAction: true
-		})
-	];
-	if (name) nodes.push(button("fileInputClear", rect(Math.max(0, width - 36), 6, 32, 32), tr("Clear file"), "close", { type: "clear" }, enabled, {
-		iconOnly: true,
-		iconAction: true
-	}));
-	return {
-		height: 44,
-		nodes
-	};
-}
-//#endregion
-//#region src/controls/forms/AppFileInput.vue
-var _hoisted_1$2 = [
-	"aria-label",
-	"disabled",
-	"required"
-];
-var _sfc_main$4 = {
-	__name: "AppFileInput",
-	props: {
-		value: String,
-		disabled: Boolean,
-		label: String,
-		required: Boolean
-	},
-	emits: ["change"],
-	setup(__props, { emit: __emit }) {
-		const props = __props;
-		const emit = __emit;
-		const input = ref(null);
-		const host = ref(null), width = ref(0);
-		let observer;
-		const scene = computed(() => describe(props.value, width.value, appearance.language, !props.disabled));
-		onMounted(() => {
-			const measure = () => {
-				width.value = host.value.clientWidth;
-			};
-			measure();
-			observer = observeFrameSizes(measure);
-			observer.observe(host.value);
-		});
-		onBeforeUnmount(() => observer?.disconnect());
-		function action(event) {
-			if (props.disabled) return;
-			if (event.type === "choose") input.value.click();
-			else if (event.type === "clear") {
-				input.value.value = "";
-				emit("change", { target: { files: [] } });
-			}
-		}
-		return (_ctx, _cache) => {
-			return openBlock(), createElementBlock("div", {
-				ref_key: "host",
-				ref: host,
-				class: "app-file-input",
-				style: {
-					"position": "relative",
-					"height": "44px",
-					"width": "100%"
-				}
-			}, [createVNode(_sfc_main$8, {
-				scene: scene.value,
-				onEvent: action
-			}, null, 8, ["scene"]), createBaseVNode("input", {
-				ref_key: "input",
-				ref: input,
-				type: "file",
-				hidden: "",
-				"aria-label": __props.label,
-				disabled: __props.disabled,
-				required: __props.required,
-				onChange: _cache[0] || (_cache[0] = ($event) => emit("change", $event))
-			}, null, 40, _hoisted_1$2)], 512);
-		};
-	}
-};
-//#endregion
 //#region src/controls/previewImage.js
 async function readPreviewImage(file) {
 	const url = await new Promise((resolve, reject) => {
@@ -281,7 +190,7 @@ async function readPreviewImage(file) {
 //#region src/controls/ImagePicker.vue
 var _sfc_main$3 = {
 	components: {
-		AppButton: _sfc_main$7,
+		AppButton: _sfc_main$6,
 		ItemPreview: ItemPreview_default
 	},
 	props: {
@@ -603,14 +512,14 @@ var _sfc_main$2 = {
 				class: normalizeClass(["app-spin-box", { disabled: __props.disabled }]),
 				onKeydown: key
 			}, [
-				createVNode(_sfc_main$7, {
+				createVNode(_sfc_main$6, {
 					"icon-only": "",
 					icon: "chevron-down",
 					label: "Decrease value",
 					disabled: __props.disabled || __props.readonly || __props.modelValue <= __props.min,
 					onClick: _cache[0] || (_cache[0] = ($event) => increment(-1))
 				}, null, 8, ["disabled"]),
-				createVNode(_sfc_main$9, {
+				createVNode(_sfc_main$7, {
 					modelValue: text.value,
 					"onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => text.value = $event),
 					inputmode: "decimal",
@@ -639,7 +548,7 @@ var _sfc_main$2 = {
 					"aria-valuenow",
 					"error-state"
 				]),
-				createVNode(_sfc_main$7, {
+				createVNode(_sfc_main$6, {
 					"icon-only": "",
 					icon: "chevron-up",
 					label: "Increase value",
@@ -933,16 +842,16 @@ var _sfc_main = {
 		return { formId: useId() };
 	},
 	components: {
-		AppDateField: _sfc_main$10,
-		AppSwitch: _sfc_main$11,
-		AppColorInput: _sfc_main$12,
-		AppButton: _sfc_main$7,
-		AppTextField: _sfc_main$9,
-		AppTextArea: _sfc_main$13,
-		AppSelect: _sfc_main$14,
-		ObjectFieldFrame: _sfc_main$6,
-		ObjectFieldGrid: _sfc_main$5,
-		AppFileInput: _sfc_main$4,
+		AppDateField: _sfc_main$9,
+		AppSwitch: _sfc_main$10,
+		AppColorInput: _sfc_main$11,
+		AppButton: _sfc_main$6,
+		AppTextField: _sfc_main$7,
+		AppTextArea: _sfc_main$12,
+		AppSelect: _sfc_main$13,
+		ObjectFieldFrame: _sfc_main$5,
+		ObjectFieldGrid: _sfc_main$4,
+		AppFileInput: _sfc_main$14,
 		ImagePicker: ImagePicker_default,
 		ObjectEditorSurface: _sfc_main$1
 	},

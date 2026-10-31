@@ -3,6 +3,8 @@ import { computed, ref, onMounted, onBeforeUnmount } from 'vue';
 import FrameView from '../../frame/FrameView.vue';
 import { observeFrameSizes } from '../../frame/resize.js';
 import { appearance } from '../../appearance.js';
+import ShowcaseMenu from './ShowcaseMenu.vue';
+import ShowcaseDialog from './ShowcaseDialog.vue';
 import * as UI from '../../../../src/tactic_stream/shared_ui/features/administration/showcase.ui.mjs';
 const host = ref(null),
   view = ref(null),
@@ -18,8 +20,21 @@ const scene = computed(() =>
   )
 );
 const models = computed(() => ({
+  ...UI.models(model.value),
   families: UI.families(UI.catalogue, model.value, appearance.language)
 }));
+const views = {
+  showcaseMenu: {
+    component: ShowcaseMenu,
+    nodeProps: true,
+    props: { onEvent: dispatch }
+  },
+  showcaseDialog: {
+    component: ShowcaseDialog,
+    nodeProps: true,
+    props: { onEvent: dispatch }
+  }
+};
 function dispatch(event) {
   model.value = UI.transition(model.value, event, UI.catalogue);
 }
@@ -43,6 +58,11 @@ onBeforeUnmount(() => observer?.disconnect());
       ref="view"
       :scene="scene"
       :models="models"
+      :views="views"
+      :describe-cell="
+        (grid, record, row, column) =>
+          UI.cell(grid, record, row, column, model, appearance.language)
+      "
       :describe-row="
         (list, record) => UI.row(list, record, model, appearance.language)
       "

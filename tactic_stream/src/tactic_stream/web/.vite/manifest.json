@@ -1,4 +1,20 @@
 {
+  "_ActionRow.css": {
+    "file": "assets/ActionRow.css",
+    "src": "_ActionRow.css"
+  },
+  "_ActionRow.js": {
+    "file": "assets/ActionRow.js",
+    "name": "ActionRow",
+    "imports": [
+      "_vue.js",
+      "_AppButton.js",
+      "_FrameView.js"
+    ],
+    "css": [
+      "assets/ActionRow.css"
+    ]
+  },
   "_AppButton.css": {
     "file": "assets/AppButton.css",
     "src": "_AppButton.css"
@@ -28,7 +44,7 @@
       "_vue.js",
       "_AppButton.js",
       "index.html",
-      "_resize.js"
+      "_FrameView.js"
     ]
   },
   "_AppearanceControls.css": {
@@ -41,7 +57,7 @@
     "imports": [
       "_vue.js",
       "_AppButton.js",
-      "_resize.js"
+      "_FrameView.js"
     ],
     "css": [
       "assets/AppearanceControls.css"
@@ -52,7 +68,7 @@
     "name": "CodeBlock",
     "imports": [
       "_vue.js",
-      "_resize.js"
+      "_FrameView.js"
     ]
   },
   "_ConfiguredView.css": {
@@ -67,7 +83,7 @@
       "_vue.js",
       "_AppButton.js",
       "index.html",
-      "_resize.js",
+      "_FrameView.js",
       "_textMetrics.js",
       "_sections.ui.js",
       "src/features/objects/RecordForm.vue",
@@ -77,6 +93,7 @@
       "_CodeBlock.js",
       "_metrics.js",
       "_confirmation.ui.js",
+      "_ActionRow.js",
       "_AppDialog.js",
       "_markdown-it.js",
       "_VirtualCollection.js",
@@ -111,19 +128,28 @@
       "assets/ContentLoadingOverlay.css"
     ]
   },
-  "_FrameProgress.css": {
-    "file": "assets/FrameProgress.css",
-    "src": "_FrameProgress.css"
-  },
   "_FrameProgress.js": {
     "file": "assets/FrameProgress.js",
     "name": "FrameProgress",
     "imports": [
       "_vue.js",
-      "_AppButton.js"
+      "_FrameView.js"
+    ]
+  },
+  "_FrameView.css": {
+    "file": "assets/FrameView.css",
+    "src": "_FrameView.css"
+  },
+  "_FrameView.js": {
+    "file": "assets/FrameView.js",
+    "name": "FrameView",
+    "imports": [
+      "_vue.js",
+      "_AppButton.js",
+      "_icons.js"
     ],
     "css": [
-      "assets/FrameProgress.css"
+      "assets/FrameView.css"
     ]
   },
   "_MilestoneManager.css": {
@@ -138,7 +164,7 @@
       "_vue.js",
       "_AppButton.js",
       "index.html",
-      "_resize.js"
+      "_FrameView.js"
     ],
     "css": [
       "assets/MilestoneManager.css"
@@ -152,7 +178,7 @@
       "_vue.js",
       "_AppButton.js",
       "index.html",
-      "_resize.js",
+      "_FrameView.js",
       "_sections.ui.js",
       "_admin.document.js"
     ]
@@ -167,7 +193,7 @@
     "imports": [
       "_vue.js",
       "_AppButton.js",
-      "_resize.js"
+      "_FrameView.js"
     ],
     "css": [
       "assets/ObjectFieldFrame.css"
@@ -178,7 +204,7 @@
     "name": "PageEditorTools",
     "imports": [
       "_vue.js",
-      "_resize.js",
+      "_FrameView.js",
       "_ConfiguredView.js"
     ]
   },
@@ -194,7 +220,7 @@
       "_vue.js",
       "_AppButton.js",
       "index.html",
-      "_resize.js",
+      "_FrameView.js",
       "_confirmation.ui.js"
     ],
     "css": [
@@ -213,7 +239,7 @@
       "_vue.js",
       "_AppButton.js",
       "index.html",
-      "_resize.js"
+      "_FrameView.js"
     ],
     "css": [
       "assets/Timesheet.css"
@@ -228,7 +254,7 @@
     "name": "VirtualCollection",
     "imports": [
       "_vue.js",
-      "_resize.js"
+      "_FrameView.js"
     ],
     "css": [
       "assets/VirtualCollection.css"
@@ -245,7 +271,7 @@
       "_vue.js",
       "_AppButton.js",
       "index.html",
-      "_resize.js",
+      "_FrameView.js",
       "_textMetrics.js",
       "_file_values.js",
       "_files.js",
@@ -259,21 +285,21 @@
     "file": "assets/confirmation.ui.js",
     "name": "confirmation.ui",
     "imports": [
-      "_resize.js"
+      "_FrameView.js"
     ]
   },
   "_executor.ui.js": {
     "file": "assets/executor.ui.js",
     "name": "executor.ui",
     "imports": [
-      "_resize.js"
+      "_FrameView.js"
     ]
   },
   "_file_values.js": {
     "file": "assets/file_values.js",
     "name": "file_values",
     "imports": [
-      "_resize.js"
+      "_FrameView.js"
     ]
   },
   "_files.js": {
@@ -295,7 +321,7 @@
     "imports": [
       "_vue.js",
       "_AppButton.js",
-      "_resize.js",
+      "_FrameView.js",
       "_sections.ui.js",
       "_admin.document.js",
       "_tree.ui.js"
@@ -305,7 +331,7 @@
     "file": "assets/groups.ui.js",
     "name": "groups.ui",
     "imports": [
-      "_resize.js"
+      "_FrameView.js"
     ]
   },
   "_icons.js": {
@@ -330,28 +356,12 @@
       "_AppButton.js"
     ]
   },
-  "_resize.css": {
-    "file": "assets/resize.css",
-    "src": "_resize.css"
-  },
-  "_resize.js": {
-    "file": "assets/resize.js",
-    "name": "resize",
-    "imports": [
-      "_vue.js",
-      "_AppButton.js",
-      "_icons.js"
-    ],
-    "css": [
-      "assets/resize.css"
-    ]
-  },
   "_sections.ui.js": {
     "file": "assets/sections.ui.js",
     "name": "sections.ui",
     "imports": [
       "_AppButton.js",
-      "_resize.js"
+      "_FrameView.js"
     ]
   },
   "_textMetrics.js": {
@@ -363,14 +373,14 @@
     "name": "toggle.ui",
     "imports": [
       "_AppButton.js",
-      "_resize.js"
+      "_FrameView.js"
     ]
   },
   "_tree.ui.js": {
     "file": "assets/tree.ui.js",
     "name": "tree.ui",
     "imports": [
-      "_resize.js"
+      "_FrameView.js"
     ]
   },
   "_vue.js": {
@@ -414,7 +424,7 @@
       "_vue.js",
       "_AppButton.js",
       "index.html",
-      "_resize.js",
+      "_FrameView.js",
       "_AppearanceControls.js",
       "_textMetrics.js",
       "_sections.ui.js",
@@ -426,6 +436,7 @@
       "_ConfiguredView.js",
       "_CodeBlock.js",
       "_confirmation.ui.js",
+      "_ActionRow.js",
       "_AppDialog.js",
       "_Timesheet.js",
       "_tree.ui.js",
@@ -498,7 +509,7 @@
       "_vue.js",
       "_AppButton.js",
       "index.html",
-      "_resize.js",
+      "_FrameView.js",
       "_sections.ui.js",
       "_admin.document.js",
       "_ConfiguredView.js"
@@ -512,8 +523,11 @@
     "imports": [
       "_vue.js",
       "_AppButton.js",
-      "_resize.js",
-      "_tree.ui.js"
+      "_FrameView.js",
+      "_ActionRow.js",
+      "_AppDialog.js",
+      "_tree.ui.js",
+      "src/App.vue"
     ],
     "css": [
       "assets/ComponentShowcase.css"
@@ -528,7 +542,7 @@
       "_vue.js",
       "_AppButton.js",
       "index.html",
-      "_resize.js",
+      "_FrameView.js",
       "_sections.ui.js",
       "_admin.document.js",
       "_ConfiguredView.js"
@@ -549,7 +563,7 @@
       "_vue.js",
       "_AppButton.js",
       "index.html",
-      "_resize.js",
+      "_FrameView.js",
       "_sections.ui.js",
       "_admin.document.js",
       "_ConfiguredView.js",
@@ -567,7 +581,7 @@
       "_vue.js",
       "_AppButton.js",
       "index.html",
-      "_resize.js",
+      "_FrameView.js",
       "_ConfiguredView.js",
       "_PageEditorTools.js"
     ]
@@ -581,7 +595,7 @@
       "_vue.js",
       "_AppButton.js",
       "index.html",
-      "_resize.js",
+      "_FrameView.js",
       "_sections.ui.js",
       "_admin.document.js"
     ],
@@ -598,7 +612,7 @@
       "_vue.js",
       "_AppButton.js",
       "index.html",
-      "_resize.js",
+      "_FrameView.js",
       "_admin.document.js"
     ],
     "css": [
@@ -614,7 +628,7 @@
       "_vue.js",
       "_AppButton.js",
       "index.html",
-      "_resize.js",
+      "_FrameView.js",
       "_admin.document.js",
       "src/features/administration/SearchTypes.vue",
       "_graphFrame.js"
@@ -632,7 +646,7 @@
       "_vue.js",
       "_AppButton.js",
       "index.html",
-      "_resize.js",
+      "_FrameView.js",
       "_sections.ui.js",
       "src/features/objects/RecordForm.vue",
       "_admin.document.js",
@@ -648,7 +662,7 @@
       "_vue.js",
       "_AppButton.js",
       "index.html",
-      "_resize.js",
+      "_FrameView.js",
       "_groups.ui.js"
     ]
   },
@@ -661,7 +675,7 @@
       "_vue.js",
       "_AppButton.js",
       "index.html",
-      "_resize.js",
+      "_FrameView.js",
       "_admin.document.js"
     ]
   },
@@ -674,7 +688,7 @@
       "_vue.js",
       "_AppButton.js",
       "index.html",
-      "_resize.js",
+      "_FrameView.js",
       "_groups.ui.js"
     ]
   },
@@ -687,7 +701,7 @@
       "_vue.js",
       "_AppButton.js",
       "index.html",
-      "_resize.js",
+      "_FrameView.js",
       "_sections.ui.js",
       "_admin.document.js",
       "_tree.ui.js"
@@ -702,7 +716,7 @@
       "_vue.js",
       "_AppButton.js",
       "index.html",
-      "_resize.js",
+      "_FrameView.js",
       "src/features/administration/ProcessRules.vue",
       "_graphFrame.js"
     ]
@@ -716,7 +730,7 @@
       "_vue.js",
       "_AppButton.js",
       "index.html",
-      "_resize.js",
+      "_FrameView.js",
       "_sections.ui.js",
       "_confirmation.ui.js",
       "_AppDialog.js",
@@ -735,7 +749,7 @@
       "_vue.js",
       "_AppButton.js",
       "index.html",
-      "_resize.js",
+      "_FrameView.js",
       "_sections.ui.js"
     ],
     "css": [
@@ -751,7 +765,7 @@
       "_vue.js",
       "_AppButton.js",
       "index.html",
-      "_resize.js",
+      "_FrameView.js",
       "_sections.ui.js",
       "_file_values.js",
       "_files.js",
@@ -772,7 +786,7 @@
       "_vue.js",
       "_AppButton.js",
       "index.html",
-      "_resize.js",
+      "_FrameView.js",
       "_sections.ui.js",
       "_file_values.js",
       "_files2.js",
@@ -792,7 +806,7 @@
       "_vue.js",
       "_AppButton.js",
       "index.html",
-      "_resize.js",
+      "_FrameView.js",
       "_AppDialog.js"
     ],
     "css": [
@@ -808,7 +822,7 @@
       "_vue.js",
       "_AppButton.js",
       "index.html",
-      "_resize.js",
+      "_FrameView.js",
       "_AppDialog.js",
       "src/App.vue",
       "_executor.ui.js"
@@ -826,7 +840,7 @@
       "_vue.js",
       "_AppButton.js",
       "index.html",
-      "_resize.js",
+      "_FrameView.js",
       "_AppearanceControls.js",
       "src/features/objects/RecordForm.vue",
       "_admin.document.js",
@@ -847,7 +861,7 @@
       "_vue.js",
       "_AppButton.js",
       "index.html",
-      "_resize.js",
+      "_FrameView.js",
       "_AppearanceControls.js",
       "_CodeBlock.js"
     ],
@@ -864,7 +878,7 @@
       "_vue.js",
       "_AppButton.js",
       "index.html",
-      "_resize.js",
+      "_FrameView.js",
       "_sections.ui.js",
       "_file_values.js",
       "_files.js",
@@ -887,7 +901,7 @@
       "_vue.js",
       "_AppButton.js",
       "index.html",
-      "_resize.js",
+      "_FrameView.js",
       "_ConfiguredView.js",
       "_AppDialog.js"
     ],
@@ -905,7 +919,7 @@
       "_AppButton.js",
       "_icons.js",
       "index.html",
-      "_resize.js",
+      "_FrameView.js",
       "_admin.document.js",
       "_ConfiguredView.js",
       "_markdown-it.js",
@@ -941,7 +955,7 @@
       "_vue.js",
       "_AppButton.js",
       "index.html",
-      "_resize.js",
+      "_FrameView.js",
       "_sections.ui.js",
       "_ContentLoadingOverlay.js"
     ],
@@ -959,7 +973,7 @@
       "_vue.js",
       "_AppButton.js",
       "index.html",
-      "_resize.js",
+      "_FrameView.js",
       "_textMetrics.js",
       "_sections.ui.js"
     ],
@@ -976,7 +990,7 @@
       "_vue.js",
       "_AppButton.js",
       "index.html",
-      "_resize.js",
+      "_FrameView.js",
       "src/features/objects/RecordForm.vue",
       "_admin.document.js",
       "_file_values.js",
@@ -995,7 +1009,7 @@
       "_vue.js",
       "_AppButton.js",
       "index.html",
-      "_resize.js",
+      "_FrameView.js",
       "_ConfiguredView.js",
       "_AppDialog.js",
       "_tree.ui.js",
@@ -1015,7 +1029,7 @@
       "_vue.js",
       "_AppButton.js",
       "index.html",
-      "_resize.js",
+      "_FrameView.js",
       "src/App.vue"
     ],
     "css": [
@@ -1030,7 +1044,7 @@
     "imports": [
       "_vue.js",
       "_AppButton.js",
-      "_resize.js"
+      "_FrameView.js"
     ],
     "css": [
       "assets/TaskCalendarView.css"
@@ -1044,7 +1058,7 @@
     "imports": [
       "_vue.js",
       "_AppButton.js",
-      "_resize.js"
+      "_FrameView.js"
     ],
     "css": [
       "assets/TaskGanttView.css"
@@ -1058,7 +1072,7 @@
     "imports": [
       "_vue.js",
       "_AppButton.js",
-      "_resize.js",
+      "_FrameView.js",
       "_ConfiguredView.js"
     ],
     "css": [

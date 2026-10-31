@@ -1,8 +1,8 @@
 import { A as onMounted, H as watch, K as withDirectives, M as openBlock, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, m as createBaseVNode, nt as normalizeStyle, p as computed, s as vShow } from "./vue.js";
 import { s as appearance } from "./AppButton.js";
 import { K as uploadFormFile, k as rpc } from "./index.js";
-import { B as listRowHeight, H as node, R as button, U as rect, n as observeFrameSizes, r as _sfc_main$1, y as translate$1, z as label } from "./resize.js";
-import { wt as describe$2 } from "./ConfiguredView.js";
+import { G as node, H as label, K as rect, S as translate$1, U as listRowHeight, V as button, t as _sfc_main$1, w as observeFrameSizes } from "./FrameView.js";
+import { Ct as describe$2 } from "./ConfiguredView.js";
 import { t as _sfc_main$2 } from "./PageEditorTools.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/plugins/plugins.resources.mjs
 var russian$1 = {

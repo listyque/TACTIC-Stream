@@ -2,7 +2,7 @@ import { A as onMounted, C as inject, E as nextTick, G as withCtx, H as watch, K
 import { a as _sfc_main$4, o as t, s as appearance, t as _sfc_main$3 } from "./AppButton.js";
 import { i as semanticName, r as aliases } from "./icons.js";
 import { Nt as randomId, h as messageFileRequest, m as linkPreviews, p as knowledgeRequest } from "./index.js";
-import { D as _sfc_main$10, E as _sfc_main$11, F as _sfc_main$7, H as node, I as _sfc_main$9, P as _sfc_main$8, R as button, T as AppSearchField_default, U as rect, f as javascriptTokens, g as copyText, k as _sfc_main$6, m as xmlTokens, n as observeFrameSizes, p as pythonTokens, r as _sfc_main$5, y as translate, z as label } from "./resize.js";
+import { A as _sfc_main$10, G as node, H as label, K as rect, L as _sfc_main$8, M as _sfc_main$6, O as AppSearchField_default, R as _sfc_main$7, S as translate, V as button, d as pythonTokens, f as xmlTokens, k as _sfc_main$11, m as copyText, t as _sfc_main$5, u as javascriptTokens, w as observeFrameSizes, z as _sfc_main$9 } from "./FrameView.js";
 import { M as extractSkeys, j as escapeHtml, u as _sfc_main$12, x as browserLink } from "./admin.document.js";
 import { C as messageDate, Q as _sfc_main$13, h as _sfc_main$14 } from "./ConfiguredView.js";
 import { t as MarkdownItCallable } from "./markdown-it.js";

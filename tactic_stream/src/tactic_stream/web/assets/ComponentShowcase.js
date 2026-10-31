@@ -1,7 +1,157 @@
-import { A as onMounted, M as openBlock, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, et as unref, p as computed } from "./vue.js";
-import { D as textStyles, R as _plugin_vue_export_helper_default, s as appearance, w as lineHeights } from "./AppButton.js";
-import { H as node, R as button, U as rect, n as observeFrameSizes, r as _sfc_main$1, v as describe$2, y as translate, z as label } from "./resize.js";
+import { A as onMounted, E as nextTick, G as withCtx, H as watch, M as openBlock, N as renderList, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, et as unref, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, u as Fragment } from "./vue.js";
+import { D as textStyles, R as _plugin_vue_export_helper_default, o as t, s as appearance, t as _sfc_main$3, w as lineHeights } from "./AppButton.js";
+import { G as node, H as label, K as rect, M as _sfc_main$4, S as translate, V as button, g as describe$3, t as _sfc_main$5, w as observeFrameSizes } from "./FrameView.js";
+import { t as _sfc_main$6 } from "./ActionRow.js";
+import { t as _sfc_main$7 } from "./AppDialog.js";
 import { t as listAction } from "./tree.ui.js";
+import { S as surfaces, x as filterGeometry } from "./App.js";
+//#region src/features/administration/ShowcaseMenu.vue
+var _sfc_main$2 = {
+	__name: "ShowcaseMenu",
+	props: { frameNode: {
+		type: Object,
+		required: true
+	} },
+	emits: ["event"],
+	setup(__props, { emit: __emit }) {
+		const props = __props;
+		const emit = __emit;
+		const menu = ref(null);
+		const trigger = ref(null);
+		function open(event, below) {
+			if (!props.frameNode.enabled) return;
+			const bounds = trigger.value.$el.getBoundingClientRect();
+			menu.value?.openAt(below ? {
+				clientX: bounds.left,
+				clientY: bounds.bottom,
+				target: trigger.value.$el
+			} : event);
+		}
+		function choose(command) {
+			menu.value?.close(true);
+			emit("event", {
+				...props.frameNode.action,
+				value: command
+			});
+		}
+		watch(() => props.frameNode.enabled, (enabled) => {
+			if (!enabled) menu.value?.close(true);
+		});
+		return (_ctx, _cache) => {
+			return openBlock(), createElementBlock("div", null, [createVNode(_sfc_main$3, {
+				ref_key: "trigger",
+				ref: trigger,
+				label: __props.frameNode.text,
+				"translate-label": false,
+				disabled: !__props.frameNode.enabled,
+				style: {
+					"width": "100%",
+					"height": "100%"
+				},
+				onClick: _cache[0] || (_cache[0] = ($event) => open($event, true)),
+				onContextmenu: _cache[1] || (_cache[1] = withModifiers(($event) => open($event, false), ["prevent"]))
+			}, null, 8, ["label", "disabled"]), createVNode(_sfc_main$4, {
+				ref_key: "menu",
+				ref: menu,
+				label: __props.frameNode.text,
+				"external-trigger": "",
+				anchor: trigger.value?.$el,
+				overlay: "",
+				"frame-composition": "",
+				disabled: !__props.frameNode.enabled
+			}, {
+				default: withCtx(() => [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.frameNode.actions, (record, index) => {
+					return openBlock(), createElementBlock(Fragment, { key: index }, [record.children ? (openBlock(), createBlock(_sfc_main$4, {
+						key: 0,
+						label: record.title,
+						"show-label": "",
+						submenu: "",
+						overlay: "",
+						"frame-composition": ""
+					}, {
+						default: withCtx(() => [(openBlock(true), createElementBlock(Fragment, null, renderList(record.children, (child) => {
+							return openBlock(), createBlock(_sfc_main$6, {
+								key: child.command,
+								record: child,
+								onTriggered: ($event) => choose(child.command)
+							}, null, 8, ["record", "onTriggered"]);
+						}), 128))]),
+						_: 2
+					}, 1032, ["label"])) : (openBlock(), createBlock(_sfc_main$6, {
+						key: 1,
+						record,
+						onTriggered: ($event) => choose(record.command)
+					}, null, 8, ["record", "onTriggered"]))], 64);
+				}), 128))]),
+				_: 1
+			}, 8, [
+				"label",
+				"anchor",
+				"disabled"
+			])]);
+		};
+	}
+};
+//#endregion
+//#region src/features/administration/ShowcaseDialog.vue
+var _hoisted_1 = ["role"];
+var _hoisted_2 = { class: "window-actions" };
+var _sfc_main$1 = {
+	__name: "ShowcaseDialog",
+	props: { frameNode: {
+		type: Object,
+		required: true
+	} },
+	emits: ["event"],
+	setup(__props, { emit: __emit }) {
+		const props = __props;
+		const emit = __emit;
+		const dialog = ref(null);
+		let outcome = "";
+		watch(() => props.frameNode.open, async (opened) => {
+			await nextTick();
+			if (opened) {
+				outcome = "";
+				dialog.value?.show();
+			} else if (dialog.value?.open) dialog.value.close();
+		}, { immediate: true });
+		function finish(value) {
+			outcome = value;
+			dialog.value.close();
+		}
+		function closed() {
+			if (props.frameNode.open) emit("event", {
+				...props.frameNode.action,
+				value: outcome || "cancel"
+			});
+		}
+		onBeforeUnmount(() => {
+			if (dialog.value?.open) dialog.value.close();
+		});
+		return (_ctx, _cache) => {
+			return openBlock(), createElementBlock("div", null, [createVNode(_sfc_main$7, {
+				ref_key: "dialog",
+				ref: dialog,
+				title: __props.frameNode.text,
+				"translate-title": false,
+				style: normalizeStyle({ width: (__props.frameNode.popupWidth || 440) + "px" }),
+				onClosed: closed
+			}, {
+				default: withCtx(() => [createBaseVNode("p", { role: __props.frameNode.error ? "alert" : void 0 }, toDisplayString(__props.frameNode.message), 9, _hoisted_1), createBaseVNode("footer", _hoisted_2, [createVNode(_sfc_main$3, {
+					label: __props.frameNode.cancelText || unref(t)("Cancel"),
+					onClick: _cache[0] || (_cache[0] = ($event) => finish("cancel"))
+				}, null, 8, ["label"]), createVNode(_sfc_main$3, {
+					label: __props.frameNode.acceptText || unref(t)("Apply"),
+					highlighted: "",
+					disabled: !__props.frameNode.enabled,
+					onClick: _cache[1] || (_cache[1] = ($event) => finish("accept"))
+				}, null, 8, ["label", "disabled"])])]),
+				_: 1
+			}, 8, ["title", "style"])]);
+		};
+	}
+};
+//#endregion
 //#region ../src/tactic_stream/shared_ui/controls/catalog.ui.mjs
 var users = [{
 	value: "admin",
@@ -36,7 +186,7 @@ var choices = [
 ];
 //#endregion
 //#region ../src/tactic_stream/shared_ui/controls/showcase.examples.mjs
-function describe$1(model, family, width, language) {
+function describe$2(model, family, width, language) {
 	const tr = (text) => translate(text, language), nodes = [];
 	const enabled = !["disabled", "readonly"].includes(model.state);
 	const text = model.state === "long" ? "A much longer component label / Длинное название компонента" : model.text;
@@ -415,7 +565,7 @@ function describe$1(model, family, width, language) {
 		"donut"
 	]) {
 		caption(type === "line" ? "Line chart" : type === "bar" ? "Bar chart" : "Donut chart");
-		const scene = describe$2({
+		const scene = describe$3({
 			type,
 			labels: [
 				"Mon",
@@ -454,6 +604,934 @@ function describe$1(model, family, width, language) {
 		}
 	}
 	const code = family === "charts" ? "import { describe } from './controls/charts/chart.ui.mjs';\n\ndescribe({ type: 'line', labels: ['Mon', 'Tue', 'Wed'], values: [4, 8, 5] },\n  'chart', 600, 220, 'en');" : example ? `import { node, rect } from './core/frame.mjs';\n\nnode(${JSON.stringify(example.kind)}, 'example',\n  rect(0, 0, ${Math.round(example.width)}, ${Math.round(example.height)}),\n  ${JSON.stringify(properties, null, 2)}\n);` : "";
+	return {
+		nodes,
+		height: y,
+		code
+	};
+}
+//#endregion
+//#region ../src/tactic_stream/shared_ui/controls/catalog/variants.mjs
+var exampleImage = "data:image/svg+xml," + encodeURIComponent("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"120\" height=\"60\"><path fill=\"#cc6655\" d=\"M0 0h60v60H0z\"/><path fill=\"#5588aa\" d=\"M60 0h60v60H60z\"/><path fill=\"#55aa66\" d=\"M0 0h12v60H0z\"/></svg>");
+function sample(id, family, kind, properties = {}, height = 36) {
+	return {
+		id,
+		family,
+		kind,
+		properties,
+		height
+	};
+}
+var examples = [
+	sample("icon-material", "icons", "Icon", {
+		icon: "material-design:account",
+		color: "action"
+	}, 24),
+	sample("icon-solid", "icons", "Icon", {
+		icon: "fontawesome-solid:user",
+		color: "action"
+	}, 24),
+	sample("icon-outline", "icons", "Icon", {
+		icon: "fontawesome-outline:user",
+		color: "action"
+	}, 24),
+	sample("icon-fluent", "icons", "Icon", {
+		icon: "fluent-regular:person",
+		color: "action"
+	}, 24),
+	sample("icon-fluent-filled", "icons", "Icon", {
+		icon: "fluent-filled:person",
+		color: "action"
+	}, 24),
+	sample("icon-small", "icons", "Icon", {
+		icon: "save",
+		color: "secondaryText"
+	}, 16),
+	sample("icon-large", "icons", "Icon", {
+		icon: "save",
+		color: "action"
+	}, 40),
+	sample("tree", "lists", "tree", {}, 280),
+	sample("table", "tables", "Grid", {}, 280),
+	sample("table-readonly", "tables", "Grid", { readOnly: true }, 280),
+	sample("graph", "graphs", "Graph", {}, 320),
+	sample("graph-readonly", "graphs", "Graph", { readOnly: true }, 320),
+	sample("code", "editors", "Code", { value: "def example():\n    return 42\n" }, 300),
+	sample("code-readonly", "editors", "Code", {
+		value: "def example():\n    return 42\n",
+		readOnly: true
+	}, 300),
+	sample("button", "buttons", "Button", {
+		text: "Save",
+		icon: "save"
+	}),
+	sample("button-primary", "buttons", "Button", {
+		text: "Create",
+		icon: "add",
+		highlighted: true
+	}),
+	sample("button-tonal", "buttons", "Button", {
+		text: "Apply",
+		tonal: true
+	}),
+	sample("button-danger", "buttons", "Button", {
+		text: "Delete",
+		icon: "delete",
+		destructive: true
+	}),
+	sample("button-filled-danger", "buttons", "Button", {
+		text: "Delete",
+		icon: "delete",
+		destructive: true,
+		highlighted: true
+	}),
+	sample("button-icon", "buttons", "Button", {
+		text: "Refresh",
+		icon: "refresh",
+		iconOnly: true
+	}),
+	sample("button-badge-zero", "buttons", "counter", { value: 0 }),
+	sample("button-badge", "buttons", "counter", { value: 4 }),
+	sample("button-badge-overflow", "buttons", "counter", { value: 132 }),
+	sample("button-disclosure", "buttons", "disclosure", { value: false }),
+	sample("button-preview", "buttons", "previewNavigation", { value: 0 }),
+	sample("button-send", "buttons", "send", { value: false }),
+	sample("checkbox", "toggles", "CheckBox", {
+		text: "Enabled",
+		value: false
+	}),
+	sample("checkbox-checked", "toggles", "CheckBox", {
+		text: "Enabled",
+		value: true
+	}),
+	sample("checkbox-wrapped", "toggles", "CheckBox", {
+		text: "Very long example item title that wraps in a narrow viewport",
+		wrapText: true,
+		value: true
+	}, 64),
+	sample("checkbox-mixed", "toggles", "CheckBox", {
+		text: "Enabled",
+		value: true,
+		mixed: true
+	}),
+	sample("checkbox-compact", "toggles", "CheckBox", {
+		text: "Enabled",
+		value: true,
+		compact: true
+	}),
+	sample("checkbox-prominent", "toggles", "CheckBox", {
+		text: "Enabled",
+		value: false,
+		prominent: true
+	}),
+	sample("switch-off", "toggles", "Switch", {
+		text: "Enabled",
+		value: false
+	}),
+	sample("switch-on", "toggles", "Switch", {
+		text: "Enabled",
+		value: true
+	}),
+	sample("segments", "toggles", "segments", { value: "model" }),
+	sample("segments-icons", "toggles", "segments", {
+		value: "model",
+		iconOnly: true
+	}),
+	sample("segments-outline", "toggles", "segments", {
+		value: "model",
+		outlined: true
+	}),
+	sample("segments-disabled-option", "toggles", "segments", {
+		value: "model",
+		disabledOption: true,
+		dataLabels: true
+	}),
+	sample("field", "text-fields", "Field", {
+		value: "Robot Arm",
+		label: "Name"
+	}),
+	sample("field-empty", "text-fields", "Field", {
+		value: "",
+		label: "Name",
+		placeholder: "Name"
+	}),
+	sample("field-password", "text-fields", "Field", {
+		value: "private example",
+		label: "Password",
+		password: true
+	}),
+	sample("field-readonly", "text-fields", "Field", {
+		value: "Read only",
+		label: "Name",
+		readOnly: true
+	}),
+	sample("field-error", "text-fields", "Field", {
+		value: "Invalid value",
+		label: "Name",
+		error: true
+	}),
+	sample("field-inline", "text-fields", "Field", {
+		value: "Robot Arm",
+		label: "Name",
+		tableCell: true
+	}),
+	sample("text-area", "text-fields", "Area", {
+		value: "First line\nSecond line",
+		label: "Description"
+	}, 100),
+	sample("search", "search", "search", { value: "Robot" }),
+	sample("search-empty", "search", "search", { value: "" }),
+	sample("search-suggestions", "search", "search", {
+		value: "Robot",
+		suggestions: true
+	}),
+	sample("choice", "choices", "Choice", { value: "model" }),
+	sample("choice-empty", "choices", "Choice", { value: "" }),
+	sample("choice-editable", "choices", "Choice", {
+		value: "custom_process",
+		editable: true
+	}),
+	sample("choice-disabled-option", "choices", "Choice", {
+		value: "model",
+		disabledOption: true
+	}),
+	sample("choice-icons", "choices", "Choice", {
+		value: "model",
+		choiceIcons: true
+	}),
+	sample("choice-status", "choices", "status", { value: "model" }, 28),
+	sample("packed-choices", "choices", "packedChoices", { value: "" }, 280),
+	sample("integer", "numbers", "spin", {
+		value: 5,
+		min: 0,
+		max: 10,
+		step: 1,
+		decimals: 0
+	}),
+	sample("decimal", "numbers", "spin", {
+		value: 1.25,
+		min: -2,
+		max: 3,
+		step: .25,
+		decimals: 2
+	}),
+	sample("integer-min", "numbers", "spin", {
+		value: 0,
+		min: 0,
+		max: 10,
+		step: 1,
+		decimals: 0
+	}),
+	sample("integer-max", "numbers", "spin", {
+		value: 10,
+		min: 0,
+		max: 10,
+		step: 1,
+		decimals: 0
+	}),
+	sample("slider", "numbers", "slider", {
+		value: 50,
+		min: 0,
+		max: 100,
+		step: 1
+	}, 26),
+	sample("slider-step", "numbers", "slider", {
+		value: 50,
+		min: 0,
+		max: 100,
+		step: 5
+	}, 26),
+	sample("slider-fixed", "numbers", "slider", {
+		value: 5,
+		min: 5,
+		max: 5,
+		step: 1
+	}, 26),
+	sample("date", "dates", "DateChoice", {
+		value: "2024-02-29",
+		includeTime: false
+	}),
+	sample("datetime", "dates", "DateChoice", {
+		value: "2024-02-29T13:14",
+		includeTime: true
+	}),
+	sample("date-early-year", "dates", "DateChoice", {
+		value: "0099-01-01",
+		includeTime: false
+	}),
+	sample("date-invalid", "dates", "DateChoice", {
+		value: "2023-02-29",
+		includeTime: false
+	}),
+	sample("date-empty", "dates", "DateChoice", {
+		value: "",
+		includeTime: false
+	}),
+	sample("user", "user-choice", "UserChoice", { value: "admin" }),
+	sample("user-empty", "user-choice", "UserChoice", { value: "" }),
+	sample("users-multiple", "user-choice", "users", { value: ["admin"] }, 300),
+	sample("avatar-initials", "identity", "Preview", {
+		initials: "A",
+		round: true,
+		outlined: true,
+		accent: "#557f75"
+	}, 40),
+	sample("avatar-two-initials", "identity", "Preview", {
+		initials: "TA",
+		round: true,
+		outlined: true,
+		accent: "#557f75"
+	}, 40),
+	sample("avatar-fallback", "identity", "Preview", {
+		icon: "person",
+		round: true,
+		outlined: true,
+		accent: "#557f75"
+	}, 40),
+	sample("identity", "identity", "identity", { value: "admin" }, 40),
+	sample("identity-retired", "identity", "identity", {
+		value: "admin",
+		retired: true
+	}, 40),
+	sample("identity-emphasized", "identity", "identity", {
+		value: "admin",
+		emphasized: true,
+		avatarSize: 56
+	}, 56),
+	sample("user-group", "identity", "userGroup", { value: "Artists" }, 34),
+	sample("user-group-compact", "identity", "userGroup", {
+		value: "Artists",
+		compact: true
+	}, 28),
+	sample("user-group-empty", "identity", "userGroup", { value: "Ungrouped" }, 34),
+	sample("profile-info", "identity", "profileInfo", { value: "Administrator" }, 40),
+	sample("color", "pickers", "ColorChoice", { value: "#78a6c4" }),
+	sample("icon-choice", "pickers", "IconChoice", { value: "save" }),
+	sample("emoji", "pickers", "emoji", { value: "" }),
+	sample("image-picker", "pickers", "image", { value: "" }, 220),
+	sample("accent-presets", "pickers", "presets", { value: "blue" }, 48),
+	sample("preview-square", "previews", "Preview", {
+		initials: "RA",
+		accent: "#557f75",
+		round: false,
+		outlined: false
+	}, 96),
+	sample("preview-outline", "previews", "Preview", {
+		initials: "RA",
+		accent: "#557f75",
+		round: false,
+		outlined: true
+	}, 96),
+	sample("preview-broken", "previews", "Preview", {
+		initials: "RA",
+		source: "missing-example.png",
+		accent: "#557f75",
+		round: false
+	}, 96),
+	sample("preview-loading", "previews", "Preview", {
+		loading: true,
+		source: "pending-preview:example"
+	}, 96),
+	sample("preview-photo", "previews", "Preview", {
+		source: exampleImage,
+		round: false
+	}, 96),
+	sample("preview-contain", "previews", "Preview", {
+		source: exampleImage,
+		round: false,
+		fit: "contain"
+	}, 96),
+	sample("preview-selected", "previews", "Preview", {
+		source: exampleImage,
+		round: false,
+		selected: true
+	}, 96),
+	sample("avatar-photo", "identity", "Preview", {
+		source: exampleImage,
+		round: true
+	}, 40),
+	sample("chip", "badges", "chip", { value: 4 }, 30),
+	sample("chip-clickable", "badges", "chip", {
+		value: 4,
+		clickable: true
+	}, 30),
+	sample("chip-compact", "badges", "chip", {
+		value: 4,
+		compact: true
+	}, 24),
+	sample("status-chip", "badges", "statusChip", { value: "Ready" }, 24),
+	sample("status-chip-dense", "badges", "statusChip", {
+		value: "Ready",
+		dense: true
+	}, 20),
+	sample("status-chip-action", "badges", "statusChip", {
+		value: "Ready",
+		interactive: true
+	}, 24),
+	sample("reaction", "badges", "reaction", {
+		value: false,
+		count: 1
+	}, 28),
+	sample("reaction-count", "badges", "reaction", {
+		value: false,
+		count: 4
+	}, 28),
+	sample("reaction-checked", "badges", "reaction", {
+		value: true,
+		count: 4
+	}, 28),
+	sample("filter-chip", "badges", "filterChip", { value: false }, 32),
+	sample("filter-chip-checked", "badges", "filterChip", { value: true }, 32),
+	sample("filter-chip-subtle", "badges", "filterChip", {
+		value: true,
+		subtle: true
+	}, 32),
+	sample("filter-chip-marker", "badges", "filterChip", {
+		value: true,
+		marker: true
+	}, 32),
+	sample("filter-chip-emphasis", "badges", "filterChip", {
+		value: true,
+		emphasis: 1
+	}, filterGeometry(1).height),
+	sample("tab", "tabs", "tab", { value: false }),
+	sample("tab-current", "tabs", "tab", { value: true }),
+	sample("header", "headers", "header", { subtitle: "Description" }, 60),
+	sample("header-back", "headers", "header", {
+		back: true,
+		subtitle: "Description"
+	}, 60),
+	sample("header-actions", "headers", "header", { actions: [{
+		label: "Refresh",
+		icon: "refresh",
+		command: "refresh"
+	}, {
+		label: "Actions",
+		icon: "more",
+		command: "menu"
+	}] }, 60),
+	sample("editor-panel", "headers", "editorPanel", {}, 160),
+	sample("configuration-section", "headers", "configurationSection", {}, 160),
+	sample("section-label", "headers", "sectionLabel", {}, 24),
+	sample("info-values", "headers", "infoValues", { items: [{
+		label: "Type",
+		value: "Asset"
+	}, {
+		label: "Version",
+		value: "v003"
+	}] }, 16),
+	sample("field-frame", "headers", "fieldFrame", { value: "Robot Arm" }, 150),
+	sample("field-frame-required", "headers", "fieldFrame", {
+		value: "Robot Arm",
+		required: true
+	}, 150),
+	sample("field-frame-error", "headers", "fieldFrame", {
+		value: "",
+		error: true
+	}, 180),
+	sample("field-frame-readonly", "headers", "fieldFrame", {
+		value: "Robot Arm",
+		readOnly: true
+	}, 180),
+	sample("list-item", "lists", "listItem", { value: "Example item" }, 72),
+	sample("list-item-selected", "lists", "listItem", {
+		value: "Example item",
+		selected: true
+	}, 72),
+	sample("list-item-badge", "lists", "listItem", {
+		value: "Example item",
+		badge: true
+	}, 72),
+	sample("list-item-long", "lists", "listItem", {
+		value: "Very long example item title that wraps in a narrow viewport",
+		wrapTitle: true
+	}, 100),
+	sample("menu", "menus", "menu", { value: "" }),
+	sample("menu-checks", "menus", "menu", {
+		value: "",
+		checkable: true
+	}),
+	sample("busy", "feedback", "busy", { value: true }, 24),
+	sample("progress", "feedback", "progress", { value: .5 }, 4),
+	sample("progress-empty", "feedback", "progress", { value: 0 }, 4),
+	sample("progress-complete", "feedback", "progress", { value: 1 }, 4),
+	sample("progress-indeterminate", "feedback", "progress", { value: null }, 4),
+	sample("loading-overlay", "feedback", "loadingOverlay", {}, 220),
+	sample("loading-cancellable", "feedback", "loadingOverlay", { cancellable: true }, 220),
+	sample("empty", "feedback", "empty", { value: "" }, 180),
+	sample("error-retry", "feedback", "empty", {
+		value: "",
+		error: true
+	}, 220),
+	sample("drop-target", "drag-files", "drop", {
+		value: "",
+		accepted: true
+	}, 180),
+	sample("drop-rejected", "drag-files", "drop", {
+		value: "",
+		accepted: false
+	}, 180),
+	sample("markdown", "typography", "markdown", { value: "# Example\n\n**Bold** and a [link](https://example.org).\n\n- First item\n- Second item" }, 200),
+	sample("middle-elide", "typography", "elide", { value: "D:/very/long/project/path/to/production/scene-file.ext" }),
+	sample("setting-row", "scroll-layout", "setting", { value: true }, 100),
+	sample("flow", "scroll-layout", "flow", { value: "" }, 150),
+	sample("scroll-vertical", "scroll-layout", "Scroll", {}, 280),
+	sample("scroll-horizontal", "scroll-layout", "Scroll", { horizontal: true }, 120),
+	sample("scroll-both", "scroll-layout", "Scroll", { both: true }, 280),
+	sample("splitter-vertical", "scroll-layout", "Splitter", { value: 50 }, 160),
+	sample("splitter-horizontal", "scroll-layout", "Splitter", {
+		value: 50,
+		horizontal: true
+	}, 10)
+];
+//#endregion
+//#region ../src/tactic_stream/shared_ui/features/administration/showcase.examples.mjs
+var families$1 = [
+	"search",
+	"identity",
+	"menus",
+	"popups",
+	"feedback",
+	"tables",
+	"scroll-layout",
+	"previews",
+	"drag-files",
+	"editors",
+	"graphs",
+	"input-runtime",
+	"domain-fragments"
+];
+var photo = examples.find((row) => row.kind === "Preview" && String(row.properties.source).startsWith("data:"))?.properties.source || "";
+var tableRows = Array.from({ length: 100 }, (_, i) => ({
+	selected: false,
+	name: "Object " + (i + 1),
+	value: String(i * 10)
+}));
+function models(model) {
+	return { sampleCells: model.family !== "tables" || model.state === "empty" ? [] : tableRows };
+}
+function cell(grid, record, row, column, model, language = "en") {
+	const key = row + ":" + column;
+	return { nodes: [node(column === 0 ? "CheckBox" : "Field", "sampleCell_" + key, rect(0, 0, grid.cellWidth, grid.rowHeight), {
+		text: column === 0 ? "" : model.cells[key] === void 0 ? column === 1 ? "Object " + (row + 1) : String(row * 10) : String(model.cells[key]),
+		checked: model.cells[key] === void 0 ? model.state === "selected" && row === 0 : !!model.cells[key],
+		label: translate(column === 0 ? "Selected" : "Value", language),
+		tableCell: true,
+		enabled: grid.enabled && !grid.readOnly,
+		readOnly: grid.readOnly,
+		action: {
+			type: "sampleCell",
+			row,
+			column
+		}
+	})] };
+}
+function describe$1(model, family, width, language) {
+	const tr = (text) => translate(text, language), nodes = [], enabled = ![
+		"disabled",
+		"readonly",
+		"loading"
+	].includes(model.state), flags = {
+		enabled: !["disabled", "loading"].includes(model.state),
+		readOnly: model.state === "readonly",
+		error: model.state === "error"
+	}, h = model.state === "long" ? 64 : 36;
+	let y = 0;
+	function add(kind, id, height, props, w = width) {
+		nodes.push(node(kind, id, rect(0, y, w, height), props));
+		y += height + 16;
+	}
+	function title(text) {
+		add("Label", "sampleTitle_" + y, 28, {
+			text: tr(text),
+			fontRole: "section",
+			weight: 600
+		});
+	}
+	function action(id, text, type, value) {
+		nodes.push(button(id, rect(0, y, Math.min(width, 240), 36), tr(text), "", {
+			type,
+			value
+		}, enabled));
+		y += 52;
+	}
+	if (model.state === "loading" && !["search", "feedback"].includes(family)) add("Progress", "sampleLoading", 4, {
+		text: tr("Loading"),
+		indeterminate: true
+	});
+	if (model.state === "error" && family !== "feedback") add("Label", "sampleError", 40, {
+		text: tr("Something went wrong"),
+		color: "error",
+		role: "alert",
+		wrap: true
+	});
+	if (family === "search") {
+		title("Search suggestions");
+		const rows = model.state === "empty" || model.state === "loading" ? [] : [
+			"Robot Arm",
+			"Robot Body",
+			"Workshop"
+		].filter((text) => text.toLowerCase().includes(model.search.toLowerCase())).map((text, i) => ({
+			title: text,
+			description: tr("Example"),
+			code: String(i)
+		}));
+		add("Search", "sampleSearch", 44, Object.assign({}, flags, {
+			text: model.search,
+			placeholder: tr("Search objects"),
+			label: tr("Search objects"),
+			suggestions: rows,
+			errorText: model.state === "error" ? tr("Search failed") : "",
+			action: { type: "search" },
+			acceptAction: { type: "searchAccept" },
+			commitAction: { type: "searchSubmit" }
+		}));
+		if (model.state === "loading") add("Progress", "sampleSearchPending", 4, {
+			text: tr("Loading"),
+			indeterminate: true
+		});
+		add("Label", "sampleSearchCount", 28, {
+			text: String(rows.length) + " · " + tr("Search suggestions"),
+			color: "secondaryText"
+		});
+	} else if (family === "identity") {
+		for (const [login, name, initials, retired, emphasized] of [
+			[
+				"admin",
+				"Administrator",
+				"A",
+				false,
+				true
+			],
+			[
+				"vfx_anna",
+				model.state === "long" ? model.text.repeat(4) : "Anna",
+				"VA",
+				false,
+				false
+			],
+			[
+				"archived",
+				"Retired",
+				"AR",
+				true,
+				false
+			]
+		]) add("Identity", "sampleIdentity_" + login, 52, {
+			text: tr(name),
+			login,
+			initials,
+			accent: "action",
+			retired,
+			emphasized,
+			opacity: model.state === "disabled" ? .5 : 1
+		});
+		add("UserChoice", "sampleIdentityChoice", 36, {
+			value: model.user,
+			options: [{
+				value: "admin",
+				label: "Administrator",
+				login: "admin"
+			}, {
+				value: "vfx_anna",
+				label: "Anna",
+				login: "vfx_anna"
+			}],
+			enabled,
+			action: { type: "user" },
+			label: tr("User")
+		});
+	} else if (family === "menus") {
+		title("Context menu");
+		add("View", "sampleMenu", 36, {
+			view: "showcaseMenu",
+			text: tr("Open menu"),
+			enabled,
+			checked: model.menuChecked,
+			language,
+			action: { type: "sampleMenu" },
+			actions: [
+				{
+					title: tr("Actions"),
+					header: true,
+					translate: false
+				},
+				{
+					title: tr("Edit"),
+					command: "edit",
+					icon: "edit",
+					translate: false
+				},
+				{
+					title: tr("Selected"),
+					command: "toggle",
+					checked: model.menuChecked,
+					translate: false
+				},
+				{ separator: true },
+				{
+					title: tr("More"),
+					children: [{
+						title: tr("Refresh"),
+						command: "refresh",
+						icon: "refresh",
+						translate: false
+					}],
+					translate: false
+				},
+				{
+					title: tr("Delete"),
+					command: "delete",
+					icon: "delete",
+					enabled: false,
+					translate: false
+				}
+			].filter((row) => model.state !== "empty").concat(model.state === "empty" ? [{
+				title: tr("No results"),
+				enabled: false,
+				translate: false
+			}] : [])
+		}, Math.min(width, 240));
+		add("Label", "sampleMenuResult", 40, {
+			text: model.last || tr("Choose an action"),
+			wrap: true
+		});
+	} else if (family === "popups") {
+		title("Confirmation");
+		action("sampleOpenDialog", "Open dialog", "sampleDialogOpen");
+		add("View", "sampleDialog", 0, {
+			view: "showcaseDialog",
+			text: tr("Confirmation"),
+			message: model.state === "empty" ? "" : model.state === "long" ? model.text.repeat(8) : tr("Changes stay in this example."),
+			open: model.dialogOpen,
+			popupWidth: 440,
+			cancelText: tr("Cancel"),
+			acceptText: tr("Apply"),
+			enabled,
+			language,
+			error: flags.error,
+			action: { type: "sampleDialog" }
+		});
+		add("Label", "sampleDialogResult", 36, {
+			text: model.last || tr("No changes"),
+			wrap: true
+		});
+	} else if (family === "feedback") {
+		title("Progress");
+		add("Progress", "sampleProgress", 4, {
+			text: tr("Progress"),
+			value: model.progress / 100,
+			indeterminate: model.state === "loading"
+		});
+		add("Label", "sampleProgressValue", 28, { text: String(model.progress) + "%" });
+		action("sampleAdvance", "Continue", "sampleAdvance");
+		add("Empty", "sampleEmpty", 220, {
+			text: tr(model.state === "error" ? "Something went wrong" : "No results"),
+			message: tr("Changes stay in this example."),
+			error: flags.error,
+			icon: flags.error ? "alert" : "search",
+			actionText: tr("Retry"),
+			actionIcon: "refresh",
+			action: { type: "sampleRetry" },
+			enabled
+		});
+	} else if (family === "tables") {
+		title("Table");
+		add("Grid", "sampleGrid", 330, {
+			text: tr("Table"),
+			source: "sampleCells",
+			cellWidth: 160,
+			rowHeight: 38,
+			labelWidth: 40,
+			headerHeight: 32,
+			rowHeaders: models(model).sampleCells.map((_, i) => ({ label: String(i + 1) })),
+			columnHeaders: [
+				tr("Selected"),
+				tr("Name"),
+				tr("Value")
+			],
+			revision: model.revision,
+			enabled,
+			readOnly: flags.readOnly
+		});
+		if (model.state === "empty") add("Empty", "sampleGridEmpty", 180, {
+			text: tr("No results"),
+			icon: "table"
+		});
+	} else if (family === "scroll-layout") {
+		title("Resizable panels");
+		const split = Math.max(0, Math.min(width - 60, model.split * width));
+		const pane = (id, x, w) => node("Scroll", id, rect(x, y, w, 240), {
+			contentWidth: 420,
+			contentHeight: 700,
+			children: Array.from({ length: 14 }, (_, i) => label(id + "_" + i, rect(12, i * 48, 380, 36), tr("Row") + " " + (i + 1)))
+		});
+		nodes.push(pane("sampleLeftPane", 0, split), pane("sampleRightPane", split + 12, Math.max(0, width - split - 12)), node("Splitter", "sampleSplitter", rect(split, y, 12, 240), {
+			min: 0,
+			max: Math.max(48, width - 60),
+			value: split,
+			enabled,
+			text: tr("Resize panels"),
+			action: {
+				type: "sampleSplit",
+				width
+			},
+			commitAction: {
+				type: "sampleSplit",
+				width
+			}
+		}));
+		y += 256;
+		action("sampleCollapsePane", model.split < .2 ? "Expand" : "Collapse", "sampleCollapse");
+	} else if (family === "previews") {
+		title("Image preview");
+		const size = Math.min(width, 180);
+		add("Preview", "sampleImage", size, {
+			source: model.state === "error" || model.state === "empty" ? "" : photo,
+			initials: "RA",
+			icon: model.state === "error" ? "alert" : "image",
+			round: false,
+			selected: model.previewSelected || model.state === "selected",
+			loading: model.state === "loading",
+			fit: model.fit
+		}, size);
+		action("sampleImageSelect", "Select", "samplePreviewSelect");
+		add("Choice", "sampleImageFit", 36, {
+			value: model.fit,
+			options: [{
+				value: "contain",
+				label: "Contain"
+			}, {
+				value: "cover",
+				label: "Cover"
+			}],
+			enabled,
+			label: tr("Image fit"),
+			action: { type: "sampleFit" }
+		});
+	} else if (family === "drag-files") {
+		title("Files");
+		add("FileField", "sampleFile", 44, Object.assign({}, flags, {
+			text: model.files.map((file) => file.name).join(", "),
+			label: tr("Choose file"),
+			action: { type: "sampleFiles" }
+		}));
+		add("Box", "sampleDrop", 144, {
+			enabled,
+			background: "surfaceContainerLow",
+			border: flags.error ? "error" : "outlineVariant",
+			radius: 8,
+			dropAction: {
+				type: "sampleFiles",
+				name: "file-ingest"
+			},
+			children: [label("sampleDropText", rect(16, 16, Math.max(0, width - 32), 110), tr("Drop files here or choose a file above."), {
+				wrap: true,
+				align: "center"
+			})]
+		});
+		for (const file of model.files) add("Label", "sampleFile_" + y, 36, {
+			text: file.name,
+			elideMiddle: true
+		});
+		action("sampleFilesClear", "Clear", "sampleFilesClear");
+	} else if (family === "editors") {
+		title("Source code");
+		add("Code", "sampleEditor", 320, Object.assign({}, flags, {
+			text: model.state === "empty" ? "" : model.editorText,
+			service: "sourceEditor",
+			bufferKey: "showcaseEditable",
+			language,
+			syntax: "python",
+			action: { type: "sampleEditor" }
+		}));
+	} else if (family === "graphs") {
+		title("Graph");
+		const records = model.state === "empty" ? [] : [{
+			identity: "a",
+			label: "Model",
+			nodeX: 24,
+			nodeY: 24,
+			color: "action"
+		}, {
+			identity: "b",
+			label: "Review",
+			nodeX: Math.min(width - 180, 300),
+			nodeY: 160,
+			color: "action"
+		}];
+		add("Graph", "sampleGraph", 360, Object.assign({}, flags, {
+			enabled,
+			nodes: records.map((row) => Object.assign({}, row, model.graphPositions.find((p) => p.identity === row.identity) || {})),
+			edges: records.length ? [{
+				from: "a",
+				to: "b"
+			}] : [],
+			selectedNodes: model.state === "selected" ? ["a"] : model.graphSelected,
+			resetKey: "showcaseGraph_" + model.resetRevision,
+			action: { type: "sampleGraph" },
+			selectAction: { type: "sampleGraphSelect" },
+			moveAction: { type: "sampleGraphMove" }
+		}));
+		action("sampleGraphReset", "Reset", "sampleGraphReset");
+	} else if (family === "input-runtime") {
+		title("Mouse, keyboard and touch");
+		add("Button", "sampleActivation", h, {
+			text: model.state === "long" ? model.text.repeat(3) : tr("Activate"),
+			enabled,
+			action: { type: "sampleActivate" },
+			pressAction: { type: "samplePress" },
+			cancelAction: { type: "sampleCancel" },
+			toolTip: tr("Mouse, keyboard and touch")
+		});
+		add("Field", "sampleIME", 36, Object.assign({}, flags, {
+			text: model.ime,
+			label: tr("Text"),
+			placeholder: "IME · Кириллица · 日本語",
+			action: { type: "sampleIME" }
+		}));
+		add("Label", "sampleInputCounts", 44, {
+			text: tr("Activated") + ": " + model.activations + " · " + tr("Pressed") + ": " + model.presses + " · " + tr("Cancelled") + ": " + model.cancels,
+			wrap: true
+		});
+	} else if (family === "domain-fragments") {
+		title("Task workspace surface");
+		const part = surfaces({
+			value: model.surface,
+			disabled: !enabled,
+			controlHeight: 36
+		}, width, language);
+		add("Box", "sampleTaskSurfaces", part.height, {
+			background: "transparent",
+			children: part.nodes
+		});
+		add("Identity", "sampleTaskAssignee", 48, {
+			text: "Anna",
+			login: "vfx_anna",
+			initials: "VA",
+			accent: "action"
+		});
+		add("StatusChip", "sampleTaskStatus", 32, {
+			text: tr("In progress"),
+			accent: "action"
+		});
+		add("Area", "sampleTaskDraft", 100, Object.assign({}, flags, {
+			text: model.taskDraft,
+			label: tr("Description"),
+			action: { type: "sampleTaskDraft" }
+		}));
+		action("sampleTaskSave", "Save", "sampleTaskSave");
+		if (model.last === "sampleTaskSave") add("Label", "sampleTaskSaved", 28, {
+			text: tr("Saved"),
+			color: "green",
+			role: "status"
+		});
+	}
+	const scene = {
+		nodes,
+		models: models(model)
+	};
+	const code = "import * as Showcase from './features/administration/showcase.ui.mjs';\n\n// FrameView: models = example.models; local model = Showcase.initial();\n// describeCell = (grid, record, row, column) => Showcase.cell(grid, record, row, column, model);\n// Menu/dialog ports: ComponentShowcase hosts. Events: Showcase.transition.\n(" + JSON.stringify(scene, null, 2) + ")";
 	return {
 		nodes,
 		height: y,
@@ -2018,20 +3096,26 @@ var live = [
 	"badges",
 	"lists",
 	"charts"
-];
+].concat(families$1);
 var states = [
 	"default",
 	"disabled",
 	"readonly",
 	"error",
-	"long"
+	"long",
+	"loading",
+	"empty",
+	"selected"
 ];
 var stateLabels = [
 	"Default",
 	"Disabled",
 	"Read only",
 	"Error",
-	"Long text"
+	"Long text",
+	"Loading",
+	"Empty",
+	"Selected"
 ];
 function initial() {
 	return {
@@ -2051,22 +3135,110 @@ function initial() {
 		number: "42",
 		row: "assets",
 		tab: "overview",
+		search: "",
+		menuChecked: true,
+		dialogOpen: false,
+		progress: 42,
+		cells: {},
+		revision: 0,
+		split: .5,
+		files: [],
+		fit: "contain",
+		previewSelected: false,
+		editorText: "def example():\n    return 42\n",
+		graphPositions: [],
+		graphSelected: [],
+		resetRevision: 0,
+		presses: 0,
+		activations: 0,
+		cancels: 0,
+		ime: "",
+		surface: "cards",
+		taskDraft: "Review the model",
+		savedTaskDraft: "",
 		last: ""
 	};
 }
 function transition(model, event, catalog) {
 	const next = Object.assign({}, model);
-	if (event.type === "family" && catalog.families.some((f) => f.id === event.value)) next.family = event.value;
+	if (event.type === "family" && catalog.families.some((f) => f.id === event.value)) Object.assign(next, {
+		family: event.value,
+		dialogOpen: false
+	});
 	else if (event.type === "category" && (event.value === "" || catalog.categories.some((c) => c.id === event.value))) next.category = event.value;
-	else if (event.type === "state" && states.includes(event.value)) next.state = event.value;
+	else if (event.type === "state" && states.includes(event.value)) Object.assign(next, {
+		state: event.value,
+		dialogOpen: false
+	});
 	else if (event.type === "query") next.query = String(event.value || "").slice(0, 200);
 	else if (event.type === "code") next.code = !model.code;
 	else if (event.type === "reset") return Object.assign(initial(), {
+		resetRevision: model.resetRevision + 1,
 		family: model.family,
 		query: model.query,
 		category: model.category
 	});
-	else if ([
+	else if (event.type.startsWith("sample") || [
+		"search",
+		"searchAccept",
+		"searchSubmit",
+		"surface"
+	].includes(event.type)) {
+		if ([
+			"disabled",
+			"readonly",
+			"loading"
+		].includes(model.state) && event.type !== "sampleDialog") return model;
+		next.last = event.type;
+		if (event.type === "search") next.search = String(event.value || "").slice(0, 200);
+		else if (event.type === "searchAccept") next.search = String(event.value.title || "");
+		else if (event.type === "sampleMenu") {
+			next.last = String(event.value);
+			if (event.value === "toggle") next.menuChecked = !model.menuChecked;
+		} else if (event.type === "sampleDialogOpen") next.dialogOpen = true;
+		else if (event.type === "sampleDialog") {
+			next.dialogOpen = false;
+			next.last = String(event.value);
+		} else if (event.type === "sampleAdvance") next.progress = Math.min(100, model.progress + 10);
+		else if (event.type === "sampleRetry") {
+			next.progress = 0;
+			next.state = "default";
+		} else if (event.type === "sampleCell") {
+			next.cells = Object.assign({}, model.cells);
+			next.cells[event.row + ":" + event.column] = event.value;
+			next.revision++;
+		} else if (event.type === "sampleSplit" && event.width > 0) next.split = Math.max(0, Math.min(1, Number(event.value) / event.width));
+		else if (event.type === "sampleCollapse") next.split = model.split < .2 ? .5 : 0;
+		else if (event.type === "sampleFit") next.fit = event.value === "cover" ? "cover" : "contain";
+		else if (event.type === "samplePreviewSelect") next.previewSelected = !model.previewSelected;
+		else if (event.type === "sampleFiles") next.files = fileLabels(event.value);
+		else if (event.type === "sampleFilesClear") next.files = [];
+		else if (event.type === "sampleEditor") next.editorText = String(event.value);
+		else if (event.type === "sampleGraphSelect") next.graphSelected = Array.isArray(event.value) ? event.value : [];
+		else if (event.type === "sampleGraphMove") next.graphPositions = Array.isArray(event.value) ? event.value : [];
+		else if (event.type === "sampleGraphReset") {
+			next.resetRevision++;
+			next.graphSelected = [];
+			next.graphPositions = [];
+		} else if (event.type === "sampleGraph" && event.value) {
+			if (event.value.type === "clear") next.graphSelected = [];
+			if (event.value.type === "selectNodes") next.graphSelected = event.value.identities || [];
+			else if (event.value.type === "moveNodes") {
+				const positions = event.value.positions || [];
+				next.graphPositions = model.graphPositions.filter((old) => !positions.some((row) => row.identity === old.identity)).concat(positions);
+			}
+		} else if (event.type === "sampleActivate") next.activations++;
+		else if (event.type === "samplePress") next.presses++;
+		else if (event.type === "sampleCancel") next.cancels++;
+		else if (event.type === "sampleIME") next.ime = String(event.value);
+		else if (event.type === "surface" && [
+			"cards",
+			"compact",
+			"workspace"
+		].includes(event.value)) next.surface = event.value;
+		else if (event.type === "sampleTaskDraft") next.taskDraft = String(event.value);
+		else if (event.type === "sampleTaskSave") next.savedTaskDraft = model.taskDraft;
+	} else if ([
 		"text",
 		"area",
 		"checked",
@@ -2081,6 +3253,18 @@ function transition(model, event, catalog) {
 	].includes(event.type)) next[event.type] = event.value;
 	else next.last = event.type;
 	return next;
+}
+function fileLabels(values) {
+	if (!Array.isArray(values)) return [];
+	return values.slice(0, 100).map((value) => {
+		const raw = typeof value === "string" ? value : value && value.name;
+		if (!raw || typeof value === "string" && !raw.startsWith("file:")) return null;
+		let name = String(raw).split(/[\\/]/).pop();
+		try {
+			name = decodeURIComponent(name);
+		} catch (_) {}
+		return { name: name.slice(0, 240) };
+	}).filter(Boolean);
 }
 function families(catalog, model, language) {
 	const query = model.query.trim().toLocaleLowerCase();
@@ -2196,6 +3380,7 @@ function describe(model, catalog, width, height, language = "en") {
 		weight: 600,
 		wrap: true,
 		maxLines: 2,
+		verticalAlign: "top",
 		role: "heading",
 		level: 2
 	}));
@@ -2209,7 +3394,7 @@ function describe(model, catalog, width, height, language = "en") {
 		content.push(label("showcaseNoResults", rect(16, y, inner, 48), tr("No matching components"), { wrap: true }));
 		y += 64;
 	} else if (live.includes(family.id)) {
-		const p = describe$1(model, family.id, inner, language);
+		const p = families$1.includes(family.id) ? describe$1(model, family.id, inner, language) : describe$2(model, family.id, inner, language);
 		if (p.code) {
 			if (narrow) content.push(button("showcaseCode", rect(16, y, Math.min(inner, 160), 36), tr(model.code ? "Preview" : "Code example"), "code", { type: "code" }, true, {
 				selected: model.code,
@@ -2275,7 +3460,22 @@ var ComponentShowcase_default = /*#__PURE__*/ _plugin_vue_export_helper_default(
 			height: 1
 		}), model = ref(initial());
 		const scene = computed(() => describe(model.value, catalogue, size.value.width, size.value.height, appearance.language));
-		const models = computed(() => ({ families: families(catalogue, model.value, appearance.language) }));
+		const models$1 = computed(() => ({
+			...models(model.value),
+			families: families(catalogue, model.value, appearance.language)
+		}));
+		const views = {
+			showcaseMenu: {
+				component: _sfc_main$2,
+				nodeProps: true,
+				props: { onEvent: dispatch }
+			},
+			showcaseDialog: {
+				component: _sfc_main$1,
+				nodeProps: true,
+				props: { onEvent: dispatch }
+			}
+		};
 		function dispatch(event) {
 			model.value = transition(model.value, event, catalogue);
 		}
@@ -2298,21 +3498,24 @@ var ComponentShowcase_default = /*#__PURE__*/ _plugin_vue_export_helper_default(
 				ref_key: "host",
 				ref: host,
 				class: "component-showcase"
-			}, [createVNode(_sfc_main$1, {
+			}, [createVNode(_sfc_main$5, {
 				ref_key: "view",
 				ref: view,
 				scene: scene.value,
-				models: models.value,
+				models: models$1.value,
+				views,
+				"describe-cell": (grid, record, row, column) => cell(grid, record, row, column, model.value, unref(appearance).language),
 				"describe-row": (list, record) => row(list, record, model.value, unref(appearance).language),
 				onEvent: dispatch
 			}, null, 8, [
 				"scene",
 				"models",
+				"describe-cell",
 				"describe-row"
 			])], 512);
 		};
 	}
-}, [["__scopeId", "data-v-c64e6f20"]]);
+}, [["__scopeId", "data-v-83cdcbad"]]);
 //#endregion
 export { ComponentShowcase_default as default };
 

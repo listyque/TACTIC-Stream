@@ -5,6 +5,11 @@ import AppButton from '../controls/AppButton.vue';
 import AppTabButton from '../controls/AppTabButton.vue';
 import AppCheckbox from '../controls/AppCheckbox.vue';
 import AppSwitch from '../controls/AppSwitch.vue';
+import AppSearchField from '../controls/AppSearchField.vue';
+import UserIdentity from '../controls/UserIdentity.vue';
+import AppProgress from '../controls/AppProgress.vue';
+import EmptyState from '../controls/display/EmptyState.vue';
+import AppFileInput from '../controls/forms/AppFileInput.vue';
 import AppTextField from '../controls/AppTextField.vue';
 import AppTextArea from '../controls/AppTextArea.vue';
 import AppDateField from '../controls/AppDateField.vue';
@@ -469,7 +474,11 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
             textOverflow: node.elide === false ? 'clip' : undefined,
             textAlign: node.align || 'left',
             wordBreak: node.wrapAnywhere ? 'break-all' : undefined,
-            lineHeight: node.wrap ? 'normal' : node.height + 'px',
+            lineHeight:
+              node.wrap || node.verticalAlign === 'top'
+                ? 'normal'
+                : node.height + 'px',
+            alignItems: node.verticalAlign === 'top' ? 'flex-start' : undefined,
             display:
               node.visible === false
                 ? 'none'
@@ -967,6 +976,78 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         :action-field="!!node.actionField"
         :disabled="!node.enabled"
         @change="send(node.action, $event)"
+      />
+      <AppSearchField
+        v-else-if="node.kind === 'Search'"
+        class="frame-node"
+        :data-frame="node.id"
+        :style="style(node)"
+        :model-value="node.text"
+        :placeholder="node.placeholder"
+        :label="node.label"
+        :disabled="!interactive || !node.enabled"
+        :readonly="node.readOnly"
+        :suggestions="node.suggestions || []"
+        :error="node.errorText || ''"
+        @update:model-value="(value) => send(node.action, value)"
+        @search="send(node.commitAction)"
+        @accept="(record) => send(node.acceptAction, record)"
+      />
+      <UserIdentity
+        v-else-if="node.kind === 'Identity'"
+        class="frame-node"
+        :data-frame="node.id"
+        :style="style(node)"
+        :login="node.login || ''"
+        :display-name="node.text"
+        :initials="node.initials || ''"
+        :avatar-url="node.url || ''"
+        :avatar-color="color(node.accent || 'action')"
+        :avatar-size="node.avatarSize || 40"
+        :retired="node.retired"
+        :emphasized="node.emphasized"
+      />
+      <AppProgress
+        v-else-if="node.kind === 'Progress'"
+        class="frame-node"
+        :data-frame="node.id"
+        :style="style(node)"
+        :label="node.text"
+        :value="node.indeterminate ? undefined : node.value"
+        :min="node.min ?? 0"
+        :max="node.max ?? 1"
+      />
+      <EmptyState
+        v-else-if="node.kind === 'Empty'"
+        class="frame-node"
+        :data-frame="node.id"
+        :style="style(node)"
+        :title="node.text"
+        :message="node.message"
+        :icon="node.icon || 'info'"
+        :error="node.error"
+        :action="
+          node.action
+            ? {
+                label: node.actionText,
+                icon: node.actionIcon,
+                disabled: !interactive || !node.enabled || node.readOnly
+              }
+            : undefined
+        "
+        @action="send(node.action)"
+      />
+      <AppFileInput
+        v-else-if="node.kind === 'FileField'"
+        class="frame-node"
+        :data-frame="node.id"
+        :style="style(node)"
+        :value="node.text"
+        :label="node.label"
+        :disabled="!interactive || !node.enabled || node.readOnly"
+        @change="
+          (event) => send(node.action, Array.from(event.target.files || []))
+        "
       />
       <FrameGrid
         v-else-if="node.kind === 'Grid'"

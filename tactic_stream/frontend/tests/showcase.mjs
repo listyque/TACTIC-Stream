@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { mkdir, readFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { createServer } from 'vite';
 import vue from '@vitejs/plugin-vue';
@@ -27,6 +27,7 @@ try {
     channel: process.env.STREAM_BROWSER_CHANNEL || 'msedge'
   });
   page = await browser.newPage({
+    hasTouch: true,
     viewport: { width: 1400, height: 1000 }
   });
   page.setDefaultTimeout(10000);
@@ -134,7 +135,20 @@ try {
     'tabs',
     'badges',
     'lists',
-    'charts'
+    'charts',
+    'search',
+    'identity',
+    'menus',
+    'popups',
+    'feedback',
+    'tables',
+    'scroll-layout',
+    'previews',
+    'drag-files',
+    'editors',
+    'graphs',
+    'input-runtime',
+    'domain-fragments'
   ]) {
     await choose(id);
     await page.locator('[data-frame=showcasePreview]').waitFor();
@@ -145,6 +159,149 @@ try {
     )
       await dialog.screenshot({ path: output + '/' + id + '-ts-dark.png' });
   }
+  const area = page.locator('.component-showcase');
+  await writeFile(
+    output + '/size.json',
+    JSON.stringify(await area.boundingBox())
+  );
+  for (const mode of ['dark', 'light']) {
+    await page.evaluate(async (mode) => {
+      (await import('/frontend/src/appearance.js')).appearance.mode = mode;
+    }, mode);
+    for (const id of [
+      'search',
+      'identity',
+      'menus',
+      'popups',
+      'feedback',
+      'tables',
+      'scroll-layout',
+      'previews',
+      'drag-files',
+      'editors',
+      'graphs',
+      'input-runtime',
+      'domain-fragments'
+    ]) {
+      await choose(id);
+      await page.locator('[data-frame=showcaseTitle]').click();
+      await page.mouse.move(0, 999);
+      await area.screenshot({
+        path: output + '/' + id + '-ts-' + mode + '.png'
+      });
+    }
+  }
+  await page.evaluate(async () => {
+    (await import('/frontend/src/appearance.js')).appearance.mode = 'dark';
+  });
+  for (const id of [
+    'search',
+    'identity',
+    'menus',
+    'popups',
+    'feedback',
+    'tables',
+    'scroll-layout',
+    'previews',
+    'drag-files',
+    'editors',
+    'graphs',
+    'input-runtime',
+    'domain-fragments'
+  ]) {
+    await choose(id);
+    for (const state of [
+      'default',
+      'disabled',
+      'readonly',
+      'error',
+      'long',
+      'loading',
+      'empty',
+      'selected'
+    ]) {
+      await page.locator('[data-frame=showcaseState]').selectOption(state);
+      await page.locator('[data-frame=showcasePreview]').waitFor();
+    }
+  }
+  await page.locator('[data-frame=showcaseState]').selectOption('default');
+  await choose('search');
+  await page.locator('[data-frame=sampleSearch] input').fill('Robot');
+  await page.getByText('Robot Arm', { exact: true }).last().click();
+  assert.equal(
+    await page.locator('[data-frame=sampleSearch] input').inputValue(),
+    'Robot Arm'
+  );
+  await choose('menus');
+  await page
+    .locator('[data-frame=sampleMenu]')
+    .getByRole('button', { name: 'Open menu', exact: true })
+    .click();
+  await page.locator('[data-menu-command=toggle] button').click();
+  assert.match(
+    await page.locator('[data-frame=sampleMenuResult]').innerText(),
+    /toggle/
+  );
+  await choose('popups');
+  await page.locator('[data-frame=sampleOpenDialog]').click();
+  await page
+    .getByRole('dialog', { name: 'Confirmation', exact: true })
+    .waitFor();
+  await page.keyboard.press('Escape');
+  await page
+    .locator('[data-frame=sampleDialogResult]')
+    .filter({ hasText: 'cancel' })
+    .waitFor();
+  await page.locator('[data-frame=sampleOpenDialog]').click();
+  const confirmation = page.getByRole('dialog', {
+    name: 'Confirmation',
+    exact: true
+  });
+  await confirmation.waitFor();
+  const confirmationBounds = await confirmation.boundingBox();
+  assert(confirmationBounds.height > 100 && confirmationBounds.width <= 442);
+  await confirmation
+    .getByRole('button', { name: 'Apply', exact: true })
+    .click();
+  await page
+    .locator('[data-frame=sampleDialogResult]')
+    .filter({ hasText: 'accept' })
+    .waitFor();
+  await choose('tables');
+  await page.locator('input[data-frame="sampleCell_0:1"]').fill('Edited cell');
+  assert.equal(
+    await page.locator('input[data-frame="sampleCell_0:1"]').inputValue(),
+    'Edited cell'
+  );
+  await choose('drag-files');
+  await page.locator('[data-frame=sampleFile] input[type=file]').setInputFiles({
+    name: 'local.txt',
+    mimeType: 'text/plain',
+    buffer: Buffer.from('local example')
+  });
+  await page.getByText('local.txt', { exact: true }).last().waitFor();
+  await choose('input-runtime');
+  await page.locator('[data-frame=sampleActivation]').click();
+  assert.match(
+    await page.locator('[data-frame=sampleInputCounts]').innerText(),
+    /: 1/
+  );
+  await page.locator('[data-frame=sampleActivation]').tap();
+  await page
+    .locator('[data-frame=sampleInputCounts]')
+    .filter({ hasText: 'Activated: 2' })
+    .waitFor();
+  await choose('editors');
+  await page
+    .locator('[data-frame=sampleEditor] textarea')
+    .fill('print("local")');
+  assert.equal(
+    await page.locator('[data-frame=sampleEditor] textarea').inputValue(),
+    'print("local")'
+  );
+  await choose('graphs');
+  await page.locator('[data-frame=graphNode_a]').click();
+  await page.keyboard.press('ArrowRight');
   await choose('text-fields');
   await page.locator('input[data-frame=sampleField]').fill('Edited locally');
   assert.equal(
@@ -214,7 +371,7 @@ try {
   );
   assert.deepEqual(errors, []);
   console.log(
-    'Actual Administration showcase: 16 families, local input, code, both palettes, narrow layouts, no server commands and close pass.'
+    'Actual Administration showcase: 29 families, local input, code, both palettes, narrow layouts, no server commands and close pass.'
   );
 } catch (error) {
   await page?.screenshot({

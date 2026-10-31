@@ -1,4 +1,4 @@
-import { H as node, R as button, U as rect, y as translate, z as label } from "./resize.js";
+import { G as node, H as label, K as rect, S as translate, V as button } from "./FrameView.js";
 //#region ../src/tactic_stream/shared_ui/features/objects/snapshot.ui.mjs
 var metrics = {
 	toolbar: 46,

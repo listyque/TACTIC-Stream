@@ -2,7 +2,7 @@ import { r as __exportAll } from "./ObjectFieldFrame.js";
 import { F as resolveComponent, K as withDirectives, M as openBlock, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, m as createBaseVNode, nt as normalizeStyle, s as vShow } from "./vue.js";
 import { R as _plugin_vue_export_helper_default, o as t, s as appearance } from "./AppButton.js";
 import { k as rpc } from "./index.js";
-import { H as node, R as button, U as rect, V as muted, n as observeFrameSizes, r as _sfc_main$1, y as translate, z as label } from "./resize.js";
+import { G as node, H as label, K as rect, S as translate, V as button, W as muted, t as _sfc_main$1, w as observeFrameSizes } from "./FrameView.js";
 import { n as sections } from "./sections.ui.js";
 import { i as sectionSelector, n as notices, o as toolbar$1, r as policy, t as documentEvent } from "./admin.document.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/naming/naming.ui.mjs

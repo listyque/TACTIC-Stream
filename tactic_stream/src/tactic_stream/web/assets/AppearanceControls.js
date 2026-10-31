@@ -1,6 +1,6 @@
 import { A as onMounted, B as useModel, G as withCtx, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, X as ref, _ as createElementBlock, b as createVNode, et as unref, g as createCommentVNode, h as createBlock, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment, w as mergeModels } from "./vue.js";
 import { F as iconSets, I as themes, P as accentPresets, a as _sfc_main$5, c as colorModes, f as languages, l as effectiveColorMode, m as readableText, o as t, s as appearance, t as _sfc_main$4 } from "./AppButton.js";
-import { I as _sfc_main$6, L as _sfc_main$7 } from "./resize.js";
+import { B as _sfc_main$7, z as _sfc_main$6 } from "./FrameView.js";
 //#region src/controls/SettingRow.vue
 var _hoisted_1$3 = { class: "setting-description" };
 var _hoisted_2$2 = ["for"];

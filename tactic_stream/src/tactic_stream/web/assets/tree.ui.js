@@ -1,4 +1,4 @@
-import { H as node, R as button, U as rect, V as muted, z as label } from "./resize.js";
+import { G as node, H as label, K as rect, V as button, W as muted } from "./FrameView.js";
 //#region ../src/tactic_stream/shared_ui/controls/lists/tree.ui.mjs
 function listAction(id, bounds, text, icon, action, enabled = true, options = {}) {
 	const iconOnly = !!options.iconOnly;
