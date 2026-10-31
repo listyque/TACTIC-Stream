@@ -178,3 +178,5 @@ Workflow hover previews use compact cards with editable dates, status and assign
 Only the cell under the pointer expands; selecting other rows does not open their previews. Bulk task editing still uses the selected rows.
 
 The active expanded related table is raised with a shadow; the remaining parent table is dimmed. Click the dimmed area or Close to collapse it. If search is disabled for that view, no empty toolbar is reserved: remaining actions use the footer. Enabled search uses the main suggestion field within the current relation.
+
+The task-count menu uses the compact Handler process picker. Choosing a process opens Task Manager for that object and process; choosing an individual task also selects that task. Notes retain their separate process-scoped action. Use All processes to return from the task list.

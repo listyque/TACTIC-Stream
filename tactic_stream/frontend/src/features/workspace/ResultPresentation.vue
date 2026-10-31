@@ -117,6 +117,9 @@ export default {
       choiceNode: null,
       choiceTasks: false,
       choices: [],
+      processChoices: [],
+      choiceAnchor: null,
+      choiceProcess: '',
       relationNode: null,
       splitRatio: Math.max(
         20,
@@ -1090,8 +1093,12 @@ export default {
         if (this.choices.length > 1) {
           this.choiceNode = node;
           this.choiceTasks = tasks;
+          this.processChoices = this.choices;
+          this.choiceProcess = '';
+          this.choiceAnchor =
+            event.currentTarget || event.target.closest('button');
           await nextTick();
-          this.$refs.processMenu.openAt(event);
+          this.$refs.processMenu.open = true;
           return;
         }
         choice = this.choices[0];
@@ -1104,13 +1111,12 @@ export default {
         owner.tasks.find(
           (task) => task.taskSearchKey === choice?.taskSearchKey
         ) || (ownTasks.length === 1 ? ownTasks[0] : { process: chosenProcess });
-      if (tasks && this.mobile)
-        this.openTaskManager?.(owner.record, chosenProcess);
-      else if (tasks)
-        this.$refs.notes.openTask(
+      if (tasks)
+        this.openTaskManager?.(
           owner.record,
-          { process: chosenProcess, tasks: ownTasks },
-          task
+          chosenProcess,
+          {},
+          choice?.taskSearchKey || ''
         );
       else
         this.$refs.notes.open(
@@ -1123,6 +1129,7 @@ export default {
     },
     chooseTask(choice, event) {
       event.stopPropagation();
+      this.choiceProcess = choice.title;
       const owner =
         this.choiceNode.kind === 'branch'
           ? this.find(this.choiceNode.ownerId)
@@ -1540,11 +1547,23 @@ export default {
       ref="processMenu"
       class="result-process-menu"
       label="Choose process"
-      modal
+      process-picker-style
+      external-trigger
       overlay
-      :width="260"
+      :anchor="choiceAnchor"
+      :width="212"
       @toggle="choiceNode && (choiceNode.menuVisible = $event.target.open)"
     >
+      <strong>{{ choiceProcess || t(choiceTasks ? 'Tasks' : 'Notes') }}</strong>
+      <AppMenuItem
+        v-if="choiceProcess"
+        label="All processes"
+        icon="arrow-left"
+        @click.stop="
+          choices = processChoices;
+          choiceProcess = '';
+        "
+      />
       <AppMenuItem
         v-for="choice in choices"
         :key="choice.taskSearchKey || choice.process"

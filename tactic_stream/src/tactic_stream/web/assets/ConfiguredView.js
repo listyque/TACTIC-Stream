@@ -18094,6 +18094,9 @@ var _sfc_main$10 = {
 			choiceNode: null,
 			choiceTasks: false,
 			choices: [],
+			processChoices: [],
+			choiceAnchor: null,
+			choiceProcess: "",
 			relationNode: null,
 			splitRatio: Math.max(20, Math.min(80, Number(this.state?.splitRatio) || 55)),
 			operationRequest: 0,
@@ -18815,8 +18818,11 @@ var _sfc_main$10 = {
 				if (this.choices.length > 1) {
 					this.choiceNode = node;
 					this.choiceTasks = tasks;
+					this.processChoices = this.choices;
+					this.choiceProcess = "";
+					this.choiceAnchor = event.currentTarget || event.target.closest("button");
 					await nextTick();
-					this.$refs.processMenu.openAt(event);
+					this.$refs.processMenu.open = true;
 					return;
 				}
 				choice = this.choices[0];
@@ -18824,15 +18830,12 @@ var _sfc_main$10 = {
 			const chosenProcess = choice?.process || process;
 			const ownTasks = owner.tasks.filter((task) => task.process === chosenProcess);
 			const task = owner.tasks.find((task) => task.taskSearchKey === choice?.taskSearchKey) || (ownTasks.length === 1 ? ownTasks[0] : { process: chosenProcess });
-			if (tasks && this.mobile) this.openTaskManager?.(owner.record, chosenProcess);
-			else if (tasks) this.$refs.notes.openTask(owner.record, {
-				process: chosenProcess,
-				tasks: ownTasks
-			}, task);
+			if (tasks) this.openTaskManager?.(owner.record, chosenProcess, {}, choice?.taskSearchKey || "");
 			else this.$refs.notes.open(owner.record, { process: chosenProcess }, chosenProcess, void 0, task.taskSearchKey || "");
 		},
 		chooseTask(choice, event) {
 			event.stopPropagation();
+			this.choiceProcess = choice.title;
 			const owner = this.choiceNode.kind === "branch" ? this.find(this.choiceNode.ownerId) : this.choiceNode;
 			this.choices = owner.tasks.filter((task) => task.process === choice.process).map((task) => ({
 				...task,
@@ -19294,40 +19297,54 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
 			ref: "processMenu",
 			class: "result-process-menu",
 			label: "Choose process",
-			modal: "",
+			"process-picker-style": "",
+			"external-trigger": "",
 			overlay: "",
-			width: 260,
-			onToggle: _cache[24] || (_cache[24] = ($event) => $data.choiceNode && ($data.choiceNode.menuVisible = $event.target.open))
+			anchor: $data.choiceAnchor,
+			width: 212,
+			onToggle: _cache[25] || (_cache[25] = ($event) => $data.choiceNode && ($data.choiceNode.menuVisible = $event.target.open))
 		}, {
-			default: withCtx(() => [(openBlock(true), createElementBlock(Fragment, null, renderList($data.choices, (choice) => {
-				return openBlock(), createBlock(_component_AppMenuItem, {
-					key: choice.taskSearchKey || choice.process,
-					label: choice.title,
-					translate: false,
-					icon: "FAS_CIRCLE",
-					"badge-count": choice.count,
-					"show-zero-badge": choice.process === "publish",
-					"secondary-label": choice.multipleTasks ? "Choose task" : void 0,
-					"secondary-icon": "MDI_CHEVRON_RIGHT",
-					style: normalizeStyle({ "--process-accent": choice.accent || "var(--content-accent)" }),
-					onClick: ($event) => $options.notes($data.choiceNode, $data.choiceTasks, null, choice),
-					onSecondary: ($event) => $options.chooseTask(choice, $event)
-				}, null, 8, [
-					"label",
-					"badge-count",
-					"show-zero-badge",
-					"secondary-label",
-					"style",
-					"onClick",
-					"onSecondary"
-				]);
-			}), 128))]),
+			default: withCtx(() => [
+				createBaseVNode("strong", null, toDisplayString($data.choiceProcess || $options.t($data.choiceTasks ? "Tasks" : "Notes")), 1),
+				$data.choiceProcess ? (openBlock(), createBlock(_component_AppMenuItem, {
+					key: 0,
+					label: "All processes",
+					icon: "arrow-left",
+					onClick: _cache[24] || (_cache[24] = withModifiers(($event) => {
+						$data.choices = $data.processChoices;
+						$data.choiceProcess = "";
+					}, ["stop"]))
+				})) : createCommentVNode("", true),
+				(openBlock(true), createElementBlock(Fragment, null, renderList($data.choices, (choice) => {
+					return openBlock(), createBlock(_component_AppMenuItem, {
+						key: choice.taskSearchKey || choice.process,
+						label: choice.title,
+						translate: false,
+						icon: "FAS_CIRCLE",
+						"badge-count": choice.count,
+						"show-zero-badge": choice.process === "publish",
+						"secondary-label": choice.multipleTasks ? "Choose task" : void 0,
+						"secondary-icon": "MDI_CHEVRON_RIGHT",
+						style: normalizeStyle({ "--process-accent": choice.accent || "var(--content-accent)" }),
+						onClick: ($event) => $options.notes($data.choiceNode, $data.choiceTasks, null, choice),
+						onSecondary: ($event) => $options.chooseTask(choice, $event)
+					}, null, 8, [
+						"label",
+						"badge-count",
+						"show-zero-badge",
+						"secondary-label",
+						"style",
+						"onClick",
+						"onSecondary"
+					]);
+				}), 128))
+			]),
 			_: 1
-		}, 512),
+		}, 8, ["anchor"]),
 		createVNode(_component_RelatedObjectsMenu, {
 			ref: "relationMenu",
 			node: $data.relationNode,
-			onChoose: _cache[25] || (_cache[25] = (branch) => $options.showRelated($data.relationNode, branch?.kind === "parent" ? branch : null, branch?.kind === "relation" ? branch.search_type : ""))
+			onChoose: _cache[26] || (_cache[26] = (branch) => $options.showRelated($data.relationNode, branch?.kind === "parent" ? branch : null, branch?.kind === "relation" ? branch.search_type : ""))
 		}, null, 8, ["node"]),
 		createVNode(_component_ProcessVisibility, {
 			ref: "processVisibility",
@@ -19380,18 +19397,18 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
 			onFilesAttached: $options.load,
 			onPreviewOpened: $options.mobilePreviewOpened,
 			onPreviewClosed: $options.mobilePreviewClosed,
-			onInspect: _cache[26] || (_cache[26] = ($event) => $options.inspect($data.operationNode.kind === "branch" ? $options.find($data.operationNode.ownerId) : $data.operationNode)),
+			onInspect: _cache[27] || (_cache[27] = ($event) => $options.inspect($data.operationNode.kind === "branch" ? $options.find($data.operationNode.ownerId) : $data.operationNode)),
 			onEdit: $options.edit,
-			onCreate: _cache[27] || (_cache[27] = ($event) => _ctx.$refs.form.open()),
-			onDuplicate: _cache[28] || (_cache[28] = (record) => _ctx.$refs.form.open(null, record.__search_key__)),
+			onCreate: _cache[28] || (_cache[28] = ($event) => _ctx.$refs.form.open()),
+			onDuplicate: _cache[29] || (_cache[29] = (record) => _ctx.$refs.form.open(null, record.__search_key__)),
 			onDuplicated: $options.load,
-			onRelated: _cache[29] || (_cache[29] = ($event) => $options.showRelated($data.operationNode)),
-			onCreateRelated: _cache[30] || (_cache[30] = ($event) => $options.createRelated($data.operationNode)),
-			onLinkRelated: _cache[31] || (_cache[31] = ($event) => $options.showRelated($data.operationNode, $data.operationNode.branch)),
+			onRelated: _cache[30] || (_cache[30] = ($event) => $options.showRelated($data.operationNode)),
+			onCreateRelated: _cache[31] || (_cache[31] = ($event) => $options.createRelated($data.operationNode)),
+			onLinkRelated: _cache[32] || (_cache[32] = ($event) => $options.showRelated($data.operationNode, $data.operationNode.branch)),
 			onUnlink: $options.unlink,
-			onRetire: _cache[32] || (_cache[32] = (record) => _ctx.$refs.action.open(record, "retire")),
-			onReactivate: _cache[33] || (_cache[33] = (record) => _ctx.$refs.action.open(record, "reactivate")),
-			onDelete: _cache[34] || (_cache[34] = (record) => _ctx.$refs.action.open(record, "delete"))
+			onRetire: _cache[33] || (_cache[33] = (record) => _ctx.$refs.action.open(record, "retire")),
+			onReactivate: _cache[34] || (_cache[34] = (record) => _ctx.$refs.action.open(record, "reactivate")),
+			onDelete: _cache[35] || (_cache[35] = (record) => _ctx.$refs.action.open(record, "delete"))
 		}, null, 8, [
 			"ticket",
 			"project",
@@ -19449,7 +19466,7 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
 			label: "Close details",
 			icon: "close",
 			"icon-only": "",
-			onClick: _cache[35] || (_cache[35] = ($event) => _ctx.$refs.details.close())
+			onClick: _cache[36] || (_cache[36] = ($event) => _ctx.$refs.details.close())
 		})]), $data.detail ? (openBlock(), createBlock(_component_ObjectReport, {
 			key: 0,
 			ticket: $props.ticket,

@@ -1319,9 +1319,6 @@ button { border-radius: var(--button-radius); transition: background-color var(-
 .result-item-tree.selected:not(.result-item-branch):not(.menu-open):has(.result-title-line:hover) > .result-surface { background:var(--content-selection); }
 .result-item-tree:not(.result-item-branch):not(.menu-open):not(.control-hover):has(.result-title-line:hover) .result-hover-actions { opacity:0; visibility:hidden; }
 .result-item-tree.result-item-snapshot:hover .result-preview { transform:scale(1.15); transition:transform var(--motion-hover) var(--motion-easing-out-cubic); }
-.result-process-menu > summary { display:none; }
-.result-process-menu [data-menu-primary] > .app-icon { color:var(--process-accent); }
-.result-process-menu .app-button-badge { position:static; flex-shrink:0; background:var(--process-accent); }
 .result-item-copy > * { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .result-description { font-size: var(--text-body); font-weight: 400; color: var(--muted); }
 .result-item.selected .result-description { color: var(--on-selected); }

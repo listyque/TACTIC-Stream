@@ -1,5 +1,5 @@
 import { A as onMounted, B as useModel, E as nextTick, F as resolveComponent, G as withCtx, H as watch, K as withDirectives, L as resolveDynamicComponent, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, R as useAttrs, T as mergeProps, X as ref, _ as createElementBlock, a as vModelSelect, b as createVNode, c as withKeys, et as unref, g as createCommentVNode, h as createBlock, j as onUpdated, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, o as vModelText, p as computed, q as isRef, rt as toDisplayString, s as vShow, tt as normalizeClass, u as Fragment, w as mergeModels, y as createTextVNode, z as useId } from "./vue.js";
-import { E as readableText, I as iconSets, O as textStyles, R as BusyIndicator_default, T as metrics, _ as controls, a as _sfc_main$33, g as blend, i as ripple, n as tooltipDirective, o as t, r as capturePress, s as appearance, t as _sfc_main$34, u as frameColors, v as cssColor, y as cssRoles, z as _plugin_vue_export_helper_default } from "./AppButton.js";
+import { E as readableText, I as iconSets, O as textStyles, R as BusyIndicator_default, T as metrics, _ as controls, a as _sfc_main$33, g as blend, i as ripple, l as effectiveColorMode, n as tooltipDirective, o as t, r as capturePress, s as appearance, t as _sfc_main$34, u as frameColors, v as cssColor, y as cssRoles, z as _plugin_vue_export_helper_default } from "./AppButton.js";
 import { t as iconMaps } from "./icons.js";
 //#region ../src/tactic_stream/shared_ui/core/frame.mjs
 /** @typedef {{x:number, y:number, width:number, height:number}} Bounds Logical pixels. */
@@ -817,6 +817,7 @@ var _sfc_main$26 = {
 	props: {
 		label: String,
 		frameComposition: Boolean,
+		processPickerStyle: Boolean,
 		externalTrigger: Boolean,
 		focusOnOpen: {
 			type: Boolean,
@@ -852,6 +853,18 @@ var _sfc_main$26 = {
 	setup(__props, { expose: __expose, emit: __emit }) {
 		const props = __props;
 		const emit = __emit;
+		const processPaint = computed(() => {
+			if (!props.processPickerStyle) return {};
+			const colors = frameColors.value, dark = effectiveColorMode.value === "dark";
+			const surface = blend(colors.panelDeep, colors.blackMix, dark ? .18 : .04);
+			return {
+				"--process-menu-surface": cssColor(surface),
+				"--process-menu-border": cssColor(blend(surface, colors.primaryText, dark ? .16 : .22)),
+				"--process-menu-row": cssColor(blend(surface, colors.primaryText, dark ? .05 : .08)),
+				"--process-menu-row-border": cssColor(blend(surface, colors.primaryText, dark ? .1 : .15)),
+				"--process-menu-badge": cssColor(blend(colors.surfaceContainerHigh, colors.primaryText, dark ? .12 : .06))
+			};
+		});
 		const menu = ref(null);
 		const trigger = ref(null);
 		const expanded = ref(false);
@@ -941,6 +954,15 @@ var _sfc_main$26 = {
 			};
 			const y = Math.max(top + 4 - bounds.top, Math.min(0, bottom - 4 - bounds.bottom));
 			panel.style.translate = Math.max(left + 4 - bounds.left, Math.min(0, right - 4 - bounds.right)) + "px " + y + "px";
+			if (props.processPickerStyle) {
+				const triggerBox = props.anchor?.getBoundingClientRect();
+				if (triggerBox) {
+					const placed = panel.getBoundingClientRect();
+					panel.style.setProperty("--menu-anchor-center", Math.max(14, Math.min(panel.offsetWidth - 14, triggerBox.x + triggerBox.width / 2 - placed.x)) + "px");
+					if (panel.scrollHeight <= panel.clientHeight) panel.style.overflow = "visible";
+					panel.dataset.anchorEdge = placed.top >= triggerBox.bottom ? "top" : "bottom";
+				}
+			}
 		}
 		function items() {
 			return [...panelElement.value.querySelectorAll("button:not(:disabled):not([data-menu-secondary]), a[href], .workspace-menu > summary")].filter((item) => item.getClientRects().length && item.getAttribute("aria-disabled") !== "true" && (item.tagName === "SUMMARY" ? item.parentElement.parentElement.closest(".workspace-menu") : item.closest(".workspace-menu")) === menu.value);
@@ -1089,6 +1111,7 @@ var _sfc_main$26 = {
 				class: normalizeClass(["workspace-menu", {
 					"inline-menu": __props.inline,
 					"frame-menu": __props.frameComposition,
+					"process-picker-menu": __props.processPickerStyle,
 					"labelled-menu": __props.showLabel,
 					"compact-trigger": __props.compactTrigger
 				}]),
@@ -1115,7 +1138,7 @@ var _sfc_main$26 = {
 				ref_key: "panelElement",
 				ref: panelElement,
 				class: "account-panel",
-				style: normalizeStyle(__props.width ? { width: "min(" + __props.width + "px, calc(100dvw - " + (__props.frameComposition ? 8 : 16) + "px))" } : void 0),
+				style: normalizeStyle([processPaint.value, __props.width ? { width: "min(" + __props.width + "px, calc(100dvw - " + (__props.frameComposition ? 8 : 16) + "px))" } : void 0]),
 				"aria-label": __props.modal ? unref(t)(__props.label) : void 0,
 				popover: __props.overlay && !__props.modal ? "manual" : void 0,
 				onCancel: _cache[1] || (_cache[1] = withModifiers(($event) => close(true), ["prevent", "stop"])),

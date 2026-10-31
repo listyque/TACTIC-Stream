@@ -1,7 +1,12 @@
 <script setup>
-import { onBeforeUnmount, onUpdated, ref, nextTick } from 'vue';
+import { onBeforeUnmount, onUpdated, ref, nextTick, computed } from 'vue';
 import { t } from '../i18n.js';
 import AppIcon from './AppIcon.vue';
+import { frameColors, effectiveColorMode } from '../appearance.js';
+import {
+  blend,
+  cssColor
+} from '../../../src/tactic_stream/shared_ui/core/foundation.mjs';
 import { ripple } from './ripple.js';
 import { capturePress } from './activation.js';
 import { tooltipDirective as vTooltip } from './tooltip.js';
@@ -9,6 +14,7 @@ import { tooltipDirective as vTooltip } from './tooltip.js';
 const props = defineProps({
   label: String,
   frameComposition: Boolean,
+  processPickerStyle: Boolean,
   externalTrigger: Boolean,
   focusOnOpen: { type: Boolean, default: true },
   showLabel: Boolean,
@@ -29,6 +35,27 @@ const props = defineProps({
   maxHeight: Number
 });
 const emit = defineEmits(['before-open']);
+const processPaint = computed(() => {
+  if (!props.processPickerStyle) return {};
+  const colors = frameColors.value,
+    dark = effectiveColorMode.value === 'dark';
+  const surface = blend(colors.panelDeep, colors.blackMix, dark ? 0.18 : 0.04);
+  return {
+    '--process-menu-surface': cssColor(surface),
+    '--process-menu-border': cssColor(
+      blend(surface, colors.primaryText, dark ? 0.16 : 0.22)
+    ),
+    '--process-menu-row': cssColor(
+      blend(surface, colors.primaryText, dark ? 0.05 : 0.08)
+    ),
+    '--process-menu-row-border': cssColor(
+      blend(surface, colors.primaryText, dark ? 0.1 : 0.15)
+    ),
+    '--process-menu-badge': cssColor(
+      blend(colors.surfaceContainerHigh, colors.primaryText, dark ? 0.12 : 0.06)
+    )
+  };
+});
 const menu = ref(null);
 const trigger = ref(null);
 const expanded = ref(false);
@@ -204,6 +231,26 @@ function position() {
     'px ' +
     y +
     'px';
+  if (props.processPickerStyle) {
+    const triggerBox = props.anchor?.getBoundingClientRect();
+    if (triggerBox) {
+      const placed = panel.getBoundingClientRect();
+      panel.style.setProperty(
+        '--menu-anchor-center',
+        Math.max(
+          14,
+          Math.min(
+            panel.offsetWidth - 14,
+            triggerBox.x + triggerBox.width / 2 - placed.x
+          )
+        ) + 'px'
+      );
+      if (panel.scrollHeight <= panel.clientHeight)
+        panel.style.overflow = 'visible';
+      panel.dataset.anchorEdge =
+        placed.top >= triggerBox.bottom ? 'top' : 'bottom';
+    }
+  }
 }
 function items() {
   return [
@@ -426,6 +473,7 @@ onBeforeUnmount(() => {
     :class="{
       'inline-menu': inline,
       'frame-menu': frameComposition,
+      'process-picker-menu': processPickerStyle,
       'labelled-menu': showLabel,
       'compact-trigger': compactTrigger
     }"
@@ -466,7 +514,8 @@ onBeforeUnmount(() => {
       :is="modal ? 'dialog' : 'div'"
       ref="panelElement"
       class="account-panel"
-      :style="
+      :style="[
+        processPaint,
         width
           ? {
               width:
@@ -477,7 +526,7 @@ onBeforeUnmount(() => {
                 'px))'
             }
           : undefined
-      "
+      ]"
       :aria-label="modal ? t(label) : undefined"
       :popover="overlay && !modal ? 'manual' : undefined"
       @cancel.prevent.stop="close(true)"
@@ -554,5 +603,74 @@ dialog.account-panel::backdrop {
 .workspace-menu.frame-menu > .account-panel {
   padding: 5px;
   width: min(244px, calc(100dvw - 8px));
+}
+</style>
+
+<style>
+.workspace-menu.process-picker-menu > .account-panel {
+  gap: 2px;
+  padding: 6px;
+  border-radius: 8px;
+  background: var(--process-menu-surface);
+  border-color: var(--process-menu-border);
+  transition: none;
+  scale: 1;
+}
+.process-picker-menu > .account-panel::before {
+  content: '';
+  position: absolute;
+  left: calc(var(--menu-anchor-center) - 9.5px);
+  width: 19px;
+  height: 8px;
+  background: var(--process-menu-surface);
+  clip-path: polygon(0 100%, 50% 0, 100% 100%);
+  top: -7px;
+  pointer-events: none;
+}
+.process-picker-menu > .account-panel[data-anchor-edge='bottom']::before {
+  top: auto;
+  bottom: -7px;
+  rotate: 180deg;
+}
+.process-picker-menu > .account-panel > strong {
+  height: 22px;
+  min-height: 22px;
+  padding: 0 10px;
+  font-size: 11px;
+  color: var(--disabled);
+}
+.process-picker-menu .app-menu-item {
+  height: 32px;
+  border-radius: 7px;
+  border: 1px solid var(--process-menu-row-border);
+  background: var(--process-menu-row);
+}
+.process-picker-menu .app-menu-item:has([data-menu-primary]:hover),
+.process-picker-menu .app-menu-item:focus-within {
+  background: var(--surface-high);
+}
+.process-picker-menu .app-menu-item:has([data-menu-primary]:active) {
+  background: var(--surface-highest);
+}
+.process-picker-menu > .account-panel .app-menu-item > [data-menu-primary] {
+  gap: 9px;
+  padding-inline: 9px 7px;
+  font-size: 11px;
+}
+.process-picker-menu .app-menu-item [data-menu-primary] > .app-icon {
+  width: 11px;
+  height: 11px;
+  font-size: 11px;
+  color: var(--process-accent, var(--muted));
+}
+.process-picker-menu .app-menu-item .app-button-badge {
+  position: static;
+  flex-shrink: 0;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 4px;
+  background: var(--process-menu-badge);
+  color: var(--on-surface);
+  font-size: 10px;
 }
 </style>
