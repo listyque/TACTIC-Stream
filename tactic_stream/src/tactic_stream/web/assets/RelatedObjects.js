@@ -9706,6 +9706,7 @@ function definitionWizard(source, viewName = "") {
 			...node.hasAttribute("value_icon") ? { valueIcon: node.getAttribute("value_icon") } : display?.querySelector("icon") ? { valueIcon: display.querySelector("icon").textContent } : {},
 			...node.hasAttribute("value_style") ? { valueStyle: node.getAttribute("value_style") } : {},
 			...node.hasAttribute("value_text_style") ? { valueTextStyle: node.getAttribute("value_text_style") } : {},
+			...node.hasAttribute("value_align") ? { valueAlign: node.getAttribute("value_align") } : {},
 			widget: display?.getAttribute("class") || display?.getAttribute("widget") || ""
 		}];
 	}) : [];
@@ -9754,6 +9755,15 @@ function changeDefinition(source, path, field, value) {
 			"small"
 		].includes(text)) throw new Error("Invalid cell text style");
 		node.setAttribute("value_text_style", text);
+	} else if (field === "valueAlign") {
+		const text = String(value || "").trim();
+		if (![
+			"",
+			"left",
+			"center",
+			"right"
+		].includes(text)) throw new Error("Invalid cell alignment");
+		node.setAttribute("value_align", text);
 	} else if (field === "widget") {
 		let display = [...node.children].find((child) => child.tagName === "display");
 		if (!display) {

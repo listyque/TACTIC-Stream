@@ -2185,6 +2185,9 @@ var _sfc_main$17 = {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/core/strings.mjs
 var russian = {
+	"Cell alignment": "Выравнивание ячейки",
+	"Horizontal position of content in this column.": "Горизонтальное положение содержимого в этой колонке.",
+	"Invalid cell alignment": "Неверное выравнивание ячейки",
 	"Result view": "Вид результатов",
 	"Cell text style": "Стиль текста ячейки",
 	"Size and emphasis of text values in this column.": "Размер и начертание текстовых значений в этой колонке.",

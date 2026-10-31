@@ -23,7 +23,8 @@ function presentationOptions(options = {}, attributes = {}) {
 	for (const key of [
 		"value_icon",
 		"value_style",
-		"value_text_style"
+		"value_text_style",
+		"value_align"
 	]) if (Object.prototype.hasOwnProperty.call(attributes, key)) result[key] = attributes[key];
 	return result;
 }
@@ -68,7 +69,7 @@ function valueLabel(text, width, height, presentation) {
 		icon,
 		color: "action"
 	}));
-	const x = presentation.align === "left" ? 6 : presentation.align === "right" ? width - w - 6 : (width - w) / 2;
+	const x = contentX(width, w, presentation.align, 6);
 	return { nodes: [node("Box", "tableValueBadge", rect(Math.max(0, x), (height - h) / 2, w, h), {
 		background: presentation.badge ? "surfaceContainerHigh" : void 0,
 		border: presentation.badge ? "outlineVariant" : void 0,
@@ -105,13 +106,16 @@ var metrics$2 = {
 	previewInset: 8
 };
 var status = { foregroundMix: .45 };
-function alignment(options = {}) {
-	const value = options.justify || options.align;
+function alignment(options = {}, content = true, valueAlign = options.value_align) {
+	const value = content && valueAlign || options.justify || options.align;
 	return [
 		"left",
 		"right",
 		"center"
 	].includes(value) ? value : "center";
+}
+function contentX(width, contentWidth, align, inset = 0) {
+	return Math.max(0, align === "left" ? inset : align === "right" ? width - contentWidth - inset : (width - contentWidth) / 2);
 }
 function completionGroups(count, width, height) {
 	const rowHeight = 18, gap = 4;
@@ -3996,7 +4000,7 @@ function describe$8(cell$2, width, height, language, editable = true, expanded =
 		};
 		if (combined) {
 			const options = cell$2.displayOptions || {}, font = valueFont(options), leadingIcon = Object.prototype.hasOwnProperty.call(options, "value_icon") ? options.value_icon : options.icon || options.title_icon || "", text = relatedLabel(cell$2.text, options), left = leadingIcon ? 36 : 12, w = Math.min(inner, buttonWidth(text.length * 7 * font.size / metrics$2.bodyFont, true) + (leadingIcon ? 24 : 0));
-			children.push(node("Action", "tableServiceAction_" + index, rect((width - w) / 2, 0, w, size), {
+			children.push(node("Action", "tableServiceAction_" + index, rect(contentX(width, w, alignment(options), 12), 0, w, size), {
 				text,
 				icon,
 				enabled,
@@ -4031,7 +4035,7 @@ function describe$8(cell$2, width, height, language, editable = true, expanded =
 		const rowStart = Math.floor(index / capacity) * capacity;
 		const rowCount = Math.min(capacity, actions.length - rowStart);
 		const rowWidth = rowCount * size + (rowCount - 1) * gap;
-		const left = cell$2.text ? inner - size : (width - rowWidth) / 2 + index % capacity * (size + gap);
+		const left = cell$2.text ? inner - size : contentX(width, rowWidth, alignment(cell$2.displayOptions), 12) + index % capacity * (size + gap);
 		const top = cell$2.text ? 0 : Math.floor(index / capacity) * (size + gap);
 		children.push(button("tableServiceAction_" + index, rect(Math.max(0, left), top, size, size), action.translateLabel === false ? action.label : translate(action.label, language), icon, command, enabled, {
 			iconOnly: true,
@@ -5199,7 +5203,7 @@ var _sfc_main$43 = {
 									"drop-target": drag.value?.target === column.name,
 									grouped: __props.groupMode === "column:" + column.name
 								}]),
-								"data-align": unref(alignment)(column.displayOptions || column.display?.options),
+								"data-align": unref(alignment)(column.displayOptions || column.display?.options, false),
 								role: "columnheader",
 								"aria-sort": __props.sortField === column.sortField ? __props.sortDirection === "desc" ? "descending" : "ascending" : "none",
 								title: column.title,
@@ -5339,7 +5343,7 @@ var _sfc_main$43 = {
 								return openBlock(), createElementBlock("div", {
 									key: column.name,
 									class: normalizeClass(["handler-table-cell", { "first-column": index === 0 }]),
-									"data-align": unref(alignment)(column.displayOptions || column.display?.options),
+									"data-align": unref(alignment)(column.displayOptions || column.display?.options, true, column.attributes?.value_align),
 									role: "gridcell"
 								}, [createBaseVNode("strong", null, toDisplayString(entry.summary[column.name] || ""), 1)], 10, _hoisted_9$7);
 							}), 128)),
@@ -5369,7 +5373,7 @@ var _sfc_main$43 = {
 										"first-column": index === 0,
 										"editable-cell": __props.editable && column.editable
 									}]),
-									"data-align": unref(alignment)(column.displayOptions || column.display?.options),
+									"data-align": unref(alignment)(column.displayOptions || column.display?.options, true, column.attributes?.value_align),
 									role: "gridcell",
 									onDblclick: withModifiers(($event) => __props.editable && column.editable ? emit("edit", entry.record, column, $event.currentTarget) : emit("inspect", entry.record), ["stop"])
 								}, [renderSlot(_ctx.$slots, "cell", {

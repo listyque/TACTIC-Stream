@@ -647,7 +647,7 @@ defineExpose({ viewport });
         :key="column.name"
         class="handler-table-heading"
         :data-align="
-          alignment(column.displayOptions || column.display?.options)
+          alignment(column.displayOptions || column.display?.options, false)
         "
         role="columnheader"
         :aria-sort="
@@ -810,7 +810,11 @@ defineExpose({ viewport });
             :key="column.name"
             class="handler-table-cell"
             :data-align="
-              alignment(column.displayOptions || column.display?.options)
+              alignment(
+                column.displayOptions || column.display?.options,
+                true,
+                column.attributes?.value_align
+              )
             "
             role="gridcell"
             :class="{ 'first-column': index === 0 }"
@@ -845,7 +849,11 @@ defineExpose({ viewport });
             :key="column.name"
             class="handler-table-cell"
             :data-align="
-              alignment(column.displayOptions || column.display?.options)
+              alignment(
+                column.displayOptions || column.display?.options,
+                true,
+                column.attributes?.value_align
+              )
             "
             role="gridcell"
             :class="{

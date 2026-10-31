@@ -393,14 +393,14 @@ export default {
 }
 .handler-table-cell .table-thumbnail {
   display: flex;
-  justify-content: center;
+  justify-content: inherit;
   width: 100%;
   height: 100%;
   min-width: 0;
   min-height: 0;
   border: 0;
   background: transparent;
-  padding: 0;
+  padding: 0 8px;
 }
 .handler-table-cell .table-thumbnail .item-preview {
   width: var(--table-preview-size);
@@ -412,7 +412,7 @@ export default {
   height: 28px;
   min-width: 28px;
   min-height: 28px;
-  margin: auto;
+  margin: auto 6px;
   color: var(--primary);
 }
 .handler-table-cell .table-action.danger {
