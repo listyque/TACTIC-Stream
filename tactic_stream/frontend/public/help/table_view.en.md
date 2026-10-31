@@ -173,7 +173,7 @@ The Files cell in snapshot history expands a table of files registered in that e
 
 Checkin Log shows the referenced object name and code in Code, as in legacy TACTIC. A missing or excluded owner displays n/a. Files opens the exact version file list. The old RenderSubmission action is part of the excluded production subsystem and is omitted from the built-in log.
 
-Workflow hover previews use compact cards with editable dates, status and assignee. The preview shows up to three processes at once, stays inside the window and scrolls horizontally for additional processes. The count button remains a direct Task Manager action and does not trigger expansion; the same action is available in the preview. Compact table row height stays unchanged.
+Workflow hover previews use compact cards with editable dates, status and assignee. The preview arranges smaller cards in one to three columns with equal gaps and padding. Additional rows scroll vertically inside the bounded preview. Task Manager remains available in its separate footer. The count button remains a direct Task Manager action and does not trigger expansion; the same action is available in the preview. Compact table row height stays unchanged.
 
 Only the cell under the pointer expands; selecting other rows does not open their previews. Bulk task editing still uses the selected rows.
 

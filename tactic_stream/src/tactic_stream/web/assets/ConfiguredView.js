@@ -33,7 +33,7 @@ var metrics$2 = {
 	taskWidth: 107,
 	taskGap: 4,
 	taskMenu: 32,
-	taskPreviewWidth: 160,
+	taskPreviewWidth: 128,
 	taskMaximumHeight: 88,
 	taskDatesHeight: 76,
 	taskHeading: 15,
@@ -109,7 +109,7 @@ function taskCardLayout(height, expanded = false, style) {
 		padding: 2,
 		gap: 1
 	});
-	const padding = spacing$1.tight, gap = spacing$1.text, editorHeight = 24, headingHeight = 18, datesHeight = 18;
+	const padding = spacing$1.tight, gap = spacing$1.text, editorHeight = 20, headingHeight = 16, datesHeight = 14;
 	return {
 		dates: true,
 		editorHeight,
@@ -117,22 +117,24 @@ function taskCardLayout(height, expanded = false, style) {
 		datesHeight,
 		padding,
 		gap,
-		cardHeight: padding * 2 + headingHeight + 48 + datesHeight + gap * 3
+		cardHeight: padding * 2 + headingHeight + 40 + datesHeight + gap * 3
 	};
 }
 function taskPreviewLayout(count, viewportWidth, viewportHeight, style) {
-	const card = taskCardLayout(0, true, style), padding = spacing$1.compact;
-	const contentWidth = Math.max(0, count * (metrics$2.taskPreviewWidth + metrics$2.taskGap) - metrics$2.taskGap);
-	const width = Math.max(0, Math.min(viewportWidth - padding * 2, Math.min(count, 3) * (metrics$2.taskPreviewWidth + metrics$2.taskGap) - metrics$2.taskGap + metrics$2.taskMenu + padding * 2));
-	const horizontal = contentWidth > width - padding * 2 - metrics$2.taskMenu;
+	const card = taskCardLayout(0, true, style), padding = spacing$1.content, gap = spacing$1.compact, footerHeight = 36, scrollWidth = 16, availableWidth = Math.max(0, viewportWidth - 16), columns = Math.max(1, Math.min(3, Math.ceil(Math.sqrt(count)), Math.floor((availableWidth - padding * 2 - scrollWidth + gap) / (metrics$2.taskPreviewWidth + gap)))), rows = Math.ceil(count / columns), contentWidth = columns * metrics$2.taskPreviewWidth + (columns - 1) * gap, contentHeight = Math.max(0, rows * card.cardHeight + (rows - 1) * gap), height = Math.max(0, Math.min(viewportHeight - 16, Math.min(contentHeight, card.cardHeight * 3 + gap * 2) + padding * 2 + footerHeight)), vertical = contentHeight > height - padding * 2 - footerHeight;
 	return {
 		cardWidth: metrics$2.taskPreviewWidth,
 		cardHeight: card.cardHeight,
 		contentWidth,
-		menuWidth: metrics$2.taskMenu,
+		contentHeight,
+		columns,
+		rows,
+		gap,
+		footerHeight,
 		padding,
-		width,
-		height: Math.max(0, Math.min(viewportHeight - padding * 2, card.cardHeight + padding * 2 + (horizontal ? 16 : 0)))
+		width: Math.max(0, Math.min(availableWidth, contentWidth + padding * 2 + (vertical ? scrollWidth : 0))),
+		height,
+		vertical
 	};
 }
 function taskCardsHovered(x, y, inlineWidth, height) {
@@ -446,7 +448,7 @@ var _sfc_main$67 = {
 								actionField: true,
 								showAccent: true,
 								accent: task.statusColor || task.processColor || "action",
-								fontRole: __props.expanded ? "body" : "caption"
+								fontRole: "caption"
 							}
 						}, null, 8, ["height", "model"])]),
 						_: 2
@@ -466,7 +468,7 @@ var _sfc_main$67 = {
 								actionField: true,
 								avatar: true,
 								avatarLabel: task.assigned ? assigneeLabel(task, unref(appearance).language) : "",
-								fontRole: __props.expanded ? "body" : "caption"
+								fontRole: "caption"
 							}
 						}, null, 8, [
 							"height",
@@ -495,6 +497,7 @@ var _sfc_main$67 = {
 //#region src/features/interface/TaskCell.vue
 var _hoisted_1$36 = ["aria-label"];
 var _hoisted_2$26 = { class: "task-preview-content" };
+var _hoisted_3$20 = { class: "task-preview-footer" };
 var _sfc_main$66 = {
 	__name: "TaskCell",
 	props: {
@@ -540,6 +543,11 @@ var _sfc_main$66 = {
 			popup.value.style.width = geometry.width + "px";
 			popup.value.style.height = geometry.height + "px";
 			popup.value.style.setProperty("--table-row-height", geometry.cardHeight + "px");
+			popup.value.style.setProperty("--task-preview-columns", geometry.columns);
+			popup.value.style.setProperty("--task-preview-gap", geometry.gap + "px");
+			popup.value.style.setProperty("--task-preview-padding", geometry.padding + "px");
+			popup.value.style.setProperty("--task-preview-footer-height", geometry.footerHeight + "px");
+			popup.value.style.setProperty("--task-preview-scroll-inset", geometry.vertical ? "4px" : "0px");
 			popup.value.showPopover();
 			visible.value = true;
 			const size = {
@@ -699,14 +707,13 @@ var _sfc_main$66 = {
 				"tasks",
 				"height",
 				"editable"
-			])]), createVNode(_sfc_main$69, {
-				label: "Task Manager",
+			])]), createBaseVNode("footer", _hoisted_3$20, [createVNode(_sfc_main$69, {
+				label: unref(t)("Task Manager") + (__props.cell?.count ? " · " + __props.cell.count : ""),
+				"translate-label": false,
 				icon: "tasks",
-				"icon-only": "",
 				class: "task-preview-manager",
-				"badge-count": __props.cell?.count || 0,
 				onClick: _cache[1] || (_cache[1] = ($event) => inspect(null))
-			}, null, 8, ["badge-count"])], 40, _hoisted_1$36)]))], 64);
+			}, null, 8, ["label"])])], 40, _hoisted_1$36)]))], 64);
 		};
 	}
 };

@@ -74,6 +74,20 @@ async function open(pin = false) {
     '--table-row-height',
     geometry.cardHeight + 'px'
   );
+  popup.value.style.setProperty('--task-preview-columns', geometry.columns);
+  popup.value.style.setProperty('--task-preview-gap', geometry.gap + 'px');
+  popup.value.style.setProperty(
+    '--task-preview-padding',
+    geometry.padding + 'px'
+  );
+  popup.value.style.setProperty(
+    '--task-preview-footer-height',
+    geometry.footerHeight + 'px'
+  );
+  popup.value.style.setProperty(
+    '--task-preview-scroll-inset',
+    geometry.vertical ? '4px' : '0px'
+  );
   popup.value.showPopover();
   visible.value = true;
   const size = {
@@ -257,14 +271,15 @@ onBeforeUnmount(() => {
           @edit="edit"
         />
       </div>
-      <AppButton
-        label="Task Manager"
-        icon="tasks"
-        icon-only
-        class="task-preview-manager"
-        :badge-count="cell?.count || 0"
-        @click="inspect(null)"
-      />
+      <footer class="task-preview-footer">
+        <AppButton
+          :label="t('Task Manager') + (cell?.count ? ' · ' + cell.count : '')"
+          :translate-label="false"
+          icon="tasks"
+          class="task-preview-manager"
+          @click="inspect(null)"
+        />
+      </footer>
     </div>
   </Teleport>
 </template>
@@ -272,27 +287,43 @@ onBeforeUnmount(() => {
 <style>
 .task-preview:popover-open {
   display: flex;
+  flex-direction: column;
   overflow: hidden;
+  padding: var(--task-preview-padding);
 }
 .task-preview-content {
   flex: 1;
   min-width: 0;
   min-height: 0;
-  height: 100%;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding-right: var(--task-preview-scroll-inset);
 }
 .task-preview-content > .task-cards {
+  display: grid;
+  grid-template-columns: repeat(
+    var(--task-preview-columns),
+    var(--task-card-width)
+  );
+  gap: var(--task-preview-gap);
   width: max-content;
-  height: var(--table-row-height);
+  height: auto;
+  align-items: start;
 }
-.task-preview .task-preview-manager {
-  flex: none;
-  align-self: center;
-  width: 28px;
+.task-preview-footer {
+  flex: 0 0 var(--task-preview-footer-height);
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  border-top: 1px solid var(--outline-variant);
+  padding-top: 7px;
+}
+.task-preview-footer .task-preview-manager {
+  min-height: 0;
   height: 28px;
-  min-width: 28px;
-  min-height: 28px;
-  margin-left: 4px;
+  max-width: 100%;
+  font-size: var(--text-caption);
+  padding: 0 8px;
 }
 .handler-table-cell .table-task-cell {
   width: calc(100% - 12px);

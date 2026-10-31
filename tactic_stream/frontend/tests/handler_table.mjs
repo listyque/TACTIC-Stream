@@ -55,7 +55,8 @@ async function taskPreviewGeometry(popup, expectedCount = 4) {
     const cards = scroller.firstElementChild;
     return {
       box: el.getBoundingClientRect().toJSON(),
-      scrolls: scroller.scrollWidth > scroller.clientWidth,
+      scrolls: scroller.scrollHeight > scroller.clientHeight,
+      horizontal: scroller.scrollWidth > scroller.clientWidth,
       items: [...cards.children].map((card) =>
         card.getBoundingClientRect().toJSON()
       )
@@ -63,11 +64,13 @@ async function taskPreviewGeometry(popup, expectedCount = 4) {
   });
   assert.equal(result.items.length, expectedCount);
   for (const card of result.items) {
-    assert.equal(card.width, 160);
-    assert.equal(card.height, 98);
+    assert.equal(card.width, 128);
+    assert.equal(card.height, 84);
   }
-  assert.equal(result.scrolls, true);
-  assert.ok(result.box.width <= 536);
+  assert.equal(result.scrolls, expectedCount > 9);
+  assert.equal(result.horizontal, false);
+  assert.ok(result.items.at(-1).y > result.items[0].y);
+  assert.ok(result.box.width <= 440);
   return result;
 }
 const deadline = setTimeout(() => browser?.close(), 120000);
@@ -507,15 +510,15 @@ try {
         path: report + '/compact-preview-' + sample.width + '-15.png'
       });
     }
-    if (sample.narrow || sample.count) {
+    if (sample.count) {
       await preview
         .locator('.task-preview-content')
-        .evaluate((el) => (el.scrollLeft = el.scrollWidth));
+        .evaluate((el) => (el.scrollTop = el.scrollHeight));
       await check.waitForFunction(
         () =>
           document.querySelector(
             '.task-preview:popover-open .task-preview-content'
-          )?.scrollLeft > 0
+          )?.scrollTop > 0
       );
       await preview.locator('.task-card-heading').last().click();
       assert.equal(

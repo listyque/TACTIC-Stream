@@ -70,7 +70,7 @@ function edit(task, field, event) {
             actionField: true,
             showAccent: true,
             accent: task.statusColor || task.processColor || 'action',
-            fontRole: expanded ? 'body' : 'caption'
+            fontRole: 'caption'
           }"
       /></AppButton>
       <AppButton
@@ -89,7 +89,7 @@ function edit(task, field, event) {
             avatarLabel: task.assigned
               ? Cells.assigneeLabel(task, appearance.language)
               : '',
-            fontRole: expanded ? 'body' : 'caption'
+            fontRole: 'caption'
           }"
       /></AppButton>
       <AppButton
@@ -173,7 +173,7 @@ function edit(task, field, event) {
   gap: var(--task-card-gap);
 }
 .task-cards .task-card.expanded .app-button {
-  font-size: var(--font-body-size);
+  font-size: var(--text-caption);
 }
 .handler-table-cell .table-task-cell {
   gap: 0;
