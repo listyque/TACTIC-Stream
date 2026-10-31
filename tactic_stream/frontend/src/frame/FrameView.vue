@@ -644,6 +644,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         :options="node.options"
         :model-value="node.value"
         :icon-only="node.iconOnly"
+        :icon-size="node.iconSize || 15"
         :disabled="!node.enabled"
         @update:model-value="send(node.action, $event)"
       />

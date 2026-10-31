@@ -16,7 +16,7 @@ import { t as _sfc_main$74 } from "./AppDialog.js";
 import { t as _sfc_main$75 } from "./VirtualCollection.js";
 import { t as Timesheet_default } from "./Timesheet.js";
 import { a as duplicateProfile, t as _sfc_main$76 } from "./ContentLoadingOverlay.js";
-import { A as _sfc_main$83, At as describe$22, B as _sfc_main$79, D as insertion, Ft as buttonWidth, I as decorate, L as itemScene, Mt as interrupted, Nt as settled, O as mentionQuery, Q as _sfc_main$78, T as emojiCount, U as groupRecords, V as _sfc_main$80, _t as describe$21, a as tableDefinition, b as _sfc_main$84, ct as _sfc_main$77, gt as actionAvailable, ht as viewTabWidth, j as _sfc_main$82, jt as field$1, kt as change$6, mt as tab, n as changeTable, o as ObjectAction_default, s as _sfc_main$85, tt as choices, vt as supports, w as composerKey, xt as binding, y as _sfc_main$86, z as _sfc_main$81 } from "./RelatedObjects.js";
+import { A as _sfc_main$83, B as _sfc_main$79, D as insertion, Ft as interrupted, I as decorate, It as settled, L as itemScene, Mt as change$6, Nt as describe$22, O as mentionQuery, Pt as field$1, Rt as buttonWidth, T as emojiCount, U as groupRecords, V as _sfc_main$80, _t as tab, a as tableDefinition, b as _sfc_main$84, bt as describe$21, dt as _sfc_main$77, it as choices, j as _sfc_main$82, n as changeTable, o as ObjectAction_default, s as _sfc_main$85, tt as _sfc_main$78, vt as viewTabWidth, w as composerKey, wt as binding, xt as supports, y as _sfc_main$86, yt as actionAvailable, z as _sfc_main$81 } from "./RelatedObjects.js";
 //#region ../src/tactic_stream/shared_ui/features/table/cells.ui.mjs
 function presentationOptions(options = {}, attributes = {}) {
 	const result = Object.assign({}, options);

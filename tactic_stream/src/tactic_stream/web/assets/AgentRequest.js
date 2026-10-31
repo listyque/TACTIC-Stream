@@ -3,7 +3,7 @@ import { D as spacing, a as _sfc_main$2, o as t, s as appearance, t as _sfc_main
 import { A as rpc, It as randomUuid, ut as notify } from "./index.js";
 import { G as button, H as observeFrameSizes, J as muted, K as label, P as _sfc_main$4, X as rect, Y as node, t as _sfc_main$5, w as translate } from "./FrameView.js";
 import { t as _sfc_main$6 } from "./AppDialog.js";
-import { $ as _sfc_main$8, z as _sfc_main$7 } from "./RelatedObjects.js";
+import { nt as _sfc_main$8, z as _sfc_main$7 } from "./RelatedObjects.js";
 import { t as listAction } from "./tree.ui.js";
 import { g as describe$3 } from "./App.js";
 import { n as current, r as status$1, t as controls } from "./executor.ui.js";

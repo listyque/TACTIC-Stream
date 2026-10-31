@@ -2185,6 +2185,7 @@ var _sfc_main$17 = {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/core/strings.mjs
 var russian = {
+	"Result view": "Вид результатов",
 	"Cell text style": "Стиль текста ячейки",
 	"Size and emphasis of text values in this column.": "Размер и начертание текстовых значений в этой колонке.",
 	Standard: "Обычный",
@@ -6941,7 +6942,11 @@ var _sfc_main$13 = {
 		label: String,
 		disabled: Boolean,
 		outlined: Boolean,
-		iconOnly: Boolean
+		iconOnly: Boolean,
+		iconSize: {
+			type: Number,
+			default: 15
+		}
 	}, {
 		"modelValue": {},
 		"modelModifiers": {}
@@ -6968,6 +6973,7 @@ var _sfc_main$13 = {
 		return (_ctx, _cache) => {
 			return openBlock(), createElementBlock("div", {
 				class: normalizeClass(["app-segmented-button", { outlined: __props.outlined }]),
+				style: normalizeStyle({ "--segmented-icon-size": __props.iconSize + "px" }),
 				role: "radiogroup",
 				"aria-label": unref(t)(__props.label),
 				onKeydown: move
@@ -6993,7 +6999,7 @@ var _sfc_main$13 = {
 					"disabled",
 					"onClick"
 				]);
-			}), 128))], 42, _hoisted_1$13);
+			}), 128))], 46, _hoisted_1$13);
 		};
 	}
 };
@@ -10582,6 +10588,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					options: node.options,
 					"model-value": node.value,
 					"icon-only": node.iconOnly,
+					"icon-size": node.iconSize || 15,
 					disabled: !node.enabled,
 					"onUpdate:modelValue": ($event) => send(node.action, $event)
 				}, null, 8, [
@@ -10592,6 +10599,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"options",
 					"model-value",
 					"icon-only",
+					"icon-size",
 					"disabled",
 					"onUpdate:modelValue"
 				])) : node.kind === "CheckBox" ? (openBlock(), createBlock(_sfc_main$22, {

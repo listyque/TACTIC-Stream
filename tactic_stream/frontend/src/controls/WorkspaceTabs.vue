@@ -57,6 +57,8 @@ const root = ref(null);
 const overflow = ref(false);
 const compact = ref(false);
 const widths = ref([]);
+const toolbarWidth = ref(0),
+  naturalWidth = ref(0);
 const drag = shallowRef(null);
 let pressedTab;
 let suppressClick = false;
@@ -72,6 +74,7 @@ watch(
 );
 
 function measure() {
+  toolbarWidth.value = root.value?.clientWidth || 0;
   if (props.mobile) {
     cancelDrag();
     compact.value = true;
@@ -153,6 +156,7 @@ function measure() {
     return Math.max(minimum, compact.value ? Math.min(180, ideal) : ideal);
   });
   const fitted = fitTabWidths(natural, current, available, minimum);
+  naturalWidth.value = natural.reduce((sum, width) => sum + width, 0);
   overflow.value =
     fitted.reduce((sum, width) => sum + width, 0) > available + 1;
   widths.value = fitTabWidths(
@@ -733,7 +737,13 @@ function clickAfterDrag(event) {
           @click="menuAction(menu, 'clear-history')"
       /></template>
     </AppMenu>
-    <slot name="actions" :compact="compact" />
+    <slot
+      name="actions"
+      :compact="compact"
+      :width="toolbarWidth"
+      :natural="naturalWidth"
+      :history="closedTabs.length ? 42 : 0"
+    />
     <AppMenu
       v-if="kind === 'search' && closedTabs.length && !mobile"
       ref="history"

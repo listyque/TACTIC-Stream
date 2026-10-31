@@ -7190,6 +7190,28 @@ var views = [
 		icon: "MDI_VIEW_AGENDA"
 	}
 ];
+var viewPicker = {
+	width: 114,
+	height: 40,
+	iconSize: 20
+};
+function inlineViews(width, tabsWidth = 0, historyWidth = 0) {
+	return width >= 720 && width - 240 - historyWidth - Math.max(220, tabsWidth) >= viewPicker.width + 8;
+}
+function describeViewPicker(model, language) {
+	return { nodes: [node("Segmented", "searchResultViewPicker", rect(0, 0, viewPicker.width, viewPicker.height), {
+		label: translate("Result view", language),
+		options: views.slice(0, 3).map((view) => Object.assign({}, view, {
+			label: translate(view.label, language),
+			translate: false
+		})),
+		value: model.mode,
+		enabled: !model.busy,
+		iconOnly: true,
+		iconSize: viewPicker.iconSize,
+		action: { type: "view" }
+	})] };
+}
 var groups = [
 	{
 		value: "none",
@@ -9746,6 +9768,6 @@ function changeDefinition(source, path, field, value) {
 	return new XMLSerializer().serializeToString(document);
 }
 //#endregion
-export { _sfc_main$13 as $, _sfc_main$7 as A, describe$4 as At, _sfc_main$10 as B, bubbleGeometry as C, edit as Ct, insertion as D, variants as Dt, formatFileSize as E, template as Et, toggle as F, buttonWidth as Ft, groupActions as G, defaultResultView as H, decorate as I, sortColumn as J, groups as K, itemScene as L, alignment as M, interrupted as Mt, roots as N, settled as Nt, mentionQuery as O, widgets as Ot, selected as P, actionLayout as Pt, _sfc_main$12 as Q, spacingField as R, bubbleContour as S, describe$3 as St, emojiCount as T, serialize as Tt, groupRecords as U, _sfc_main$11 as V, filterActions as W, viewActions as X, sorts as Y, views as Z, retainOlderMessages as _, describe$2 as _t, tableDefinition as a, row as at, _sfc_main$6 as b, actions as bt, attachmentName as c, _sfc_main$14 as ct, groupedMessages as d, RelatedObjects_default as default, dimensions as dt, MarkdownItCallable as et, initials as f, key as ft, messageId as g, actionAvailable as gt, messageDate as h, viewTabWidth as ht, displayWidgets as i, loaded as it, _sfc_main$8 as j, field as jt, popup as k, change as kt, canChangeMessage as l, _sfc_main$15 as lt, messageAttachments as m, tab as mt, changeTable as n, describe$1 as nt, ObjectAction_default as o, rows as ot, mergeMessages as p, sectionWidth as pt, sortActions as q, definitionWizard as r, initial as rt, _sfc_main$3 as s, transition as st, changeDefinition as t, choices$1 as tt, conversationAttachments as u, row$1 as ut, contextActions as v, supports as vt, composerKey as w, roles as wt, bodyOrder as x, binding as xt, _sfc_main$5 as y, visible as yt, _sfc_main$9 as z };
+export { viewPicker as $, _sfc_main$7 as A, variants as At, _sfc_main$10 as B, bubbleGeometry as C, actions as Ct, insertion as D, roles as Dt, formatFileSize as E, edit as Et, toggle as F, interrupted as Ft, filterActions as G, defaultResultView as H, decorate as I, settled as It, inlineViews as J, groupActions as K, itemScene as L, actionLayout as Lt, alignment as M, change as Mt, roots as N, describe$4 as Nt, mentionQuery as O, serialize as Ot, selected as P, field as Pt, viewActions as Q, spacingField as R, buttonWidth as Rt, bubbleContour as S, visible as St, emojiCount as T, describe$3 as Tt, groupRecords as U, _sfc_main$11 as V, describeViewPicker as W, sortColumn as X, sortActions as Y, sorts as Z, retainOlderMessages as _, tab as _t, tableDefinition as a, describe$1 as at, _sfc_main$6 as b, describe$2 as bt, attachmentName as c, row as ct, groupedMessages as d, RelatedObjects_default as default, _sfc_main$14 as dt, views as et, initials as f, _sfc_main$15 as ft, messageId as g, sectionWidth as gt, messageDate as h, key as ht, displayWidgets as i, choices$1 as it, _sfc_main$8 as j, widgets as jt, popup as k, template as kt, canChangeMessage as l, rows as lt, messageAttachments as m, dimensions as mt, changeTable as n, _sfc_main$13 as nt, ObjectAction_default as o, initial as ot, mergeMessages as p, row$1 as pt, groups as q, definitionWizard as r, MarkdownItCallable as rt, _sfc_main$3 as s, loaded as st, changeDefinition as t, _sfc_main$12 as tt, conversationAttachments as u, transition as ut, contextActions as v, viewTabWidth as vt, composerKey as w, binding as wt, bodyOrder as x, supports as xt, _sfc_main$5 as y, actionAvailable as yt, _sfc_main$9 as z };
 
 //# sourceMappingURL=RelatedObjects.js.map

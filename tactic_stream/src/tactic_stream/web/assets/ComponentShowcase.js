@@ -6,7 +6,7 @@ import { r as ImagePicker_default, t as _sfc_main$32 } from "./RecordForm.js";
 import { u as _sfc_main$33 } from "./admin.document.js";
 import { t as _sfc_main$34 } from "./AppDialog.js";
 import { t as _sfc_main$35 } from "./ContentLoadingOverlay.js";
-import { A as _sfc_main$38, B as _sfc_main$43, Q as _sfc_main$41, V as _sfc_main$39, b as _sfc_main$37, lt as _sfc_main$36, y as _sfc_main$42, z as _sfc_main$40 } from "./RelatedObjects.js";
+import { A as _sfc_main$38, B as _sfc_main$43, V as _sfc_main$39, b as _sfc_main$37, ft as _sfc_main$36, tt as _sfc_main$41, y as _sfc_main$42, z as _sfc_main$40 } from "./RelatedObjects.js";
 import { a as visibleRows, i as row$3, n as navigate, t as listAction } from "./tree.ui.js";
 import { E as surfaces, T as filterGeometry, d as _sfc_main$44, u as QuickFilterOptions_default, w as QuickFilterChip_default } from "./App.js";
 //#region src/features/administration/ShowcaseMenu.vue

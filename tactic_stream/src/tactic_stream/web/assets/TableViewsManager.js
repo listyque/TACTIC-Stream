@@ -3,7 +3,7 @@ import { s as appearance } from "./AppButton.js";
 import { A as rpc } from "./index.js";
 import { H as observeFrameSizes, t as _sfc_main$1 } from "./FrameView.js";
 import { t as _sfc_main$2 } from "./AppDialog.js";
-import { at as row, it as loaded, nt as describe, ot as rows, rt as initial, st as transition } from "./RelatedObjects.js";
+import { at as describe, ct as row, lt as rows, ot as initial, st as loaded, ut as transition } from "./RelatedObjects.js";
 //#region src/features/interface/TableViewsManager.vue
 var _sfc_main = {
 	__name: "TableViewsManager",

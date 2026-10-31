@@ -17,7 +17,7 @@ import { t as _sfc_main$129 } from "./CodeBlock.js";
 import { t as describe$41 } from "./confirmation.ui.js";
 import { t as _sfc_main$130 } from "./AppDialog.js";
 import { t as Timesheet_default } from "./Timesheet.js";
-import { A as _sfc_main$136, C as bubbleGeometry, E as formatFileSize, G as groupActions, H as defaultResultView, J as sortColumn, K as groups$1, Q as _sfc_main$137, S as bubbleContour, T as emojiCount, W as filterActions, X as viewActions, Y as sorts$1, Z as views, _ as retainOlderMessages, b as _sfc_main$131, c as attachmentName, ct as _sfc_main$132, d as groupedMessages, dt as dimensions$4, f as initials$1, ft as key$1, g as messageId, h as messageDate, ht as viewTabWidth, k as popup$2, l as canChangeMessage, m as messageAttachments, mt as tab, o as ObjectAction_default, p as mergeMessages, pt as sectionWidth, q as sortActions, s as _sfc_main$134, u as conversationAttachments, ut as row$15, v as contextActions, x as bodyOrder, y as _sfc_main$135, z as _sfc_main$133 } from "./RelatedObjects.js";
+import { $ as viewPicker, A as _sfc_main$136, C as bubbleGeometry, E as formatFileSize, G as filterActions, H as defaultResultView, J as inlineViews, K as groupActions, Q as viewActions, S as bubbleContour, T as emojiCount, W as describeViewPicker, X as sortColumn, Y as sortActions, Z as sorts$1, _ as retainOlderMessages, _t as tab, b as _sfc_main$131, c as attachmentName, d as groupedMessages, dt as _sfc_main$132, et as views, f as initials$1, g as messageId, gt as sectionWidth, h as messageDate, ht as key$1, k as popup$2, l as canChangeMessage, m as messageAttachments, mt as dimensions$4, o as ObjectAction_default, p as mergeMessages, pt as row$15, q as groups$1, s as _sfc_main$134, tt as _sfc_main$137, u as conversationAttachments, v as contextActions, vt as viewTabWidth, x as bodyOrder, y as _sfc_main$135, z as _sfc_main$133 } from "./RelatedObjects.js";
 import { n as navigate, r as navigationRow } from "./tree.ui.js";
 import { t as _sfc_main$138 } from "./FrameProgress.js";
 import { t as captionedSwitch } from "./toggle.ui.js";
@@ -13160,6 +13160,7 @@ var _sfc_main$62 = {
 		const overflow = ref(false);
 		const compact = ref(false);
 		const widths = ref([]);
+		const toolbarWidth = ref(0), naturalWidth = ref(0);
 		const drag = shallowRef(null);
 		let pressedTab;
 		let suppressClick = false;
@@ -13168,6 +13169,7 @@ var _sfc_main$62 = {
 			if (props.kind === "view") emit("gutter", value ? layout$6.scrollbarExtent : 0);
 		}, { immediate: true });
 		function measure() {
+			toolbarWidth.value = root.value?.clientWidth || 0;
 			if (props.mobile) {
 				cancelDrag();
 				compact.value = true;
@@ -13211,6 +13213,7 @@ var _sfc_main$62 = {
 				return Math.max(minimum, compact.value ? Math.min(180, ideal) : ideal);
 			});
 			const fitted = fitTabWidths(natural, current, available, minimum);
+			naturalWidth.value = natural.reduce((sum, width) => sum + width, 0);
 			overflow.value = fitted.reduce((sum, width) => sum + width, 0) > available + 1;
 			widths.value = fitTabWidths(natural, current, available - (overflow.value ? 40 : 0), minimum);
 		}
@@ -13702,7 +13705,12 @@ var _sfc_main$62 = {
 					]),
 					key: "0"
 				} : void 0]), 1032, ["show-label"])) : createCommentVNode("", true),
-				renderSlot(_ctx.$slots, "actions", { compact: compact.value }),
+				renderSlot(_ctx.$slots, "actions", {
+					compact: compact.value,
+					width: toolbarWidth.value,
+					natural: naturalWidth.value,
+					history: __props.closedTabs.length ? 42 : 0
+				}),
 				__props.kind === "search" && __props.closedTabs.length && !__props.mobile ? (openBlock(), createBlock(_sfc_main$107, {
 					key: 4,
 					ref_key: "history",
@@ -17972,13 +17980,36 @@ var _sfc_main$52 = {
 		label: String,
 		icon: String,
 		boundary: Object,
-		iconOnly: Boolean
+		iconOnly: Boolean,
+		toolbarWidth: {
+			type: Number,
+			default: 0
+		},
+		tabsWidth: {
+			type: Number,
+			default: 0
+		},
+		historyWidth: {
+			type: Number,
+			default: 0
+		}
 	},
 	emits: ["command", "opening"],
 	setup(__props, { expose: __expose, emit: __emit }) {
 		const props = __props;
 		const emit = __emit;
 		const menu = ref(null), editor = ref(null), anchor = ref(null), column = ref(""), direction = ref("asc");
+		const inlineViews$1 = computed(() => props.kind === "view" && inlineViews(props.toolbarWidth, props.tabsWidth, props.historyWidth));
+		const picker = computed(() => describeViewPicker(props.model, appearance.language));
+		const extraView = computed(() => !views.slice(0, 3).some((view) => view.value === props.model.mode));
+		const triggerIcon = computed(() => inlineViews$1.value && !extraView.value ? "expand-more" : props.icon);
+		watch(inlineViews$1, () => menu.value?.close(false));
+		function selectView(action) {
+			if (action.type === "view" && !props.model.busy) {
+				menu.value?.close(false);
+				emit("command", action.value);
+			}
+		}
 		const actions = computed(() => props.kind === "filters" ? filterActions(props.model) : props.kind === "sort" ? sortActions(props.model) : props.kind === "group" ? groupActions(props.model) : viewActions(props.model.mode, props.model.busy));
 		const scene = computed(() => sortColumn({
 			column: column.value,
@@ -18021,50 +18052,66 @@ var _sfc_main$52 = {
 		}
 		__expose({ close });
 		return (_ctx, _cache) => {
-			return openBlock(), createElementBlock(Fragment, null, [createVNode(_sfc_main$107, {
-				ref_key: "menu",
-				ref: menu,
-				overlay: __props.kind === "filters",
-				"align-start": __props.kind === "filters",
-				label: __props.label,
-				icon: __props.icon,
-				boundary: __props.boundary,
-				width: __props.kind === "filters" ? 300 : 280,
-				onToggle: opened
-			}, {
-				trigger: withCtx(() => [createVNode(_sfc_main$104, { name: __props.icon }, null, 8, ["name"]), !__props.iconOnly ? (openBlock(), createElementBlock("span", _hoisted_1$31, toDisplayString(unref(t)(__props.label)), 1)) : createCommentVNode("", true)]),
-				default: withCtx(() => [createVNode(_sfc_main$132, {
-					actions: actions.value,
-					onTriggered: choose
-				}, null, 8, ["actions"])]),
-				_: 1
-			}, 8, [
-				"overlay",
-				"align-start",
-				"label",
-				"icon",
-				"boundary",
-				"width"
-			]), __props.kind === "sort" ? (openBlock(), createBlock(_sfc_main$107, {
-				key: 0,
-				ref_key: "editor",
-				ref: editor,
-				"external-trigger": "",
-				"frame-composition": "",
-				overlay: "",
-				boundary: __props.boundary,
-				anchor: anchor.value,
-				width: 280,
-				label: "Sort by column",
-				"close-on-select": false
-			}, {
-				default: withCtx(() => [createVNode(_sfc_main$105, {
-					scene: scene.value,
-					style: { "height": "156px" },
-					onEvent: edit
-				}, null, 8, ["scene"])]),
-				_: 1
-			}, 8, ["boundary", "anchor"])) : createCommentVNode("", true)], 64);
+			return openBlock(), createElementBlock(Fragment, null, [
+				inlineViews$1.value ? (openBlock(), createBlock(_sfc_main$105, {
+					key: 0,
+					scene: picker.value,
+					class: "result-view-picker",
+					style: normalizeStyle({
+						width: viewPicker.width + "px",
+						height: viewPicker.height + "px"
+					}),
+					onEvent: selectView
+				}, null, 8, ["scene", "style"])) : createCommentVNode("", true),
+				createVNode(_sfc_main$107, {
+					ref_key: "menu",
+					ref: menu,
+					overlay: __props.kind === "filters",
+					"align-start": __props.kind === "filters",
+					label: __props.label,
+					icon: triggerIcon.value,
+					boundary: __props.boundary,
+					width: __props.kind === "filters" ? 300 : 280,
+					onToggle: opened
+				}, {
+					trigger: withCtx(() => [createVNode(_sfc_main$104, {
+						name: triggerIcon.value,
+						style: normalizeStyle(inlineViews$1.value && extraView.value ? { color: "var(--primary)" } : void 0)
+					}, null, 8, ["name", "style"]), !__props.iconOnly ? (openBlock(), createElementBlock("span", _hoisted_1$31, toDisplayString(unref(t)(__props.label)), 1)) : createCommentVNode("", true)]),
+					default: withCtx(() => [createVNode(_sfc_main$132, {
+						actions: actions.value,
+						onTriggered: choose
+					}, null, 8, ["actions"])]),
+					_: 1
+				}, 8, [
+					"overlay",
+					"align-start",
+					"label",
+					"icon",
+					"boundary",
+					"width"
+				]),
+				__props.kind === "sort" ? (openBlock(), createBlock(_sfc_main$107, {
+					key: 1,
+					ref_key: "editor",
+					ref: editor,
+					"external-trigger": "",
+					"frame-composition": "",
+					overlay: "",
+					boundary: __props.boundary,
+					anchor: anchor.value,
+					width: 280,
+					label: "Sort by column",
+					"close-on-select": false
+				}, {
+					default: withCtx(() => [createVNode(_sfc_main$105, {
+						scene: scene.value,
+						style: { "height": "156px" },
+						onEvent: edit
+					}, null, 8, ["scene"])]),
+					_: 1
+				}, 8, ["boundary", "anchor"])) : createCommentVNode("", true)
+			], 64);
 		};
 	}
 };
@@ -37288,7 +37335,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 								}), 128)),
 								_cache[181] || (_cache[181] = createBaseVNode("hr", null, null, -1))
 							], 64)) : createCommentVNode("", true)]),
-							actions: withCtx(({ compact }) => [$data.compactShortcuts ? (openBlock(), createBlock(_component_AppButton, {
+							actions: withCtx(({ compact, width, natural, history }) => [$data.compactShortcuts ? (openBlock(), createBlock(_component_AppButton, {
 								key: 0,
 								ref: "mobileSearchToggle",
 								"icon-only": "",
@@ -37349,9 +37396,32 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 										_cache[182] || (_cache[182] = createBaseVNode("hr", null, null, -1))
 									], 64)) : createCommentVNode("", true),
 									_cache[183] || (_cache[183] = createBaseVNode("div", { id: "workspace-sort-actions" }, null, -1)),
+									!$data.compactShortcuts ? (openBlock(), createBlock(_component_SearchResultMenu, {
+										key: 1,
+										kind: "view",
+										label: "Change search results view",
+										icon: $options.resultViews.find((item) => item.value === $data.resultMode)?.icon || "MDI_TABLE",
+										model: {
+											mode: $data.resultMode,
+											busy: $data.busy
+										},
+										"toolbar-width": compact ? 0 : width,
+										"tabs-width": natural,
+										"history-width": history,
+										boundary: _ctx.$refs.results?.parentElement,
+										onCommand: $options.changeResultView
+									}, null, 8, [
+										"icon",
+										"model",
+										"toolbar-width",
+										"tabs-width",
+										"history-width",
+										"boundary",
+										"onCommand"
+									])) : createCommentVNode("", true),
 									withDirectives(createBaseVNode("div", _hoisted_36, null, 512), [[vShow, $data.compactShortcuts]]),
 									$data.compactShortcuts ? (openBlock(), createBlock(_component_AppButton, {
-										key: 1,
+										key: 2,
 										label: "Saved searches",
 										icon: "filter",
 										disabled: $data.busy,
@@ -37365,8 +37435,8 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 										id: "workspace-mobile-view-actions"
 									}, null, 512), [[vShow, $data.compactShortcuts]])
 								]),
-								_: 1
-							}, 8, [
+								_: 2
+							}, 1032, [
 								"inline",
 								"overlay",
 								"onToggle"
@@ -37388,51 +37458,31 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 							key: 1,
 							defer: "",
 							to: "#workspace-sort-actions"
-						}, [
-							createVNode(_component_SearchResultMenu, {
-								kind: "sort",
-								icon: "sort-items",
-								label: "Sort by",
-								model: $options.searchSortMenuModel,
-								boundary: _ctx.$refs.results?.parentElement,
-								onCommand: $options.searchSortCommand
-							}, null, 8, [
-								"model",
-								"boundary",
-								"onCommand"
-							]),
-							createVNode(_component_SearchResultMenu, {
-								kind: "group",
-								icon: "group-items",
-								label: "Group items",
-								model: $options.searchGroupMenuModel,
-								onOpening: $options.prepareResultGroups,
-								boundary: _ctx.$refs.results?.parentElement,
-								onCommand: $options.changeResultGroup
-							}, null, 8, [
-								"model",
-								"onOpening",
-								"boundary",
-								"onCommand"
-							]),
-							!$data.compactShortcuts ? (openBlock(), createBlock(_component_SearchResultMenu, {
-								key: 0,
-								kind: "view",
-								label: "Change search results view",
-								icon: $options.resultViews.find((item) => item.value === $data.resultMode)?.icon || "MDI_TABLE",
-								model: {
-									mode: $data.resultMode,
-									busy: $data.busy
-								},
-								boundary: _ctx.$refs.results?.parentElement,
-								onCommand: $options.changeResultView
-							}, null, 8, [
-								"icon",
-								"model",
-								"boundary",
-								"onCommand"
-							])) : createCommentVNode("", true)
-						])) : createCommentVNode("", true),
+						}, [createVNode(_component_SearchResultMenu, {
+							kind: "sort",
+							icon: "sort-items",
+							label: "Sort by",
+							model: $options.searchSortMenuModel,
+							boundary: _ctx.$refs.results?.parentElement,
+							onCommand: $options.searchSortCommand
+						}, null, 8, [
+							"model",
+							"boundary",
+							"onCommand"
+						]), createVNode(_component_SearchResultMenu, {
+							kind: "group",
+							icon: "group-items",
+							label: "Group items",
+							model: $options.searchGroupMenuModel,
+							onOpening: $options.prepareResultGroups,
+							boundary: _ctx.$refs.results?.parentElement,
+							onCommand: $options.changeResultGroup
+						}, null, 8, [
+							"model",
+							"onOpening",
+							"boundary",
+							"onCommand"
+						])])) : createCommentVNode("", true),
 						$data.error ? (openBlock(), createElementBlock("p", _hoisted_37, toDisplayString($options.t($data.error)), 1)) : createCommentVNode("", true),
 						$options.selectedRecords.length && ($data.resultMode !== "continious" || $options.selectedRecords.length > 1 || _ctx.mobile) ? (openBlock(), createElementBlock("div", {
 							key: 3,

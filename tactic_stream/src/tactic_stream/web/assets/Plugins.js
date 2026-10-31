@@ -2,7 +2,7 @@ import { A as onMounted, H as watch, K as withDirectives, M as openBlock, O as o
 import { D as spacing, s as appearance } from "./AppButton.js";
 import { A as rpc, J as uploadFormFile } from "./index.js";
 import { G as button, H as observeFrameSizes, K as label, X as rect, Y as node, q as listRowHeight, t as _sfc_main$1, w as translate$1 } from "./FrameView.js";
-import { _t as describe$2 } from "./RelatedObjects.js";
+import { bt as describe$2 } from "./RelatedObjects.js";
 import { t as _sfc_main$2 } from "./PageEditorTools.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/plugins/plugins.resources.mjs
 var russian$1 = {

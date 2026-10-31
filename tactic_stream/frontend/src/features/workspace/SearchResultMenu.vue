@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, nextTick } from 'vue';
+import { computed, ref, nextTick, watch } from 'vue';
 import { appearance } from '../../appearance.js';
 import { t } from '../../i18n.js';
 import AppMenu from '../../controls/AppMenu.vue';
@@ -13,7 +13,10 @@ const props = defineProps({
   label: String,
   icon: String,
   boundary: Object,
-  iconOnly: Boolean
+  iconOnly: Boolean,
+  toolbarWidth: { type: Number, default: 0 },
+  tabsWidth: { type: Number, default: 0 },
+  historyWidth: { type: Number, default: 0 }
 });
 const emit = defineEmits(['command', 'opening']);
 const menu = ref(null),
@@ -21,6 +24,27 @@ const menu = ref(null),
   anchor = ref(null),
   column = ref(''),
   direction = ref('asc');
+const inlineViews = computed(
+  () =>
+    props.kind === 'view' &&
+    UI.inlineViews(props.toolbarWidth, props.tabsWidth, props.historyWidth)
+);
+const picker = computed(() =>
+  UI.describeViewPicker(props.model, appearance.language)
+);
+const extraView = computed(
+  () => !UI.views.slice(0, 3).some((view) => view.value === props.model.mode)
+);
+const triggerIcon = computed(() =>
+  inlineViews.value && !extraView.value ? 'expand-more' : props.icon
+);
+watch(inlineViews, () => menu.value?.close(false));
+function selectView(action) {
+  if (action.type === 'view' && !props.model.busy) {
+    menu.value?.close(false);
+    emit('command', action.value);
+  }
+}
 const actions = computed(() =>
   props.kind === 'filters'
     ? UI.filterActions(props.model)
@@ -80,22 +104,35 @@ function close() {
 defineExpose({ close });
 </script>
 <template>
+  <FrameView
+    v-if="inlineViews"
+    :scene="picker"
+    class="result-view-picker"
+    :style="{
+      width: UI.viewPicker.width + 'px',
+      height: UI.viewPicker.height + 'px'
+    }"
+    @event="selectView"
+  />
   <AppMenu
     ref="menu"
     :overlay="kind === 'filters'"
     :align-start="kind === 'filters'"
     :label="label"
-    :icon="icon"
+    :icon="triggerIcon"
     :boundary="boundary"
     :width="kind === 'filters' ? 300 : 280"
     @toggle="opened"
   >
     <template #trigger
-      ><AppIcon :name="icon" /><span
-        v-if="!iconOnly"
-        class="result-action-label"
-        >{{ t(label) }}</span
-      ></template
+      ><AppIcon
+        :name="triggerIcon"
+        :style="
+          inlineViews && extraView ? { color: 'var(--primary)' } : undefined
+        "
+      /><span v-if="!iconOnly" class="result-action-label">{{
+        t(label)
+      }}</span></template
     >
     <ActionRows :actions="actions" @triggered="choose" />
   </AppMenu>
@@ -114,3 +151,9 @@ defineExpose({ close });
     <FrameView :scene="scene" style="height: 156px" @event="edit" />
   </AppMenu>
 </template>
+<style>
+.result-view-picker {
+  flex: none;
+  align-self: center;
+}
+</style>

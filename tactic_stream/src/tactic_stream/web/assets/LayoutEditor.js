@@ -5,7 +5,7 @@ import { A as rpc, Lt as asyncComponent, Z as widgetConfiguration, a as __vitePr
 import { G as button, H as observeFrameSizes, J as muted, K as label, X as rect, Y as node, t as _sfc_main$2, w as translate } from "./FrameView.js";
 import { n as sections } from "./sections.ui.js";
 import { i as sectionSelector, k as workspaceAddress, n as notices, o as toolbar$1, r as policy, t as documentEvent } from "./admin.document.js";
-import { Ct as edit, Dt as variants, Et as template, L as itemScene, Ot as widgets, R as spacingField, St as describe$1, Tt as serialize, _t as describe$2, bt as actions, j as _sfc_main$3, vt as supports, wt as roles, xt as binding, yt as visible } from "./RelatedObjects.js";
+import { At as variants, Ct as actions, Dt as roles, Et as edit, L as itemScene, Ot as serialize, R as spacingField, St as visible, Tt as describe$1, bt as describe$2, j as _sfc_main$3, jt as widgets, kt as template, wt as binding, xt as supports } from "./RelatedObjects.js";
 //#region src/features/interface/layoutXml.js
 function layoutTree(source) {
 	if (!source.trim()) throw Error("Select a SObject layout configuration");

@@ -8,7 +8,8 @@ const props = defineProps({
   label: String,
   disabled: Boolean,
   outlined: Boolean,
-  iconOnly: Boolean
+  iconOnly: Boolean,
+  iconSize: { type: Number, default: 15 }
 });
 const model = defineModel();
 const emit = defineEmits(['update:modelValue']);
@@ -38,6 +39,7 @@ function move(event) {
   <div
     class="app-segmented-button"
     :class="{ outlined }"
+    :style="{ '--segmented-icon-size': iconSize + 'px' }"
     role="radiogroup"
     :aria-label="t(label)"
     @keydown="move"
@@ -86,9 +88,9 @@ function move(event) {
   font-weight: 600;
 }
 .app-segmented-button .app-button > .app-icon {
-  width: 15px;
-  height: 15px;
-  font-size: 15px;
+  width: var(--segmented-icon-size);
+  height: var(--segmented-icon-size);
+  font-size: var(--segmented-icon-size);
   color: var(--muted);
   flex: none;
 }
