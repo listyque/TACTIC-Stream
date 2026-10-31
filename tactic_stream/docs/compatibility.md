@@ -6,6 +6,13 @@ successful modern-client screen is not proof of complete legacy compatibility.
 Use live API discovery for the selected installation and check actual arguments,
 results, authorization, revisions, transaction effects and failure paths.
 
+Handler security-group catalog procedures and Stream's native counterpart use
+the legacy `Search.add_column` signature. Fixed aggregate expressions such as
+`MAX(id)` use `Search.get_select().set_quoted_mode('none')` instead of a `quoted`
+keyword. SQL-backed tests check both implementations with the old signature and
+compare grouped journal markers with each group's latest revision; administrator
+checks, stale-write protection and safe user projections remain required.
+
 | Boundary | Reference |
 | --- | --- |
 | Supported and excluded server contracts | [API compatibility Help](../frontend/public/help/api_compatibility.en.md) |

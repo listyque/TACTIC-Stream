@@ -92,7 +92,10 @@ def query_security_groups():
     if groups:
         log = Search('sthpw/sobject_log'); log.add_filter('search_type', 'sthpw/login_group')
         log.add_filters('search_code', [group.get_code() for group in groups])
-        log.add_column('search_code'); log.add_column('MAX(id)', as_column='id', quoted=False); log.add_group_by('search_code')
+        log.add_column('search_code')
+        log.get_select().set_quoted_mode('none')
+        log.add_column('MAX(id)', as_column='id')
+        log.add_group_by('search_code')
         # Journal Search defaults to timestamp sorting; native Select would
         # also group by timestamp and split one group's journal into many rows.
         statement, parameters = log._statement(default_order=False)

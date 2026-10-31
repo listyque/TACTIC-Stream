@@ -1,8 +1,10 @@
 """Handler group creation, native membership deltas, conflict and rollback."""
+import json
 import os
 from pathlib import Path
 import tempfile
 import unittest
+from runpy import run_path
 from unittest.mock import patch
 
 from pyasm.common import Config
@@ -69,6 +71,46 @@ def exercise(store):
 
 
 class SecurityGroups(unittest.TestCase):
+    def test_legacy_search_signature_in_handler_and_stream_catalogs(self):
+        handler = run_path(str(Path(__file__).resolve().parents[3]
+                               / 'TH/thlib/ui/security_store.py'))
+        add_column = Search.add_column
+
+        def legacy_add_column(search, column, distinct=False, table=None, as_column=None):
+            return add_column(search, column, distinct, table, as_column)
+
+        with tempfile.TemporaryDirectory() as directory, patch.dict(
+                os.environ, {'TACTIC_CONFIG_PATH': '', 'TACTIC_TMP_CONFIG_PATH': ''}):
+            Config.reload_config()
+            store = Store(Path(directory) / 'sqlite')
+            store.initialize(hash_password('group-test-password'))
+            api = Api(store)
+            ticket = api.get_ticket('admin', 'group-test-password')
+            with request_context(RequestContext(store, login='admin', project='sthpw')):
+                api.auth.bind_security('admin', ticket)
+                for name in ('first', 'second'):
+                    request('save', dict(login_group=name, description='Original'))
+                group = next(row for row in request('read', {})['groups'] if row['name'] == 'first')
+                original_revision = group['revision']
+                for description in ('Changed', 'Original'):
+                    result = request('save', dict(
+                        group_code=group['code'], login_group='first',
+                        description=description, expected_revision=group['revision']))
+                    group = next(row for row in result['groups'] if row['code'] == group['code'])
+                self.assertNotEqual(group['revision'], original_revision)
+                from tactic_stream.server.security_groups import group_revision
+                expected = {row.get_code(): group_revision(row)
+                            for row in Search('sthpw/login_group').get_sobjects()}
+                with patch.object(Search, 'add_column', legacy_add_column):
+                    for name, read in (
+                        ('stream', lambda: request('read', {})),
+                        ('handler', lambda: json.loads(handler['query_security_groups']())),
+                    ):
+                        with self.subTest(api=name):
+                            payload = read()
+                            self.assertEqual({row['code']: row['revision'] for row in payload['groups']}, expected)
+                            self.assertTrue(all('password' not in row for row in payload['users']))
+
     def test_native_groups_membership_conflict_rollback_and_permissions(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
