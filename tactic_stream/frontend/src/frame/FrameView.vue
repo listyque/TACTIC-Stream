@@ -148,6 +148,10 @@ function background(node) {
         .filter(Boolean)
         .join(', ') || undefined,
     borderRadius: radius,
+    borderBottomLeftRadius:
+      node.bottomLeftRadius === undefined
+        ? radius
+        : node.bottomLeftRadius + 'px',
     borderBottomRightRadius:
       node.bottomRightRadius === undefined
         ? radius

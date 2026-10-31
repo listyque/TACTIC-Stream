@@ -10088,6 +10088,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 				background: color(node.background),
 				boxShadow: [node.border ? "inset 0 0 0 " + (node.borderWidth || 1) + "px " + color(node.border) : "", node.shadow ? `0 ${node.shadow.y}px ${node.shadow.blur}px color-mix(in srgb, ${color("popupShadow")} ${node.shadow.opacity * 100}%, transparent)` : ""].filter(Boolean).join(", ") || void 0,
 				borderRadius: radius,
+				borderBottomLeftRadius: node.bottomLeftRadius === void 0 ? radius : node.bottomLeftRadius + "px",
 				borderBottomRightRadius: node.bottomRightRadius === void 0 ? radius : node.bottomRightRadius + "px"
 			};
 		}

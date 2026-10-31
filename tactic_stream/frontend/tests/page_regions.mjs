@@ -146,6 +146,22 @@ assert.equal(
 );
 assert.equal(doc.blocks[1].region, 'footer');
 const chrome = Page.describe({ title: 'Tasks', canEdit: true }, 800, 600, 'en');
+const rounded = Page.describe(
+  { title: 'Tasks', cornerRadius: 17 },
+  800,
+  600,
+  'en'
+);
+const roundedHeader = rounded.nodes.find(
+  (row) => row.id === 'workspacePageHeader'
+);
+assert.equal(roundedHeader.radius, 17);
+assert.equal(roundedHeader.bottomLeftRadius, 0);
+assert.equal(roundedHeader.bottomRightRadius, 0);
+assert.equal(
+  chrome.nodes.find((row) => row.id === 'workspacePageHeader').radius,
+  0
+);
 assert.equal(
   chrome.nodes.find((row) => row.id === 'workspacePageHeader').background,
   'panel'

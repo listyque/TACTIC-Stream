@@ -986,11 +986,13 @@ function describe$36(model, width, height, language) {
 	const nodes = [
 		node("Box", "workspacePageBackground", rect$1(0, 0, width, height), {
 			background: "workspace",
-			radius: 0
+			radius: model.cornerRadius || 0
 		}),
 		node("Box", "workspacePageHeader", rect$1(0, 0, width, 52), {
 			background: "panel",
-			radius: 0
+			radius: model.cornerRadius || 0,
+			bottomLeftRadius: 0,
+			bottomRightRadius: 0
 		}),
 		node("Box", "workspacePageHeaderDivider", rect$1(0, 51, width, 1), {
 			background: "outlineVariant",

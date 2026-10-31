@@ -361,3 +361,5 @@ Suggestion labels share escaped match markup; raw data never becomes executable
 HTML. Page reloads preserve the search component instead of recreating it.
 
 Table headings and plain/status values share cells.ui.mjs alignment: center by default, retaining explicit display justify/align left/center/right. Both engines keep symmetric insets, wrapped-label alignment and column-axis badge placement across resize.
+
+Native workspace pages pass the dock interior corner radius into the shared page chrome; web dock clipping remains the owner of its exterior. Frame Box surfaces honor bottomLeftRadius and bottomRightRadius independently. Keep the page header bottom edge square and native glyphs directly rendered without a whole-dock mask/layer.
