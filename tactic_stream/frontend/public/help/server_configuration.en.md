@@ -150,3 +150,21 @@ not download these browser assets.
 Help and Debug Log remain available before sign-in. Enter submits only a complete login/password pair while no authentication is pending. Handler keeps its existing server presets, ticket generation and proxy/site routing; preset edits are applied through the existing Configuration owner. Stream signs in to the current browser origin and does not expose native server-preset routing. Password entry is cleared when its sign-in window closes.
 
 Handler updates keep the existing release controller, changelog, portable-install eligibility, cancellation and install confirmation. Maintainers retain Ctrl-double-click on the current version to open release creation. The browser does not install native client ZIPs. Connection menus and session expiry retain the existing shell owners; a shared layout never grants permissions or retries an unknown mutation.
+
+## Server processes and restart
+
+Administrators can open **Administration → Backend server** in Handler or Stream.
+**Web workers** edits the installation's `services/process_count`; **Running web
+workers** shows the ready processes reported by its monitor. Save first, then use
+**Restart TACTIC Stream** and confirm the connection interruption. Saving alone
+never restarts the server. Refresh reloads saved values; Discard explicitly drops
+the draft. Concurrent configuration changes require a reload before restarting.
+
+The existing monitor recreates its workers/listeners using saved configuration;
+no remote shell or new launcher is started by the interface. The interface waits
+up to 90 seconds for the matching restart to become ready, without resending the
+restart command. The endpoint must be managed by a current TacticMonitor and the
+account must be an administrator. Explicit startup overrides still take priority.
+If network settings changed, open the new address and reconnect. Closing the
+interface does not cancel an accepted restart; the short interruption affects
+other clients too. Schedule it when no critical operations are in progress.

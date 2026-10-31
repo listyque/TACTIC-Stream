@@ -68,6 +68,59 @@ def running(pid):
 
 
 class Runtime(unittest.TestCase):
+    def test_admin_restart_applies_worker_count_and_rejects_replays(self):
+        from uuid import uuid4
+        from urllib.error import HTTPError
+        initial = self.start(count=2)
+        with ServerProxy(self.url + '/tactic/default/Api/', allow_none=True) as server:
+            token = server.get_ticket('admin', 'monitor-private-password', None)
+        def post(path, **values):
+            request = Request(self.url + '/admin/configuration' + path,
+                data=json.dumps(dict(ticket=token, **values)).encode(),
+                headers={'Content-Type': 'application/json'})
+            with urlopen(request, timeout=5) as response:
+                return json.load(response)['result']
+        config = post('')
+        self.assertTrue(config['runtime']['available'])
+        self.assertEqual(config['runtime']['web_workers'], 2)
+        with self.assertRaises(HTTPError) as error:
+            post('/restart', revision='stale', instance_id=initial['instance_id'], request_id=str(uuid4()))
+        self.assertEqual(error.exception.code, 409)
+        error.exception.close()
+        from tactic_stream.server.api import Api
+        api = Api(self.store)
+        api.dispatch('insert', ({'ticket': token, 'project': 'admin'}, 'sthpw/login',
+            {'login': 'restart_viewer', 'password': hash_password('viewer-private-password')}))
+        viewer = api.get_ticket('restart_viewer', 'viewer-private-password')
+        denied = Request(self.url + '/admin/configuration/runtime',
+            data=json.dumps(dict(ticket=viewer)).encode(), headers={'Content-Type': 'application/json'})
+        with self.assertRaises(HTTPError) as error:
+            urlopen(denied, timeout=5)
+        self.assertEqual(error.exception.code, 403)
+        error.exception.close()
+        saved = post('/save', changes={'services/process_count': '3'}, revision=config['revision'])
+        request = dict(revision=saved['revision'], instance_id=initial['instance_id'], request_id=str(uuid4()))
+        accepted = post('/restart', **request)
+        self.assertEqual(accepted['restart_id'], request['request_id'])
+        current = self.wait_for(lambda: self.status() if self.status().get('instance_id') != initial['instance_id'] and self.status()['state'] == 'running' else None)
+        self.assertEqual(len([row for row in current['workers'] if row['service'] == 'tactic']), 3)
+        self.assertTrue(all(not running(row['pid']) for row in initial['workers']))
+        self.assertEqual(current['restart_id'], request['request_id'])
+        self.assertEqual(post('/runtime')['web_workers'], 3)
+        self.assertEqual(post('/restart', **request)['instance_id'], current['instance_id'])
+        # An old instance cannot schedule another restart with a fresh request id.
+        with self.assertRaises(HTTPError) as error:
+            post('/restart', **dict(request, request_id=str(uuid4())))
+        self.assertEqual(error.exception.code, 409)
+        error.exception.close()
+        self.assertEqual(self.status()['instance_id'], current['instance_id'])
+        invalid = Request(self.url + '/admin/configuration/restart',
+            data=json.dumps(dict(ticket='invalid', **request)).encode(), headers={'Content-Type': 'application/json'})
+        with self.assertRaises(HTTPError) as error:
+            urlopen(invalid, timeout=5)
+        self.assertEqual(error.exception.code, 403)
+        error.exception.close()
+
     def test_sse_connections_are_listed_across_real_worker_processes(self):
         ports = [free_port(), free_port()]
         while ports[0] == ports[1]:

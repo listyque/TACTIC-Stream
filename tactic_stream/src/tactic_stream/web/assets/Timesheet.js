@@ -1,7 +1,7 @@
 import { r as __exportAll } from "./ObjectFieldFrame.js";
 import { A as onMounted, E as nextTick, F as resolveComponent, G as withCtx, I as resolveDirective, K as withDirectives, L as resolveDynamicComponent, M as openBlock, N as renderList, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, s as vShow, tt as normalizeClass, u as Fragment } from "./vue.js";
 import { D as spacing, o as t, s as appearance, t as _sfc_main$4, z as _plugin_vue_export_helper_default } from "./AppButton.js";
-import { k as rpc } from "./index.js";
+import { A as rpc } from "./index.js";
 import { G as node, H as label, K as rect, L as frameContentWidth, R as observeFrameSizes, S as translate, V as button, k as _sfc_main$6, t as _sfc_main$5, z as _sfc_main$7 } from "./FrameView.js";
 //#region ../src/tactic_stream/shared_ui/features/workhours/reports.ui.mjs
 var titles = {

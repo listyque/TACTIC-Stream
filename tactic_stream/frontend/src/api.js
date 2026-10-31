@@ -67,6 +67,14 @@ export async function serverConfiguration(ticket) {
   return post('/admin/configuration', { ticket })
 }
 
+export function restartServer(ticket, revision, instance_id, request_id) {
+  return post('/admin/configuration/restart', { ticket, revision, instance_id, request_id }, undefined, true)
+}
+
+export function serverRuntime(ticket) {
+  return post('/admin/configuration/runtime', { ticket }, AbortSignal.timeout(3000), true)
+}
+
 export function rawDatabase(action, ticket, project, values = {}) {
   return post('/admin/raw-database/' + action, { ticket, project, ...values })
 }

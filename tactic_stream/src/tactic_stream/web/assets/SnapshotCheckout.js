@@ -1,6 +1,6 @@
 import { A as onMounted, E as nextTick, H as watch, I as resolveDirective, J as markRaw, K as withDirectives, M as openBlock, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, et as unref, f as Teleport, h as createBlock, l as withModifiers, m as createBaseVNode, p as computed, rt as toDisplayString } from "./vue.js";
 import { D as spacing, _ as controls, o as t, s as appearance, t as _sfc_main$2 } from "./AppButton.js";
-import { k as rpc, o as fileBlob } from "./index.js";
+import { A as rpc, o as fileBlob } from "./index.js";
 import { G as node, H as label, K as rect, R as observeFrameSizes, S as translate, V as button, t as _sfc_main$3 } from "./FrameView.js";
 import { t as captionHeight } from "./sections.ui.js";
 import { i as sourceIcon, r as prettySize } from "./file_values.js";

@@ -14,6 +14,7 @@ import signal
 import socket
 import threading
 import time
+from uuid import uuid4
 
 from pyasm.common.errors import UnsupportedContract
 from tactic_stream.server.startup import read_server_config, start_server, start_queue, recover_queue_jobs
@@ -53,6 +54,10 @@ class TacticMonitor:
         self.should_exit = threading.Event()
         self.spawn = multiprocessing.get_context('spawn')
         self.log = logging.getLogger('tactic_stream.server.monitor')
+        self.instance_id = str(uuid4())
+        self.restart_id = ''
+        self.restart_error = ''
+        self._restart_requested = False
 
     def set_check_interval(self, check_interval):
         if not math.isfinite(check_interval) or check_interval <= 0:
@@ -69,7 +74,23 @@ class TacticMonitor:
     def execute(self):
         if self.mode != 'normal':
             raise UnsupportedContract('Attaching a monitor to unrelated processes is not migrated')
-        self._execute()
+        overrides = (self.host, self.port, self.num_processes, self.check_interval)
+        while True:
+            self._restart_requested = False
+            self._execute()
+            if not self._restart_requested:
+                break
+            if (self.log_dir / 'stop.monitor').exists():
+                self._restart_requested = False
+                self._write_status('stopped')
+                break
+            from pyasm.common import Config
+            Config.reload_config()
+            self.host, self.port, self.num_processes, self.check_interval = overrides
+            self.workers = []
+            self.sockets = []
+            self.should_exit.clear()
+            self.instance_id = str(uuid4())
 
     def _execute(self):
         self.settings = read_server_config(Path(os.environ.get('TACTIC_DATA_DIR', 'data')),
@@ -126,7 +147,7 @@ class TacticMonitor:
         finally:
             try:
                 self.final_kill()
-                self._write_status(state)
+                self._write_status('restarting' if self._restart_requested and state != 'failed' else state)
             finally:
                 for listener in self.sockets:
                     listener.close()
@@ -189,6 +210,26 @@ class TacticMonitor:
             if (self.log_dir / 'stop.monitor').exists():
                 self.should_exit.set()
                 break
+            request_path = self.log_dir / 'restart.monitor'
+            if request_path.exists():
+                from pyasm.common import Config
+                request = json.loads(request_path.read_text(encoding='utf-8'))
+                if request.get('instance_id') == self.instance_id:
+                    self.restart_id = request['request_id']
+                    self.restart_error = ''
+                    try:
+                        Config.reload_config()
+                        if Config.get_revision() != request['revision']:
+                            raise ValueError('Configuration changed; reload before restarting')
+                        read_server_config(Path(os.environ.get('TACTIC_DATA_DIR', 'data')), self.host, self.port)
+                    except Exception as error:
+                        self.restart_error = str(error)
+                    else:
+                        self._restart_requested = True
+                    self._write_status('restarting' if self._restart_requested else 'running')
+                request_path.unlink()
+                if self._restart_requested:
+                    break
             now = time.monotonic()
             ready = True
             for index, worker in enumerate(self.workers):
@@ -228,6 +269,7 @@ class TacticMonitor:
 
     def _write_status(self, state):
         status = dict(monitor_pid=os.getpid(), state=state, host=self.settings['host'], port=self.settings['port'],
+            instance_id=self.instance_id, restart_id=self.restart_id, restart_error=self.restart_error,
             config_path=self.settings['config_path'], updated_at=time.time(),
             workers=[dict(index=index, pid=worker['pid'], service=worker['service'], state=worker['reason'] if worker['process'] else 'stopped',
                           restarts=worker['restarts']) for index, worker in enumerate(self.workers)])

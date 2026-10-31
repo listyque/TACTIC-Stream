@@ -92,6 +92,7 @@ const SecurityUsers = asyncComponent(() => import('./features/administration/Sec
 const SecurityGroups = asyncComponent(() => import('./features/administration/SecurityGroups.vue'))
 const SecurityRules = asyncComponent(() => import('./features/administration/SecurityRules.vue'))
 const ComponentShowcase = asyncComponent(() => import('./features/administration/ComponentShowcase.vue'))
+const BackendServer = asyncComponent(() => import('./features/configuration/ServerConfiguration.vue'))
 const Plugins = asyncComponent(() => import('./features/administration/Plugins.vue'))
 
 import { readWindowPage, installWindowPages, bootstrapWindowPage } from './features/windows/windowPages.js'
@@ -100,7 +101,7 @@ const compactLayout = window.matchMedia('(max-width: 900px)')
 const shortcutLayout = mobileLayout
 
 export default {
-  components: { ComponentShowcase, Plugins, ObjectReport, WorkspacePage, SearchResultMenu, SearchHeader, SearchFooter, SignIn, ActionRows, DockWorkspaceFooter, AdministrationShell, PageLayoutEditor, FileWorkspace, DropPlate, KnowledgeBase, SnapshotBrowser, DescriptionEditor, HelpView, UserProfile, MessagesView, NotificationStack, SystemActivityButton, SystemActivity, ServerUpdates, ConnectionMenu, FilePreview, ActivityFeed, NotesPanel, ScriptShelf, UiPerformance, SystemInfo, DebugLog, WorkspaceSearch, TagCloud, DockWorkspace, AppearanceControls, Configuration, RecordForm, WidgetConfiguration, ConfiguredView, ObjectOperations, ObjectAction, RelatedObjects, AppIcon, AppSwitch, SearchTypes, SchemaEditor, WorkflowEditor, AppSelect, AppButton, AppMenu, CommitQueue, Timesheet, TaskManager, SectionTabRail, WorkspaceTabs, NavigationTree, NavigationDrawer, ProjectCreation, ProjectChooser, ItemPreview, SidebarEditor, SearchLibrary, QuickFilterEditor, SearchQuickFilters, FieldFilter, SecurityGroups, SecurityRules, SecurityUsers, LayoutEditor, ColumnsEditor, RawDatabase },
+  components: { BackendServer, ComponentShowcase, Plugins, ObjectReport, WorkspacePage, SearchResultMenu, SearchHeader, SearchFooter, SignIn, ActionRows, DockWorkspaceFooter, AdministrationShell, PageLayoutEditor, FileWorkspace, DropPlate, KnowledgeBase, SnapshotBrowser, DescriptionEditor, HelpView, UserProfile, MessagesView, NotificationStack, SystemActivityButton, SystemActivity, ServerUpdates, ConnectionMenu, FilePreview, ActivityFeed, NotesPanel, ScriptShelf, UiPerformance, SystemInfo, DebugLog, WorkspaceSearch, TagCloud, DockWorkspace, AppearanceControls, Configuration, RecordForm, WidgetConfiguration, ConfiguredView, ObjectOperations, ObjectAction, RelatedObjects, AppIcon, AppSwitch, SearchTypes, SchemaEditor, WorkflowEditor, AppSelect, AppButton, AppMenu, CommitQueue, Timesheet, TaskManager, SectionTabRail, WorkspaceTabs, NavigationTree, NavigationDrawer, ProjectCreation, ProjectChooser, ItemPreview, SidebarEditor, SearchLibrary, QuickFilterEditor, SearchQuickFilters, FieldFilter, SecurityGroups, SecurityRules, SecurityUsers, LayoutEditor, ColumnsEditor, RawDatabase },
   provide() { return {
     checkinDescription: () => this.$refs.description?.pinnedValue() || '',
     queueCheckin: values => { this.$refs.commitQueue.enqueue(values); this.openCommitQueue() },
@@ -734,7 +735,7 @@ export default {
       this.selectedTags = []; this.tagColumn = ''
       this.searchRelation = 'contains'
       this.filterRecords = []; this.savedSearch = ''; this.quickSelections = {}; this.quickLayout = null; this.scopeKey = ''; this.presetOrderBys = []
-      if (['types', 'schema', 'workflow', 'columns', 'layouts', 'dashboards', 'raw', 'sidebar', 'users', 'groups', 'rules', 'plugins', 'showcase'].includes(id)) {
+      if (['server', 'types', 'schema', 'workflow', 'columns', 'layouts', 'dashboards', 'raw', 'sidebar', 'users', 'groups', 'rules', 'plugins', 'showcase'].includes(id)) {
         this.requestId++
         this.busy = false
       } else this.loadRows()
@@ -2210,6 +2211,7 @@ export default {
       <AdministrationShell ref="administrationShell" :model="{section:administrationSection,project,layoutParent,projects:administrationProjectOptions,locked:administrationLocked,busy, drafts:Object.entries(administrationInstances).filter(([,editor])=>editor.dirty||editor.uncertain).map(([id])=>id)}" @command="administrationCommand" />
     </dialog>
     <Teleport defer :disabled="!!windowPage && !administrationOpen" :to="administrationOpen ? '#administration-pages' : '#workspace-data'">
+    <div v-if="administrationOpen && administrationVisited.includes('server')" v-show="administrationSection === 'server'" class="administration-page"><BackendServer workers-only :ref="editor => { if (editor) administrationInstances.server = editor }" :ticket="session.ticket" :group-titles="['Services and workers']" @session-expired="logout('Session ended. Sign in again.')" /></div>
     <div v-if="administrationOpen && administrationVisited.includes('showcase')" v-show="administrationSection === 'showcase'" class="administration-page"><ComponentShowcase /></div>
     <div v-if="administrationOpen && administrationVisited.includes('plugins')" v-show="administrationSection === 'plugins'" class="administration-page"><Plugins :presentation-visible="administrationSection === 'plugins'" :ref="editor => { if (editor) administrationInstances.plugins = editor }" :ticket="session.ticket" :project="project" toolbar-target="#administration-actions" @saved="refreshTypes();loadNavigation();refreshAfterAdministration = true" @help="$refs.help.open('plugins')" /></div>
     <div v-if="administrationOpen && administrationVisited.includes('types')" v-show="administrationSection === 'types'" class="administration-page"><SearchTypes :presentation-visible="administrationSection === 'types'" @vue:mounted="administrationInstances.types = $event.component.proxy" ref="searchTypes" @open-workflow="openAdministrationWorkflow" :ticket="session.ticket" :project="project" toolbar-target="#administration-actions" :queue-preview="queuePreview" :checkins="checkins" @saved="refreshTypes" @open-commit-queue="openCommitQueue()" /></div>
@@ -2235,7 +2237,7 @@ export default {
         @loaded="publishDashboardResults(entry.tab, $event)"
         @inspect="inspect" @operate="(record,event,node)=>$refs.objectOperations.open(record,event,node)" @column="showColumnsEditor(false,$event)" @close="closeSection(entry.section.id)" />
     </template>
-    <section v-if="retainedSearchTabs.length || administrationOpen" v-show="(administrationOpen || !layoutView) && (sidebarSearch || (administrationOpen ? !['types', 'schema', 'workflow', 'columns', 'layouts', 'dashboards', 'raw', 'sidebar', 'users', 'groups', 'rules'].includes(administrationSection) : !!activeSearchTab))" class="content workspace-browser">
+    <section v-if="retainedSearchTabs.length || administrationOpen" v-show="(administrationOpen || !layoutView) && (sidebarSearch || (administrationOpen ? !['server', 'types', 'schema', 'workflow', 'columns', 'layouts', 'dashboards', 'raw', 'sidebar', 'users', 'groups', 'rules'].includes(administrationSection) : !!activeSearchTab))" class="content workspace-browser">
       <SearchHeader :model="{compact:compactShortcuts&&!administrationOpen,collapseSearch:true,searchOpen:mobileSearchOpen,busy,shelf:!administrationOpen,shelfOpen,tags:!administrationOpen,quick:true,panels:true}"
         @event="action=>{if(action.type==='refresh')loadRows();else if(action.type==='shelf')shelfOpen=!shelfOpen;else if(action.type==='help')$refs.help.open('search')}">
         <template #field>

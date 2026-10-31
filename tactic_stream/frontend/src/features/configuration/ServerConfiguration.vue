@@ -1,19 +1,29 @@
 <script>
-import { serverConfiguration, saveServerConfiguration } from '../../api.js';
+import {
+  serverConfiguration,
+  saveServerConfiguration,
+  restartServer,
+  serverRuntime
+} from '../../api.js';
 import { t } from '../../i18n.js';
 import AppIcon from '../../controls/AppIcon.vue';
 import AppButton from '../../controls/AppButton.vue';
 import FrameSettings from './FrameSettings.vue';
+import FrameView from '../../frame/FrameView.vue';
+import * as Control from '../../../../src/tactic_stream/shared_ui/features/configuration/server_control.ui.mjs';
+import { observeFrameSizes } from '../../frame/resize.js';
+import { randomUuid } from '../../controls/identity.js';
 import { appearance } from '../../appearance.js';
 import * as UI from '../../../../src/tactic_stream/shared_ui/features/configuration/server.ui.mjs';
 import { timestampFullLabel } from '../activity/activity.js';
 
 export default {
-  components: { FrameSettings, AppIcon, AppButton },
+  components: { FrameSettings, FrameView, AppIcon, AppButton },
   props: {
     ticket: { type: String, required: true },
     showDetails: Boolean,
-    groupTitles: Array
+    groupTitles: Array,
+    workersOnly: Boolean
   },
   emits: ['session-expired'],
   data() {
@@ -31,14 +41,51 @@ export default {
       draft: {},
       baseline: {},
       expanded: [],
-      generation: 0
+      generation: 0,
+      restarting: false,
+      restartConfirm: false,
+      controlWidth: 640
     };
   },
   computed: {
+    dirty() {
+      return this.hasChanges;
+    },
+    busy() {
+      return this.loading || this.saving || this.restarting;
+    },
+    showControl() {
+      return (
+        !this.search &&
+        this.groups.some((group) => group.title === 'Services and workers')
+      );
+    },
+    controlScene() {
+      return Control.describe(
+        {
+          workers: this.draft['services/process_count'],
+          runtime: this.configuration?.runtime,
+          dirty: this.hasChanges,
+          busy: this.loading || this.saving,
+          restarting: this.restarting,
+          confirm: this.restartConfirm,
+          notice: this.notice,
+          error: this.error
+        },
+        this.controlWidth,
+        appearance.language
+      );
+    },
     fields() {
       return UI.fields(
         {
-          groups: this.groups,
+          groups: this.groups.map((group) => ({
+            ...group,
+            settings: group.settings.filter(
+              (setting) =>
+                !this.showControl || setting.path !== 'services/process_count'
+            )
+          })),
           draft: this.draft,
           expanded: this.expanded,
           showDetails: this.showDetails,
@@ -109,6 +156,7 @@ export default {
       this.baseline = {};
       this.expanded = [];
       this.loading = this.saving = this.clientsLoading = false;
+      this.restarting = this.restartConfirm = false;
       this.error = this.notice = this.clientsError = '';
     }
   },
@@ -118,10 +166,101 @@ export default {
   },
   beforeUnmount() {
     this.generation++;
+    this.controlObserver?.disconnect();
     window.removeEventListener('beforeunload', this.beforeUnload);
+  },
+  updated() {
+    const element = this.$refs.serverControl;
+    if (element === this.controlElement) return;
+    this.controlObserver?.disconnect();
+    this.controlElement = element;
+    if (element) {
+      this.controlObserver = observeFrameSizes((entries) => {
+        this.controlWidth = entries.at(-1).contentRect.width;
+      });
+      this.controlObserver.observe(element);
+    }
   },
   methods: {
     t,
+    canLeave() {
+      return !this.hasChanges && !this.busy;
+    },
+    async controlAction(action) {
+      if (this.restarting || this.saving || this.loading) return;
+      if (action.type === 'workers')
+        this.editSetting('services/process_count', action.value);
+      else if (action.type === 'save') await this.save();
+      else if (action.type === 'discard') {
+        this.resetDraft();
+        await this.load();
+      } else if (action.type === 'refresh' && !this.hasChanges)
+        await this.load();
+      else if (action.type === 'restart' && !this.hasChanges)
+        this.restartConfirm = true;
+      else if (action.type === 'reject') this.restartConfirm = false;
+      else if (action.type === 'accept' && !this.hasChanges)
+        await this.restart();
+    },
+    async restart() {
+      const generation = this.generation;
+      const runtime = this.configuration.runtime;
+      const id = randomUuid();
+      this.restartConfirm = false;
+      this.restarting = true;
+      this.error = this.notice = '';
+      try {
+        try {
+          await restartServer(
+            this.ticket,
+            this.configuration.revision,
+            runtime.instance_id,
+            id
+          );
+        } catch (error) {
+          if (!(error instanceof TypeError)) throw error;
+          // A lost acknowledgement is checked by identity, never by resubmitting.
+        }
+        const deadline = performance.now() + 90000;
+        while (generation === this.generation && performance.now() < deadline) {
+          try {
+            const state = await serverRuntime(this.ticket);
+            if (state.restart_id === id && state.restart_error)
+              throw Error(state.restart_error);
+            if (
+              state.restart_id === id &&
+              state.instance_id !== runtime.instance_id &&
+              state.state === 'running'
+            ) {
+              this.configuration = await serverConfiguration(this.ticket);
+              this.resetDraft();
+              this.notice = 'TACTIC Stream restarted';
+              return;
+            }
+          } catch (error) {
+            if (
+              !(error instanceof TypeError) &&
+              error.name !== 'TimeoutError' &&
+              error.name !== 'AbortError'
+            )
+              throw error;
+          }
+          await new Promise((resolve) => setTimeout(resolve, 500));
+        }
+        if (generation === this.generation)
+          throw Error(
+            'The server has not returned yet. Reconnect and check its status.'
+          );
+      } catch (error) {
+        if (generation === this.generation) {
+          if (error.code === 'authentication_failed')
+            this.$emit('session-expired');
+          this.error = error.message;
+        }
+      } finally {
+        if (generation === this.generation) this.restarting = false;
+      }
+    },
     fieldEdited(action) {
       const setting = this.configuration.groups
         .flatMap((group) => group.settings)
@@ -249,7 +388,7 @@ export default {
       return timestampFullLabel(new Date(value).toISOString());
     },
     async save(groupTitles) {
-      if (this.loading || this.saving) return false;
+      if (this.loading || this.saving || this.restarting) return false;
       const generation = this.generation;
       const changes = Object.fromEntries(
         Object.entries(this.changes).filter(
@@ -342,17 +481,33 @@ export default {
 
 <template>
   <section class="content server-configuration" :aria-busy="loading || saving">
-    <p v-if="error" class="error" role="alert">
+    <p
+      v-if="error && (!workersOnly || !configuration)"
+      class="error"
+      role="alert"
+    >
       <strong v-if="failedSetting">{{ t(failedSetting) }}: </strong
       >{{ t(error) }}
     </p>
-    <p v-if="notice && !hasChanges" class="notice" role="status">
+    <p
+      v-if="notice && !hasChanges && !workersOnly"
+      class="notice"
+      role="status"
+    >
       {{ t(notice) }}
     </p>
     <p v-if="loading" class="muted" role="status">{{ t('Loading data…') }}</p>
     <template v-if="configuration">
+      <div
+        v-if="showControl"
+        ref="serverControl"
+        class="server-process-controls"
+        :style="{ height: controlScene.height + 'px', position: 'relative' }"
+      >
+        <FrameView :scene="controlScene" @event="controlAction" />
+      </div>
       <section
-        v-if="activeGroup === 'Services and workers' && !search"
+        v-if="!workersOnly && activeGroup === 'Services and workers' && !search"
         class="settings-section event-clients"
       >
         <header>
@@ -416,7 +571,7 @@ export default {
           <p v-else class="muted">{{ t('No open SSE connections') }}</p>
         </div>
       </section>
-      <details v-if="showDetails" class="configuration-source">
+      <details v-if="showDetails && !workersOnly" class="configuration-source">
         <summary>{{ t('Configuration source') }}</summary>
         <button :disabled="loading || saving || hasChanges" @click="load">
           <AppIcon name="refresh" />{{ t('Refresh') }}
@@ -440,11 +595,11 @@ export default {
           }}
         </p>
       </details>
-      <div class="configuration-groups">
+      <div v-if="!workersOnly" class="configuration-groups">
         <FrameSettings
           :fields="fields"
           :values="frameValues"
-          :busy="loading || saving"
+          :busy="loading || saving || restarting"
           natural
           @field="fieldEdited"
           @action="action"

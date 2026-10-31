@@ -74,3 +74,31 @@ checks. Generated reports belong in the ignored tool `output/` directories.
 Historical release counts and captures are local archive material, not current
 acceptance. Offscreen checks do not establish physical touch/IME, compositor,
 DCC or deployment readiness; exercise those when the feature requires them.
+
+
+## Managed server restart
+
+`features/configuration/server_control.ui.mjs` owns the common worker-count and
+restart card. Administration exposes it in both products; Stream also retains
+its full native configuration form. The draft owner saves through native
+`save_configuration` with its source revision. Restart is a separate confirmed
+action requiring the same revision, monitor instance UUID and request UUID.
+
+Administrator-only `/admin/configuration/runtime` and `/restart` share the
+configuration authentication boundary. `server/lifecycle.py` writes only a fixed
+restart marker under the native Config lock. It never spawns a process or accepts
+an executable/command. The owning TacticMonitor validates the revision again,
+drains its children through the existing shutdown path, rereads configuration
+and re-creates the workers/listeners. Its instance UUID changes; request ID and
+failure remain in the atomic monitor status. Duplicate accepted IDs return the
+same status; stale instances cannot schedule another restart. Explicit CLI
+overrides are retained. The marker stores no ticket or provider credential.
+
+The clients poll only during that explicit operation (at most 90 seconds) and
+match the request ID and new instance before announcing success. Poll failures
+do not resubmit the mutation. Session/owner changes cancel local waiting, not an
+accepted server restart. Network-origin changes require opening the new address.
+TH uses its standard asynchronous administration owner and the same authenticated
+HTTP configuration endpoints, with per-request timeouts and no new
+QML global binding; an explicit subclass status signal keeps native property
+notification separate from inherited document-state notifications.

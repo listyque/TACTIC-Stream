@@ -1,7 +1,7 @@
 import { A as onMounted, C as inject, E as nextTick, G as withCtx, H as watch, K as withDirectives, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, X as ref, Y as reactive, _ as createElementBlock, b as createVNode, et as unref, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, q as isRef, rt as toDisplayString, s as vShow, tt as normalizeClass, u as Fragment, y as createTextVNode } from "./vue.js";
 import { a as _sfc_main$4, o as t, s as appearance, t as _sfc_main$3 } from "./AppButton.js";
 import { i as semanticName, r as aliases } from "./icons.js";
-import { Nt as randomId, h as messageFileRequest, m as linkPreviews, p as knowledgeRequest } from "./index.js";
+import { Ft as randomId, h as messageFileRequest, m as linkPreviews, p as knowledgeRequest } from "./index.js";
 import { A as _sfc_main$6, D as _sfc_main$11, E as AppSearchField_default, F as _sfc_main$8, G as node, H as label, I as _sfc_main$7, K as rect, O as _sfc_main$10, R as observeFrameSizes, S as translate, V as button, d as pythonTokens, f as xmlTokens, m as copyText, t as _sfc_main$5, u as javascriptTokens, z as _sfc_main$9 } from "./FrameView.js";
 import { M as extractSkeys, j as escapeHtml, u as _sfc_main$12, x as browserLink } from "./admin.document.js";
 import { C as messageDate, Q as _sfc_main$13, h as _sfc_main$14 } from "./ConfiguredView.js";

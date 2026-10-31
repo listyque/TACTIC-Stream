@@ -244,8 +244,9 @@ def read_configuration():
                 # Unknown settings may contain credentials. Return names only.
                 undocumented.append(section.tag + '/' + key)
     from tactic_stream.server.server_events import read_event_clients
+    from tactic_stream.server.lifecycle import read_runtime
     return dict(config_path=path.as_posix(), data_dir=Environment.get_data_dir(), revision=revision, writable=writable,
-                groups=groups, undocumented=sorted(undocumented), event_clients=read_event_clients(Environment.get_data_dir()))
+                groups=groups, undocumented=sorted(undocumented), event_clients=read_event_clients(Environment.get_data_dir()), runtime=read_runtime())
 
 
 def save_configuration(changes, revision):

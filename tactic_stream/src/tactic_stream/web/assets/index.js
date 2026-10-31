@@ -1429,6 +1429,17 @@ async function sessionAction(action, ticket) {
 async function serverConfiguration(ticket) {
 	return post("/admin/configuration", { ticket });
 }
+function restartServer(ticket, revision, instance_id, request_id) {
+	return post("/admin/configuration/restart", {
+		ticket,
+		revision,
+		instance_id,
+		request_id
+	}, void 0, true);
+}
+function serverRuntime(ticket) {
+	return post("/admin/configuration/runtime", { ticket }, AbortSignal.timeout(3e3), true);
+}
 function rawDatabase(action, ticket, project, values = {}) {
 	return post("/admin/raw-database/" + action, {
 		ticket,
@@ -2436,6 +2447,6 @@ if (documentation) watchEffect(() => {
 var screen = asyncComponent(documentation ? () => __vitePreload(() => import("./ApiDocumentation.js"), __vite__mapDeps([49,2,3,4,5,6,7,8,50,51,21,52])) : () => __vitePreload(() => import("./App.js").then((n) => n.t), __vite__mapDeps([53,1,2,3,4,5,6,7,8,9,50,51,12,13,14,15,16,17,18,19,20,11,21,22,23,24,25,26,27,28,29,0,10,30,31,32,54,47,40,44,45,42,43,55])));
 createApp({ render: () => h(screen) }).directive("window", windowDirective).mount("#app");
 //#endregion
-export { updatesAvailable as $, saveServerConfiguration as A, savedSessions as At, sidebarRequest as B, projectNavigation as C, forgetSessions as Ct, resolveCustomUrl as D, logEvent as Dt, resetRequestActivity as E, levels as Et, securityRules as F, asyncComponent as Ft, transactionDetails as G, tableDependencies as H, securityUsers as I, userProfile as J, uploadFormFile as K, serverConfiguration as L, scriptShelf as M, setServerDebugContext as Mt, searchConfiguration as N, randomId as Nt, resultItems as O, logRequest as Ot, securityGroups as P, randomUuid as Pt, updateDelay as Q, serverUpdates as R, projectCreationCatalog as S, exportSession as St, requestActivity as T, importSession as Tt, tableDependencyFile as U, tableCells as V, tableParentGroup as W, workspaceLayouts as X, widgetConfiguration as Y, setUpdatesAvailable as Z, navigationLink as _, mobile as _t, __vitePreload as a, editNotificationReply as at, objectStatus as b, debugLog as bt, beginActivity as c, notify as ct, formDefinition as d, submitNotificationReply as dt, activeNotifications as et, interfaceDefinition as f, serverClock as ft, messagesRequest as g, fit as gt, messageFileRequest as h, dockMinimumWidth as ht, readWindowPage as i, dismissNotification as it, scriptEditor as j, sessionRecords as jt, rpc as k, redact as kt, columnsEditor as l, resetNotifications as lt, linkPreviews as m, dockMinimumHeight as mt, bootstrapWindowPage as n, cancelNotificationReply as nt, fileBlob as o, failNotificationReply as ot, knowledgeRequest as p, serverTimestamp as pt, userAvatar as q, installWindowPages as r, clearNotificationHistory as rt, activityFeed as s, notificationHistory as st, windowDirective as t, beginNotificationReply as tt, endActivity as u, setNotificationProgress as ut, objectDeletion as v, mobileLayout as vt, rawDatabase as w, formatEvent as wt, projectCatalog as x, debugSettings as xt, objectRelations as y, clearLive as yt, sessionAction as z };
+export { setUpdatesAvailable as $, rpc as A, logRequest as At, serverUpdates as B, projectNavigation as C, debugSettings as Ct, resolveCustomUrl as D, importSession as Dt, resetRequestActivity as E, formatEvent as Et, securityGroups as F, randomId as Ft, tableDependencyFile as G, sidebarRequest as H, securityRules as I, randomUuid as It, uploadFormFile as J, tableParentGroup as K, securityUsers as L, asyncComponent as Lt, scriptEditor as M, savedSessions as Mt, scriptShelf as N, sessionRecords as Nt, restartServer as O, levels as Ot, searchConfiguration as P, setServerDebugContext as Pt, workspaceLayouts as Q, serverConfiguration as R, projectCreationCatalog as S, debugLog as St, requestActivity as T, forgetSessions as Tt, tableCells as U, sessionAction as V, tableDependencies as W, userProfile as X, userAvatar as Y, widgetConfiguration as Z, navigationLink as _, dockMinimumWidth as _t, __vitePreload as a, clearNotificationHistory as at, objectStatus as b, mobileLayout as bt, beginActivity as c, failNotificationReply as ct, formDefinition as d, resetNotifications as dt, updateDelay as et, interfaceDefinition as f, setNotificationProgress as ft, messagesRequest as g, dockMinimumHeight as gt, messageFileRequest as h, serverTimestamp as ht, readWindowPage as i, cancelNotificationReply as it, saveServerConfiguration as j, redact as jt, resultItems as k, logEvent as kt, columnsEditor as l, notificationHistory as lt, linkPreviews as m, serverClock as mt, bootstrapWindowPage as n, activeNotifications as nt, fileBlob as o, dismissNotification as ot, knowledgeRequest as p, submitNotificationReply as pt, transactionDetails as q, installWindowPages as r, beginNotificationReply as rt, activityFeed as s, editNotificationReply as st, windowDirective as t, updatesAvailable as tt, endActivity as u, notify as ut, objectDeletion as v, fit as vt, rawDatabase as w, exportSession as wt, projectCatalog as x, clearLive as xt, objectRelations as y, mobile as yt, serverRuntime as z };
 
 //# sourceMappingURL=index.js.map

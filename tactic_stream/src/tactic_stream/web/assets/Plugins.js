@@ -1,6 +1,6 @@
 import { A as onMounted, H as watch, K as withDirectives, M as openBlock, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, m as createBaseVNode, nt as normalizeStyle, p as computed, s as vShow } from "./vue.js";
 import { D as spacing, s as appearance } from "./AppButton.js";
-import { K as uploadFormFile, k as rpc } from "./index.js";
+import { A as rpc, J as uploadFormFile } from "./index.js";
 import { G as node, H as label, K as rect, R as observeFrameSizes, S as translate$1, U as listRowHeight, V as button, t as _sfc_main$1 } from "./FrameView.js";
 import { Ct as describe$2 } from "./ConfiguredView.js";
 import { t as _sfc_main$2 } from "./PageEditorTools.js";

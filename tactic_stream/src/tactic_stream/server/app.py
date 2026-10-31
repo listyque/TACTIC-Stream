@@ -986,18 +986,22 @@ def create_app(data_dir: Path, thread_count=None, *, event_collector=True) -> Fa
             return body
         return await run_in_threadpool(session_action, body, action)
 
-    def configuration_request(body, save=False):
+    def configuration_request(body, save=False, lifecycle=None):
         from pyasm.common.config import ConfigException, ConfigConflict
         try:
             payload = json.loads(body.decode('utf-8'), parse_constant=reject_json_constant)
-            fields = {'ticket', 'changes', 'revision'} if save else {'ticket'}
+            fields = {'ticket', 'revision', 'instance_id', 'request_id'} if lifecycle == 'restart' else {'ticket', 'changes', 'revision'} if save else {'ticket'}
             if not isinstance(payload, dict) or set(payload) != fields:
                 raise ValueError('Invalid configuration request')
             login = api.auth.validate(payload['ticket'])
             with request_context(RequestContext(api.store, login, 'admin')):
                 api.auth.bind_security(login, payload['ticket'])
                 from tactic_stream.server.configuration import read_configuration, save_configuration
-                result = save_configuration(payload['changes'], payload['revision']) if save else read_configuration()
+                if lifecycle:
+                    from tactic_stream.server.lifecycle import read_runtime, request_restart
+                    result = request_restart(payload['revision'], payload['instance_id'], payload['request_id']) if lifecycle == 'restart' else read_runtime()
+                else:
+                    result = save_configuration(payload['changes'], payload['revision']) if save else read_configuration()
             return JSONResponse({'result': result}, headers={'Cache-Control': 'no-store'})
         except AuthenticationError:
             status, code, message = 403, 'authentication_failed', 'Invalid credentials or expired session.'
@@ -1030,6 +1034,15 @@ def create_app(data_dir: Path, thread_count=None, *, event_collector=True) -> Fa
         if isinstance(body, Response):
             return body
         return await run_in_threadpool(interface_request, body, raw_database=action)
+
+    @app.post('/admin/configuration/restart', include_in_schema=False)
+    @app.post('/admin/configuration/runtime', include_in_schema=False)
+    async def admin_configuration_lifecycle(request: Request):
+        action = request.url.path.rsplit('/', 1)[-1]
+        body = await admin_body(request)
+        if isinstance(body, Response):
+            return body
+        return await run_in_threadpool(configuration_request, body, lifecycle=action)
 
     @app.post('/admin/configuration', include_in_schema=False)
     async def admin_configuration(request: Request):

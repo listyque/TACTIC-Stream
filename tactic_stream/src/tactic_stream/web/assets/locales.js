@@ -7672,7 +7672,20 @@ var ru_default = {
 	"Project chat rules changed. Reopen the editor before saving.": "Правила чатов проекта изменились. Откройте редактор заново перед сохранением.",
 	"Project chat rules must be text of at most 16000 characters": "Правила чатов проекта должны содержать не более 16000 символов",
 	"Select a user project before editing chat rules": "Выберите пользовательский проект для настройки правил чата",
-	"Reconnect the agent to load project chat rules": "Переподключите агента, чтобы загрузить правила чатов проекта"
+	"Reconnect the agent to load project chat rules": "Переподключите агента, чтобы загрузить правила чатов проекта",
+	"Backend server": "Сервер ТС",
+	"Worker processes and server restart": "Процессы и перезапуск сервера",
+	"Server processes": "Процессы сервера",
+	"Running web workers": "Работает веб-процессов",
+	"Restart TACTIC Stream": "Перезапустить ТС",
+	"Restarting TACTIC Stream…": "ТС перезапускается…",
+	"TACTIC Stream restarted": "ТС перезапущен",
+	"Save changes before restarting.": "Сохраните изменения перед перезапуском.",
+	"Saved settings are applied only after restarting the server.": "Сохранённые настройки применяются после перезапуска сервера.",
+	"This server is not managed by TacticMonitor.": "Этот сервер запущен без TacticMonitor.",
+	"The server monitor is unavailable or outdated.": "Монитор сервера недоступен или требует обновления.",
+	"The server has not returned yet. Reconnect and check its status.": "Сервер ещё не ответил. Подключитесь заново и проверьте его состояние.",
+	"Restart TACTIC Stream? Connections and running operations may be interrupted while saved settings are applied. Unsaved changes will not be applied.": "Перезапустить ТС? Соединения и текущие операции могут прерваться при применении сохранённых настроек. Несохранённые изменения применены не будут."
 };
 //#endregion
 export { en_default as n, ru_default as t };

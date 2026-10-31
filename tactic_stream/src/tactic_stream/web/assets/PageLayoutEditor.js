@@ -1,6 +1,6 @@
 import { F as resolveComponent, K as withDirectives, M as openBlock, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, m as createBaseVNode, nt as normalizeStyle, s as vShow } from "./vue.js";
 import { s as appearance, z as _plugin_vue_export_helper_default } from "./AppButton.js";
-import { Pt as randomUuid, k as rpc } from "./index.js";
+import { A as rpc, It as randomUuid } from "./index.js";
 import { G as node, H as label, K as rect, R as observeFrameSizes, S as translate, V as button, t as _sfc_main$1 } from "./FrameView.js";
 import { n as sections } from "./sections.ui.js";
 import { T as projectPath, i as sectionSelector, n as notices, o as toolbar$1, t as documentEvent } from "./admin.document.js";

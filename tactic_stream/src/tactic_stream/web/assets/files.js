@@ -1,5 +1,5 @@
 import { j as preferences } from "./AppButton.js";
-import { k as rpc } from "./index.js";
+import { A as rpc } from "./index.js";
 import "./file_values.js";
 //#region src/features/checkin/files.js
 var sourcePath = (file) => file.webkitRelativePath || file.name;
