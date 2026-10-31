@@ -1,9 +1,9 @@
 import { A as onMounted, D as onActivated, G as withCtx, H as watch, L as resolveDynamicComponent, M as openBlock, O as onBeforeUnmount, X as ref, b as createVNode, h as createBlock, k as onDeactivated, m as createBaseVNode, p as computed, tt as normalizeClass } from "./vue.js";
 import { s as appearance } from "./AppButton.js";
 import { A as rpc } from "./index.js";
-import { G as node, H as label, K as rect, R as observeFrameSizes, S as translate, V as button, W as muted, t as _sfc_main$1 } from "./FrameView.js";
+import { C as translate, G as label, J as node, V as observeFrameSizes, W as button, Y as rect, q as muted, t as _sfc_main$1 } from "./FrameView.js";
 import { t as _sfc_main$2 } from "./AppDialog.js";
-import { m as describe$1 } from "./App.js";
+import { g as describe$1 } from "./App.js";
 import { n as current, r as status, t as controls } from "./executor.ui.js";
 //#region ../src/tactic_stream/shared_ui/features/configuration/providers.ui.mjs
 function initial() {

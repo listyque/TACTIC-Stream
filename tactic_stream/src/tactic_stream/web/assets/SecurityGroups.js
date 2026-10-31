@@ -1,7 +1,7 @@
 import { F as resolveComponent, K as withDirectives, M as openBlock, _ as createElementBlock, b as createVNode, f as Teleport, g as createCommentVNode, h as createBlock, m as createBaseVNode, nt as normalizeStyle, rt as toDisplayString, s as vShow } from "./vue.js";
 import { o as t, s as appearance, z as _plugin_vue_export_helper_default } from "./AppButton.js";
 import { F as securityGroups } from "./index.js";
-import { R as observeFrameSizes, t as _sfc_main$1 } from "./FrameView.js";
+import { V as observeFrameSizes, t as _sfc_main$1 } from "./FrameView.js";
 import { i as toolbar, n as metrics, o as initial, r as row, s as transition, t as describe } from "./groups.ui.js";
 //#region src/features/administration/SecurityGroups.vue
 var _sfc_main = {

@@ -1,6 +1,6 @@
 import { E as nextTick } from "./vue.js";
 import { s as appearance } from "./AppButton.js";
-import { G as node, H as label, K as rect, R as observeFrameSizes, S as translate, V as button, W as muted } from "./FrameView.js";
+import { C as translate, G as label, J as node, V as observeFrameSizes, W as button, Y as rect, q as muted } from "./FrameView.js";
 import { n as sections } from "./sections.ui.js";
 import { i as sectionSelector, n as notices, o as toolbar$1, r as policy, t as documentEvent } from "./admin.document.js";
 import { t as listAction } from "./tree.ui.js";

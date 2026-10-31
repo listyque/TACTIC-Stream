@@ -1,7 +1,7 @@
 import { A as onMounted, E as nextTick, G as withCtx, M as openBlock, N as renderList, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, h as createBlock, p as computed, u as Fragment } from "./vue.js";
 import { D as spacing, _ as controls, o as t, s as appearance, t as _sfc_main$1 } from "./AppButton.js";
 import { A as rpc, Ft as randomId } from "./index.js";
-import { A as _sfc_main$3, G as node, H as label, K as rect, R as observeFrameSizes, S as translate, V as button, t as _sfc_main$2 } from "./FrameView.js";
+import { C as translate, G as label, J as node, N as _sfc_main$3, V as observeFrameSizes, W as button, Y as rect, t as _sfc_main$2 } from "./FrameView.js";
 import { t as captionHeight } from "./sections.ui.js";
 //#region ../src/tactic_stream/shared_ui/features/files/matching.ui.mjs
 function testResult(text, language, matchedType) {

@@ -1,11 +1,11 @@
 import { A as onMounted, D as onActivated, E as nextTick, G as withCtx, H as watch, I as resolveDirective, K as withDirectives, M as openBlock, O as onBeforeUnmount, P as renderSlot, X as ref, Y as reactive, _ as createElementBlock, b as createVNode, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, k as onDeactivated, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, s as vShow } from "./vue.js";
 import { A as normalizePreferences, I as iconSets, L as themes, M as savePreferencePage, _ as controls, c as colorModes, f as languages, h as saveAppearance, j as preferences, k as configurationPreview, l as effectiveColorMode, o as t, s as appearance } from "./AppButton.js";
 import { A as rpc, Ct as debugSettings, x as projectCatalog } from "./index.js";
-import { E as AppSearchField_default, G as node, H as label, K as rect, R as observeFrameSizes, S as translate, V as button, W as muted, t as _sfc_main$5, z as _sfc_main$6 } from "./FrameView.js";
+import { C as translate, G as label, H as _sfc_main$6, J as node, O as AppSearchField_default, V as observeFrameSizes, W as button, Y as rect, q as muted, t as _sfc_main$5 } from "./FrameView.js";
 import "./AppearanceControls.js";
-import RecordForm_default, { a as fieldKind, o as unsupportedField, r as ImagePicker_default } from "./RecordForm.js";
-import { st as views } from "./ConfiguredView.js";
-import { _ as confirmation, a as updateModes, d as ProjectCreation_default, i as updateIntervals, m as describe$2, n as networkSettings, p as contentWidth, r as updateBatchDelays, u as lifecycle, v as describe$3, y as pages } from "./App.js";
+import RecordForm_default, { a as unsupportedField, i as fieldKind, r as ImagePicker_default } from "./RecordForm.js";
+import { lt as views } from "./ConfiguredView.js";
+import { a as updateModes, b as describe$3, f as lifecycle, g as describe$2, h as contentWidth, i as updateIntervals, n as networkSettings, p as ProjectCreation_default, r as updateBatchDelays, x as pages, y as confirmation } from "./App.js";
 import _sfc_main$7 from "./AgentProviders.js";
 import ServerConfiguration_default, { t as _sfc_main$8 } from "./ServerConfiguration.js";
 //#region ../src/tactic_stream/shared_ui/features/projects/catalog.ui.mjs

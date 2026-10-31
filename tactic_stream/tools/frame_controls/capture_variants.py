@@ -380,6 +380,7 @@ def main():
                 [
                     "tests/fixtures/frame_controls/ControlVariantsHarness.qml",
                     "tests/fixtures/frame_controls/ControlExample.qml",
+                    "thlib/ui/qml/features/administration/ShowcaseControl.qml",
                     "thlib/ui/qml/UserIdentity.qml",
                     "thlib/ui/qml/UserPicker.qml",
                     "thlib/ui/qml/EmojiPicker.qml",

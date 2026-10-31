@@ -9,9 +9,70 @@ import {
 import * as Examples from '../../src/tactic_stream/shared_ui/controls/showcase.examples.mjs';
 import * as Chart from '../../src/tactic_stream/shared_ui/controls/charts/chart.ui.mjs';
 import * as Extended from '../../src/tactic_stream/shared_ui/features/administration/showcase.examples.mjs';
+import * as Variants from '../../src/tactic_stream/shared_ui/features/administration/showcase.variants.mjs';
 assert.equal(UI.catalogue.families.length, 29);
 assert.equal(new Set(UI.catalogue.families.map((f) => f.id)).size, 29);
 assert.equal(UI.catalogue.categories.length, 6);
+assert.equal(UI.variants.length, 151);
+for (const example of UI.variants) {
+  assert(UI.catalogue.families.some((family) => family.id === example.family));
+  let model = UI.transition(
+    UI.initial(),
+    { type: 'family', value: example.family },
+    UI.catalogue
+  );
+  model = UI.transition(
+    model,
+    { type: 'variant', value: example.id },
+    UI.catalogue
+  );
+  assert.equal(model.variantModel.id, example.id);
+  for (const width of [240, 600]) {
+    const scene = Variants.describe(model.variantModel, width, 'en', 'default');
+    validateScene(scene, { cells: [], treeRows: [] }, { example: true });
+    for (const item of scene.nodes) {
+      assert(item.x >= 0 && item.y >= 0, example.id);
+      assert(item.x + item.width <= width, example.id);
+    }
+    assert(
+      Variants.sample(model, width, 'en').code.includes('ShowcaseControl')
+    );
+  }
+}
+assert(
+  UI.families(
+    UI.catalogue,
+    { ...UI.initial(), query: 'preview-round' },
+    'en'
+  ).some((family) => family.id === 'previews')
+);
+let variantModel = UI.transition(
+  { ...UI.initial(), family: 'numbers' },
+  { type: 'variant', value: 'integer' },
+  UI.catalogue
+);
+variantModel = UI.transition(
+  variantModel,
+  { type: 'variantEvent', value: { type: 'change', value: 7 } },
+  UI.catalogue
+);
+assert.equal(variantModel.variantModel.value, 7);
+assert.equal(
+  UI.transition(
+    { ...variantModel, state: 'readonly' },
+    { type: 'variantEvent', value: { type: 'change', value: 8 } },
+    UI.catalogue
+  ).variantModel.value,
+  7
+);
+assert.equal(
+  UI.transition(
+    variantModel,
+    { type: 'family', value: 'previews' },
+    UI.catalogue
+  ).variantModel,
+  null
+);
 for (const family of UI.live) {
   const model = { ...UI.initial(), family };
   const sample = (
@@ -33,7 +94,7 @@ for (const family of UI.live) {
   validateScene(
     result.nodes ? result : { nodes: [result] },
     result.models || {},
-    { showcaseMenu: true, showcaseDialog: true }
+    { showcaseMenu: true, showcaseDialog: true, showcaseVariant: true }
   );
 }
 function walk(nodes, check) {
@@ -55,7 +116,7 @@ for (const language of ['en', 'ru'])
               ...UI.models(model),
               families: UI.families(UI.catalogue, model, language)
             },
-            { showcaseMenu: true, showcaseDialog: true }
+            { showcaseMenu: true, showcaseDialog: true, showcaseVariant: true }
           );
           const ids = new Set();
           walk(scene.nodes, (n) => {

@@ -1,12 +1,17 @@
-import { A as onMounted, E as nextTick, G as withCtx, H as watch, M as openBlock, N as renderList, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, et as unref, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, u as Fragment } from "./vue.js";
-import { D as spacing, O as textStyles, o as t, s as appearance, t as _sfc_main$3, w as lineHeights, z as _plugin_vue_export_helper_default } from "./AppButton.js";
-import { A as _sfc_main$4, G as node, H as label, K as rect, R as observeFrameSizes, S as translate, V as button, g as describe$3, t as _sfc_main$5 } from "./FrameView.js";
-import { t as _sfc_main$6 } from "./ActionRow.js";
-import { t as _sfc_main$7 } from "./AppDialog.js";
-import { t as listAction } from "./tree.ui.js";
-import { S as surfaces, x as filterGeometry } from "./App.js";
+import { A as onMounted, E as nextTick, G as withCtx, H as watch, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, X as ref, _ as createElementBlock, b as createVNode, et as unref, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment } from "./vue.js";
+import { D as spacing, O as textStyles, R as BusyIndicator_default, _ as controls, a as _sfc_main$15, o as t, s as appearance, t as _sfc_main$14, w as lineHeights, z as _plugin_vue_export_helper_default } from "./AppButton.js";
+import { A as _sfc_main$26, C as translate, E as _sfc_main$22, G as label, J as node, N as _sfc_main$16, O as AppSearchField_default, R as _sfc_main$25, T as AppProgress_default, U as _sfc_main$28, V as observeFrameSizes, W as button, Y as rect, _ as describe$5, a as _sfc_main$17, i as _sfc_main$18, n as _sfc_main$24, r as _sfc_main$19, t as _sfc_main$29, v as _sfc_main$20, w as _sfc_main$27, x as _sfc_main$23, z as _sfc_main$21 } from "./FrameView.js";
+import { n as _sfc_main$30, r as _sfc_main$31 } from "./AppearanceControls.js";
+import { r as ImagePicker_default, t as _sfc_main$32 } from "./RecordForm.js";
+import { u as _sfc_main$33 } from "./admin.document.js";
+import { $ as _sfc_main$40, A as _sfc_main$34, D as _sfc_main$39, Q as _sfc_main$37, U as _sfc_main$35, et as _sfc_main$36, ut as _sfc_main$38 } from "./ConfiguredView.js";
+import { t as _sfc_main$41 } from "./ActionRow.js";
+import { t as _sfc_main$42 } from "./AppDialog.js";
+import { t as _sfc_main$43 } from "./ContentLoadingOverlay.js";
+import { a as visibleRows, i as row$3, n as navigate, t as listAction } from "./tree.ui.js";
+import { C as QuickFilterChip_default, T as surfaces, d as _sfc_main$44, u as QuickFilterOptions_default, w as filterGeometry } from "./App.js";
 //#region src/features/administration/ShowcaseMenu.vue
-var _sfc_main$2 = {
+var _sfc_main$13 = {
 	__name: "ShowcaseMenu",
 	props: { frameNode: {
 		type: Object,
@@ -38,7 +43,7 @@ var _sfc_main$2 = {
 			if (!enabled) menu.value?.close(true);
 		});
 		return (_ctx, _cache) => {
-			return openBlock(), createElementBlock("div", null, [createVNode(_sfc_main$3, {
+			return openBlock(), createElementBlock("div", null, [createVNode(_sfc_main$14, {
 				ref_key: "trigger",
 				ref: trigger,
 				label: __props.frameNode.text,
@@ -50,7 +55,7 @@ var _sfc_main$2 = {
 				},
 				onClick: _cache[0] || (_cache[0] = ($event) => open($event, true)),
 				onContextmenu: _cache[1] || (_cache[1] = withModifiers(($event) => open($event, false), ["prevent"]))
-			}, null, 8, ["label", "disabled"]), createVNode(_sfc_main$4, {
+			}, null, 8, ["label", "disabled"]), createVNode(_sfc_main$16, {
 				ref_key: "menu",
 				ref: menu,
 				label: __props.frameNode.text,
@@ -61,7 +66,7 @@ var _sfc_main$2 = {
 				disabled: !__props.frameNode.enabled
 			}, {
 				default: withCtx(() => [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.frameNode.actions, (record, index) => {
-					return openBlock(), createElementBlock(Fragment, { key: index }, [record.children ? (openBlock(), createBlock(_sfc_main$4, {
+					return openBlock(), createElementBlock(Fragment, { key: index }, [record.children ? (openBlock(), createBlock(_sfc_main$16, {
 						key: 0,
 						label: record.title,
 						"show-label": "",
@@ -70,14 +75,14 @@ var _sfc_main$2 = {
 						"frame-composition": ""
 					}, {
 						default: withCtx(() => [(openBlock(true), createElementBlock(Fragment, null, renderList(record.children, (child) => {
-							return openBlock(), createBlock(_sfc_main$6, {
+							return openBlock(), createBlock(_sfc_main$41, {
 								key: child.command,
 								record: child,
 								onTriggered: ($event) => choose(child.command)
 							}, null, 8, ["record", "onTriggered"]);
 						}), 128))]),
 						_: 2
-					}, 1032, ["label"])) : (openBlock(), createBlock(_sfc_main$6, {
+					}, 1032, ["label"])) : (openBlock(), createBlock(_sfc_main$41, {
 						key: 1,
 						record,
 						onTriggered: ($event) => choose(record.command)
@@ -94,9 +99,9 @@ var _sfc_main$2 = {
 };
 //#endregion
 //#region src/features/administration/ShowcaseDialog.vue
-var _hoisted_1 = ["role"];
-var _hoisted_2 = { class: "window-actions" };
-var _sfc_main$1 = {
+var _hoisted_1$8 = ["role"];
+var _hoisted_2$4 = { class: "window-actions" };
+var _sfc_main$12 = {
 	__name: "ShowcaseDialog",
 	props: { frameNode: {
 		type: Object,
@@ -129,7 +134,7 @@ var _sfc_main$1 = {
 			if (dialog.value?.open) dialog.value.close();
 		});
 		return (_ctx, _cache) => {
-			return openBlock(), createElementBlock("div", null, [createVNode(_sfc_main$7, {
+			return openBlock(), createElementBlock("div", null, [createVNode(_sfc_main$42, {
 				ref_key: "dialog",
 				ref: dialog,
 				title: __props.frameNode.text,
@@ -137,10 +142,10 @@ var _sfc_main$1 = {
 				style: normalizeStyle({ width: (__props.frameNode.popupWidth || 440) + "px" }),
 				onClosed: closed
 			}, {
-				default: withCtx(() => [createBaseVNode("p", { role: __props.frameNode.error ? "alert" : void 0 }, toDisplayString(__props.frameNode.message), 9, _hoisted_1), createBaseVNode("footer", _hoisted_2, [createVNode(_sfc_main$3, {
+				default: withCtx(() => [createBaseVNode("p", { role: __props.frameNode.error ? "alert" : void 0 }, toDisplayString(__props.frameNode.message), 9, _hoisted_1$8), createBaseVNode("footer", _hoisted_2$4, [createVNode(_sfc_main$14, {
 					label: __props.frameNode.cancelText || unref(t)("Cancel"),
 					onClick: _cache[0] || (_cache[0] = ($event) => finish("cancel"))
-				}, null, 8, ["label"]), createVNode(_sfc_main$3, {
+				}, null, 8, ["label"]), createVNode(_sfc_main$14, {
 					label: __props.frameNode.acceptText || unref(t)("Apply"),
 					highlighted: "",
 					disabled: !__props.frameNode.enabled,
@@ -152,7 +157,397 @@ var _sfc_main$1 = {
 	}
 };
 //#endregion
+//#region src/controls/actions/PreviewNavigationButton.vue
+var _sfc_main$11 = {
+	__name: "PreviewNavigationButton",
+	props: {
+		icon: {
+			type: String,
+			default: "chevron-right"
+		},
+		label: String
+	},
+	setup(__props) {
+		return (_ctx, _cache) => {
+			return openBlock(), createBlock(_sfc_main$14, {
+				class: "preview-navigation-button",
+				"icon-only": "",
+				icon: __props.icon,
+				label: __props.label
+			}, null, 8, ["icon", "label"]);
+		};
+	}
+};
+//#endregion
+//#region src/controls/display/ReactionChip.vue
+var _hoisted_1$7 = { class: "reaction-emoji" };
+var _hoisted_2$3 = { key: 0 };
+var _sfc_main$10 = {
+	__name: "ReactionChip",
+	props: {
+		emoji: String,
+		count: {
+			type: Number,
+			default: 0
+		},
+		checked: Boolean,
+		label: String
+	},
+	setup(__props) {
+		return (_ctx, _cache) => {
+			return openBlock(), createBlock(_sfc_main$14, {
+				class: normalizeClass(["reaction-chip", { checked: __props.checked }]),
+				"aria-pressed": __props.checked,
+				label: __props.label || __props.emoji
+			}, {
+				default: withCtx(() => [createBaseVNode("span", _hoisted_1$7, toDisplayString(__props.emoji), 1), __props.count > 1 ? (openBlock(), createElementBlock("span", _hoisted_2$3, toDisplayString(__props.count), 1)) : createCommentVNode("", true)]),
+				_: 1
+			}, 8, [
+				"class",
+				"aria-pressed",
+				"label"
+			]);
+		};
+	}
+};
+//#endregion
+//#region src/controls/layout/EditorPanel.vue
+var _hoisted_1$6 = { key: 0 };
+var _hoisted_2$2 = { key: 0 };
+var _hoisted_3$1 = {
+	key: 1,
+	class: "editor-panel-actions"
+};
+var _sfc_main$9 = {
+	__name: "EditorPanel",
+	props: {
+		title: String,
+		description: String,
+		icon: String,
+		padding: {
+			type: Number,
+			default: controls.editorPanel.padding
+		},
+		fillContentHeight: {
+			type: Boolean,
+			default: true
+		}
+	},
+	setup(__props) {
+		return (_ctx, _cache) => {
+			return openBlock(), createElementBlock("section", {
+				class: "editor-panel",
+				style: normalizeStyle({ padding: Math.max(0, __props.padding - 1) + "px" })
+			}, [__props.title || _ctx.$slots.actions ? (openBlock(), createElementBlock("header", _hoisted_1$6, [
+				__props.icon ? (openBlock(), createBlock(_sfc_main$15, {
+					key: 0,
+					name: __props.icon
+				}, null, 8, ["name"])) : createCommentVNode("", true),
+				createBaseVNode("div", null, [createBaseVNode("strong", null, toDisplayString(unref(t)(__props.title)), 1), __props.description ? (openBlock(), createElementBlock("p", _hoisted_2$2, toDisplayString(unref(t)(__props.description)), 1)) : createCommentVNode("", true)]),
+				_ctx.$slots.actions ? (openBlock(), createElementBlock("div", _hoisted_3$1, [renderSlot(_ctx.$slots, "actions")])) : createCommentVNode("", true)
+			])) : createCommentVNode("", true), createBaseVNode("div", { class: normalizeClass(["editor-panel-body", { "fill-content": __props.fillContentHeight }]) }, [renderSlot(_ctx.$slots, "default")], 2)], 4);
+		};
+	}
+};
+//#endregion
+//#region src/controls/layout/ConfigurationSection.vue
+var _hoisted_1$5 = { key: 0 };
+var _sfc_main$8 = {
+	__name: "ConfigurationSection",
+	props: {
+		title: String,
+		description: String,
+		fillContentHeight: Boolean
+	},
+	setup(__props) {
+		return (_ctx, _cache) => {
+			return openBlock(), createElementBlock("section", { class: normalizeClass(["configuration-section", { "fill-content": __props.fillContentHeight }]) }, [
+				createBaseVNode("strong", null, toDisplayString(unref(t)(__props.title)), 1),
+				__props.description ? (openBlock(), createElementBlock("p", _hoisted_1$5, toDisplayString(unref(t)(__props.description)), 1)) : createCommentVNode("", true),
+				createBaseVNode("div", null, [renderSlot(_ctx.$slots, "default")])
+			], 2);
+		};
+	}
+};
+//#endregion
+//#region src/controls/layout/SectionLabel.vue
+var _hoisted_1$4 = { class: "section-label" };
+var _sfc_main$7 = {
+	__name: "SectionLabel",
+	props: { text: String },
+	setup(__props) {
+		return (_ctx, _cache) => {
+			return openBlock(), createElementBlock("span", _hoisted_1$4, toDisplayString(unref(t)(__props.text)), 1);
+		};
+	}
+};
+//#endregion
+//#region src/controls/forms/FormFieldFrame.vue
+var _hoisted_1$3 = { class: "form-field-icon" };
+var _hoisted_2$1 = { class: "field-title-text" };
+var _hoisted_3 = {
+	key: 0,
+	class: "field-required"
+};
+var _hoisted_4 = { key: 0 };
+var _hoisted_5 = {
+	key: 0,
+	role: "alert"
+};
+var _sfc_main$6 = {
+	__name: "FormFieldFrame",
+	props: {
+		title: String,
+		fieldName: String,
+		description: String,
+		icon: String,
+		error: String,
+		required: Boolean,
+		readonly: Boolean
+	},
+	setup(__props) {
+		const heading = ref(null), editor = ref(null), weights = ref({
+			heading: 1,
+			editor: 1
+		});
+		let observer;
+		onMounted(() => {
+			observer = new ResizeObserver(() => {
+				weights.value = {
+					heading: Math.max(1, heading.value.offsetHeight),
+					editor: Math.max(1, editor.value.offsetHeight)
+				};
+			});
+			observer.observe(heading.value);
+			observer.observe(editor.value);
+		});
+		onBeforeUnmount(() => observer?.disconnect());
+		return (_ctx, _cache) => {
+			return openBlock(), createElementBlock("section", { class: normalizeClass(["form-field-frame", { "has-error": !!__props.error }]) }, [createBaseVNode("div", {
+				class: "form-field-layout",
+				style: normalizeStyle({
+					"--field-heading-weight": weights.value.heading + "fr",
+					"--field-editor-weight": weights.value.editor + "fr"
+				})
+			}, [createBaseVNode("header", {
+				ref_key: "heading",
+				ref: heading
+			}, [createBaseVNode("span", _hoisted_1$3, [createVNode(_sfc_main$15, { name: __props.icon }, null, 8, ["name"])]), createBaseVNode("div", null, [
+				createBaseVNode("strong", null, [createBaseVNode("span", _hoisted_2$1, toDisplayString(unref(t)(__props.title)), 1), __props.required ? (openBlock(), createElementBlock("span", _hoisted_3, " *")) : createCommentVNode("", true)]),
+				createBaseVNode("p", null, toDisplayString(__props.description ? unref(t)(__props.description) : __props.fieldName), 1),
+				__props.readonly ? (openBlock(), createElementBlock("small", _hoisted_4, toDisplayString(unref(t)("Read only")), 1)) : createCommentVNode("", true)
+			])], 512), createBaseVNode("div", {
+				ref_key: "editor",
+				ref: editor,
+				class: "form-field-editor"
+			}, [renderSlot(_ctx.$slots, "default"), __props.error ? (openBlock(), createElementBlock("p", _hoisted_5, toDisplayString(unref(t)(__props.error)), 1)) : createCommentVNode("", true)], 512)], 4)], 2);
+		};
+	}
+};
+//#endregion
+//#region src/controls/lists/EditorListItem.vue
+var _hoisted_1$2 = { class: "editor-list-item-text" };
+var _hoisted_2 = { key: 0 };
+var _sfc_main$5 = {
+	__name: "EditorListItem",
+	props: {
+		text: String,
+		description: String,
+		icon: String,
+		badgeText: String,
+		selected: Boolean,
+		wrapTitle: Boolean,
+		accent: String,
+		disabled: Boolean
+	},
+	setup(__props) {
+		return (_ctx, _cache) => {
+			return openBlock(), createBlock(_sfc_main$17, {
+				class: "editor-list-item-surface",
+				selected: __props.selected,
+				accent: __props.accent,
+				"selected-color": "var(--selected)",
+				"normal-color": "transparent",
+				"rail-visible": !!__props.selected,
+				"separator-visible": false,
+				inset: 0
+			}, {
+				default: withCtx(() => [createVNode(_sfc_main$14, {
+					class: normalizeClass(["editor-list-item", {
+						selected: __props.selected,
+						"wrap-title": __props.wrapTitle
+					}]),
+					label: __props.text,
+					"translate-label": false,
+					"aria-description": __props.description,
+					disabled: __props.disabled
+				}, {
+					default: withCtx(() => [
+						__props.icon ? (openBlock(), createBlock(_sfc_main$15, {
+							key: 0,
+							name: __props.icon,
+							style: normalizeStyle({ color: __props.accent || "var(--primary)" })
+						}, null, 8, ["name", "style"])) : createCommentVNode("", true),
+						createBaseVNode("span", _hoisted_1$2, [createBaseVNode("strong", null, toDisplayString(__props.text), 1), __props.description ? (openBlock(), createElementBlock("span", _hoisted_2, toDisplayString(__props.description), 1)) : createCommentVNode("", true)]),
+						__props.badgeText ? (openBlock(), createBlock(_sfc_main$18, {
+							key: 1,
+							label: __props.badgeText,
+							"show-dot": false,
+							"show-count": false
+						}, null, 8, ["label"])) : createCommentVNode("", true)
+					]),
+					_: 1
+				}, 8, [
+					"class",
+					"label",
+					"aria-description",
+					"disabled"
+				])]),
+				_: 1
+			}, 8, [
+				"selected",
+				"accent",
+				"rail-visible"
+			]);
+		};
+	}
+};
+//#endregion
+//#region src/controls/ProfileInfoRow.vue
+var _hoisted_1$1 = {
+	key: 0,
+	class: "profile-info-row"
+};
+var _sfc_main$4 = {
+	__name: "ProfileInfoRow",
+	props: {
+		icon: String,
+		label: String,
+		value: String
+	},
+	setup(__props) {
+		return (_ctx, _cache) => {
+			return __props.value ? (openBlock(), createElementBlock("div", _hoisted_1$1, [createVNode(_sfc_main$15, { name: __props.icon }, null, 8, ["name"]), createBaseVNode("span", null, [createBaseVNode("small", null, toDisplayString(unref(t)(__props.label)), 1), createVNode(_sfc_main$19, { text: __props.value }, null, 8, ["text"])])])) : createCommentVNode("", true);
+		};
+	}
+};
+//#endregion
+//#region src/controls/display/DropTargetOverlay.vue
+var _sfc_main$3 = {
+	__name: "DropTargetOverlay",
+	props: {
+		prompt: String,
+		accepted: {
+			type: Boolean,
+			default: true
+		}
+	},
+	setup(__props) {
+		return (_ctx, _cache) => {
+			return openBlock(), createElementBlock("div", {
+				class: normalizeClass(["drop-target-overlay", { rejected: !__props.accepted }]),
+				role: "status"
+			}, [createVNode(_sfc_main$15, { name: __props.accepted ? "move-to-inbox" : "cancel" }, null, 8, ["name"]), createBaseVNode("strong", null, toDisplayString(unref(t)(__props.prompt)), 1)], 2);
+		};
+	}
+};
+//#endregion
+//#region ../src/tactic_stream/shared_ui/controls/display/surfaces.ui.mjs
+function header(model, width, height = 60) {
+	const actions = model.actions || [];
+	const leading = model.back ? 48 : model.icon ? 42 : 12;
+	const right = width - 12 - actions.length * 36;
+	const nodes = [node("Box", "headerSurface", rect(0, 0, width, height), {
+		radius: model.radius || 0,
+		background: "surfaceContainerHigh"
+	})];
+	if (model.back) nodes.push(button("headerBack", rect(8, (height - 32) / 2, 32, 32), model.backLabel || "Back", "chevron-left", { type: "back" }, model.enabled !== false, { iconOnly: true }));
+	else if (model.icon) nodes.push(node("Icon", "headerIcon", rect(12, (height - 18) / 2, 18, 18), {
+		icon: model.icon,
+		color: "action"
+	}));
+	nodes.push(label("headerTitle", rect(leading, model.subtitle ? 10 : (height - 22) / 2, Math.max(0, right - leading - 8), 22), model.title || "", {
+		fontRole: "bodyLarge",
+		weight: 600
+	}));
+	if (model.subtitle) nodes.push(label("headerSubtitle", rect(leading, 34, Math.max(0, right - leading - 8), 16), model.subtitle, {
+		fontRole: "secondary",
+		color: "secondaryText"
+	}));
+	actions.forEach((action, index) => nodes.push(button("headerAction_" + index, rect(right + index * 36, (height - 32) / 2, 32, 32), action.label, action.icon, { type: action.command }, action.enabled !== false, { iconOnly: true })));
+	return {
+		width,
+		height,
+		nodes
+	};
+}
+//#endregion
 //#region ../src/tactic_stream/shared_ui/controls/catalog.ui.mjs
+function initial$3() {
+	return {
+		text: "Robot Arm",
+		description: "Sample asset",
+		checked: true,
+		mixed: true,
+		choice: "model",
+		user: "admin",
+		date: "2024-02-29T13:14",
+		color: "#78a6c4",
+		icon: "save",
+		treeSelected: "assets",
+		split: 50,
+		tree: [
+			{
+				id: "assets",
+				title: "Assets",
+				depth: 0,
+				icon: "folder",
+				hasChildren: true,
+				expanded: true
+			},
+			{
+				id: "arm",
+				title: "Robot Arm",
+				depth: 1,
+				icon: "box"
+			},
+			{
+				id: "body",
+				title: "Robot Body",
+				depth: 1,
+				icon: "box"
+			},
+			{
+				id: "textures",
+				title: "Textures",
+				depth: 0,
+				icon: "folder",
+				hasChildren: true,
+				expanded: false
+			},
+			{
+				id: "metal",
+				title: "Metal",
+				depth: 1,
+				icon: "image"
+			}
+		],
+		events: []
+	};
+}
+function transition$3(model, action) {
+	const next = Object.assign({}, model, { events: model.events.concat([action]) });
+	if (Object.prototype.hasOwnProperty.call(model, action.type) && action.value !== void 0) next[action.type] = action.value;
+	if (action.type === "checked") next.mixed = false;
+	if (action.type === "treeSelect") next.treeSelected = action.id;
+	if (action.type === "treeToggle") next.tree = model.tree.map((record) => record.id === action.id ? Object.assign({}, record, { expanded: !record.expanded }) : record);
+	if (action.type === "treeKey") {
+		const command = navigate(visibleRows(model.tree), action.id, action.key);
+		if (command?.type === "select") next.treeSelected = command.id;
+		else if (command) next.tree = model.tree.map((record) => record.id === command.id ? Object.assign({}, record, { expanded: command.type === "expand" }) : record);
+	}
+	return next;
+}
 var users = [{
 	value: "admin",
 	login: "admin",
@@ -184,6 +579,1454 @@ var choices = [
 		label: "Publish"
 	}
 ];
+function treeRows(model) {
+	return visibleRows(model.tree);
+}
+function row$2(list, record, model, language, state) {
+	const keys = {};
+	for (const key of [
+		"ArrowUp",
+		"ArrowDown",
+		"ArrowLeft",
+		"ArrowRight",
+		"Home",
+		"End"
+	]) keys[key] = {
+		type: "treeKey",
+		id: record.id,
+		key
+	};
+	return row$3("tree_" + record.id, list.width - 16, record, {
+		selected: record.id === model.treeSelected,
+		enabled: !["disabled", "loading"].includes(state),
+		select: {
+			type: "treeSelect",
+			id: record.id
+		},
+		toggle: {
+			type: "treeToggle",
+			id: record.id
+		},
+		toggleLabel: translate(record.expanded ? "Collapse section" : "Expand section", language),
+		keys
+	});
+}
+//#endregion
+//#region ../src/tactic_stream/shared_ui/controls/catalog/variants.mjs
+var exampleImage = "data:image/svg+xml," + encodeURIComponent("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"120\" height=\"60\"><path fill=\"#cc6655\" d=\"M0 0h60v60H0z\"/><path fill=\"#5588aa\" d=\"M60 0h60v60H60z\"/><path fill=\"#55aa66\" d=\"M0 0h12v60H0z\"/></svg>");
+function sample$1(id, family, kind, properties = {}, height = 36) {
+	return {
+		id,
+		family,
+		kind,
+		properties,
+		height
+	};
+}
+var directKinds = [
+	"previewCard",
+	"Icon",
+	"Grid",
+	"Graph",
+	"Code",
+	"tree",
+	"Button",
+	"CheckBox",
+	"Switch",
+	"Field",
+	"Area",
+	"Choice",
+	"DateChoice",
+	"UserChoice",
+	"Preview",
+	"ColorChoice",
+	"IconChoice",
+	"header",
+	"Scroll",
+	"Splitter"
+];
+var examples$1 = [
+	sample$1("icon-material", "icons", "Icon", {
+		icon: "material-design:account",
+		color: "action"
+	}, 24),
+	sample$1("icon-solid", "icons", "Icon", {
+		icon: "fontawesome-solid:user",
+		color: "action"
+	}, 24),
+	sample$1("icon-outline", "icons", "Icon", {
+		icon: "fontawesome-outline:user",
+		color: "action"
+	}, 24),
+	sample$1("icon-fluent", "icons", "Icon", {
+		icon: "fluent-regular:person",
+		color: "action"
+	}, 24),
+	sample$1("icon-fluent-filled", "icons", "Icon", {
+		icon: "fluent-filled:person",
+		color: "action"
+	}, 24),
+	sample$1("icon-small", "icons", "Icon", {
+		icon: "save",
+		color: "secondaryText"
+	}, 16),
+	sample$1("icon-large", "icons", "Icon", {
+		icon: "save",
+		color: "action"
+	}, 40),
+	sample$1("tree", "lists", "tree", {}, 280),
+	sample$1("table", "tables", "Grid", {}, 280),
+	sample$1("table-readonly", "tables", "Grid", { readOnly: true }, 280),
+	sample$1("graph", "graphs", "Graph", {}, 320),
+	sample$1("graph-readonly", "graphs", "Graph", { readOnly: true }, 320),
+	sample$1("code", "editors", "Code", { value: "def example():\n    return 42\n" }, 300),
+	sample$1("code-readonly", "editors", "Code", {
+		value: "def example():\n    return 42\n",
+		readOnly: true
+	}, 300),
+	sample$1("button", "buttons", "Button", {
+		text: "Save",
+		icon: "save"
+	}),
+	sample$1("button-primary", "buttons", "Button", {
+		text: "Create",
+		icon: "add",
+		highlighted: true
+	}),
+	sample$1("button-tonal", "buttons", "Button", {
+		text: "Apply",
+		tonal: true
+	}),
+	sample$1("button-danger", "buttons", "Button", {
+		text: "Delete",
+		icon: "delete",
+		destructive: true
+	}),
+	sample$1("button-filled-danger", "buttons", "Button", {
+		text: "Delete",
+		icon: "delete",
+		destructive: true,
+		highlighted: true
+	}),
+	sample$1("button-icon", "buttons", "Button", {
+		text: "Refresh",
+		icon: "refresh",
+		iconOnly: true
+	}),
+	sample$1("button-badge-zero", "buttons", "counter", { value: 0 }),
+	sample$1("button-badge", "buttons", "counter", { value: 4 }),
+	sample$1("button-badge-overflow", "buttons", "counter", { value: 132 }),
+	sample$1("button-disclosure", "buttons", "disclosure", { value: false }),
+	sample$1("button-preview", "buttons", "previewNavigation", { value: 0 }),
+	sample$1("button-send", "buttons", "send", { value: false }),
+	sample$1("checkbox", "toggles", "CheckBox", {
+		text: "Enabled",
+		value: false
+	}),
+	sample$1("checkbox-checked", "toggles", "CheckBox", {
+		text: "Enabled",
+		value: true
+	}),
+	sample$1("checkbox-wrapped", "toggles", "CheckBox", {
+		text: "Very long example item title that wraps in a narrow viewport",
+		wrapText: true,
+		value: true
+	}, 64),
+	sample$1("checkbox-mixed", "toggles", "CheckBox", {
+		text: "Enabled",
+		value: true,
+		mixed: true
+	}),
+	sample$1("checkbox-compact", "toggles", "CheckBox", {
+		text: "Enabled",
+		value: true,
+		compact: true
+	}),
+	sample$1("checkbox-prominent", "toggles", "CheckBox", {
+		text: "Enabled",
+		value: false,
+		prominent: true
+	}),
+	sample$1("switch-off", "toggles", "Switch", {
+		text: "Enabled",
+		value: false
+	}),
+	sample$1("switch-on", "toggles", "Switch", {
+		text: "Enabled",
+		value: true
+	}),
+	sample$1("segments", "toggles", "segments", { value: "model" }),
+	sample$1("segments-icons", "toggles", "segments", {
+		value: "model",
+		iconOnly: true
+	}),
+	sample$1("segments-outline", "toggles", "segments", {
+		value: "model",
+		outlined: true
+	}),
+	sample$1("segments-disabled-option", "toggles", "segments", {
+		value: "model",
+		disabledOption: true,
+		dataLabels: true
+	}),
+	sample$1("field", "text-fields", "Field", {
+		value: "Robot Arm",
+		label: "Name"
+	}),
+	sample$1("field-empty", "text-fields", "Field", {
+		value: "",
+		label: "Name",
+		placeholder: "Name"
+	}),
+	sample$1("field-password", "text-fields", "Field", {
+		value: "private example",
+		label: "Password",
+		password: true
+	}),
+	sample$1("field-readonly", "text-fields", "Field", {
+		value: "Read only",
+		label: "Name",
+		readOnly: true
+	}),
+	sample$1("field-error", "text-fields", "Field", {
+		value: "Invalid value",
+		label: "Name",
+		error: true
+	}),
+	sample$1("field-inline", "text-fields", "Field", {
+		value: "Robot Arm",
+		label: "Name",
+		tableCell: true
+	}),
+	sample$1("text-area", "text-fields", "Area", {
+		value: "First line\nSecond line",
+		label: "Description"
+	}, 100),
+	sample$1("search", "search", "search", { value: "Robot" }),
+	sample$1("search-empty", "search", "search", { value: "" }),
+	sample$1("search-suggestions", "search", "search", {
+		value: "Robot",
+		suggestions: true
+	}),
+	sample$1("choice", "choices", "Choice", { value: "model" }),
+	sample$1("choice-empty", "choices", "Choice", { value: "" }),
+	sample$1("choice-editable", "choices", "Choice", {
+		value: "custom_process",
+		editable: true
+	}),
+	sample$1("choice-disabled-option", "choices", "Choice", {
+		value: "model",
+		disabledOption: true
+	}),
+	sample$1("choice-icons", "choices", "Choice", {
+		value: "model",
+		choiceIcons: true
+	}),
+	sample$1("choice-status", "choices", "status", { value: "model" }, 28),
+	sample$1("packed-choices", "choices", "packedChoices", { value: "" }, 280),
+	sample$1("integer", "numbers", "spin", {
+		value: 5,
+		min: 0,
+		max: 10,
+		step: 1,
+		decimals: 0
+	}),
+	sample$1("decimal", "numbers", "spin", {
+		value: 1.25,
+		min: -2,
+		max: 3,
+		step: .25,
+		decimals: 2
+	}),
+	sample$1("integer-min", "numbers", "spin", {
+		value: 0,
+		min: 0,
+		max: 10,
+		step: 1,
+		decimals: 0
+	}),
+	sample$1("integer-max", "numbers", "spin", {
+		value: 10,
+		min: 0,
+		max: 10,
+		step: 1,
+		decimals: 0
+	}),
+	sample$1("slider", "numbers", "slider", {
+		value: 50,
+		min: 0,
+		max: 100,
+		step: 1
+	}, 26),
+	sample$1("slider-step", "numbers", "slider", {
+		value: 50,
+		min: 0,
+		max: 100,
+		step: 5
+	}, 26),
+	sample$1("slider-fixed", "numbers", "slider", {
+		value: 5,
+		min: 5,
+		max: 5,
+		step: 1
+	}, 26),
+	sample$1("date", "dates", "DateChoice", {
+		value: "2024-02-29",
+		includeTime: false
+	}),
+	sample$1("datetime", "dates", "DateChoice", {
+		value: "2024-02-29T13:14",
+		includeTime: true
+	}),
+	sample$1("date-early-year", "dates", "DateChoice", {
+		value: "0099-01-01",
+		includeTime: false
+	}),
+	sample$1("date-invalid", "dates", "DateChoice", {
+		value: "2023-02-29",
+		includeTime: false
+	}),
+	sample$1("date-empty", "dates", "DateChoice", {
+		value: "",
+		includeTime: false
+	}),
+	sample$1("user", "user-choice", "UserChoice", { value: "admin" }),
+	sample$1("user-empty", "user-choice", "UserChoice", { value: "" }),
+	sample$1("users-multiple", "user-choice", "users", { value: ["admin"] }, 300),
+	sample$1("avatar-initials", "identity", "Preview", {
+		initials: "A",
+		round: true,
+		outlined: true,
+		accent: "#557f75"
+	}, 40),
+	sample$1("avatar-two-initials", "identity", "Preview", {
+		initials: "TA",
+		round: true,
+		outlined: true,
+		accent: "#557f75"
+	}, 40),
+	sample$1("avatar-fallback", "identity", "Preview", {
+		icon: "person",
+		round: true,
+		outlined: true,
+		accent: "#557f75"
+	}, 40),
+	sample$1("identity", "identity", "identity", { value: "admin" }, 40),
+	sample$1("identity-retired", "identity", "identity", {
+		value: "admin",
+		retired: true
+	}, 40),
+	sample$1("identity-emphasized", "identity", "identity", {
+		value: "admin",
+		emphasized: true,
+		avatarSize: 56
+	}, 56),
+	sample$1("user-group", "identity", "userGroup", { value: "Artists" }, 34),
+	sample$1("user-group-compact", "identity", "userGroup", {
+		value: "Artists",
+		compact: true
+	}, 28),
+	sample$1("user-group-empty", "identity", "userGroup", { value: "Ungrouped" }, 34),
+	sample$1("profile-info", "identity", "profileInfo", { value: "Administrator" }, 40),
+	sample$1("color", "pickers", "ColorChoice", { value: "#78a6c4" }),
+	sample$1("icon-choice", "pickers", "IconChoice", { value: "save" }),
+	sample$1("emoji", "pickers", "emoji", { value: "" }),
+	sample$1("image-picker", "pickers", "image", { value: "" }, 220),
+	sample$1("accent-presets", "pickers", "presets", { value: "blue" }, 48),
+	sample$1("preview-square", "previews", "Preview", {
+		initials: "RA",
+		accent: "#557f75",
+		round: false,
+		outlined: false
+	}, 96),
+	sample$1("preview-round", "previews", "Preview", {
+		source: exampleImage,
+		round: true
+	}, 96),
+	sample$1("preview-icon", "previews", "Preview", {
+		icon: "image",
+		round: false
+	}, 96),
+	sample$1("preview-card", "previews", "previewCard", { source: exampleImage }, 220),
+	sample$1("attachment-image", "previews", "attachment", {
+		source: exampleImage,
+		extension: "svg"
+	}, 220),
+	sample$1("attachment-file", "previews", "attachment", {
+		extension: "pdf",
+		compact: true
+	}, 64),
+	sample$1("preview-outline", "previews", "Preview", {
+		initials: "RA",
+		accent: "#557f75",
+		round: false,
+		outlined: true
+	}, 96),
+	sample$1("preview-broken", "previews", "Preview", {
+		initials: "RA",
+		source: "missing-example.png",
+		accent: "#557f75",
+		round: false
+	}, 96),
+	sample$1("preview-loading", "previews", "Preview", {
+		loading: true,
+		source: "pending-preview:example",
+		round: false
+	}, 96),
+	sample$1("preview-photo", "previews", "Preview", {
+		source: exampleImage,
+		round: false
+	}, 96),
+	sample$1("preview-contain", "previews", "Preview", {
+		source: exampleImage,
+		round: false,
+		fit: "contain"
+	}, 96),
+	sample$1("preview-selected", "previews", "Preview", {
+		source: exampleImage,
+		round: false,
+		selected: true
+	}, 96),
+	sample$1("avatar-photo", "identity", "Preview", {
+		source: exampleImage,
+		round: true
+	}, 40),
+	sample$1("chip", "badges", "chip", { value: 4 }, 30),
+	sample$1("chip-clickable", "badges", "chip", {
+		value: 4,
+		clickable: true
+	}, 30),
+	sample$1("chip-compact", "badges", "chip", {
+		value: 4,
+		compact: true
+	}, 24),
+	sample$1("status-chip", "badges", "statusChip", { value: "Ready" }, 24),
+	sample$1("status-chip-dense", "badges", "statusChip", {
+		value: "Ready",
+		dense: true
+	}, 20),
+	sample$1("status-chip-action", "badges", "statusChip", {
+		value: "Ready",
+		interactive: true
+	}, 24),
+	sample$1("reaction", "badges", "reaction", {
+		value: false,
+		count: 1
+	}, 28),
+	sample$1("reaction-count", "badges", "reaction", {
+		value: false,
+		count: 4
+	}, 28),
+	sample$1("reaction-checked", "badges", "reaction", {
+		value: true,
+		count: 4
+	}, 28),
+	sample$1("filter-chip", "badges", "filterChip", { value: false }, 32),
+	sample$1("filter-chip-checked", "badges", "filterChip", { value: true }, 32),
+	sample$1("filter-chip-subtle", "badges", "filterChip", {
+		value: true,
+		subtle: true
+	}, 32),
+	sample$1("filter-chip-marker", "badges", "filterChip", {
+		value: true,
+		marker: true
+	}, 32),
+	sample$1("filter-chip-emphasis", "badges", "filterChip", {
+		value: true,
+		emphasis: 1
+	}, filterGeometry(1).height),
+	sample$1("tab", "tabs", "tab", { value: false }),
+	sample$1("tab-current", "tabs", "tab", { value: true }),
+	sample$1("header", "headers", "header", { subtitle: "Description" }, 60),
+	sample$1("header-back", "headers", "header", {
+		back: true,
+		subtitle: "Description"
+	}, 60),
+	sample$1("header-actions", "headers", "header", { actions: [{
+		label: "Refresh",
+		icon: "refresh",
+		command: "refresh"
+	}, {
+		label: "Actions",
+		icon: "more",
+		command: "menu"
+	}] }, 60),
+	sample$1("editor-panel", "headers", "editorPanel", {}, 160),
+	sample$1("configuration-section", "headers", "configurationSection", {}, 160),
+	sample$1("section-label", "headers", "sectionLabel", {}, 24),
+	sample$1("info-values", "headers", "infoValues", { items: [{
+		label: "Type",
+		value: "Asset"
+	}, {
+		label: "Version",
+		value: "v003"
+	}] }, 16),
+	sample$1("field-frame", "headers", "fieldFrame", { value: "Robot Arm" }, 150),
+	sample$1("field-frame-required", "headers", "fieldFrame", {
+		value: "Robot Arm",
+		required: true
+	}, 150),
+	sample$1("field-frame-error", "headers", "fieldFrame", {
+		value: "",
+		error: true
+	}, 180),
+	sample$1("field-frame-readonly", "headers", "fieldFrame", {
+		value: "Robot Arm",
+		readOnly: true
+	}, 180),
+	sample$1("list-item", "lists", "listItem", { value: "Example item" }, 72),
+	sample$1("list-item-selected", "lists", "listItem", {
+		value: "Example item",
+		selected: true
+	}, 72),
+	sample$1("list-item-badge", "lists", "listItem", {
+		value: "Example item",
+		badge: true
+	}, 72),
+	sample$1("list-item-long", "lists", "listItem", {
+		value: "Very long example item title that wraps in a narrow viewport",
+		wrapTitle: true
+	}, 100),
+	sample$1("menu", "menus", "menu", { value: "" }),
+	sample$1("menu-checks", "menus", "menu", {
+		value: "",
+		checkable: true
+	}),
+	sample$1("busy", "feedback", "busy", { value: true }, 24),
+	sample$1("progress", "feedback", "progress", { value: .5 }, 4),
+	sample$1("progress-empty", "feedback", "progress", { value: 0 }, 4),
+	sample$1("progress-complete", "feedback", "progress", { value: 1 }, 4),
+	sample$1("progress-indeterminate", "feedback", "progress", { value: null }, 4),
+	sample$1("loading-overlay", "feedback", "loadingOverlay", {}, 220),
+	sample$1("loading-cancellable", "feedback", "loadingOverlay", { cancellable: true }, 220),
+	sample$1("empty", "feedback", "empty", { value: "" }, 180),
+	sample$1("error-retry", "feedback", "empty", {
+		value: "",
+		error: true
+	}, 220),
+	sample$1("drop-target", "drag-files", "drop", {
+		value: "",
+		accepted: true
+	}, 180),
+	sample$1("drop-rejected", "drag-files", "drop", {
+		value: "",
+		accepted: false
+	}, 180),
+	sample$1("markdown", "typography", "markdown", { value: "# Example\n\n**Bold** and a [link](https://example.org).\n\n- First item\n- Second item" }, 200),
+	sample$1("middle-elide", "typography", "elide", { value: "D:/very/long/project/path/to/production/scene-file.ext" }),
+	sample$1("setting-row", "scroll-layout", "setting", { value: true }, 100),
+	sample$1("flow", "scroll-layout", "flow", { value: "" }, 150),
+	sample$1("scroll-vertical", "scroll-layout", "Scroll", {}, 280),
+	sample$1("scroll-horizontal", "scroll-layout", "Scroll", { horizontal: true }, 120),
+	sample$1("scroll-both", "scroll-layout", "Scroll", { both: true }, 280),
+	sample$1("splitter-vertical", "scroll-layout", "Splitter", { value: 50 }, 160),
+	sample$1("splitter-horizontal", "scroll-layout", "Splitter", {
+		value: 50,
+		horizontal: true
+	}, 10)
+];
+function find(id) {
+	const result = examples$1.find((example) => example.id === id);
+	if (!result) throw Error("Unknown control example: " + id);
+	return result;
+}
+function initial$2(id) {
+	const example = find(id);
+	return Object.assign(initial$3(), {
+		id,
+		value: example.properties.value === void 0 ? "" : example.properties.value,
+		cells: {},
+		graphPositions: [],
+		graphSelected: [],
+		events: []
+	});
+}
+function transition$2(model, action) {
+	const result = transition$3(model, action);
+	if (action.type === "cell") result.cells = Object.assign({}, model.cells, { [action.row + ":" + action.column]: action.value });
+	if (action.value !== void 0) result.value = action.value;
+	if (action.type === "graph" && action.value) {
+		if (action.value.type === "selectNodes") result.graphSelected = action.value.identities;
+		if (action.value.type === "moveNodes") result.graphPositions = action.value.positions;
+	}
+	return result;
+}
+function options(example) {
+	return choices.map((choice, index) => Object.assign({}, choice, {
+		label: example.properties.dataLabels && index === 0 ? "Enabled" : choice.label,
+		translate: !example.properties.dataLabels,
+		enabled: !(example.properties.disabledOption && index === 1),
+		disabled: !!(example.properties.disabledOption && index === 1),
+		icon: example.properties.choiceIcons || example.kind === "segments" ? [
+			"view-list",
+			"edit",
+			"publish"
+		][index] : "",
+		color: [
+			"#ce6868",
+			"#7b85ca",
+			"#55a9ad"
+		][index]
+	}));
+}
+function describe$4(model, width, height, language = "en", state = "idle") {
+	const example = find(model.id);
+	const tr = (text) => translate(text, language);
+	const bounds = rect(20, 64, Math.max(0, width - 40), example.height);
+	if (example.kind === "Preview" || example.kind === "Icon") bounds.width = bounds.height;
+	if (example.kind === "attachment") {
+		bounds.width = Math.min(bounds.width, 320);
+		bounds.height = example.properties.compact ? 64 : (bounds.width - 16) / 2 + 65;
+	}
+	if (example.kind === "chip") bounds.width = 140;
+	if (["statusChip", "reaction"].indexOf(example.kind) >= 0) bounds.width = 140;
+	if (example.kind === "filterChip") bounds.width = 220;
+	if (example.kind === "Splitter" && !example.properties.horizontal) bounds.width = 10;
+	if (example.kind === "busy") bounds.width = bounds.height;
+	if ([
+		"counter",
+		"disclosure",
+		"emoji",
+		"menu",
+		"send"
+	].indexOf(example.kind) >= 0) bounds.width = 36;
+	if (example.kind === "previewNavigation") {
+		bounds.width = 40;
+		bounds.height = 84;
+	}
+	if (example.properties.iconOnly && example.kind === "Button") bounds.width = 36;
+	const values = Object.assign({}, example.properties, {
+		enabled: state !== "disabled" && state !== "loading",
+		readOnly: !!example.properties.readOnly || state === "readonly",
+		action: { type: "change" },
+		value: model.value,
+		text: [
+			"Field",
+			"Area",
+			"DateChoice"
+		].indexOf(example.kind) >= 0 ? String(model.value) : tr(example.properties.text || ""),
+		label: tr(example.properties.label || "Name"),
+		placeholder: tr(example.properties.placeholder || ""),
+		checked: !!model.value,
+		mixed: !!example.properties.mixed && !model.events.length,
+		options: example.kind === "UserChoice" ? users : options(example),
+		users,
+		error: example.properties.error || state === "error",
+		selected: example.properties.selected || state === "selected",
+		loading: example.properties.loading || state === "loading",
+		language
+	});
+	if (["Preview", "previewCard"].includes(example.kind) && ["empty", "error"].includes(state)) {
+		values.source = "";
+		if (state === "error") {
+			values.initials = "";
+			values.icon = "alert";
+		}
+	}
+	if (example.kind === "CheckBox") {
+		const indicator = values.prominent ? controls.checkBox.prominentIndicator : values.compact ? controls.checkBox.compactIndicator : controls.checkBox.indicator;
+		const spacing = values.compact ? controls.checkBox.compactSpacing : controls.checkBox.spacing;
+		values.children = [label("checkLabel", rect(indicator + spacing, 0, Math.max(0, bounds.width - indicator - spacing), bounds.height), values.text, {
+			fontRole: values.compact ? "secondary" : "body",
+			wrap: !!values.wrapText,
+			color: values.enabled ? "primaryText" : "disabledText"
+		})];
+	}
+	let content;
+	if (example.kind === "previewCard") content = [node("Box", "sample", bounds, {
+		radius: 10,
+		clip: true,
+		children: [
+			node("Preview", "sampleCardImage", rect(0, 0, bounds.width, bounds.height), {
+				source: values.source,
+				round: false,
+				fit: "cover",
+				loading: values.loading,
+				selected: values.selected
+			}),
+			node("Box", "sampleCardShade", rect(0, 0, bounds.width, bounds.height), {
+				background: "#000000",
+				opacity: .68,
+				radius: 10
+			}),
+			label("sampleCardTitle", rect(16, 24, Math.max(0, bounds.width - 32), 36), "Robot Arm", {
+				fontRole: "title",
+				weight: 600,
+				color: "#ffffff"
+			}),
+			label("sampleCardDescription", rect(16, 68, Math.max(0, bounds.width - 32), 48), tr("Image preview"), {
+				wrap: true,
+				color: "#ffffff"
+			}),
+			node("StatusChip", "sampleCardStatus", rect(16, bounds.height - 44, Math.min(140, bounds.width - 32), 28), {
+				text: tr("Ready"),
+				accent: "action"
+			})
+		]
+	})];
+	else if (example.kind === "Scroll") {
+		const contentWidth = example.properties.horizontal || example.properties.both ? 900 : bounds.width;
+		const scroll = {
+			contentHeight: example.properties.horizontal ? 80 : 900,
+			children: Array.from({ length: example.properties.horizontal ? 7 : 20 }, (_, index) => label("scrollRow_" + index, rect(example.properties.horizontal ? 8 + index * 120 : index % 2 && example.properties.both ? 500 : 8, example.properties.horizontal ? 8 : index * 40, example.properties.horizontal ? 100 : 280, 32), "Example " + String(index + 1), { fontRole: "body" }))
+		};
+		if (example.properties.horizontal || example.properties.both) scroll.contentWidth = contentWidth;
+		content = [node("Scroll", "sample", bounds, scroll)];
+	} else if (example.kind === "Splitter") content = [node("Splitter", "sample", bounds, Object.assign({}, values, {
+		text: tr("Size"),
+		min: 0,
+		max: 100,
+		horizontal: !!example.properties.horizontal
+	}))];
+	else if (example.kind === "tree") content = [node("List", "sample", bounds, {
+		source: "treeRows",
+		keyField: "id",
+		rowHeight: 36
+	})];
+	else if (example.kind === "Grid") content = [node("Grid", "sample", bounds, Object.assign({}, values, {
+		source: "cells",
+		text: tr("Table"),
+		rowHeaders: Array.from({ length: 50 }, (_, index) => ({ label: String(index + 1) })),
+		columnHeaders: choices.map((option) => option.label),
+		cellWidth: 160,
+		rowHeight: 38,
+		labelWidth: 40,
+		headerHeight: 32,
+		revision: model.events.length
+	}))];
+	else if (example.kind === "Graph") content = [node("Graph", "sample", bounds, Object.assign({}, values, {
+		label: tr("Graph"),
+		language,
+		nodes: [{
+			identity: "a",
+			label: "First",
+			nodeX: 20,
+			nodeY: 20,
+			color: "action"
+		}, {
+			identity: "b",
+			label: "Second",
+			nodeX: 280,
+			nodeY: 140,
+			color: "action"
+		}].map((record) => Object.assign({}, record, model.graphPositions.find((position) => position.identity === record.identity) || {})),
+		selectedNodes: model.graphSelected,
+		edges: [{
+			from: "a",
+			to: "b"
+		}],
+		action: { type: "graph" },
+		selectAction: { type: "graphSelect" },
+		moveAction: { type: "graphMove" }
+	}))];
+	else if (example.kind === "Code") content = [node("Code", "sample", bounds, Object.assign({}, values, {
+		text: String(model.value),
+		service: "sourceEditor",
+		bufferKey: model.id,
+		language
+	}))];
+	else if (example.kind === "header") {
+		content = header(Object.assign({}, example.properties, {
+			title: tr("Name"),
+			subtitle: tr(example.properties.subtitle || ""),
+			backLabel: tr("Back"),
+			enabled: values.enabled,
+			actions: (example.properties.actions || []).map((action) => Object.assign({}, action, {
+				label: tr(action.label),
+				enabled: values.enabled && action.enabled !== false
+			}))
+		}), bounds.width, bounds.height);
+		content = [node("Box", "sample", bounds, { children: content.nodes })];
+	} else content = [directKinds.indexOf(example.kind) >= 0 ? node(example.kind, "sample", bounds, values) : node("View", "sample", bounds, { view: "example" })];
+	return {
+		width,
+		height,
+		nodes: [
+			label("exampleTitle", rect(20, 16, width - 40, 28), example.id, {
+				fontRole: "bodyLarge",
+				weight: 600
+			}),
+			...content,
+			label("exampleEvents", rect(20, height - 36, width - 40, 24), String(model.events.length), { fontRole: "secondary" })
+		]
+	};
+}
+function row$1(list, record, model, language, state) {
+	return row$2(list, record, model, language, state);
+}
+function cell$1(grid, record, row, column, model, state) {
+	const key = row + ":" + column;
+	return { nodes: [node("Field", "cell_" + row + "_" + column, rect(0, 0, grid.cellWidth, grid.rowHeight), {
+		text: model.cells[key] === void 0 ? String(row + 1) + " / " + String(column + 1) : model.cells[key],
+		label: "Name",
+		tableCell: true,
+		readOnly: grid.readOnly || state === "readonly",
+		enabled: state !== "disabled",
+		action: {
+			type: "cell",
+			row,
+			column
+		}
+	})] };
+}
+function packedOptions(value) {
+	return Array.from({ length: 1e3 }, (_, index) => ({
+		key: String(index),
+		title: "Option " + String(index).padStart(4, "0"),
+		icon: index % 3 === 0 ? "folder" : "",
+		marker: index % 5 === 0,
+		accent: "#55a9ad",
+		selected: String(index) === value
+	}));
+}
+//#endregion
+//#region src/features/administration/ShowcaseControl.vue
+var _hoisted_1 = ["data-example"];
+var _sfc_main$2 = {
+	__name: "ShowcaseControl",
+	props: {
+		example: Object,
+		value: [
+			String,
+			Number,
+			Boolean,
+			Array
+		],
+		disabled: Boolean,
+		readonly: Boolean
+	},
+	emits: ["event"],
+	setup(__props, { emit: __emit }) {
+		const props = __props;
+		const emit = __emit;
+		const data = computed(() => props.example.properties);
+		const choices = computed(() => options(props.example));
+		const suggestions = computed(() => data.value.suggestions ? [{
+			title: "Robot Arm",
+			description: "Example",
+			code: "arm"
+		}, {
+			title: "Robot Body",
+			description: "Example",
+			code: "body"
+		}] : []);
+		const image = ref(null);
+		const optionsViewport = ref(null), optionTop = ref(0);
+		const packed = computed(() => packedOptions(props.value));
+		const presets = [{
+			value: "blue",
+			label: "Blue",
+			dark: "#78a6c4",
+			light: "#3d7599",
+			darkBase: "#292d30",
+			lightBase: "#d4dce1"
+		}, {
+			value: "green",
+			label: "Green",
+			dark: "#77b398",
+			light: "#3d8062",
+			darkBase: "#26342e",
+			lightBase: "#d9e9df"
+		}];
+		if (![
+			"attachment",
+			"segments",
+			"spin",
+			"slider",
+			"search",
+			"status",
+			"users",
+			"identity",
+			"emoji",
+			"image",
+			"presets",
+			"chip",
+			"tab",
+			"menu",
+			"progress",
+			"busy",
+			"empty",
+			"drop",
+			"markdown",
+			"elide",
+			"setting",
+			"flow",
+			"counter",
+			"disclosure",
+			"previewNavigation",
+			"send",
+			"packedChoices",
+			"statusChip",
+			"reaction",
+			"filterChip",
+			"loadingOverlay",
+			"editorPanel",
+			"configurationSection",
+			"sectionLabel",
+			"infoValues",
+			"fieldFrame",
+			"listItem",
+			"userGroup",
+			"profileInfo"
+		].includes(props.example.kind)) throw Error("Missing catalog brick: " + props.example.kind);
+		function change(value) {
+			if (!props.disabled && !props.readonly) emit("event", {
+				type: "change",
+				value
+			});
+		}
+		function activate(type = "activate") {
+			if (!props.disabled) emit("event", { type });
+		}
+		return (_ctx, _cache) => {
+			return openBlock(), createElementBlock("div", {
+				class: "control-example",
+				"data-example": __props.example.id
+			}, [__props.example.kind === "attachment" ? (openBlock(), createBlock(_sfc_main$33, {
+				key: 0,
+				title: "Robot Arm",
+				extension: data.value.extension,
+				"preview-url": data.value.source || "",
+				"size-text": "128 KB",
+				compact: !!data.value.compact,
+				"web-preview": false,
+				disabled: __props.disabled || __props.readonly,
+				style: {
+					width: "100%",
+					height: "100%"
+				},
+				onActivated: _cache[0] || (_cache[0] = ($event) => activate())
+			}, null, 8, [
+				"extension",
+				"preview-url",
+				"compact",
+				"disabled"
+			])) : __props.example.kind === "segments" ? (openBlock(), createBlock(_sfc_main$20, {
+				key: 1,
+				"model-value": __props.value,
+				options: choices.value,
+				label: "Display",
+				"icon-only": data.value.iconOnly,
+				outlined: data.value.outlined,
+				disabled: __props.disabled,
+				"onUpdate:modelValue": change
+			}, null, 8, [
+				"model-value",
+				"options",
+				"icon-only",
+				"outlined",
+				"disabled"
+			])) : __props.example.kind === "spin" ? (openBlock(), createBlock(_sfc_main$32, {
+				key: 2,
+				"model-value": __props.value,
+				min: data.value.min,
+				max: data.value.max,
+				step: data.value.step,
+				decimals: data.value.decimals,
+				label: "Size",
+				disabled: __props.disabled,
+				readonly: __props.readonly,
+				"onUpdate:modelValue": change
+			}, null, 8, [
+				"model-value",
+				"min",
+				"max",
+				"step",
+				"decimals",
+				"disabled",
+				"readonly"
+			])) : __props.example.kind === "slider" ? (openBlock(), createBlock(_sfc_main$21, {
+				key: 3,
+				"model-value": __props.value,
+				min: data.value.min,
+				max: data.value.max,
+				step: data.value.step,
+				label: "Size",
+				disabled: __props.disabled || __props.readonly,
+				"onUpdate:modelValue": change
+			}, null, 8, [
+				"model-value",
+				"min",
+				"max",
+				"step",
+				"disabled"
+			])) : __props.example.kind === "search" ? (openBlock(), createBlock(AppSearchField_default, {
+				key: 4,
+				"model-value": __props.value,
+				label: "Search",
+				placeholder: unref(t)("Search"),
+				suggestions: suggestions.value,
+				disabled: __props.disabled,
+				readonly: __props.readonly,
+				"onUpdate:modelValue": change,
+				onSearch: _cache[1] || (_cache[1] = ($event) => activate("search")),
+				onDismiss: _cache[2] || (_cache[2] = ($event) => activate("dismiss")),
+				onOpen: _cache[3] || (_cache[3] = ($event) => activate("open")),
+				onAccept: _cache[4] || (_cache[4] = ($event) => change($event.title))
+			}, null, 8, [
+				"model-value",
+				"placeholder",
+				"suggestions",
+				"disabled",
+				"readonly"
+			])) : __props.example.kind === "packedChoices" ? (openBlock(), createElementBlock("div", {
+				key: 5,
+				ref_key: "optionsViewport",
+				ref: optionsViewport,
+				class: "example-options-viewport",
+				onScrollPassive: _cache[5] || (_cache[5] = ($event) => optionTop.value = $event.target.scrollTop)
+			}, [optionsViewport.value ? (openBlock(), createBlock(QuickFilterOptions_default, {
+				key: 0,
+				options: packed.value,
+				viewport: optionsViewport.value,
+				top: optionTop.value,
+				height: 280,
+				active: "",
+				disabled: __props.disabled,
+				onActivate: change
+			}, null, 8, [
+				"options",
+				"viewport",
+				"top",
+				"disabled"
+			])) : createCommentVNode("", true)], 544)) : __props.example.kind === "status" ? (openBlock(), createBlock(_sfc_main$34, {
+				key: 6,
+				value: __props.value,
+				options: choices.value,
+				disabled: __props.disabled,
+				onChange: change
+			}, null, 8, [
+				"value",
+				"options",
+				"disabled"
+			])) : __props.example.kind === "users" ? (openBlock(), createBlock(_sfc_main$44, {
+				key: 7,
+				"model-value": __props.value,
+				users: unref(users),
+				disabled: __props.disabled,
+				"onUpdate:modelValue": change
+			}, null, 8, [
+				"model-value",
+				"users",
+				"disabled"
+			])) : __props.example.kind === "identity" ? (openBlock(), createBlock(_sfc_main$22, {
+				key: 8,
+				login: "admin",
+				"display-name": "Administrator",
+				initials: "A",
+				"avatar-color": "#557f75",
+				retired: data.value.retired,
+				emphasized: data.value.emphasized,
+				"avatar-size": data.value.avatarSize || 40
+			}, null, 8, [
+				"retired",
+				"emphasized",
+				"avatar-size"
+			])) : __props.example.kind === "userGroup" ? (openBlock(), createBlock(_sfc_main$23, {
+				key: 9,
+				title: __props.value,
+				compact: data.value.compact
+			}, null, 8, ["title", "compact"])) : __props.example.kind === "profileInfo" ? (openBlock(), createBlock(_sfc_main$4, {
+				key: 10,
+				icon: "person",
+				label: "Name",
+				value: __props.value
+			}, null, 8, ["value"])) : __props.example.kind === "emoji" ? (openBlock(), createBlock(_sfc_main$35, {
+				key: 11,
+				disabled: __props.disabled,
+				onSelected: change
+			}, null, 8, ["disabled"])) : __props.example.kind === "image" ? (openBlock(), createBlock(ImagePicker_default, {
+				key: 12,
+				"model-value": image.value,
+				disabled: __props.disabled,
+				"fallback-text": "RA",
+				"onUpdate:modelValue": _cache[6] || (_cache[6] = ($event) => {
+					image.value = $event;
+					change($event?.name || "");
+				})
+			}, null, 8, ["model-value", "disabled"])) : __props.example.kind === "presets" ? (openBlock(), createBlock(_sfc_main$30, {
+				key: 13,
+				"model-value": __props.value,
+				options: presets,
+				mode: unref(appearance).mode,
+				label: "Colors",
+				disabled: __props.disabled,
+				"onUpdate:modelValue": change
+			}, null, 8, [
+				"model-value",
+				"mode",
+				"disabled"
+			])) : __props.example.kind === "chip" ? (openBlock(), createBlock(_sfc_main$18, {
+				key: 14,
+				label: unref(t)("Status"),
+				count: __props.value,
+				compact: data.value.compact,
+				clickable: data.value.clickable,
+				disabled: data.value.clickable ? __props.disabled : void 0,
+				onClick: _cache[7] || (_cache[7] = ($event) => activate())
+			}, null, 8, [
+				"label",
+				"count",
+				"compact",
+				"clickable",
+				"disabled"
+			])) : __props.example.kind === "statusChip" ? (openBlock(), createBlock(_sfc_main$24, {
+				key: 15,
+				text: __props.value,
+				icon: "check",
+				accent: "#55a9ad",
+				dense: data.value.dense,
+				interactive: data.value.interactive,
+				disabled: __props.disabled,
+				onClick: _cache[8] || (_cache[8] = ($event) => activate())
+			}, null, 8, [
+				"text",
+				"dense",
+				"interactive",
+				"disabled"
+			])) : __props.example.kind === "reaction" ? (openBlock(), createBlock(_sfc_main$10, {
+				key: 16,
+				emoji: "👍",
+				count: data.value.count,
+				checked: __props.value,
+				disabled: __props.disabled,
+				onClick: _cache[9] || (_cache[9] = ($event) => change(!__props.value))
+			}, null, 8, [
+				"count",
+				"checked",
+				"disabled"
+			])) : __props.example.kind === "filterChip" ? (openBlock(), createBlock(QuickFilterChip_default, {
+				key: 17,
+				style: {
+					"width": "100%",
+					"height": "100%"
+				},
+				text: "Example",
+				icon: "filter",
+				checked: __props.value,
+				subtle: data.value.subtle,
+				"show-accent-marker": data.value.marker,
+				emphasis: data.value.emphasis,
+				disabled: __props.disabled,
+				onClick: _cache[10] || (_cache[10] = ($event) => change(!__props.value))
+			}, null, 8, [
+				"checked",
+				"subtle",
+				"show-accent-marker",
+				"emphasis",
+				"disabled"
+			])) : __props.example.kind === "loadingOverlay" ? (openBlock(), createBlock(_sfc_main$43, {
+				key: 18,
+				message: "Loading…",
+				cancellable: data.value.cancellable,
+				disabled: __props.disabled,
+				onCancel: _cache[11] || (_cache[11] = ($event) => activate("cancel"))
+			}, null, 8, ["cancellable", "disabled"])) : __props.example.kind === "editorPanel" ? (openBlock(), createBlock(_sfc_main$9, {
+				key: 19,
+				title: "Name",
+				description: "Description",
+				icon: "settings"
+			}, {
+				default: withCtx(() => [..._cache[21] || (_cache[21] = [createBaseVNode("div", { class: "example-body" }, "Example", -1)])]),
+				_: 1
+			})) : __props.example.kind === "configurationSection" ? (openBlock(), createBlock(_sfc_main$8, {
+				key: 20,
+				title: "Name",
+				description: "Description",
+				"fill-content-height": ""
+			}, {
+				default: withCtx(() => [..._cache[22] || (_cache[22] = [createBaseVNode("div", { class: "example-body" }, "Example", -1)])]),
+				_: 1
+			})) : __props.example.kind === "sectionLabel" ? (openBlock(), createBlock(_sfc_main$7, {
+				key: 21,
+				text: "Display"
+			})) : __props.example.kind === "infoValues" ? (openBlock(), createBlock(_sfc_main$36, {
+				key: 22,
+				items: data.value.items
+			}, null, 8, ["items"])) : __props.example.kind === "fieldFrame" ? (openBlock(), createBlock(_sfc_main$6, {
+				key: 23,
+				title: "Name",
+				"field-name": "name",
+				description: "Description",
+				icon: "edit",
+				required: data.value.required,
+				readonly: __props.readonly || data.value.readOnly,
+				error: data.value.error ? "Invalid value" : ""
+			}, {
+				default: withCtx(() => [createVNode(_sfc_main$25, {
+					"model-value": __props.value,
+					label: "Name",
+					disabled: __props.disabled,
+					readonly: __props.readonly || data.value.readOnly,
+					"error-state": data.value.error,
+					"onUpdate:modelValue": change
+				}, null, 8, [
+					"model-value",
+					"disabled",
+					"readonly",
+					"error-state"
+				])]),
+				_: 1
+			}, 8, [
+				"required",
+				"readonly",
+				"error"
+			])) : __props.example.kind === "listItem" ? (openBlock(), createBlock(_sfc_main$5, {
+				key: 24,
+				text: __props.value,
+				description: "Description",
+				icon: "folder",
+				selected: data.value.selected,
+				"wrap-title": data.value.wrapTitle,
+				"badge-text": data.value.badge ? "4" : "",
+				disabled: __props.disabled,
+				onClick: _cache[12] || (_cache[12] = ($event) => activate())
+			}, null, 8, [
+				"text",
+				"selected",
+				"wrap-title",
+				"badge-text",
+				"disabled"
+			])) : __props.example.kind === "tab" ? (openBlock(), createBlock(_sfc_main$26, {
+				key: 25,
+				label: "Display",
+				checked: __props.value,
+				disabled: __props.disabled,
+				onClick: _cache[13] || (_cache[13] = ($event) => change(!__props.value))
+			}, null, 8, ["checked", "disabled"])) : __props.example.kind === "menu" ? (openBlock(), createBlock(_sfc_main$16, {
+				key: 26,
+				label: "Actions",
+				disabled: __props.disabled,
+				overlay: ""
+			}, {
+				default: withCtx(() => [
+					createVNode(_sfc_main$37, {
+						label: "Refresh",
+						icon: "refresh",
+						onClick: _cache[14] || (_cache[14] = ($event) => activate("refresh"))
+					}),
+					createVNode(_sfc_main$37, {
+						label: "Enabled",
+						checked: data.value.checkable ? !!__props.value : void 0,
+						onClick: _cache[15] || (_cache[15] = ($event) => change(!__props.value))
+					}, null, 8, ["checked"]),
+					createVNode(_sfc_main$37, {
+						label: "Delete",
+						icon: "delete",
+						disabled: ""
+					})
+				]),
+				_: 1
+			}, 8, ["disabled"])) : __props.example.kind === "progress" ? (openBlock(), createBlock(AppProgress_default, {
+				key: 27,
+				label: "Progress",
+				value: __props.value === null ? void 0 : __props.value
+			}, null, 8, ["value"])) : __props.example.kind === "busy" ? (openBlock(), createBlock(BusyIndicator_default, {
+				key: 28,
+				running: __props.value && !__props.disabled
+			}, null, 8, ["running"])) : __props.example.kind === "empty" ? (openBlock(), createBlock(_sfc_main$27, {
+				key: 29,
+				error: data.value.error,
+				icon: data.value.error ? "warning" : "info",
+				title: data.value.error ? "Error" : "No records yet",
+				message: "Description",
+				action: data.value.error ? {
+					label: "Retry",
+					icon: "refresh",
+					command: "retry",
+					disabled: __props.disabled
+				} : null,
+				onAction: activate
+			}, null, 8, [
+				"error",
+				"icon",
+				"title",
+				"action"
+			])) : __props.example.kind === "drop" ? (openBlock(), createBlock(_sfc_main$3, {
+				key: 30,
+				accepted: data.value.accepted,
+				prompt: data.value.accepted ? "Drop files here" : "Unsupported file type"
+			}, null, 8, ["accepted", "prompt"])) : __props.example.kind === "markdown" ? (openBlock(), createBlock(_sfc_main$38, {
+				key: 31,
+				"document-key": "example",
+				text: __props.value,
+				onLink: _cache[16] || (_cache[16] = ($event) => activate("link"))
+			}, null, 8, ["text"])) : __props.example.kind === "elide" ? (openBlock(), createBlock(_sfc_main$19, {
+				key: 32,
+				text: __props.value
+			}, null, 8, ["text"])) : __props.example.kind === "setting" ? (openBlock(), createBlock(_sfc_main$31, {
+				key: 33,
+				"control-id": "exampleSetting",
+				title: "Enabled",
+				description: "Description"
+			}, {
+				default: withCtx(() => [createVNode(_sfc_main$28, {
+					id: "exampleSetting",
+					"model-value": __props.value,
+					label: "Enabled",
+					disabled: __props.disabled,
+					"onUpdate:modelValue": change
+				}, null, 8, ["model-value", "disabled"])]),
+				_: 1
+			})) : __props.example.kind === "flow" ? (openBlock(), createBlock(_sfc_main$39, {
+				key: 34,
+				"minimum-cell-width": 120
+			}, {
+				default: withCtx(() => [(openBlock(true), createElementBlock(Fragment, null, renderList(choices.value, (option) => {
+					return openBlock(), createBlock(_sfc_main$14, {
+						key: option.value,
+						label: option.label,
+						disabled: __props.disabled,
+						onClick: ($event) => change(option.value)
+					}, null, 8, [
+						"label",
+						"disabled",
+						"onClick"
+					]);
+				}), 128))]),
+				_: 1
+			})) : __props.example.kind === "counter" ? (openBlock(), createBlock(_sfc_main$14, {
+				key: 35,
+				icon: "comment",
+				"icon-only": "",
+				label: "Notes",
+				"badge-count": __props.value,
+				"badge-color": "var(--primary)",
+				style: normalizeStyle({ color: __props.value > 0 ? "var(--primary)" : "var(--muted)" }),
+				disabled: __props.disabled,
+				onClick: _cache[17] || (_cache[17] = ($event) => activate())
+			}, null, 8, [
+				"badge-count",
+				"style",
+				"disabled"
+			])) : __props.example.kind === "disclosure" ? (openBlock(), createBlock(_sfc_main$40, {
+				key: 36,
+				expanded: __props.value,
+				identity: "sample",
+				"has-children": "",
+				disabled: __props.disabled,
+				onClick: _cache[18] || (_cache[18] = ($event) => change(!__props.value))
+			}, null, 8, ["expanded", "disabled"])) : __props.example.kind === "previewNavigation" ? (openBlock(), createBlock(_sfc_main$11, {
+				key: 37,
+				label: "Next",
+				disabled: __props.disabled,
+				onClick: _cache[19] || (_cache[19] = ($event) => activate())
+			}, null, 8, ["disabled"])) : __props.example.kind === "send" ? (openBlock(), createBlock(_sfc_main$14, {
+				key: 38,
+				label: __props.value ? "Sending" : "Send",
+				icon: "send",
+				compact: "",
+				highlighted: "",
+				disabled: __props.disabled || __props.value,
+				onClick: _cache[20] || (_cache[20] = ($event) => change(true))
+			}, null, 8, ["label", "disabled"])) : createCommentVNode("", true)], 8, _hoisted_1);
+		};
+	}
+};
+//#endregion
+//#region ../src/tactic_stream/shared_ui/features/administration/showcase.variants.mjs
+var examples = examples$1;
+var initial$1 = initial$2;
+var transition$1 = transition$2;
+function available(family) {
+	return examples.filter((example) => example.family === family);
+}
+function title(id, language) {
+	return {
+		"preview-round": ["Round photo", "Круглое фото"],
+		"preview-square": ["Square initials", "Квадратное с инициалами"],
+		"preview-outline": ["Outlined preview", "Превью с обводкой"],
+		"preview-photo": ["Square photo · crop", "Квадратное фото · обрезка"],
+		"preview-contain": ["Fit whole image", "Изображение целиком"],
+		"preview-icon": ["Fallback icon", "Иконка без изображения"],
+		"preview-loading": ["Loading image", "Загрузка изображения"],
+		"preview-selected": ["Selected image", "Выбранное изображение"],
+		"preview-broken": ["Failed image", "Ошибка изображения"],
+		"preview-card": ["Image behind card content", "Изображение на фоне карточки"],
+		"attachment-image": ["Image attachment", "Вложение с изображением"],
+		"attachment-file": ["File attachment", "Файловое вложение"]
+	}[id]?.[language === "ru" ? 1 : 0] || id.replace(/-/g, " ");
+}
+function describe$3(model, width, language, state) {
+	const example = find(model.id);
+	const scene = describe$4(model, width + 40, example.height + 116, language, state);
+	scene.nodes = scene.nodes.filter((item) => !["exampleTitle", "exampleEvents"].includes(item.id)).map((item) => Object.assign({}, item, {
+		x: item.x - 20,
+		y: item.y - 64
+	}));
+	return scene;
+}
+function sample(model, width, language) {
+	const example = find(model.variant);
+	const height = example.height;
+	const scene = describe$3(model.variantModel, width, language, model.state);
+	return {
+		height,
+		nodes: [node("View", "showcaseVariantPreview", rect(0, 0, width, height), {
+			view: "showcaseVariant",
+			model: model.variantModel,
+			state: model.state,
+			language
+		})],
+		code: "import * as Variants from './controls/catalog/variants.mjs';\n\n// Native/Vue named port: ShowcaseControl; local events: Variants.transition.\n// Port example: " + JSON.stringify(example) + "\n(" + JSON.stringify(scene, null, 2) + ")"
+	};
+}
+//#endregion
+//#region src/features/administration/ShowcaseVariant.vue
+var _sfc_main$1 = {
+	__name: "ShowcaseVariant",
+	props: { frameNode: Object },
+	emits: ["event"],
+	setup(__props, { emit: __emit }) {
+		const props = __props;
+		const model = computed(() => props.frameNode.model);
+		const state = computed(() => props.frameNode.state);
+		const language = computed(() => props.frameNode.language);
+		const emit = __emit;
+		const models = computed(() => ({
+			cells: model.value.id.startsWith("table") ? Array.from({ length: 50 }, () => [
+				{},
+				{},
+				{}
+			]) : [],
+			treeRows: treeRows(model.value)
+		}));
+		const scene = computed(() => describe$3(model.value, props.frameNode.width, language.value, state.value));
+		function dispatch(action) {
+			emit("event", {
+				type: props.frameNode.gallery ? "galleryEvent" : "variantEvent",
+				id: props.frameNode.gallery,
+				value: action
+			});
+		}
+		const views = computed(() => ({ example: {
+			component: _sfc_main$2,
+			props: {
+				example: find(model.value.id),
+				value: model.value.value,
+				disabled: ["disabled", "loading"].includes(state.value),
+				readonly: state.value === "readonly",
+				onEvent: dispatch
+			}
+		} }));
+		return (_ctx, _cache) => {
+			return openBlock(), createBlock(_sfc_main$29, {
+				scene: scene.value,
+				models: models.value,
+				views: views.value,
+				"describe-row": (list, record) => row$1(list, record, model.value, language.value, state.value),
+				"describe-cell": (grid, record, row, column) => cell$1(grid, record, row, column, model.value, state.value),
+				onEvent: dispatch
+			}, null, 8, [
+				"scene",
+				"models",
+				"views",
+				"describe-row",
+				"describe-cell"
+			]);
+		};
+	}
+};
 //#endregion
 //#region ../src/tactic_stream/shared_ui/controls/showcase.examples.mjs
 function describe$2(model, family, width, language) {
@@ -565,7 +2408,7 @@ function describe$2(model, family, width, language) {
 		"donut"
 	]) {
 		caption(type === "line" ? "Line chart" : type === "bar" ? "Bar chart" : "Donut chart");
-		const scene = describe$3({
+		const scene = describe$5({
 			type,
 			labels: [
 				"Mon",
@@ -611,480 +2454,6 @@ function describe$2(model, family, width, language) {
 	};
 }
 //#endregion
-//#region ../src/tactic_stream/shared_ui/controls/catalog/variants.mjs
-var exampleImage = "data:image/svg+xml," + encodeURIComponent("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"120\" height=\"60\"><path fill=\"#cc6655\" d=\"M0 0h60v60H0z\"/><path fill=\"#5588aa\" d=\"M60 0h60v60H60z\"/><path fill=\"#55aa66\" d=\"M0 0h12v60H0z\"/></svg>");
-function sample(id, family, kind, properties = {}, height = 36) {
-	return {
-		id,
-		family,
-		kind,
-		properties,
-		height
-	};
-}
-var examples = [
-	sample("icon-material", "icons", "Icon", {
-		icon: "material-design:account",
-		color: "action"
-	}, 24),
-	sample("icon-solid", "icons", "Icon", {
-		icon: "fontawesome-solid:user",
-		color: "action"
-	}, 24),
-	sample("icon-outline", "icons", "Icon", {
-		icon: "fontawesome-outline:user",
-		color: "action"
-	}, 24),
-	sample("icon-fluent", "icons", "Icon", {
-		icon: "fluent-regular:person",
-		color: "action"
-	}, 24),
-	sample("icon-fluent-filled", "icons", "Icon", {
-		icon: "fluent-filled:person",
-		color: "action"
-	}, 24),
-	sample("icon-small", "icons", "Icon", {
-		icon: "save",
-		color: "secondaryText"
-	}, 16),
-	sample("icon-large", "icons", "Icon", {
-		icon: "save",
-		color: "action"
-	}, 40),
-	sample("tree", "lists", "tree", {}, 280),
-	sample("table", "tables", "Grid", {}, 280),
-	sample("table-readonly", "tables", "Grid", { readOnly: true }, 280),
-	sample("graph", "graphs", "Graph", {}, 320),
-	sample("graph-readonly", "graphs", "Graph", { readOnly: true }, 320),
-	sample("code", "editors", "Code", { value: "def example():\n    return 42\n" }, 300),
-	sample("code-readonly", "editors", "Code", {
-		value: "def example():\n    return 42\n",
-		readOnly: true
-	}, 300),
-	sample("button", "buttons", "Button", {
-		text: "Save",
-		icon: "save"
-	}),
-	sample("button-primary", "buttons", "Button", {
-		text: "Create",
-		icon: "add",
-		highlighted: true
-	}),
-	sample("button-tonal", "buttons", "Button", {
-		text: "Apply",
-		tonal: true
-	}),
-	sample("button-danger", "buttons", "Button", {
-		text: "Delete",
-		icon: "delete",
-		destructive: true
-	}),
-	sample("button-filled-danger", "buttons", "Button", {
-		text: "Delete",
-		icon: "delete",
-		destructive: true,
-		highlighted: true
-	}),
-	sample("button-icon", "buttons", "Button", {
-		text: "Refresh",
-		icon: "refresh",
-		iconOnly: true
-	}),
-	sample("button-badge-zero", "buttons", "counter", { value: 0 }),
-	sample("button-badge", "buttons", "counter", { value: 4 }),
-	sample("button-badge-overflow", "buttons", "counter", { value: 132 }),
-	sample("button-disclosure", "buttons", "disclosure", { value: false }),
-	sample("button-preview", "buttons", "previewNavigation", { value: 0 }),
-	sample("button-send", "buttons", "send", { value: false }),
-	sample("checkbox", "toggles", "CheckBox", {
-		text: "Enabled",
-		value: false
-	}),
-	sample("checkbox-checked", "toggles", "CheckBox", {
-		text: "Enabled",
-		value: true
-	}),
-	sample("checkbox-wrapped", "toggles", "CheckBox", {
-		text: "Very long example item title that wraps in a narrow viewport",
-		wrapText: true,
-		value: true
-	}, 64),
-	sample("checkbox-mixed", "toggles", "CheckBox", {
-		text: "Enabled",
-		value: true,
-		mixed: true
-	}),
-	sample("checkbox-compact", "toggles", "CheckBox", {
-		text: "Enabled",
-		value: true,
-		compact: true
-	}),
-	sample("checkbox-prominent", "toggles", "CheckBox", {
-		text: "Enabled",
-		value: false,
-		prominent: true
-	}),
-	sample("switch-off", "toggles", "Switch", {
-		text: "Enabled",
-		value: false
-	}),
-	sample("switch-on", "toggles", "Switch", {
-		text: "Enabled",
-		value: true
-	}),
-	sample("segments", "toggles", "segments", { value: "model" }),
-	sample("segments-icons", "toggles", "segments", {
-		value: "model",
-		iconOnly: true
-	}),
-	sample("segments-outline", "toggles", "segments", {
-		value: "model",
-		outlined: true
-	}),
-	sample("segments-disabled-option", "toggles", "segments", {
-		value: "model",
-		disabledOption: true,
-		dataLabels: true
-	}),
-	sample("field", "text-fields", "Field", {
-		value: "Robot Arm",
-		label: "Name"
-	}),
-	sample("field-empty", "text-fields", "Field", {
-		value: "",
-		label: "Name",
-		placeholder: "Name"
-	}),
-	sample("field-password", "text-fields", "Field", {
-		value: "private example",
-		label: "Password",
-		password: true
-	}),
-	sample("field-readonly", "text-fields", "Field", {
-		value: "Read only",
-		label: "Name",
-		readOnly: true
-	}),
-	sample("field-error", "text-fields", "Field", {
-		value: "Invalid value",
-		label: "Name",
-		error: true
-	}),
-	sample("field-inline", "text-fields", "Field", {
-		value: "Robot Arm",
-		label: "Name",
-		tableCell: true
-	}),
-	sample("text-area", "text-fields", "Area", {
-		value: "First line\nSecond line",
-		label: "Description"
-	}, 100),
-	sample("search", "search", "search", { value: "Robot" }),
-	sample("search-empty", "search", "search", { value: "" }),
-	sample("search-suggestions", "search", "search", {
-		value: "Robot",
-		suggestions: true
-	}),
-	sample("choice", "choices", "Choice", { value: "model" }),
-	sample("choice-empty", "choices", "Choice", { value: "" }),
-	sample("choice-editable", "choices", "Choice", {
-		value: "custom_process",
-		editable: true
-	}),
-	sample("choice-disabled-option", "choices", "Choice", {
-		value: "model",
-		disabledOption: true
-	}),
-	sample("choice-icons", "choices", "Choice", {
-		value: "model",
-		choiceIcons: true
-	}),
-	sample("choice-status", "choices", "status", { value: "model" }, 28),
-	sample("packed-choices", "choices", "packedChoices", { value: "" }, 280),
-	sample("integer", "numbers", "spin", {
-		value: 5,
-		min: 0,
-		max: 10,
-		step: 1,
-		decimals: 0
-	}),
-	sample("decimal", "numbers", "spin", {
-		value: 1.25,
-		min: -2,
-		max: 3,
-		step: .25,
-		decimals: 2
-	}),
-	sample("integer-min", "numbers", "spin", {
-		value: 0,
-		min: 0,
-		max: 10,
-		step: 1,
-		decimals: 0
-	}),
-	sample("integer-max", "numbers", "spin", {
-		value: 10,
-		min: 0,
-		max: 10,
-		step: 1,
-		decimals: 0
-	}),
-	sample("slider", "numbers", "slider", {
-		value: 50,
-		min: 0,
-		max: 100,
-		step: 1
-	}, 26),
-	sample("slider-step", "numbers", "slider", {
-		value: 50,
-		min: 0,
-		max: 100,
-		step: 5
-	}, 26),
-	sample("slider-fixed", "numbers", "slider", {
-		value: 5,
-		min: 5,
-		max: 5,
-		step: 1
-	}, 26),
-	sample("date", "dates", "DateChoice", {
-		value: "2024-02-29",
-		includeTime: false
-	}),
-	sample("datetime", "dates", "DateChoice", {
-		value: "2024-02-29T13:14",
-		includeTime: true
-	}),
-	sample("date-early-year", "dates", "DateChoice", {
-		value: "0099-01-01",
-		includeTime: false
-	}),
-	sample("date-invalid", "dates", "DateChoice", {
-		value: "2023-02-29",
-		includeTime: false
-	}),
-	sample("date-empty", "dates", "DateChoice", {
-		value: "",
-		includeTime: false
-	}),
-	sample("user", "user-choice", "UserChoice", { value: "admin" }),
-	sample("user-empty", "user-choice", "UserChoice", { value: "" }),
-	sample("users-multiple", "user-choice", "users", { value: ["admin"] }, 300),
-	sample("avatar-initials", "identity", "Preview", {
-		initials: "A",
-		round: true,
-		outlined: true,
-		accent: "#557f75"
-	}, 40),
-	sample("avatar-two-initials", "identity", "Preview", {
-		initials: "TA",
-		round: true,
-		outlined: true,
-		accent: "#557f75"
-	}, 40),
-	sample("avatar-fallback", "identity", "Preview", {
-		icon: "person",
-		round: true,
-		outlined: true,
-		accent: "#557f75"
-	}, 40),
-	sample("identity", "identity", "identity", { value: "admin" }, 40),
-	sample("identity-retired", "identity", "identity", {
-		value: "admin",
-		retired: true
-	}, 40),
-	sample("identity-emphasized", "identity", "identity", {
-		value: "admin",
-		emphasized: true,
-		avatarSize: 56
-	}, 56),
-	sample("user-group", "identity", "userGroup", { value: "Artists" }, 34),
-	sample("user-group-compact", "identity", "userGroup", {
-		value: "Artists",
-		compact: true
-	}, 28),
-	sample("user-group-empty", "identity", "userGroup", { value: "Ungrouped" }, 34),
-	sample("profile-info", "identity", "profileInfo", { value: "Administrator" }, 40),
-	sample("color", "pickers", "ColorChoice", { value: "#78a6c4" }),
-	sample("icon-choice", "pickers", "IconChoice", { value: "save" }),
-	sample("emoji", "pickers", "emoji", { value: "" }),
-	sample("image-picker", "pickers", "image", { value: "" }, 220),
-	sample("accent-presets", "pickers", "presets", { value: "blue" }, 48),
-	sample("preview-square", "previews", "Preview", {
-		initials: "RA",
-		accent: "#557f75",
-		round: false,
-		outlined: false
-	}, 96),
-	sample("preview-outline", "previews", "Preview", {
-		initials: "RA",
-		accent: "#557f75",
-		round: false,
-		outlined: true
-	}, 96),
-	sample("preview-broken", "previews", "Preview", {
-		initials: "RA",
-		source: "missing-example.png",
-		accent: "#557f75",
-		round: false
-	}, 96),
-	sample("preview-loading", "previews", "Preview", {
-		loading: true,
-		source: "pending-preview:example"
-	}, 96),
-	sample("preview-photo", "previews", "Preview", {
-		source: exampleImage,
-		round: false
-	}, 96),
-	sample("preview-contain", "previews", "Preview", {
-		source: exampleImage,
-		round: false,
-		fit: "contain"
-	}, 96),
-	sample("preview-selected", "previews", "Preview", {
-		source: exampleImage,
-		round: false,
-		selected: true
-	}, 96),
-	sample("avatar-photo", "identity", "Preview", {
-		source: exampleImage,
-		round: true
-	}, 40),
-	sample("chip", "badges", "chip", { value: 4 }, 30),
-	sample("chip-clickable", "badges", "chip", {
-		value: 4,
-		clickable: true
-	}, 30),
-	sample("chip-compact", "badges", "chip", {
-		value: 4,
-		compact: true
-	}, 24),
-	sample("status-chip", "badges", "statusChip", { value: "Ready" }, 24),
-	sample("status-chip-dense", "badges", "statusChip", {
-		value: "Ready",
-		dense: true
-	}, 20),
-	sample("status-chip-action", "badges", "statusChip", {
-		value: "Ready",
-		interactive: true
-	}, 24),
-	sample("reaction", "badges", "reaction", {
-		value: false,
-		count: 1
-	}, 28),
-	sample("reaction-count", "badges", "reaction", {
-		value: false,
-		count: 4
-	}, 28),
-	sample("reaction-checked", "badges", "reaction", {
-		value: true,
-		count: 4
-	}, 28),
-	sample("filter-chip", "badges", "filterChip", { value: false }, 32),
-	sample("filter-chip-checked", "badges", "filterChip", { value: true }, 32),
-	sample("filter-chip-subtle", "badges", "filterChip", {
-		value: true,
-		subtle: true
-	}, 32),
-	sample("filter-chip-marker", "badges", "filterChip", {
-		value: true,
-		marker: true
-	}, 32),
-	sample("filter-chip-emphasis", "badges", "filterChip", {
-		value: true,
-		emphasis: 1
-	}, filterGeometry(1).height),
-	sample("tab", "tabs", "tab", { value: false }),
-	sample("tab-current", "tabs", "tab", { value: true }),
-	sample("header", "headers", "header", { subtitle: "Description" }, 60),
-	sample("header-back", "headers", "header", {
-		back: true,
-		subtitle: "Description"
-	}, 60),
-	sample("header-actions", "headers", "header", { actions: [{
-		label: "Refresh",
-		icon: "refresh",
-		command: "refresh"
-	}, {
-		label: "Actions",
-		icon: "more",
-		command: "menu"
-	}] }, 60),
-	sample("editor-panel", "headers", "editorPanel", {}, 160),
-	sample("configuration-section", "headers", "configurationSection", {}, 160),
-	sample("section-label", "headers", "sectionLabel", {}, 24),
-	sample("info-values", "headers", "infoValues", { items: [{
-		label: "Type",
-		value: "Asset"
-	}, {
-		label: "Version",
-		value: "v003"
-	}] }, 16),
-	sample("field-frame", "headers", "fieldFrame", { value: "Robot Arm" }, 150),
-	sample("field-frame-required", "headers", "fieldFrame", {
-		value: "Robot Arm",
-		required: true
-	}, 150),
-	sample("field-frame-error", "headers", "fieldFrame", {
-		value: "",
-		error: true
-	}, 180),
-	sample("field-frame-readonly", "headers", "fieldFrame", {
-		value: "Robot Arm",
-		readOnly: true
-	}, 180),
-	sample("list-item", "lists", "listItem", { value: "Example item" }, 72),
-	sample("list-item-selected", "lists", "listItem", {
-		value: "Example item",
-		selected: true
-	}, 72),
-	sample("list-item-badge", "lists", "listItem", {
-		value: "Example item",
-		badge: true
-	}, 72),
-	sample("list-item-long", "lists", "listItem", {
-		value: "Very long example item title that wraps in a narrow viewport",
-		wrapTitle: true
-	}, 100),
-	sample("menu", "menus", "menu", { value: "" }),
-	sample("menu-checks", "menus", "menu", {
-		value: "",
-		checkable: true
-	}),
-	sample("busy", "feedback", "busy", { value: true }, 24),
-	sample("progress", "feedback", "progress", { value: .5 }, 4),
-	sample("progress-empty", "feedback", "progress", { value: 0 }, 4),
-	sample("progress-complete", "feedback", "progress", { value: 1 }, 4),
-	sample("progress-indeterminate", "feedback", "progress", { value: null }, 4),
-	sample("loading-overlay", "feedback", "loadingOverlay", {}, 220),
-	sample("loading-cancellable", "feedback", "loadingOverlay", { cancellable: true }, 220),
-	sample("empty", "feedback", "empty", { value: "" }, 180),
-	sample("error-retry", "feedback", "empty", {
-		value: "",
-		error: true
-	}, 220),
-	sample("drop-target", "drag-files", "drop", {
-		value: "",
-		accepted: true
-	}, 180),
-	sample("drop-rejected", "drag-files", "drop", {
-		value: "",
-		accepted: false
-	}, 180),
-	sample("markdown", "typography", "markdown", { value: "# Example\n\n**Bold** and a [link](https://example.org).\n\n- First item\n- Second item" }, 200),
-	sample("middle-elide", "typography", "elide", { value: "D:/very/long/project/path/to/production/scene-file.ext" }),
-	sample("setting-row", "scroll-layout", "setting", { value: true }, 100),
-	sample("flow", "scroll-layout", "flow", { value: "" }, 150),
-	sample("scroll-vertical", "scroll-layout", "Scroll", {}, 280),
-	sample("scroll-horizontal", "scroll-layout", "Scroll", { horizontal: true }, 120),
-	sample("scroll-both", "scroll-layout", "Scroll", { both: true }, 280),
-	sample("splitter-vertical", "scroll-layout", "Splitter", { value: 50 }, 160),
-	sample("splitter-horizontal", "scroll-layout", "Splitter", {
-		value: 50,
-		horizontal: true
-	}, 10)
-];
-//#endregion
 //#region ../src/tactic_stream/shared_ui/features/administration/showcase.examples.mjs
 var families$1 = [
 	"search",
@@ -1101,7 +2470,7 @@ var families$1 = [
 	"input-runtime",
 	"domain-fragments"
 ];
-var photo = examples.find((row) => row.kind === "Preview" && String(row.properties.source).startsWith("data:"))?.properties.source || "";
+examples$1.find((row) => row.kind === "Preview" && String(row.properties.source).startsWith("data:"))?.properties.source;
 var tableRows = Array.from({ length: 100 }, (_, i) => ({
 	selected: false,
 	name: "Object " + (i + 1),
@@ -1141,7 +2510,7 @@ function describe$1(model, family, width, language) {
 		nodes.push(node(kind, id, rect(0, y, w, height), props));
 		y += height + 16;
 	}
-	function title(text) {
+	function title$1(text) {
 		add("Label", "sampleTitle_" + y, 28, {
 			text: tr(text),
 			fontRole: "section",
@@ -1166,7 +2535,7 @@ function describe$1(model, family, width, language) {
 		wrap: true
 	});
 	if (family === "search") {
-		title("Search suggestions");
+		title$1("Search suggestions");
 		const rows = model.state === "empty" || model.state === "loading" ? [] : [
 			"Robot Arm",
 			"Robot Body",
@@ -1242,7 +2611,7 @@ function describe$1(model, family, width, language) {
 			label: tr("User")
 		});
 	} else if (family === "menus") {
-		title("Context menu");
+		title$1("Context menu");
 		add("View", "sampleMenu", 36, {
 			view: "showcaseMenu",
 			text: tr("Open menu"),
@@ -1297,7 +2666,7 @@ function describe$1(model, family, width, language) {
 			wrap: true
 		});
 	} else if (family === "popups") {
-		title("Confirmation");
+		title$1("Confirmation");
 		action("sampleOpenDialog", "Open dialog", "sampleDialogOpen");
 		add("View", "sampleDialog", 0, {
 			view: "showcaseDialog",
@@ -1317,7 +2686,7 @@ function describe$1(model, family, width, language) {
 			wrap: true
 		});
 	} else if (family === "feedback") {
-		title("Progress");
+		title$1("Progress");
 		add("Progress", "sampleProgress", 4, {
 			text: tr("Progress"),
 			value: model.progress / 100,
@@ -1336,7 +2705,7 @@ function describe$1(model, family, width, language) {
 			enabled
 		});
 	} else if (family === "tables") {
-		title("Table");
+		title$1("Table");
 		add("Grid", "sampleGrid", 330, {
 			text: tr("Table"),
 			source: "sampleCells",
@@ -1359,7 +2728,7 @@ function describe$1(model, family, width, language) {
 			icon: "table"
 		});
 	} else if (family === "scroll-layout") {
-		title("Resizable panels");
+		title$1("Resizable panels");
 		const split = Math.max(0, Math.min(width - 60, model.split * width));
 		const pane = (id, x, w) => node("Scroll", id, rect(x, y, w, 240), {
 			contentWidth: 420,
@@ -1384,33 +2753,51 @@ function describe$1(model, family, width, language) {
 		y += 256;
 		action("sampleCollapsePane", model.split < .2 ? "Expand" : "Collapse", "sampleCollapse");
 	} else if (family === "previews") {
-		title("Image preview");
-		const size = Math.min(width, 180);
-		add("Preview", "sampleImage", size, {
-			source: model.state === "error" || model.state === "empty" ? "" : photo,
-			initials: "RA",
-			icon: model.state === "error" ? "alert" : "image",
-			round: false,
-			selected: model.previewSelected || model.state === "selected",
-			loading: model.state === "loading",
-			fit: model.fit
-		}, size);
-		action("sampleImageSelect", "Select", "samplePreviewSelect");
-		add("Choice", "sampleImageFit", 36, {
-			value: model.fit,
-			options: [{
-				value: "contain",
-				label: "Contain"
-			}, {
-				value: "cover",
-				label: "Cover"
-			}],
-			enabled,
-			label: tr("Image fit"),
-			action: { type: "sampleFit" }
-		});
+		const thumbnails = [
+			"preview-round",
+			"preview-square",
+			"preview-outline",
+			"preview-photo",
+			"preview-contain",
+			"preview-icon",
+			"preview-loading",
+			"preview-selected"
+		];
+		const columns = width >= 560 ? 4 : width >= 280 ? 2 : 1;
+		const cellWidth = (width - (columns - 1) * 16) / columns;
+		for (let index = 0; index < thumbnails.length; index++) {
+			const id = thumbnails[index], example = examples$1.find((row) => row.id === id);
+			const x = index % columns * (cellWidth + 16), top = y + Math.floor(index / columns) * 144;
+			nodes.push(node("Preview", "sample_" + id, rect(x, top, 96, 96), Object.assign({}, example.properties, {
+				round: example.properties.round === true,
+				source: model.state === "empty" || model.state === "error" ? "" : example.properties.source,
+				loading: model.state === "loading" || example.properties.loading,
+				selected: model.state === "selected" || example.properties.selected,
+				fit: id === "preview-contain" ? "contain" : "cover"
+			})));
+			nodes.push(label("caption_" + id, rect(x, top + 104, cellWidth, 32), title(id, language), {
+				fontRole: "caption",
+				wrap: true
+			}));
+		}
+		y += Math.ceil(thumbnails.length / columns) * 144;
+		for (const id of [
+			"preview-card",
+			"attachment-image",
+			"attachment-file"
+		]) {
+			const example = examples$1.find((row) => row.id === id);
+			title$1(title(id, language));
+			add("View", "sample_" + id, example.height, {
+				view: "showcaseVariant",
+				model: initial$2(id),
+				state: model.state,
+				language,
+				gallery: id
+			});
+		}
 	} else if (family === "drag-files") {
-		title("Files");
+		title$1("Files");
 		add("FileField", "sampleFile", 44, Object.assign({}, flags, {
 			text: model.files.map((file) => file.name).join(", "),
 			label: tr("Choose file"),
@@ -1436,7 +2823,7 @@ function describe$1(model, family, width, language) {
 		});
 		action("sampleFilesClear", "Clear", "sampleFilesClear");
 	} else if (family === "editors") {
-		title("Source code");
+		title$1("Source code");
 		add("Code", "sampleEditor", 320, Object.assign({}, flags, {
 			text: model.state === "empty" ? "" : model.editorText,
 			service: "sourceEditor",
@@ -1446,7 +2833,7 @@ function describe$1(model, family, width, language) {
 			action: { type: "sampleEditor" }
 		}));
 	} else if (family === "graphs") {
-		title("Graph");
+		title$1("Graph");
 		const records = model.state === "empty" ? [] : [{
 			identity: "a",
 			label: "Model",
@@ -1475,7 +2862,7 @@ function describe$1(model, family, width, language) {
 		}));
 		action("sampleGraphReset", "Reset", "sampleGraphReset");
 	} else if (family === "input-runtime") {
-		title("Mouse, keyboard and touch");
+		title$1("Mouse, keyboard and touch");
 		add("Button", "sampleActivation", h, {
 			text: model.state === "long" ? model.text.repeat(3) : tr("Activate"),
 			enabled,
@@ -1495,7 +2882,7 @@ function describe$1(model, family, width, language) {
 			wrap: true
 		});
 	} else if (family === "domain-fragments") {
-		title("Task workspace surface");
+		title$1("Task workspace surface");
 		const part = surfaces({
 			value: model.surface,
 			disabled: !enabled,
@@ -2550,6 +3937,11 @@ var catalogue = {
 			rule: "Карточка нейтральных данных — составной контрол; ObjectCard с командами/ACL — предметный фрагмент.",
 			examples: [
 				"preview-square",
+				"preview-round",
+				"preview-icon",
+				"preview-card",
+				"attachment-image",
+				"attachment-file",
 				"preview-outline",
 				"preview-broken",
 				"preview-loading",
@@ -3124,6 +4516,8 @@ function initial() {
 		category: "",
 		state: "default",
 		code: false,
+		variant: "",
+		variantModel: null,
 		text: "Robot Arm",
 		area: "A local example",
 		checked: true,
@@ -3163,9 +4557,23 @@ function transition(model, event, catalog) {
 	const next = Object.assign({}, model);
 	if (event.type === "family" && catalog.families.some((f) => f.id === event.value)) Object.assign(next, {
 		family: event.value,
-		dialogOpen: false
+		dialogOpen: false,
+		variant: "",
+		variantModel: null
 	});
-	else if (event.type === "category" && (event.value === "" || catalog.categories.some((c) => c.id === event.value))) next.category = event.value;
+	else if (event.type === "variant" && (event.value === "" || available(model.family).some((row) => row.id === event.value))) Object.assign(next, {
+		variant: event.value,
+		variantModel: event.value ? initial$1(event.value) : null
+	});
+	else if (event.type === "galleryEvent") next.last = event.id + ": " + event.value.type;
+	else if (event.type === "variantEvent" && model.variantModel && ![
+		"disabled",
+		"readonly",
+		"loading"
+	].includes(model.state)) {
+		next.variantModel = transition$1(model.variantModel, event.value);
+		next.last = event.value.type;
+	} else if (event.type === "category" && (event.value === "" || catalog.categories.some((c) => c.id === event.value))) next.category = event.value;
 	else if (event.type === "state" && states.includes(event.value)) Object.assign(next, {
 		state: event.value,
 		dialogOpen: false
@@ -3175,6 +4583,8 @@ function transition(model, event, catalog) {
 	else if (event.type === "reset") return Object.assign(initial(), {
 		resetRevision: model.resetRevision + 1,
 		family: model.family,
+		variant: model.variant,
+		variantModel: model.variant ? initial$1(model.variant) : null,
 		query: model.query,
 		category: model.category
 	});
@@ -3281,13 +4691,14 @@ function families(catalog, model, language) {
 		f.label,
 		...f.native,
 		...f.vue,
-		...f.tokens
+		...f.tokens,
+		...available(f.id).map((row) => row.id)
 	].join(" ").toLocaleLowerCase().includes(query))).sort((a, b) => groups.indexOf(a.category) - groups.indexOf(b.category) || (a.category === "foundations" ? foundations.indexOf(a.id) - foundations.indexOf(b.id) : catalog.families.indexOf(a) - catalog.families.indexOf(b))).map((f) => ({
 		id: f.id,
 		title: language === "ru" ? f.title : f.label,
 		level: f.level,
 		available: live.includes(f.id),
-		count: f.native.length + f.vue.length
+		count: available(f.id).length + 1
 	}));
 }
 function row(list, record, model, language) {
@@ -3297,7 +4708,7 @@ function row(list, record, model, language) {
 		value: record.id
 	}, true, { selected: model.family === record.id });
 	result.children[0].height = 27;
-	result.children.push(label("showcaseFamilyState_" + record.id, rect(12, 27, list.width - 24, 16), tr(record.available ? "Live example" : "Catalogue entry"), {
+	result.children.push(label("showcaseFamilyState_" + record.id, rect(12, 27, list.width - 24, 16), tr(record.available ? "Live example" : "Catalogue entry") + " · " + record.count, {
 		fontRole: "caption",
 		color: "secondaryText"
 	}));
@@ -3394,7 +4805,24 @@ function describe(model, catalog, width, height, language = "en") {
 		content.push(label("showcaseNoResults", rect(16, y, inner, 48), tr("No matching components"), { wrap: true }));
 		y += 64;
 	} else if (live.includes(family.id)) {
-		const p = families$1.includes(family.id) ? describe$1(model, family.id, inner, language) : describe$2(model, family.id, inner, language);
+		const variants = available(family.id);
+		if (variants.length) {
+			content.push(node("Choice", "showcaseVariant", rect(16, y, inner, 36), {
+				value: model.variant,
+				label: language === "ru" ? "Вариант контрола" : "Control variant",
+				options: [{
+					value: "",
+					label: language === "ru" ? "Обзор примеров" : "Example overview"
+				}, ...variants.map((row) => ({
+					value: row.id,
+					label: title(row.id, language)
+				}))],
+				enabled: true,
+				action: { type: "variant" }
+			}));
+			y += 48;
+		}
+		const p = model.variant && model.variantModel ? sample(model, inner, language) : families$1.includes(family.id) ? describe$1(model, family.id, inner, language) : describe$2(model, family.id, inner, language);
 		if (p.code) {
 			if (narrow) content.push(button("showcaseCode", rect(16, y, Math.min(inner, 160), 36), tr(model.code ? "Preview" : "Code example"), "code", { type: "code" }, true, {
 				selected: model.code,
@@ -3465,13 +4893,18 @@ var ComponentShowcase_default = /*#__PURE__*/ _plugin_vue_export_helper_default(
 			families: families(catalogue, model.value, appearance.language)
 		}));
 		const views = {
+			showcaseVariant: {
+				component: _sfc_main$1,
+				nodeProps: true,
+				props: { onEvent: dispatch }
+			},
 			showcaseMenu: {
-				component: _sfc_main$2,
+				component: _sfc_main$13,
 				nodeProps: true,
 				props: { onEvent: dispatch }
 			},
 			showcaseDialog: {
-				component: _sfc_main$1,
+				component: _sfc_main$12,
 				nodeProps: true,
 				props: { onEvent: dispatch }
 			}
@@ -3498,7 +4931,7 @@ var ComponentShowcase_default = /*#__PURE__*/ _plugin_vue_export_helper_default(
 				ref_key: "host",
 				ref: host,
 				class: "component-showcase"
-			}, [createVNode(_sfc_main$5, {
+			}, [createVNode(_sfc_main$29, {
 				ref_key: "view",
 				ref: view,
 				scene: scene.value,
@@ -3515,7 +4948,7 @@ var ComponentShowcase_default = /*#__PURE__*/ _plugin_vue_export_helper_default(
 			])], 512);
 		};
 	}
-}, [["__scopeId", "data-v-83cdcbad"]]);
+}, [["__scopeId", "data-v-f21543c2"]]);
 //#endregion
 export { ComponentShowcase_default as default };
 

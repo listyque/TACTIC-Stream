@@ -2,7 +2,7 @@ import { A as onMounted, C as inject, E as nextTick, H as watch, M as openBlock,
 import { o as t, z as _plugin_vue_export_helper_default } from "./AppButton.js";
 import { A as rpc } from "./index.js";
 import { N as linkifyPlainText, x as browserLink } from "./admin.document.js";
-import { C as _sfc_main$1 } from "./App.js";
+import { E as _sfc_main$1 } from "./App.js";
 //#region src/features/objects/DescriptionEditor.vue
 var _hoisted_1 = ["aria-label"];
 var DescriptionEditor_default = /*#__PURE__*/ _plugin_vue_export_helper_default({

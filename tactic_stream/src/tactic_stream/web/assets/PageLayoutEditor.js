@@ -1,10 +1,10 @@
 import { F as resolveComponent, K as withDirectives, M as openBlock, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, m as createBaseVNode, nt as normalizeStyle, s as vShow } from "./vue.js";
 import { s as appearance, z as _plugin_vue_export_helper_default } from "./AppButton.js";
 import { A as rpc, It as randomUuid } from "./index.js";
-import { G as node, H as label, K as rect, R as observeFrameSizes, S as translate, V as button, t as _sfc_main$1 } from "./FrameView.js";
+import { C as translate, G as label, J as node, V as observeFrameSizes, W as button, Y as rect, t as _sfc_main$1 } from "./FrameView.js";
 import { n as sections } from "./sections.ui.js";
 import { T as projectPath, i as sectionSelector, n as notices, o as toolbar$1, t as documentEvent } from "./admin.document.js";
-import { $t as path, Bt as scope$1, Ft as change$1, Gt as change, Ht as add, It as fields$1, J as selected, Jt as fingerprint, K as alignment, Kt as copy, Lt as filter, Qt as layers, Rt as mode, Ut as appearances, Vt as type, Wt as block, Xt as geometry$1, Y as toggle, Yt as geometries, Z as spacingField, Zt as kinds, a as _sfc_main$2, an as spacing, en as remove, in as sizing, nn as reparent, o as controls, q as roots, qt as duplicate, rn as siblings, s as zooms, tn as reorder, zt as options } from "./ConfiguredView.js";
+import { $t as layers, Bt as options, Gt as block, Ht as type, It as change$1, J as selected, Jt as duplicate, K as alignment, Kt as change, Lt as fields$1, Qt as kinds, Rt as filter, Ut as add, Vt as scope$1, Wt as appearances, Xt as geometries, Y as toggle, Yt as fingerprint, Z as spacingField, Zt as geometry$1, a as _sfc_main$2, an as sizing, en as path, in as siblings, nn as reorder, o as controls, on as spacing, q as roots, qt as copy, rn as reparent, s as zooms, tn as remove, zt as mode } from "./ConfiguredView.js";
 import { n as buttonWidth } from "./metrics.js";
 import { t as listAction } from "./tree.ui.js";
 import { t as _sfc_main$3 } from "./PageEditorTools.js";

@@ -1,5 +1,5 @@
 import { D as spacing, T as metrics } from "./AppButton.js";
-import { G as node, H as label, K as rect, S as translate, W as muted } from "./FrameView.js";
+import { C as translate, G as label, J as node, Y as rect, q as muted } from "./FrameView.js";
 //#region ../src/tactic_stream/shared_ui/controls/forms/fields.mjs
 function fieldProperties(field, language, enabled) {
 	const title = field.dataLabel ? field.title : translate(field.title, language);

@@ -1,9 +1,9 @@
 import { F as resolveComponent, J as markRaw, K as withDirectives, M as openBlock, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, m as createBaseVNode, nt as normalizeStyle, s as vShow } from "./vue.js";
 import { o as t, s as appearance, z as _plugin_vue_export_helper_default } from "./AppButton.js";
 import { A as rpc } from "./index.js";
-import { G as node, H as label, K as rect, R as observeFrameSizes, S as translate, V as button, W as muted, t as _sfc_main$1 } from "./FrameView.js";
+import { C as translate, G as label, J as node, V as observeFrameSizes, W as button, Y as rect, q as muted, t as _sfc_main$1 } from "./FrameView.js";
+import { t as readPreviewImage } from "./previewImage.js";
 import { n as sections } from "./sections.ui.js";
-import { i as readPreviewImage } from "./RecordForm.js";
 import { i as sectionSelector, n as notices, o as toolbar$1, r as policy, t as documentEvent } from "./admin.document.js";
 import { t as NamingEditor_default } from "./NamingEditor.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/search_types/search_types.fields.mjs

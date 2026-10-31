@@ -119,6 +119,104 @@ try {
     await page.locator('[data-frame=showcaseFamily_' + id + ']').click();
     await page.locator('input[data-frame=showcaseSearch]').fill('');
   }
+  const variants = await page.evaluate(
+    async () =>
+      (
+        await import(
+          '/src/tactic_stream/shared_ui/features/administration/showcase.ui.mjs'
+        )
+      ).variants
+  );
+  assert.equal(variants.length, 151);
+  for (const family of [...new Set(variants.map((row) => row.family))]) {
+    await choose(family);
+    for (const variant of variants.filter((row) => row.family === family)) {
+      await page
+        .locator('[data-frame=showcaseVariant]')
+        .selectOption(variant.id);
+      await page
+        .locator('[data-frame=showcaseVariantPreview] [data-frame=sample]')
+        .waitFor();
+      assert.equal(
+        await page.getByText('Widget unavailable', { exact: true }).count(),
+        0
+      );
+    }
+  }
+  await choose('numbers');
+  await page.locator('[data-frame=showcaseVariant]').selectOption('integer');
+  const numberInput = page.locator('[data-frame=sample] input');
+  await numberInput.focus();
+  await numberInput.press('ArrowUp');
+  assert.equal(await numberInput.inputValue(), '6');
+  await page.locator('[data-frame=showcaseState]').selectOption('readonly');
+  assert((await numberInput.getAttribute('readonly')) !== null);
+  await page.locator('[data-frame=showcaseState]').selectOption('default');
+  await page.locator('[data-frame=showcaseCode]').click();
+  await page.locator('[data-frame=showcaseCodeSource]').waitFor();
+  await page.locator('[data-frame=showcaseCode]').click();
+  await choose('previews');
+  await page
+    .locator('[data-frame=showcaseVariant]')
+    .selectOption('preview-round');
+  await page.locator('[data-frame=showcaseState]').selectOption('loading');
+  assert.equal(
+    await page.locator('[data-frame=sample]').getAttribute('aria-busy'),
+    'true'
+  );
+  await page.locator('[data-frame=showcaseState]').selectOption('empty');
+  assert.equal(await page.locator('[data-frame=sample] img').count(), 0);
+  await page.locator('[data-frame=showcaseState]').selectOption('selected');
+  assert(
+    await page
+      .locator('[data-frame=sample]')
+      .evaluate((el) => el.classList.contains('selected-preview'))
+  );
+  await page.locator('[data-frame=showcaseState]').selectOption('default');
+  await page.locator('[data-frame=showcaseVariant]').selectOption('');
+  const circle = page.locator('[data-frame=sample_preview-round]');
+  assert.equal(
+    await circle.evaluate((el) => getComputedStyle(el).borderRadius),
+    '50%'
+  );
+  for (const mode of ['dark', 'light']) {
+    await page.evaluate(async (mode) => {
+      (await import('/frontend/src/appearance.js')).appearance.mode = mode;
+    }, mode);
+    await dialog.screenshot({
+      path: output + '/preview-gallery-' + mode + '.png'
+    });
+    const component = page.locator('.component-showcase');
+    await component.screenshot({
+      path: output + '/preview-component-' + mode + '.png'
+    });
+    const bounds = await component.boundingBox();
+    const ids = [
+      'sample_preview-round',
+      'sample_preview-square',
+      'sample_preview-outline',
+      'sample_preview-photo',
+      'sample_preview-contain',
+      'sample_preview-icon',
+      'sample_preview-loading',
+      'sample_preview-selected'
+    ];
+    const controls = [];
+    for (const id of ids) {
+      const box = await page.locator('[data-frame="' + id + '"]').boundingBox();
+      controls.push({
+        id,
+        x: box.x - bounds.x,
+        y: box.y - bounds.y,
+        width: box.width,
+        height: box.height
+      });
+    }
+    await writeFile(
+      output + '/preview-' + mode + '.json',
+      JSON.stringify({ width: bounds.width, height: bounds.height, controls })
+    );
+  }
   for (const id of [
     'typography',
     'headers',

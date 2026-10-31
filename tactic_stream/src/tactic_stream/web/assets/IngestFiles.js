@@ -1,7 +1,7 @@
 import { E as nextTick, F as resolveComponent, G as withCtx, I as resolveDirective, J as markRaw, K as withDirectives, M as openBlock, _ as createElementBlock, b as createVNode, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString } from "./vue.js";
 import { o as t, s as appearance, t as _sfc_main$2, z as _plugin_vue_export_helper_default } from "./AppButton.js";
 import { A as rpc, Ft as randomId } from "./index.js";
-import { G as node, H as label, K as rect, R as observeFrameSizes, S as translate, V as button, W as muted, t as _sfc_main$3 } from "./FrameView.js";
+import { C as translate, G as label, J as node, V as observeFrameSizes, W as button, Y as rect, q as muted, t as _sfc_main$3 } from "./FrameView.js";
 import { t as captionHeight } from "./sections.ui.js";
 import { t as describe$1 } from "./confirmation.ui.js";
 import { t as _sfc_main$4 } from "./AppDialog.js";

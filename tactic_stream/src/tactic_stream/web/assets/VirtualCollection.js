@@ -1,5 +1,5 @@
 import { A as onMounted, E as nextTick, H as watch, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, X as ref, _ as createElementBlock, nt as normalizeStyle, p as computed, u as Fragment } from "./vue.js";
-import { R as observeFrameSizes } from "./FrameView.js";
+import { V as observeFrameSizes } from "./FrameView.js";
 //#region ../src/tactic_stream/shared_ui/controls/lists/collection.mjs
 function layout(items, width, options = {}) {
 	const columns = Math.max(1, Math.floor((width + (options.columnGap || 0)) / ((options.cellWidth || width || 1) + (options.columnGap || 0)))), cellWidth = options.cellWidth ? Math.min(width, options.cellWidth) : width, rows = [], rowByKey = Object.create(null);

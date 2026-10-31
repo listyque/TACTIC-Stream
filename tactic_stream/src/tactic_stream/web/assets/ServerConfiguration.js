@@ -1,11 +1,11 @@
 import { A as onMounted, F as resolveComponent, M as openBlock, N as renderList, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, g as createCommentVNode, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment, y as createTextVNode } from "./vue.js";
 import { F as accentPresets, a as _sfc_main$2, o as t, s as appearance, t as _sfc_main$3, z as _plugin_vue_export_helper_default } from "./AppButton.js";
 import { It as randomUuid, O as restartServer, R as serverConfiguration, j as saveServerConfiguration, z as serverRuntime } from "./index.js";
-import { G as node, H as label, K as rect, R as observeFrameSizes, S as translate, V as button, t as _sfc_main$4 } from "./FrameView.js";
+import { C as translate, G as label, J as node, V as observeFrameSizes, W as button, Y as rect, t as _sfc_main$4 } from "./FrameView.js";
 import { n as _sfc_main$5 } from "./AppearanceControls.js";
 import { _ as timestampFullLabel } from "./admin.document.js";
 import { t as describe$1 } from "./confirmation.ui.js";
-import { f as change, g as fieldsFor, h as editColumn, m as describe$2 } from "./App.js";
+import { _ as editColumn, g as describe$2, m as change, v as fieldsFor } from "./App.js";
 //#region src/features/configuration/FrameSettings.vue
 var _sfc_main$1 = {
 	__name: "FrameSettings",

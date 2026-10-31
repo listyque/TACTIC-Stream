@@ -1,11 +1,12 @@
 import { C as inject, E as nextTick, G as withCtx, H as watch, J as markRaw, M as openBlock, N as renderList, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment } from "./vue.js";
 import { D as spacing, a as _sfc_main$2, o as t, s as appearance, t as _sfc_main$3, y as cssRoles } from "./AppButton.js";
 import { A as rpc, It as randomUuid, ut as notify } from "./index.js";
-import { A as _sfc_main$4, G as node, H as label, K as rect, R as observeFrameSizes, S as translate, V as button, W as muted, t as _sfc_main$5 } from "./FrameView.js";
-import { Q as _sfc_main$6, lt as _sfc_main$7 } from "./ConfiguredView.js";
-import { t as _sfc_main$8 } from "./AppDialog.js";
+import { C as translate, G as label, J as node, N as _sfc_main$4, V as observeFrameSizes, W as button, Y as rect, q as muted, t as _sfc_main$5 } from "./FrameView.js";
+import { Q as _sfc_main$6 } from "./ConfiguredView.js";
+import { t as _sfc_main$7 } from "./AppDialog.js";
+import { t as _sfc_main$8 } from "./MarkdownText.js";
 import { t as listAction } from "./tree.ui.js";
-import { m as describe$3 } from "./App.js";
+import { g as describe$3 } from "./App.js";
 import { n as current, r as status$1, t as controls } from "./executor.ui.js";
 //#region ../src/tactic_stream/shared_ui/features/scripts/history.ui.mjs
 function initial$1() {
@@ -1019,7 +1020,7 @@ var _sfc_main$1 = {
 						class: normalizeClass(["agent-message", row.role]),
 						style: normalizeStyle(messageStyle(row))
 					}, [
-						createVNode(_sfc_main$7, { text: safeMarkdown(row.text) }, null, 8, ["text"]),
+						createVNode(_sfc_main$8, { text: safeMarkdown(row.text) }, null, 8, ["text"]),
 						(openBlock(true), createElementBlock(Fragment, null, renderList(row.attachments || [], (file) => {
 							return openBlock(), createElementBlock("div", {
 								key: file.attachment_id,
@@ -1638,7 +1639,7 @@ var _sfc_main = {
 			}
 		});
 		return (_ctx, _cache) => {
-			return openBlock(), createBlock(Teleport, { to: "body" }, [createVNode(_sfc_main$8, {
+			return openBlock(), createBlock(Teleport, { to: "body" }, [createVNode(_sfc_main$7, {
 				ref_key: "dialog",
 				ref: dialog,
 				title: "External agent",

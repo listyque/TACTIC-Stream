@@ -1,4 +1,4 @@
-import { G as node, H as label, K as rect, V as button, W as muted } from "./FrameView.js";
+import { G as label, J as node, W as button, Y as rect, q as muted } from "./FrameView.js";
 //#region ../src/tactic_stream/shared_ui/controls/lists/tree.ui.mjs
 function listAction(id, bounds, text, icon, action, enabled = true, options = {}) {
 	const iconOnly = !!options.iconOnly;
@@ -74,6 +74,17 @@ function navigationRow(width, record, state = {}) {
 		nodes
 	};
 }
+function visibleRows(rows) {
+	const visible = [];
+	let collapsedDepth = -1;
+	for (const row of rows) {
+		if (collapsedDepth >= 0 && row.depth > collapsedDepth) continue;
+		collapsedDepth = -1;
+		visible.push(row);
+		if (row.hasChildren && !row.expanded) collapsedDepth = row.depth;
+	}
+	return visible;
+}
 function navigate(rows, id, key) {
 	if (!rows.length) return null;
 	const index = rows.findIndex((row) => row.id === id);
@@ -137,6 +148,6 @@ function row(id, width, record, options = {}) {
 	return { nodes };
 }
 //#endregion
-export { row as i, navigate as n, navigationRow as r, listAction as t };
+export { visibleRows as a, row as i, navigate as n, navigationRow as r, listAction as t };
 
 //# sourceMappingURL=tree.ui.js.map

@@ -5,6 +5,7 @@ import { observeFrameSizes } from '../../frame/resize.js';
 import { appearance } from '../../appearance.js';
 import ShowcaseMenu from './ShowcaseMenu.vue';
 import ShowcaseDialog from './ShowcaseDialog.vue';
+import ShowcaseVariant from './ShowcaseVariant.vue';
 import * as UI from '../../../../src/tactic_stream/shared_ui/features/administration/showcase.ui.mjs';
 const host = ref(null),
   view = ref(null),
@@ -24,6 +25,11 @@ const models = computed(() => ({
   families: UI.families(UI.catalogue, model.value, appearance.language)
 }));
 const views = {
+  showcaseVariant: {
+    component: ShowcaseVariant,
+    nodeProps: true,
+    props: { onEvent: dispatch }
+  },
   showcaseMenu: {
     component: ShowcaseMenu,
     nodeProps: true,
