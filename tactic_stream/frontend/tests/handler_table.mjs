@@ -49,53 +49,24 @@ this.page==='shelf'?h(ScriptShelfBar,{mode:this.shelfMode,buttons:this.shelfButt
 </script><style>html,body,#app{width:100%;height:100%;overflow:hidden}#frame{width:100%;height:100%;background:var(--page)}#frame>.configured-view{display:flex;flex-direction:column;height:100%;width:100%;overflow:hidden}#frame>.columns-editor{height:100%;padding:0;gap:0}#frame>.columns-editor>.columns-editor-layout{height:100%;margin:0}#frame .administration-save-bar{display:none}</style></body></html>`;
 let server, browser;
 const measurements = [];
-async function taskPreviewGeometry(popup, height, narrow = false) {
+async function taskPreviewGeometry(popup, narrow = false) {
   const result = await popup.evaluate((el) => {
-    const cards = el.firstElementChild,
-      style = getComputedStyle(cards);
+    const scroller = el.querySelector('.task-preview-content');
+    const cards = scroller.firstElementChild;
     return {
-      width: el.clientWidth,
-      scrollWidth: el.scrollWidth,
-      height: el.clientHeight,
-      scrollHeight: el.scrollHeight,
       box: el.getBoundingClientRect().toJSON(),
-      inner: {
-        width: cards.clientWidth,
-        scrollWidth: cards.scrollWidth,
-        height: cards.clientHeight,
-        scrollHeight: cards.scrollHeight
-      },
-      cards: cards.getBoundingClientRect().toJSON(),
-      gap: style.gap,
-      overflow: style.overflow,
+      scrolls: scroller.scrollWidth > scroller.clientWidth,
       items: [...cards.children].map((card) =>
         card.getBoundingClientRect().toJSON()
       )
     };
   });
-  const details = JSON.stringify(result);
-  assert.equal(result.items.length, 4, details);
-  assert.equal(result.gap, '4px', details);
-  assert.equal(result.overflow, 'visible', details);
-  assert.equal(result.inner.width, 440, details);
-  assert.equal(result.inner.scrollWidth, result.inner.width, details);
-  assert.equal(result.inner.height, height, details);
-  assert.equal(result.inner.scrollHeight, height, details);
-  assert.equal(result.scrollHeight, result.height, details);
+  assert.equal(result.items.length, 4);
   for (const card of result.items) {
-    assert.equal(card.width, 107, details);
-    assert.equal(card.height, height - 2, details);
-    assert(
-      card.top >= result.cards.top && card.bottom <= result.cards.bottom,
-      details
-    );
+    assert.equal(card.width, 220);
+    assert.equal(card.height, 152);
   }
-  if (narrow) assert(result.scrollWidth > result.width, details);
-  else {
-    assert.equal(result.scrollWidth, result.width, details);
-    assert.equal(result.box.width, 456, details);
-    assert.equal(result.box.height, height + 16, details);
-  }
+  assert.equal(result.scrolls, narrow);
   return result;
 }
 const deadline = setTimeout(() => browser?.close(), 120000);
@@ -418,24 +389,21 @@ try {
     }
   }
   await page.setViewportSize({width:1496,height:660});
-  // Hovering any selected task cell previews every selected row, as in Handler.
+  // Selection preserves bulk edits, but only the hovered cell opens a preview.
   await page.evaluate(
     (keys) => (window.host.selected = keys),
     fixture.records.slice(0, 2).map((row) => row.__search_key__)
   );
-  await rows.first().locator('.table-task-cell').hover();
+  await rows.first().locator('.table-task-cell .task-card-heading').first().hover();
   await page.waitForFunction(
-    () => document.querySelectorAll('.task-preview:popover-open').length === 2
+    () => document.querySelectorAll('.task-preview:popover-open').length === 1
   );
   const taskPopup = page.locator('.task-preview:popover-open').first();
   for (const mode of ['dark', 'light']) {
     await page.evaluate((mode) => (window.appearance.mode = mode), mode);
-    const geometry = await taskPreviewGeometry(taskPopup, 52),
-      source = native.captures.find(
-        (c) => c.kind === 'task-preview' && c.mode === mode
-      );
-    assert.equal(geometry.box.width, source.popups[0].width);
-    assert.equal(geometry.box.height, source.popups[0].height);
+    const geometry = await taskPreviewGeometry(taskPopup);
+    await page.waitForTimeout(400); // Exceeds the old peer-preview timer.
+    assert.equal(await page.locator('.task-preview:popover-open').count(), 1);
     await page.screenshot({
       path: report + '/task-preview-stream-' + mode + '.png'
     });
@@ -487,19 +455,15 @@ try {
     }, sample);
     const cell = check.locator('.table-task-cell').first();
     await cell.scrollIntoViewIfNeeded();
-    await cell.hover();
+    await cell.locator('.task-card-heading').first().hover();
     const preview = check.locator('.task-preview:popover-open').first();
     await preview.waitFor({ state: 'visible' });
-    const geometry = await taskPreviewGeometry(
-      preview,
-      sample.height - 6,
-      sample.narrow
-    );
+    const geometry = await taskPreviewGeometry(preview, sample.narrow);
     if (sample.narrow) {
-      await preview.evaluate((el) => (el.scrollLeft = el.scrollWidth));
+      await preview.locator('.task-preview-content').evaluate((el) => (el.scrollLeft = el.scrollWidth));
       await check.waitForFunction(
         () =>
-          document.querySelector('.task-preview:popover-open')?.scrollLeft > 0
+          document.querySelector('.task-preview:popover-open .task-preview-content')?.scrollLeft > 0
       );
       await preview.locator('.task-card-heading').last().click();
       assert.equal(

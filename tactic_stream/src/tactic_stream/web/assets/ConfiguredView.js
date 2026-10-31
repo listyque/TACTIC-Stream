@@ -33,6 +33,7 @@ var metrics$2 = {
 	taskWidth: 107,
 	taskGap: 4,
 	taskMenu: 32,
+	taskPreviewWidth: 220,
 	taskMaximumHeight: 88,
 	taskDatesHeight: 76,
 	taskHeading: 15,
@@ -93,6 +94,42 @@ function taskLayout(count, width, height) {
 		editorHeight: Math.max(10, Math.min(24, (cardHeight - (dates ? 36 : 21)) / 2))
 	};
 }
+function taskCardLayout(height, expanded = false, style) {
+	if (!expanded) return Object.assign(taskLayout(1, 0, height), {
+		headingHeight: metrics$2.taskHeading,
+		datesHeight: 14,
+		padding: 2,
+		gap: 1
+	});
+	const theme = metrics$3(style), padding = spacing$1.compact, gap = spacing$1.tight;
+	return {
+		dates: true,
+		editorHeight: theme.controlHeight,
+		headingHeight: 20,
+		datesHeight: theme.compactControlHeight,
+		padding,
+		gap,
+		cardHeight: padding * 2 + 20 + theme.controlHeight * 2 + theme.compactControlHeight + gap * 3
+	};
+}
+function taskPreviewLayout(count, viewportWidth, viewportHeight, style) {
+	const card = taskCardLayout(0, true, style), padding = spacing$1.compact;
+	const contentWidth = Math.max(0, count * (metrics$2.taskPreviewWidth + metrics$2.taskGap) - metrics$2.taskGap);
+	const width = Math.max(0, Math.min(viewportWidth - padding * 2, contentWidth + metrics$2.taskMenu + padding * 2));
+	const horizontal = contentWidth > width - padding * 2 - metrics$2.taskMenu;
+	return {
+		cardWidth: metrics$2.taskPreviewWidth,
+		cardHeight: card.cardHeight,
+		contentWidth,
+		menuWidth: metrics$2.taskMenu,
+		padding,
+		width,
+		height: Math.max(0, Math.min(viewportHeight - padding * 2, card.cardHeight + padding * 2 + (horizontal ? 16 : 0)))
+	};
+}
+function taskCardsHovered(x, y, inlineWidth, height) {
+	return x >= 0 && x < inlineWidth && y >= 0 && y < height;
+}
 function previewSize(width, height) {
 	return Math.max(0, Math.min(width, height) - metrics$2.previewInset);
 }
@@ -102,6 +139,11 @@ function assigneeLabel(task, language) {
 function taskDate(value, simple) {
 	const date = value ? String(value).slice(0, 10) : "—";
 	return simple && date.length === 10 ? date.slice(5) : date;
+}
+function taskDateRange(task) {
+	const start = task.simpleDates === void 0 && task.bidStartLabel ? task.bidStartLabel : taskDate(task.bidStart, task.simpleDates);
+	const end = task.simpleDates === void 0 && task.bidEndLabel ? task.bidEndLabel : taskDate(task.bidEnd, task.simpleDates);
+	return start + " – " + end;
 }
 function taskEditable(task, field, editable = true) {
 	if (!editable || task.processType === "progress") return false;
@@ -334,6 +376,7 @@ var _sfc_main$67 = {
 	props: {
 		tasks: Array,
 		editable: Boolean,
+		expanded: Boolean,
 		height: {
 			type: Number,
 			default: 58
@@ -342,7 +385,7 @@ var _sfc_main$67 = {
 	emits: ["inspect", "edit"],
 	setup(__props, { emit: __emit }) {
 		const props = __props;
-		const layout = computed(() => taskLayout(props.tasks?.length || 0, 0, props.height));
+		const layout = computed(() => taskCardLayout(props.height, props.expanded, appearance.theme));
 		const emit = __emit;
 		function edit(task, field, event) {
 			const anchor = event.currentTarget;
@@ -356,12 +399,18 @@ var _sfc_main$67 = {
 				class: "task-cards",
 				style: normalizeStyle({
 					"--task-card-height": layout.value.cardHeight + "px",
-					"--task-editor-height": layout.value.editorHeight + "px"
+					"--task-editor-height": layout.value.editorHeight + "px",
+					"--task-card-width": (__props.expanded ? metrics$2.taskPreviewWidth : metrics$2.taskWidth) + "px",
+					"--task-heading-height": layout.value.headingHeight + "px",
+					"--task-dates-height": layout.value.datesHeight + "px"
 				})
 			}, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.tasks, (task) => {
 				return openBlock(), createElementBlock("article", {
 					key: task.taskSearchKey || task.process,
-					class: normalizeClass(["task-card", { pending: task.pending }]),
+					class: normalizeClass(["task-card", {
+						pending: task.pending,
+						expanded: __props.expanded
+					}]),
 					style: normalizeStyle({ "--task-accent": task.statusColor || task.processColor || "var(--primary)" })
 				}, [
 					createVNode(_sfc_main$69, {
@@ -387,7 +436,7 @@ var _sfc_main$67 = {
 								actionField: true,
 								showAccent: true,
 								accent: task.statusColor || task.processColor || "action",
-								fontRole: "caption"
+								fontRole: __props.expanded ? "body" : "caption"
 							}
 						}, null, 8, ["height", "model"])]),
 						_: 2
@@ -407,7 +456,7 @@ var _sfc_main$67 = {
 								actionField: true,
 								avatar: true,
 								avatarLabel: task.assigned ? assigneeLabel(task, unref(appearance).language) : "",
-								fontRole: "caption"
+								fontRole: __props.expanded ? "body" : "caption"
 							}
 						}, null, 8, [
 							"height",
@@ -424,7 +473,7 @@ var _sfc_main$67 = {
 						disabled: !taskEditable(task, "bid_start_date", __props.editable),
 						onClick: ($event) => edit(task, "bid_start_date", $event)
 					}, {
-						default: withCtx(() => [createBaseVNode("span", null, toDisplayString(taskDate(task.bidStart, task.simpleDates)) + " – " + toDisplayString(taskDate(task.bidEnd, task.simpleDates)), 1)]),
+						default: withCtx(() => [createBaseVNode("span", null, toDisplayString(taskDateRange(task)), 1)]),
 						_: 2
 					}, 1032, ["disabled", "onClick"])) : createCommentVNode("", true)
 				], 6);
@@ -435,19 +484,15 @@ var _sfc_main$67 = {
 //#endregion
 //#region src/features/interface/TaskCell.vue
 var _hoisted_1$36 = ["aria-label"];
+var _hoisted_2$25 = { class: "task-preview-content" };
 var _sfc_main$66 = {
 	__name: "TaskCell",
 	props: {
 		cell: Object,
 		editable: Boolean,
-		height: Number,
-		selectedPreview: Boolean
+		height: Number
 	},
-	emits: [
-		"inspect",
-		"edit",
-		"hover"
-	],
+	emits: ["inspect", "edit"],
 	setup(__props, { emit: __emit }) {
 		const props = __props;
 		const emit = __emit;
@@ -468,7 +513,6 @@ var _sfc_main$66 = {
 			popup.value?.hidePopover();
 			visible.value = pinned.value = false;
 			inside = hovering = false;
-			emit("hover", false);
 			if (focus === true) menu.value?.$el.focus();
 		}
 		async function open(pin = false) {
@@ -482,11 +526,10 @@ var _sfc_main$66 = {
 			await nextTick();
 			if (id !== request || !popup.value || !anchor.value?.isConnected) return;
 			const bounds = anchor.value.getBoundingClientRect();
-			const cardsWidth = layout.value.previewWidth;
-			const popupWidth = Math.min(innerWidth - 16, cardsWidth + 16);
-			popup.value.style.width = popupWidth + "px";
-			popup.value.style.height = (props.height || 58) + 16 + (cardsWidth > popupWidth - 16 ? 16 : 0) + "px";
-			popup.value.style.setProperty("--table-row-height", (props.height || 58) + "px");
+			const geometry = taskPreviewLayout(tasks.value.length, innerWidth, innerHeight, appearance.theme);
+			popup.value.style.width = geometry.width + "px";
+			popup.value.style.height = geometry.height + "px";
+			popup.value.style.setProperty("--table-row-height", geometry.cardHeight + "px");
 			popup.value.showPopover();
 			visible.value = true;
 			const size = {
@@ -499,40 +542,43 @@ var _sfc_main$66 = {
 		}
 		function enter(event) {
 			if (event.pointerType !== "mouse") return;
-			hovering = true;
-			emit("hover", true);
-			scheduleOpen();
+			const bounds = anchor.value.getBoundingClientRect();
+			const active = taskCardsHovered((event.clientX - bounds.left) * width.value / bounds.width, event.clientY - bounds.top, layout.value.visibleWidth, bounds.height);
+			if (hovering === active) return;
+			hovering = active;
+			if (active) scheduleOpen();
+			else {
+				clearTimeout(opening);
+				scheduleClose();
+			}
 		}
 		function moved(event) {
-			if (!hovering) enter(event);
+			enter(event);
 		}
 		function scheduleOpen() {
 			clearTimeout(closing);
 			clearTimeout(opening);
 			if (overflow.value && tasks.value.length && !visible.value) opening = setTimeout(() => {
-				if (hovering || props.selectedPreview) open();
+				if (hovering) open();
 			}, 260);
 		}
 		function leave() {
 			hovering = false;
-			emit("hover", inside);
-			if (!props.selectedPreview) clearTimeout(opening);
+			clearTimeout(opening);
 			scheduleClose();
 		}
 		function scheduleClose() {
 			clearTimeout(closing);
-			if (!pinned.value && !hovering && !inside && !props.selectedPreview) closing = setTimeout(() => {
-				if (!pinned.value && !hovering && !inside && !props.selectedPreview) close();
+			if (!pinned.value && !hovering && !inside) closing = setTimeout(() => {
+				if (!pinned.value && !hovering && !inside) close();
 			}, 180);
 		}
 		function popupEnter() {
 			inside = true;
-			emit("hover", true);
 			clearTimeout(closing);
 		}
 		function popupLeave() {
 			inside = false;
-			emit("hover", hovering);
 			scheduleClose();
 		}
 		function activate() {
@@ -570,13 +616,6 @@ var _sfc_main$66 = {
 		}
 		watch(() => tasks.value.map((task) => task.taskSearchKey || task.context || task.process).join("\n"), () => close());
 		watch(() => props.height, () => close());
-		watch(() => props.selectedPreview, (active) => {
-			if (active) scheduleOpen();
-			else {
-				if (!hovering) clearTimeout(opening);
-				scheduleClose();
-			}
-		});
 		onMounted(() => {
 			observer = new ResizeObserver((entries) => {
 				width.value = entries[0].contentRect.width;
@@ -634,14 +673,15 @@ var _sfc_main$66 = {
 				role: "dialog",
 				"aria-label": unref(t)("Task previews"),
 				onToggle: toggled,
-				onKeydown: _cache[1] || (_cache[1] = withKeys(withModifiers(($event) => close(true), ["stop", "prevent"]), ["esc"])),
+				onKeydown: _cache[2] || (_cache[2] = withKeys(withModifiers(($event) => close(true), ["stop", "prevent"]), ["esc"])),
 				onPointerenter: popupEnter,
 				onPointerleave: popupLeave,
 				onPointerdown: activate,
 				onFocusin: activate
-			}, [createVNode(_sfc_main$67, {
+			}, [createBaseVNode("div", _hoisted_2$25, [createVNode(_sfc_main$67, {
 				tasks: tasks.value,
 				height: __props.height || 58,
+				expanded: "",
 				editable: __props.editable,
 				onInspect: inspect,
 				onEdit: edit
@@ -649,7 +689,14 @@ var _sfc_main$66 = {
 				"tasks",
 				"height",
 				"editable"
-			])], 40, _hoisted_1$36)]))], 64);
+			])]), createVNode(_sfc_main$69, {
+				label: "Task Manager",
+				icon: "tasks",
+				"icon-only": "",
+				class: "task-preview-manager",
+				"badge-count": __props.cell?.count || 0,
+				onClick: _cache[1] || (_cache[1] = ($event) => inspect(null))
+			}, null, 8, ["badge-count"])], 40, _hoisted_1$36)]))], 64);
 		};
 	}
 };
@@ -660,11 +707,7 @@ var TaskSummaryCell_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 		height: Number,
 		editable: Boolean
 	},
-	emits: [
-		"inspect",
-		"edit",
-		"hover"
-	],
+	emits: ["inspect", "edit"],
 	setup(__props, { emit: __emit }) {
 		const props = __props;
 		const emit = __emit;
@@ -692,8 +735,7 @@ var TaskSummaryCell_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 				height: __props.height,
 				editable: __props.editable,
 				onInspect: _cache[1] || (_cache[1] = ($event) => emit("inspect", $event)),
-				onEdit: _cache[2] || (_cache[2] = (task, field, bounds) => emit("edit", task, field, bounds)),
-				onHover: _cache[3] || (_cache[3] = ($event) => emit("hover", $event))
+				onEdit: _cache[2] || (_cache[2] = (task, field, bounds) => emit("edit", task, field, bounds))
 			}, null, 8, [
 				"cell",
 				"height",
@@ -701,7 +743,7 @@ var TaskSummaryCell_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 			]))], 512);
 		};
 	}
-}, [["__scopeId", "data-v-88c60dcb"]]);
+}, [["__scopeId", "data-v-7609c5e7"]]);
 var ValueFieldsCell_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 	__name: "ValueFieldsCell",
 	props: {
@@ -4787,7 +4829,6 @@ var _sfc_main$58 = {
 		expanded: Boolean,
 		nestedState: Object,
 		selected: Boolean,
-		selectedTaskPreview: Boolean,
 		height: {
 			type: Number,
 			default: 58
@@ -4803,7 +4844,6 @@ var _sfc_main$58 = {
 		"task-edit",
 		"expand",
 		"action",
-		"task-hover",
 		"select"
 	],
 	computed: {
@@ -4922,23 +4962,19 @@ function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
 		cell: $props.cell,
 		height: $props.height - 6,
 		editable: $props.editable,
-		"selected-preview": $props.selectedTaskPreview,
-		onHover: _cache[2] || (_cache[2] = ($event) => _ctx.$emit("task-hover", $event)),
-		onInspect: _cache[3] || (_cache[3] = (task) => _ctx.$emit("tasks", $props.cell, task)),
-		onEdit: _cache[4] || (_cache[4] = (task, field, bounds) => _ctx.$emit("task-edit", $props.cell, task, field, bounds))
+		onInspect: _cache[2] || (_cache[2] = (task) => _ctx.$emit("tasks", $props.cell, task)),
+		onEdit: _cache[3] || (_cache[3] = (task, field, bounds) => _ctx.$emit("task-edit", $props.cell, task, field, bounds))
 	}, null, 8, [
 		"cell",
 		"height",
-		"editable",
-		"selected-preview"
+		"editable"
 	])) : $props.element.cell?.kind === "task_summary" ? (openBlock(), createBlock(_component_TaskSummaryCell, {
 		key: 6,
 		cell: $props.cell,
 		height: $props.height - 6,
 		editable: $props.editable,
-		onHover: _cache[5] || (_cache[5] = ($event) => _ctx.$emit("task-hover", $event)),
-		onInspect: _cache[6] || (_cache[6] = (task) => _ctx.$emit("tasks", $props.cell, task)),
-		onEdit: _cache[7] || (_cache[7] = (task, field, bounds) => _ctx.$emit("task-edit", $props.cell, task, field, bounds))
+		onInspect: _cache[4] || (_cache[4] = (task) => _ctx.$emit("tasks", $props.cell, task)),
+		onEdit: _cache[5] || (_cache[5] = (task, field, bounds) => _ctx.$emit("task-edit", $props.cell, task, field, bounds))
 	}, null, 8, [
 		"cell",
 		"height",
@@ -4952,7 +4988,7 @@ function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
 		"icon-only": "",
 		destructive: $options.action.destructive,
 		disabled: ["delete", "checkin"].includes($props.element.cell.kind) && !$props.editable || $props.cell?.available === false,
-		onClick: _cache[8] || (_cache[8] = ($event) => _ctx.$emit("action", $props.element.cell.kind, $props.cell))
+		onClick: _cache[6] || (_cache[6] = ($event) => _ctx.$emit("action", $props.element.cell.kind, $props.cell))
 	}, null, 8, [
 		"label",
 		"icon",
@@ -5003,13 +5039,13 @@ function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
 		"icon-only": "",
 		"badge-count": $props.cell?.count,
 		disabled: !$props.cell?.search_key,
-		onClick: _cache[9] || (_cache[9] = ($event) => _ctx.$emit("notes", $props.cell, $props.element.display?.options?.process || ""))
+		onClick: _cache[7] || (_cache[7] = ($event) => _ctx.$emit("notes", $props.cell, $props.element.display?.options?.process || ""))
 	}, null, 8, ["badge-count", "disabled"])) : createCommentVNode("", true)])) : $props.element.cell?.kind === "thumbnail" ? (openBlock(), createBlock(_component_AppButton, {
 		key: 14,
 		class: "table-thumbnail",
 		label: "File preview",
 		style: normalizeStyle({ "--table-preview-size": $options.previewSize + "px" }),
-		onClick: _cache[10] || (_cache[10] = ($event) => _ctx.$emit("preview", $props.cell))
+		onClick: _cache[8] || (_cache[8] = ($event) => _ctx.$emit("preview", $props.cell))
 	}, {
 		default: withCtx(() => [createVNode(_component_ItemPreview, {
 			source: $props.cell?.image,
@@ -5039,7 +5075,7 @@ function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
 		label: $props.element.title,
 		"translate-label": false,
 		disabled: !$props.editable,
-		"onUpdate:modelValue": _cache[11] || (_cache[11] = ($event) => _ctx.$emit("select", $event))
+		"onUpdate:modelValue": _cache[9] || (_cache[9] = ($event) => _ctx.$emit("select", $event))
 	}, {
 		default: withCtx(() => [createBaseVNode("span", _hoisted_6$12, toDisplayString($props.element.title), 1)]),
 		_: 1
@@ -21575,8 +21611,7 @@ var _sfc_main = {
 			editBusy: false,
 			editError: "",
 			editUncertain: false,
-			taskContext: null,
-			hoveredTaskCell: null
+			taskContext: null
 		};
 	},
 	computed: {
@@ -23403,14 +23438,6 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 						editable: !$props.readOnly && !$data.serviceBusy && !$data.taskBusy && !$data.taskUncertain,
 						expanded: !!$data.expandedDetails[record.__search_key__],
 						"nested-state": $data.expandedTables[record.__search_key__],
-						"selected-task-preview": $options.tableSelection.includes(record.__search_key__) && $options.tableSelection.includes($data.hoveredTaskCell?.key),
-						onTaskHover: (active) => {
-							if (active) $data.hoveredTaskCell = {
-								key: record.__search_key__,
-								column: element.name
-							};
-							else if ($data.hoveredTaskCell?.key === record.__search_key__ && $data.hoveredTaskCell.column === element.name) $data.hoveredTaskCell = null;
-						},
 						onExpand: ($event) => $data.expandedDetails[record.__search_key__] = !$data.expandedDetails[record.__search_key__],
 						onInspect: ($event) => _ctx.$emit("inspect", record),
 						onAction: (kind, cell, anchor) => $options.tableAction(record, kind, cell, anchor),
@@ -23431,8 +23458,6 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 						"editable",
 						"expanded",
 						"nested-state",
-						"selected-task-preview",
-						"onTaskHover",
 						"onExpand",
 						"onInspect",
 						"onAction",

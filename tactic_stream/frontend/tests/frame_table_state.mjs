@@ -170,7 +170,42 @@ assert.equal(Cells.taskLayout(4, 440, 52).visible, 4);
 assert.equal(Cells.taskLayout(4, 440, 52).previewWidth, 440);
 assert.equal(Cells.taskLayout(4, 220, 78).dates, true);
 assert.equal(Cells.taskLayout(4, 220, 77).dates, false);
+for (const style of ['md3', 'material5', 'fluent']) {
+  const card = Cells.taskCardLayout(52, true, style);
+  assert.equal(card.dates, true);
+  assert.ok(card.editorHeight >= 34);
+  assert.ok(card.cardHeight >= 148);
+  assert.equal(
+    card.cardHeight,
+    card.padding * 2 +
+      card.headingHeight +
+      card.editorHeight * 2 +
+      card.datesHeight +
+      card.gap * 3
+  );
+  for (const width of [320, 800]) {
+    const preview = Cells.taskPreviewLayout(11, width, 600, style);
+    assert.ok(preview.width <= width - 16);
+    assert.ok(preview.height >= card.cardHeight + 16);
+    assert.equal(preview.cardWidth, 220);
+  }
+}
+assert.equal(Cells.taskCardsHovered(50, 20, 107, 52), true);
+assert.equal(
+  Cells.taskCardsHovered(125, 20, 107, 52),
+  false,
+  'Badge/gutter hover never opens cards'
+);
+assert.equal(
+  Cells.taskCardsHovered(0, 20, 0, 52),
+  false,
+  'Badge-only cell never opens cards on hover'
+);
 assert.equal(Cells.previewSize(40, 60), 32);
+assert.equal(
+  Cells.taskDateRange({ bidStartLabel: '1 Sep', bidEndLabel: '3 Sep' }),
+  '1 Sep – 3 Sep'
+);
 assert.equal(Cells.checked({ checked: false }, 'true'), false);
 assert.equal(Cells.checked({}, 'yes'), true);
 for (const value of [

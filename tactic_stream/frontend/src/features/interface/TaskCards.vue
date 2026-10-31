@@ -9,10 +9,11 @@ import { appearance } from '../../appearance.js';
 const props = defineProps({
   tasks: Array,
   editable: Boolean,
+  expanded: Boolean,
   height: { type: Number, default: 58 }
 });
 const layout = computed(() =>
-  Cells.taskLayout(props.tasks?.length || 0, 0, props.height)
+  Cells.taskCardLayout(props.height, props.expanded, appearance.theme)
 );
 const emit = defineEmits(['inspect', 'edit']);
 function edit(task, field, event) {
@@ -29,14 +30,19 @@ function edit(task, field, event) {
     class="task-cards"
     :style="{
       '--task-card-height': layout.cardHeight + 'px',
-      '--task-editor-height': layout.editorHeight + 'px'
+      '--task-editor-height': layout.editorHeight + 'px',
+      '--task-card-width':
+        (expanded ? Cells.metrics.taskPreviewWidth : Cells.metrics.taskWidth) +
+        'px',
+      '--task-heading-height': layout.headingHeight + 'px',
+      '--task-dates-height': layout.datesHeight + 'px'
     }"
   >
     <article
       v-for="task in tasks"
       :key="task.taskSearchKey || task.process"
       class="task-card"
-      :class="{ pending: task.pending }"
+      :class="{ pending: task.pending, expanded }"
       :style="{
         '--task-accent':
           task.statusColor || task.processColor || 'var(--primary)'
@@ -62,7 +68,7 @@ function edit(task, field, event) {
             actionField: true,
             showAccent: true,
             accent: task.statusColor || task.processColor || 'action',
-            fontRole: 'caption'
+            fontRole: expanded ? 'body' : 'caption'
           }"
       /></AppButton>
       <AppButton
@@ -81,7 +87,7 @@ function edit(task, field, event) {
             avatarLabel: task.assigned
               ? Cells.assigneeLabel(task, appearance.language)
               : '',
-            fontRole: 'caption'
+            fontRole: expanded ? 'body' : 'caption'
           }"
       /></AppButton>
       <AppButton
@@ -91,10 +97,7 @@ function edit(task, field, event) {
         icon="calendar"
         :disabled="!Cells.taskEditable(task, 'bid_start_date', editable)"
         @click="edit(task, 'bid_start_date', $event)"
-        ><span
-          >{{ Cells.taskDate(task.bidStart, task.simpleDates) }} –
-          {{ Cells.taskDate(task.bidEnd, task.simpleDates) }}</span
-        ></AppButton
+        ><span>{{ Cells.taskDateRange(task) }}</span></AppButton
       >
     </article>
   </div>
@@ -107,8 +110,8 @@ function edit(task, field, event) {
   align-items: center;
 }
 .task-cards .task-card {
-  width: 107px;
-  flex: 0 0 107px;
+  width: var(--task-card-width);
+  flex: 0 0 var(--task-card-width);
   height: var(--task-card-height);
   padding: 1px 1px 1px 5px;
   gap: 1px;
@@ -139,8 +142,8 @@ function edit(task, field, event) {
   color: var(--on-surface);
 }
 .task-cards .task-card .task-card-heading {
-  flex: 0 0 15px;
-  height: 15px;
+  flex: 0 0 var(--task-heading-height);
+  height: var(--task-heading-height);
   justify-content: center;
   font-weight: 600;
   text-transform: uppercase;
@@ -152,8 +155,8 @@ function edit(task, field, event) {
   gap: 0;
 }
 .task-cards .task-card .task-card-dates {
-  flex: 0 0 14px;
-  height: 14px;
+  flex: 0 0 var(--task-dates-height);
+  height: var(--task-dates-height);
   padding: 0 7px;
   gap: 4px;
   color: var(--muted);
@@ -162,6 +165,13 @@ function edit(task, field, event) {
   width: 11px;
   height: 11px;
   font-size: 11px;
+}
+.task-cards .task-card.expanded {
+  padding: calc(var(--space-compact) - 1px);
+  gap: var(--space-tight);
+}
+.task-cards .task-card.expanded .app-button {
+  font-size: var(--font-body-size);
 }
 .handler-table-cell .table-task-cell {
   gap: 0;

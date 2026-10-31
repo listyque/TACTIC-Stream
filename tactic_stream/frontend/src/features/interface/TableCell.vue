@@ -45,7 +45,7 @@ export default {
     expanded: Boolean,
     nestedState: Object,
     selected: Boolean,
-    selectedTaskPreview: Boolean,
+
     height: { type: Number, default: 58 },
     accent: String,
     dataType: String
@@ -58,7 +58,7 @@ export default {
     'task-edit',
     'expand',
     'action',
-    'task-hover',
+
     'select'
   ],
   computed: {
@@ -179,8 +179,6 @@ export default {
     :cell="cell"
     :height="height - 6"
     :editable="editable"
-    :selected-preview="selectedTaskPreview"
-    @hover="$emit('task-hover', $event)"
     @inspect="(task) => $emit('tasks', cell, task)"
     @edit="
       (task, field, bounds) => $emit('task-edit', cell, task, field, bounds)
@@ -191,7 +189,6 @@ export default {
     :cell="cell"
     :height="height - 6"
     :editable="editable"
-    @hover="$emit('task-hover', $event)"
     @inspect="(task) => $emit('tasks', cell, task)"
     @edit="
       (task, field, bounds) => $emit('task-edit', cell, task, field, bounds)

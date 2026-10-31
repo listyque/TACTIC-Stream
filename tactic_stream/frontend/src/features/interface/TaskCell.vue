@@ -11,15 +11,15 @@ import {
 import AppButton from '../../controls/AppButton.vue';
 import TaskCards from './TaskCards.vue';
 import { t } from '../../i18n.js';
+import { appearance } from '../../appearance.js';
 import * as Cells from '../../../../src/tactic_stream/shared_ui/features/table/cells.ui.mjs';
 
 const props = defineProps({
   cell: Object,
   editable: Boolean,
-  height: Number,
-  selectedPreview: Boolean
+  height: Number
 });
-const emit = defineEmits(['inspect', 'edit', 'hover']);
+const emit = defineEmits(['inspect', 'edit']);
 const anchor = ref(null),
   popup = ref(null),
   menu = ref(null);
@@ -49,7 +49,6 @@ function close(focus = false) {
   popup.value?.hidePopover();
   visible.value = pinned.value = false;
   inside = hovering = false;
-  emit('hover', false);
   if (focus === true) menu.value?.$el.focus();
 }
 async function open(pin = false) {
@@ -63,14 +62,17 @@ async function open(pin = false) {
   await nextTick();
   if (id !== request || !popup.value || !anchor.value?.isConnected) return;
   const bounds = anchor.value.getBoundingClientRect();
-  const cardsWidth = layout.value.previewWidth;
-  const popupWidth = Math.min(innerWidth - 16, cardsWidth + 16);
-  popup.value.style.width = popupWidth + 'px';
-  popup.value.style.height =
-    (props.height || 58) + 16 + (cardsWidth > popupWidth - 16 ? 16 : 0) + 'px';
+  const geometry = Cells.taskPreviewLayout(
+    tasks.value.length,
+    innerWidth,
+    innerHeight,
+    appearance.theme
+  );
+  popup.value.style.width = geometry.width + 'px';
+  popup.value.style.height = geometry.height + 'px';
   popup.value.style.setProperty(
     '--table-row-height',
-    (props.height || 58) + 'px'
+    geometry.cardHeight + 'px'
   );
   popup.value.showPopover();
   visible.value = true;
@@ -86,43 +88,50 @@ async function open(pin = false) {
 }
 function enter(event) {
   if (event.pointerType !== 'mouse') return;
-  hovering = true;
-  emit('hover', true);
-  scheduleOpen();
+  const bounds = anchor.value.getBoundingClientRect();
+  const active = Cells.taskCardsHovered(
+    ((event.clientX - bounds.left) * width.value) / bounds.width,
+    event.clientY - bounds.top,
+    layout.value.visibleWidth,
+    bounds.height
+  );
+  if (hovering === active) return;
+  hovering = active;
+  if (active) scheduleOpen();
+  else {
+    clearTimeout(opening);
+    scheduleClose();
+  }
 }
 function moved(event) {
-  if (!hovering) enter(event);
+  enter(event);
 }
 function scheduleOpen() {
   clearTimeout(closing);
   clearTimeout(opening);
   if (overflow.value && tasks.value.length && !visible.value)
     opening = setTimeout(() => {
-      if (hovering || props.selectedPreview) open();
+      if (hovering) open();
     }, 260);
 }
 function leave() {
   hovering = false;
-  emit('hover', inside);
-  if (!props.selectedPreview) clearTimeout(opening);
+  clearTimeout(opening);
   scheduleClose();
 }
 function scheduleClose() {
   clearTimeout(closing);
-  if (!pinned.value && !hovering && !inside && !props.selectedPreview)
+  if (!pinned.value && !hovering && !inside)
     closing = setTimeout(() => {
-      if (!pinned.value && !hovering && !inside && !props.selectedPreview)
-        close();
+      if (!pinned.value && !hovering && !inside) close();
     }, 180);
 }
 function popupEnter() {
   inside = true;
-  emit('hover', true);
   clearTimeout(closing);
 }
 function popupLeave() {
   inside = false;
-  emit('hover', hovering);
   scheduleClose();
 }
 function activate() {
@@ -175,16 +184,6 @@ watch(
 watch(
   () => props.height,
   () => close()
-);
-watch(
-  () => props.selectedPreview,
-  (active) => {
-    if (active) scheduleOpen();
-    else {
-      if (!hovering) clearTimeout(opening);
-      scheduleClose();
-    }
-  }
 );
 onMounted(() => {
   observer = new ResizeObserver((entries) => {
@@ -248,31 +247,64 @@ onBeforeUnmount(() => {
       @pointerdown="activate"
       @focusin="activate"
     >
-      <TaskCards
-        :tasks="tasks"
-        :height="height || 58"
-        :editable="editable"
-        @inspect="inspect"
-        @edit="edit"
+      <div class="task-preview-content">
+        <TaskCards
+          :tasks="tasks"
+          :height="height || 58"
+          expanded
+          :editable="editable"
+          @inspect="inspect"
+          @edit="edit"
+        />
+      </div>
+      <AppButton
+        label="Task Manager"
+        icon="tasks"
+        icon-only
+        class="task-preview-manager"
+        :badge-count="cell?.count || 0"
+        @click="inspect(null)"
       />
     </div>
   </Teleport>
 </template>
 
 <style>
-.task-preview > .task-cards {
+.task-preview:popover-open {
+  display: flex;
+  overflow: hidden;
+}
+.task-preview-content {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  overflow: auto;
+}
+.task-preview-content > .task-cards {
   width: max-content;
   height: var(--table-row-height);
+}
+.task-preview .task-preview-manager {
+  flex: none;
+  align-self: center;
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  min-height: 28px;
+  margin-left: 4px;
 }
 .handler-table-cell .table-task-cell {
   width: calc(100% - 12px);
   height: var(--table-row-height);
   margin: 3px 6px;
 }
-.task-preview-trigger {
+.task-preview-trigger,
+.task-preview-manager {
   color: var(--primary);
 }
-.task-preview-trigger .app-button-badge {
+.task-preview-trigger .app-button-badge,
+.task-preview-manager .app-button-badge {
   background: var(--primary);
 }
 </style>

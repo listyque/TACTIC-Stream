@@ -4,7 +4,7 @@ import FrameView from '../../frame/FrameView.vue';
 import TaskCell from './TaskCell.vue';
 import { taskSummary } from '../../../../src/tactic_stream/shared_ui/features/table/cells.ui.mjs';
 const props = defineProps({ cell: Object, height: Number, editable: Boolean });
-const emit = defineEmits(['inspect', 'edit', 'hover']);
+const emit = defineEmits(['inspect', 'edit']);
 const host = ref(null),
   width = ref(100);
 const scene = computed(() =>
@@ -34,7 +34,6 @@ onBeforeUnmount(() => observer?.disconnect());
       :editable="editable"
       @inspect="emit('inspect', $event)"
       @edit="(task, field, bounds) => emit('edit', task, field, bounds)"
-      @hover="emit('hover', $event)"
     />
   </div>
 </template>

@@ -194,8 +194,7 @@ export default {
       editBusy: false,
       editError: '',
       editUncertain: false,
-      taskContext: null,
-      hoveredTaskCell: null
+      taskContext: null
     };
   },
   computed: {
@@ -2459,24 +2458,6 @@ export default {
               "
               :expanded="!!expandedDetails[record.__search_key__]"
               :nested-state="expandedTables[record.__search_key__]"
-              :selected-task-preview="
-                tableSelection.includes(record.__search_key__) &&
-                tableSelection.includes(hoveredTaskCell?.key)
-              "
-              @task-hover="
-                (active) => {
-                  if (active)
-                    hoveredTaskCell = {
-                      key: record.__search_key__,
-                      column: element.name
-                    };
-                  else if (
-                    hoveredTaskCell?.key === record.__search_key__ &&
-                    hoveredTaskCell.column === element.name
-                  )
-                    hoveredTaskCell = null;
-                }
-              "
               @expand="
                 expandedDetails[record.__search_key__] =
                   !expandedDetails[record.__search_key__]
