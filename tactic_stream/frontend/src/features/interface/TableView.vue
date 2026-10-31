@@ -18,6 +18,7 @@ import ActionRows from '../../controls/ActionRows.vue';
 import { appearance } from '../../appearance.js';
 import { cssRoles } from '../../../../src/tactic_stream/shared_ui/core/foundation.mjs';
 import * as Host from '../../../../src/tactic_stream/shared_ui/features/table/host.ui.mjs';
+import { alignment } from '../../../../src/tactic_stream/shared_ui/features/table/cells.ui.mjs';
 import { acknowledgedWidths } from '../../../../src/tactic_stream/shared_ui/features/table/columns.mjs';
 import * as Menus from '../../../../src/tactic_stream/shared_ui/features/table/menus.ui.mjs';
 import FrameView from '../../frame/FrameView.vue';
@@ -638,6 +639,9 @@ defineExpose({ viewport });
         v-for="column in columns"
         :key="column.name"
         class="handler-table-heading"
+        :data-align="
+          alignment(column.displayOptions || column.display?.options)
+        "
         role="columnheader"
         :aria-sort="
           sortField === column.sortField
@@ -798,6 +802,9 @@ defineExpose({ viewport });
             v-for="(column, index) in columns"
             :key="column.name"
             class="handler-table-cell"
+            :data-align="
+              alignment(column.displayOptions || column.display?.options)
+            "
             role="gridcell"
             :class="{ 'first-column': index === 0 }"
           >
@@ -830,6 +837,9 @@ defineExpose({ viewport });
             v-for="(column, index) in columns"
             :key="column.name"
             class="handler-table-cell"
+            :data-align="
+              alignment(column.displayOptions || column.display?.options)
+            "
             role="gridcell"
             :class="{
               'first-column': index === 0,
@@ -962,15 +972,12 @@ defineExpose({ viewport });
   position: relative;
   display: flex;
   align-items: center;
-  padding: 0 12px 0 10px;
+  padding: 0 12px;
   min-width: 0;
   cursor: grab;
   touch-action: none;
   text-transform: uppercase;
   outline: 0;
-}
-.handler-table-heading:nth-child(2) {
-  padding-left: 14px;
 }
 .handler-table-heading > span:first-child {
   overflow: hidden;
@@ -987,7 +994,7 @@ defineExpose({ viewport });
   color: var(--table-header-text);
 }
 .handler-table-heading.grouped {
-  padding-right: 30px;
+  padding-inline: 30px;
 }
 .table-group-indicator {
   position: absolute;
@@ -1052,7 +1059,7 @@ defineExpose({ viewport });
   white-space: nowrap;
 }
 .handler-table-cell.first-column {
-  padding-left: 14px;
+  padding-inline: 14px;
   font-weight: 600;
 }
 .handler-table-cell:has(
@@ -1075,6 +1082,21 @@ defineExpose({ viewport });
 .handler-table-cell > span:not(.table-notes) {
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.handler-table
+  :is(.handler-table-heading, .handler-table-cell)[data-align='center'] {
+  justify-content: center;
+  text-align: center;
+}
+.handler-table
+  :is(.handler-table-heading, .handler-table-cell)[data-align='left'] {
+  justify-content: flex-start;
+  text-align: left;
+}
+.handler-table
+  :is(.handler-table-heading, .handler-table-cell)[data-align='right'] {
+  justify-content: flex-end;
+  text-align: right;
 }
 .handler-table-cell.editable-cell {
   cursor: text;

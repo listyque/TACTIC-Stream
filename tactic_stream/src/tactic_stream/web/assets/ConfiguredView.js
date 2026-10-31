@@ -44,6 +44,14 @@ var metrics$2 = {
 	previewInset: 8
 };
 var status = { foregroundMix: .45 };
+function alignment$1(options = {}) {
+	const value = options.justify || options.align;
+	return [
+		"left",
+		"right",
+		"center"
+	].includes(value) ? value : "center";
+}
 function completionGroups(count, width, height) {
 	const rowHeight = 18, gap = 4;
 	const contentHeight = Math.max(0, count * 22 - gap);
@@ -5663,6 +5671,7 @@ var _hoisted_2$22 = {
 };
 var _hoisted_3$17 = { class: "visually-hidden" };
 var _hoisted_4$16 = [
+	"data-align",
 	"aria-sort",
 	"title",
 	"aria-label",
@@ -5690,18 +5699,19 @@ var _hoisted_8$8 = [
 	"onDblclick",
 	"onContextmenu"
 ];
-var _hoisted_9$8 = {
+var _hoisted_9$8 = ["data-align"];
+var _hoisted_10$6 = {
 	class: "handler-table-selection",
 	role: "gridcell"
 };
-var _hoisted_10$6 = { class: "visually-hidden" };
-var _hoisted_11$6 = ["onDblclick"];
-var _hoisted_12$6 = {
+var _hoisted_11$6 = { class: "visually-hidden" };
+var _hoisted_12$6 = ["data-align", "onDblclick"];
+var _hoisted_13$6 = {
 	class: "handler-table-actions",
 	role: "gridcell"
 };
-var _hoisted_13$6 = ["aria-label"];
-var _hoisted_14$5 = ["aria-label", "placeholder"];
+var _hoisted_14$5 = ["aria-label"];
+var _hoisted_15$5 = ["aria-label", "placeholder"];
 var _sfc_main$56 = {
 	__name: "TableView",
 	props: {
@@ -6173,6 +6183,7 @@ var _sfc_main$56 = {
 									"drop-target": drag.value?.target === column.name,
 									grouped: __props.groupMode === "column:" + column.name
 								}]),
+								"data-align": unref(alignment$1)(column.displayOptions || column.display?.options),
 								role: "columnheader",
 								"aria-sort": __props.sortField === column.sortField ? __props.sortDirection === "desc" ? "descending" : "ascending" : "none",
 								title: column.title,
@@ -6312,22 +6323,23 @@ var _sfc_main$56 = {
 								return openBlock(), createElementBlock("div", {
 									key: column.name,
 									class: normalizeClass(["handler-table-cell", { "first-column": index === 0 }]),
+									"data-align": unref(alignment$1)(column.displayOptions || column.display?.options),
 									role: "gridcell"
-								}, [createBaseVNode("strong", null, toDisplayString(entry.summary[column.name] || ""), 1)], 2);
+								}, [createBaseVNode("strong", null, toDisplayString(entry.summary[column.name] || ""), 1)], 10, _hoisted_9$8);
 							}), 128)),
 							_cache[13] || (_cache[13] = createBaseVNode("div", {
 								class: "handler-table-actions",
 								role: "gridcell"
 							}, null, -1))
 						], 64)) : (openBlock(), createElementBlock(Fragment, { key: 4 }, [
-							createBaseVNode("div", _hoisted_9$8, [__props.selectable ? (openBlock(), createBlock(_sfc_main$72, {
+							createBaseVNode("div", _hoisted_10$6, [__props.selectable ? (openBlock(), createBlock(_sfc_main$72, {
 								key: 0,
 								label: unref(t)("Select record: {name}", { name: entry.record.name || entry.record.title || entry.record.code || entry.record.id }),
 								"translate-label": false,
 								"model-value": __props.selectedKeys?.includes(entry.key),
 								"onUpdate:modelValue": ($event) => emit("select", [entry.record], $event)
 							}, {
-								default: withCtx(() => [createBaseVNode("span", _hoisted_10$6, toDisplayString(unref(t)("Select row")), 1)]),
+								default: withCtx(() => [createBaseVNode("span", _hoisted_11$6, toDisplayString(unref(t)("Select row")), 1)]),
 								_: 1
 							}, 8, [
 								"label",
@@ -6341,6 +6353,7 @@ var _sfc_main$56 = {
 										"first-column": index === 0,
 										"editable-cell": __props.editable && column.editable
 									}]),
+									"data-align": unref(alignment$1)(column.displayOptions || column.display?.options),
 									role: "gridcell",
 									onDblclick: withModifiers(($event) => __props.editable && column.editable ? emit("edit", entry.record, column, $event.currentTarget) : emit("inspect", entry.record), ["stop"])
 								}, [renderSlot(_ctx.$slots, "cell", {
@@ -6351,9 +6364,9 @@ var _sfc_main$56 = {
 									},
 									index,
 									height: rowHeight.value
-								})], 42, _hoisted_11$6);
+								})], 42, _hoisted_12$6);
 							}), 128)),
-							createBaseVNode("div", _hoisted_12$6, [!__props.readOnly ? (openBlock(), createBlock(_sfc_main$69, {
+							createBaseVNode("div", _hoisted_13$6, [!__props.readOnly ? (openBlock(), createBlock(_sfc_main$69, {
 								key: 0,
 								label: "Object actions",
 								icon: "more",
@@ -6398,7 +6411,7 @@ var _sfc_main$56 = {
 					"aria-label": unref(t)("View name"),
 					placeholder: unref(t)("View name"),
 					required: ""
-				}, null, 8, _hoisted_14$5), [[vModelText, viewName.value]]), createBaseVNode("footer", null, [createVNode(_sfc_main$69, {
+				}, null, 8, _hoisted_15$5), [[vModelText, viewName.value]]), createBaseVNode("footer", null, [createVNode(_sfc_main$69, {
 					label: "Save",
 					highlighted: "",
 					type: "submit",
@@ -6406,7 +6419,7 @@ var _sfc_main$56 = {
 				}, null, 8, ["disabled"]), createVNode(_sfc_main$69, {
 					label: "Cancel",
 					onClick: _cache[8] || (_cache[8] = ($event) => savingView.value = false)
-				})])], 32)], 40, _hoisted_13$6)), [[_directive_window, { type: "dialog" }]])
+				})])], 32)], 40, _hoisted_14$5)), [[_directive_window, { type: "dialog" }]])
 			], 64);
 		};
 	}
