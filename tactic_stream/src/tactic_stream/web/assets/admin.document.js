@@ -341,6 +341,7 @@ var sections = [
 function metric(id, title, value, bounds, color, language) {
 	return node("Box", id, bounds, {
 		background: "transparent",
+		radius: 0,
 		children: [label(id + "Value", rect(0, 0, bounds.width, 28), String(value ?? 0), {
 			fontRole: "statistic",
 			weight: 600,
