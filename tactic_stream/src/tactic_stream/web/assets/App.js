@@ -1558,7 +1558,10 @@ var rect = (x, y, width, height) => ({
 	width: Math.max(0, width),
 	height: Math.max(0, height)
 });
-function geometry(width, height, collapsed) {
+function availableSections(model) {
+	return sections.filter((row) => model.streamApi !== false || !["dashboards", "layouts"].includes(row.id));
+}
+function geometry(width, height, collapsed, sectionCount = sections.length) {
 	const mobile = width < 1e3, nav = mobile ? 0 : collapsed ? 56 : 250, body = width - nav, pad = spacing$1.content;
 	const header = mobile ? 166 : 77;
 	return {
@@ -1568,13 +1571,13 @@ function geometry(width, height, collapsed) {
 		pad,
 		header,
 		toolbar: Math.max(0, Math.min(body - (mobile ? 24 : 434), 620)),
-		compactHeight: sections.length * 48 - 8,
-		compactWidth: nav - (height - 88 - 12 < sections.length * 48 - 8 ? 16 : 0),
+		compactHeight: sectionCount * 48 - 8,
+		compactWidth: nav - (height - 88 - 12 < sectionCount * 48 - 8 ? 16 : 0),
 		content: rect(nav + pad, header + pad, body - pad * 2, height - header - pad * 2)
 	};
 }
 function describe$35(model, ui, width, height, language) {
-	const tr = (text) => translate(text, language), g = geometry(width, height, ui.collapsed), nodes = [], branding = [], current = sections.find((row) => row.id === model.section) || sections[0];
+	const tr = (text) => translate(text, language), available = availableSections(model), g = geometry(width, height, ui.collapsed, available.length), nodes = [], branding = [], current = available.find((row) => row.id === model.section) || available[0];
 	const label = (id, r, text, props) => node("Label", id, r, Object.assign({ text: tr(text) }, props || {}));
 	const button = (id, r, text, icon, action, enabled) => node("Button", id, r, {
 		text: tr(text),
@@ -1603,7 +1606,7 @@ function describe$35(model, ui, width, height, language) {
 		const top = ui.collapsed ? 88 : 170;
 		if (ui.collapsed) {
 			const children = [];
-			sections.forEach((record, index) => {
+			available.forEach((record, index) => {
 				row$13({
 					width: g.nav,
 					contentWidth: g.compactWidth,
@@ -1654,7 +1657,7 @@ function describe$35(model, ui, width, height, language) {
 		head.push(node("Choice", "administrationSectionSelector", rect(20 + half, 70, half, 38), {
 			label: tr("Administration section"),
 			value: model.section,
-			options: sections.map((row) => ({
+			options: available.map((row) => ({
 				value: row.id,
 				label: tr(row.title)
 			})),
@@ -1820,7 +1823,7 @@ var AdministrationShell_default = /*#__PURE__*/ _plugin_vue_export_helper_defaul
 			}, [createVNode(_sfc_main$105, {
 				scene: scene.value,
 				views: views.value,
-				models: { sections },
+				models: { sections: availableSections(__props.model) },
 				"describe-row": (list, record) => row$13(list, record, __props.model, ui.value, unref(appearance).language),
 				onEvent: dispatch
 			}, null, 8, [
@@ -1831,7 +1834,7 @@ var AdministrationShell_default = /*#__PURE__*/ _plugin_vue_export_helper_defaul
 			])], 512);
 		};
 	}
-}, [["__scopeId", "data-v-6f05cb69"]]);
+}, [["__scopeId", "data-v-5fed5e1c"]]);
 var main_menus_default = {
 	user: [
 		{

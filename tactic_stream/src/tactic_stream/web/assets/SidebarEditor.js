@@ -329,7 +329,7 @@ function fields(model, ui, language) {
 			heading("sidebarSearchHeading", "Search and quick filters", "The saved search defines the starting query. Quick filters refine it in the same search tab and use this item's own defaults."),
 			choice("sidebarSearchType", "searchType", "Search Type", "Which project objects this item opens.", model.typeOptions),
 			choice("sidebarSearchPreset", "searchView", "Predefined search", "Choose a saved query or leave the list unfiltered.", optionsWithEmpty(model.presetOptions, "No predefined search")),
-			...entry.widgetType === "custom_layout" && entry.displayView?.startsWith("dashboard.") ? [action("sidebarEditPage", "Edit page layout", "pageLayout", !model.dirty)] : [],
+			...model.streamApi !== false && entry.widgetType === "custom_layout" && entry.displayView?.startsWith("dashboard.") ? [action("sidebarEditPage", "Edit page layout", "pageLayout", !model.dirty)] : [],
 			action("sidebarSearchSetupButton", "Configure search", "search", !model.dirty && !!entry.searchType && !!entry.isVisible),
 			choice("sidebarResultView", "resultViewMode", "Default item view", "The initial presentation when this search tab is opened.", model.resultOptions),
 			choice("sidebarLayoutPreset", "layoutPreset", "Workspace layout", "Apply a saved dock arrangement when this sidebar item opens.", optionsWithEmpty(model.layoutOptions, "Do not change workspace layout")),

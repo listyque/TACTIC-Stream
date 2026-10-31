@@ -6,6 +6,12 @@ successful modern-client screen is not proof of complete legacy compatibility.
 Use live API discovery for the selected installation and check actual arguments,
 results, authorization, revisions, transaction effects and failure paths.
 
+DashboardCmd and Stream widget-configuration authoring are Stream extensions.
+Handler hides page/item layout editors for Legacy and unidentified API sessions;
+native and browser administration descriptions use the same section filtering.
+Browser Stream sessions retain both editors. Controller guards cover direct,
+queued and preview requests, including a change away from a Stream session.
+
 Transported Handler procedures use public `pyasm.common` exception exports.
 Legacy TACTIC re-exports `SecurityException` from `common_exception.py` and lacks
 Stream's `pyasm.common.errors` module. Physical-table tests execute both products'

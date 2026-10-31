@@ -61,7 +61,7 @@ onBeforeUnmount(() => observer?.disconnect());
     <FrameView
       :scene="scene"
       :views="views"
-      :models="{ sections: UI.sections }"
+      :models="{ sections: UI.availableSections(model) }"
       :describe-row="
         (list, record) => UI.row(list, record, model, ui, appearance.language)
       "
