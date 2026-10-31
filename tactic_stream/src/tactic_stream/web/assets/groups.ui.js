@@ -1,4 +1,4 @@
-import { V as node } from "./resize.js";
+import { H as node } from "./resize.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/groups/groups.state.mjs
 function initial() {
 	return {

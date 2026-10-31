@@ -2,7 +2,7 @@ import { n as arrange, r as __exportAll, t as _sfc_main$6 } from "./ObjectFieldF
 import { A as onMounted, E as nextTick, F as resolveComponent, G as withCtx, H as watch, I as resolveDirective, K as withDirectives, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, S as h, X as ref, _ as createElementBlock, a as vModelSelect, b as createVNode, g as createCommentVNode, h as createBlock, i as vModelCheckbox, j as onUpdated, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, o as vModelText, p as computed, rt as toDisplayString, s as vShow, tt as normalizeClass, u as Fragment, y as createTextVNode, z as useId } from "./vue.js";
 import { D as textStyles, R as _plugin_vue_export_helper_default, _ as controls, o as t, s as appearance, t as _sfc_main$7 } from "./AppButton.js";
 import { K as uploadFormFile, _t as mobile, d as formDefinition, k as rpc } from "./index.js";
-import { C as ItemPreview_default, D as _sfc_main$10, E as _sfc_main$13, F as _sfc_main$14, H as rect, I as _sfc_main$11, L as button, M as _sfc_main$12, N as _sfc_main$9, R as label, V as node, n as observeFrameSizes, r as _sfc_main$8, v as translate } from "./resize.js";
+import { D as _sfc_main$13, H as node, I as _sfc_main$14, L as _sfc_main$11, N as _sfc_main$12, O as _sfc_main$10, P as _sfc_main$9, R as button, U as rect, n as observeFrameSizes, r as _sfc_main$8, w as ItemPreview_default, y as translate, z as label } from "./resize.js";
 import { n as qtLabelTextWidth } from "./textMetrics.js";
 import { t as captionHeight } from "./sections.ui.js";
 //#region src/features/objects/recordFields.js

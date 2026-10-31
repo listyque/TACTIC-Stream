@@ -1,7 +1,7 @@
 import { A as onMounted, B as useModel, C as inject, E as nextTick, G as withCtx, H as watch, I as resolveDirective, K as withDirectives, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, T as mergeProps, X as ref, _ as createElementBlock, b as createVNode, c as withKeys, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, s as vShow, tt as normalizeClass, u as Fragment, w as mergeModels } from "./vue.js";
 import { _ as controls, a as _sfc_main$4, o as t, s as appearance, t as _sfc_main$5 } from "./AppButton.js";
 import { Pt as randomUuid, c as beginActivity, j as scriptEditor, k as rpc, u as endActivity } from "./index.js";
-import { B as muted, H as rect, L as button, O as _sfc_main$9, R as label, V as node, c as toolbar$1, d as documentSymbols, g as copyText, l as _sfc_main$7, n as observeFrameSizes, r as _sfc_main$6, s as _sfc_main$8, t as frameContentWidth, u as completions, v as translate, w as AppSearchField_default } from "./resize.js";
+import { H as node, R as button, T as AppSearchField_default, U as rect, V as muted, c as toolbar$1, d as documentSymbols, g as copyText, k as _sfc_main$9, l as _sfc_main$7, n as observeFrameSizes, r as _sfc_main$6, s as _sfc_main$8, t as frameContentWidth, u as completions, y as translate, z as label } from "./resize.js";
 import { S as _sfc_main$11, b as _sfc_main$10, c as runBrowserScript, l as scriptTree, s as buttonId } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/scripts/source.ui.mjs
 function toolbarHeight(width) {

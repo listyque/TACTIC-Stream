@@ -547,7 +547,7 @@ def dashboard_layout(document, view, search_key='', *, detail_key='', filter_val
                     emit(dict(kind='metric', text=block.title or block.search_type, value=value, weight=block.weight))
                 else:
                     emit(dict(kind=block.kind, text=block.title or info.get_title(), report=report, weight=block.weight,
-                              height=block.height))
+                              height=block.height, chartType=block.chart_type))
             elif block.kind=='metric':
                 search=Search(block.search_type)
                 for column,relation,value in filters:

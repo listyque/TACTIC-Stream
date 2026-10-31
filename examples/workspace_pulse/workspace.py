@@ -10,7 +10,7 @@ from tactic_stream.server.sidebar_editor import SidebarDraft, read_sidebar, save
 
 NAMES = ('workspace_pulse', 'workspace_vfx')
 TABLE_VIEW = 'workspace_pulse_table'
-PANEL = dict(fill='panel', stroke_width=1, radius=6)
+PANEL = dict(fill='surfaceContainerLowest', stroke_width=0, radius=8, shadow=True)
 VFX_TABLES = ('episode', 'episodes', 'sequence', 'sequences', 'scenes', 'shot', 'shots', 'asset', 'assets')
 
 
@@ -19,33 +19,54 @@ def panel(title, children, **values):
                 gap=12, appearance=PANEL, **values)
 
 
-def metric(title, search_type, filters):
+def metric(title, search_type, filters, icon=''):
     return dict(kind='metric', title=title, search_type=search_type,
-                filters=filters, appearance=PANEL, padding=[12]*4, height=100)
+                filters=filters, icon=icon, appearance=PANEL, height=104)
 
 
-def documents(project, types):
-    """Project code and type identities come from native discovery, never a fixture."""
+def overview(project):
+    """An editable overview backed by scoped native task aggregates and tables."""
     scope = [dict(column='project_code', relation='=', value=project)]
     task = dict(search_type='sthpw/task', filters=scope)
-    pulse = dict(name=NAMES[0], title='Pulse', filters=[
+    due = dict(column='bid_end_date', relation='!=', value=None)
+    def card(children, **values):
+        return dict(kind='column', children=children, padding=[20]*4, gap=12,
+                    appearance=PANEL, **values)
+    return dict(name='workspace_overview', title='Project overview', filters=[
         dict(name=name, title=title, search_type='sthpw/task', column=column,
              value='', enabled=False)
         for name, title, column in [('status', 'Status', 'status'),
                                     ('assigned', 'Assignee', 'assigned'),
                                     ('process', 'Process', 'process')]
     ], blocks=[
-        dict(kind='row', region='header', children=[
-            metric('Tasks', 'sthpw/task', scope),
-            metric('With due date', 'sthpw/task', scope + [dict(column='bid_end_date', relation='!=', value=None)]),
-            metric('Without due date', 'sthpw/task', scope + [dict(column='bid_end_date', relation='=', value=None)])]),
-        dict(kind='row', children=[
-            panel('By status', [dict(kind='chart', title='Tasks by status', **task, height=180,
-                group_by=[dict(column='status', title='Status')], group_order='value_desc')]),
-            panel('By assignee', [dict(kind='chart', title='Tasks by assignee', **task, height=180,
-                group_by=[dict(column='assigned', title='Assignee')], group_order='value_desc')])]),
-        panel('Task queue', [dict(kind='table', title='Task queue', **task, view=TABLE_VIEW,
-            height=320, controls=['shelf', 'search', 'searchLimit'])])])
+        dict(kind='grid', region='header', columns=4, min_cell_width=220,
+             row_height=104, gap=16, margin=[16,0,8,0], children=[
+            metric('Total tasks', 'sthpw/task', scope, 'clipboard-check'),
+            metric('Scheduled', 'sthpw/task', scope + [due], 'calendar'),
+            metric('Without a due date', 'sthpw/task', scope + [dict(column='bid_end_date', relation='=', value=None)], 'clock'),
+            metric('Assigned', 'sthpw/task', scope + [dict(column='assigned', relation='like', value='_%')], 'person')]),
+        dict(kind='column', padding=[16,0,24,0], gap=20, children=[
+            dict(kind='row', gap=20, collapse_width=880, children=[
+                card([dict(kind='chart', title='Delivery schedule', search_type='sthpw/task',
+                    filters=scope + [due], chart_type='line', height=264,
+                    group_by=[dict(column='bid_end_date', period='day', title='Due date')],
+                    group_limit=25)], weight=2),
+                card([dict(kind='chart', title='Tasks by status', **task, chart_type='donut',
+                    height=264, group_by=[dict(column='status', title='Status')],
+                    group_order='value_desc', group_limit=10)], weight=2)]),
+            dict(kind='row', gap=20, collapse_width=880, children=[
+                card([dict(kind='table', title='Task queue', **task, view=TABLE_VIEW,
+                    height=344, controls=['shelf', 'search', 'searchLimit'])], weight=3),
+                card([dict(kind='chart', title='Workload by assignee', **task, chart_type='bar',
+                    height=344, group_by=[dict(column='assigned', title='Assignee')],
+                    group_order='value_desc', group_limit=10)], weight=2)])])])
+
+
+def documents(project, types):
+    """Project code and type identities come from native discovery, never a fixture."""
+    scope = [dict(column='project_code', relation='=', value=project)]
+    pulse = overview(project)
+    pulse.update(name=NAMES[0], title='Pulse')
 
     # Native templates keep their own namespaces; inspect existing table names only.
     vfx_types = [row for row in types if row['table'] in VFX_TABLES]
@@ -70,8 +91,17 @@ def table_config(search_type, fields):
     root = ET.Element('config')
     view = ET.SubElement(root, TABLE_VIEW)
     widths = dict(name=200, description=280, process=120, status=140, assigned=160, bid_end_date=140, code=180)
+    if search_type == 'sthpw/task':
+        widths.update(description=200, process=72, status=96, assigned=100, bid_end_date=100)
     for column, title in fields:
-        ET.SubElement(view, 'element', name=column, title=title, width=str(widths[column]))
+        element = ET.SubElement(view, 'element', name=column, title=title, width=str(widths[column]))
+        if search_type == 'sthpw/task' and column == 'assigned':
+            display = ET.SubElement(element, 'display', {'class': 'tactic.ui.table.ExpressionElementWdg'})
+            ET.SubElement(display, 'expression').text = '@GET(.assigned)'
+        elif search_type == 'sthpw/task' and column == 'bid_end_date':
+            display = ET.SubElement(element, 'display', {'class': 'tactic.ui.table.FormatElementWdg'})
+            ET.SubElement(display, 'type').text = 'date'
+            ET.SubElement(display, 'format').text = '1999-12-31'
     ET.indent(root, space='  ')
     row = SearchType.create('config/widget_config')
     for key, value in dict(search_type=search_type, view=TABLE_VIEW,

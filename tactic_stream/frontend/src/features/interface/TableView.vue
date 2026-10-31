@@ -557,6 +557,7 @@ defineExpose({ viewport });
       '--table-resize-hit': Host.metrics.resizeHandle + 'px',
       '--table-accent': accent,
       '--table-header': 'var(' + cssRoles[Host.paint.header] + ')',
+      '--table-row': 'var(' + cssRoles[Host.paint.row] + ')',
       '--table-header-text': 'var(' + cssRoles[Host.paint.headerText] + ')'
     }"
     @scroll="scrolled"
@@ -673,6 +674,7 @@ defineExpose({ viewport });
         :aria-selected="!!entry.record && (focusedKey === entry.key || selectedKeys?.includes(entry.key))"
         :class="{
           selected: selectedKeys?.includes(entry.key),
+          alternate: !!entry.record && entry.index % 2 === 1,
           active: !!entry.record && focusedKey === entry.key,
           'group-row': !!entry.group || !!entry.summary
         }"
@@ -895,7 +897,7 @@ defineExpose({ viewport });
   color: var(--table-header-text);
   background: var(--table-header);
   border-radius: 0;
-  border-bottom: 0;
+  border-bottom: 1px solid var(--table-divider);
   font-size: var(--text-caption);
   font-weight: 600;
 }
@@ -965,11 +967,17 @@ defineExpose({ viewport });
   width: 100%;
   display: grid;
   grid-template-columns: var(--table-columns);
-  background: var(--surface);
-  border-bottom: 1px solid var(--outline-variant);
+  background: var(--table-row);
+  border-bottom: 1px solid var(--table-divider);
   cursor: pointer;
 }
 .handler-table-row:hover {
+  background: var(--row-hover, var(--hover));
+}
+.handler-table-row.alternate {
+  background: var(--table-alternate-row);
+}
+.handler-table-row.alternate:hover {
   background: var(--row-hover, var(--hover));
 }
 .handler-table-row.selected,
@@ -997,7 +1005,6 @@ defineExpose({ viewport });
   .table-task-summary,
   .table-value-fields,
   .table-service-cell,
-  .table-status-cell,
   .table-message-cell,
   .table-completion,
   .table-completion-groups,
@@ -1063,7 +1070,7 @@ defineExpose({ viewport });
 }
 .handler-table-header .handler-table-actions :is(.app-button, summary) {
   color: var(--table-header-text);
-  background: var(--surface-high);
+  background: transparent;
   border-radius: var(--item-radius);
 }
 .handler-table-actions .busy-indicator {

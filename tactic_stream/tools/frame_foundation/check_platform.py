@@ -906,6 +906,8 @@ def main():
         ),
         ("search-state", ["node", "frontend/tests/frame_search_state.mjs"], ROOT, {}),
         ("table-state", ["node", "frontend/tests/frame_table_state.mjs"], ROOT, {}),
+        ("charts-state", ["node", "frontend/tests/frame_charts.mjs"], ROOT, {}),
+        ("dashboard-layout", ["node", "frontend/tests/frame_dashboard_layout.mjs"], ROOT, {}),
         ("dependencies-state", ["node", "frontend/tests/frame_dependencies_state.mjs"], ROOT, {}),
         ("parent-state", ["node", "frontend/tests/frame_parent_state.mjs"], ROOT, {}),
         ("tasks-state", ["node", "frontend/tests/frame_tasks_state.mjs"], ROOT, {}),

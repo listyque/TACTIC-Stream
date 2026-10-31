@@ -518,7 +518,8 @@ var lineHeights = Object.freeze({
 	heading: 23,
 	display: 24,
 	statistic: 28,
-	hero: 32
+	hero: 32,
+	headline: 43
 });
 var textStyles = Object.freeze({
 	timelineTick: 7,
@@ -533,7 +534,8 @@ var textStyles = Object.freeze({
 	heading: 17,
 	display: 18,
 	statistic: 21,
-	hero: 24
+	hero: 24,
+	headline: 32
 });
 var controls = {
 	dialog: {
@@ -927,6 +929,7 @@ function palette(style, dark, base, accent) {
 	colors.topBar = blend(surface, dark ? white : black, dark ? material ? .05 : .03 : .03);
 	colors.toolBar = blend(surface, dark ? white : black, dark ? material ? .11 : .08 : .07);
 	colors.panel = blend(surface, dark ? black : white, dark ? .04 : .22);
+	colors.surfaceContainerLowest = dark ? colors.panel : blend(surface, white, .94);
 	colors.panelRaised = blend(surface, white, dark ? .08 : .38);
 	colors.panelDeep = blend(surface, black, dark ? .19 : .08);
 	colors.row = blend(surface, white, dark ? .07 : .32);
@@ -934,7 +937,9 @@ function palette(style, dark, base, accent) {
 	colors.selected = blend(accent, colors.panelRaised, dark ? .28 : .3);
 	colors.contentSelection = blend(accent, colors.workspace, dark ? .68 : .72);
 	colors.primaryText = readableText$1(colors.workspace);
-	colors.tableHeader = blend(colors.toolBar, colors.primaryText, .14);
+	colors.tableHeader = dark ? blend(colors.panelRaised, accent, .1) : blend(colors.surfaceContainerLowest, colors.primaryText, .035);
+	colors.tableAlternateRow = blend(colors.surfaceContainerLowest, colors.primaryText, dark ? .018 : .014);
+	colors.tableDivider = blend(colors.panel, colors.primaryText, dark ? .075 : .1);
 	colors.contentAccent = blend(accent, colors.primaryText, dark ? .12 : .08);
 	colors.selectedText = readableText$1(colors.selected);
 	colors.contentSelectionText = readableText$1(colors.contentSelection);
@@ -1006,7 +1011,10 @@ var cssRoles = {
 	topBar: "--header",
 	toolBar: "--surface-container",
 	tableHeader: "--table-header-surface",
+	tableAlternateRow: "--table-alternate-row",
+	tableDivider: "--table-divider",
 	panel: "--surface",
+	surfaceContainerLowest: "--surface-lowest",
 	panelRaised: "--surface-high",
 	panelDeep: "--surface-deep",
 	row: "--row",

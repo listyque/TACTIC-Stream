@@ -117,6 +117,25 @@ for (const width of [0, 240, 800, 1600]) {
   }
 }
 assert.equal(Host.boundedWidth(1000), 640);
+const fitted = Host.describe(
+  {
+    autoFit: true,
+    columns: Array.from({ length: 5 }, (_, index) => ({
+      name: 'column_' + index,
+      width: 220
+    }))
+  },
+  600
+);
+assert.equal(
+  fitted.columns.length,
+  5,
+  'Auto Fit keeps every configured column'
+);
+assert(
+  Math.abs(fitted.width - 600) < 1,
+  'Fitted columns stay inside the viewport'
+);
 assert.equal(Host.boundedWidth(0), 48);
 for (const connection of [
   {

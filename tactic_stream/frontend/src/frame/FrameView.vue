@@ -14,6 +14,7 @@ import AppSelect from '../controls/AppSelect.vue';
 import AppEditableSelect from '../controls/AppEditableSelect.vue';
 import FrameGrid from './controls/grid/FrameGrid.vue';
 import FrameGraph from './controls/graph/FrameGraph.vue';
+import FrameChart from './controls/charts/FrameChart.vue';
 import FrameCode from './controls/code/FrameCode.vue';
 import IconPicker from '../controls/IconPicker.vue';
 import AppColorInput from '../controls/AppColorInput.vue';
@@ -127,9 +128,20 @@ function background(node) {
       : node.radius + 'px';
   return {
     background: color(node.background),
-    boxShadow: node.border
-      ? 'inset 0 0 0 ' + (node.borderWidth || 1) + 'px ' + color(node.border)
-      : undefined,
+    boxShadow:
+      [
+        node.border
+          ? 'inset 0 0 0 ' +
+            (node.borderWidth || 1) +
+            'px ' +
+            color(node.border)
+          : '',
+        node.shadow
+          ? `0 ${node.shadow.y}px ${node.shadow.blur}px color-mix(in srgb, ${color('popupShadow')} ${node.shadow.opacity * 100}%, transparent)`
+          : ''
+      ]
+        .filter(Boolean)
+        .join(', ') || undefined,
     borderRadius: radius,
     borderBottomRightRadius:
       node.bottomRightRadius === undefined
@@ -973,6 +985,12 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         :style="style(node)"
         :node="node"
         @event="(action, source) => emit('event', action, source)"
+      />
+      <FrameChart
+        v-else-if="node.kind === 'Chart'"
+        class="frame-node"
+        :style="style(node)"
+        :node="node"
       />
       <FrameCode
         v-else-if="node.kind === 'Code'"

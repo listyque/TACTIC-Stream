@@ -12,6 +12,7 @@ import GroupedCompletionCell from './GroupedCompletionCell.vue';
 import StructuredCell from './StructuredCell.vue';
 import MessageTableCell from './MessageTableCell.vue';
 import TableServiceCell from './TableServiceCell.vue';
+import StatusChip from '../../controls/display/StatusChip.vue';
 import { t } from '../../i18n.js';
 import { appearance } from '../../appearance.js';
 import * as Cells from '../../../../src/tactic_stream/shared_ui/features/table/cells.ui.mjs';
@@ -31,7 +32,8 @@ export default {
     GroupedCompletionCell,
     StructuredCell,
     MessageTableCell,
-    TableServiceCell
+    TableServiceCell,
+    StatusChip
   },
   props: {
     element: Object,
@@ -69,6 +71,9 @@ export default {
     },
     foreground() {
       return 'var(' + cssRoles[Cells.textRole(this.cell || {})] + ')';
+    },
+    statusAccent() {
+      return `color-mix(in srgb, ${this.cell?.statusColor} ${(1 - Cells.status.foregroundMix) * 100}%, var(--on-surface))`;
     },
     displayValue() {
       return this.cell && Object.hasOwn(this.cell, 'text')
@@ -323,17 +328,22 @@ export default {
     rel="noopener noreferrer"
     >{{ value }}</a
   >
+  <StatusChip
+    v-else-if="cell?.statusColor && !cell?.error"
+    class="table-status-badge"
+    :text="text"
+    :accent="statusAccent"
+    :title="tooltip"
+  />
   <span
     v-else
     class="table-cell-text"
     :class="{
-      'table-status-cell': cell?.statusColor,
       'table-cell-multiline': cell?.multiline
     }"
     :title="tooltip"
     :style="{
-      color: cell?.statusColor ? '#000' : foreground,
-      background: cell?.statusColor || undefined
+      color: foreground
     }"
     >{{ text }}</span
   >
@@ -352,16 +362,6 @@ export default {
   white-space: pre-line;
   overflow-wrap: anywhere;
   max-height: 100%;
-}
-.table-status-cell {
-  display: flex;
-  align-items: center;
-  align-self: stretch;
-  width: 100%;
-  padding: 0 10px;
-}
-.first-column > .table-status-cell {
-  padding-left: 14px;
 }
 .handler-table-cell .table-thumbnail {
   display: flex;

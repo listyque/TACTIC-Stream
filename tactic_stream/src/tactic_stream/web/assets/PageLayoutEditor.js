@@ -1,7 +1,7 @@
 import { F as resolveComponent, K as withDirectives, M as openBlock, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, m as createBaseVNode, nt as normalizeStyle, s as vShow } from "./vue.js";
 import { R as _plugin_vue_export_helper_default, s as appearance } from "./AppButton.js";
 import { Pt as randomUuid, k as rpc } from "./index.js";
-import { H as rect, L as button, R as label, V as node, n as observeFrameSizes, r as _sfc_main$1, v as translate } from "./resize.js";
+import { H as node, R as button, U as rect, n as observeFrameSizes, r as _sfc_main$1, y as translate, z as label } from "./resize.js";
 import { n as sections } from "./sections.ui.js";
 import { T as projectPath, i as sectionSelector, n as notices, o as toolbar$1, t as documentEvent } from "./admin.document.js";
 import { $t as layers, Bt as options, Gt as block, Ht as type, It as change$1, J as selected, Jt as duplicate, K as alignment, Kt as change, Lt as fields$1, Qt as kinds, Rt as filter, Ut as add, Vt as scope$1, Wt as appearances, Xt as geometries, Y as toggle, Yt as fingerprint, Z as spacingField, Zt as geometry$1, a as _sfc_main$2, an as sizing, en as path, in as siblings, nn as reorder, o as controls, on as spacing, q as roots, qt as copy, rn as reparent, s as zooms, tn as remove, zt as mode } from "./ConfiguredView.js";
@@ -145,7 +145,8 @@ function edit(model, ui, event) {
 		} else if ([
 			"group_limit",
 			"group_order",
-			"measure"
+			"measure",
+			"chart_type"
 		].includes(event.field)) item[event.field] = value;
 		else {
 			const field = event.section === "group" ? "group_by" : "aggregates";
@@ -429,16 +430,33 @@ function fields(model, ui, width, language, enabled) {
 			field: "group_limit"
 		});
 	}
-	if (item.kind === "chart") choice("pageChartMeasure", "Chart measure", item.measure || measures[0]?.name || "count", measures.length ? measures.map((row) => ({
-		value: row.name,
-		label: row.title
-	})) : [{
-		value: "count",
-		label: tr("Count")
-	}], {
-		type: "report",
-		field: "measure"
-	});
+	if (item.kind === "chart") {
+		choice("pageChartType", "Chart type", item.chart_type || "bar", [
+			"bar",
+			"line",
+			"donut"
+		].map((value) => ({
+			value,
+			label: tr({
+				bar: "Bar chart",
+				line: "Line chart",
+				donut: "Donut chart"
+			}[value])
+		})), {
+			type: "report",
+			field: "chart_type"
+		});
+		choice("pageChartMeasure", "Chart measure", item.measure || measures[0]?.name || "count", measures.length ? measures.map((row) => ({
+			value: row.name,
+			label: row.title
+		})) : [{
+			value: "count",
+			label: tr("Count")
+		}], {
+			type: "report",
+			field: "measure"
+		});
+	}
 	return result;
 }
 //#endregion
@@ -1187,7 +1205,8 @@ function describe(model, ui, width, height, language) {
 						["transparent", "Transparent"],
 						["panel", "Panel"],
 						["workspace", "Workspace"],
-						["surfaceContainerLow", "Low surface"]
+						["surfaceContainerLow", "Low surface"],
+						["surfaceContainerLowest", "Raised card"]
 					] : [
 						["outlineVariant", "Outline"],
 						["contentAccent", "Accent"],

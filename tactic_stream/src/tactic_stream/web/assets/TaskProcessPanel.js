@@ -1,6 +1,6 @@
 import { A as onMounted, G as withCtx, J as markRaw, M as openBlock, N as renderList, O as onBeforeUnmount, S as h, X as ref, _ as createElementBlock, b as createVNode, et as unref, g as createCommentVNode, h as createBlock, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment } from "./vue.js";
 import { o as t, s as appearance, t as _sfc_main$2 } from "./AppButton.js";
-import { H as rect, L as button, O as _sfc_main$5, R as label, V as node, b as _sfc_main$3, n as observeFrameSizes, r as _sfc_main$4, t as frameContentWidth, v as translate } from "./resize.js";
+import { H as node, R as button, U as rect, k as _sfc_main$5, n as observeFrameSizes, r as _sfc_main$4, t as frameContentWidth, x as _sfc_main$3, y as translate, z as label } from "./resize.js";
 import { A as _sfc_main$6 } from "./ConfiguredView.js";
 //#region ../src/tactic_stream/shared_ui/features/tasks/process.ui.mjs
 var metrics = {

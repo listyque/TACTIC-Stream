@@ -1,7 +1,7 @@
 import { A as onMounted, D as onActivated, E as nextTick, F as resolveComponent, G as withCtx, H as watch, I as resolveDirective, K as withDirectives, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, X as ref, Y as reactive, _ as createElementBlock, b as createVNode, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, k as onDeactivated, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, s as vShow, tt as normalizeClass, u as Fragment, y as createTextVNode } from "./vue.js";
 import { A as preferences, F as iconSets, I as themes, O as configurationPreview, P as accentPresets, R as _plugin_vue_export_helper_default, _ as controls, a as _sfc_main$7, c as colorModes, f as languages, h as saveAppearance, j as savePreferencePage, k as normalizePreferences, l as effectiveColorMode, o as t, s as appearance, t as _sfc_main$8 } from "./AppButton.js";
 import { A as saveServerConfiguration, L as serverConfiguration, k as rpc, x as projectCatalog, xt as debugSettings } from "./index.js";
-import { B as muted, F as _sfc_main$10, H as rect, L as button, R as label, V as node, n as observeFrameSizes, r as _sfc_main$9, v as translate, w as AppSearchField_default } from "./resize.js";
+import { H as node, I as _sfc_main$10, R as button, T as AppSearchField_default, U as rect, V as muted, n as observeFrameSizes, r as _sfc_main$9, y as translate, z as label } from "./resize.js";
 import { n as _sfc_main$11 } from "./AppearanceControls.js";
 import RecordForm_default, { a as fieldKind, o as unsupportedField, r as ImagePicker_default } from "./RecordForm.js";
 import { _ as timestampFullLabel } from "./admin.document.js";

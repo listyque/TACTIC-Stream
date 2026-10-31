@@ -6,7 +6,7 @@ from zipfile import ZIP_DEFLATED, ZipFile
 def build():
     root = Path(__file__).resolve().parents[2]
     source = root / 'examples/workspace_pulse'
-    destination = root / 'releases/workspace-pulse-1.0.0.zip'
+    destination = root / 'releases/workspace-pulse-1.1.0.zip'
     destination.parent.mkdir(exist_ok=True)
     with ZipFile(destination, 'w', ZIP_DEFLATED) as archive:
         for name in ('manifest.xml', 'empty.spt', 'workspace.py', 'install.py',

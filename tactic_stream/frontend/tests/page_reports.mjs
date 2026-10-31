@@ -123,10 +123,12 @@ const scene = Plot.describe(
   300,
   'en'
 );
-const bar = scene.nodes
-  .find((node) => node.id === 'plot_bars')
-  .children.find((node) => node.id === 'plot_bar_0');
-assert(bar.width > 0 && bar.x >= 0);
+const chartNode = scene.nodes
+  .find((node) => node.id === 'plot_chart')
+  .children.find((node) => node.kind === 'Chart');
+const bar = chartNode.chart.marks[0];
+assert(bar.width > 0 && bar.x >= 0 && bar.y > bar.zero);
+assert.equal(chartNode.chart.marks[2].value, null);
 const grid = Plot.describe(
   { kind: 'summary', text: 'Report', report: data },
   'summary',

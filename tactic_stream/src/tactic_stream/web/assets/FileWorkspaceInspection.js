@@ -1,7 +1,7 @@
 import { A as onMounted, E as nextTick, F as resolveComponent, G as withCtx, H as watch, J as markRaw, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, Q as shallowRef, X as ref, _ as createElementBlock, b as createVNode, c as withKeys, et as unref, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment } from "./vue.js";
 import { R as _plugin_vue_export_helper_default, T as metrics, o as t, s as appearance, t as _sfc_main$16, u as frameColors, y as cssRoles } from "./AppButton.js";
 import { Dt as logEvent, kt as redact } from "./index.js";
-import { F as _sfc_main$19, H as rect, L as button, N as _sfc_main$20, O as _sfc_main$18, R as label, V as node, g as copyText, n as observeFrameSizes, r as _sfc_main$17, s as _sfc_main$21, v as translate } from "./resize.js";
+import { H as node, I as _sfc_main$19, P as _sfc_main$20, R as button, U as rect, g as copyText, k as _sfc_main$18, n as observeFrameSizes, r as _sfc_main$17, s as _sfc_main$21, y as translate, z as label } from "./resize.js";
 import { t as captionHeight } from "./sections.ui.js";
 import { r as prettySize } from "./file_values.js";
 import "./files.js";

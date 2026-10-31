@@ -106,7 +106,10 @@ const views = computed(() => ({
       parentKey: model.value.scope.parentKey,
       selectionEnabled: model.value.scope.selection !== false,
       selectedKeys: model.value.selected || [],
-      resultState: model.value.resultState || {},
+      resultState: {
+        ...model.value.resultState,
+        table: { autoFit: true, ...model.value.resultState?.table }
+      },
       sortField: (model.value.order || '').split(' ')[0],
       sortDirection: (model.value.order || '').split(' ')[1] || 'asc',
       onSelect: (records, selected) => {

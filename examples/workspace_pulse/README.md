@@ -1,4 +1,4 @@
-# Workspace Pulse 1.0.0
+# Workspace Pulse 1.1.0
 
 A reusable example TACTIC plugin for **TACTIC Stream and TACTIC Handler**.
 The same native dashboard documents render in both clients. No extra frontend,
@@ -13,12 +13,14 @@ TS/tactic_stream/.venv/Scripts/python.exe TS/tactic_stream/tools/build_workspace
 ```
 
 Open **Administration → Plugins** in either client, select a business project,
-install `TS/releases/workspace-pulse-1.0.0.zip`, review its contents and activate.
+install `TS/releases/workspace-pulse-1.1.0.zip`, review its contents and activate.
 Refresh project navigation. **Pulse** and **VFX overview** appear in the existing
 sidebar. The same ZIP can be activated independently in other projects.
 
-- **Pulse:** current-project task/deadline counters, shared status/assignee/process filters,
-  status/assignee charts and searchable native task table with due dates.
+- **Pulse:** four compact task/deadline counters, shared status/assignee/process filters,
+  a delivery line chart, status donut, assignee bars and a searchable native task table.
+  Cards use one spacing grid, theme-aware surfaces and cached soft shadows.
+  The task table fits all configured columns and shares its height with the adjacent chart.
   Task descriptions, rather than internal task codes, lead the table.
 - **VFX overview:** discovers existing episode, sequence, scenes, shot and asset
   tables in the target project, including types from template namespaces. Shows
@@ -31,6 +33,13 @@ previews or sample business data. Counters show tasks with/without a due date;
 the report groups by actual assignee values. A type without a `name` field uses its code.
 Status/assignee inputs use the existing dashboard filter controls; table search
 uses the ordinary smart search and suggestions. Common filters affect task bricks.
+Chart tooltips show the full label and value. A single scheduled date produces
+one real point, not an invented trend. No-value groups remain visible.
+
+Upgrade both clients to TS 0.112.345 / TH 0.6.0.306 or newer before installing.
+For an existing 1.0.0 activation, export customized pages first, remove the old
+version from that project, then install and activate 1.1.0. Installation does not
+silently replace an active project's customized pages.
 
 ## Customize and remove
 

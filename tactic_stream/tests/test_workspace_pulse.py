@@ -52,11 +52,11 @@ class WorkspacePulseTests(unittest.TestCase):
         state = self.dashboard('workspace_pulse')
         model = self.call('execute_cmd', DASHBOARD, dict(action='preview', project_code='one',
             document=document, expected_revision=state['revision']))['info']['model']
-        self.assertEqual([row['value'] for row in model['layoutNodes'][0]['children']], [2, 1, 1])
+        self.assertEqual([row['value'] for row in model['layoutNodes'][0]['children']], [2, 1, 1, 2])
         filtered = self.call('execute_cmd', DASHBOARD, dict(action='preview', project_code='one',
             document=document, expected_revision=state['revision'],
             filter_values={'status': {'enabled': True, 'value': 'Review'}}))['info']['model']
-        self.assertEqual([row['value'] for row in filtered['layoutNodes'][0]['children']], [1, 1, 0])
+        self.assertEqual([row['value'] for row in filtered['layoutNodes'][0]['children']], [1, 1, 0, 1])
         self.assertIn('no episode', self.dashboard('workspace_vfx')['document']['blocks'][0]['children'][0]['text'])
         with self.store.connection('one') as db:
             self.assertEqual(list(db.execute('SELECT * FROM entity')), before)

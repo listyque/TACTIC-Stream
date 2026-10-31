@@ -2,7 +2,7 @@
   <data>
     <code>workspace_pulse</code>
     <title>Workspace Pulse</title>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
     <description>Two editable native dashboards: task Pulse and schema-aware VFX overview. No sample records or project-specific identifiers.</description>
   </data>
   <sobject search_type="config/widget_config" view="dashboard.workspace_pulse" path="empty.spt"/>

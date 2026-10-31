@@ -14,7 +14,7 @@ The shared catalogue now contains **71 adapted classes / 172 named aliases** acr
 
 ## Table
 
-Rounded header, 58px rows, 50px previews, 107 × 50px task cards, process note chips, relative dates, text elision and selection follow Handler. Ctrl/Shift and keyboard select rows. Double-click a row to inspect it; double-click an editable cell to use its native input. Description uses a text panel. Enter or leaving the field commits the full text; Escape cancels.
+The square header, 58px rows, 50px previews, 107 × 50px task cards, process note chips, relative dates and selection follow Handler. Quiet row dividers, subtle alternating surfaces and compact status badges keep the table readable in both themes. A normal click focuses the row; explicit checkboxes or Shift select records for bulk actions. Double-click a row to inspect it; double-click an editable cell to use its native input. Description uses a text panel. Enter or leaving the field commits the full text; Escape cancels.
 
 ![TH](media/handler-table-th-dark.png)
 
@@ -33,6 +33,8 @@ Episode displays native previews, names and task controls. Related assets and sh
 Task Workflow accepts the stock legacy edit flag without hiding the cell. Status and assignee changes still use their native editors and permissions. Expression columns with a standard DatabaseAction bound to an existing field remain readable; unknown callbacks and options are rejected.
 
 Table headers and rows fill the available width. Space for a scrollbar is reserved only while that scrollbar is needed.
+
+Embedded tables use the same header, menus, selection and editors. They start with Auto Fit across all configured columns; manually hidden columns remain hidden. If minimum column widths cannot fit, use the horizontal scrollbar. A dashboard table's height includes its title, search, rows and footer, so adjacent blocks align without extra page gutters.
 
 ## Edits and tasks
 

@@ -53,6 +53,22 @@ class DashboardReports(unittest.TestCase):
         self.assertTrue(report['truncated'])
         self.assertEqual(report['rows'][0]['count'],2)
 
+    def test_chart_types_validate_render_and_survive_native_save(self):
+        from tactic_stream.dashboard_plan import DashboardDocument
+        from pydantic import ValidationError
+        for kind in ('bar', 'line', 'donut'):
+            document = self.document()
+            document['name'] = 'chart_' + kind
+            document['blocks'][0].update(kind='chart', chart_type=kind)
+            self.assertEqual(self.preview(document)['layoutNodes'][0]['chartType'], kind)
+            revision = self.command('read')['revision']
+            self.command('apply', document=document, expected_revision=revision, operation_id=str(uuid4()))
+            saved = self.command('read', name=document['name'])['document']
+            self.assertEqual(saved['blocks'][0]['chart_type'], kind)
+        document['blocks'][0]['chart_type'] = 'script'
+        with self.assertRaises(ValidationError):
+            DashboardDocument.model_validate(document)
+
     def test_common_values_maps_and_runtime_reset_are_not_saved(self):
         document=self.document()
         document['blocks'] += [dict(kind='metric',search_type='contract/report'),

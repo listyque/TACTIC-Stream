@@ -40,7 +40,7 @@ class DashboardAggregate(BaseModel):
 
 class DashboardAppearance(BaseModel):
     model_config = ConfigDict(extra='forbid', strict=True)
-    fill: str = Field(default='transparent', pattern=r'^(transparent|panel|workspace|surfaceContainerLow|#[0-9a-fA-F]{6})$')
+    fill: str = Field(default='transparent', pattern=r'^(transparent|panel|workspace|surfaceContainerLow|surfaceContainerLowest|#[0-9a-fA-F]{6})$')
     stroke: str = Field(default='outlineVariant', pattern=r'^(outlineVariant|contentAccent|transparent|#[0-9a-fA-F]{6})$')
     stroke_width: int = Field(default=0, ge=0, le=8)
     radius: int = Field(default=0, ge=0, le=48)
@@ -82,6 +82,7 @@ class DashboardBlock(BaseModel):
     group_by: list[DashboardGrouping] = Field(default_factory=list, max_length=3)
     aggregates: list[DashboardAggregate] = Field(default_factory=list, max_length=8)
     measure: str = Field(default='', max_length=48)
+    chart_type: Literal['bar', 'line', 'donut'] = 'bar'
     group_limit: int = Field(default=50, ge=1, le=100)
     group_order: Literal['group', 'value_asc', 'value_desc'] = 'group'
     href: str = Field(default='', max_length=2048)

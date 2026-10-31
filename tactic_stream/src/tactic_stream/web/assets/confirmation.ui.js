@@ -1,4 +1,4 @@
-import { H as rect, L as button, R as label, v as translate } from "./resize.js";
+import { R as button, U as rect, y as translate, z as label } from "./resize.js";
 //#region ../src/tactic_stream/shared_ui/controls/feedback/confirmation.ui.mjs
 function describe(model, width, height, language) {
 	const text = (key) => translate(key, language), compact = width < 380, margin = 16, inner = width - 32;

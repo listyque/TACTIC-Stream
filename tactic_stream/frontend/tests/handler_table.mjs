@@ -346,6 +346,7 @@ try {
   const table = page.locator('.handler-table'),
     rows = table.locator('.handler-table-row'),
     headings = table.locator('.handler-table-heading');
+  await headings.nth(9).waitFor();
   assert.equal(await headings.count(), 10);
   assert.equal(await rows.count(), 5);
   assert.equal(
@@ -384,7 +385,7 @@ try {
   assert.equal(grip.width, '1px');
   assert.notEqual(grip.background, 'rgba(0, 0, 0, 0)');
   assert(Number(grip.opacity) > 0);
-  assert.equal(await table.locator('.handler-table-header').evaluate(el => getComputedStyle(el).borderBottomWidth), '0px');
+  assert.equal(await table.locator('.handler-table-header').evaluate(el => getComputedStyle(el).borderBottomWidth), '1px');
   assert.equal(await table.evaluate(el => getComputedStyle(el).paddingRight), '0px');
   assert.equal(await table.evaluate(el => getComputedStyle(el).scrollbarGutter), 'auto');
   assert.equal(await table.evaluate(el => el.offsetWidth - el.clientWidth), 0);
@@ -857,7 +858,7 @@ try {
       Object.values(window.host.$refs.table.expandedTables)[0]?.rows?.length ===
       2
   );
-  await nested.locator('[data-frame="nestedSelect"]').first().click();
+  await nested.locator('.handler-table-row').getByRole('checkbox').first().click();
   assert.deepEqual(
     await page.evaluate(() => window.host.selected),
     rootSelection,
@@ -900,8 +901,8 @@ try {
     ),
     1
   );
-  await nested.locator('[data-frame="nestedFilter"]').fill('Robot');
-  await nested.locator('[data-frame="nestedReload"]').click();
+  await nested.locator('[data-frame="nestedFilter"] input').fill('Robot');
+  await nested.locator('[data-frame="nestedFilter"] input').press('Enter');
   await page.waitForFunction(
     () => !Object.values(window.host.$refs.table.expandedTables)[0].busy
   );
@@ -910,9 +911,7 @@ try {
       (row) => row.data.args?.[1] === 'tactic.ui.table.NestedTableReadCmd'
     )
     .at(-1);
-  assert.deepEqual(lastChild.data.args[2].filters, [
-    ['name', 'like', '%Robot%']
-  ]);
+  assert.equal(lastChild.data.args[2].keyword, 'Robot');
   await nested.screenshot({ path: report + '/nested-table-stream.png' });
   assert.deepEqual(errors, []);
   await writeFile(

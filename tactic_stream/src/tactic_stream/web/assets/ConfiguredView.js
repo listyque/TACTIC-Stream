@@ -3,7 +3,7 @@ import { n as arrange, r as __exportAll } from "./ObjectFieldFrame.js";
 import { $ as toRaw, A as onMounted, C as inject, E as nextTick, F as resolveComponent, G as withCtx, H as watch, I as resolveDirective, J as markRaw, K as withDirectives, L as resolveDynamicComponent, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, S as h, T as mergeProps, V as useSlots, X as ref, Y as reactive, _ as createElementBlock, b as createVNode, c as withKeys, d as KeepAlive, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, o as vModelText, p as computed, q as isRef, rt as toDisplayString, s as vShow, t as Transition, tt as normalizeClass, u as Fragment, v as createSlots, y as createTextVNode, z as useId } from "./vue.js";
 import { A as preferences, D as textStyles, L as BusyIndicator_default, R as _plugin_vue_export_helper_default, S as fontMetricHeight, T as metrics$3, _ as controls$1, a as _sfc_main$72, b as fontFamily, m as readableText, o as t, s as appearance, t as _sfc_main$71, u as frameColors, y as cssRoles } from "./AppButton.js";
 import { Ft as asyncComponent, G as transactionDetails, H as tableDependencies, K as uploadFormFile, N as searchConfiguration, O as resultItems, Ot as logRequest, U as tableDependencyFile, V as tableCells, W as tableParentGroup, Y as widgetConfiguration, _ as navigationLink, _t as mobile, a as __vitePreload, b as objectStatus, bt as debugLog, c as beginActivity, ct as notify, f as interfaceDefinition, ft as serverClock, h as messageFileRequest, k as rpc, m as linkPreviews, o as fileBlob, pt as serverTimestamp, u as endActivity, v as objectDeletion, y as objectRelations } from "./index.js";
-import { B as muted, C as ItemPreview_default, D as _sfc_main$83, E as _sfc_main$81, F as _sfc_main$78, H as rect, L as button, N as _sfc_main$82, O as _sfc_main$75, P as _sfc_main$79, R as label, T as _sfc_main$74, U as revealListOffset, V as node, W as virtualRange, _ as readClipboardImages, a as _sfc_main$76, b as _sfc_main$80, f as javascriptTokens, g as copyText, h as copyImage, i as _sfc_main$77, m as xmlTokens, n as observeFrameSizes, o as _sfc_main$84, p as pythonTokens, r as _sfc_main$73, s as _sfc_main$85, t as frameContentWidth, v as translate, w as AppSearchField_default } from "./resize.js";
+import { D as _sfc_main$81, E as _sfc_main$74, F as _sfc_main$79, G as virtualRange, H as node, I as _sfc_main$78, O as _sfc_main$83, P as _sfc_main$82, R as button, T as AppSearchField_default, U as rect, V as muted, W as revealListOffset, _ as readClipboardImages, a as _sfc_main$77, f as javascriptTokens, g as copyText, h as copyImage, i as _sfc_main$75, k as _sfc_main$76, m as xmlTokens, n as observeFrameSizes, o as _sfc_main$84, p as pythonTokens, r as _sfc_main$73, s as _sfc_main$85, t as frameContentWidth, v as describe$24, w as ItemPreview_default, x as _sfc_main$80, y as translate, z as label } from "./resize.js";
 import { n as qtLabelTextWidth, t as layoutTextWidth } from "./textMetrics.js";
 import { t as captionHeight } from "./sections.ui.js";
 import RecordForm_default, { a as fieldKind, o as unsupportedField, t as _sfc_main$86 } from "./RecordForm.js";
@@ -12,7 +12,7 @@ import { f as summary$1, r as prettySize } from "./file_values.js";
 import "./files.js";
 import { t as _sfc_main$89 } from "./CodeBlock.js";
 import { n as buttonWidth } from "./metrics.js";
-import { t as describe$24 } from "./confirmation.ui.js";
+import { t as describe$25 } from "./confirmation.ui.js";
 import { t as _sfc_main$90 } from "./AppDialog.js";
 import { t as MarkdownItCallable } from "./markdown-it.js";
 import { t as _sfc_main$91 } from "./VirtualCollection.js";
@@ -41,6 +41,7 @@ var metrics$2 = {
 	action: 28,
 	previewInset: 8
 };
+var status = { foregroundMix: .45 };
 function completionGroups(count, width, height) {
 	const rowHeight = 18, gap = 4;
 	const contentHeight = Math.max(0, count * 22 - gap);
@@ -1112,7 +1113,9 @@ var metrics$1 = {
 var paint = {
 	header: "tableHeader",
 	headerText: "primaryText",
-	row: "surfaceContainerLow",
+	row: "surfaceContainerLowest",
+	alternateRow: "tableAlternateRow",
+	divider: "tableDivider",
 	selected: "contentSelection",
 	group: "surfaceContainerHigh"
 };
@@ -1153,7 +1156,7 @@ function serviceHeight(columns) {
 }
 function describe$21(model, width) {
 	const available = Math.max(0, width - metrics$1.selection - metrics$1.actions);
-	const columns = model.scrollColumns ? model.columns || [] : visibleColumns(model.columns || [], available, model.overrides);
+	const columns = model.scrollColumns || model.autoFit ? model.columns || [] : visibleColumns(model.columns || [], available, model.overrides);
 	const fitted = model.autoFit && !model.scrollColumns ? fittedWidths(columns, available, model.overrides) : {};
 	const cells = [];
 	let left = metrics$1.selection;
@@ -1290,11 +1293,11 @@ function content$1(model, width, extent, language) {
 	const quick = quickLayout(model, width), quickColumns = quick.columns, quickHeight = quick.height;
 	const nodes = [
 		node("Box", "nestedToolbarSurface", rect(0, 0, width, 42 + quickHeight), {
-			background: "panel",
+			background: model.embedded ? "transparent" : "panel",
 			radius: 0
 		}),
 		node("Box", "nestedFooterSurface", rect(0, Math.max(0, extent - 40), width, 40), {
-			background: "panel",
+			background: model.embedded ? "transparent" : "panel",
 			radius: 0
 		}),
 		node("Box", "nestedFooterDivider", rect(0, Math.max(0, extent - 40), width, 1), {
@@ -1438,7 +1441,10 @@ function cell$2(grid, value, row, column) {
 function describe$19(item, id, width, height, language) {
 	const tr = (text) => translate(text, language), report = item.report, nodes = [];
 	const bodyHeight = Math.max(40, height - 38 - (report.truncated ? 28 : 0));
-	nodes.push(label(id + "_title", rect(0, 0, width, 28), item.text, { weight: 600 }));
+	nodes.push(label(id + "_title", rect(0, 0, width, 28), item.text, {
+		fontRole: "title",
+		weight: 600
+	}));
 	if (!report.rows.length) nodes.push(label(id + "_empty", rect(0, 38, width, 40), tr("No matching report data"), { color: "secondaryText" }));
 	else if (item.kind === "summary") nodes.push(node("Grid", id + "_grid", rect(0, 36, width, bodyHeight), {
 		report,
@@ -1453,28 +1459,13 @@ function describe$19(item, id, width, height, language) {
 		text: item.text
 	}));
 	else {
-		width = Math.max(0, width - 16);
-		const measure = report.measure, groups = report.columns.filter((column) => column.kind === "group");
-		const values = report.rows.map((row) => Number(row[measure] || 0)), low = Math.min(0, ...values);
-		const range = Math.max(0, ...values) - low || 1, labelWidth = Math.min(210, width * .36), valueWidth = 90, barWidth = Math.max(1, width - labelWidth - valueWidth - 24), zero = -low / range * barWidth;
-		const children = [];
-		report.rows.forEach((row, index) => {
-			const value = row[measure], number = Number(value || 0), position = (number - low) / range * barWidth;
-			const title = groups.length ? groups.map((column) => row[column.key] == null ? tr("No value") : String(row[column.key])).join(" · ") : tr("Total");
-			const y = index * 36;
-			children.push(label(id + "_group_" + index, rect(0, y, labelWidth - 12, 32), title, { maxLines: 1 }));
-			children.push(node("Box", id + "_axis_" + index, rect(labelWidth + zero, y + 5, 1, 24), { background: "outlineVariant" }));
-			if (number) children.push(node("Box", id + "_bar_" + index, rect(labelWidth + Math.min(position, zero), y + 8, Math.max(1, Math.abs(position - zero)), 18), {
-				background: "action",
-				radius: 2
-			}));
-			children.push(label(id + "_number_" + index, rect(width - valueWidth, y, valueWidth, 32), value == null ? "—" : String(value), { align: "right" }));
-		});
-		nodes.push(node("Scroll", id + "_bars", rect(0, 36, width, bodyHeight), {
-			contentHeight: report.rows.length * 36,
-			scrollbarId: id + "Bar",
-			children
-		}));
+		const groups = report.columns.filter((column) => column.kind === "group");
+		const data = {
+			type: item.chartType || item.chart_type || "bar",
+			values: report.rows.map((row) => row[report.measure]),
+			labels: report.rows.map((row) => groups.length ? groups.map((column) => row[column.key] == null ? tr("No value") : String(row[column.key])).join(" · ") : tr("Total"))
+		};
+		nodes.push(node("Box", id + "_chart", rect(0, 36, width, bodyHeight), { children: describe$24(data, id, width, bodyHeight, language).nodes }));
 	}
 	if (report.truncated) nodes.push(label(id + "_truncated", rect(0, height - 26, width, 26), tr("Group limit reached. Refine filters or increase the limit."), {
 		color: "secondaryText",
@@ -1909,7 +1900,7 @@ function appearances(document, keys, field, value) {
 	} else if (["radius", "stroke_width"].includes(field)) {
 		if (!/^\d+$/.test(String(value)) || Number(value) > (field === "radius" ? 48 : 8)) throw Error("Enter a whole number within the allowed range");
 		value = Number(value);
-	} else if (!(field === "fill" ? /^(transparent|panel|workspace|surfaceContainerLow|#[0-9a-fA-F]{6})$/ : /^(outlineVariant|contentAccent|transparent|#[0-9a-fA-F]{6})$/).test(value)) throw Error("Choose a theme color or enter a six-digit hex color");
+	} else if (!(field === "fill" ? /^(transparent|panel|workspace|surfaceContainerLow|surfaceContainerLowest|#[0-9a-fA-F]{6})$/ : /^(outlineVariant|contentAccent|transparent|#[0-9a-fA-F]{6})$/).test(value)) throw Error("Choose a theme color or enter a six-digit hex color");
 	for (const key of keys) {
 		const item = block(result, key);
 		item.appearance = Object.assign({}, defaults, item.appearance || {}, { [field]: value });
@@ -2472,10 +2463,11 @@ function describe$18(definitions, draft, width, language, enabled = true) {
 		nodes: []
 	};
 	const tr = (text) => translate(text, language), nodes = [], gap = 12;
-	const maximum = Math.max(1, Math.floor((width + gap) / 240)), columns = Math.ceil(definitions.length / Math.ceil(definitions.length / maximum)), size = (width - gap * (columns - 1)) / columns;
+	const applyWidth = Math.min(width, buttonWidth(tr("Apply").length * 8, true)), resetWidth = Math.min(width, buttonWidth(tr("Reset").length * 8, true)), actionsWidth = applyWidth + resetWidth + 8, inline = width >= definitions.length * 250 + actionsWidth + gap, fieldsWidth = inline ? width - actionsWidth - gap : width;
+	const maximum = Math.max(1, Math.floor((fieldsWidth + gap) / 260)), columns = Math.ceil(definitions.length / Math.ceil(definitions.length / maximum)), size = (fieldsWidth - gap * (columns - 1)) / columns;
 	definitions.forEach((item, index) => {
-		const x = index % columns * (size + gap), y = Math.floor(index / columns) * 76, row = draft[item.name] || item;
-		nodes.push(node("CheckBox", "pageRuntime_" + item.name + "_enabled", rect(x, y, 24, 24), {
+		const x = index % columns * (size + gap), y = Math.floor(index / columns) * 44, row = draft[item.name] || item;
+		nodes.push(node("CheckBox", "pageRuntime_" + item.name + "_enabled", rect(x, y + 5, 24, 24), {
 			checked: row.enabled,
 			enabled,
 			label: item.title,
@@ -2485,14 +2477,17 @@ function describe$18(definitions, draft, width, language, enabled = true) {
 				field: "enabled"
 			}
 		}));
-		nodes.push(label("pageRuntime_" + item.name + "_title", rect(x + 30, y, size - 30, 24), item.title, { weight: 600 }));
+		nodes.push(label("pageRuntime_" + item.name + "_title", rect(x + 28, y, Math.min(88, size * .28), 34), item.title, {
+			weight: 500,
+			maxLines: 1
+		}));
 		const action = {
 			type: "page-filter",
 			name: item.name,
 			field: "value"
 		}, field = type({ dataType: item.dataType });
-		if (item.value == null && ["=", "!="].includes(item.relation)) nodes.push(label("pageRuntime_" + item.name + "_value", rect(x + 30, y + 30, size - 30, 34), tr(item.relation === "=" ? "Is empty" : "Is not empty"), { color: "secondaryText" }));
-		else nodes.push(node(field === "boolean" ? "Choice" : field === "date" ? "DateChoice" : "Field", "pageRuntime_" + item.name + "_value", rect(x, y + 30, size, 34), {
+		if (item.value == null && ["=", "!="].includes(item.relation)) nodes.push(label("pageRuntime_" + item.name + "_value", rect(x + 120, y, Math.max(0, size - 120), 34), tr(item.relation === "=" ? "Is empty" : "Is not empty"), { color: "secondaryText" }));
+		else nodes.push(node(field === "boolean" ? "Choice" : field === "date" ? "DateChoice" : "Field", "pageRuntime_" + item.name + "_value", rect(x + 120, y, Math.max(0, size - 120), 34), {
 			label: item.title,
 			text: String(row.value ?? ""),
 			value: String(row.value),
@@ -2509,12 +2504,13 @@ function describe$18(definitions, draft, width, language, enabled = true) {
 			}] : void 0
 		}));
 	});
-	const y = Math.ceil(definitions.length / columns) * 76;
-	const applyWidth = Math.min(width, buttonWidth(tr("Apply filters").length * 9, true)), resetWidth = Math.min(width, buttonWidth(tr("Reset filters").length * 9, true)), stacked = applyWidth + resetWidth + 8 > width;
-	nodes.push(button("pageRuntimeApply", rect(0, y, applyWidth, 32), tr("Apply filters"), "filter", { type: "page-filter-apply" }, enabled));
-	nodes.push(button("pageRuntimeReset", rect(stacked ? 0 : applyWidth + 8, y + (stacked ? 40 : 0), resetWidth, 32), tr("Reset filters"), "restore", { type: "page-filter-reset" }, enabled));
+	const y = inline ? 1 : Math.ceil(definitions.length / columns) * 44;
+	const actionX = inline ? width - actionsWidth : 0;
+	const stacked = actionsWidth > width;
+	nodes.push(button("pageRuntimeApply", rect(actionX, y, applyWidth, 32), tr("Apply"), "filter", { type: "page-filter-apply" }, enabled));
+	nodes.push(button("pageRuntimeReset", rect(stacked ? 0 : actionX + applyWidth + 8, y + (stacked ? 40 : 0), resetWidth, 32), tr("Reset"), "restore", { type: "page-filter-reset" }, enabled));
 	return {
-		height: y + (stacked ? 84 : 44),
+		height: inline ? 40 : y + (stacked ? 84 : 40),
 		nodes
 	};
 }
@@ -3718,13 +3714,19 @@ function describe$14(cell, width, height, language, editable = true, server = ""
 					border: decorated ? "" : "outlineVariant",
 					radiusRole: decorated ? void 0 : "surfaceRadius",
 					radius: decorated ? 0 : void 0,
-					children: [label(id + "_label", rect(16, 12, Math.max(0, available - 32), 36), text, {
+					children: [label(id + "_label", rect(16, 12, Math.max(0, available - (item.icon ? 80 : 32)), 28), text, {
 						color: "secondaryText",
-						wrap: true
-					}), label(id + "_value", rect(16, 52, Math.max(0, available - 32), 40), item.value == null && Object.prototype.hasOwnProperty.call(item, "value") ? "—" : String(item.value ?? 0), {
-						fontRole: "hero",
+						maxLines: 1
+					}), label(id + "_value", rect(16, 42, Math.max(0, available - 32), 44), item.value == null && Object.prototype.hasOwnProperty.call(item, "value") ? "—" : String(item.value ?? 0), {
+						fontRole: "headline",
 						weight: 600
-					})]
+					})].concat(item.icon ? [node("Box", id + "_iconSurface", rect(available - 52, 12, 36, 36), {
+						background: "rowHover",
+						radius: 10
+					}), node("Icon", id + "_icon", rect(available - 45, 19, 22, 22), {
+						icon: item.icon,
+						color: "contentAccent"
+					})] : [])
 				}));
 			} else if (["field", "form"].includes(item.kind)) {
 				const part = item.kind === "field" ? field$1(item, id, available) : describe$17(item, id, available, cell.layoutForms || {}, language, editable && !cell.layoutEditing && !cell.layoutBusy);
@@ -3840,17 +3842,23 @@ function describe$14(cell, width, height, language, editable = true, server = ""
 			} else if (item.kind === "items") {
 				const itemsExtent = height$1(item, Number.isFinite(item.height) ? item.height : tableHeight, slotCapacity === null ? null : Math.max(0, slotCapacity - 32));
 				extent = itemsExtent + 32;
-				output.push(label(id + "_title", rect(x, top, available, 28), text));
+				output.push(label(id + "_title", rect(x, top, available, 28), text, {
+					fontRole: "title",
+					weight: 600
+				}));
 				output.push(node("View", id, rect(x, top + 32, available, itemsExtent), {
 					view: "layoutItems",
 					key: id,
 					items: item.items
 				}));
 			} else if (item.kind === "table") {
-				const tableExtent = Number.isFinite(item.height) ? item.height : Math.max(tableHeight, quickLayout(cell.layoutTables?.[id] || {}, available).height + 260);
-				extent = tableExtent + 32;
-				output.push(label(id + "_title", rect(x, top, available, 28), text));
-				output.push(node("View", id, rect(x, top + 32, available, tableExtent), {
+				const tableExtent = height$1(item, Number.isFinite(item.height) ? item.height : Math.max(tableHeight, quickLayout(cell.layoutTables?.[id] || {}, available).height + 260), slotCapacity);
+				extent = tableExtent;
+				if (text) output.push(label(id + "_title", rect(x, top, available, 28), text, {
+					fontRole: "title",
+					weight: 600
+				}));
+				output.push(node("View", id, rect(x, top + (text ? 36 : 0), available, Math.max(0, tableExtent - (text ? 36 : 0))), {
 					view: "layoutTable",
 					key: id,
 					table: item.table
@@ -3883,11 +3891,7 @@ function describe$14(cell, width, height, language, editable = true, server = ""
 				}));
 			}
 			if (item.editorPath) {
-				const overhead = [
-					"items",
-					"table",
-					"details"
-				].includes(item.kind) ? 32 : 0;
+				const overhead = ["items", "details"].includes(item.kind) ? 32 : 0;
 				const contentSlot = slotHeight === null ? null : Math.max(0, slotHeight - margin[0] - margin[2] - padding[0] - padding[2] - overhead);
 				const resolved = height$1(item, Math.max(0, extent - overhead), contentSlot) + overhead;
 				if (resolved !== extent) {
@@ -3905,7 +3909,7 @@ function describe$14(cell, width, height, language, editable = true, server = ""
 						"markdown"
 					].includes(item.kind)) surface.height = resolved;
 					if (["table", "items"].includes(item.kind)) {
-						for (const surface of output.slice(firstOutput)) if (surface.kind === "View") surface.height = Math.max(0, resolved - 32);
+						for (const surface of output.slice(firstOutput)) if (surface.kind === "View") surface.height = Math.max(0, resolved - (item.kind === "table" ? text ? 36 : 0 : 32));
 					}
 				}
 				extent = resolved;
@@ -3917,26 +3921,13 @@ function describe$14(cell, width, height, language, editable = true, server = ""
 					child.x -= originX + margin[3];
 					child.y -= outerTop + margin[0];
 				}
-				if (item.appearance?.shadow) for (const [index, dx, dy, grow, opacity] of [[
-					0,
-					-1,
-					1,
-					2,
-					.28
-				], [
-					1,
-					1,
-					3,
-					-2,
-					.58
-				]]) output.push(node("Box", id + "_shadow" + index, rect(originX + margin[3] + (item.offsetX || 0) + dx, outerTop + margin[0] + (item.offsetY || 0) + dy, Math.max(0, outerWidth - margin[1] - margin[3] + grow), Math.max(0, outerHeight - margin[0] - margin[2]) + (index === 0 ? 2 : 0)), {
-					background: "popupShadow",
-					radius: (item.appearance.radius || 0) + (index === 0 ? 1 : 0),
-					opacity,
-					pointerTransparent: true
-				}));
 				output.push(node("Box", id + "_block", rect(originX + margin[3] + (item.offsetX || 0), outerTop + margin[0] + (item.offsetY || 0), Math.max(0, outerWidth - margin[1] - margin[3]), Math.max(0, outerHeight - margin[0] - margin[2])), {
 					background: item.appearance?.fill || "transparent",
+					shadow: item.appearance?.shadow ? {
+						y: 4,
+						blur: 14,
+						opacity: .55
+					} : void 0,
 					border: item.appearance?.stroke_width ? item.appearance.stroke : "",
 					borderWidth: item.appearance?.stroke_width || 0,
 					radius: item.appearance?.radius || 0,
@@ -3973,19 +3964,16 @@ function describe$14(cell, width, height, language, editable = true, server = ""
 		return Math.max(start, top - (entries.length ? gap : 0), visualBottom(output));
 	}
 	function header(space) {
-		const filters = describe$18(cell.layoutFilters, cell.layoutFilterDraft || initial$2(cell.layoutFilters), Math.max(0, space - 24), language, editable && !cell.layoutBusy && !cell.layoutFilterBusy && !cell.layoutEditing);
+		const filters = describe$18(cell.layoutFilters, cell.layoutFilterDraft || initial$2(cell.layoutFilters), Math.max(0, space), language, editable && !cell.layoutBusy && !cell.layoutFilterBusy && !cell.layoutEditing);
 		const output = [];
-		const contextHeight = drawRegion("header", Math.max(0, space - 24), output);
+		const contextHeight = drawRegion("header", Math.max(0, space), output);
 		const filterTop = contextHeight + (contextHeight && filters.height ? gap : 0);
 		for (const item of filters.nodes) {
 			item.y += filterTop;
 			output.push(item);
 		}
 		const extent = filterTop + filters.height;
-		for (const item of output) {
-			item.x += 12;
-			item.y += 12;
-		}
+		for (const item of output) item.y += 12;
 		return {
 			nodes: output,
 			height: output.length ? extent + 24 : 0
@@ -3993,19 +3981,16 @@ function describe$14(cell, width, height, language, editable = true, server = ""
 	}
 	let head = header(width);
 	let foot = [];
-	let footerExtent = drawRegion("footer", Math.max(0, width - 24), foot);
+	let footerExtent = drawRegion("footer", Math.max(0, width), foot);
 	footerHeight = foot.length ? Math.min(footerExtent + 24, viewportHeight * .3) : 0;
 	headerHeight = Math.min(head.height, Math.max(0, viewportHeight - footerHeight - Math.min(180, viewportHeight * .45)));
 	if (head.height > headerHeight) head = header(Math.max(0, width - controls$1.scrollBar.extent - 4));
 	headerNodes = head.nodes;
 	if (footerExtent + 24 > footerHeight && footerHeight) {
 		foot = [];
-		footerExtent = drawRegion("footer", Math.max(0, width - 24 - controls$1.scrollBar.extent - 4), foot);
+		footerExtent = drawRegion("footer", Math.max(0, width - controls$1.scrollBar.extent - 4), foot);
 	}
-	for (const item of foot) {
-		item.x += 12;
-		item.y += 12;
-	}
+	for (const item of foot) item.y += 12;
 	footerNodes = foot;
 	const bodyHeight = Math.max(0, viewportHeight - headerHeight - footerHeight);
 	if (headerHeight || footerHeight) tableHeight = Math.max(160, bodyHeight - 32);
@@ -4023,7 +4008,10 @@ function describe$14(cell, width, height, language, editable = true, server = ""
 		wrap: true,
 		color: "error"
 	}));
-	const nodes = [node("Box", "layoutBackground", rect(0, 0, width, height), { background: "workspace" })];
+	const nodes = [node("Box", "layoutBackground", rect(0, 0, width, height), {
+		background: "workspace",
+		radius: 0
+	})];
 	for (const [name, y, extent, content, contentHeight] of [[
 		"Header",
 		tabOffset,
@@ -4441,7 +4429,7 @@ var popupMetrics = {
 };
 function describe$12(model, width, height, language) {
 	const tr = (text) => translate(text, language);
-	if (model.confirmAction) return describe$24({
+	if (model.confirmAction) return describe$25({
 		message: tr(model.uncertain ? "Discard this draft? Some changes may already have been saved." : "Discard this draft?"),
 		accept: "Discard",
 		destructive: true
@@ -4785,7 +4773,8 @@ var _sfc_main$60 = {
 					])], 512);
 				};
 			}
-		}, [["__scopeId", "data-v-b1e79fcd"]])
+		}, [["__scopeId", "data-v-b1e79fcd"]]),
+		StatusChip: _sfc_main$75
 	},
 	props: {
 		element: Object,
@@ -4822,6 +4811,9 @@ var _sfc_main$60 = {
 		},
 		foreground() {
 			return "var(" + cssRoles[textRole(this.cell || {})] + ")";
+		},
+		statusAccent() {
+			return `color-mix(in srgb, ${this.cell?.statusColor} ${(1 - status.foregroundMix) * 100}%, var(--on-surface))`;
 		},
 		displayValue() {
 			return this.cell && Object.hasOwn(this.cell, "text") ? this.value : this.value || "—";
@@ -4884,6 +4876,7 @@ function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
 	const _component_ItemPreview = resolveComponent("ItemPreview");
 	const _component_AppCheckbox = resolveComponent("AppCheckbox");
 	const _component_AppIcon = resolveComponent("AppIcon");
+	const _component_StatusChip = resolveComponent("StatusChip");
 	return !$props.element.supported ? (openBlock(), createElementBlock("span", {
 		key: 0,
 		class: "table-cell-text muted",
@@ -5085,17 +5078,21 @@ function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
 		href: $options.href,
 		target: $options.href.startsWith("/") ? void 0 : "_blank",
 		rel: "noopener noreferrer"
-	}, toDisplayString($options.value), 9, _hoisted_10$7)) : (openBlock(), createElementBlock("span", {
+	}, toDisplayString($options.value), 9, _hoisted_10$7)) : $props.cell?.statusColor && !$props.cell?.error ? (openBlock(), createBlock(_component_StatusChip, {
 		key: 21,
-		class: normalizeClass(["table-cell-text", {
-			"table-status-cell": $props.cell?.statusColor,
-			"table-cell-multiline": $props.cell?.multiline
-		}]),
+		class: "table-status-badge",
+		text: $options.text,
+		accent: $options.statusAccent,
+		title: $options.tooltip
+	}, null, 8, [
+		"text",
+		"accent",
+		"title"
+	])) : (openBlock(), createElementBlock("span", {
+		key: 22,
+		class: normalizeClass(["table-cell-text", { "table-cell-multiline": $props.cell?.multiline }]),
 		title: $options.tooltip,
-		style: normalizeStyle({
-			color: $props.cell?.statusColor ? "#000" : $options.foreground,
-			background: $props.cell?.statusColor || void 0
-		})
+		style: normalizeStyle({ color: $options.foreground })
 	}, toDisplayString($options.text), 15, _hoisted_11$7));
 }
 var TableCell_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$60, [["render", _sfc_render$7]]);
@@ -6173,6 +6170,7 @@ var _sfc_main$57 = {
 						"--table-resize-hit": metrics$1.resizeHandle + "px",
 						"--table-accent": __props.accent,
 						"--table-header": "var(" + unref(cssRoles)[paint.header] + ")",
+						"--table-row": "var(" + unref(cssRoles)[paint.row] + ")",
 						"--table-header-text": "var(" + unref(cssRoles)[paint.headerText] + ")"
 					}),
 					onScroll: scrolled,
@@ -6256,7 +6254,7 @@ var _sfc_main$57 = {
 								scrollColumns: false
 							}))
 						}, null, 8, ["aria-pressed", "highlighted"]), [[vShow, !__props.busy]]),
-						withDirectives(createVNode(_sfc_main$75, {
+						withDirectives(createVNode(_sfc_main$76, {
 							label: "Table views and columns",
 							icon: "view-column",
 							overlay: "",
@@ -6281,6 +6279,7 @@ var _sfc_main$57 = {
 						key: entry.key,
 						class: normalizeClass(["handler-table-row", {
 							selected: __props.selectedKeys?.includes(entry.key),
+							alternate: !!entry.record && entry.index % 2 === 1,
 							active: !!entry.record && focusedKey.value === entry.key,
 							"group-row": !!entry.group || !!entry.summary
 						}]),
@@ -6387,7 +6386,7 @@ var _sfc_main$57 = {
 						}, null, 8, ["onClick"])) : createCommentVNode("", true)])
 					], 64))], 46, _hoisted_8$8);
 				}), 128))], 4)], 46, _hoisted_1$32),
-				createVNode(_sfc_main$75, {
+				createVNode(_sfc_main$76, {
 					ref_key: "contextMenu",
 					ref: contextMenu,
 					class: "table-column-menu",
@@ -6999,7 +6998,13 @@ var NestedTable_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 					parentKey: model.value.scope.parentKey,
 					selectionEnabled: model.value.scope.selection !== false,
 					selectedKeys: model.value.selected || [],
-					resultState: model.value.resultState || {},
+					resultState: {
+						...model.value.resultState,
+						table: {
+							autoFit: true,
+							...model.value.resultState?.table
+						}
+					},
 					sortField: (model.value.order || "").split(" ")[0],
 					sortDirection: (model.value.order || "").split(" ")[1] || "asc",
 					onSelect: (records, selected) => {
@@ -7219,7 +7224,7 @@ var NestedTable_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 			])], 36);
 		};
 	}
-}, [["__scopeId", "data-v-245f513f"]]);
+}, [["__scopeId", "data-v-678793fb"]]);
 //#endregion
 //#region src/controls/markdown.js
 var markdown = new MarkdownItCallable({
@@ -8208,7 +8213,7 @@ var _sfc_main$46 = {
 			}, [createVNode(_sfc_main$73, {
 				scene: trigger$1.value,
 				onEvent: _cache[0] || (_cache[0] = (_, source) => open(source))
-			}, null, 8, ["scene"]), createVNode(_sfc_main$75, {
+			}, null, 8, ["scene"]), createVNode(_sfc_main$76, {
 				ref_key: "menu",
 				ref: menu,
 				"external-trigger": "",
@@ -8642,7 +8647,7 @@ var _sfc_main$45 = {
 							name: __props.node.snapshot_display?.exists === false ? "priority_high" : "description"
 						}, null, 8, ["name"])) : createCommentVNode("", true),
 						(openBlock(), createBlock(resolveDynamicComponent(__props.back ? "h2" : "strong"), null, {
-							default: withCtx(() => [__props.tree && !unref(mobile) && __props.node.kind === "snapshot" ? (openBlock(), createBlock(_sfc_main$76, {
+							default: withCtx(() => [__props.tree && !unref(mobile) && __props.node.kind === "snapshot" ? (openBlock(), createBlock(_sfc_main$77, {
 								key: 0,
 								text: title.value
 							}, null, 8, ["text"])) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [createTextVNode(toDisplayString(__props.node.branch?.kind === "versions" ? unref(t)(title.value) : title.value), 1)], 64))]),
@@ -8669,7 +8674,7 @@ var _sfc_main$45 = {
 					], 32)]),
 					metadata: withCtx(() => [__props.node.kind === "object" ? (openBlock(), createElementBlock("div", _hoisted_3$16, [
 						(openBlock(true), createElementBlock(Fragment, null, renderList(__props.compact ? __props.node.progress_items?.slice(0, 1) : __props.node.progress_items, (item) => {
-							return openBlock(), createBlock(_sfc_main$77, {
+							return openBlock(), createBlock(_sfc_main$75, {
 								key: item.name,
 								class: "result-completion",
 								icon: "donut-small",
@@ -8764,7 +8769,7 @@ var _sfc_main$45 = {
 						onClick: _cache[13] || (_cache[13] = ($event) => _ctx.$emit("upload", __props.node))
 					})])) : createCommentVNode("", true),
 					__props.tree && __props.node.kind === "snapshot" && __props.node.snapshot_display?.size != null ? (openBlock(), createElementBlock("span", _hoisted_17$3, toDisplayString(unref(prettySize)(__props.node.snapshot_display.size)), 1)) : createCommentVNode("", true),
-					unref(mobile) ? (openBlock(), createBlock(_sfc_main$75, {
+					unref(mobile) ? (openBlock(), createBlock(_sfc_main$76, {
 						key: 2,
 						label: "Item actions",
 						overlay: ""
@@ -8864,7 +8869,7 @@ var _sfc_main$45 = {
 							icon: "book-open",
 							label: "Knowledge Base",
 							onClick: _cache[27] || (_cache[27] = ($event) => unref(openObjectTab)?.(__props.node.knowledge[0].searchKey))
-						})) : __props.node.knowledge?.length > 1 ? (openBlock(), createBlock(_sfc_main$75, {
+						})) : __props.node.knowledge?.length > 1 ? (openBlock(), createBlock(_sfc_main$76, {
 							key: 4,
 							icon: "book-open",
 							label: "Knowledge Base",
@@ -10291,10 +10296,10 @@ var _sfc_main$41 = {
 							"accent",
 							"fill-mode",
 							"style"
-						]))], 64)) : item.kind === "title" && nativeFlow.value && item.tag === "strong" ? (openBlock(), createElementBlock(Fragment, { key: 4 }, [__props.presentation.tree && __props.node.kind === "snapshot" ? (openBlock(), createBlock(_sfc_main$76, {
+						]))], 64)) : item.kind === "title" && nativeFlow.value && item.tag === "strong" ? (openBlock(), createElementBlock(Fragment, { key: 4 }, [__props.presentation.tree && __props.node.kind === "snapshot" ? (openBlock(), createBlock(_sfc_main$77, {
 							key: 0,
 							text: title.value
-						}, null, 8, ["text"])) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [createTextVNode(toDisplayString(__props.node.branch?.kind === "versions" ? unref(t)(title.value) : title.value), 1)], 64))], 64)) : item.kind === "title" ? (openBlock(), createElementBlock("strong", _hoisted_2$16, [__props.node.kind === "snapshot" ? (openBlock(), createBlock(_sfc_main$76, {
+						}, null, 8, ["text"])) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [createTextVNode(toDisplayString(__props.node.branch?.kind === "versions" ? unref(t)(title.value) : title.value), 1)], 64))], 64)) : item.kind === "title" ? (openBlock(), createElementBlock("strong", _hoisted_2$16, [__props.node.kind === "snapshot" ? (openBlock(), createBlock(_sfc_main$77, {
 							key: 0,
 							text: value(item) || title.value
 						}, null, 8, ["text"])) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [createTextVNode(toDisplayString(value(item) || title.value), 1)], 64)), __props.node.kind === "snapshot" && !snapshot.value.exists ? (openBlock(), createElementBlock("small", _hoisted_3$13, " (" + toDisplayString(unref(t)("File Offline")) + ")", 1)) : createCommentVNode("", true)])) : item.kind === "text" || item.kind === "description" ? (openBlock(), createElementBlock("span", _hoisted_4$12, toDisplayString(item.role === "description" ? subtitle.value : value(item)), 1)) : item.kind === "link" && href(item) ? (openBlock(), createElementBlock("a", {
@@ -10413,7 +10418,7 @@ var _sfc_main$41 = {
 							createTextVNode(toDisplayString(unref(t)(__props.node.branch?.kind === "relation" ? "Objects" : "Versions")) + ": " + toDisplayString(__props.node.branch.count ?? __props.node.children?.length ?? 0), 1),
 							__props.node.hasNext ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createTextVNode("+")], 64)) : createCommentVNode("", true),
 							process.value && !__props.node.branch.count && __props.node.hasChildren ? (openBlock(), createElementBlock(Fragment, { key: 1 }, [createTextVNode(" · " + toDisplayString(unref(t)("Versionless")), 1)], 64)) : createCommentVNode("", true)
-						], 64)) : item.kind === "item-menu" ? (openBlock(), createBlock(_sfc_main$75, {
+						], 64)) : item.kind === "item-menu" ? (openBlock(), createBlock(_sfc_main$76, {
 							key: 17,
 							label: "Item actions",
 							overlay: ""
@@ -10492,7 +10497,7 @@ var _sfc_main$41 = {
 							"icon-only": "",
 							disabled: __props.editing || __props.readOnly,
 							onClick: _cache[23] || (_cache[23] = withModifiers(($event) => unref(openObjectTab)?.(__props.node.knowledge[0].searchKey), ["stop"]))
-						}, null, 8, ["disabled"])) : __props.node.knowledge?.length > 1 ? (openBlock(), createBlock(_sfc_main$75, {
+						}, null, 8, ["disabled"])) : __props.node.knowledge?.length > 1 ? (openBlock(), createBlock(_sfc_main$76, {
 							key: 1,
 							label: "Knowledge Base",
 							icon: "book-open",
@@ -11784,7 +11789,7 @@ var _sfc_main$35 = {
 					scene: scene.value,
 					onEvent: event
 				}, null, 8, ["scene"]),
-				createVNode(_sfc_main$75, {
+				createVNode(_sfc_main$76, {
 					"external-trigger": "",
 					ref_key: "processMenu",
 					ref: processMenu,
@@ -11830,7 +11835,7 @@ var _sfc_main$35 = {
 					}), 128))]),
 					_: 1
 				}, 8, ["anchor", "aria-disabled"]),
-				__props.editor.task_choices.length > 1 ? (openBlock(), createBlock(_sfc_main$75, {
+				__props.editor.task_choices.length > 1 ? (openBlock(), createBlock(_sfc_main$76, {
 					key: 0,
 					"external-trigger": "",
 					ref_key: "taskMenu",
@@ -11878,7 +11883,7 @@ var _sfc_main$35 = {
 					}), 128))]),
 					_: 1
 				}, 8, ["anchor", "aria-disabled"])) : createCommentVNode("", true),
-				unref(mobile) || __props.editor.process_type !== "progress" ? (openBlock(), createBlock(_sfc_main$75, {
+				unref(mobile) || __props.editor.process_type !== "progress" ? (openBlock(), createBlock(_sfc_main$76, {
 					key: 1,
 					"external-trigger": "",
 					ref_key: "actionsMenu",
@@ -12096,7 +12101,7 @@ var _sfc_main$34 = {
 			else menu.value.openAt({ target: source });
 		} });
 		return (_ctx, _cache) => {
-			return openBlock(), createBlock(_sfc_main$75, {
+			return openBlock(), createBlock(_sfc_main$76, {
 				ref_key: "menu",
 				ref: menu,
 				"external-trigger": __props.externalTrigger,
@@ -14160,7 +14165,7 @@ var _sfc_main$22 = {
 						label: failed.value ? "Retry preview" : __props.preview.kind === "snapshot" ? "Open snapshot" : __props.preview.kind === "knowledge" ? "Open article" : "Open linked item",
 						onClick: activate
 					}, null, 8, ["icon", "label"])) : createCommentVNode("", true)
-				], 64)), createVNode(_sfc_main$75, {
+				], 64)), createVNode(_sfc_main$76, {
 					ref_key: "menu",
 					ref: menu,
 					class: "skey-actions",
@@ -14395,7 +14400,7 @@ var _sfc_main$19 = {
 		AppSelect: _sfc_main$78,
 		AppIcon: _sfc_main$72,
 		AppTextArea: _sfc_main$81,
-		AppMenu: _sfc_main$75,
+		AppMenu: _sfc_main$76,
 		AttachmentCard: _sfc_main$87,
 		FilePreview: FilePreview_default,
 		TaskDetails: _sfc_main$28,
@@ -15766,7 +15771,7 @@ var desktopReason = "Watch Folders require a desktop connection, which is not en
 var _sfc_main$18 = {
 	components: {
 		AppButton: _sfc_main$71,
-		AppMenu: _sfc_main$75,
+		AppMenu: _sfc_main$76,
 		FilePreview: FilePreview_default
 	},
 	inject: {
@@ -17336,7 +17341,7 @@ var _sfc_main$11 = {
 		ObjectOperations: ObjectOperations_default,
 		ObjectAction: ObjectAction_default,
 		AppButton: _sfc_main$71,
-		AppMenu: _sfc_main$75
+		AppMenu: _sfc_main$76
 	},
 	props: {
 		ticket: String,
@@ -18076,7 +18081,7 @@ var _sfc_main$10 = {
 		}
 		__expose({ openAt: (event) => menu.value.openAt(event) });
 		return (_ctx, _cache) => {
-			return openBlock(), createBlock(_sfc_main$75, {
+			return openBlock(), createBlock(_sfc_main$76, {
 				ref_key: "menu",
 				ref: menu,
 				label: "Related and child objects",
@@ -18112,7 +18117,7 @@ var _sfc_main$9 = {
 		BusyIndicator: BusyIndicator_default,
 		AppSelect: _sfc_main$78,
 		AppSplitter: _sfc_main$85,
-		AppMenu: _sfc_main$75,
+		AppMenu: _sfc_main$76,
 		AppMenuItem: _sfc_main$47,
 		FilePreview: FilePreview_default,
 		NotesPanel: NotesPanel_default,
@@ -20651,7 +20656,7 @@ var TableServiceDialogs_default = /*#__PURE__*/ _plugin_vue_export_helper_defaul
 			height: 180
 		});
 		let resolve, observer;
-		const scene = computed(() => describe$24(model.value, size.value.width, size.value.height, appearance.language));
+		const scene = computed(() => describe$25(model.value, size.value.width, size.value.height, appearance.language));
 		function finish(accepted = false) {
 			const pending = resolve;
 			resolve = null;
@@ -21685,7 +21690,7 @@ var _sfc_main = {
 		ObjectOperations: ObjectOperations_default,
 		ObjectAction: ObjectAction_default,
 		AppButton: _sfc_main$71,
-		AppMenu: _sfc_main$75,
+		AppMenu: _sfc_main$76,
 		AppSelect: _sfc_main$78,
 		AppSearchField: AppSearchField_default,
 		FilePreview: FilePreview_default,
