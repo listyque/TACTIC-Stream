@@ -5,7 +5,7 @@ import { C as translate, G as label, H as _sfc_main$19, J as node, N as _sfc_mai
 import { t as captionHeight } from "./sections.ui.js";
 import { r as prettySize } from "./file_values.js";
 import "./files.js";
-import { Q as _sfc_main$22 } from "./ConfiguredView.js";
+import { $ as _sfc_main$22 } from "./ConfiguredView.js";
 import { t as actionLayout } from "./metrics.js";
 import { t as describe$7 } from "./confirmation.ui.js";
 import { t as _sfc_main$23 } from "./AppDialog.js";

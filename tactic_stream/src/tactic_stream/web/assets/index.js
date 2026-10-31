@@ -1946,8 +1946,8 @@ var windowPages = {
 			});
 		}
 	} },
-	related_objects: { load: () => __vitePreload(() => import("./ConfiguredView.js").then((n) => n.u), __vite__mapDeps([11,1,2,3,4,5,6,7,8,9,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,0,10,33,34,35])) },
-	link_sobjects: { load: () => __vitePreload(() => import("./ConfiguredView.js").then((n) => n.u), __vite__mapDeps([11,1,2,3,4,5,6,7,8,9,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,0,10,33,34,35])) },
+	related_objects: { load: () => __vitePreload(() => import("./ConfiguredView.js").then((n) => n.d), __vite__mapDeps([11,1,2,3,4,5,6,7,8,9,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,0,10,33,34,35])) },
+	link_sobjects: { load: () => __vitePreload(() => import("./ConfiguredView.js").then((n) => n.d), __vite__mapDeps([11,1,2,3,4,5,6,7,8,9,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,0,10,33,34,35])) },
 	add_sobject: { load: () => __vitePreload(() => import("./RecordForm.js"), __vite__mapDeps([14,1,2,3,4,5,6,7,8,9,15,12,13,16])) },
 	task_editor: { load: () => __vitePreload(() => import("./RecordForm.js"), __vite__mapDeps([14,1,2,3,4,5,6,7,8,9,15,12,13,16])) },
 	process_dependencies: { load: () => __vitePreload(() => import("./ProcessRules.js"), __vite__mapDeps([36,2,3,4,5,6,7,8,13,17,12,18,19,20,21,37])) },

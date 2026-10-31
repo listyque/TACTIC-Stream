@@ -4,7 +4,7 @@ import { l as columnsEditor } from "./index.js";
 import { C as translate, G as label, J as node, V as observeFrameSizes, W as button, Y as rect, q as muted, t as _sfc_main$1 } from "./FrameView.js";
 import { n as sections, t as captionHeight } from "./sections.ui.js";
 import { a as tabs, n as notices, o as toolbar, r as policy, t as documentEvent } from "./admin.document.js";
-import { i as displayWidgets, n as changeDefinition, r as definitionWizard } from "./ConfiguredView.js";
+import { a as displayWidgets, i as definitionWizard, r as changeDefinition } from "./ConfiguredView.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/columns/columns.state.mjs
 var initial = () => ({
 	query: "",

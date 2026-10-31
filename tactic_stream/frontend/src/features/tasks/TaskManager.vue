@@ -27,6 +27,7 @@ import TaskWorkspaceToolbar from './TaskWorkspaceToolbar.vue';
 import TaskProcessToolbar from './TaskProcessToolbar.vue';
 import MobileTasks from './MobileTasks.vue';
 import TaskWorkspaceEditor from './TaskWorkspaceEditor.vue';
+import TaskTableEditor from '../interface/TaskTableEditor.vue';
 import TaskWorkspaceFilters from './TaskWorkspaceFilters.vue';
 import TaskWorkspaceScope from './TaskWorkspaceScope.vue';
 import MilestoneManager from './MilestoneManager.vue';
@@ -115,6 +116,7 @@ export default {
     TaskWorkspaceTable,
     MobileTasks,
     TaskWorkspaceEditor,
+    TaskTableEditor,
     TaskWorkspaceFilters,
     TaskWorkspaceScope,
     TaskGanttView,
@@ -1883,22 +1885,35 @@ export default {
         )
       )
         return;
-      this.inline = { key: task.key, fields };
+      const editableFields =
+        column.key === 'progress'
+          ? [
+              plan.fields.find(
+                (field) => field.editable && fields.includes(field.name)
+              ).name
+            ]
+          : fields;
+      this.inline = { key: task.key, fields: editableFields };
       await nextTick();
-      const popup = this.$refs.inline;
-      popup.showPopover();
-      popup.style.left =
-        Math.max(8, Math.min(bounds.left, innerWidth - popup.offsetWidth - 8)) +
-        'px';
-      popup.style.top =
-        Math.max(
-          8,
-          Math.min(bounds.bottom, innerHeight - popup.offsetHeight - 8)
-        ) + 'px';
-      popup.querySelector('select, input, textarea')?.focus();
+      await this.$refs.inline.open(bounds);
+    },
+    changeInline(name, value) {
+      if (!this.inline) return;
+      this.stageRow(this.inline.key, name, value);
+      if (
+        this.inlineEditor?.fields.length === 1 &&
+        [
+          'status',
+          'assigned',
+          'supervisor',
+          'priority',
+          'milestone_code'
+        ].includes(name)
+      )
+        this.closeInline();
     },
     closeInline() {
-      this.$refs.inline?.hidePopover();
+      this.$refs.inline?.close();
       this.inline = null;
     },
     collapse(key) {
@@ -3158,27 +3173,19 @@ export default {
       >
         <ActionRows :actions="rowActions" @triggered="rowCommand" />
       </div>
-      <div
+      <TaskTableEditor
+        embedded
         ref="inline"
-        class="task-table-editor task-manager-inline"
-        popover="auto"
-        role="dialog"
-        :aria-label="t('Edit task cell')"
-        @toggle="$event.newState === 'closed' && (inline = null)"
-      >
-        <template v-if="inlineEditor">
-          <TaskWorkspaceEditor
-            immediate
-            inline
-            title="Edit task cell"
-            @cancel="closeInline"
-            :editor="inlineEditor"
-            :busy="blocked"
-            @change="(name, value) => stageRow(inline.key, name, value)"
-            @milestones="$refs.milestones.open()"
-          />
-        </template>
-      </div>
+        label="Edit task cell"
+        :editor="inlineEditor"
+        :busy="blocked"
+        @change="changeInline"
+        @milestones="
+          closeInline();
+          $refs.milestones.open();
+        "
+        @closed="inline = null"
+      />
       <div
         ref="columnMenu"
         class="task-table-editor task-manager-menu"

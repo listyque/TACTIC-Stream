@@ -2,7 +2,7 @@ import { C as inject, E as nextTick, G as withCtx, H as watch, J as markRaw, M a
 import { D as spacing, a as _sfc_main$2, o as t, s as appearance, t as _sfc_main$3, y as cssRoles } from "./AppButton.js";
 import { A as rpc, It as randomUuid, ut as notify } from "./index.js";
 import { C as translate, G as label, J as node, N as _sfc_main$4, V as observeFrameSizes, W as button, Y as rect, q as muted, t as _sfc_main$5 } from "./FrameView.js";
-import { Q as _sfc_main$6 } from "./ConfiguredView.js";
+import { $ as _sfc_main$6 } from "./ConfiguredView.js";
 import { t as _sfc_main$7 } from "./AppDialog.js";
 import { t as _sfc_main$8 } from "./MarkdownText.js";
 import { t as listAction } from "./tree.ui.js";

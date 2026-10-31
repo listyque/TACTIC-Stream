@@ -3,6 +3,8 @@ import AppSelect from '../../controls/AppSelect.vue';
 import AppTextArea from '../../controls/AppTextArea.vue';
 import AppTextField from '../../controls/AppTextField.vue';
 import AppDateField from '../../controls/AppDateField.vue';
+import AppSlider from '../../controls/AppSlider.vue';
+import AppIcon from '../../controls/AppIcon.vue';
 import AppSpinBox from '../../controls/forms/AppSpinBox.vue';
 import UserComboBox from '../../controls/UserComboBox.vue';
 import { t } from '../../i18n.js';
@@ -121,17 +123,32 @@ const numericValue = () =>
     :disabled="busy || !field.editable"
     @update:model-value="emit('change', $event)"
   />
-  <AppSpinBox
-    v-else-if="field.name === 'bid_duration'"
-    :min="0"
-    :max="100000"
-    :step="0.25"
-    :decimals="2"
-    :model-value="numericValue()"
-    :label="titles[field.name]"
-    :disabled="busy || !field.editable"
-    @update:model-value="emit('change', $event * hourScale())"
-  />
+  <div v-else-if="field.name === 'bid_duration'" class="task-hours-field">
+    <AppIcon name="schedule" />
+    <AppSpinBox
+      :min="0"
+      :max="100000"
+      :step="0.25"
+      :decimals="2"
+      :model-value="numericValue()"
+      :label="titles[field.name]"
+      :disabled="busy || !field.editable"
+      @update:model-value="emit('change', $event * hourScale())"
+    />
+    <span class="muted">{{ t('h') }}</span>
+  </div>
+  <div
+    v-else-if="['progress', 'completion'].includes(field.name)"
+    class="task-progress-field"
+  >
+    <AppSlider
+      :model-value="Number(value || 0)"
+      label="Progress"
+      :disabled="busy || !field.editable"
+      @update:model-value="emit('change', $event)"
+    />
+    <output>{{ Number(value || 0) }}%</output>
+  </div>
   <AppTextField
     v-else
     type="number"
@@ -144,3 +161,29 @@ const numericValue = () =>
     @update:model-value="emit('change', $event)"
   />
 </template>
+
+<style>
+.task-progress-field,
+.task-hours-field {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  min-width: 0;
+}
+.task-progress-field > .app-slider,
+.task-hours-field > .app-spin-box {
+  flex: 1;
+  min-width: 0;
+}
+.task-progress-field > output {
+  min-width: 4ch;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.task-hours-field > .app-spin-box {
+  max-height: 100%;
+}
+.task-hours-field > .app-icon {
+  color: var(--muted);
+}
+</style>

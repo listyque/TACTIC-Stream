@@ -4,7 +4,7 @@ import { A as _sfc_main$26, C as translate, E as _sfc_main$22, G as label, J as 
 import { n as _sfc_main$30, r as _sfc_main$31 } from "./AppearanceControls.js";
 import { r as ImagePicker_default, t as _sfc_main$32 } from "./RecordForm.js";
 import { u as _sfc_main$33 } from "./admin.document.js";
-import { $ as _sfc_main$40, A as _sfc_main$34, D as _sfc_main$39, Q as _sfc_main$37, U as _sfc_main$35, et as _sfc_main$36, ut as _sfc_main$38 } from "./ConfiguredView.js";
+import { $ as _sfc_main$37, O as _sfc_main$39, W as _sfc_main$35, dt as _sfc_main$38, et as _sfc_main$40, j as _sfc_main$34, tt as _sfc_main$36 } from "./ConfiguredView.js";
 import { t as _sfc_main$41 } from "./ActionRow.js";
 import { t as _sfc_main$42 } from "./AppDialog.js";
 import { t as _sfc_main$43 } from "./ContentLoadingOverlay.js";

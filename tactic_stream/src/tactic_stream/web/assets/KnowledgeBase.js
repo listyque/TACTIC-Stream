@@ -4,7 +4,7 @@ import { i as semanticName, r as aliases } from "./icons.js";
 import { Ft as randomId, h as messageFileRequest, m as linkPreviews, p as knowledgeRequest } from "./index.js";
 import { C as translate, G as label, H as _sfc_main$9, J as node, N as _sfc_main$6, O as AppSearchField_default, R as _sfc_main$8, V as observeFrameSizes, W as button, Y as rect, d as javascriptTokens, f as pythonTokens, h as copyText, j as _sfc_main$10, k as _sfc_main$11, p as xmlTokens, t as _sfc_main$5, z as _sfc_main$7 } from "./FrameView.js";
 import { M as extractSkeys, j as escapeHtml, u as _sfc_main$12, x as browserLink } from "./admin.document.js";
-import { C as messageDate, Q as _sfc_main$13, h as _sfc_main$14 } from "./ConfiguredView.js";
+import { $ as _sfc_main$13, g as _sfc_main$14, w as messageDate } from "./ConfiguredView.js";
 import { t as MarkdownItCallable } from "./markdown-it.js";
 import { o as _sfc_main$15 } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/knowledge/workspace.ui.mjs

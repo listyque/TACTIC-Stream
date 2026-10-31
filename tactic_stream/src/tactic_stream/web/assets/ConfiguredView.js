@@ -493,8 +493,8 @@ var _sfc_main$67 = {
 };
 //#endregion
 //#region src/features/interface/TaskCell.vue
-var _hoisted_1$35 = ["aria-label"];
-var _hoisted_2$25 = { class: "task-preview-content" };
+var _hoisted_1$36 = ["aria-label"];
+var _hoisted_2$26 = { class: "task-preview-content" };
 var _sfc_main$66 = {
 	__name: "TaskCell",
 	props: {
@@ -688,7 +688,7 @@ var _sfc_main$66 = {
 				onPointerleave: popupLeave,
 				onPointerdown: activate,
 				onFocusin: activate
-			}, [createBaseVNode("div", _hoisted_2$25, [createVNode(_sfc_main$67, {
+			}, [createBaseVNode("div", _hoisted_2$26, [createVNode(_sfc_main$67, {
 				tasks: tasks.value,
 				height: __props.height || 58,
 				expanded: "",
@@ -706,7 +706,7 @@ var _sfc_main$66 = {
 				class: "task-preview-manager",
 				"badge-count": __props.cell?.count || 0,
 				onClick: _cache[1] || (_cache[1] = ($event) => inspect(null))
-			}, null, 8, ["badge-count"])], 40, _hoisted_1$35)]))], 64);
+			}, null, 8, ["badge-count"])], 40, _hoisted_1$36)]))], 64);
 		};
 	}
 };
@@ -784,12 +784,12 @@ var ValueFieldsCell_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 }, [["__scopeId", "data-v-e1aebbf0"]]);
 //#endregion
 //#region src/features/interface/CompletionCell.vue
-var _hoisted_1$34 = [
+var _hoisted_1$35 = [
 	"aria-label",
 	"aria-valuenow",
 	"aria-valuetext"
 ];
-var _hoisted_2$24 = { class: "table-completion-label" };
+var _hoisted_2$25 = { class: "table-completion-label" };
 var CompletionCell_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 	__name: "CompletionCell",
 	props: {
@@ -811,7 +811,7 @@ var CompletionCell_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 			}, [createBaseVNode("span", {
 				class: "table-completion-fill",
 				style: normalizeStyle({ width: percent.value + "%" })
-			}, null, 4), createBaseVNode("span", _hoisted_2$24, toDisplayString(__props.text || percent.value.toFixed(1) + "%"), 1)], 8, _hoisted_1$34);
+			}, null, 4), createBaseVNode("span", _hoisted_2$25, toDisplayString(__props.text || percent.value.toFixed(1) + "%"), 1)], 8, _hoisted_1$35);
 		};
 	}
 }, [["__scopeId", "data-v-9cb6efea"]]);
@@ -860,7 +860,7 @@ var GroupedCompletionCell_default = /*#__PURE__*/ _plugin_vue_export_helper_defa
 }, [["__scopeId", "data-v-7adb7e90"]]);
 //#endregion
 //#region src/features/interface/StructuredCell.vue
-var _hoisted_1$33 = {
+var _hoisted_1$34 = {
 	key: 0,
 	role: "status",
 	class: "error-text"
@@ -876,7 +876,7 @@ var StructuredCell_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 			return openBlock(), createElementBlock("div", {
 				class: "table-structured",
 				style: normalizeStyle({ maxHeight: (__props.height || (__props.cell?.language === "xml" ? 600 : 300)) + "px" })
-			}, [__props.cell?.diagnostic ? (openBlock(), createElementBlock("span", _hoisted_1$33, toDisplayString(unref(t)("XML Parse Error")) + ": " + toDisplayString(__props.cell.diagnostic), 1)) : createCommentVNode("", true), createVNode(_sfc_main$88, {
+			}, [__props.cell?.diagnostic ? (openBlock(), createElementBlock("span", _hoisted_1$34, toDisplayString(unref(t)("XML Parse Error")) + ": " + toDisplayString(__props.cell.diagnostic), 1)) : createCommentVNode("", true), createVNode(_sfc_main$88, {
 				code: __props.cell?.text || "",
 				language: "text"
 			}, null, 8, ["code"])], 4);
@@ -5010,9 +5010,9 @@ var _sfc_main$58 = {
 	},
 	methods: { t }
 };
-var _hoisted_1$32 = ["title"];
-var _hoisted_2$23 = ["title"];
-var _hoisted_3$18 = {
+var _hoisted_1$33 = ["title"];
+var _hoisted_2$24 = ["title"];
+var _hoisted_3$19 = {
 	key: 2,
 	class: "table-cell-text muted"
 };
@@ -5020,7 +5020,7 @@ var _hoisted_4$17 = {
 	key: 13,
 	class: "table-notes"
 };
-var _hoisted_5$13 = { class: "visually-hidden" };
+var _hoisted_5$14 = { class: "visually-hidden" };
 var _hoisted_6$12 = { class: "visually-hidden" };
 var _hoisted_7$12 = ["aria-label", "title"];
 var _hoisted_8$9 = ["aria-label", "title"];
@@ -5045,12 +5045,12 @@ function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
 		key: 0,
 		class: "table-cell-text muted",
 		title: $props.element.display?.handler || ""
-	}, toDisplayString($options.t("Widget unavailable")), 9, _hoisted_1$32)) : $props.cell?.error ? (openBlock(), createElementBlock("span", {
+	}, toDisplayString($options.t("Widget unavailable")), 9, _hoisted_1$33)) : $props.cell?.error ? (openBlock(), createElementBlock("span", {
 		key: 1,
 		class: "table-cell-text error-text",
 		title: $props.cell.error,
 		role: "status"
-	}, toDisplayString($options.t("Cell calculation failed")) + ": " + toDisplayString($props.cell.error), 9, _hoisted_2$23)) : $props.loading && $props.element.cell?.server && !$props.cell ? (openBlock(), createElementBlock("span", _hoisted_3$18, toDisplayString($options.t("Loading data…")), 1)) : $props.element.cell?.kind === "journal-details" ? (openBlock(), createBlock(_component_AppButton, {
+	}, toDisplayString($options.t("Cell calculation failed")) + ": " + toDisplayString($props.cell.error), 9, _hoisted_2$24)) : $props.loading && $props.element.cell?.server && !$props.cell ? (openBlock(), createElementBlock("span", _hoisted_3$19, toDisplayString($options.t("Loading data…")), 1)) : $props.element.cell?.kind === "journal-details" ? (openBlock(), createBlock(_component_AppButton, {
 		key: 3,
 		label: $props.expanded ? "Hide transaction details" : "Show transaction details",
 		icon: $props.expanded ? "MDI_CHEVRON_DOWN" : "MDI_CHEVRON_RIGHT",
@@ -5190,7 +5190,7 @@ function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
 		"translate-label": false,
 		disabled: ""
 	}, {
-		default: withCtx(() => [createBaseVNode("span", _hoisted_5$13, toDisplayString($props.element.title), 1)]),
+		default: withCtx(() => [createBaseVNode("span", _hoisted_5$14, toDisplayString($props.element.title), 1)]),
 		_: 1
 	}, 8, ["model-value", "label"])) : $props.element.cell?.kind === "selection" ? (openBlock(), createBlock(_component_AppCheckbox, {
 		key: 16,
@@ -5258,7 +5258,7 @@ function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
 var TableCell_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$58, [["render", _sfc_render$7]]);
 //#endregion
 //#region src/controls/ActionRows.vue
-var _hoisted_1$31 = { class: "action-rows" };
+var _hoisted_1$32 = { class: "action-rows" };
 var _sfc_main$57 = {
 	__name: "ActionRows",
 	props: { actions: {
@@ -5269,7 +5269,7 @@ var _sfc_main$57 = {
 	setup(__props) {
 		const hovered = ref(null);
 		return (_ctx, _cache) => {
-			return openBlock(), createElementBlock("div", _hoisted_1$31, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.actions, (record, index) => {
+			return openBlock(), createElementBlock("div", _hoisted_1$32, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.actions, (record, index) => {
 				return openBlock(), createBlock(_sfc_main$89, {
 					key: record.command || index,
 					record,
@@ -5662,16 +5662,16 @@ function viewActions$1(views, enabled, language, scrollColumns = false) {
 }
 //#endregion
 //#region src/features/interface/TableView.vue
-var _hoisted_1$30 = [
+var _hoisted_1$31 = [
 	"aria-label",
 	"aria-rowcount",
 	"aria-colcount"
 ];
-var _hoisted_2$22 = {
+var _hoisted_2$23 = {
 	class: "handler-table-selection",
 	role: "columnheader"
 };
-var _hoisted_3$17 = { class: "visually-hidden" };
+var _hoisted_3$18 = { class: "visually-hidden" };
 var _hoisted_4$16 = [
 	"data-align",
 	"aria-sort",
@@ -5681,7 +5681,7 @@ var _hoisted_4$16 = [
 	"onPointerdown",
 	"onKeydown"
 ];
-var _hoisted_5$12 = { key: 1 };
+var _hoisted_5$13 = { key: 1 };
 var _hoisted_6$11 = [
 	"aria-label",
 	"aria-valuenow",
@@ -6167,14 +6167,14 @@ var _sfc_main$56 = {
 						role: "row",
 						style: normalizeStyle({ width: tableWidth.value + "px" })
 					}, [
-						createBaseVNode("div", _hoisted_2$22, [__props.selectable ? (openBlock(), createBlock(_sfc_main$72, {
+						createBaseVNode("div", _hoisted_2$23, [__props.selectable ? (openBlock(), createBlock(_sfc_main$72, {
 							key: 0,
 							label: "Select all rows",
 							"model-value": !!allSelected.value,
 							indeterminate: !allSelected.value && records.value.some((record) => __props.selectedKeys?.includes(record.__search_key__)),
 							"onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => emit("select", records.value, $event))
 						}, {
-							default: withCtx(() => [createBaseVNode("span", _hoisted_3$17, toDisplayString(unref(t)("Select all rows")), 1)]),
+							default: withCtx(() => [createBaseVNode("span", _hoisted_3$18, toDisplayString(unref(t)("Select all rows")), 1)]),
 							_: 1
 						}, 8, ["model-value", "indeterminate"])) : createCommentVNode("", true)]),
 						(openBlock(true), createElementBlock(Fragment, null, renderList(columns.value, (column) => {
@@ -6210,7 +6210,7 @@ var _sfc_main$56 = {
 									"icon",
 									"disabled",
 									"onClick"
-								])) : (openBlock(), createElementBlock("span", _hoisted_5$12, toDisplayString(column.title), 1)),
+								])) : (openBlock(), createElementBlock("span", _hoisted_5$13, toDisplayString(column.title), 1)),
 								__props.groupMode === "column:" + column.name ? (openBlock(), createBlock(_sfc_main$70, {
 									key: 2,
 									name: "group-items",
@@ -6377,7 +6377,7 @@ var _sfc_main$56 = {
 							}, null, 8, ["onClick"])) : createCommentVNode("", true)])
 						], 64))], 46, _hoisted_8$8);
 					}), 128))], 4)
-				], 46, _hoisted_1$30),
+				], 46, _hoisted_1$31),
 				createVNode(_sfc_main$74, {
 					ref_key: "contextMenu",
 					ref: contextMenu,
@@ -7219,16 +7219,16 @@ var NestedTable_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 }, [["__scopeId", "data-v-678793fb"]]);
 //#endregion
 //#region src/controls/DocumentPane.vue
-var _hoisted_1$29 = {
+var _hoisted_1$30 = {
 	key: 0,
 	class: "error",
 	role: "alert"
 };
-var _hoisted_2$21 = {
+var _hoisted_2$22 = {
 	key: 1,
 	class: "document-notice muted"
 };
-var _hoisted_3$16 = {
+var _hoisted_3$17 = {
 	key: 2,
 	class: "document-summary"
 };
@@ -7314,9 +7314,9 @@ var _sfc_main$52 = {
 				ref: article,
 				tabindex: "0"
 			}, [
-				__props.error ? (openBlock(), createElementBlock("p", _hoisted_1$29, toDisplayString(__props.error), 1)) : createCommentVNode("", true),
-				__props.notice ? (openBlock(), createElementBlock("p", _hoisted_2$21, toDisplayString(__props.notice), 1)) : createCommentVNode("", true),
-				__props.summary && !__props.error ? (openBlock(), createElementBlock("div", _hoisted_3$16, [createVNode(_sfc_main$70, { name: "info" }), createVNode(_sfc_main$91, {
+				__props.error ? (openBlock(), createElementBlock("p", _hoisted_1$30, toDisplayString(__props.error), 1)) : createCommentVNode("", true),
+				__props.notice ? (openBlock(), createElementBlock("p", _hoisted_2$22, toDisplayString(__props.notice), 1)) : createCommentVNode("", true),
+				__props.summary && !__props.error ? (openBlock(), createElementBlock("div", _hoisted_3$17, [createVNode(_sfc_main$70, { name: "info" }), createVNode(_sfc_main$91, {
 					text: __props.summary,
 					onTopic: _cache[0] || (_cache[0] = ($event) => emit("link", $event))
 				}, null, 8, ["text"])])) : createCommentVNode("", true),
@@ -7837,8 +7837,8 @@ var _sfc_main$50 = {
 };
 //#endregion
 //#region src/controls/layout/InfoValueStrip.vue
-var _hoisted_1$28 = { class: "info-value-strip" };
-var _hoisted_2$20 = {
+var _hoisted_1$29 = { class: "info-value-strip" };
+var _hoisted_2$21 = {
 	key: 0,
 	class: "info-separator"
 };
@@ -7869,8 +7869,8 @@ var _sfc_main$49 = {
 			return /^(https?:\/\/|ftp:\/\/|mailto:)/i.test(url || "") && !/[\u0000-\u001f]/.test(url);
 		}
 		return (_ctx, _cache) => {
-			return openBlock(), createElementBlock("span", _hoisted_1$28, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.maximumItems > 0 ? __props.items.slice(0, __props.maximumItems) : __props.items, (item, index) => {
-				return openBlock(), createElementBlock(Fragment, { key: index }, [index ? (openBlock(), createElementBlock("span", _hoisted_2$20, toDisplayString(__props.separator), 1)) : createCommentVNode("", true), (openBlock(), createBlock(resolveDynamicComponent(external(item.url) ? "a" : "span"), {
+			return openBlock(), createElementBlock("span", _hoisted_1$29, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.maximumItems > 0 ? __props.items.slice(0, __props.maximumItems) : __props.items, (item, index) => {
+				return openBlock(), createElementBlock(Fragment, { key: index }, [index ? (openBlock(), createElementBlock("span", _hoisted_2$21, toDisplayString(__props.separator), 1)) : createCommentVNode("", true), (openBlock(), createBlock(resolveDynamicComponent(external(item.url) ? "a" : "span"), {
 					href: external(item.url) ? item.url : void 0,
 					target: "_blank",
 					rel: "noopener noreferrer",
@@ -7969,8 +7969,8 @@ var _sfc_main$48 = {
 };
 //#endregion
 //#region src/controls/AppMenuItem.vue
-var _hoisted_1$27 = { class: "app-menu-item" };
-var _hoisted_2$19 = { class: "app-menu-item-label" };
+var _hoisted_1$28 = { class: "app-menu-item" };
+var _hoisted_2$20 = { class: "app-menu-item-label" };
 var _sfc_main$47 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 	__name: "AppMenuItem",
 	props: {
@@ -7997,7 +7997,7 @@ var _sfc_main$47 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 	setup(__props, { emit: __emit }) {
 		const emit = __emit;
 		return (_ctx, _cache) => {
-			return openBlock(), createElementBlock("div", _hoisted_1$27, [createVNode(_sfc_main$69, mergeProps(_ctx.$attrs, {
+			return openBlock(), createElementBlock("div", _hoisted_1$28, [createVNode(_sfc_main$69, mergeProps(_ctx.$attrs, {
 				"data-menu-primary": "",
 				icon: __props.icon,
 				label: __props.label,
@@ -8009,7 +8009,7 @@ var _sfc_main$47 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 				disabled: __props.disabled,
 				onClick: _cache[0] || (_cache[0] = ($event) => emit("click", $event))
 			}), {
-				default: withCtx(() => [createBaseVNode("span", _hoisted_2$19, toDisplayString(__props.translate ? unref(t)(__props.label) : __props.label), 1), __props.checked ? (openBlock(), createBlock(_sfc_main$70, {
+				default: withCtx(() => [createBaseVNode("span", _hoisted_2$20, toDisplayString(__props.translate ? unref(t)(__props.label) : __props.label), 1), __props.checked ? (openBlock(), createBlock(_sfc_main$70, {
 					key: 0,
 					name: "check-circle",
 					class: "menu-check"
@@ -8151,16 +8151,16 @@ var _sfc_main$46 = {
 };
 //#endregion
 //#region src/features/workspace/ResultItem.vue
-var _hoisted_1$26 = [
+var _hoisted_1$27 = [
 	"data-result-key",
 	"data-node-id",
 	"aria-label"
 ];
-var _hoisted_2$18 = {
+var _hoisted_2$19 = {
 	key: 2,
 	class: "result-file-offline"
 };
-var _hoisted_3$15 = {
+var _hoisted_3$16 = {
 	key: 0,
 	class: "result-metadata"
 };
@@ -8168,7 +8168,7 @@ var _hoisted_4$15 = {
 	key: 0,
 	class: "muted"
 };
-var _hoisted_5$11 = {
+var _hoisted_5$12 = {
 	key: 0,
 	class: "muted"
 };
@@ -8584,9 +8584,9 @@ var _sfc_main$45 = {
 							"icon-only": "",
 							onClick: _cache[7] || (_cache[7] = ($event) => _ctx.$emit("quickaction", __props.node, "open"))
 						})) : createCommentVNode("", true)], 2)) : createCommentVNode("", true),
-						__props.tree && __props.node.kind === "snapshot" && title.value && !__props.node.snapshot_display?.exists ? (openBlock(), createElementBlock("span", _hoisted_2$18, "(" + toDisplayString(unref(t)("File Offline")) + ")", 1)) : createCommentVNode("", true)
+						__props.tree && __props.node.kind === "snapshot" && title.value && !__props.node.snapshot_display?.exists ? (openBlock(), createElementBlock("span", _hoisted_2$19, "(" + toDisplayString(unref(t)("File Offline")) + ")", 1)) : createCommentVNode("", true)
 					], 32)]),
-					metadata: withCtx(() => [__props.node.kind === "object" ? (openBlock(), createElementBlock("div", _hoisted_3$15, [
+					metadata: withCtx(() => [__props.node.kind === "object" ? (openBlock(), createElementBlock("div", _hoisted_3$16, [
 						(openBlock(true), createElementBlock(Fragment, null, renderList(__props.compact ? __props.node.progress_items?.slice(0, 1) : __props.node.progress_items, (item) => {
 							return openBlock(), createBlock(_sfc_main$73, {
 								key: item.name,
@@ -8616,7 +8616,7 @@ var _sfc_main$45 = {
 							onClick: _cache[9] || (_cache[9] = withModifiers(() => {}, ["stop"]))
 						}, null, 8, ["items", "selected"])
 					])) : createCommentVNode("", true)]),
-					technical: withCtx(() => [__props.node.kind === "file" ? (openBlock(), createElementBlock("span", _hoisted_5$11, toDisplayString([record.value.relative_dir, record.value.file_name].filter(Boolean).join("/") || __props.node.subtitle), 1)) : __props.tree && !unref(mobile) && __props.node.kind === "snapshot" ? (openBlock(), createElementBlock("div", _hoisted_6$10, [
+					technical: withCtx(() => [__props.node.kind === "file" ? (openBlock(), createElementBlock("span", _hoisted_5$12, toDisplayString([record.value.relative_dir, record.value.file_name].filter(Boolean).join("/") || __props.node.subtitle), 1)) : __props.tree && !unref(mobile) && __props.node.kind === "snapshot" ? (openBlock(), createElementBlock("div", _hoisted_6$10, [
 						createBaseVNode("span", _hoisted_7$10, toDisplayString(__props.node.snapshot_display?.version), 1),
 						__props.node.snapshot_display?.revision ? (openBlock(), createElementBlock("span", _hoisted_8$7, toDisplayString(__props.node.snapshot_display.revision), 1)) : createCommentVNode("", true),
 						record.value.repo ? (openBlock(), createElementBlock("span", {
@@ -8820,7 +8820,7 @@ var _sfc_main$45 = {
 						}, null, 8, ["badge-count"])], 6)) : createCommentVNode("", true)
 					], 64))
 				], 36)
-			], 46, _hoisted_1$26);
+			], 46, _hoisted_1$27);
 		};
 	}
 };
@@ -9049,9 +9049,9 @@ function branchVisible(branch, record, ignore) {
 }
 //#endregion
 //#region src/features/workspace/ProcessVisibility.vue
-var _hoisted_1$25 = ["aria-label"];
-var _hoisted_2$17 = ["aria-busy"];
-var _hoisted_3$14 = {
+var _hoisted_1$26 = ["aria-label"];
+var _hoisted_2$18 = ["aria-busy"];
+var _hoisted_3$15 = {
 	key: 0,
 	role: "status"
 };
@@ -9060,7 +9060,7 @@ var _hoisted_4$14 = {
 	class: "error",
 	role: "alert"
 };
-var _hoisted_5$10 = { class: "process-visibility-tree" };
+var _hoisted_5$11 = { class: "process-visibility-tree" };
 var _hoisted_6$9 = ["aria-label"];
 var _hoisted_7$9 = ["data-process-id"];
 var _sfc_main$44 = {
@@ -9207,12 +9207,12 @@ var _sfc_main$44 = {
 						"flex": "none"
 					}
 				}, null, 8, ["scene"]),
-				busy.value ? (openBlock(), createElementBlock("p", _hoisted_3$14, toDisplayString(unref(t)("Loading data…")), 1)) : createCommentVNode("", true),
+				busy.value ? (openBlock(), createElementBlock("p", _hoisted_3$15, toDisplayString(unref(t)("Loading data…")), 1)) : createCommentVNode("", true),
 				error.value ? (openBlock(), createElementBlock("p", _hoisted_4$14, [createTextVNode(toDisplayString(unref(t)(error.value)) + " ", 1), createVNode(_sfc_main$69, {
 					label: "Retry",
 					onClick: load
 				})])) : createCommentVNode("", true),
-				createBaseVNode("div", _hoisted_5$10, [createBaseVNode("div", {
+				createBaseVNode("div", _hoisted_5$11, [createBaseVNode("div", {
 					ref_key: "viewport",
 					ref: viewport,
 					class: "process-visibility-viewport",
@@ -9259,7 +9259,7 @@ var _sfc_main$44 = {
 					}),
 					onEvent: command
 				}, null, 8, ["scene", "style"])
-			], 8, _hoisted_2$17)], 40, _hoisted_1$25)), [[_directive_window, { kind: "process_filter_editor" }]]);
+			], 8, _hoisted_2$18)], 40, _hoisted_1$26)), [[_directive_window, { kind: "process_filter_editor" }]]);
 		};
 	}
 };
@@ -9543,14 +9543,14 @@ function drag(boxes, handle, dx, dy, candidates, scale, snap) {
 }
 //#endregion
 //#region src/features/administration/CanvasSelection.vue
-var _hoisted_1$24 = ["data-canvas-guide"];
-var _hoisted_2$16 = [
+var _hoisted_1$25 = ["data-canvas-guide"];
+var _hoisted_2$17 = [
 	"data-canvas-key",
 	"aria-label",
 	"onPointerdown",
 	"onKeydown"
 ];
-var _hoisted_3$13 = ["aria-label"];
+var _hoisted_3$14 = ["aria-label"];
 var _hoisted_4$13 = [
 	"data-canvas-handle",
 	"aria-label",
@@ -9762,7 +9762,7 @@ var _sfc_main$43 = {
 							width: guide.end - guide.start + "px",
 							height: 0
 						})
-					}, null, 12, _hoisted_1$24);
+					}, null, 12, _hoisted_1$25);
 				}), 128)),
 				rubber.value ? (openBlock(), createElementBlock("div", {
 					key: 1,
@@ -9787,7 +9787,7 @@ var _sfc_main$43 = {
 						onPointerup: finish,
 						onPointercancel: cancel,
 						onKeydown: ($event) => key($event, box)
-					}, null, 44, _hoisted_2$16);
+					}, null, 44, _hoisted_2$17);
 				}), 128)),
 				chosen.value ? (openBlock(), createElementBlock("div", {
 					key: 2,
@@ -9805,7 +9805,7 @@ var _sfc_main$43 = {
 						onPointerup: finish,
 						onPointercancel: cancel,
 						onKeydown: _cache[2] || (_cache[2] = ($event) => key($event, chosen.value))
-					}, null, 40, _hoisted_3$13)) : createCommentVNode("", true),
+					}, null, 40, _hoisted_3$14)) : createCommentVNode("", true),
 					createBaseVNode("span", {
 						class: "canvas-size",
 						style: normalizeStyle({ fontSize: Math.round(11 / __props.scale) + "px" })
@@ -9908,14 +9908,14 @@ var _sfc_main$42 = {
 };
 //#endregion
 //#region src/features/interface/ItemLayout.vue
-var _hoisted_1$23 = { key: 2 };
-var _hoisted_2$15 = {
+var _hoisted_1$24 = { key: 2 };
+var _hoisted_2$16 = {
 	key: 5,
 	class: "item-layout-title"
 };
-var _hoisted_3$12 = { key: 2 };
+var _hoisted_3$13 = { key: 2 };
 var _hoisted_4$12 = { key: 6 };
-var _hoisted_5$9 = [
+var _hoisted_5$10 = [
 	"href",
 	"tabindex",
 	"target"
@@ -10187,7 +10187,7 @@ var _sfc_main$41 = {
 							"node",
 							"presentation",
 							"read-only"
-						])) : item.kind === "view" ? (openBlock(), createElementBlock("span", _hoisted_1$23, toDisplayString(item.options.view || unref(t)("Choose a reusable view")), 1)) : item.kind === "image" ? (openBlock(), createElementBlock(Fragment, { key: 3 }, [__props.node.kind === "branch" ? (openBlock(), createBlock(_sfc_main$70, {
+						])) : item.kind === "view" ? (openBlock(), createElementBlock("span", _hoisted_1$24, toDisplayString(item.options.view || unref(t)("Choose a reusable view")), 1)) : item.kind === "image" ? (openBlock(), createElementBlock(Fragment, { key: 3 }, [__props.node.kind === "branch" ? (openBlock(), createBlock(_sfc_main$70, {
 							key: 0,
 							name: process.value ? __props.node.branch.process_type === "hierarchy" ? "FAS_CODE_BRANCH" : "FAS_CIRCLE" : "stream"
 						}, null, 8, ["name"])) : (openBlock(), createBlock(ItemPreview_default, {
@@ -10213,17 +10213,17 @@ var _sfc_main$41 = {
 						]))], 64)) : item.kind === "title" && nativeFlow.value && item.tag === "strong" ? (openBlock(), createElementBlock(Fragment, { key: 4 }, [__props.presentation.tree && __props.node.kind === "snapshot" ? (openBlock(), createBlock(_sfc_main$75, {
 							key: 0,
 							text: title.value
-						}, null, 8, ["text"])) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [createTextVNode(toDisplayString(__props.node.branch?.kind === "versions" ? unref(t)(title.value) : title.value), 1)], 64))], 64)) : item.kind === "title" ? (openBlock(), createElementBlock("strong", _hoisted_2$15, [__props.node.kind === "snapshot" ? (openBlock(), createBlock(_sfc_main$75, {
+						}, null, 8, ["text"])) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [createTextVNode(toDisplayString(__props.node.branch?.kind === "versions" ? unref(t)(title.value) : title.value), 1)], 64))], 64)) : item.kind === "title" ? (openBlock(), createElementBlock("strong", _hoisted_2$16, [__props.node.kind === "snapshot" ? (openBlock(), createBlock(_sfc_main$75, {
 							key: 0,
 							text: value(item) || title.value
-						}, null, 8, ["text"])) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [createTextVNode(toDisplayString(value(item) || title.value), 1)], 64)), __props.node.kind === "snapshot" && !snapshot.value.exists ? (openBlock(), createElementBlock("small", _hoisted_3$12, " (" + toDisplayString(unref(t)("File Offline")) + ")", 1)) : createCommentVNode("", true)])) : item.kind === "text" || item.kind === "description" ? (openBlock(), createElementBlock("span", _hoisted_4$12, toDisplayString(item.role === "description" ? subtitle.value : value(item)), 1)) : item.kind === "link" && href(item) ? (openBlock(), createElementBlock("a", {
+						}, null, 8, ["text"])) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [createTextVNode(toDisplayString(value(item) || title.value), 1)], 64)), __props.node.kind === "snapshot" && !snapshot.value.exists ? (openBlock(), createElementBlock("small", _hoisted_3$13, " (" + toDisplayString(unref(t)("File Offline")) + ")", 1)) : createCommentVNode("", true)])) : item.kind === "text" || item.kind === "description" ? (openBlock(), createElementBlock("span", _hoisted_4$12, toDisplayString(item.role === "description" ? subtitle.value : value(item)), 1)) : item.kind === "link" && href(item) ? (openBlock(), createElementBlock("a", {
 							key: 7,
 							href: href(item),
 							tabindex: __props.editing ? -1 : void 0,
 							onClick: _cache[11] || (_cache[11] = ($event) => __props.editing ? $event.preventDefault() : $event.stopPropagation()),
 							target: href(item).startsWith("/") ? void 0 : "_blank",
 							rel: "noopener noreferrer"
-						}, toDisplayString(value(item) || item.title), 9, _hoisted_5$9)) : item.kind === "link" ? (openBlock(), createElementBlock("span", _hoisted_6$8, toDisplayString(value(item) || item.title), 1)) : item.kind === "button" && (__props.editing || href(item) || available(item.options.action)) ? (openBlock(), createBlock(_sfc_main$69, {
+						}, toDisplayString(value(item) || item.title), 9, _hoisted_5$10)) : item.kind === "link" ? (openBlock(), createElementBlock("span", _hoisted_6$8, toDisplayString(value(item) || item.title), 1)) : item.kind === "button" && (__props.editing || href(item) || available(item.options.action)) ? (openBlock(), createBlock(_sfc_main$69, {
 							key: 9,
 							class: normalizeClass(nativeFlow.value ? roleClasses[item.role] : void 0),
 							href: !__props.readOnly && !__props.editing ? href(item) || void 0 : void 0,
@@ -10480,13 +10480,13 @@ var _sfc_main$41 = {
 };
 //#endregion
 //#region src/features/interface/ConfiguredResultItem.vue
-var _hoisted_1$22 = [
+var _hoisted_1$23 = [
 	"data-result-key",
 	"data-node-id",
 	"aria-label",
 	"onKeydown"
 ];
-var _hoisted_2$14 = {
+var _hoisted_2$15 = {
 	key: 3,
 	class: "result-expand-spacer"
 };
@@ -10661,7 +10661,7 @@ var _sfc_main$40 = {
 					"icon-size",
 					"indicator-size"
 				])) : createCommentVNode("", true),
-				!unref(mobile) && !__props.node.hasChildren ? (openBlock(), createElementBlock("span", _hoisted_2$14)) : createCommentVNode("", true),
+				!unref(mobile) && !__props.node.hasChildren ? (openBlock(), createElementBlock("span", _hoisted_2$15)) : createCommentVNode("", true),
 				!native.value && unref(mobile) && __props.selectable && !__props.readOnly ? (openBlock(), createBlock(_sfc_main$72, {
 					key: 4,
 					label: "Select record",
@@ -10690,17 +10690,17 @@ var _sfc_main$40 = {
 					"editing",
 					"selected-element"
 				])
-			], 46, _hoisted_1$22);
+			], 46, _hoisted_1$23);
 		};
 	}
 };
 //#endregion
 //#region src/features/interface/ItemLayoutTable.vue
-var _hoisted_1$21 = { class: "item-layout-table-scroll" };
-var _hoisted_2$13 = { class: "item-layout-table" };
-var _hoisted_3$11 = { key: 0 };
+var _hoisted_1$22 = { class: "item-layout-table-scroll" };
+var _hoisted_2$14 = { class: "item-layout-table" };
+var _hoisted_3$12 = { key: 0 };
 var _hoisted_4$11 = ["onClick", "onContextmenu"];
-var _hoisted_5$8 = { key: 0 };
+var _hoisted_5$9 = { key: 0 };
 var _sfc_main$39 = {
 	__name: "ItemLayoutTable",
 	props: {
@@ -10722,7 +10722,7 @@ var _sfc_main$39 = {
 		const emit = __emit;
 		const columns = computed(() => props.layout.elements.filter((item) => !item.parent && !item.hidden && ["all", "main"].includes(item.variant)));
 		return (_ctx, _cache) => {
-			return openBlock(), createElementBlock("div", _hoisted_1$21, [createBaseVNode("table", _hoisted_2$13, [createBaseVNode("thead", null, [createBaseVNode("tr", null, [(openBlock(true), createElementBlock(Fragment, null, renderList(columns.value, (column) => {
+			return openBlock(), createElementBlock("div", _hoisted_1$22, [createBaseVNode("table", _hoisted_2$14, [createBaseVNode("thead", null, [createBaseVNode("tr", null, [(openBlock(true), createElementBlock(Fragment, null, renderList(columns.value, (column) => {
 				return openBlock(), createElementBlock("th", { key: column.name }, [__props.editing ? (openBlock(), createBlock(_sfc_main$69, {
 					key: 0,
 					label: column.title,
@@ -10734,7 +10734,7 @@ var _sfc_main$39 = {
 					"highlighted",
 					"onClick"
 				])) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [createTextVNode(toDisplayString(column.title), 1)], 64))]);
-			}), 128)), _ctx.$slots.actions ? (openBlock(), createElementBlock("th", _hoisted_3$11, toDisplayString(unref(t)("Actions")), 1)) : createCommentVNode("", true)])]), createBaseVNode("tbody", null, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.nodes, (node) => {
+			}), 128)), _ctx.$slots.actions ? (openBlock(), createElementBlock("th", _hoisted_3$12, toDisplayString(unref(t)("Actions")), 1)) : createCommentVNode("", true)])]), createBaseVNode("tbody", null, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.nodes, (node) => {
 				return openBlock(), createElementBlock("tr", {
 					key: node.id || node.record?.__search_key__,
 					onClick: ($event) => emit("activate", node, $event),
@@ -10758,19 +10758,19 @@ var _sfc_main$39 = {
 						"editing",
 						"selected-element"
 					])]);
-				}), 128)), _ctx.$slots.actions ? (openBlock(), createElementBlock("td", _hoisted_5$8, [renderSlot(_ctx.$slots, "actions", { node })])) : createCommentVNode("", true)], 40, _hoisted_4$11);
+				}), 128)), _ctx.$slots.actions ? (openBlock(), createElementBlock("td", _hoisted_5$9, [renderSlot(_ctx.$slots, "actions", { node })])) : createCommentVNode("", true)], 40, _hoisted_4$11);
 			}), 128))])])]);
 		};
 	}
 };
 //#endregion
 //#region src/controls/MobilePage.vue
-var _hoisted_1$20 = ["data-chrome-hidden"];
-var _hoisted_2$12 = {
+var _hoisted_1$21 = ["data-chrome-hidden"];
+var _hoisted_2$13 = {
 	key: 0,
 	class: "mobile-result-header"
 };
-var _hoisted_3$10 = { class: "mobile-result-stage" };
+var _hoisted_3$11 = { class: "mobile-result-stage" };
 var _hoisted_4$10 = ["aria-label", "data-screen-key"];
 var _sfc_main$38 = {
 	__name: "MobilePage",
@@ -10910,8 +10910,8 @@ var _sfc_main$38 = {
 				onPointercancel: _cache[1] || (_cache[1] = ($event) => stop($event, true)),
 				onClickCapture: click
 			}, [
-				__props.back ? (openBlock(), createElementBlock("header", _hoisted_2$12, [renderSlot(_ctx.$slots, "header")])) : createCommentVNode("", true),
-				createBaseVNode("div", _hoisted_3$10, [createVNode(Transition, {
+				__props.back ? (openBlock(), createElementBlock("header", _hoisted_2$13, [renderSlot(_ctx.$slots, "header")])) : createCommentVNode("", true),
+				createBaseVNode("div", _hoisted_3$11, [createVNode(Transition, {
 					name: "mobile-result-" + __props.direction,
 					onBeforeLeave: remember,
 					onEnter: restore,
@@ -10935,24 +10935,24 @@ var _sfc_main$38 = {
 					_: 3
 				}, 8, ["name"])]),
 				renderSlot(_ctx.$slots, "footer")
-			], 40, _hoisted_1$20);
+			], 40, _hoisted_1$21);
 		};
 	}
 };
 //#endregion
 //#region src/features/workspace/MobileResults.vue
-var _hoisted_1$19 = { class: "mobile-snapshot-view file-preview" };
-var _hoisted_2$11 = {
+var _hoisted_1$20 = { class: "mobile-snapshot-view file-preview" };
+var _hoisted_2$12 = {
 	key: 0,
 	role: "status"
 };
-var _hoisted_3$9 = {
+var _hoisted_3$10 = {
 	key: 1,
 	role: "alert",
 	class: "error"
 };
 var _hoisted_4$9 = { class: "mobile-snapshot-metadata" };
-var _hoisted_5$7 = {
+var _hoisted_5$8 = {
 	key: 1,
 	class: "table-message",
 	role: "status"
@@ -11056,9 +11056,9 @@ var _sfc_main$37 = {
 				]))]),
 				default: withCtx(() => [
 					snapshot.value ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
-						createBaseVNode("div", _hoisted_1$19, [
-							__props.parent.previewBusy ? (openBlock(), createElementBlock("p", _hoisted_2$11, toDisplayString(unref(t)("Loading file…")), 1)) : createCommentVNode("", true),
-							__props.parent.previewError ? (openBlock(), createElementBlock("p", _hoisted_3$9, [createTextVNode(toDisplayString(unref(t)(__props.parent.previewError)) + " ", 1), createVNode(_sfc_main$69, {
+						createBaseVNode("div", _hoisted_1$20, [
+							__props.parent.previewBusy ? (openBlock(), createElementBlock("p", _hoisted_2$12, toDisplayString(unref(t)("Loading file…")), 1)) : createCommentVNode("", true),
+							__props.parent.previewError ? (openBlock(), createElementBlock("p", _hoisted_3$10, [createTextVNode(toDisplayString(unref(t)(__props.parent.previewError)) + " ", 1), createVNode(_sfc_main$69, {
 								label: "Retry",
 								onClick: _cache[10] || (_cache[10] = ($event) => emit("preview-retry", __props.parent))
 							})])) : createCommentVNode("", true),
@@ -11096,7 +11096,7 @@ var _sfc_main$37 = {
 							__props.parent.record.timestamp ? (openBlock(), createElementBlock(Fragment, { key: 2 }, [createBaseVNode("dt", null, toDisplayString(unref(t)("Date")), 1), createBaseVNode("dd", null, toDisplayString(unref(timestampFullLabel)(__props.parent.record.timestamp)), 1)], 64)) : createCommentVNode("", true)
 						])
 					], 64)) : createCommentVNode("", true),
-					busy.value ? (openBlock(), createElementBlock("p", _hoisted_5$7, toDisplayString(unref(t)("Loading data…")), 1)) : createCommentVNode("", true),
+					busy.value ? (openBlock(), createElementBlock("p", _hoisted_5$8, toDisplayString(unref(t)("Loading data…")), 1)) : createCommentVNode("", true),
 					error.value ? (openBlock(), createElementBlock("p", _hoisted_6$7, [createTextVNode(toDisplayString(unref(t)(error.value)) + " ", 1), createVNode(_sfc_main$69, {
 						label: "Retry",
 						icon: "refresh",
@@ -11562,9 +11562,9 @@ function workHours(model, width, language) {
 }
 //#endregion
 //#region src/features/objects/TaskInspectorHeader.vue
-var _hoisted_1$18 = { class: "inspector-menu-heading" };
-var _hoisted_2$10 = { class: "inspector-choice-copy" };
-var _hoisted_3$8 = { class: "inspector-menu-heading" };
+var _hoisted_1$19 = { class: "inspector-menu-heading" };
+var _hoisted_2$11 = { class: "inspector-choice-copy" };
+var _hoisted_3$9 = { class: "inspector-menu-heading" };
 var _hoisted_4$8 = { class: "inspector-choice-copy" };
 var _sfc_main$36 = {
 	__name: "TaskInspectorHeader",
@@ -11661,7 +11661,7 @@ var _sfc_main$36 = {
 					onPointerdownCapture: _cache[0] || (_cache[0] = ($event) => __props.busy && $event.preventDefault()),
 					onKeydownCapture: _cache[1] || (_cache[1] = ($event) => __props.busy && $event.preventDefault())
 				}, {
-					default: withCtx(() => [createBaseVNode("strong", _hoisted_1$18, toDisplayString(unref(t)("Process and note context")), 1), (openBlock(true), createElementBlock(Fragment, null, renderList(__props.editor.processes, (row) => {
+					default: withCtx(() => [createBaseVNode("strong", _hoisted_1$19, toDisplayString(unref(t)("Process and note context")), 1), (openBlock(true), createElementBlock(Fragment, null, renderList(__props.editor.processes, (row) => {
 						return openBlock(), createBlock(_sfc_main$69, {
 							key: row.value,
 							"data-process-choice": row.value,
@@ -11677,7 +11677,7 @@ var _sfc_main$36 = {
 									class: "inspector-process-dot",
 									style: normalizeStyle({ background: row.color || "var(--primary)" })
 								}, null, 4),
-								createBaseVNode("span", _hoisted_2$10, [createBaseVNode("strong", null, toDisplayString(row.label), 1), createBaseVNode("small", null, toDisplayString(row.type === "progress" ? unref(t)("Related tasks") : row.type === "built-in" ? unref(t)("Built-in") : row.type) + " · " + toDisplayString(row.type === "progress" ? (row.approved || 0) + " / " + (row.total || 0) : unref(t)("{count} notes", { count: row.count || 0 })), 1)]),
+								createBaseVNode("span", _hoisted_2$11, [createBaseVNode("strong", null, toDisplayString(row.label), 1), createBaseVNode("small", null, toDisplayString(row.type === "progress" ? unref(t)("Related tasks") : row.type === "built-in" ? unref(t)("Built-in") : row.type) + " · " + toDisplayString(row.type === "progress" ? (row.approved || 0) + " / " + (row.total || 0) : unref(t)("{count} notes", { count: row.count || 0 })), 1)]),
 								row.value === __props.process ? (openBlock(), createBlock(_sfc_main$70, {
 									key: 0,
 									name: "check-circle"
@@ -11709,7 +11709,7 @@ var _sfc_main$36 = {
 					onPointerdownCapture: _cache[2] || (_cache[2] = ($event) => __props.busy && $event.preventDefault()),
 					onKeydownCapture: _cache[3] || (_cache[3] = ($event) => __props.busy && $event.preventDefault())
 				}, {
-					default: withCtx(() => [createBaseVNode("strong", _hoisted_3$8, toDisplayString(unref(t)("Tasks for this process")), 1), (openBlock(true), createElementBlock(Fragment, null, renderList(__props.editor.task_choices, (row) => {
+					default: withCtx(() => [createBaseVNode("strong", _hoisted_3$9, toDisplayString(unref(t)("Tasks for this process")), 1), (openBlock(true), createElementBlock(Fragment, null, renderList(__props.editor.task_choices, (row) => {
 						return openBlock(), createBlock(_sfc_main$69, {
 							key: row.value,
 							"data-task-choice": row.value,
@@ -11877,11 +11877,11 @@ function cell(model, size, phone = false) {
 }
 //#endregion
 //#region src/controls/EmojiPicker.vue
-var _hoisted_1$17 = {
+var _hoisted_1$18 = {
 	key: 0,
 	role: "alert"
 };
-var _hoisted_2$9 = { key: 1 };
+var _hoisted_2$10 = { key: 1 };
 var _sfc_main$35 = {
 	__name: "EmojiPicker",
 	props: {
@@ -11983,7 +11983,7 @@ var _sfc_main$35 = {
 						}, bounds.value.width - 20, unref(appearance).language),
 						onEvent: heading
 					}, null, 8, ["scene"]),
-					error.value ? (openBlock(), createElementBlock("p", _hoisted_1$17, [createTextVNode(toDisplayString(unref(t)(error.value)) + " ", 1), createVNode(_sfc_main$69, {
+					error.value ? (openBlock(), createElementBlock("p", _hoisted_1$18, [createTextVNode(toDisplayString(unref(t)(error.value)) + " ", 1), createVNode(_sfc_main$69, {
 						label: "Retry",
 						onClick: load
 					})])) : createCommentVNode("", true),
@@ -12024,7 +12024,7 @@ var _sfc_main$35 = {
 							"onClick"
 						]);
 					}), 128))], 4)], 36),
-					entries.value.length && !shown.value.length ? (openBlock(), createElementBlock("p", _hoisted_2$9, toDisplayString(unref(t)("No matching emoji")), 1)) : createCommentVNode("", true)
+					entries.value.length && !shown.value.length ? (openBlock(), createElementBlock("p", _hoisted_2$10, toDisplayString(unref(t)("No matching emoji")), 1)) : createCommentVNode("", true)
 				]),
 				_: 2
 			}, [__props.textTrigger ? {
@@ -12425,7 +12425,7 @@ function popup(mode) {
 }
 //#endregion
 //#region src/features/messages/MessageComposer.vue
-var _hoisted_1$16 = [
+var _hoisted_1$17 = [
 	"value",
 	"disabled",
 	"readonly",
@@ -12434,7 +12434,7 @@ var _hoisted_1$16 = [
 	"aria-controls",
 	"aria-activedescendant"
 ];
-var _hoisted_2$8 = ["id", "aria-label"];
+var _hoisted_2$9 = ["id", "aria-label"];
 var _sfc_main$34 = {
 	__name: "MessageComposer",
 	props: {
@@ -12603,7 +12603,7 @@ var _sfc_main$34 = {
 							emit("files", event.clipboardData.files);
 						}
 					})
-				}, null, 40, _hoisted_1$16), !__props.sending ? (openBlock(), createBlock(_sfc_main$35, {
+				}, null, 40, _hoisted_1$17), !__props.sending ? (openBlock(), createBlock(_sfc_main$35, {
 					key: 0,
 					"data-frame": "messageComposerEmojiButton",
 					style: normalizeStyle({ "--composer-emoji-extent": metrics.emoji + "px" }),
@@ -12628,7 +12628,7 @@ var _sfc_main$34 = {
 						}, Math.max(0, Math.min(296, geometry.value.field.width) - 30)),
 						onEvent: _cache[2] || (_cache[2] = (event) => insert("@" + event.login + " ", mention$1.value.length + 1))
 					}, null, 8, ["scene"]);
-				}), 128))], 12, _hoisted_2$8)) : createCommentVNode("", true),
+				}), 128))], 12, _hoisted_2$9)) : createCommentVNode("", true),
 				createVNode(_sfc_main$69, {
 					"data-frame": "messageComposerSendButton",
 					class: "message-send",
@@ -12774,6 +12774,15 @@ var _sfc_main$32 = {
 };
 //#endregion
 //#region src/features/objects/TaskField.vue
+var _hoisted_1$16 = {
+	key: 6,
+	class: "task-hours-field"
+};
+var _hoisted_2$8 = { class: "muted" };
+var _hoisted_3$8 = {
+	key: 7,
+	class: "task-progress-field"
+};
 var _sfc_main$31 = {
 	__name: "TaskField",
 	props: {
@@ -12891,22 +12900,30 @@ var _sfc_main$31 = {
 				"model-value",
 				"label",
 				"disabled"
-			])) : __props.field.name === "bid_duration" ? (openBlock(), createBlock(_sfc_main$85, {
-				key: 6,
-				min: 0,
-				max: 1e5,
-				step: .25,
-				decimals: 2,
-				"model-value": numericValue(),
-				label: titles[__props.field.name],
+			])) : __props.field.name === "bid_duration" ? (openBlock(), createElementBlock("div", _hoisted_1$16, [
+				createVNode(_sfc_main$70, { name: "schedule" }),
+				createVNode(_sfc_main$85, {
+					min: 0,
+					max: 1e5,
+					step: .25,
+					decimals: 2,
+					"model-value": numericValue(),
+					label: titles[__props.field.name],
+					disabled: __props.busy || !__props.field.editable,
+					"onUpdate:modelValue": _cache[6] || (_cache[6] = ($event) => emit("change", $event * hourScale()))
+				}, null, 8, [
+					"model-value",
+					"label",
+					"disabled"
+				]),
+				createBaseVNode("span", _hoisted_2$8, toDisplayString(unref(t)("h")), 1)
+			])) : ["progress", "completion"].includes(__props.field.name) ? (openBlock(), createElementBlock("div", _hoisted_3$8, [createVNode(_sfc_main$78, {
+				"model-value": Number(__props.value || 0),
+				label: "Progress",
 				disabled: __props.busy || !__props.field.editable,
-				"onUpdate:modelValue": _cache[6] || (_cache[6] = ($event) => emit("change", $event * hourScale()))
-			}, null, 8, [
-				"model-value",
-				"label",
-				"disabled"
-			])) : (openBlock(), createBlock(_sfc_main$81, {
-				key: 7,
+				"onUpdate:modelValue": _cache[7] || (_cache[7] = ($event) => emit("change", $event))
+			}, null, 8, ["model-value", "disabled"]), createBaseVNode("output", null, toDisplayString(Number(__props.value || 0)) + "%", 1)])) : (openBlock(), createBlock(_sfc_main$81, {
+				key: 8,
 				type: "number",
 				min: "0",
 				max: "100",
@@ -12914,7 +12931,7 @@ var _sfc_main$31 = {
 				"model-value": numericValue(),
 				label: titles[__props.field.name],
 				disabled: __props.busy || !__props.field.editable,
-				"onUpdate:modelValue": _cache[7] || (_cache[7] = ($event) => emit("change", $event))
+				"onUpdate:modelValue": _cache[8] || (_cache[8] = ($event) => emit("change", $event))
 			}, null, 8, [
 				"model-value",
 				"label",
@@ -12941,10 +12958,10 @@ var titles = {
 	milestone_code: "Milestone"
 };
 function describe$7(model, width, language) {
-	const tr = (text) => translate(text, language), nodes = [], gap = spacing$1.content, columns = width >= (model.live ? 420 : 520) ? 2 : 1, cell = (width - gap * (columns - 1)) / columns;
+	const tr = (text) => translate(text, language), nodes = [], single = model.inline && model.immediate && model.fields?.length === 1, rowHeight = single ? 40 : 72, gap = spacing$1.content, columns = width >= (model.live ? 420 : 520) ? 2 : 1, cell = (width - gap * (columns - 1)) / columns;
 	let y = 0, slot = 0;
 	if (model.inline) {
-		nodes.push(label("taskInlineTitle", rect(0, 0, width - 40, 28), tr(model.title || "Edit task draft"), {
+		nodes.push(label("taskInlineTitle", rect(0, 0, width - 40, 28), tr(single ? titles[model.fields[0].name] || model.fields[0].name : model.title || "Edit task draft"), {
 			fontRole: "body",
 			weight: 600
 		}));
@@ -12980,9 +12997,9 @@ function describe$7(model, width, language) {
 				field: field.name
 			}
 		}));
-		else nodes.push(label("taskEditorTitle_" + field.name, rect(x, y, w, 20), title, { fontRole: "body" }));
+		else if (!single) nodes.push(label("taskEditorTitle_" + field.name, rect(x, y, w, 20), title, { fontRole: "body" }));
 		const h = wide ? 64 : 32;
-		nodes.push(node("View", "taskEditorValue_" + field.name, rect(x, y + 28, w, h), {
+		nodes.push(node("View", "taskEditorValue_" + field.name, rect(x, y + (single ? 0 : 28), w, h), {
 			view: "field",
 			field,
 			enabled: enabled && (!model.bulk || (model.enabled || []).includes(field.name))
@@ -12992,11 +13009,11 @@ function describe$7(model, width, language) {
 			slot++;
 			if (slot === columns) {
 				slot = 0;
-				y += 72;
+				y += rowHeight;
 			}
 		}
 	}
-	if (slot) y += 72;
+	if (slot) y += rowHeight;
 	if (!model.immediate) {
 		const hasApply = !model.live || model.staging;
 		const stacked = hasApply && width < 256;
@@ -13115,7 +13132,7 @@ var _hoisted_1$15 = ["data-has-task"];
 var _hoisted_2$7 = { key: 1 };
 var _hoisted_3$7 = { class: "inspector-task-caption" };
 var _hoisted_4$7 = { class: "configuration-actions" };
-var _hoisted_5$6 = {
+var _hoisted_5$7 = {
 	key: 2,
 	class: "notice"
 };
@@ -13250,7 +13267,7 @@ var _sfc_main$29 = {
 						onClick: _cache[3] || (_cache[3] = ($event) => emit("save"))
 					}, null, 8, ["label", "disabled"])) : createCommentVNode("", true)
 				])])),
-				__props.pendingAction ? (openBlock(), createElementBlock("div", _hoisted_5$6, [__props.pendingAction === "copy" ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createBaseVNode("p", null, toDisplayString(unref(t)("Create a separate task for another assignee in this process.")), 1), createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Assigned to")), 1), createVNode(_sfc_main$79, {
+				__props.pendingAction ? (openBlock(), createElementBlock("div", _hoisted_5$7, [__props.pendingAction === "copy" ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createBaseVNode("p", null, toDisplayString(unref(t)("Create a separate task for another assignee in this process.")), 1), createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Assigned to")), 1), createVNode(_sfc_main$79, {
 					value: __props.assignee,
 					options: __props.editor.users,
 					"action-field": false,
@@ -13839,7 +13856,7 @@ var _hoisted_1$12 = { class: "skey-author-row" };
 var _hoisted_2$6 = { class: "skey-message-text" };
 var _hoisted_3$6 = { class: "skey-author-heading" };
 var _hoisted_4$6 = ["title"];
-var _hoisted_5$5 = {
+var _hoisted_5$6 = {
 	key: 0,
 	class: "skey-preview-body"
 };
@@ -13955,7 +13972,7 @@ var _sfc_main$23 = {
 						title: __props.preview.timestamp,
 						onMouseenter: _cache[1] || (_cache[1] = ($event) => timeHovered.value = true),
 						onMouseleave: _cache[2] || (_cache[2] = ($event) => timeHovered.value = false)
-					}, toDisplayString(timeHovered.value ? __props.preview.timestamp : time.value), 41, _hoisted_4$6)]), __props.preview.kind === "message" ? (openBlock(), createElementBlock("p", _hoisted_5$5, toDisplayString(__props.preview.body), 1)) : createCommentVNode("", true)])]),
+					}, toDisplayString(timeHovered.value ? __props.preview.timestamp : time.value), 41, _hoisted_4$6)]), __props.preview.kind === "message" ? (openBlock(), createElementBlock("p", _hoisted_5$6, toDisplayString(__props.preview.body), 1)) : createCommentVNode("", true)])]),
 					__props.preview.kind === "note" && __props.preview.body ? (openBlock(), createElementBlock("p", _hoisted_6$5, toDisplayString(__props.preview.body), 1)) : createCommentVNode("", true),
 					(openBlock(true), createElementBlock(Fragment, null, renderList(__props.preview.nestedPreviews || [], (nested) => {
 						return openBlock(), createBlock(_component_SKeyPreviewCard, {
@@ -15194,7 +15211,7 @@ var _hoisted_4$5 = {
 	class: "notice",
 	role: "status"
 };
-var _hoisted_5$4 = {
+var _hoisted_5$5 = {
 	key: 2,
 	class: "notice"
 };
@@ -15281,7 +15298,7 @@ function _sfc_render$5(_ctx, _cache, $props, $setup, $data, $options) {
 					onClick: _cache[1] || (_cache[1] = ($event) => $options.load())
 				}, null, 8, ["disabled"])) : createCommentVNode("", true)])) : createCommentVNode("", true),
 				$data.refreshError ? (openBlock(), createElementBlock("p", _hoisted_4$5, toDisplayString($options.t("Automatic refresh failed. Use Refresh to retry.")) + " " + toDisplayString($options.t($data.refreshError)), 1)) : createCommentVNode("", true),
-				$data.uncertain ? (openBlock(), createElementBlock("p", _hoisted_5$4, toDisplayString($options.t("Refresh and check the timeline before retrying. The server may have saved the note.")), 1)) : createCommentVNode("", true),
+				$data.uncertain ? (openBlock(), createElementBlock("p", _hoisted_5$5, toDisplayString($options.t("Refresh and check the timeline before retrying. The server may have saved the note.")), 1)) : createCommentVNode("", true),
 				$data.taskUncertain ? (openBlock(), createElementBlock("p", _hoisted_6$4, toDisplayString($options.t("Refresh and check the task before retrying. The server may have saved the changes.")), 1)) : createCommentVNode("", true),
 				$data.relatedTrail.length ? (openBlock(), createBlock(_component_AppButton, {
 					key: 4,
@@ -16728,7 +16745,7 @@ var _hoisted_4$4 = {
 	key: 3,
 	class: "notice"
 };
-var _hoisted_5$3 = {
+var _hoisted_5$4 = {
 	key: 4,
 	class: "configuration-actions"
 };
@@ -16758,7 +16775,7 @@ function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
 		}, null, 8, ["model", "onEvent"])) : (openBlock(), createElementBlock("p", _hoisted_2$4, toDisplayString($options.t($data.operation === "retire" ? "Retiring keeps the data and hides the object from normal searches." : "Reactivating returns the object to normal searches.")), 1)),
 		$data.error && $data.operation !== "delete" ? (openBlock(), createElementBlock("p", _hoisted_3$4, toDisplayString($options.t($data.error)), 1)) : createCommentVNode("", true),
 		$data.uncertain ? (openBlock(), createElementBlock("p", _hoisted_4$4, toDisplayString($options.t("This operation cannot be retried here. Close this dialog and refresh the data to check the result.")), 1)) : createCommentVNode("", true),
-		$data.operation !== "delete" ? (openBlock(), createElementBlock("footer", _hoisted_5$3, [createBaseVNode("button", {
+		$data.operation !== "delete" ? (openBlock(), createElementBlock("footer", _hoisted_5$4, [createBaseVNode("button", {
 			type: "button",
 			disabled: $data.saving,
 			onClick: _cache[0] || (_cache[0] = (...args) => $options.close && $options.close(...args))
@@ -17705,7 +17722,7 @@ var _hoisted_4$3 = {
 	key: 3,
 	role: "status"
 };
-var _hoisted_5$2 = {
+var _hoisted_5$3 = {
 	key: 4,
 	class: "notice"
 };
@@ -17787,7 +17804,7 @@ function _sfc_render$2(_ctx, _cache, $props, $setup, $data, $options) {
 				"onSelect",
 				"onDrop"
 			])) : createCommentVNode("", true),
-			$data.busy && !$data.linking ? (openBlock(), createElementBlock("p", _hoisted_4$3, toDisplayString($options.t("Loading data…")), 1)) : !$data.linking && $options.relation && !$options.relation.available && !$data.definition ? (openBlock(), createElementBlock("p", _hoisted_5$2, toDisplayString($options.t("This relationship is not available in this browser yet.")), 1)) : createCommentVNode("", true),
+			$data.busy && !$data.linking ? (openBlock(), createElementBlock("p", _hoisted_4$3, toDisplayString($options.t("Loading data…")), 1)) : !$data.linking && $options.relation && !$options.relation.available && !$data.definition ? (openBlock(), createElementBlock("p", _hoisted_5$3, toDisplayString($options.t("This relationship is not available in this browser yet.")), 1)) : createCommentVNode("", true),
 			$data.definition && !$data.linking ? (openBlock(), createElementBlock("div", _hoisted_6$2, [createVNode(_component_ConfiguredView, {
 				ref: "table",
 				definition: $data.definition,
@@ -18904,7 +18921,7 @@ var _hoisted_3$2 = {
 	role: "alert"
 };
 var _hoisted_4$2 = ["aria-label"];
-var _hoisted_5$1 = ["aria-label"];
+var _hoisted_5$2 = ["aria-label"];
 var _hoisted_6$1 = ["data-sequence"];
 var _hoisted_7$1 = {
 	key: 0,
@@ -19052,7 +19069,7 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
 					onClick: _cache[12] || (_cache[12] = ($event) => $data.cardPath = [])
 				}),
 				createBaseVNode("strong", null, toDisplayString($options.cardParent?.title || $options.cardParent?.record?.name || $options.cardParent?.record?.code), 1)
-			], 8, _hoisted_5$1)) : createCommentVNode("", true),
+			], 8, _hoisted_5$2)) : createCommentVNode("", true),
 			(openBlock(true), createElementBlock(Fragment, null, renderList($options.groups, (group) => {
 				return openBlock(), createElementBlock("section", {
 					key: group.key,
@@ -21425,17 +21442,35 @@ var _hoisted_3$1 = {
 	key: 1,
 	class: "muted"
 };
-var _hoisted_4$1 = { key: 0 };
+var _hoisted_4$1 = ["data-task-field"];
+var _hoisted_5$1 = { key: 0 };
 var _sfc_main$2 = {
 	__name: "TaskTableEditor",
 	props: {
 		editor: Object,
-		busy: Boolean
+		busy: Boolean,
+		embedded: Boolean,
+		label: {
+			type: String,
+			default: "Edit table tasks"
+		}
 	},
-	emits: ["change", "closed"],
+	emits: [
+		"change",
+		"closed",
+		"milestones"
+	],
 	setup(__props, { expose: __expose, emit: __emit }) {
 		const props = __props;
-		const compact = computed(() => props.editor?.fields.length === 1 && ["status", "assigned"].includes(props.editor.fields[0].name));
+		const compact = computed(() => props.editor?.fields.length === 1 && [
+			"status",
+			"assigned",
+			"supervisor",
+			"priority",
+			"milestone_code"
+		].includes(props.editor.fields[0].name));
+		const single = computed(() => props.editor?.fields.length === 1);
+		const fieldLabel = (field) => t(titles[field.name] || field.name);
 		const emit = __emit;
 		const popup = ref(null);
 		let anchor;
@@ -21484,18 +21519,21 @@ var _sfc_main$2 = {
 			close
 		});
 		return (_ctx, _cache) => {
-			return openBlock(), createBlock(Teleport, { to: "body" }, [createBaseVNode("div", {
+			return openBlock(), createBlock(Teleport, {
+				to: "body",
+				disabled: __props.embedded
+			}, [createBaseVNode("div", {
 				ref_key: "popup",
 				ref: popup,
 				class: normalizeClass(["task-table-editor", { "in-cell": compact.value }]),
 				popover: compact.value ? "manual" : "auto",
 				role: "dialog",
-				"aria-label": unref(t)("Edit table tasks"),
+				"aria-label": unref(t)(__props.label),
 				"aria-description": __props.editor ? unref(t)("Apply to {count} rows", { count: __props.editor.plans.length }) : void 0,
 				onKeydown: withKeys(withModifiers(close, ["stop", "prevent"]), ["esc"]),
-				onToggle: _cache[0] || (_cache[0] = ($event) => $event.newState === "closed" && emit("closed"))
+				onToggle: _cache[1] || (_cache[1] = ($event) => $event.newState === "closed" && emit("closed"))
 			}, [__props.editor ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
-				!compact.value ? (openBlock(), createElementBlock("header", _hoisted_2$1, [createBaseVNode("strong", null, toDisplayString(__props.editor.process), 1), createVNode(_sfc_main$69, {
+				!compact.value ? (openBlock(), createElementBlock("header", _hoisted_2$1, [createBaseVNode("strong", null, toDisplayString(single.value ? fieldLabel(__props.editor.fields[0]) : __props.editor.process || unref(t)("Edit task cell")), 1), createVNode(_sfc_main$69, {
 					label: "Close",
 					icon: "close",
 					"icon-only": "",
@@ -21503,25 +21541,42 @@ var _sfc_main$2 = {
 				})])) : createCommentVNode("", true),
 				!compact.value && __props.editor.plans.length > 1 ? (openBlock(), createElementBlock("p", _hoisted_3$1, toDisplayString(unref(t)("Apply to {count} rows", { count: __props.editor.plans.length })), 1)) : createCommentVNode("", true),
 				(openBlock(true), createElementBlock(Fragment, null, renderList(__props.editor.fields, (field) => {
-					return openBlock(), createElementBlock("label", { key: field.name }, [!compact.value ? (openBlock(), createElementBlock("span", _hoisted_4$1, toDisplayString(unref(t)(field.name === "status" ? "Status" : field.name === "assigned" ? "Assigned to" : field.name === "bid_start_date" ? "Start date" : "End date")), 1)) : createCommentVNode("", true), createVNode(_sfc_main$31, {
-						field,
-						compact: compact.value,
-						value: __props.editor.values[field.name],
-						statuses: __props.editor.statuses,
-						users: __props.editor.users,
-						busy: __props.busy,
-						onChange: ($event) => emit("change", field.name, $event)
-					}, null, 8, [
-						"field",
-						"compact",
-						"value",
-						"statuses",
-						"users",
-						"busy",
-						"onChange"
-					])]);
+					return openBlock(), createElementBlock("label", {
+						key: field.name,
+						"data-task-field": field.name
+					}, [
+						!compact.value && !single.value ? (openBlock(), createElementBlock("span", _hoisted_5$1, toDisplayString(fieldLabel(field)), 1)) : createCommentVNode("", true),
+						createVNode(_sfc_main$31, {
+							field,
+							compact: compact.value,
+							value: __props.editor.values[field.name],
+							statuses: __props.editor.statuses,
+							users: __props.editor.users,
+							catalog: __props.editor.catalog,
+							busy: __props.busy,
+							onChange: ($event) => emit("change", field.name, $event)
+						}, null, 8, [
+							"field",
+							"compact",
+							"value",
+							"statuses",
+							"users",
+							"catalog",
+							"busy",
+							"onChange"
+						]),
+						field.name === "milestone_code" ? (openBlock(), createBlock(_sfc_main$69, {
+							key: 1,
+							class: "task-table-milestones",
+							label: "Project milestones",
+							icon: "milestone",
+							"icon-only": "",
+							disabled: __props.busy,
+							onClick: _cache[0] || (_cache[0] = ($event) => emit("milestones"))
+						}, null, 8, ["disabled"])) : createCommentVNode("", true)
+					], 8, _hoisted_4$1);
 				}), 128))
-			], 64)) : createCommentVNode("", true)], 42, _hoisted_1$2)]);
+			], 64)) : createCommentVNode("", true)], 42, _hoisted_1$2)], 8, ["disabled"]);
 		};
 	}
 };
@@ -24005,6 +24060,6 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 }
 var ConfiguredView_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main, [["render", _sfc_render]]);
 //#endregion
-export { _sfc_main$48 as $, layers as $t, _sfc_main$33 as A, edit$1 as At, gallery as B, options as Bt, messageDate as C, viewTabWidth as Ct, _sfc_main$25 as D, actions as Dt, contextActions as E, visible as Et, emojiCount as F, widgets as Ft, _sfc_main$43 as G, block as Gt, revision as H, type as Ht, formatFileSize as I, change$5 as It, selected as J, duplicate as Jt, alignment as K, change$6 as Kt, popup as L, fields as Lt, bodyOrder as M, serialize as Mt, bubbleContour as N, template as Nt, _sfc_main$30 as O, binding as Ot, bubbleGeometry as P, variants as Pt, _sfc_main$47 as Q, kinds as Qt, forward as R, filter as Rt, messageAttachments as S, tab as St, retainOlderMessages as T, supports as Tt, _sfc_main$35 as U, add as Ut, heading as V, scope as Vt, _sfc_main$38 as W, appearances as Wt, itemScene as X, geometries as Xt, toggle as Y, fingerprint as Yt, spacingField as Z, geometry$1 as Zt, canChangeMessage as _, transition as _t, _sfc_main$7 as a, sizing as an, sortActions as at, initials as b, key as bt, ResultPresentation_exports as c, viewActions as ct, ObjectAction_default as d, WorkspaceSearch_default as dt, path as en, _sfc_main$49 as et, ObjectOperations_default as f, describe$9 as ft, attachmentName as g, rows$1 as gt, _sfc_main$23 as h, row$3 as ht, displayWidgets as i, siblings as in, groups as it, _sfc_main$34 as j, roles as jt, _sfc_main$31 as k, describe$16 as kt, RelatedObjects_default as l, views as lt, skeyPlaceholder as m, loaded as mt, changeDefinition as n, reorder as nn, filterActions as nt, controls as o, spacing as on, sortColumn as ot, NotesPanel_default as p, initial as pt, roots as q, copy as qt, definitionWizard as r, reparent as rn, groupActions as rt, zooms as s, _sfc_main$68 as sn, sorts as st, ConfiguredView_default as t, remove$1 as tn, defaultResultView as tt, RelatedObjects_exports as u, _sfc_main$52 as ut, conversationAttachments as v, _sfc_main$57 as vt, messageId as w, describe$15 as wt, mergeMessages as x, sectionWidth as xt, groupedMessages as y, dimensions$1 as yt, forwarding as z, mode as zt };
+export { _sfc_main$47 as $, kinds as $t, _sfc_main$31 as A, describe$16 as At, forwarding as B, mode as Bt, messageAttachments as C, tab as Ct, contextActions as D, visible as Dt, retainOlderMessages as E, supports as Et, bubbleGeometry as F, variants as Ft, _sfc_main$38 as G, appearances as Gt, heading as H, scope as Ht, emojiCount as I, widgets as It, roots as J, copy as Jt, _sfc_main$43 as K, block as Kt, formatFileSize as L, change$5 as Lt, _sfc_main$34 as M, roles as Mt, bodyOrder as N, serialize as Nt, _sfc_main$25 as O, actions as Ot, bubbleContour as P, template as Pt, spacingField as Q, geometry$1 as Qt, popup as R, fields as Rt, mergeMessages as S, sectionWidth as St, messageId as T, describe$15 as Tt, revision as U, type as Ut, gallery as V, options as Vt, _sfc_main$35 as W, add as Wt, toggle as X, fingerprint as Xt, selected as Y, duplicate as Yt, itemScene as Z, geometries as Zt, attachmentName as _, rows$1 as _t, displayWidgets as a, siblings as an, groups as at, groupedMessages as b, dimensions$1 as bt, zooms as c, _sfc_main$68 as cn, sorts as ct, RelatedObjects_exports as d, _sfc_main$52 as dt, layers as en, _sfc_main$48 as et, ObjectAction_default as f, WorkspaceSearch_default as ft, _sfc_main$23 as g, row$3 as gt, skeyPlaceholder as h, loaded as ht, definitionWizard as i, reparent as in, groupActions as it, _sfc_main$33 as j, edit$1 as jt, _sfc_main$30 as k, binding as kt, ResultPresentation_exports as l, viewActions as lt, NotesPanel_default as m, initial as mt, _sfc_main$2 as n, remove$1 as nn, defaultResultView as nt, _sfc_main$7 as o, sizing as on, sortActions as ot, ObjectOperations_default as p, describe$9 as pt, alignment as q, change$6 as qt, changeDefinition as r, reorder as rn, filterActions as rt, controls as s, spacing as sn, sortColumn as st, ConfiguredView_default as t, path as tn, _sfc_main$49 as tt, RelatedObjects_default as u, views as ut, canChangeMessage as v, transition as vt, messageDate as w, viewTabWidth as wt, initials as x, key as xt, conversationAttachments as y, _sfc_main$57 as yt, forward as z, filter as zt };
 
 //# sourceMappingURL=ConfiguredView.js.map

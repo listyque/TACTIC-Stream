@@ -49,7 +49,9 @@ function editCell(column, event) {
     emit(
       'edit-cell',
       { ...column, key: column.sourceKey },
-      event.currentTarget.getBoundingClientRect()
+      Object.assign(event.currentTarget.getBoundingClientRect(), {
+        anchor: event.currentTarget
+      })
     );
 }
 const initials = computed(() =>

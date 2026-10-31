@@ -5,7 +5,7 @@ import { A as rpc, Lt as asyncComponent, Z as widgetConfiguration, a as __vitePr
 import { C as translate, G as label, J as node, V as observeFrameSizes, W as button, Y as rect, q as muted, t as _sfc_main$2 } from "./FrameView.js";
 import { n as sections } from "./sections.ui.js";
 import { i as sectionSelector, k as workspaceAddress, n as notices, o as toolbar$1, r as policy, t as documentEvent } from "./admin.document.js";
-import { At as edit, Dt as actions, Et as visible, Ft as widgets, G as _sfc_main$3, Mt as serialize, Nt as template, Ot as binding, Pt as variants, Tt as supports, X as itemScene, Z as spacingField, jt as roles, kt as describe$1, wt as describe$2 } from "./ConfiguredView.js";
+import { At as describe$1, Dt as visible, Et as supports, Ft as variants, It as widgets, K as _sfc_main$3, Mt as roles, Nt as serialize, Ot as actions, Pt as template, Q as spacingField, Tt as describe$2, Z as itemScene, jt as edit, kt as binding } from "./ConfiguredView.js";
 //#region src/features/interface/layoutXml.js
 function layoutTree(source) {
 	if (!source.trim()) throw Error("Select a SObject layout configuration");
@@ -1513,7 +1513,7 @@ var _sfc_main$1 = {
 	},
 	emits: ["element", "geometry"],
 	setup(__props, { emit: __emit }) {
-		const ResultPresentation = asyncComponent(() => __vitePreload(() => import("./ConfiguredView.js").then((n) => n.c), __vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37])));
+		const ResultPresentation = asyncComponent(() => __vitePreload(() => import("./ConfiguredView.js").then((n) => n.l), __vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37])));
 		const props = __props;
 		const emit = __emit;
 		const sampleScene = computed(() => scene(props.layout, props.sample, props.frameNode?.width || 1, props.frameNode?.height || 1, props.selectedElement, props.editing, appearance.language, window.innerWidth, location.origin));
