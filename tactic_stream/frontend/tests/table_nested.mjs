@@ -1,12 +1,13 @@
 import assert from 'node:assert/strict';
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, writeFileSync, readFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { createServer } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import { chromium } from 'playwright';
 import {
   extent,
-  describe
+  describe,
+  focusScene
 } from '../../src/tactic_stream/shared_ui/features/table/nested.ui.mjs';
 
 const short = {
@@ -35,6 +36,32 @@ assert.equal(
 );
 assert(!JSON.stringify(scene).includes('nestedDrag'));
 
+const compact = describe(
+  { ...short, search: false, insert: true },
+  320,
+  extent({ ...short, search: false }, 320),
+  'en'
+);
+assert(
+  !compact.nodes.some((node) =>
+    ['nestedFilter', 'nestedToolbarSurface'].includes(node.id)
+  )
+);
+assert.equal(compact.nodes.find((node) => node.id === 'nestedTableBody').y, 0);
+const footer = compact.nodes.find((node) => node.id === 'nestedFooterSurface');
+for (const id of ['nestedReload', 'nestedCreate', 'nestedClose'])
+  assert.equal(compact.nodes.find((node) => node.id === id).y, footer.y + 4);
+const focus = focusScene(
+  { x: 0, y: 95, width: 800, height: 309 },
+  800,
+  650,
+  'en'
+);
+assert.equal(
+  focus.nodes.filter((node) => node.id.startsWith('nestedFocusScrim')).length,
+  2
+);
+assert(focus.nodes.find((node) => node.id === 'nestedFocusShadow').shadow);
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const server = await createServer({
   root,
@@ -178,6 +205,155 @@ await page.route('**/admin/rpc', async (route) => {
   });
 });
 try {
+  await page.setViewportSize({ width: 800, height: 682 });
+  await page.goto(
+    'http://127.0.0.1:' +
+      server.httpServer.address().port +
+      '/tools/frame_table/nested_recursive.html?parent'
+  );
+  await page.waitForFunction(() => window.nestedFixture);
+  await page.evaluate(() => {
+    const state = window.nestedFixture.state;
+    state.scope.search = false;
+    state.scope.insert = false;
+    state.columns = [
+      {
+        name: 'code',
+        title: 'Code',
+        width: 160,
+        cell: { kind: 'text', supported: true }
+      },
+      {
+        name: 'expand',
+        title: 'Details',
+        width: 100,
+        cell: { kind: 'text', supported: true }
+      }
+    ];
+    state.definition.table.elements = state.columns.map((column) => ({
+      ...column,
+      attributes: { width: column.width }
+    }));
+    state.rows = Array.from({ length: 4 }, (_, i) => ({
+      key: String(i),
+      record: { code: 'Row ' + i, __search_key__: String(i) },
+      cells: { code: { text: 'Row ' + i }, expand: { text: '' } }
+    }));
+  });
+  const parentTable = page.locator('.handler-table').first();
+  const raised = parentTable.locator('.nested-table').first();
+  await raised.locator('[data-frame="nestedTableBody"]').waitFor();
+  assert.equal(
+    await raised.locator('[data-frame="nestedToolbarSurface"]').count(),
+    0
+  );
+  assert(
+    await raised
+      .locator('[data-frame="nestedReload"]')
+      .evaluate(
+        (el) =>
+          parseFloat(getComputedStyle(el).borderTopLeftRadius) <
+          el.offsetWidth / 2
+      )
+  );
+  const raisedRect = await raised.boundingBox();
+  const bodyRect = await raised
+    .locator('[data-frame="nestedTableBody"]')
+    .boundingBox();
+  assert.equal(bodyRect.y, raisedRect.y);
+  await parentTable.locator('[data-frame="nestedFocusShadow"]').waitFor();
+  const focusOutput = process.env.TABLE_NESTED_FOCUS_OUTPUT;
+  if (focusOutput) {
+    mkdirSync(focusOutput, { recursive: true });
+    await parentTable.screenshot({ path: focusOutput + '/browser-focus.png' });
+    const parentRect = await parentTable.boundingBox();
+    const footerRect = await raised
+      .locator('[data-frame="nestedFooterSurface"]')
+      .boundingBox();
+    const geometry = {
+      width: parentRect.width,
+      height: parentRect.height,
+      bounds: {
+        x: raisedRect.x - parentRect.x,
+        y: raisedRect.y - parentRect.y,
+        width: raisedRect.width,
+        height: raisedRect.height
+      },
+      bodyY: bodyRect.y - raisedRect.y,
+      footerY: footerRect.y - raisedRect.y
+    };
+    writeFileSync(
+      focusOutput + '/browser-focus.json',
+      JSON.stringify(geometry)
+    );
+    if (existsSync(focusOutput + '/native-focus.json'))
+      assert.deepEqual(
+        geometry,
+        JSON.parse(readFileSync(focusOutput + '/native-focus.json', 'utf8'))
+      );
+  }
+  if (focusOutput) {
+    const captures = [];
+    for (const width of [800, 320]) {
+      await page.setViewportSize({ width, height: 682 });
+      for (const dark of [true, false]) {
+        await page.evaluate(async (dark) => {
+          const { appearance } = await import('/frontend/src/appearance.js');
+          appearance.mode = dark ? 'dark' : 'light';
+          await new Promise((resolve) =>
+            requestAnimationFrame(() => requestAnimationFrame(resolve))
+          );
+        }, dark);
+        await page.waitForFunction(() => {
+          const table = document.querySelector('.handler-table');
+          const detail = table.querySelector('.handler-table-detail');
+          return detail.offsetWidth === table.clientWidth;
+        });
+        const parentRect = await parentTable.boundingBox();
+        const rect = await raised.boundingBox();
+        const footer = await raised
+          .locator('[data-frame="nestedFooterSurface"]')
+          .boundingBox();
+        captures.push({
+          width,
+          height: parentRect.height,
+          dark,
+          bounds: {
+            x: rect.x - parentRect.x,
+            y: rect.y - parentRect.y,
+            width: rect.width,
+            height: rect.height
+          },
+          bodyY: 0,
+          footerY: footer.y - rect.y
+        });
+        await parentTable.screenshot({
+          path: focusOutput + `/browser-focus-${width}-${dark}.png`
+        });
+      }
+    }
+    writeFileSync(
+      focusOutput + '/browser-focus-matrix.json',
+      JSON.stringify(captures)
+    );
+    if (existsSync(focusOutput + '/native-focus-matrix.json'))
+      assert.deepEqual(
+        captures,
+        JSON.parse(
+          readFileSync(focusOutput + '/native-focus-matrix.json', 'utf8')
+        )
+      );
+    await page.setViewportSize({ width: 800, height: 682 });
+  }
+  await parentTable
+    .locator('[data-frame="nestedFocusScrim_0"]')
+    .click({ position: { x: 10, y: 10 } });
+  await raised.waitFor({ state: 'detached' });
+  assert.equal(
+    await page.evaluate(() => window.nestedFixture.state.open),
+    false
+  );
+  await page.setViewportSize({ width: 500, height: 300 });
   await page.goto(
     'http://127.0.0.1:' +
       server.httpServer.address().port +
@@ -427,6 +603,10 @@ try {
       window.nestedFixture.state.children['demo/asset?code=A'].scope
         .searchType === 'sthpw/task'
   );
+  await root
+    .locator('.nested-table [data-frame="nestedClose"]')
+    .first()
+    .click();
   await root.locator('[data-frame="tableSummary_1"]').click();
   await page.waitForFunction(
     () =>

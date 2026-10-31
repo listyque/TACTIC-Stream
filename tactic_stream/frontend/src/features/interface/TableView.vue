@@ -69,6 +69,8 @@ const viewport = ref(null),
   columnContext = ref(null),
   width = ref(0),
   scrollTop = ref(0),
+  scrollLeft = ref(0),
+  focusedDetail = ref(''),
   viewportHeight = ref(600);
 const overrides = ref({}),
   drag = ref(null),
@@ -244,6 +246,40 @@ const entries = computed(() => {
   }
   return rows;
 });
+const expandedKeys = computed(() =>
+  entries.value.filter((row) => row.detail).map((row) => row.key)
+);
+watch(
+  expandedKeys,
+  (keys, previous = []) => {
+    const added = keys.filter((key) => !previous.includes(key));
+    if (added.length) focusedDetail.value = added.at(-1);
+    else if (!keys.includes(focusedDetail.value)) focusedDetail.value = '';
+  },
+  { immediate: true }
+);
+const focusedEntry = computed(() =>
+  rendered.value.find((row) => row.key === focusedDetail.value)
+);
+const focusScene = computed(() =>
+  NestedUI.focusScene(
+    focusedEntry.value
+      ? {
+          x: 0,
+          y: focusedEntry.value.top + 37 - scrollTop.value,
+          width: width.value,
+          height: focusedEntry.value.height
+        }
+      : null,
+    width.value,
+    viewportHeight.value,
+    appearance.language
+  )
+);
+function closeFocusedDetail() {
+  const state = props.expandedRows[focusedEntry.value?.detail?.__search_key__];
+  if (state) state.open = false;
+}
 const contentHeight = computed(
   () => (entries.value.at(-1)?.top || 0) + (entries.value.at(-1)?.height || 0)
 );
@@ -286,6 +322,7 @@ function scrolled() {
   const top = viewport.value.scrollTop,
     left = viewport.value.scrollLeft;
   scrollTop.value = top;
+  scrollLeft.value = left;
   emit('scroll', { target: viewport.value });
   cancelAnimationFrame(frame);
   frame = requestAnimationFrame(() =>
@@ -563,6 +600,18 @@ defineExpose({ viewport });
     @scroll="scrolled"
     @keydown="rowKey"
   >
+    <FrameView
+      v-if="focusedEntry"
+      class="nested-focus-layer"
+      :scene="focusScene"
+      :style="{
+        left: scrollLeft + 'px',
+        top: scrollTop + 'px',
+        width: width + 'px',
+        height: viewportHeight + 'px'
+      }"
+      @event="closeFocusedDetail"
+    />
     <div
       class="handler-table-header"
       role="row"
@@ -886,6 +935,14 @@ defineExpose({ viewport });
 .handler-table.no-horizontal-overflow::-webkit-scrollbar-thumb:horizontal,
 .handler-table.no-horizontal-overflow::-webkit-scrollbar-track:horizontal {
   background: transparent;
+}
+.nested-focus-layer.frame-view {
+  position: absolute;
+  z-index: 10;
+  pointer-events: none;
+}
+.nested-focus-layer > .frame-action {
+  pointer-events: auto;
 }
 .handler-table-header {
   position: sticky;

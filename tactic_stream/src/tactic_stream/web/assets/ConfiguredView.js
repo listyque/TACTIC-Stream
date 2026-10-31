@@ -1284,9 +1284,46 @@ function extent(state = {}, width = 0, availableHeight = 320) {
 	const model = Object.assign({}, state.scope, state);
 	if (model.busy && !model.loaded && !model.rows?.length) return 320;
 	const inner = Math.max(0, width);
-	const chrome = 42 + quickLayout(model, inner).height + 40 + (model.gallery ? 0 : metrics$1.header + (model.selected?.length ? 36 : 0));
+	const chrome = toolbarHeight(model) + quickLayout(model, inner).height + 40 + (model.gallery ? 0 : metrics$1.header + (model.selected?.length ? 36 : 0));
 	const content = rows$3(model, inner, availableHeight).reduce((sum, row) => sum + row.extent, 0);
 	return Math.max(chrome + tableRowHeight(model), Math.min(availableHeight, chrome + content));
+}
+function toolbarHeight(model) {
+	return model.shelf !== false && model.search !== false ? 42 : 0;
+}
+function focusScene(bounds, width, height, language) {
+	if (!bounds) return { nodes: [] };
+	const x = Math.max(0, Math.min(width, bounds.x));
+	const y = Math.max(0, Math.min(height, bounds.y));
+	const right = Math.max(x, Math.min(width, bounds.x + bounds.width));
+	const bottom = Math.max(y, Math.min(height, bounds.y + bounds.height));
+	if (right <= x || bottom <= y) return { nodes: [] };
+	const nodes = [
+		rect(0, 0, width, y),
+		rect(0, bottom, width, height - bottom),
+		rect(0, y, x, bottom - y),
+		rect(right, y, width - right, bottom - y)
+	].filter((part) => part.width > 0 && part.height > 0).map((part, index) => node("Action", "nestedFocusScrim_" + index, part, {
+		text: translate("Close", language),
+		children: [],
+		enabled: true,
+		normalColor: "scrim",
+		hoverColor: "scrim",
+		pressedColor: "scrim",
+		radius: 0,
+		action: { type: "close" }
+	}));
+	nodes.push(node("Box", "nestedFocusShadow", rect(x, y, right - x, bottom - y), {
+		background: "transparent",
+		radius: 0,
+		clip: false,
+		shadow: {
+			y: 6,
+			blur: 14,
+			opacity: 1
+		}
+	}));
+	return { nodes };
 }
 function quickLayout(model, width) {
 	const columns = Math.max(1, Math.floor(Math.max(0, width - 16) / 180));
@@ -1332,10 +1369,19 @@ function describe$20(model, width, extent, language) {
 }
 function content$1(model, width, extent, language) {
 	const t = (value) => translate(value, language);
-	const toolOffset = model.embedded ? 36 : 0;
+	const top = toolbarHeight(model);
+	const tools = [
+		model.shelf !== false && model.refresh !== false && "nestedReload",
+		model.shelf !== false && model.gear && "nestedColumns",
+		model.shelf !== false && model.insert !== false && "nestedCreate",
+		!model.embedded && "nestedClose"
+	].filter(Boolean);
+	const pages = model.searchLimit === false ? 0 : 2;
+	const toolY = top ? 0 : Math.max(0, extent - 36);
+	const toolX = (id) => Math.max(0, width - (tools.length - tools.indexOf(id)) * 36 - 4);
 	const quick = quickLayout(model, width), quickColumns = quick.columns, quickHeight = quick.height;
 	const nodes = [
-		node("Box", "nestedToolbarSurface", rect(0, 0, width, 42 + quickHeight), {
+		node("Box", "nestedToolbarSurface", rect(0, 0, width, top + quickHeight), {
 			background: model.embedded ? "transparent" : "panel",
 			radius: 0
 		}),
@@ -1347,25 +1393,48 @@ function content$1(model, width, extent, language) {
 			background: "outlineVariant",
 			radius: 0
 		}),
-		node("View", "nestedFilter", rect(0, 0, Math.max(0, width - (model.gear ? 156 : 120) + toolOffset), 36), { view: "tableSearch" }),
-		button("nestedReload", rect(Math.max(0, width - (model.gear ? 148 : 112) + toolOffset), 0, 32, 32), model.busy ? t("Loading data…") : t("Refresh"), model.busy ? "loading" : "refresh", { type: "reload" }, !model.busy, { iconOnly: true }),
-		button("nestedColumns", rect(Math.max(0, width - 112 + toolOffset), 0, 32, 32), t("Columns"), "view-column", { type: "columns" }, !model.busy, { iconOnly: true }),
-		button("nestedCreate", rect(Math.max(0, width - 76 + toolOffset), 0, 32, 32), t("Create"), "add", { type: "create" }, !model.busy && model.insert !== false, { iconOnly: true }),
-		button("nestedClose", rect(Math.max(0, width - 40), 0, 32, 32), t("Close"), "close", { type: "close" }, true, { iconOnly: true }),
-		label("nestedState", rect(8, extent - 36, Math.max(0, width - 84), 32), model.error ? t(model.error) : t("Results") + ": " + (model.rows || []).length, { color: model.error ? "error" : "secondaryText" }),
-		button("nestedPrevious", rect(Math.max(0, width - 76), extent - 36, 32, 32), t("Previous page"), "chevron-left", {
+		node("View", "nestedFilter", rect(0, 0, Math.max(0, width - tools.length * 36 - 8), 36), { view: "tableSearch" }),
+		button("nestedReload", rect(toolX("nestedReload"), toolY, 32, 32), model.busy ? t("Loading data…") : t("Refresh"), model.busy ? "loading" : "refresh", { type: "reload" }, !model.busy, {
+			iconOnly: true,
+			iconAction: true,
+			round: false
+		}),
+		button("nestedColumns", rect(toolX("nestedColumns"), toolY, 32, 32), t("Columns"), "view-column", { type: "columns" }, !model.busy, {
+			iconOnly: true,
+			iconAction: true,
+			round: false
+		}),
+		button("nestedCreate", rect(toolX("nestedCreate"), toolY, 32, 32), t("Create"), "add", { type: "create" }, !model.busy && model.insert !== false, {
+			iconOnly: true,
+			iconAction: true,
+			round: false
+		}),
+		button("nestedClose", rect(toolX("nestedClose"), toolY, 32, 32), t("Close"), "close", { type: "close" }, true, {
+			iconOnly: true,
+			iconAction: true,
+			round: false
+		}),
+		label("nestedState", rect(8, extent - 36, Math.max(0, width - 12 - (pages + (top ? 0 : tools.length)) * 36), 32), model.error ? t(model.error) : t("Results") + ": " + (model.rows || []).length, { color: model.error ? "error" : "secondaryText" }),
+		button("nestedPrevious", rect(Math.max(0, width - 76 - (top ? 0 : tools.length * 36)), extent - 36, 32, 32), t("Previous page"), "chevron-left", {
 			type: "page",
 			value: -1
-		}, !model.busy && model.offset > 0, { iconOnly: true }),
-		button("nestedNext", rect(Math.max(0, width - 40), extent - 36, 32, 32), t("Next page"), "chevron-right", {
+		}, !model.busy && model.offset > 0, {
+			iconOnly: true,
+			iconAction: true,
+			round: false
+		}),
+		button("nestedNext", rect(Math.max(0, width - 40 - (top ? 0 : tools.length * 36)), extent - 36, 32, 32), t("Next page"), "chevron-right", {
 			type: "page",
 			value: 1
-		}, !model.busy && !!model.hasNext, { iconOnly: true })
+		}, !model.busy && !!model.hasNext, {
+			iconOnly: true,
+			iconAction: true,
+			round: false
+		})
 	];
 	if (model.gallery) {
-		const toolbar = model.search !== false || model.refresh !== false || model.gear || model.insert !== false || !model.embedded;
-		const top = toolbar ? 42 : 0;
-		nodes.push(node("List", "nestedGallery", rect(0, top, width, Math.max(0, extent - top - 40)), {
+		const galleryTop = top + quickHeight;
+		nodes.push(node("List", "nestedGallery", rect(0, galleryTop, width, Math.max(0, extent - galleryTop - 40)), {
 			source: "rows",
 			scrollbarId: "nestedGalleryScrollBar",
 			keyField: "key",
@@ -1380,9 +1449,9 @@ function content$1(model, width, extent, language) {
 			label: t("Snapshots"),
 			role: "list"
 		}));
-		if (!(model.rows || []).length && !model.busy && !model.error) nodes.push(label("nestedGalleryEmpty", rect(8, top + 12, Math.max(0, width - 16), 30), t("No snapshots found"), { color: "secondaryText" }));
+		if (!(model.rows || []).length && !model.busy && !model.error) nodes.push(label("nestedGalleryEmpty", rect(8, galleryTop + 12, Math.max(0, width - 16), 30), t("No snapshots found"), { color: "secondaryText" }));
 		return { nodes: nodes.filter((item) => {
-			if (item.id === "nestedToolbarSurface") return toolbar;
+			if (item.id === "nestedToolbarSurface") return top + quickHeight > 0;
 			if (item.id === "nestedFilter") return model.shelf !== false && model.search !== false;
 			if (item.id === "nestedReload") return model.shelf !== false && model.refresh !== false;
 			if (item.id === "nestedColumns") return model.shelf !== false && !!model.gear;
@@ -1393,9 +1462,9 @@ function content$1(model, width, extent, language) {
 			return true;
 		}) };
 	}
-	if (model.loaded || model.definition) nodes.push(node("View", "nestedTableBody", rect(0, 42 + quickHeight, width, Math.max(0, extent - 82 - quickHeight)), { view: "tableBody" }));
+	if (model.loaded || model.definition) nodes.push(node("View", "nestedTableBody", rect(0, top + quickHeight, width, Math.max(0, extent - top - 40 - quickHeight)), { view: "tableBody" }));
 	(model.simpleFilters || []).forEach((filter, index) => {
-		const part = Math.max(0, (width - 24) / quickColumns), x = index % quickColumns * part, y = 42 + Math.floor(index / quickColumns) * 66;
+		const part = Math.max(0, (width - 24) / quickColumns), x = index % quickColumns * part, y = top + Math.floor(index / quickColumns) * 66;
 		nodes.push(label("nestedQuickLabel_" + filter.name, rect(x, y, Math.max(0, part - 8), 22), filter.title, { color: "secondaryText" }));
 		nodes.push(node("Choice", "nestedQuick_" + filter.name, rect(x, y + 24, Math.max(0, part - 8), 36), {
 			value: model.simpleValues?.[filter.name] || "",
@@ -1411,7 +1480,9 @@ function content$1(model, width, extent, language) {
 		}));
 	});
 	return { nodes: nodes.filter((item) => {
+		if (item.id === "nestedToolbarSurface") return top + quickHeight > 0;
 		if (item.id === "nestedClose" && model.embedded) return false;
+		if (item.id === "nestedReload" && model.refresh === false) return false;
 		if ([
 			"nestedFilter",
 			"nestedReload",
@@ -5642,7 +5713,7 @@ var _sfc_main$56 = {
 	setup(__props, { expose: __expose, emit: __emit }) {
 		const props = __props;
 		const emit = __emit;
-		const viewport = ref(null), saveDialog = ref(null), contextMenu = ref(null), columnContext = ref(null), width = ref(0), scrollTop = ref(0), viewportHeight = ref(600);
+		const viewport = ref(null), saveDialog = ref(null), contextMenu = ref(null), columnContext = ref(null), width = ref(0), scrollTop = ref(0), scrollLeft = ref(0), focusedDetail = ref(""), viewportHeight = ref(600);
 		const overrides = ref({}), drag = ref(null), focusedKey = ref(""), anchorKey = ref(""), savingView = ref(false), viewName = ref("");
 		let observer, frame, resizeFrame;
 		const preferences = computed(() => props.state?.table || {});
@@ -5767,6 +5838,23 @@ var _sfc_main$56 = {
 			}
 			return rows;
 		});
+		const expandedKeys = computed(() => entries.value.filter((row) => row.detail).map((row) => row.key));
+		watch(expandedKeys, (keys, previous = []) => {
+			const added = keys.filter((key) => !previous.includes(key));
+			if (added.length) focusedDetail.value = added.at(-1);
+			else if (!keys.includes(focusedDetail.value)) focusedDetail.value = "";
+		}, { immediate: true });
+		const focusedEntry = computed(() => rendered.value.find((row) => row.key === focusedDetail.value));
+		const focusScene$1 = computed(() => focusScene(focusedEntry.value ? {
+			x: 0,
+			y: focusedEntry.value.top + 37 - scrollTop.value,
+			width: width.value,
+			height: focusedEntry.value.height
+		} : null, width.value, viewportHeight.value, appearance.language));
+		function closeFocusedDetail() {
+			const state = props.expandedRows[focusedEntry.value?.detail?.__search_key__];
+			if (state) state.open = false;
+		}
 		const contentHeight = computed(() => (entries.value.at(-1)?.top || 0) + (entries.value.at(-1)?.height || 0));
 		const verticalOverflow = computed(() => contentHeight.value + 37 > viewportHeight.value + .5);
 		const horizontalOverflow = computed(() => tableWidth.value > width.value + .5);
@@ -5799,6 +5887,7 @@ var _sfc_main$56 = {
 			if (!viewport.value.getClientRects().length) return;
 			const top = viewport.value.scrollTop, left = viewport.value.scrollLeft;
 			scrollTop.value = top;
+			scrollLeft.value = left;
 			emit("scroll", { target: viewport.value });
 			cancelAnimationFrame(frame);
 			frame = requestAnimationFrame(() => preference({
@@ -6006,217 +6095,232 @@ var _sfc_main$56 = {
 					}),
 					onScroll: scrolled,
 					onKeydown: rowKey
-				}, [createBaseVNode("div", {
-					class: "handler-table-header",
-					role: "row",
-					style: normalizeStyle({ width: tableWidth.value + "px" })
 				}, [
-					createBaseVNode("div", _hoisted_2$22, [__props.selectable ? (openBlock(), createBlock(_sfc_main$72, {
+					focusedEntry.value ? (openBlock(), createBlock(_sfc_main$71, {
 						key: 0,
-						label: "Select all rows",
-						"model-value": !!allSelected.value,
-						indeterminate: !allSelected.value && records.value.some((record) => __props.selectedKeys?.includes(record.__search_key__)),
-						"onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => emit("select", records.value, $event))
-					}, {
-						default: withCtx(() => [createBaseVNode("span", _hoisted_3$17, toDisplayString(unref(t)("Select all rows")), 1)]),
-						_: 1
-					}, 8, ["model-value", "indeterminate"])) : createCommentVNode("", true)]),
-					(openBlock(true), createElementBlock(Fragment, null, renderList(columns.value, (column) => {
-						return openBlock(), createElementBlock("div", {
-							key: column.name,
-							class: normalizeClass(["handler-table-heading", {
-								dragging: drag.value?.source === column.name,
-								"drop-target": drag.value?.target === column.name,
-								grouped: __props.groupMode === "column:" + column.name
-							}]),
-							role: "columnheader",
-							"aria-sort": __props.sortField === column.sortField ? __props.sortDirection === "desc" ? "descending" : "ascending" : "none",
-							title: column.title,
-							"aria-label": column.title,
-							tabindex: "0",
-							onContextmenu: ($event) => openColumn(column, $event),
-							onPointerdown: ($event) => beginMove(column, $event),
-							onKeydown: ($event) => moveKey(column, $event)
-						}, [
-							headerAction(column) ? (openBlock(), createBlock(_sfc_main$69, {
-								key: 0,
-								class: "table-header-insert",
-								label: headerAction(column).label || "Create",
-								icon: headerAction(column).icon || "add",
-								compact: "",
-								"icon-only": "",
-								disabled: __props.readOnly || __props.busy,
-								onPointerdown: _cache[1] || (_cache[1] = withModifiers(() => {}, ["stop"])),
-								onClick: withModifiers(($event) => emit("header-action", headerAction(column)), ["stop"])
-							}, null, 8, [
-								"label",
-								"icon",
-								"disabled",
-								"onClick"
-							])) : (openBlock(), createElementBlock("span", _hoisted_5$12, toDisplayString(column.title), 1)),
-							__props.groupMode === "column:" + column.name ? (openBlock(), createBlock(_sfc_main$70, {
-								key: 2,
-								name: "group-items",
-								class: "table-group-indicator"
-							})) : createCommentVNode("", true),
-							createBaseVNode("span", {
-								class: "table-resize",
-								role: "slider",
-								tabindex: "0",
-								"aria-label": unref(t)("Resize column") + " " + column.title,
-								"aria-valuenow": Math.round(columnWidth(column)),
-								"aria-valuemin": "48",
-								"aria-valuemax": "640",
-								onPointerdown: ($event) => resize(column, $event),
-								onKeydown: withModifiers(($event) => resizeKey(column, $event), ["stop"])
-							}, null, 40, _hoisted_6$11)
-						], 42, _hoisted_4$16);
-					}), 128)),
-					createBaseVNode("div", _hoisted_7$11, [
-						__props.busy ? (openBlock(), createBlock(BusyIndicator_default, { key: 0 })) : createCommentVNode("", true),
-						withDirectives(createVNode(_sfc_main$69, {
-							label: "Auto Fit columns",
-							icon: "fit-width",
-							"icon-only": "",
-							"aria-pressed": autoFit.value,
-							highlighted: autoFit.value,
-							onClick: _cache[2] || (_cache[2] = ($event) => preference({
-								autoFit: !autoFit.value,
-								scrollColumns: false
-							}))
-						}, null, 8, ["aria-pressed", "highlighted"]), [[vShow, !__props.busy]]),
-						withDirectives(createVNode(_sfc_main$74, {
-							label: "Table views and columns",
-							icon: "view-column",
-							overlay: "",
-							width: 280,
-							disabled: __props.busy
-						}, {
-							default: withCtx(() => [createVNode(_sfc_main$57, {
-								actions: viewActions.value,
-								onTriggered: viewCommand
-							}, null, 8, ["actions"])]),
-							_: 1
-						}, 8, ["disabled"]), [[vShow, !__props.busy]])
-					])
-				], 4), createBaseVNode("div", {
-					class: "handler-table-body",
-					style: normalizeStyle({
-						height: contentHeight.value + "px",
-						width: tableWidth.value + "px"
-					})
-				}, [(openBlock(true), createElementBlock(Fragment, null, renderList(rendered.value, (entry) => {
-					return openBlock(), createElementBlock("div", {
-						key: entry.key,
-						class: normalizeClass(["handler-table-row", {
-							selected: __props.selectedKeys?.includes(entry.key),
-							alternate: !!entry.record && entry.index % 2 === 1,
-							active: !!entry.record && focusedKey.value === entry.key,
-							"group-row": !!entry.group || !!entry.summary
-						}]),
-						role: "row",
-						"aria-rowindex": entry.index + 2,
-						"aria-selected": !!entry.record && (focusedKey.value === entry.key || __props.selectedKeys?.includes(entry.key)),
+						class: "nested-focus-layer",
+						scene: focusScene$1.value,
 						style: normalizeStyle({
-							top: entry.top + "px",
-							height: entry.height + "px"
+							left: scrollLeft.value + "px",
+							top: scrollTop.value + "px",
+							width: width.value + "px",
+							height: viewportHeight.value + "px"
 						}),
-						draggable: !!entry.record && !__props.readOnly,
-						onDragstart: ($event) => entry.record && rowDrag(entry.record, $event),
-						onClick: ($event) => entry.record && choose(entry.record, $event),
-						onDblclick: ($event) => entry.record && !$event.target.closest("button,input,select,textarea,a") && emit("inspect", entry.record),
-						onContextmenu: ($event) => entry.record && (choose(entry.record, $event), emit("operate", entry.record, $event))
-					}, [entry.detail ? (openBlock(), createElementBlock("div", {
-						key: 0,
-						class: "handler-table-detail",
-						style: normalizeStyle({ width: width.value + "px" }),
-						onClick: _cache[3] || (_cache[3] = withModifiers(() => {}, ["stop"])),
-						onDblclick: _cache[4] || (_cache[4] = withModifiers(() => {}, ["stop"])),
-						onContextmenu: _cache[5] || (_cache[5] = withModifiers(() => {}, ["stop"]))
-					}, [renderSlot(_ctx.$slots, "detail", {
-						record: entry.detail,
-						height: entry.height
-					})], 36)) : entry.group?.cell ? (openBlock(), createBlock(_sfc_main$71, {
-						key: 1,
-						class: "handler-table-group",
-						scene: group$1({
-							cell: entry.group.cell,
-							count: entry.group.records.length,
-							closed: !!__props.closedGroups?.[entry.group.key]
-						}, Math.max(0, width.value - 24), unref(appearance).language, !__props.readOnly, ""),
-						onEvent: (action) => action.type === "toggle" ? emit("toggle-group", entry.group.key) : action.type === "create-child" && emit("create-child", entry.group.cell)
-					}, null, 8, ["scene", "onEvent"])) : entry.group ? (openBlock(), createBlock(_sfc_main$69, {
-						key: 2,
-						class: "handler-table-group",
-						icon: __props.closedGroups?.[entry.group.key] ? "MDI_CHEVRON_RIGHT" : "MDI_CHEVRON_DOWN",
-						"aria-expanded": !__props.closedGroups?.[entry.group.key],
-						onClick: ($event) => emit("toggle-group", entry.group.key)
-					}, {
-						default: withCtx(() => [createTextVNode(toDisplayString(entry.group.translate || !entry.group.key ? unref(t)(entry.group.label) : entry.group.label) + " ", 1), createBaseVNode("small", null, toDisplayString(entry.group.records.length), 1)]),
-						_: 2
-					}, 1032, [
-						"icon",
-						"aria-expanded",
-						"onClick"
-					])) : entry.summary ? (openBlock(), createElementBlock(Fragment, { key: 3 }, [
-						_cache[12] || (_cache[12] = createBaseVNode("div", {
-							class: "handler-table-selection",
-							role: "gridcell"
-						}, null, -1)),
-						(openBlock(true), createElementBlock(Fragment, null, renderList(columns.value, (column, index) => {
-							return openBlock(), createElementBlock("div", {
-								key: column.name,
-								class: normalizeClass(["handler-table-cell", { "first-column": index === 0 }]),
-								role: "gridcell"
-							}, [createBaseVNode("strong", null, toDisplayString(entry.summary[column.name] || ""), 1)], 2);
-						}), 128)),
-						_cache[13] || (_cache[13] = createBaseVNode("div", {
-							class: "handler-table-actions",
-							role: "gridcell"
-						}, null, -1))
-					], 64)) : (openBlock(), createElementBlock(Fragment, { key: 4 }, [
-						createBaseVNode("div", _hoisted_9$8, [__props.selectable ? (openBlock(), createBlock(_sfc_main$72, {
+						onEvent: closeFocusedDetail
+					}, null, 8, ["scene", "style"])) : createCommentVNode("", true),
+					createBaseVNode("div", {
+						class: "handler-table-header",
+						role: "row",
+						style: normalizeStyle({ width: tableWidth.value + "px" })
+					}, [
+						createBaseVNode("div", _hoisted_2$22, [__props.selectable ? (openBlock(), createBlock(_sfc_main$72, {
 							key: 0,
-							label: unref(t)("Select record: {name}", { name: entry.record.name || entry.record.title || entry.record.code || entry.record.id }),
-							"translate-label": false,
-							"model-value": __props.selectedKeys?.includes(entry.key),
-							"onUpdate:modelValue": ($event) => emit("select", [entry.record], $event)
+							label: "Select all rows",
+							"model-value": !!allSelected.value,
+							indeterminate: !allSelected.value && records.value.some((record) => __props.selectedKeys?.includes(record.__search_key__)),
+							"onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => emit("select", records.value, $event))
 						}, {
-							default: withCtx(() => [createBaseVNode("span", _hoisted_10$6, toDisplayString(unref(t)("Select row")), 1)]),
+							default: withCtx(() => [createBaseVNode("span", _hoisted_3$17, toDisplayString(unref(t)("Select all rows")), 1)]),
 							_: 1
-						}, 8, [
-							"label",
-							"model-value",
-							"onUpdate:modelValue"
-						])) : createCommentVNode("", true)]),
-						(openBlock(true), createElementBlock(Fragment, null, renderList(columns.value, (column, index) => {
+						}, 8, ["model-value", "indeterminate"])) : createCommentVNode("", true)]),
+						(openBlock(true), createElementBlock(Fragment, null, renderList(columns.value, (column) => {
 							return openBlock(), createElementBlock("div", {
 								key: column.name,
-								class: normalizeClass(["handler-table-cell", {
-									"first-column": index === 0,
-									"editable-cell": __props.editable && column.editable
+								class: normalizeClass(["handler-table-heading", {
+									dragging: drag.value?.source === column.name,
+									"drop-target": drag.value?.target === column.name,
+									grouped: __props.groupMode === "column:" + column.name
 								}]),
-								role: "gridcell",
-								onDblclick: withModifiers(($event) => __props.editable && column.editable ? emit("edit", entry.record, column, $event.currentTarget) : emit("inspect", entry.record), ["stop"])
-							}, [renderSlot(_ctx.$slots, "cell", {
-								record: entry.record,
-								column: {
-									...column,
-									width: columnWidth(column)
-								},
-								index,
-								height: rowHeight.value
-							})], 42, _hoisted_11$6);
+								role: "columnheader",
+								"aria-sort": __props.sortField === column.sortField ? __props.sortDirection === "desc" ? "descending" : "ascending" : "none",
+								title: column.title,
+								"aria-label": column.title,
+								tabindex: "0",
+								onContextmenu: ($event) => openColumn(column, $event),
+								onPointerdown: ($event) => beginMove(column, $event),
+								onKeydown: ($event) => moveKey(column, $event)
+							}, [
+								headerAction(column) ? (openBlock(), createBlock(_sfc_main$69, {
+									key: 0,
+									class: "table-header-insert",
+									label: headerAction(column).label || "Create",
+									icon: headerAction(column).icon || "add",
+									compact: "",
+									"icon-only": "",
+									disabled: __props.readOnly || __props.busy,
+									onPointerdown: _cache[1] || (_cache[1] = withModifiers(() => {}, ["stop"])),
+									onClick: withModifiers(($event) => emit("header-action", headerAction(column)), ["stop"])
+								}, null, 8, [
+									"label",
+									"icon",
+									"disabled",
+									"onClick"
+								])) : (openBlock(), createElementBlock("span", _hoisted_5$12, toDisplayString(column.title), 1)),
+								__props.groupMode === "column:" + column.name ? (openBlock(), createBlock(_sfc_main$70, {
+									key: 2,
+									name: "group-items",
+									class: "table-group-indicator"
+								})) : createCommentVNode("", true),
+								createBaseVNode("span", {
+									class: "table-resize",
+									role: "slider",
+									tabindex: "0",
+									"aria-label": unref(t)("Resize column") + " " + column.title,
+									"aria-valuenow": Math.round(columnWidth(column)),
+									"aria-valuemin": "48",
+									"aria-valuemax": "640",
+									onPointerdown: ($event) => resize(column, $event),
+									onKeydown: withModifiers(($event) => resizeKey(column, $event), ["stop"])
+								}, null, 40, _hoisted_6$11)
+							], 42, _hoisted_4$16);
 						}), 128)),
-						createBaseVNode("div", _hoisted_12$6, [!__props.readOnly ? (openBlock(), createBlock(_sfc_main$69, {
+						createBaseVNode("div", _hoisted_7$11, [
+							__props.busy ? (openBlock(), createBlock(BusyIndicator_default, { key: 0 })) : createCommentVNode("", true),
+							withDirectives(createVNode(_sfc_main$69, {
+								label: "Auto Fit columns",
+								icon: "fit-width",
+								"icon-only": "",
+								"aria-pressed": autoFit.value,
+								highlighted: autoFit.value,
+								onClick: _cache[2] || (_cache[2] = ($event) => preference({
+									autoFit: !autoFit.value,
+									scrollColumns: false
+								}))
+							}, null, 8, ["aria-pressed", "highlighted"]), [[vShow, !__props.busy]]),
+							withDirectives(createVNode(_sfc_main$74, {
+								label: "Table views and columns",
+								icon: "view-column",
+								overlay: "",
+								width: 280,
+								disabled: __props.busy
+							}, {
+								default: withCtx(() => [createVNode(_sfc_main$57, {
+									actions: viewActions.value,
+									onTriggered: viewCommand
+								}, null, 8, ["actions"])]),
+								_: 1
+							}, 8, ["disabled"]), [[vShow, !__props.busy]])
+						])
+					], 4),
+					createBaseVNode("div", {
+						class: "handler-table-body",
+						style: normalizeStyle({
+							height: contentHeight.value + "px",
+							width: tableWidth.value + "px"
+						})
+					}, [(openBlock(true), createElementBlock(Fragment, null, renderList(rendered.value, (entry) => {
+						return openBlock(), createElementBlock("div", {
+							key: entry.key,
+							class: normalizeClass(["handler-table-row", {
+								selected: __props.selectedKeys?.includes(entry.key),
+								alternate: !!entry.record && entry.index % 2 === 1,
+								active: !!entry.record && focusedKey.value === entry.key,
+								"group-row": !!entry.group || !!entry.summary
+							}]),
+							role: "row",
+							"aria-rowindex": entry.index + 2,
+							"aria-selected": !!entry.record && (focusedKey.value === entry.key || __props.selectedKeys?.includes(entry.key)),
+							style: normalizeStyle({
+								top: entry.top + "px",
+								height: entry.height + "px"
+							}),
+							draggable: !!entry.record && !__props.readOnly,
+							onDragstart: ($event) => entry.record && rowDrag(entry.record, $event),
+							onClick: ($event) => entry.record && choose(entry.record, $event),
+							onDblclick: ($event) => entry.record && !$event.target.closest("button,input,select,textarea,a") && emit("inspect", entry.record),
+							onContextmenu: ($event) => entry.record && (choose(entry.record, $event), emit("operate", entry.record, $event))
+						}, [entry.detail ? (openBlock(), createElementBlock("div", {
 							key: 0,
-							label: "Object actions",
-							icon: "more",
-							"icon-only": "",
-							onClick: ($event) => emit("operate", entry.record, $event)
-						}, null, 8, ["onClick"])) : createCommentVNode("", true)])
-					], 64))], 46, _hoisted_8$8);
-				}), 128))], 4)], 46, _hoisted_1$31),
+							class: "handler-table-detail",
+							style: normalizeStyle({ width: width.value + "px" }),
+							onClick: _cache[3] || (_cache[3] = withModifiers(() => {}, ["stop"])),
+							onDblclick: _cache[4] || (_cache[4] = withModifiers(() => {}, ["stop"])),
+							onContextmenu: _cache[5] || (_cache[5] = withModifiers(() => {}, ["stop"]))
+						}, [renderSlot(_ctx.$slots, "detail", {
+							record: entry.detail,
+							height: entry.height
+						})], 36)) : entry.group?.cell ? (openBlock(), createBlock(_sfc_main$71, {
+							key: 1,
+							class: "handler-table-group",
+							scene: group$1({
+								cell: entry.group.cell,
+								count: entry.group.records.length,
+								closed: !!__props.closedGroups?.[entry.group.key]
+							}, Math.max(0, width.value - 24), unref(appearance).language, !__props.readOnly, ""),
+							onEvent: (action) => action.type === "toggle" ? emit("toggle-group", entry.group.key) : action.type === "create-child" && emit("create-child", entry.group.cell)
+						}, null, 8, ["scene", "onEvent"])) : entry.group ? (openBlock(), createBlock(_sfc_main$69, {
+							key: 2,
+							class: "handler-table-group",
+							icon: __props.closedGroups?.[entry.group.key] ? "MDI_CHEVRON_RIGHT" : "MDI_CHEVRON_DOWN",
+							"aria-expanded": !__props.closedGroups?.[entry.group.key],
+							onClick: ($event) => emit("toggle-group", entry.group.key)
+						}, {
+							default: withCtx(() => [createTextVNode(toDisplayString(entry.group.translate || !entry.group.key ? unref(t)(entry.group.label) : entry.group.label) + " ", 1), createBaseVNode("small", null, toDisplayString(entry.group.records.length), 1)]),
+							_: 2
+						}, 1032, [
+							"icon",
+							"aria-expanded",
+							"onClick"
+						])) : entry.summary ? (openBlock(), createElementBlock(Fragment, { key: 3 }, [
+							_cache[12] || (_cache[12] = createBaseVNode("div", {
+								class: "handler-table-selection",
+								role: "gridcell"
+							}, null, -1)),
+							(openBlock(true), createElementBlock(Fragment, null, renderList(columns.value, (column, index) => {
+								return openBlock(), createElementBlock("div", {
+									key: column.name,
+									class: normalizeClass(["handler-table-cell", { "first-column": index === 0 }]),
+									role: "gridcell"
+								}, [createBaseVNode("strong", null, toDisplayString(entry.summary[column.name] || ""), 1)], 2);
+							}), 128)),
+							_cache[13] || (_cache[13] = createBaseVNode("div", {
+								class: "handler-table-actions",
+								role: "gridcell"
+							}, null, -1))
+						], 64)) : (openBlock(), createElementBlock(Fragment, { key: 4 }, [
+							createBaseVNode("div", _hoisted_9$8, [__props.selectable ? (openBlock(), createBlock(_sfc_main$72, {
+								key: 0,
+								label: unref(t)("Select record: {name}", { name: entry.record.name || entry.record.title || entry.record.code || entry.record.id }),
+								"translate-label": false,
+								"model-value": __props.selectedKeys?.includes(entry.key),
+								"onUpdate:modelValue": ($event) => emit("select", [entry.record], $event)
+							}, {
+								default: withCtx(() => [createBaseVNode("span", _hoisted_10$6, toDisplayString(unref(t)("Select row")), 1)]),
+								_: 1
+							}, 8, [
+								"label",
+								"model-value",
+								"onUpdate:modelValue"
+							])) : createCommentVNode("", true)]),
+							(openBlock(true), createElementBlock(Fragment, null, renderList(columns.value, (column, index) => {
+								return openBlock(), createElementBlock("div", {
+									key: column.name,
+									class: normalizeClass(["handler-table-cell", {
+										"first-column": index === 0,
+										"editable-cell": __props.editable && column.editable
+									}]),
+									role: "gridcell",
+									onDblclick: withModifiers(($event) => __props.editable && column.editable ? emit("edit", entry.record, column, $event.currentTarget) : emit("inspect", entry.record), ["stop"])
+								}, [renderSlot(_ctx.$slots, "cell", {
+									record: entry.record,
+									column: {
+										...column,
+										width: columnWidth(column)
+									},
+									index,
+									height: rowHeight.value
+								})], 42, _hoisted_11$6);
+							}), 128)),
+							createBaseVNode("div", _hoisted_12$6, [!__props.readOnly ? (openBlock(), createBlock(_sfc_main$69, {
+								key: 0,
+								label: "Object actions",
+								icon: "more",
+								"icon-only": "",
+								onClick: ($event) => emit("operate", entry.record, $event)
+							}, null, 8, ["onClick"])) : createCommentVNode("", true)])
+						], 64))], 46, _hoisted_8$8);
+					}), 128))], 4)
+				], 46, _hoisted_1$31),
 				createVNode(_sfc_main$74, {
 					ref_key: "contextMenu",
 					ref: contextMenu,
