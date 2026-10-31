@@ -33,7 +33,7 @@ var metrics$2 = {
 	taskWidth: 107,
 	taskGap: 4,
 	taskMenu: 32,
-	taskPreviewWidth: 220,
+	taskPreviewWidth: 160,
 	taskMaximumHeight: 88,
 	taskDatesHeight: 76,
 	taskHeading: 15,
@@ -109,21 +109,21 @@ function taskCardLayout(height, expanded = false, style) {
 		padding: 2,
 		gap: 1
 	});
-	const theme = metrics$3(style), padding = spacing$1.compact, gap = spacing$1.tight;
+	const padding = spacing$1.tight, gap = spacing$1.text, editorHeight = 24, headingHeight = 18, datesHeight = 18;
 	return {
 		dates: true,
-		editorHeight: theme.controlHeight,
-		headingHeight: 20,
-		datesHeight: theme.compactControlHeight,
+		editorHeight,
+		headingHeight,
+		datesHeight,
 		padding,
 		gap,
-		cardHeight: padding * 2 + 20 + theme.controlHeight * 2 + theme.compactControlHeight + gap * 3
+		cardHeight: padding * 2 + headingHeight + 48 + datesHeight + gap * 3
 	};
 }
 function taskPreviewLayout(count, viewportWidth, viewportHeight, style) {
 	const card = taskCardLayout(0, true, style), padding = spacing$1.compact;
 	const contentWidth = Math.max(0, count * (metrics$2.taskPreviewWidth + metrics$2.taskGap) - metrics$2.taskGap);
-	const width = Math.max(0, Math.min(viewportWidth - padding * 2, contentWidth + metrics$2.taskMenu + padding * 2));
+	const width = Math.max(0, Math.min(viewportWidth - padding * 2, Math.min(count, 3) * (metrics$2.taskPreviewWidth + metrics$2.taskGap) - metrics$2.taskGap + metrics$2.taskMenu + padding * 2));
 	const horizontal = contentWidth > width - padding * 2 - metrics$2.taskMenu;
 	return {
 		cardWidth: metrics$2.taskPreviewWidth,
@@ -410,7 +410,9 @@ var _sfc_main$67 = {
 					"--task-editor-height": layout.value.editorHeight + "px",
 					"--task-card-width": (__props.expanded ? metrics$2.taskPreviewWidth : metrics$2.taskWidth) + "px",
 					"--task-heading-height": layout.value.headingHeight + "px",
-					"--task-dates-height": layout.value.datesHeight + "px"
+					"--task-dates-height": layout.value.datesHeight + "px",
+					"--task-card-padding": layout.value.padding + "px",
+					"--task-card-gap": layout.value.gap + "px"
 				})
 			}, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.tasks, (task) => {
 				return openBlock(), createElementBlock("article", {

@@ -173,8 +173,8 @@ assert.equal(Cells.taskLayout(4, 220, 77).dates, false);
 for (const style of ['md3', 'material5', 'fluent']) {
   const card = Cells.taskCardLayout(52, true, style);
   assert.equal(card.dates, true);
-  assert.ok(card.editorHeight >= 34);
-  assert.ok(card.cardHeight >= 148);
+  assert.equal(card.editorHeight, 24);
+  assert.equal(card.cardHeight, 98);
   assert.equal(
     card.cardHeight,
     card.padding * 2 +
@@ -184,10 +184,14 @@ for (const style of ['md3', 'material5', 'fluent']) {
       card.gap * 3
   );
   for (const width of [320, 800]) {
-    const preview = Cells.taskPreviewLayout(11, width, 600, style);
-    assert.ok(preview.width <= width - 16);
-    assert.ok(preview.height >= card.cardHeight + 16);
-    assert.equal(preview.cardWidth, 220);
+    for (const count of [1, 4, 15]) {
+      const preview = Cells.taskPreviewLayout(count, width, 600, style);
+      assert.ok(preview.width <= width - 16);
+      assert.ok(preview.height >= card.cardHeight + 16);
+      assert.equal(preview.cardWidth, 160);
+      assert.ok(preview.width <= 536);
+      assert.equal(preview.contentWidth, count * 164 - 4);
+    }
   }
 }
 assert.equal(Cells.taskCardsHovered(50, 20, 107, 52), true);

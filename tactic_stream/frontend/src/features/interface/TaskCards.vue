@@ -35,7 +35,9 @@ function edit(task, field, event) {
         (expanded ? Cells.metrics.taskPreviewWidth : Cells.metrics.taskWidth) +
         'px',
       '--task-heading-height': layout.headingHeight + 'px',
-      '--task-dates-height': layout.datesHeight + 'px'
+      '--task-dates-height': layout.datesHeight + 'px',
+      '--task-card-padding': layout.padding + 'px',
+      '--task-card-gap': layout.gap + 'px'
     }"
   >
     <article
@@ -167,8 +169,8 @@ function edit(task, field, event) {
   font-size: 11px;
 }
 .task-cards .task-card.expanded {
-  padding: calc(var(--space-compact) - 1px);
-  gap: var(--space-tight);
+  padding: calc(var(--task-card-padding) - 1px);
+  gap: var(--task-card-gap);
 }
 .task-cards .task-card.expanded .app-button {
   font-size: var(--font-body-size);

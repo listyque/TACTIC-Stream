@@ -49,7 +49,7 @@ this.page==='shelf'?h(ScriptShelfBar,{mode:this.shelfMode,buttons:this.shelfButt
 </script><style>html,body,#app{width:100%;height:100%;overflow:hidden}#frame{width:100%;height:100%;background:var(--page)}#frame>.configured-view{display:flex;flex-direction:column;height:100%;width:100%;overflow:hidden}#frame>.columns-editor{height:100%;padding:0;gap:0}#frame>.columns-editor>.columns-editor-layout{height:100%;margin:0}#frame .administration-save-bar{display:none}</style></body></html>`;
 let server, browser;
 const measurements = [];
-async function taskPreviewGeometry(popup, narrow = false) {
+async function taskPreviewGeometry(popup, expectedCount = 4) {
   const result = await popup.evaluate((el) => {
     const scroller = el.querySelector('.task-preview-content');
     const cards = scroller.firstElementChild;
@@ -61,12 +61,13 @@ async function taskPreviewGeometry(popup, narrow = false) {
       )
     };
   });
-  assert.equal(result.items.length, 4);
+  assert.equal(result.items.length, expectedCount);
   for (const card of result.items) {
-    assert.equal(card.width, 220);
-    assert.equal(card.height, 152);
+    assert.equal(card.width, 160);
+    assert.equal(card.height, 98);
   }
-  assert.equal(result.scrolls, narrow);
+  assert.equal(result.scrolls, true);
+  assert.ok(result.box.width <= 536);
   return result;
 }
 const deadline = setTimeout(() => browser?.close(), 120000);
@@ -394,7 +395,11 @@ try {
     (keys) => (window.host.selected = keys),
     fixture.records.slice(0, 2).map((row) => row.__search_key__)
   );
-  await rows.first().locator('.table-task-cell .task-card-heading').first().hover();
+  await rows
+    .first()
+    .locator('.table-task-cell .task-card-heading')
+    .first()
+    .hover();
   await page.waitForFunction(
     () => document.querySelectorAll('.task-preview:popover-open').length === 1
   );
@@ -417,6 +422,23 @@ try {
   // Both CSS load orders and scaled pixels must keep the full card row, with one horizontal scroller only when needed.
   for (const sample of [
     { width: 1496, height: 58, scale: 1.25, mode: 'dark', language: 'ru' },
+    {
+      width: 800,
+      height: 58,
+      scale: 1,
+      mode: 'dark',
+      language: 'en',
+      count: 15
+    },
+    {
+      width: 320,
+      height: 58,
+      scale: 1,
+      mode: 'dark',
+      language: 'en',
+      count: 15,
+      narrow: true
+    },
     { width: 1496, height: 84, scale: 1.5, mode: 'light', language: 'ru' },
     {
       width: 320,
@@ -444,6 +466,27 @@ try {
       window.host.state = { table: { rowHeight: sample.height } };
       for (const element of window.host.definition.table.elements)
         element.attributes.th_hide_order = '0';
+      if (sample.count) {
+        const cells = window.host.$refs.table.cells;
+        const tasks = Object.values(Object.values(cells)[0]).find((cell) =>
+          Array.isArray(cell?.tasks)
+        );
+        tasks.tasks = Array.from({ length: sample.count }, (_, index) => ({
+          ...tasks.tasks[0],
+          process: 'process' + index,
+          processLabel: 'Process ' + index,
+          status: 'In Progress',
+          statusColor: '#4f8cff',
+          assigned: '',
+          assignedLabel: 'Not assigned',
+          assignedIdentity: null,
+          bidStart: '2026-09-01',
+          bidEnd: '2026-09-03',
+          bidStartLabel: '1 Sep',
+          bidEndLabel: '3 Sep'
+        }));
+        tasks.count = sample.count;
+      }
       // Production loads feature styles after the application stylesheet.
       for (const style of document.querySelectorAll('style[data-vite-dev-id]'))
         if (
@@ -458,12 +501,21 @@ try {
     await cell.locator('.task-card-heading').first().hover();
     const preview = check.locator('.task-preview:popover-open').first();
     await preview.waitFor({ state: 'visible' });
-    const geometry = await taskPreviewGeometry(preview, sample.narrow);
-    if (sample.narrow) {
-      await preview.locator('.task-preview-content').evaluate((el) => (el.scrollLeft = el.scrollWidth));
+    const geometry = await taskPreviewGeometry(preview, sample.count || 4);
+    if (sample.count) {
+      await preview.screenshot({
+        path: report + '/compact-preview-' + sample.width + '-15.png'
+      });
+    }
+    if (sample.narrow || sample.count) {
+      await preview
+        .locator('.task-preview-content')
+        .evaluate((el) => (el.scrollLeft = el.scrollWidth));
       await check.waitForFunction(
         () =>
-          document.querySelector('.task-preview:popover-open .task-preview-content')?.scrollLeft > 0
+          document.querySelector(
+            '.task-preview:popover-open .task-preview-content'
+          )?.scrollLeft > 0
       );
       await preview.locator('.task-card-heading').last().click();
       assert.equal(
@@ -822,7 +874,11 @@ try {
       Object.values(window.host.$refs.table.expandedTables)[0]?.rows?.length ===
       2
   );
-  await nested.locator('.handler-table-row').getByRole('checkbox').first().click();
+  await nested
+    .locator('.handler-table-row')
+    .getByRole('checkbox')
+    .first()
+    .click();
   assert.deepEqual(
     await page.evaluate(() => window.host.selected),
     rootSelection,
