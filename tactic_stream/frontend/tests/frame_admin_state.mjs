@@ -289,10 +289,15 @@ for (const width of [1100, 1400, 1800]) {
   const toolbar = head.children.find(
     (node) => node.id === 'administrationToolbar'
   );
-  assert(
-    toolbar.x + toolbar.width <= width - head.chromeRight - 80,
-    'Commands leave window controls their own space'
+  const help = head.children.find(
+    (node) => node.id === 'administrationHelpButton'
   );
+  assert(
+    toolbar.x + toolbar.width <= help.x - 8,
+    'Commands leave a gap before the page Help action'
+  );
+  for (const button of head.children.filter((node) => node.kind === 'Button'))
+    assert.equal(button.round, false, button.id + ' is a service action');
   assert(
     head.children.find((node) => node.id === 'administrationSectionTitle')
       .width >= 200,

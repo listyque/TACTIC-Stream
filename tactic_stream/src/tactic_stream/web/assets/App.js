@@ -1577,6 +1577,7 @@ function describe$35(model, ui, width, height, language) {
 		text: tr(text),
 		icon,
 		iconOnly: true,
+		iconAction: true,
 		action,
 		enabled: enabled !== false
 	});
@@ -1641,7 +1642,7 @@ function describe$35(model, ui, width, height, language) {
 		action: { type: "return-layout" },
 		enabled: !model.busy
 	}));
-	head.push(node("View", "administrationToolbar", rect(g.mobile ? 12 : g.body - g.toolbar - 174, g.mobile ? 116 : 10, g.toolbar, 38), { view: "toolbar" }));
+	head.push(node("View", "administrationToolbar", rect(g.mobile ? 12 : g.body - g.toolbar - 96, g.mobile ? 116 : 10, g.toolbar, 38), { view: "toolbar" }));
 	head.push(button("administrationHelpButton", rect(g.body - 88, g.mobile ? 10 : 12, 34, 34), "Help", "help", { type: "help" }));
 	head.push(button("administrationCloseButton", rect(g.body - 48, g.mobile ? 10 : 12, 34, 34), "Close administration", "close", { type: "close" }, !model.busy));
 	if (g.mobile) {
@@ -1660,7 +1661,9 @@ function describe$35(model, ui, width, height, language) {
 	for (const item of head) item.x += g.nav;
 	head.unshift(...branding);
 	head.push(node("Box", "administrationHeaderDivider", rect(0, g.header - 1, width, 1), { background: "outlineVariant" }));
-	nodes.push(describe$36("administrationHeader", width, g.header, head));
+	const header = describe$36("administrationHeader", width, g.header, head);
+	for (const child of header.children) if (child.kind === "Button") child.round = false;
+	nodes.push(header);
 	nodes.push(node("View", "administrationContent", g.content, { view: "content" }));
 	return {
 		nodes,

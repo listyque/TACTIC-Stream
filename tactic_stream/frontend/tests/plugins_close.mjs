@@ -80,6 +80,11 @@ try {
     );
     await import('/frontend/src/theme.css');
     await import('/frontend/src/style.css');
+    const { initializeAppearance, appearance } = await import(
+      '/frontend/src/appearance.js'
+    );
+    initializeAppearance();
+    Object.assign(appearance, { mode: 'dark', language: 'en' });
     // Replace authentication only; retain the real App template, refs and close handlers.
     window.adminFixture = createApp({
       ...App,
@@ -107,6 +112,48 @@ try {
     );
   }
   await open();
+  const reloadBounds = await dialog
+    .locator('[data-frame="pluginReload"]')
+    .boundingBox();
+  const helpBounds = await dialog
+    .locator('[data-frame="administrationHelpButton"]')
+    .boundingBox();
+  assert.equal(
+    reloadBounds.y,
+    helpBounds.y,
+    'Header controls share a baseline'
+  );
+  for (const id of [
+    'adminToggleNavigation',
+    'administrationHelpButton',
+    'pluginReload',
+    'pluginCollapse'
+  ]) {
+    const control = dialog.locator(`[data-frame="${id}"]:visible`);
+    for (const hover of [false, true]) {
+      if (hover) await control.hover();
+      const style = await control.evaluate((el) => ({
+        width: el.offsetWidth,
+        height: el.offsetHeight,
+        radius: getComputedStyle(el).borderTopLeftRadius
+      }));
+      assert.deepEqual(style, { width: 34, height: 34, radius: '4px' }, id);
+    }
+  }
+  for (const button of await dialog
+    .locator('.app-window-controls button:visible')
+    .all()) {
+    const shape = await button.evaluate((el) => ({
+      height: el.offsetHeight,
+      radius: getComputedStyle(el).borderTopLeftRadius
+    }));
+    assert.ok(
+      shape.radius === '50%' || parseFloat(shape.radius) >= shape.height / 2,
+      'Outer window chrome remains round'
+    );
+  }
+  if (process.env.ADMIN_BUTTON_CAPTURE)
+    await page.screenshot({ path: process.env.ADMIN_BUTTON_CAPTURE });
   assert.equal(
     await page.evaluate(
       () => typeof window.adminFixture.administrationInstances.plugins.canLeave

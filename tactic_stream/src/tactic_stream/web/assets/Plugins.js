@@ -967,7 +967,7 @@ function toolbar(model, width, language) {
 		"refresh",
 		{ type: "reload" },
 		!model.busy,
-		40
+		34
 	]];
 	if (model.dirty || model.uncertain) {
 		commands.push([
@@ -976,7 +976,7 @@ function toolbar(model, width, language) {
 			"undo",
 			{ type: "discard" },
 			!model.busy,
-			compact ? 40 : 120
+			compact ? 34 : 120
 		]);
 		if (!model.metadata?.new) commands.push([
 			"pluginSave",
@@ -993,11 +993,15 @@ function toolbar(model, width, language) {
 		"help",
 		{ type: "help" },
 		true,
-		40
+		34
 	]);
 	let x = Math.max(0, width - commands.reduce((sum, row) => sum + row[5] + 4, 0));
 	for (const [id, title, icon, event, enabled, w] of commands) {
-		nodes.push(button(id, rect(x, 0, w, 40), tr(title), icon, event, enabled, { iconOnly: w === 40 }));
+		nodes.push(button(id, rect(x, 2, w, 34), tr(title), icon, event, enabled, {
+			iconOnly: w === 34,
+			iconAction: w === 34,
+			round: false
+		}));
 		x += w + 4;
 	}
 	return { nodes };
@@ -1007,24 +1011,28 @@ function describe(model, ui, width, height, language) {
 	const tr = (text) => translate(text, language), nodes = [], gap = spacing.content, compact = width < 760, nav = !!!(model.catalog || []).length || metaNew(model) ? 0 : ui.collapsed ? 44 : compact ? 200 : 250, right = nav ? nav + gap : 0, bodyWidth = Math.max(0, width - right), editable = !model.busy && !model.uncertain && model.canWrite, clean = !model.busy && !model.dirty && !model.uncertain, doc = model.document || {}, meta = model.metadata || {}, exists = !!model.identity;
 	const btn = (id, r, text, icon, action, enabled = clean, extra = {}) => button(id, r, tr(text), icon, action, enabled, extra);
 	if (nav) {
-		if (!ui.collapsed) nodes.push(label("pluginCatalogueCaption", rect(0, 0, nav - 36, 28), tr("Plugin catalogue"), { weight: 600 }));
-		nodes.push(btn("pluginCollapse", rect(ui.collapsed ? 0 : nav - 28, 0, 28, 28), "Plugin catalogue", ui.collapsed ? "next" : "previous", { type: "collapse" }, true, { iconOnly: true }));
+		if (!ui.collapsed) nodes.push(label("pluginCatalogueCaption", rect(0, 0, nav - 42, 34), tr("Plugin catalogue"), { weight: 600 }));
+		nodes.push(btn("pluginCollapse", rect(ui.collapsed ? 0 : nav - 34, 0, 34, 34), "Plugin catalogue", ui.collapsed ? "next" : "previous", { type: "collapse" }, true, {
+			iconOnly: true,
+			iconAction: true,
+			round: false
+		}));
 	}
 	if (nav && !ui.collapsed) {
-		nodes.push(btn("pluginNew", rect(0, 36, nav, 36), "New", "add", { type: "new" }));
-		nodes.push(btn("pluginInstall", rect(0, 80, nav, 36), "Install a package", "upload", { type: "install" }, clean, { iconOnly: false }));
-		nodes.push(node("Field", "pluginSearch", rect(0, 128, nav, 36), {
+		nodes.push(btn("pluginNew", rect(0, 42, nav, 36), "New", "add", { type: "new" }));
+		nodes.push(btn("pluginInstall", rect(0, 86, nav, 36), "Install a package", "upload", { type: "install" }, clean, { iconOnly: false }));
+		nodes.push(node("Field", "pluginSearch", rect(0, 134, nav, 36), {
 			text: ui.query,
 			placeholder: tr("Search plugins"),
 			action: { type: "query" },
 			clearable: true
 		}));
-		nodes.push(node("CheckBox", "pluginActiveOnly", rect(0, 172, nav, 36), {
+		nodes.push(node("CheckBox", "pluginActiveOnly", rect(0, 178, nav, 36), {
 			text: tr("Active in this project"),
 			checked: ui.activeOnly,
 			action: { type: "activeOnly" }
 		}));
-		nodes.push(node("List", "pluginCatalogue", rect(0, 216, nav, Math.max(0, height - 216)), {
+		nodes.push(node("List", "pluginCatalogue", rect(0, 222, nav, Math.max(0, height - 222)), {
 			source: "plugins",
 			keyField: "identity",
 			fields: [
@@ -1042,7 +1050,7 @@ function describe(model, ui, width, height, language) {
 			scrollbarReserved: 16
 		}));
 	}
-	if (nav > 44 && !catalog(model, ui).length) nodes.push(label("pluginNoMatches", rect(8, 224, nav - 24, 80), tr("No matching plugins. Change the search or the project filter."), {
+	if (nav > 44 && !catalog(model, ui).length) nodes.push(label("pluginNoMatches", rect(8, 230, nav - 24, 80), tr("No matching plugins. Change the search or the project filter."), {
 		wrap: true,
 		color: "secondaryText"
 	}));
