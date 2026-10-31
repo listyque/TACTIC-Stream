@@ -163,10 +163,13 @@ def validate_quick(configuration):
         raise ValueError('Invalid quick-filter groups or defaults')
     seen = set()
     for group in groups:
-        if (not isinstance(group, dict) or set(group) - {'key', 'enabled', 'options'} or not isinstance(group.get('key'), str)
+        if (not isinstance(group, dict) or set(group) - {'key', 'enabled', 'options', 'icon'} or not isinstance(group.get('key'), str)
                 or not group['key'] or group['key'] in seen or type(group.get('enabled', True)) is not bool):
             raise ValueError('Invalid quick-filter group')
         seen.add(group['key'])
+        icon = group.get('icon', '')
+        if not isinstance(icon, str) or len(icon) > 128 or (icon and not re.fullmatch(r'[\w:.-]+', icon, flags=re.ASCII)):
+            raise ValueError('Invalid icon name')
         if 'options' in group and (not isinstance(group['options'], list) or len(group['options']) > 512 or any(not isinstance(value, str) for value in group['options'])):
             raise ValueError('Invalid quick-filter options')
     for key, values in defaults.items():
@@ -216,7 +219,7 @@ def metadata_options(info):
     return list(records.values())
 
 
-def quick_groups(search_type, columns):
+def quick_groups(search_type, columns, column_icons=None):
     # Handler facet discovery exclusions and 64-value ceiling; SQL aggregation
     # counts the complete dataset rather than only the current result page.
     available = {}
@@ -302,6 +305,8 @@ def quick_groups(search_type, columns):
                 options = [dict(key=key, title=value) for key, value in sorted(names.items()) if key != Environment.get_user_name()]
                 options.insert(0, dict(key='__current_login__', title='MY TASKS'))
             result.append(dict(key=field, column='', source='task', accent='#607d8b', title=title, options=options))
+    for group in result:
+        group['columnIcon'] = (column_icons or {}).get(group.get('column') or group['key'], '')
     return result
 
 
@@ -327,8 +332,19 @@ def read_search_configuration(search_type, scope='', include_groups=True):
     if len(quick) > 1:
         raise ValueError('Multiple shared quick-filter standards exist for this sidebar item')
     configuration = quick_from_xml(quick[0].get_value('config'), scope) if quick else dict(groups=[], defaultSelections={})
+    column_icons = {}
+    if include_groups:
+        table = next((item for item in records if item.get_value('view') == 'table'), None)
+        if table:
+            root = parse_xml(table.get_value('config'))
+            view = root.find('table')
+            if view is None:
+                view = root.find("view[@name='table']")
+            if view is not None:
+                column_icons = {element.get('name'): element.get('value_icon', element.findtext('display/icon', ''))
+                                for element in view.findall('element')}
     return dict(presets=presets, columns=columns, relations=[dict(label=label, value=value) for label, value in RELATIONS],
-                revision=revision(records), configuration=configuration, groups=quick_groups(search_type, columns) if include_groups else [])
+                revision=revision(records), configuration=configuration, groups=quick_groups(search_type, columns, column_icons) if include_groups else [])
 
 
 def generated_quick_records(selections, columns):

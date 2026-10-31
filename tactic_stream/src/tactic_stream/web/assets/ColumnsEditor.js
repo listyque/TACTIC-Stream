@@ -393,7 +393,7 @@ function editor(nodes, model, ui, bounds, language, edit, back) {
 					id: "definitionCatalogValueIcon",
 					kind: "IconChoice",
 					title: "Cell icon",
-					description: "Icon beside text values and related-table counts.",
+					description: "Icon beside text values and related-table counts. Used by quick filters unless overridden.",
 					field: "valueIcon",
 					props: {
 						value: Object.prototype.hasOwnProperty.call(element, "valueIcon") ? element.valueIcon : element.name === "duration" ? "clock" : "",

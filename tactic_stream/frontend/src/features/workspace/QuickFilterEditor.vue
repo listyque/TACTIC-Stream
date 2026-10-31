@@ -99,6 +99,9 @@ export default {
       } else if (action.type === 'clear') this.selected = {};
       else if (action.type === 'showHidden') this.showHidden = action.value;
       else if (action.type === 'move') this.move(action.index, action.delta);
+      else if (action.type === 'icon' || action.type === 'iconReset')
+        this.groups[action.index].icon =
+          action.type === 'icon' ? action.value : '';
       else if (action.type === 'group') {
         this.groups[action.index].enabled = action.value;
         this.sanitize();
@@ -159,9 +162,10 @@ export default {
               (!this.canManage && standard.get(key)?.enabled === false)
             )
               return null;
-            const config = settings.get(key) || {};
+            const config = settings.get(key) || standard.get(key) || {};
             return {
               ...group,
+              ...(Object.hasOwn(config, 'icon') ? { icon: config.icon } : {}),
               enabled: config.enabled !== false,
               options: group.options
                 .filter(
@@ -194,7 +198,12 @@ export default {
         .map((row) => {
           const previous =
             this.original.groups?.find((group) => group.key === row.key) || {};
-          return { ...previous, key: row.key, enabled: row.enabled };
+          return {
+            ...previous,
+            key: row.key,
+            enabled: row.enabled,
+            ...(Object.hasOwn(row, 'icon') ? { icon: row.icon } : {})
+          };
         })
         .concat(
           (this.original.groups || []).filter((row) => !known.has(row.key))

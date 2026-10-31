@@ -2185,6 +2185,9 @@ var _sfc_main$17 = {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/core/strings.mjs
 var russian = {
+	"Filter icon": "Иконка фильтра",
+	"Use column icon": "Использовать иконку колонки",
+	"Icon beside text values and related-table counts. Used by quick filters unless overridden.": "Иконка рядом со значениями и счётчиками связей. Используется быстрыми фильтрами, если для них не выбрана своя иконка.",
 	"Cell alignment": "Выравнивание ячейки",
 	"Horizontal position of content in this column.": "Горизонтальное положение содержимого в этой колонке.",
 	"Invalid cell alignment": "Неверное выравнивание ячейки",

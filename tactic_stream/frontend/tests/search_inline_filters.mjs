@@ -15,6 +15,7 @@ assert.equal(
 const groups = [
   {
     key: 'status',
+    icon: 'status',
     title: 'STATUSES',
     source: 'task',
     options: [{ key: 'Review', title: 'Review' }]

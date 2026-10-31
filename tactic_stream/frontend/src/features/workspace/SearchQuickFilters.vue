@@ -159,7 +159,15 @@ export default {
             )
             .map((value) => ({ key: value, title: value }))
         ].filter((option) => allowed(option.key));
-        return [{ ...group, options, values }];
+        return [
+          {
+            ...group,
+            ...(Object.hasOwn(base, 'icon') ? { icon: base.icon } : {}),
+            ...(Object.hasOwn(local, 'icon') ? { icon: local.icon } : {}),
+            options,
+            values
+          }
+        ];
       });
     },
     selectedUsers() {

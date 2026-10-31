@@ -29,6 +29,13 @@ def exercise(store):
         coordinate = dict(search_type='sthpw/login', scope='sthpw/login@people')
         check.assertIn('groups', request('read', dict(search_type='sthpw/search_object')))
         loaded = request('read', coordinate)
+        api.dispatch('insert', (auth, 'config/widget_config', dict(
+            search_type='sthpw/login', view='table',
+            config='<config><table><element name="first_name" value_icon="material-design:clock" /></table></config>')))
+        icons = request('read', coordinate)
+        check.assertEqual(next(group for group in icons['groups'] if group['key'] == 'column:first_name')['columnIcon'],
+                          'material-design:clock')
+        loaded = icons
         api.dispatch('insert', (auth, 'sthpw/pipeline', dict(code='visibility_people',
             name='People workflow', project_code='admin', search_type='sthpw/login',
             pipeline='<pipeline><process name="model" color="#12ab34" /><process name="rig" /></pipeline>')))
@@ -75,7 +82,7 @@ def exercise(store):
         check.assertEqual([row['login'] for row in request('query', dict(**coordinate, records=expression))], ['alice'])
         with check.assertRaises(WidgetConfigConflict):
             request('save', dict(**coordinate, title='Stale', records=conditions, revision=loaded['revision']))
-        quick = dict(groups=[dict(key='column:first_name', enabled=True)], defaultSelections={'column:first_name': ['Alice']})
+        quick = dict(groups=[dict(key='column:first_name', enabled=True, icon='material-design:rocket')], defaultSelections={'column:first_name': ['Alice']})
         saved = request('quick-save', dict(**coordinate, configuration=quick, revision=saved['revision']))
         check.assertEqual(saved['configuration'], quick)
         rows = request('query', dict(**coordinate, records=conditions, selections=quick['defaultSelections']))
@@ -152,6 +159,15 @@ def exercise(store):
             request('quick-save', dict(**public, configuration=quick, revision=''))
 
 class SearchConfiguration(unittest.TestCase):
+    def test_icon_metadata_validation(self):
+        from tactic_stream.server.search_configuration import validate_quick
+        for icon in ('', 'clock', 'material-design:rocket', 'fontawesome-solid:clock'):
+            config = dict(groups=[dict(key='column:duration', icon=icon)], defaultSelections={})
+            self.assertEqual(validate_quick(config), config)
+        for icon in (None, 12, [], '<svg>', 'javascript:alert(1)', 'a' * 129):
+            with self.subTest(icon=icon), self.assertRaises(ValueError):
+                validate_quick(dict(groups=[dict(key='status', icon=icon)], defaultSelections={}))
+
     def test_quick_task_chips_keep_pipeline_colors_and_titles(self):
         from tactic_stream.server import search_configuration as configuration
 

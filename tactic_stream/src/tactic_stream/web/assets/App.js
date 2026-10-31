@@ -16536,6 +16536,117 @@ var _sfc_main$58 = {
 	}
 };
 //#endregion
+//#region ../src/tactic_stream/shared_ui/features/search/header.ui.mjs
+function quickBudget(model, width) {
+	if (model.compact || model.quick === false || width < 1e3) return 0;
+	const actions = [
+		model.panels,
+		true,
+		model.tags,
+		model.shelf
+	].filter((visible) => visible !== false).length;
+	const left = (model.reserveGrip === false ? spacing$1.compact : 38) + 44;
+	return Math.max(0, width - left - actions * 44 - 54 - Math.max(360, Math.min(640, width * .42)));
+}
+function quickLabel(group, language) {
+	return (group.source === "task" ? translate({
+		status: "Status",
+		assigned: "Assignee",
+		process: "Process"
+	}[group.key] || group.title, language) : group.title) + (group.count ? " · " + group.count : "");
+}
+function quickIcon(group) {
+	return group.icon || group.columnIcon || "";
+}
+function quickStrip(groups, budget, language) {
+	const nodes = [];
+	let left = 0;
+	for (const group of groups.slice(0, 3)) {
+		const icon = quickIcon(group), decoration = icon ? 76 : 50, width = Math.max(128, Math.ceil(group.textWidth) + decoration);
+		if (left + width + spacing$1.tight > budget) break;
+		const id = "searchQuickGroup_" + group.key;
+		nodes.push(node("Action", id, rect$1(left, 0, width, 38), {
+			text: quickLabel(group, language),
+			role: "button",
+			normalColor: "surfaceContainerLow",
+			radiusRole: "fieldRadius",
+			enabled: !group.disabled,
+			action: {
+				type: "quickGroup",
+				key: group.key
+			},
+			children: [
+				node("Box", id + "Border", rect$1(0, 0, width, 38), {
+					border: "outlineVariant",
+					radiusRole: "fieldRadius"
+				}),
+				node("Icon", id + "Icon", rect$1(12, 11, 16, 16), {
+					icon,
+					visible: !!icon,
+					color: group.disabled ? "disabledText" : group.count ? "action" : "secondaryText"
+				}),
+				label(id + "Label", rect$1(icon ? 38 : 12, 0, width - decoration, 38), quickLabel(group, language), {
+					weight: 400,
+					color: group.disabled ? "disabledText" : "primaryText"
+				}),
+				node("Icon", id + "Indicator", rect$1(width - 28, 11, 16, 16), {
+					icon: "expand-more",
+					color: group.disabled ? "disabledText" : "secondaryText"
+				})
+			]
+		}));
+		left += width + spacing$1.tight;
+	}
+	return {
+		nodes,
+		width: left + 38,
+		contentHeight: 38
+	};
+}
+function describe$16(model, width, language) {
+	const text = (key) => translate(key, language), compact = !!model.compact, nodes = [];
+	let right = width - spacing$1.compact;
+	const view = (id, name, show, extent = 38) => {
+		if (show) right -= extent;
+		nodes.push(node("View", id, rect$1(right, 5, extent, 38), {
+			view: name,
+			visible: show
+		}));
+		if (show) right -= spacing$1.tight;
+	};
+	view("searchHeaderPanels", "panels", model.panels !== false);
+	if (!compact) right -= 38;
+	nodes.push(button("searchWorkspaceHelpButton", rect$1(right, 5, 38, 38), text("Search help"), "help", { type: "help" }, true, {
+		iconOnly: true,
+		round: true,
+		visible: !compact
+	}));
+	if (!compact) right -= spacing$1.tight;
+	view("searchHeaderTags", "tags", !compact && model.tags !== false);
+	right -= !compact && model.shelf !== false ? 38 : 0;
+	nodes.push(button("scriptShelfButton", rect$1(right, 5, 38, 38), text("Script shelf"), "code", { type: "shelf" }, true, {
+		iconOnly: true,
+		visible: !compact && model.shelf !== false,
+		iconAction: true,
+		round: true,
+		iconColor: model.shelfOpen ? "action" : "secondaryText"
+	}));
+	if (!compact && model.shelf !== false) right -= spacing$1.tight;
+	view("searchHeaderQuick", "quick", model.quick !== false && (!compact || !model.collapseSearch), compact ? 38 : model.quickWidth || 38);
+	const refreshLeft = model.reserveGrip === false ? spacing$1.compact : 38;
+	const left = refreshLeft + 38 + spacing$1.tight;
+	nodes.push(node("View", "searchHeaderField", rect$1(left, 5, right - left - spacing$1.compact, 38), {
+		view: "field",
+		visible: !compact || !model.collapseSearch || !!model.searchOpen
+	}));
+	nodes.push(button("searchRefreshButton", rect$1(refreshLeft, 5, 38, 38), text("Refresh"), "refresh", { type: "refresh" }, !model.busy, {
+		iconOnly: true,
+		round: true,
+		visible: !compact || !model.collapseSearch || !!model.searchOpen
+	}));
+	return { nodes };
+}
+//#endregion
 //#region ../src/tactic_stream/shared_ui/features/search/editors.ui.mjs
 var editors_ui_exports = /* @__PURE__ */ __exportAll({
 	available: () => available,
@@ -16628,9 +16739,22 @@ function group(model, width, language) {
 				type: "move",
 				index: model.index,
 				delta: 1
-			}, enabled && model.index < model.total - 1, { iconOnly: true })
+			}, enabled && model.index < model.total - 1, { iconOnly: true }),
+			label("quickFilterIconLabel_" + model.index, rect$1(0, 44, 112, 32), text("Filter icon")),
+			node("IconChoice", "quickFilterIcon_" + model.index, rect$1(120, 44, 32, 32), {
+				value: quickIcon(model),
+				enabled,
+				action: {
+					type: "icon",
+					index: model.index
+				}
+			}),
+			button("quickFilterIconReset_" + model.index, rect$1(160, 44, 32, 32), text("Use column icon"), "refresh", {
+				type: "iconReset",
+				index: model.index
+			}, enabled && !!model.icon, { iconOnly: true })
 		],
-		contentHeight: 36
+		contentHeight: 76
 	};
 }
 function footer(model, width, language) {
@@ -16742,7 +16866,7 @@ var _sfc_main$57 = {
 		};
 	}
 };
-function describe$16(model, width, language) {
+function describe$15(model, width, language) {
 	const text = (key) => translate(key, language), compact = width < 560;
 	const left = compact ? 12 : 196;
 	const nodes = [node("Box", "savedSearchBar", rect$1(0, 0, width, 56), { background: "panelDeep" })];
@@ -16846,7 +16970,7 @@ var _sfc_main$56 = {
 		const props = __props;
 		const emit = __emit;
 		const host = ref(null), menu = ref(null), anchor = ref(null), width = ref(700);
-		const scene = computed(() => describe$16(props.model, width.value, appearance.language));
+		const scene = computed(() => describe$15(props.model, width.value, appearance.language));
 		const actions$4 = computed(() => actions(props.model));
 		let observer;
 		onMounted(() => {
@@ -17040,7 +17164,7 @@ function row$7(record, index, width, language, options = {}) {
 		children
 	});
 }
-function describe$15(model, width, language) {
+function describe$14(model, width, language) {
 	const text = (key) => translate(key, language), nodes = [], compact = width < 560;
 	nodes.push(node("Box", "searchFiltersHeader", rect$1(0, 0, width, 50), { background: "surfaceContainerHigh" }));
 	nodes.push(button("searchFiltersExpand", rect$1(8, 7, 34, 36), text("Search Filters"), model.expanded === false ? "chevron_right" : "keyboard_arrow_down", { type: "expand" }, true, { iconOnly: true }));
@@ -17262,7 +17386,7 @@ var _sfc_main$53 = {
 				const props = __props;
 				const emit = __emit;
 				const host = ref(null), width = ref(700), expanded = ref(true);
-				const scene = computed(() => describe$15({
+				const scene = computed(() => describe$14({
 					...props.model,
 					expanded: props.model.expanded ?? expanded.value,
 					valueView: "value"
@@ -18416,7 +18540,7 @@ function work(model, width, language) {
 		height: y
 	};
 }
-function describe$14(model, width, height, language) {
+function describe$13(model, width, height, language) {
 	const text = (key) => translate(key, language), compact = width < 760, margin = compact ? 8 : 12;
 	const directoryWidth = !model.directory || compact ? 0 : Math.min(360, Math.max(210, model.directoryWidth || 252));
 	const x = margin + (directoryWidth ? directoryWidth + 8 : 0), paneWidth = width - margin - x;
@@ -18578,7 +18702,7 @@ function groupRow(model, record, width, language) {
 		children: nodes
 	})] };
 }
-function describe$13(model, width, viewportHeight, language) {
+function describe$12(model, width, viewportHeight, language) {
 	const height = Math.max(540, viewportHeight);
 	const text = (key) => translate(key, language), margin = width < 500 ? 12 : 20, inner = width - margin * 2;
 	const nodes = [], draft = model.draft || {}, enabled = !model.saving && !model.uncertain, compact = width < 520;
@@ -18817,7 +18941,7 @@ var _sfc_main$50 = {
 				restricted: mobile.value
 			};
 		});
-		const scene = computed(() => describe$14(frameModel.value, viewport.value.width, viewport.value.height, appearance.language));
+		const scene = computed(() => describe$13(frameModel.value, viewport.value.width, viewport.value.height, appearance.language));
 		const editorModel = computed(() => ({
 			draft: draft.value || {},
 			creating: creating.value,
@@ -18831,7 +18955,7 @@ var _sfc_main$50 = {
 			displayName: profile.value.displayName,
 			avatarName: avatar.value?.file.name
 		}));
-		const editorScene = computed(() => describe$13(editorModel.value, editorViewport.value.width, editorViewport.value.height, appearance.language));
+		const editorScene = computed(() => describe$12(editorModel.value, editorViewport.value.width, editorViewport.value.height, appearance.language));
 		const row = (list, record) => userRow(frameModel.value, record, list.width - 16, appearance.language);
 		const editorRow = (list, record) => groupRow(editorModel.value, record, list.width - 16, appearance.language);
 		const activityComponent = markRaw(ProfileActivity_default), avatarComponent = markRaw(ItemPreview_default);
@@ -19270,6 +19394,7 @@ var _sfc_main$49 = {
 			} else if (action.type === "clear") this.selected = {};
 			else if (action.type === "showHidden") this.showHidden = action.value;
 			else if (action.type === "move") this.move(action.index, action.delta);
+			else if (action.type === "icon" || action.type === "iconReset") this.groups[action.index].icon = action.type === "icon" ? action.value : "";
 			else if (action.type === "group") {
 				this.groups[action.index].enabled = action.value;
 				this.sanitize();
@@ -19304,9 +19429,10 @@ var _sfc_main$49 = {
 				this.groups = order.map((key) => {
 					const group = this.catalog.groups.find((row) => row.key === key);
 					if (!group || !this.canManage && standard.get(key)?.enabled === false) return null;
-					const config = settings.get(key) || {};
+					const config = settings.get(key) || standard.get(key) || {};
 					return {
 						...group,
+						...Object.hasOwn(config, "icon") ? { icon: config.icon } : {},
 						enabled: config.enabled !== false,
 						options: group.options.filter((option) => this.canManage || !standard.get(key)?.options || standard.get(key).options.includes(option.key)).map((option) => ({
 							...option,
@@ -19331,7 +19457,8 @@ var _sfc_main$49 = {
 					return {
 						...this.original.groups?.find((group) => group.key === row.key) || {},
 						key: row.key,
-						enabled: row.enabled
+						enabled: row.enabled,
+						...Object.hasOwn(row, "icon") ? { icon: row.icon } : {}
 					};
 				}).concat((this.original.groups || []).filter((row) => !known.has(row.key))),
 				defaultSelections: structuredClone(toRaw(this.selected))
@@ -19646,120 +19773,6 @@ function groupHeader(title, width) {
 		fontRole: "bodyLarge",
 		weight: 600
 	})] };
-}
-//#endregion
-//#region ../src/tactic_stream/shared_ui/features/search/header.ui.mjs
-function quickBudget(model, width) {
-	if (model.compact || model.quick === false || width < 1e3) return 0;
-	const actions = [
-		model.panels,
-		true,
-		model.tags,
-		model.shelf
-	].filter((visible) => visible !== false).length;
-	const left = (model.reserveGrip === false ? spacing$1.compact : 38) + 44;
-	return Math.max(0, width - left - actions * 44 - 54 - Math.max(360, Math.min(640, width * .42)));
-}
-function quickLabel(group, language) {
-	return (group.source === "task" ? translate({
-		status: "Status",
-		assigned: "Assignee",
-		process: "Process"
-	}[group.key] || group.title, language) : group.title) + (group.count ? " · " + group.count : "");
-}
-function quickStrip(groups, budget, language) {
-	const nodes = [];
-	const icons = {
-		process: "process",
-		status: "status",
-		assigned: "user",
-		duration: "clock",
-		pipeline_code: "process"
-	};
-	let left = 0;
-	for (const group of groups.slice(0, 3)) {
-		const width = Math.max(128, Math.ceil(group.textWidth) + 76);
-		if (left + width + spacing$1.tight > budget) break;
-		const id = "searchQuickGroup_" + group.key, key = group.key.startsWith("column:") ? group.key.slice(7) : group.key, icon = Object.prototype.hasOwnProperty.call(icons, key) ? icons[key] : "filter";
-		nodes.push(node("Action", id, rect$1(left, 0, width, 38), {
-			text: quickLabel(group, language),
-			role: "button",
-			normalColor: "surfaceContainerLow",
-			radiusRole: "fieldRadius",
-			enabled: !group.disabled,
-			action: {
-				type: "quickGroup",
-				key: group.key
-			},
-			children: [
-				node("Box", id + "Border", rect$1(0, 0, width, 38), {
-					border: "outlineVariant",
-					radiusRole: "fieldRadius"
-				}),
-				node("Icon", id + "Icon", rect$1(12, 11, 16, 16), {
-					icon,
-					color: group.disabled ? "disabledText" : group.count ? "action" : "secondaryText"
-				}),
-				label(id + "Label", rect$1(38, 0, width - 76, 38), quickLabel(group, language), {
-					weight: 400,
-					color: group.disabled ? "disabledText" : "primaryText"
-				}),
-				node("Icon", id + "Indicator", rect$1(width - 28, 11, 16, 16), {
-					icon: "expand-more",
-					color: group.disabled ? "disabledText" : "secondaryText"
-				})
-			]
-		}));
-		left += width + spacing$1.tight;
-	}
-	return {
-		nodes,
-		width: left + 38,
-		contentHeight: 38
-	};
-}
-function describe$12(model, width, language) {
-	const text = (key) => translate(key, language), compact = !!model.compact, nodes = [];
-	let right = width - spacing$1.compact;
-	const view = (id, name, show, extent = 38) => {
-		if (show) right -= extent;
-		nodes.push(node("View", id, rect$1(right, 5, extent, 38), {
-			view: name,
-			visible: show
-		}));
-		if (show) right -= spacing$1.tight;
-	};
-	view("searchHeaderPanels", "panels", model.panels !== false);
-	if (!compact) right -= 38;
-	nodes.push(button("searchWorkspaceHelpButton", rect$1(right, 5, 38, 38), text("Search help"), "help", { type: "help" }, true, {
-		iconOnly: true,
-		round: true,
-		visible: !compact
-	}));
-	if (!compact) right -= spacing$1.tight;
-	view("searchHeaderTags", "tags", !compact && model.tags !== false);
-	right -= !compact && model.shelf !== false ? 38 : 0;
-	nodes.push(button("scriptShelfButton", rect$1(right, 5, 38, 38), text("Script shelf"), "code", { type: "shelf" }, true, {
-		iconOnly: true,
-		visible: !compact && model.shelf !== false,
-		iconAction: true,
-		round: true,
-		iconColor: model.shelfOpen ? "action" : "secondaryText"
-	}));
-	if (!compact && model.shelf !== false) right -= spacing$1.tight;
-	view("searchHeaderQuick", "quick", model.quick !== false && (!compact || !model.collapseSearch), compact ? 38 : model.quickWidth || 38);
-	const refreshLeft = model.reserveGrip === false ? spacing$1.compact : 38;
-	const left = refreshLeft + 38 + spacing$1.tight;
-	nodes.push(node("View", "searchHeaderField", rect$1(left, 5, right - left - spacing$1.compact, 38), {
-		view: "field",
-		visible: !compact || !model.collapseSearch || !!model.searchOpen
-	}));
-	nodes.push(button("searchRefreshButton", rect$1(refreshLeft, 5, 38, 38), text("Refresh"), "refresh", { type: "refresh" }, !model.busy, {
-		iconOnly: true,
-		round: true,
-		visible: !compact || !model.collapseSearch || !!model.searchOpen
-	}));
-	return { nodes };
 }
 //#endregion
 //#region ../src/tactic_stream/shared_ui/controls/forms/people.ui.mjs
@@ -20164,6 +20177,8 @@ var _sfc_main$46 = {
 				}))].filter((option) => allowed(option.key));
 				return [{
 					...group,
+					...Object.hasOwn(base, "icon") ? { icon: base.icon } : {},
+					...Object.hasOwn(local, "icon") ? { icon: local.icon } : {},
 					options,
 					values
 				}];
@@ -22998,7 +23013,7 @@ var _sfc_main$40 = {
 				quickWidth.value = value;
 			}
 		} : {})) }]));
-		const scene = computed(() => describe$12({
+		const scene = computed(() => describe$16({
 			...props.model,
 			reserveGrip: false,
 			quickWidth: quickWidth.value
