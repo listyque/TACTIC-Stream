@@ -195,7 +195,7 @@ defineExpose({
 <style>
 @font-face {
   font-family: 'Noto Color Emoji';
-  src: url('/assets/NotoColorEmoji_WindowsCompatible.ttf') format('truetype');
+  src: url('/assets/NotoColorEmoji.ttf') format('truetype');
   font-display: swap;
 }
 .emoji-picker .account-panel {

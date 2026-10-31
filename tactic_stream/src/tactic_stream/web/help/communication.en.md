@@ -116,7 +116,8 @@ matching journal event first, so the notification shows the same author, avatar,
 change details as the feed card.
 
 The shared emoji picker provides the complete Unicode 17 catalog with consistent Noto Color Emoji
-artwork, category navigation, and name search. On a new server, an administrator confirms one schema
+artwork, category navigation, and name search. The browser bundles the standard Noto color font
+for Firefox and Chromium; Handler retains its native Windows-compatible variant. On a new server, an administrator confirms one schema
 initialization for Messages and Knowledge Base.
 
 The confirmation lists every Search Type and column that will be added and does not delete existing

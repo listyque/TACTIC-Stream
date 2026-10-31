@@ -38,10 +38,10 @@ let css = bundle.output
   .map((asset) => asset.source)
   .join('\n');
 const emoji = await readFile(
-  root + 'frontend/public/assets/NotoColorEmoji_WindowsCompatible.ttf'
+  root + 'frontend/public/assets/NotoColorEmoji.ttf'
 );
 css = css.replaceAll(
-  '/assets/NotoColorEmoji_WindowsCompatible.ttf',
+  '/assets/NotoColorEmoji.ttf',
   'data:font/ttf;base64,' + emoji.toString('base64')
 );
 const js = bundle.output
