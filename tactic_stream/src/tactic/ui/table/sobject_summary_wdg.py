@@ -32,7 +32,8 @@ def read_summary_cell(search_key):
         if not is_project:
             search.add_parent_filter(parent)
         if search_type == 'sthpw/work_hour':
-            search.add_column('SUM(straight_time)', quoted=False, as_column='total')
+            search.get_select().set_quoted_mode('none')
+            search.add_column('SUM(straight_time)', as_column='total')
             aggregate = search.get_sobject()
             value = aggregate.get_value('total') if aggregate else 0
         else:

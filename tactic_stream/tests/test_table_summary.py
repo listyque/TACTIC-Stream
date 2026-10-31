@@ -1,5 +1,9 @@
 """Original object/project summary counts, hours and expanded query scopes."""
 import unittest
+import ast
+from pathlib import Path
+from textwrap import dedent
+from unittest.mock import patch
 import test_table_services as fixtures
 from test_table_embedded_widgets import write
 from pyasm.biz import Task
@@ -9,6 +13,27 @@ from tactic.ui.table.nested_scope import read_nested_scope
 
 class TableSummary(unittest.TestCase):
     setUp = fixtures.TableServices.setUp
+
+    def test_legacy_search_signature_in_stream_and_handler_summary(self):
+        parents = self.seed()
+        source = (Path(__file__).resolve().parents[3] / 'TH/thlib/tactic_query.py').read_text(encoding='utf8')
+        node = next(node for node in ast.walk(ast.parse(source))
+                    if isinstance(node, ast.FunctionDef) and node.name == 'read_summary_cell')
+        scope = {}
+        exec(dedent(ast.get_source_segment(source, node)), scope)
+        add_column = Search.add_column
+
+        def legacy_add_column(search, column, distinct=False, table=None, as_column=None):
+            return add_column(search, column, distinct, table, as_column)
+
+        with patch.object(Search, 'add_column', legacy_add_column):
+            for read in (read_summary_cell, scope['read_summary_cell']):
+                with self.subTest(reader=read.__module__):
+                    result = read(parents[0].get_search_key())
+                    self.assertEqual(
+                        {item['label']: item['value'] for item in result['summary']},
+                        {'Tasks': '1', 'Checkins': '0', 'Notes': '1', 'Work Hours': '2.5'},
+                    )
 
     def seed(self):
         def create():

@@ -59,6 +59,24 @@ class CompoundSearchPerformance(unittest.TestCase):
         values.update(extra)
         db.execute('INSERT INTO note(%s) VALUES(%s)' % (','.join(values), ','.join('?' for _ in values)), list(values.values()))
 
+    def test_legacy_search_signature_without_native_group_counts(self):
+        with self.store.connection(write=True) as db:
+            self.note(db, 'ONE')
+            self.note(db, 'TWO', process=None)
+            self.note(db, 'RETIRED', s_status='retired')
+        add_column = Search.add_column
+
+        def legacy_add_column(search, column, distinct=False, table=None, as_column=None):
+            return add_column(search, column, distinct, table, as_column)
+
+        with patch.object(Search, 'add_column', legacy_add_column), \
+                patch.object(Search, 'get_group_counts'):
+            del Search.get_group_counts
+            result = self.query()
+        parent = next(row for row in result['sobjects_list'] if row.get('code') == 'A')
+        self.assertEqual(parent['__notes_count__'], 3)
+        self.assertEqual(parent['__notes_count_by_process__'], {'publish': 3})
+
     def test_counts_collapse_note_rows_without_losing_null_processes_or_retirement_contract(self):
         with self.store.connection(write=True) as db:
             for index in range(1000):
