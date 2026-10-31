@@ -59,7 +59,7 @@ const bodyStyle = computed(() => {
 let generation = 0,
   observer;
 let appliedFilters = {};
-async function reload(filterValues = appliedFilters) {
+async function reload(filterValues = appliedFilters, preserveInput = false) {
   const request = ++generation;
   busy.value = true;
   error.value = '';
@@ -76,7 +76,7 @@ async function reload(filterValues = appliedFilters) {
     if (request === generation) {
       appliedFilters = filterValues;
       model.value = { ...result.info, record: result.info.layoutRecord };
-      renderRevision.value++;
+      if (!preserveInput) renderRevision.value++;
     }
   } catch (failure) {
     if (request === generation) error.value = failure.message;
@@ -124,7 +124,7 @@ defineExpose({ reload, workspaceId: computed(() => props.workspaceId) });
       :style="bodyStyle"
       :layout-model="model"
       :layout-busy="busy"
-      @filter-apply="reload"
+      @filter-apply="(values) => reload(values, true)"
       :layout-width="scene.bodyBounds.width"
       :layout-height="scene.bodyBounds.height"
       :ticket="ticket"

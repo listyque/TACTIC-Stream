@@ -81,7 +81,11 @@ Items and tables reuse the normal search field and suggestion popup in both
 clients. Suggestions and execution preserve mandatory parent/project/page scope.
 Do not compose another plain-text filter for the same list; hide `search` on short
 summary tables and retain it on full lists. Enter executes the draft, while paging
-uses the last executed query. Common analytical filters remain separate conditions.
+uses the last executed query. Shared analytical filters use one page-wide house
+search with suggestions and removable conditions. Continue defining typed
+`filters` and widget `page_filters` mappings in the normal dashboard document;
+do not build a parallel row of checkboxes or Apply buttons. The client renders
+the saved definitions as search conditions and refreshes all mapped widgets.
 
 For a navigator on the left and content on the right, put `items` (weight 4) and
 `details` (weight 8) in the same row. Inside `details`, use column groups with

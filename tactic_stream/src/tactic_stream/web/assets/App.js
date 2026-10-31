@@ -1065,7 +1065,7 @@ var _sfc_main$99 = {
 		});
 		let generation = 0, observer;
 		let appliedFilters = {};
-		async function reload(filterValues = appliedFilters) {
+		async function reload(filterValues = appliedFilters, preserveInput = false) {
 			const request = ++generation;
 			busy.value = true;
 			error.value = "";
@@ -1089,7 +1089,7 @@ var _sfc_main$99 = {
 						...result.info,
 						record: result.info.layoutRecord
 					};
-					renderRevision.value++;
+					if (!preserveInput) renderRevision.value++;
 				}
 			} catch (failure) {
 				if (request === generation) error.value = failure.message;
@@ -1140,22 +1140,22 @@ var _sfc_main$99 = {
 				style: normalizeStyle(bodyStyle.value),
 				"layout-model": model.value,
 				"layout-busy": busy.value,
-				onFilterApply: reload,
+				onFilterApply: _cache[1] || (_cache[1] = (values) => reload(values, true)),
 				"layout-width": scene.value.bodyBounds.width,
 				"layout-height": scene.value.bodyBounds.height,
 				ticket: __props.ticket,
 				project: __props.project,
 				"workspace-id": __props.workspaceId,
 				active: __props.active,
-				onLoaded: _cache[1] || (_cache[1] = ($event) => emit("loaded", $event)),
+				onLoaded: _cache[2] || (_cache[2] = ($event) => emit("loaded", $event)),
 				"selected-keys": __props.selectedKeys,
 				"read-only": false,
-				onInspect: _cache[2] || (_cache[2] = ($event) => emit("inspect", $event)),
-				onSelect: _cache[3] || (_cache[3] = (...args) => emit("select", ...args)),
-				onFocus: _cache[4] || (_cache[4] = ($event) => emit("focus", $event)),
-				onOperate: _cache[5] || (_cache[5] = (...args) => emit("operate", ...args)),
-				onColumn: _cache[6] || (_cache[6] = ($event) => emit("column", $event)),
-				onClose: _cache[7] || (_cache[7] = ($event) => emit("close"))
+				onInspect: _cache[3] || (_cache[3] = ($event) => emit("inspect", $event)),
+				onSelect: _cache[4] || (_cache[4] = (...args) => emit("select", ...args)),
+				onFocus: _cache[5] || (_cache[5] = ($event) => emit("focus", $event)),
+				onOperate: _cache[6] || (_cache[6] = (...args) => emit("operate", ...args)),
+				onColumn: _cache[7] || (_cache[7] = ($event) => emit("column", $event)),
+				onClose: _cache[8] || (_cache[8] = ($event) => emit("close"))
 			}, null, 8, [
 				"style",
 				"layout-model",

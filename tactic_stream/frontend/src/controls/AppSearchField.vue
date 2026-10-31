@@ -4,6 +4,7 @@ import { nextTick, useId } from 'vue';
 import { t } from '../i18n.js';
 import AppButton from './AppButton.vue';
 import AppIcon from './AppIcon.vue';
+import { highlight } from '../../../src/tactic_stream/shared_ui/controls/forms/search.mjs';
 
 export default {
   components: { AppButton, AppIcon },
@@ -15,7 +16,9 @@ export default {
     readonly: Boolean,
     suggestions: { type: Array, default: () => [] },
     error: String,
-    boundary: Object
+    boundary: Object,
+    highlightQuery: String,
+    openInNewTab: { type: Boolean, default: true }
   },
   emits: ['update:modelValue', 'search', 'accept', 'open', 'dismiss'],
   setup() {
@@ -53,6 +56,7 @@ export default {
   },
   methods: {
     t,
+    highlight,
     focus() {
       this.$refs.input.focus();
     },
@@ -233,14 +237,21 @@ export default {
               @click="choose(index)"
               @auxclick.prevent="$event.button === 1 && choose(index, true)"
             >
-              <AppIcon name="search" /><strong>{{ record.title }}</strong
-              ><span>{{
-                record.description ? '– ' + record.description : ''
-              }}</span
-              ><small v-if="record.keyword">#{{ record.keyword }}</small>
+              <AppIcon name="search" /><strong
+                v-html="highlight(record.title, highlightQuery ?? modelValue)"
+              />
+              <span
+                v-html="
+                  highlight(
+                    record.description ? '– ' + record.description : '',
+                    highlightQuery ?? modelValue
+                  )
+                "
+              />
+              <small v-if="record.keyword">#{{ record.keyword }}</small>
             </AppButton>
           </div>
-          <div role="gridcell">
+          <div v-if="openInNewTab" role="gridcell">
             <AppButton
               icon-only
               icon="MDI_OPEN_IN_NEW"
@@ -259,6 +270,10 @@ export default {
   </div>
 </template>
 <style>
+.app-search-field .search-suggestions u {
+  color: var(--primary);
+  font-weight: 600;
+}
 .app-search-field.workspace-search {
   --search-border-width: var(--field-idle-border-width);
   background: var(--field-idle-background);

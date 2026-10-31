@@ -207,7 +207,7 @@ def dashboard_sources(
     return result
 
 
-def dashboard_layout(document, view, search_key='', *, detail_key='', filter_values=None):
+def dashboard_layout(document, view, search_key='', *, detail_key='', filter_values=None, filter_query=None):
     document = DashboardDocument.model_validate(document)
     project = Project.get()
     check_project(project.get_code())
@@ -308,7 +308,7 @@ def dashboard_layout(document, view, search_key='', *, detail_key='', filter_val
             return selected_object(block.source_key)
         return project if block.binding=='project' else context
 
-    def filters_for(block):
+    def filters_for(block, omit=''):
         result = [native_condition(item) for item in block.filters]
         columns = SearchType.get_column_info(block.search_type)
         links = block.page_filters if block.page_filters is not None else {
@@ -321,7 +321,7 @@ def dashboard_layout(document, view, search_key='', *, detail_key='', filter_val
             original = SearchType.get_column_info(item.search_type)[item.column]
             if field_kind(columns[column]) != field_kind(original):
                 raise ValueError('Mapped page filter fields must have the same data type')
-            if item.enabled:
+            if item.enabled and name != omit:
                 condition = item.model_copy(update=dict(column=column))
                 validate_filter_value(condition, columns[column])
                 result.append(native_condition(condition))
@@ -578,6 +578,89 @@ def dashboard_layout(document, view, search_key='', *, detail_key='', filter_val
                         projectScope=not in_details and not block.search_type.startswith(('sthpw/', 'config/')),filters=filters,embedded=True,initialLimit=25,
                         **{name:block.controls is None or name in block.controls for name in controls})))
         return nodes
+
+    if filter_query is not None:
+        if (not isinstance(filter_query, dict) or set(filter_query) != {'field', 'text'}
+                or not all(isinstance(value, str) for value in filter_query.values())
+                or len(filter_query['text']) > 256
+                or filter_query['field'] and filter_query['field'] not in definitions):
+            raise ValueError('Choose configured page filters')
+        import json
+        records, seen, queried = [], set(), set()
+        def suggest(blocks, depth=0):
+            if depth > 6:
+                raise ValueError('Dashboard nesting exceeds six levels')
+            for block in blocks:
+                if block.kind == 'details':
+                    continue
+                if block.children:
+                    suggest(block.children, depth + 1)
+                if block.kind not in ('metric', 'table', 'items', 'chart', 'summary'):
+                    continue
+                info = SearchType.get(block.search_type)
+                if info.get_database() not in ('sthpw', project.get_code()):
+                    raise ValueError('Dashboard Search Type belongs to another project')
+                _require_table_access(block.search_type)
+                columns = SearchType.get_column_info(block.search_type)
+                links = block.page_filters if block.page_filters is not None else {
+                    name: item.column for name, item in page_filters.items() if item.search_type == block.search_type}
+                for name, column in links.items():
+                    if filter_query['field'] and name != filter_query['field']:
+                        continue
+                    if len(records) >= 20:
+                        return
+                    conditions = filters_for(block, omit=name)
+                    identity = (block.search_type, name, column, json.dumps(conditions, sort_keys=True, default=str))
+                    if identity in queried:
+                        continue
+                    if len(queried) >= 32:
+                        return
+                    queried.add(identity)
+                    search = Search(block.search_type)
+                    search.add_op_filters(conditions)
+                    if 'project_code' in columns:
+                        search.add_filter('project_code', project.get_code())
+                    text = filter_query['text'].strip()
+                    kind = field_kind(columns[column])
+                    if text:
+                        if kind == 'number':
+                            try:
+                                number = float(text)
+                            except ValueError:
+                                continue
+                            import math
+                            if not math.isfinite(number):
+                                continue
+                            search.add_filter(column, number)
+                        elif kind == 'boolean':
+                            if text.lower() not in ('true', 'false'):
+                                continue
+                            search.add_filter(column, text.lower() == 'true')
+                        else:
+                            import re
+                            search.add_regex_filter(column, re.escape(text), op='EQI')
+                    for raw, _count in search.get_aggregates([(column, 'value')], [('count', '')], limit=20):
+                        from datetime import date
+                        from decimal import Decimal
+                        value = float(raw) if isinstance(raw, Decimal) else raw.isoformat() if isinstance(raw, date) else raw
+                        if kind == 'boolean' and value is not None:
+                            value = bool(value)
+                        if kind == 'date' and isinstance(value, str):
+                            try:
+                                from dateutil.parser import parse
+                                value = (date.fromisoformat(value) if columns[column]['data_type'].lower() == 'date'
+                                         else parse(value)).isoformat()
+                            except (ValueError, OverflowError):
+                                continue
+                        import math
+                        if isinstance(value, float) and not math.isfinite(value):
+                            continue
+                        identity = (name, str(value))
+                        if identity not in seen and len(records) < 20:
+                            seen.add(identity)
+                            records.append(dict(name=name, value=value))
+        suggest(document.blocks)
+        return dict(filterSuggestions=records)
 
     nodes=compile_blocks(document.blocks)
     if detail_key:

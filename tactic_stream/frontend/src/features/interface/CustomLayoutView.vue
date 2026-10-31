@@ -5,6 +5,7 @@ import { qtLabelTextWidth } from '../../controls/typography/textMetrics.js';
 import NestedTable from './NestedTable.vue';
 import LayoutDocument from './LayoutDocument.vue';
 import DashboardItems from './DashboardItems.vue';
+import PageFilterSearch from './PageFilterSearch.vue';
 import { appearance } from '../../appearance.js';
 import { runTableScript } from './tableScript.js';
 import { layoutUrl } from './itemLayout.js';
@@ -134,6 +135,20 @@ watch(
   { immediate: true }
 );
 const views = computed(() => ({
+  pageFilterSearch: {
+    component: PageFilterSearch,
+    props: {
+      model: props.model,
+      values: filterDraft.value,
+      ticket: props.ticket,
+      project: props.project,
+      disabled: props.editing || props.filterBusy || !props.active,
+      onApply: (values) => {
+        filterDraft.value = values;
+        emit('filter-apply', values);
+      }
+    }
+  },
   canvasOverlay: {
     component: CanvasSelection,
     props: {
@@ -374,6 +389,18 @@ function activate(action, source) {
   }
   if (action.type === 'page-filter') {
     filterDraft.value = Filters.change(filterDraft.value, action);
+    return;
+  }
+  if (action.type === 'page-filter-remove') {
+    filterDraft.value = Filters.change(filterDraft.value, {
+      name: action.name,
+      field: 'enabled',
+      value: false
+    });
+    emit(
+      'filter-apply',
+      Filters.values(props.model.layoutFilters, filterDraft.value)
+    );
     return;
   }
   if (['page-filter-apply', 'page-filter-reset'].includes(action.type)) {

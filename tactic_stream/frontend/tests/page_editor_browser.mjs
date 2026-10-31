@@ -417,7 +417,10 @@ try {
     path: process.argv[3] + '/page-editor.png',
     animations: 'disabled'
   });
-  await control('administrationCloseButton').click();
+  await page
+    .getByRole('dialog', { name: 'Administration', exact: true })
+    .getByRole('button', { name: 'Close', exact: true })
+    .click();
   await page
     .getByRole('dialog', { name: 'Administration', exact: true })
     .waitFor({ state: 'hidden' });
@@ -585,29 +588,39 @@ try {
         .getAttribute('aria-busy') === 'false'
   );
   assert.equal(writes.length, 3);
-  await control('administrationCloseButton').click();
+  await page
+    .getByRole('dialog', { name: 'Administration', exact: true })
+    .getByRole('button', { name: 'Close', exact: true })
+    .click();
   await page
     .getByRole('dialog', { name: 'Administration', exact: true })
     .waitFor({ state: 'hidden' });
-  await control('pageRuntime_filter_1_value').fill('1');
-  await control('pageRuntimeApply').click();
+  const pageSearch = page.getByRole('combobox', {
+    name: 'Search this page…',
+    exact: true
+  });
+  await pageSearch.fill('Minimum amount: 1');
+  await pageSearch.press('Enter');
   await page.locator('.workspace-page[aria-busy="false"]').waitFor();
   await page.waitForFunction(
     () =>
-      document.querySelector('[data-frame="customLayout_1_number_0"]')
-        ?.textContent === '7'
+      document
+        .querySelector('[data-frame="customLayout_1_plot"]')
+        ?.getAttribute('aria-label') === '7: 7'
   );
+  await control('customLayout_2_grid').scrollIntoViewIfNeeded();
   assert.equal(
     await control('customLayout_2_grid_cell_0_1').textContent(),
     '7'
   );
   await page.setViewportSize({ width: 1350, height: 850 });
-  assert.equal(await control('pageRuntime_filter_1_value').inputValue(), '1');
-  await control('pageRuntimeReset').click();
-  await page.waitForFunction(
-    () =>
-      document.querySelector('[data-frame="customLayout_1_number_0"]')
-        ?.textContent === '0'
+  assert.match(await control('pageRuntimeRemove_filter_1').textContent(), /1/);
+  await control('pageRuntimeRemove_filter_1').click();
+  await page.waitForFunction(() =>
+    document
+      .querySelector('[data-frame="customLayout_1_plot"]')
+      ?.getAttribute('aria-label')
+      ?.includes('0: 0')
   );
   assert.equal(writes.length, 3, 'Runtime filters never save configuration');
   await page.screenshot({

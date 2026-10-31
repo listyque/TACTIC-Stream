@@ -24,7 +24,13 @@ const table = {
 const model = {
   layoutFilters: definitions,
   layoutNodes: [
-    { kind: 'text', text: 'Instructions', region: 'header', editorPath: [0] },
+    {
+      kind: 'text',
+      text: 'Instructions',
+      height: 450,
+      region: 'header',
+      editorPath: [0]
+    },
     table,
     {
       kind: 'button',
@@ -92,24 +98,12 @@ for (const [width, height] of [
   assert.ok(
     rows.find((row) => row.id === 'customLayout_1_block').height <= body.height
   );
-  if (width === 1800) {
-    const last = rows.find((row) => row.id === 'pageRuntimeReset');
-    assert.ok(
-      last.absoluteX + last.width > width - 32,
-      'The filter row uses the available interior width, including its actions'
-    );
-  }
-  if (width === 800) {
-    assert.equal(
-      rows.find((row) => row.id === 'pageRuntime_field0_enabled').absoluteY,
-      rows.find((row) => row.id === 'pageRuntime_field1_enabled').absoluteY
-    );
-    assert.ok(
-      rows.find((row) => row.id === 'pageRuntime_field2_enabled').absoluteY >
-        rows.find((row) => row.id === 'pageRuntime_field0_enabled').absoluteY,
-      'Four filters form balanced two-by-two rows'
-    );
-  }
+  assert.equal(rows.filter((row) => row.id === 'pageRuntimeSearch').length, 1);
+  assert.equal(
+    rows.some((row) => row.kind === 'CheckBox'),
+    false
+  );
+  assert.equal(rows.find((row) => row.id === 'pageRuntimeSearch').height, 38);
   if (width === 360) {
     const scroll = rows.find((row) => row.id === 'customLayoutHeaderScroll');
     assert.ok(scroll.contentHeight > scroll.height);

@@ -7685,7 +7685,11 @@ var ru_default = {
 	"This server is not managed by TacticMonitor.": "Этот сервер запущен без TacticMonitor.",
 	"The server monitor is unavailable or outdated.": "Монитор сервера недоступен или требует обновления.",
 	"The server has not returned yet. Reconnect and check its status.": "Сервер ещё не ответил. Подключитесь заново и проверьте его состояние.",
-	"Restart TACTIC Stream? Connections and running operations may be interrupted while saved settings are applied. Unsaved changes will not be applied.": "Перезапустить ТС? Соединения и текущие операции могут прерваться при применении сохранённых настроек. Несохранённые изменения применены не будут."
+	"Restart TACTIC Stream? Connections and running operations may be interrupted while saved settings are applied. Unsaved changes will not be applied.": "Перезапустить ТС? Соединения и текущие операции могут прерваться при применении сохранённых настроек. Несохранённые изменения применены не будут.",
+	"Search this page…": "Поиск по странице…",
+	"Choose a configured page filter": "Выберите настроенный фильтр страницы",
+	"Choose a suggestion or enter Field: value": "Выберите подсказку или введите Поле: значение",
+	"Choose a value": "Выберите значение"
 };
 //#endregion
 export { en_default as n, ru_default as t };

@@ -1153,8 +1153,8 @@ var _hoisted_7$3 = {
 	class: "date-calendar-time"
 };
 var _hoisted_8$3 = { key: 0 };
-var _hoisted_9$2 = { class: "date-time-spin" };
-var _hoisted_10$1 = [
+var _hoisted_9$3 = { class: "date-time-spin" };
+var _hoisted_10$2 = [
 	"value",
 	"max",
 	"aria-label",
@@ -1405,7 +1405,7 @@ var _sfc_main$25 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 							])) : (openBlock(), createElementBlock("span", _hoisted_6$3))], 64);
 						}), 128))], 8, _hoisted_5$4),
 						__props.includeTime ? (openBlock(), createElementBlock("div", _hoisted_7$3, [createBaseVNode("span", null, toDisplayString(unref(t)("Time")), 1), (openBlock(), createElementBlock(Fragment, null, renderList(["hour", "minute"], (name) => {
-							return openBlock(), createElementBlock(Fragment, { key: name }, [name === "minute" ? (openBlock(), createElementBlock("span", _hoisted_8$3, ":")) : createCommentVNode("", true), createBaseVNode("div", _hoisted_9$2, [
+							return openBlock(), createElementBlock(Fragment, { key: name }, [name === "minute" ? (openBlock(), createElementBlock("span", _hoisted_8$3, ":")) : createCommentVNode("", true), createBaseVNode("div", _hoisted_9$3, [
 								createVNode(_sfc_main$34, {
 									label: name === "hour" ? "Decrease hours" : "Decrease minutes",
 									icon: "MDI_CHEVRON_DOWN",
@@ -1427,7 +1427,7 @@ var _sfc_main$25 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 									"aria-label": unref(t)(name === "hour" ? "Hour" : "Minute"),
 									onInput: ($event) => timeValue(name).value = $event.target.value === "" ? "" : Number($event.target.value),
 									onKeydown: ($event) => timeKey($event, name)
-								}, null, 40, _hoisted_10$1),
+								}, null, 40, _hoisted_10$2),
 								createVNode(_sfc_main$34, {
 									label: name === "hour" ? "Increase hours" : "Increase minutes",
 									icon: "MDI_CHEVRON_UP",
@@ -1580,6 +1580,23 @@ var _sfc_main$22 = {
 	}
 };
 //#endregion
+//#region ../src/tactic_stream/shared_ui/controls/forms/search.mjs
+function highlight(text, query, color = "") {
+	const escape = (value) => String(value).replace(/[&<>"']/g, (character) => ({
+		"&": "&amp;",
+		"<": "&lt;",
+		">": "&gt;",
+		"\"": "&quot;",
+		"'": "&#39;"
+	})[character]);
+	text = String(text || "");
+	query = String(query || "").trim();
+	if (!query) return escape(text);
+	const index = text.toLocaleLowerCase().indexOf(query.toLocaleLowerCase());
+	const accent = /^#[0-9a-f]{6,8}$/i.test(String(color)) ? String(color) : "";
+	return index < 0 ? escape(text) : escape(text.slice(0, index)) + (accent ? "<font color=\"" + accent + "\">" : "") + "<u>" + escape(text.slice(index, index + query.length)) + "</u>" + (accent ? "</font>" : "") + escape(text.slice(index + query.length));
+}
+//#endregion
 //#region src/controls/AppSearchField.vue
 var _sfc_main$21 = {
 	components: {
@@ -1597,7 +1614,12 @@ var _sfc_main$21 = {
 			default: () => []
 		},
 		error: String,
-		boundary: Object
+		boundary: Object,
+		highlightQuery: String,
+		openInNewTab: {
+			type: Boolean,
+			default: true
+		}
 	},
 	emits: [
 		"update:modelValue",
@@ -1644,6 +1666,7 @@ var _sfc_main$21 = {
 	},
 	methods: {
 		t,
+		highlight,
 		focus() {
 			this.$refs.input.focus();
 		},
@@ -1755,8 +1778,13 @@ var _hoisted_6$2 = {
 	role: "gridcell",
 	class: "search-suggestion-content"
 };
-var _hoisted_7$2 = { key: 0 };
-var _hoisted_8$2 = { role: "gridcell" };
+var _hoisted_7$2 = ["innerHTML"];
+var _hoisted_8$2 = ["innerHTML"];
+var _hoisted_9$2 = { key: 0 };
+var _hoisted_10$1 = {
+	key: 0,
+	role: "gridcell"
+};
 function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
 	const _component_AppIcon = resolveComponent("AppIcon");
 	const _component_AppButton = resolveComponent("AppButton");
@@ -1825,9 +1853,9 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
 			}, {
 				default: withCtx(() => [
 					createVNode(_component_AppIcon, { name: "search" }),
-					createBaseVNode("strong", null, toDisplayString(record.title), 1),
-					createBaseVNode("span", null, toDisplayString(record.description ? "– " + record.description : ""), 1),
-					record.keyword ? (openBlock(), createElementBlock("small", _hoisted_7$2, "#" + toDisplayString(record.keyword), 1)) : createCommentVNode("", true)
+					createBaseVNode("strong", { innerHTML: $options.highlight(record.title, $props.highlightQuery ?? $props.modelValue) }, null, 8, _hoisted_7$2),
+					createBaseVNode("span", { innerHTML: $options.highlight(record.description ? "– " + record.description : "", $props.highlightQuery ?? $props.modelValue) }, null, 8, _hoisted_8$2),
+					record.keyword ? (openBlock(), createElementBlock("small", _hoisted_9$2, "#" + toDisplayString(record.keyword), 1)) : createCommentVNode("", true)
 				]),
 				_: 2
 			}, 1032, [
@@ -1835,7 +1863,7 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
 				"title",
 				"onClick",
 				"onAuxclick"
-			])]), createBaseVNode("div", _hoisted_8$2, [createVNode(_component_AppButton, {
+			])]), $props.openInNewTab ? (openBlock(), createElementBlock("div", _hoisted_10$1, [createVNode(_component_AppButton, {
 				"icon-only": "",
 				icon: "MDI_OPEN_IN_NEW",
 				label: "Open result in new tab",
@@ -1847,7 +1875,7 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
 				"aria-label",
 				"disabled",
 				"onClick"
-			])])], 42, _hoisted_5$3);
+			])])) : createCommentVNode("", true)], 42, _hoisted_5$3);
 		}), 128))], 8, _hoisted_4$4))], 512)
 	], 32);
 }
@@ -2134,6 +2162,10 @@ var _sfc_main$17 = {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/core/strings.mjs
 var russian = {
+	"Search this page…": "Поиск по странице…",
+	"Choose a configured page filter": "Выберите настроенный фильтр страницы",
+	"Choose a suggestion or enter Field: value": "Выберите подсказку или введите Поле: значение",
+	"Choose a value": "Выберите значение",
 	"Backend server": "Сервер ТС",
 	"Worker processes and server restart": "Процессы и перезапуск сервера",
 	"Server processes": "Процессы сервера",

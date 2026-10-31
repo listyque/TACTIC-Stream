@@ -348,3 +348,14 @@ apply this interior once without rewriting authored page/card padding.
 Verify both boundaries in native and browser rendering.
 
 Service Button and icon-action controls default to 4 DIP corners in all themes. Frame titlebar Boxes explicitly mark their direct Button children round; native Button and AppButton honor that flag. Primary navigation/window chrome opts in, while table, search, dock and editor controls never force circular rounding. Media, avatars, static chips, status/radio/switch indicators and ripples are separate paint roles.
+
+Shared dashboard filters use the house search presenter through the `pageFilterSearch`
+port. `page.filters.mjs` owns field matching, typed submission, condition chips and
+geometry. Search/accept/removal update runtime filter values, never the document.
+The native async owner and Vue feature discard obsolete suggestion responses.
+`CustomLayoutReadCmd(filter_query={field,text})` reads bounded distinct values from
+configured widget scopes, retaining fixed filters, project and native read rules.
+It omits only the queried filter's current value; duplicate scopes share one query
+and one request performs at most 32 grouped queries/returns 20 choices.
+Suggestion labels share escaped match markup; raw data never becomes executable
+HTML. Page reloads preserve the search component instead of recreating it.
