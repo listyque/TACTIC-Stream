@@ -4,7 +4,7 @@ import { l as columnsEditor } from "./index.js";
 import { G as button, H as observeFrameSizes, J as muted, K as label, X as rect, Y as node, t as _sfc_main$1, w as translate } from "./FrameView.js";
 import { n as sections, t as captionHeight } from "./sections.ui.js";
 import { a as tabs, n as notices, o as toolbar, r as policy, t as documentEvent } from "./admin.document.js";
-import { a as displayWidgets, i as definitionWizard, r as changeDefinition } from "./ConfiguredView.js";
+import { i as displayWidgets, r as definitionWizard, t as changeDefinition } from "./RelatedObjects.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/columns/columns.state.mjs
 var initial = () => ({
 	query: "",
@@ -388,6 +388,39 @@ function editor(nodes, model, ui, bounds, language, edit, back) {
 							}
 						}
 					}
+				},
+				{
+					id: "definitionCatalogValueIcon",
+					kind: "IconChoice",
+					title: "Cell icon",
+					description: "Icon beside text values and related-table counts.",
+					field: "valueIcon",
+					props: {
+						value: Object.prototype.hasOwnProperty.call(element, "valueIcon") ? element.valueIcon : element.name === "duration" ? "clock" : "",
+						tacticCompatibleOnly: true
+					}
+				},
+				{
+					kind: "Choice",
+					id: "definitionCatalogValueStyle",
+					title: "Value appearance",
+					description: "Automatic shows Duration as a badge.",
+					field: "valueStyle",
+					options: [
+						{
+							value: "",
+							label: tr("Automatic")
+						},
+						{
+							value: "text",
+							label: tr("Text")
+						},
+						{
+							value: "badge",
+							label: tr("Badge")
+						}
+					],
+					props: { value: element.valueStyle || "" }
 				},
 				{
 					kind: "Choice",

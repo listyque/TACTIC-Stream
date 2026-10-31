@@ -2,8 +2,8 @@ import { G as withCtx, H as watch, M as openBlock, O as onBeforeUnmount, X as re
 import { s as appearance } from "./AppButton.js";
 import { A as rpc } from "./index.js";
 import { H as observeFrameSizes, t as _sfc_main$1 } from "./FrameView.js";
-import { _t as rows, gt as row, ht as loaded, mt as initial, pt as describe, vt as transition } from "./ConfiguredView.js";
 import { t as _sfc_main$2 } from "./AppDialog.js";
+import { at as row, it as loaded, nt as describe, ot as rows, rt as initial, st as transition } from "./RelatedObjects.js";
 //#region src/features/interface/TableViewsManager.vue
 var _sfc_main = {
 	__name: "TableViewsManager",

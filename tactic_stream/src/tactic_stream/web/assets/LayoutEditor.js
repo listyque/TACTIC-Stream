@@ -1,11 +1,11 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ConfiguredView.js","assets/ObjectFieldFrame.js","assets/vue.js","assets/AppButton.js","assets/locales.js","assets/icons.js","assets/AppButton.css","assets/FrameView.js","assets/FrameView.css","assets/ObjectFieldFrame.css","assets/index.js","assets/index.css","assets/textMetrics.js","assets/sections.ui.js","assets/RecordForm.js","assets/previewImage.js","assets/RecordForm.css","assets/admin.document.js","assets/file_values.js","assets/files.js","assets/files2.js","assets/admin.css","assets/CodeBlock.js","assets/metrics.js","assets/confirmation.ui.js","assets/ActionRow.js","assets/ActionRow.css","assets/AppDialog.js","assets/MarkdownText.js","assets/markdown-it.js","assets/MarkdownText.css","assets/VirtualCollection.js","assets/VirtualCollection.css","assets/Timesheet.js","assets/Timesheet.css","assets/ContentLoadingOverlay.js","assets/ContentLoadingOverlay.css","assets/ConfiguredView.css"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ConfiguredView.js","assets/ObjectFieldFrame.js","assets/vue.js","assets/AppButton.js","assets/locales.js","assets/icons.js","assets/AppButton.css","assets/FrameView.js","assets/FrameView.css","assets/ObjectFieldFrame.css","assets/index.js","assets/index.css","assets/textMetrics.js","assets/sections.ui.js","assets/RecordForm.js","assets/previewImage.js","assets/RecordForm.css","assets/admin.document.js","assets/file_values.js","assets/files.js","assets/files2.js","assets/admin.css","assets/CodeBlock.js","assets/confirmation.ui.js","assets/AppDialog.js","assets/VirtualCollection.js","assets/VirtualCollection.css","assets/Timesheet.js","assets/Timesheet.css","assets/ContentLoadingOverlay.js","assets/ContentLoadingOverlay.css","assets/RelatedObjects.js","assets/RelatedObjects.css","assets/ConfiguredView.css"])))=>i.map(i=>d[i]);
 import { C as inject, F as resolveComponent, K as withDirectives, M as openBlock, _ as createElementBlock, b as createVNode, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, s as vShow, tt as normalizeClass } from "./vue.js";
 import { o as t, s as appearance, z as _plugin_vue_export_helper_default } from "./AppButton.js";
 import { A as rpc, Lt as asyncComponent, Z as widgetConfiguration, a as __vitePreload, k as resultItems } from "./index.js";
 import { G as button, H as observeFrameSizes, J as muted, K as label, X as rect, Y as node, t as _sfc_main$2, w as translate } from "./FrameView.js";
 import { n as sections } from "./sections.ui.js";
 import { i as sectionSelector, k as workspaceAddress, n as notices, o as toolbar$1, r as policy, t as documentEvent } from "./admin.document.js";
-import { At as describe$1, Dt as visible, Et as supports, Ft as variants, It as widgets, K as _sfc_main$3, Mt as roles, Nt as serialize, Ot as actions, Pt as template, Q as spacingField, Tt as describe$2, Z as itemScene, jt as edit, kt as binding } from "./ConfiguredView.js";
+import { Ct as edit, Dt as variants, Et as template, L as itemScene, Ot as widgets, R as spacingField, St as describe$1, Tt as serialize, _t as describe$2, bt as actions, j as _sfc_main$3, vt as supports, wt as roles, xt as binding, yt as visible } from "./RelatedObjects.js";
 //#region src/features/interface/layoutXml.js
 function layoutTree(source) {
 	if (!source.trim()) throw Error("Select a SObject layout configuration");
@@ -1513,7 +1513,7 @@ var _sfc_main$1 = {
 	},
 	emits: ["element", "geometry"],
 	setup(__props, { emit: __emit }) {
-		const ResultPresentation = asyncComponent(() => __vitePreload(() => import("./ConfiguredView.js").then((n) => n.l), __vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37])));
+		const ResultPresentation = asyncComponent(() => __vitePreload(() => import("./ConfiguredView.js").then((n) => n.o), __vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33])));
 		const props = __props;
 		const emit = __emit;
 		const sampleScene = computed(() => scene(props.layout, props.sample, props.frameNode?.width || 1, props.frameNode?.height || 1, props.selectedElement, props.editing, appearance.language, window.innerWidth, location.origin));

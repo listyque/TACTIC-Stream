@@ -4,10 +4,9 @@ import { B as _sfc_main$21, D as _sfc_main$22, E as AppProgress_default, G as bu
 import { n as _sfc_main$30, r as _sfc_main$31 } from "./AppearanceControls.js";
 import { r as ImagePicker_default, t as _sfc_main$32 } from "./RecordForm.js";
 import { u as _sfc_main$33 } from "./admin.document.js";
-import { $ as _sfc_main$37, O as _sfc_main$39, W as _sfc_main$35, dt as _sfc_main$38, et as _sfc_main$40, j as _sfc_main$34, tt as _sfc_main$36 } from "./ConfiguredView.js";
-import { t as _sfc_main$41 } from "./ActionRow.js";
-import { t as _sfc_main$42 } from "./AppDialog.js";
-import { t as _sfc_main$43 } from "./ContentLoadingOverlay.js";
+import { t as _sfc_main$34 } from "./AppDialog.js";
+import { t as _sfc_main$35 } from "./ContentLoadingOverlay.js";
+import { A as _sfc_main$38, B as _sfc_main$43, Q as _sfc_main$41, V as _sfc_main$39, b as _sfc_main$37, lt as _sfc_main$36, y as _sfc_main$42, z as _sfc_main$40 } from "./RelatedObjects.js";
 import { a as visibleRows, i as row$3, n as navigate, t as listAction } from "./tree.ui.js";
 import { E as surfaces, T as filterGeometry, d as _sfc_main$44, u as QuickFilterOptions_default, w as QuickFilterChip_default } from "./App.js";
 //#region src/features/administration/ShowcaseMenu.vue
@@ -75,14 +74,14 @@ var _sfc_main$13 = {
 						"frame-composition": ""
 					}, {
 						default: withCtx(() => [(openBlock(true), createElementBlock(Fragment, null, renderList(record.children, (child) => {
-							return openBlock(), createBlock(_sfc_main$41, {
+							return openBlock(), createBlock(_sfc_main$36, {
 								key: child.command,
 								record: child,
 								onTriggered: ($event) => choose(child.command)
 							}, null, 8, ["record", "onTriggered"]);
 						}), 128))]),
 						_: 2
-					}, 1032, ["label"])) : (openBlock(), createBlock(_sfc_main$41, {
+					}, 1032, ["label"])) : (openBlock(), createBlock(_sfc_main$36, {
 						key: 1,
 						record,
 						onTriggered: ($event) => choose(record.command)
@@ -134,7 +133,7 @@ var _sfc_main$12 = {
 			if (dialog.value?.open) dialog.value.close();
 		});
 		return (_ctx, _cache) => {
-			return openBlock(), createElementBlock("div", null, [createVNode(_sfc_main$42, {
+			return openBlock(), createElementBlock("div", null, [createVNode(_sfc_main$34, {
 				ref_key: "dialog",
 				ref: dialog,
 				title: __props.frameNode.text,
@@ -1589,7 +1588,7 @@ var _sfc_main$2 = {
 				"viewport",
 				"top",
 				"disabled"
-			])) : createCommentVNode("", true)], 544)) : __props.example.kind === "status" ? (openBlock(), createBlock(_sfc_main$34, {
+			])) : createCommentVNode("", true)], 544)) : __props.example.kind === "status" ? (openBlock(), createBlock(_sfc_main$37, {
 				key: 6,
 				value: __props.value,
 				options: choices.value,
@@ -1631,7 +1630,7 @@ var _sfc_main$2 = {
 				icon: "person",
 				label: "Name",
 				value: __props.value
-			}, null, 8, ["value"])) : __props.example.kind === "emoji" ? (openBlock(), createBlock(_sfc_main$35, {
+			}, null, 8, ["value"])) : __props.example.kind === "emoji" ? (openBlock(), createBlock(_sfc_main$38, {
 				key: 11,
 				disabled: __props.disabled,
 				onSelected: change
@@ -1715,7 +1714,7 @@ var _sfc_main$2 = {
 				"show-accent-marker",
 				"emphasis",
 				"disabled"
-			])) : __props.example.kind === "loadingOverlay" ? (openBlock(), createBlock(_sfc_main$43, {
+			])) : __props.example.kind === "loadingOverlay" ? (openBlock(), createBlock(_sfc_main$35, {
 				key: 18,
 				message: "Loading…",
 				cancellable: data.value.cancellable,
@@ -1740,7 +1739,7 @@ var _sfc_main$2 = {
 			})) : __props.example.kind === "sectionLabel" ? (openBlock(), createBlock(_sfc_main$7, {
 				key: 21,
 				text: "Display"
-			})) : __props.example.kind === "infoValues" ? (openBlock(), createBlock(_sfc_main$36, {
+			})) : __props.example.kind === "infoValues" ? (openBlock(), createBlock(_sfc_main$39, {
 				key: 22,
 				items: data.value.items
 			}, null, 8, ["items"])) : __props.example.kind === "fieldFrame" ? (openBlock(), createBlock(_sfc_main$6, {
@@ -1800,17 +1799,17 @@ var _sfc_main$2 = {
 				overlay: ""
 			}, {
 				default: withCtx(() => [
-					createVNode(_sfc_main$37, {
+					createVNode(_sfc_main$40, {
 						label: "Refresh",
 						icon: "refresh",
 						onClick: _cache[14] || (_cache[14] = ($event) => activate("refresh"))
 					}),
-					createVNode(_sfc_main$37, {
+					createVNode(_sfc_main$40, {
 						label: "Enabled",
 						checked: data.value.checkable ? !!__props.value : void 0,
 						onClick: _cache[15] || (_cache[15] = ($event) => change(!__props.value))
 					}, null, 8, ["checked"]),
-					createVNode(_sfc_main$37, {
+					createVNode(_sfc_main$40, {
 						label: "Delete",
 						icon: "delete",
 						disabled: ""
@@ -1846,7 +1845,7 @@ var _sfc_main$2 = {
 				key: 30,
 				accepted: data.value.accepted,
 				prompt: data.value.accepted ? "Drop files here" : "Unsupported file type"
-			}, null, 8, ["accepted", "prompt"])) : __props.example.kind === "markdown" ? (openBlock(), createBlock(_sfc_main$38, {
+			}, null, 8, ["accepted", "prompt"])) : __props.example.kind === "markdown" ? (openBlock(), createBlock(_sfc_main$41, {
 				key: 31,
 				"document-key": "example",
 				text: __props.value,
@@ -1868,7 +1867,7 @@ var _sfc_main$2 = {
 					"onUpdate:modelValue": change
 				}, null, 8, ["model-value", "disabled"])]),
 				_: 1
-			})) : __props.example.kind === "flow" ? (openBlock(), createBlock(_sfc_main$39, {
+			})) : __props.example.kind === "flow" ? (openBlock(), createBlock(_sfc_main$42, {
 				key: 34,
 				"minimum-cell-width": 120
 			}, {
@@ -1899,7 +1898,7 @@ var _sfc_main$2 = {
 				"badge-count",
 				"style",
 				"disabled"
-			])) : __props.example.kind === "disclosure" ? (openBlock(), createBlock(_sfc_main$40, {
+			])) : __props.example.kind === "disclosure" ? (openBlock(), createBlock(_sfc_main$43, {
 				key: 36,
 				expanded: __props.value,
 				identity: "sample",

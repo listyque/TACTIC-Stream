@@ -2,9 +2,8 @@ import { C as inject, E as nextTick, G as withCtx, H as watch, J as markRaw, M a
 import { D as spacing, a as _sfc_main$2, o as t, s as appearance, t as _sfc_main$3, y as cssRoles } from "./AppButton.js";
 import { A as rpc, It as randomUuid, ut as notify } from "./index.js";
 import { G as button, H as observeFrameSizes, J as muted, K as label, P as _sfc_main$4, X as rect, Y as node, t as _sfc_main$5, w as translate } from "./FrameView.js";
-import { $ as _sfc_main$6 } from "./ConfiguredView.js";
-import { t as _sfc_main$7 } from "./AppDialog.js";
-import { t as _sfc_main$8 } from "./MarkdownText.js";
+import { t as _sfc_main$6 } from "./AppDialog.js";
+import { $ as _sfc_main$8, z as _sfc_main$7 } from "./RelatedObjects.js";
 import { t as listAction } from "./tree.ui.js";
 import { g as describe$3 } from "./App.js";
 import { n as current, r as status$1, t as controls } from "./executor.ui.js";
@@ -938,7 +937,7 @@ var _sfc_main$1 = {
 				disabled: !__props.frameNode.enabled
 			}, {
 				default: withCtx(() => [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.frameNode.actions, (action, index) => {
-					return openBlock(), createElementBlock(Fragment, { key: index }, [action.separator ? (openBlock(), createElementBlock("hr", _hoisted_1$1)) : (openBlock(), createBlock(_sfc_main$6, {
+					return openBlock(), createElementBlock(Fragment, { key: index }, [action.separator ? (openBlock(), createElementBlock("hr", _hoisted_1$1)) : (openBlock(), createBlock(_sfc_main$7, {
 						key: 1,
 						label: action.title,
 						icon: action.icon,
@@ -1639,7 +1638,7 @@ var _sfc_main = {
 			}
 		});
 		return (_ctx, _cache) => {
-			return openBlock(), createBlock(Teleport, { to: "body" }, [createVNode(_sfc_main$7, {
+			return openBlock(), createBlock(Teleport, { to: "body" }, [createVNode(_sfc_main$6, {
 				ref_key: "dialog",
 				ref: dialog,
 				title: "External agent",

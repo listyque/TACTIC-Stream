@@ -2185,6 +2185,13 @@ var _sfc_main$17 = {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/core/strings.mjs
 var russian = {
+	"Cell icon": "Иконка значения",
+	"Icon beside text values and related-table counts.": "Иконка рядом с текстом и количеством связанных объектов.",
+	"Value appearance": "Оформление значения",
+	"Automatic shows Duration as a badge.": "Автоматически: Duration отображается баджем.",
+	Badge: "Бадж",
+	"Invalid value appearance": "Неверное оформление значения",
+	"Invalid icon name": "Неверное имя иконки",
 	"Search this page…": "Поиск по странице…",
 	"Choose a configured page filter": "Выберите настроенный фильтр страницы",
 	"Choose a suggestion or enter Field: value": "Выберите подсказку или введите Поле: значение",

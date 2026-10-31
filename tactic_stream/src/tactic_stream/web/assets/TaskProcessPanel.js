@@ -1,7 +1,7 @@
 import { A as onMounted, G as withCtx, J as markRaw, M as openBlock, N as renderList, O as onBeforeUnmount, S as h, X as ref, _ as createElementBlock, b as createVNode, et as unref, g as createCommentVNode, h as createBlock, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment } from "./vue.js";
 import { o as t, s as appearance, t as _sfc_main$2 } from "./AppButton.js";
 import { G as button, H as observeFrameSizes, K as label, P as _sfc_main$5, V as frameContentWidth, X as rect, Y as node, b as _sfc_main$3, t as _sfc_main$4, w as translate } from "./FrameView.js";
-import { j as _sfc_main$6 } from "./ConfiguredView.js";
+import { b as _sfc_main$6 } from "./RelatedObjects.js";
 //#region ../src/tactic_stream/shared_ui/features/tasks/process.ui.mjs
 var metrics = {
 	cardHeight: 119,

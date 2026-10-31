@@ -5,7 +5,7 @@ import { B as _sfc_main$7, H as observeFrameSizes, O as ItemPreview_default, P a
 import RecordForm_default from "./RecordForm.js";
 import { c as FilePreview_default } from "./admin.document.js";
 import { a as clampRatio, c as layout, d as optionChange, l as metrics, o as fileColumns, p as toolbar, s as fileIcon, u as optionActions } from "./file_values.js";
-import { f as ObjectAction_default, yt as _sfc_main$8 } from "./ConfiguredView.js";
+import { ct as _sfc_main$8, o as ObjectAction_default } from "./RelatedObjects.js";
 //#region src/features/objects/SnapshotToolbar.vue
 var _sfc_main$1 = {
 	__name: "SnapshotToolbar",

@@ -5,7 +5,7 @@ import { G as button, H as observeFrameSizes, J as muted, K as label, U as _sfc_
 import { n as _sfc_main$11 } from "./AppearanceControls.js";
 import RecordForm_default, { a as unsupportedField, i as fieldKind, r as ImagePicker_default } from "./RecordForm.js";
 import { _ as timestampFullLabel } from "./admin.document.js";
-import { ut as views } from "./ConfiguredView.js";
+import { Z as views } from "./RelatedObjects.js";
 import { S as pages, _ as editColumn, a as updateModes, b as confirmation, f as lifecycle, g as describe$2, h as contentWidth, i as updateIntervals, m as change, n as networkSettings, p as ProjectCreation_default, r as updateBatchDelays, v as fieldsFor, x as describe$4, y as describe$3 } from "./App.js";
 import _sfc_main$12 from "./AgentProviders.js";
 //#region src/features/configuration/FrameSettings.vue

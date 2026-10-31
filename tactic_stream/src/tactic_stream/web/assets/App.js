@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/NamingEditor.js","assets/ObjectFieldFrame.js","assets/vue.js","assets/AppButton.js","assets/locales.js","assets/icons.js","assets/AppButton.css","assets/FrameView.js","assets/FrameView.css","assets/ObjectFieldFrame.css","assets/index.js","assets/index.css","assets/sections.ui.js","assets/admin.document.js","assets/textMetrics.js","assets/file_values.js","assets/files.js","assets/files2.js","assets/admin.css","assets/MatchingTemplates.js","assets/MatchingTemplates.css","assets/TaskGanttView.js","assets/TaskGanttView.css","assets/TaskCalendarView.js","assets/TaskCalendarView.css","assets/TaskProcessPanel.js","assets/ConfiguredView.js","assets/RecordForm.js","assets/previewImage.js","assets/RecordForm.css","assets/CodeBlock.js","assets/metrics.js","assets/confirmation.ui.js","assets/ActionRow.js","assets/ActionRow.css","assets/AppDialog.js","assets/MarkdownText.js","assets/markdown-it.js","assets/MarkdownText.css","assets/VirtualCollection.js","assets/VirtualCollection.css","assets/Timesheet.js","assets/Timesheet.css","assets/ContentLoadingOverlay.js","assets/ContentLoadingOverlay.css","assets/ConfiguredView.css","assets/TaskProcessPanel.css","assets/FileWorkspaceInspection.js","assets/FileWorkspaceInspection.css","assets/DescriptionEditor.js","assets/DescriptionEditor.css","assets/SnapshotBrowser.js","assets/SnapshotBrowser.css","assets/KnowledgeBase.js","assets/KnowledgeBase.css","assets/Configuration.js","assets/AppearanceControls.js","assets/AppearanceControls.css","assets/AgentProviders.js","assets/executor.ui.js","assets/AgentProviders.css","assets/Configuration.css","assets/SearchTypes.js","assets/SchemaEditor.js","assets/graphFrame.js","assets/tree.ui.js","assets/SchemaEditor.css","assets/WorkflowEditor.js","assets/ProcessRules.js","assets/ProcessRules.css","assets/SidebarEditor.js","assets/PageLayoutEditor.js","assets/PageEditorTools.js","assets/LayoutEditor.js","assets/LayoutEditor.css","assets/ColumnsEditor.js","assets/RawDatabase.js","assets/RawDatabase.css","assets/SecurityUsers.js","assets/groups.ui.js","assets/SecurityGroups.js","assets/SecurityRules.js","assets/ComponentShowcase.js","assets/ComponentShowcase.css","assets/Plugins.js","assets/AgentRequest.js","assets/AgentRequest.css","assets/AgentMcp.js","assets/AgentMcp.css","assets/ScriptEditor.js","assets/ScriptEditor.css"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/NamingEditor.js","assets/ObjectFieldFrame.js","assets/vue.js","assets/AppButton.js","assets/locales.js","assets/icons.js","assets/AppButton.css","assets/FrameView.js","assets/FrameView.css","assets/ObjectFieldFrame.css","assets/index.js","assets/index.css","assets/sections.ui.js","assets/admin.document.js","assets/textMetrics.js","assets/file_values.js","assets/files.js","assets/files2.js","assets/admin.css","assets/MatchingTemplates.js","assets/MatchingTemplates.css","assets/TaskGanttView.js","assets/TaskGanttView.css","assets/TaskCalendarView.js","assets/TaskCalendarView.css","assets/TaskProcessPanel.js","assets/RelatedObjects.js","assets/ConfiguredView.js","assets/RecordForm.js","assets/previewImage.js","assets/RecordForm.css","assets/CodeBlock.js","assets/confirmation.ui.js","assets/AppDialog.js","assets/VirtualCollection.js","assets/VirtualCollection.css","assets/Timesheet.js","assets/Timesheet.css","assets/ContentLoadingOverlay.js","assets/ContentLoadingOverlay.css","assets/ConfiguredView.css","assets/RelatedObjects.css","assets/TaskProcessPanel.css","assets/FileWorkspaceInspection.js","assets/FileWorkspaceInspection.css","assets/DescriptionEditor.js","assets/DescriptionEditor.css","assets/SnapshotBrowser.js","assets/SnapshotBrowser.css","assets/KnowledgeBase.js","assets/KnowledgeBase.css","assets/Configuration.js","assets/AppearanceControls.js","assets/AppearanceControls.css","assets/AgentProviders.js","assets/executor.ui.js","assets/AgentProviders.css","assets/Configuration.css","assets/SearchTypes.js","assets/SchemaEditor.js","assets/graphFrame.js","assets/tree.ui.js","assets/SchemaEditor.css","assets/WorkflowEditor.js","assets/ProcessRules.js","assets/ProcessRules.css","assets/SidebarEditor.js","assets/PageLayoutEditor.js","assets/PageEditorTools.js","assets/LayoutEditor.js","assets/LayoutEditor.css","assets/ColumnsEditor.js","assets/RawDatabase.js","assets/RawDatabase.css","assets/SecurityUsers.js","assets/groups.ui.js","assets/SecurityGroups.js","assets/SecurityRules.js","assets/ComponentShowcase.js","assets/ComponentShowcase.css","assets/Plugins.js","assets/AgentRequest.js","assets/AgentRequest.css","assets/AgentMcp.js","assets/AgentMcp.css","assets/ScriptEditor.js","assets/ScriptEditor.css"])))=>i.map(i=>d[i]);
 import { r as __exportAll } from "./ObjectFieldFrame.js";
 import { $ as toRaw, A as onMounted, B as useModel, C as inject, E as nextTick, F as resolveComponent, G as withCtx, H as watch, I as resolveDirective, J as markRaw, K as withDirectives, L as resolveDynamicComponent, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, Q as shallowRef, S as h, T as mergeProps, V as useSlots, X as ref, Y as reactive, Z as shallowReactive, _ as createElementBlock, b as createVNode, c as withKeys, d as KeepAlive, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, o as vModelText, p as computed, q as isRef, rt as toDisplayString, s as vShow, t as Transition, tt as normalizeClass, u as Fragment, v as createSlots, w as mergeModels, y as createTextVNode, z as useId } from "./vue.js";
 import { C as layout$6, D as spacing$1, E as readableText, M as savePreferencePage, N as normalizeColumns, O as textStyles, P as taskColumns, R as BusyIndicator_default, S as fontMetricHeight, T as metrics$9, _ as controls$1, a as _sfc_main$104, b as fontFamily, g as blend, h as saveAppearance, j as preferences, k as configurationPreview, o as t, p as projectPalette, s as appearance, t as _sfc_main$103, u as frameColors, w as lineHeights, x as fontLineHeight, z as _plugin_vue_export_helper_default } from "./AppButton.js";
@@ -12,12 +12,12 @@ import { A as activateRichLink, C as customUrlLocation, D as savedSearchLink, M 
 import { i as sourceIcon, n as fileName, r as prettySize, t as extension } from "./file_values.js";
 import { a as sourcePath, i as repositories, n as droppedFiles, r as prepareFiles, t as descriptors } from "./files.js";
 import { t as downloadBlob } from "./files2.js";
-import { $ as _sfc_main$130, A as _sfc_main$124, B as forwarding, C as messageAttachments, Ct as tab, D as contextActions, E as retainOlderMessages, F as bubbleGeometry, G as _sfc_main$127, H as heading$1, I as emojiCount, L as formatFileSize, M as _sfc_main$134, N as bodyOrder, O as _sfc_main$132, P as bubbleContour, R as popup$2, S as mergeMessages, St as sectionWidth, T as messageId, U as revision, V as gallery, W as _sfc_main$133, _ as attachmentName, at as groups$1, b as groupedMessages, bt as dimensions$4, cn as _sfc_main$125, ct as sorts$1, dt as _sfc_main$135, f as ObjectAction_default, ft as WorkspaceSearch_default, g as _sfc_main$131, h as skeyPlaceholder, it as groupActions, j as _sfc_main$123, k as _sfc_main$126, lt as viewActions, m as NotesPanel_default, n as _sfc_main$129, nt as defaultResultView, ot as sortActions, p as ObjectOperations_default, rt as filterActions, st as sortColumn, t as ConfiguredView_default, u as RelatedObjects_default, ut as views, v as canChangeMessage, w as messageDate, wt as viewTabWidth, x as initials$1, xt as key$1, y as conversationAttachments, yt as _sfc_main$128, z as forward } from "./ConfiguredView.js";
-import { t as _sfc_main$136 } from "./CodeBlock.js";
+import { K as _sfc_main$124, _ as heading$1, b as WorkspaceSearch_default, c as ObjectOperations_default, d as _sfc_main$125, f as _sfc_main$123, g as gallery, h as forwarding, l as NotesPanel_default, m as forward, n as _sfc_main$127, p as _sfc_main$128, s as RelatedObjects_default, t as ConfiguredView_default, u as skeyPlaceholder, v as revision, y as _sfc_main$126 } from "./ConfiguredView.js";
+import { t as _sfc_main$129 } from "./CodeBlock.js";
 import { t as describe$41 } from "./confirmation.ui.js";
-import { n as row$15 } from "./ActionRow.js";
-import { t as _sfc_main$137 } from "./AppDialog.js";
+import { t as _sfc_main$130 } from "./AppDialog.js";
 import { t as Timesheet_default } from "./Timesheet.js";
+import { A as _sfc_main$136, C as bubbleGeometry, E as formatFileSize, G as groupActions, H as defaultResultView, J as sortColumn, K as groups$1, Q as _sfc_main$137, S as bubbleContour, T as emojiCount, W as filterActions, X as viewActions, Y as sorts$1, Z as views, _ as retainOlderMessages, b as _sfc_main$131, c as attachmentName, ct as _sfc_main$132, d as groupedMessages, dt as dimensions$4, f as initials$1, ft as key$1, g as messageId, h as messageDate, ht as viewTabWidth, k as popup$2, l as canChangeMessage, m as messageAttachments, mt as tab, o as ObjectAction_default, p as mergeMessages, pt as sectionWidth, q as sortActions, s as _sfc_main$134, u as conversationAttachments, ut as row$15, v as contextActions, x as bodyOrder, y as _sfc_main$135, z as _sfc_main$133 } from "./RelatedObjects.js";
 import { n as navigate, r as navigationRow } from "./tree.ui.js";
 import { t as _sfc_main$138 } from "./FrameProgress.js";
 import { t as captionedSwitch } from "./toggle.ui.js";
@@ -3766,7 +3766,7 @@ var _sfc_main$90 = {
 			}
 		});
 		return (_ctx, _cache) => {
-			return openBlock(), createBlock(Teleport, { to: "body" }, [createVNode(_sfc_main$137, {
+			return openBlock(), createBlock(Teleport, { to: "body" }, [createVNode(_sfc_main$130, {
 				ref_key: "clearDialog",
 				ref: clearDialog,
 				class: "commit-queue-clear-dialog",
@@ -3790,7 +3790,7 @@ var _sfc_main$90 = {
 				"close-on-escape",
 				"close-on-outside",
 				"style"
-			]), createVNode(_sfc_main$137, {
+			]), createVNode(_sfc_main$130, {
 				ref_key: "previewsDialog",
 				ref: previewsDialog,
 				class: "commit-queue-previews-dialog",
@@ -6017,7 +6017,7 @@ var _sfc_main$87 = {
 			return openBlock(), createElementBlock("div", {
 				class: "task-detail-value",
 				"data-task-field": __props.field.name
-			}, [__props.field.name === "status" ? (openBlock(), createBlock(_sfc_main$123, {
+			}, [__props.field.name === "status" ? (openBlock(), createBlock(_sfc_main$131, {
 				key: 0,
 				value: __props.editor.values.status || "",
 				options: __props.editor.statusChoices,
@@ -6052,7 +6052,7 @@ var _sfc_main$87 = {
 				"label",
 				"model-value",
 				"disabled"
-			])) : __props.field.name === "milestone_code" ? (openBlock(), createElementBlock("div", _hoisted_2$31, [createVNode(_sfc_main$124, {
+			])) : __props.field.name === "milestone_code" ? (openBlock(), createElementBlock("div", _hoisted_2$31, [createVNode(_sfc_main$123, {
 				field: __props.field,
 				value: __props.editor.values[__props.field.name],
 				catalog: __props.editor.catalog,
@@ -6069,7 +6069,7 @@ var _sfc_main$87 = {
 				"icon-only": "",
 				disabled: __props.busy,
 				onClick: _cache[4] || (_cache[4] = ($event) => emit("milestones"))
-			}, null, 8, ["disabled"])])) : (openBlock(), createBlock(_sfc_main$124, {
+			}, null, 8, ["disabled"])])) : (openBlock(), createBlock(_sfc_main$123, {
 				key: 4,
 				field: __props.field,
 				value: __props.editor.values[__props.field.name],
@@ -6292,7 +6292,7 @@ var _sfc_main$85 = {
 				"aria-label": unref(t)("Edit {column}", { column: unref(t)(__props.column.label) }) + ": " + __props.task.title,
 				onClick: _cache[0] || (_cache[0] = ($event) => emit("edit", $event))
 			}, {
-				default: withCtx(() => [painted.value ? (openBlock(), createBlock(_sfc_main$125, {
+				default: withCtx(() => [painted.value ? (openBlock(), createBlock(_sfc_main$124, {
 					key: 0,
 					user: __props.task[source.value + "User"],
 					model: {
@@ -7992,7 +7992,7 @@ var _sfc_main$80 = {
 			else emit(action.type);
 		}
 		const status = markRaw({ setup() {
-			return () => h(_sfc_main$123, {
+			return () => h(_sfc_main$131, {
 				value: props.form?.mixed.includes("status") && !props.form.set.includes("status") ? "" : props.form?.values.status,
 				options: props.form?.statusChoices || [],
 				placeholder: props.form?.mixed.includes("status") && !props.form.set.includes("status") ? t("Mixed status") : "",
@@ -8053,7 +8053,7 @@ var _sfc_main$80 = {
 				"close-on-select": false,
 				label: "Edit selected tasks"
 			}, {
-				default: withCtx(() => [moreEditor.value ? (openBlock(), createBlock(_sfc_main$126, {
+				default: withCtx(() => [moreEditor.value ? (openBlock(), createBlock(_sfc_main$125, {
 					key: 0,
 					role: "group",
 					"aria-label": unref(t)("Bulk fields"),
@@ -8657,7 +8657,7 @@ var _sfc_main$71 = {
 			if (task && !task.deleting) emit("enter", task);
 		}
 		return (_ctx, _cache) => {
-			return openBlock(), createBlock(_sfc_main$127, {
+			return openBlock(), createBlock(_sfc_main$126, {
 				class: "mobile-tasks",
 				"aria-label": unref(t)("Project tasks"),
 				"screen-key": __props.task?.key || "root",
@@ -8697,7 +8697,7 @@ var _sfc_main$71 = {
 						onClick: _cache[1] || (_cache[1] = ($event) => actions(__props.task, $event))
 					}, null, 8, ["disabled"])
 				])) : createCommentVNode("", true)]),
-				default: withCtx(() => [__props.task ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [__props.busy ? (openBlock(), createElementBlock("p", _hoisted_3$21, toDisplayString(unref(t)("Loading data…")), 1)) : createCommentVNode("", true), __props.task.deleting ? (openBlock(), createElementBlock("p", _hoisted_4$14, toDisplayString(unref(t)("Pending task changes")), 1)) : __props.editor ? (openBlock(), createBlock(_sfc_main$126, {
+				default: withCtx(() => [__props.task ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [__props.busy ? (openBlock(), createElementBlock("p", _hoisted_3$21, toDisplayString(unref(t)("Loading data…")), 1)) : createCommentVNode("", true), __props.task.deleting ? (openBlock(), createElementBlock("p", _hoisted_4$14, toDisplayString(unref(t)("Pending task changes")), 1)) : __props.editor ? (openBlock(), createBlock(_sfc_main$125, {
 					key: 2,
 					immediate: "",
 					editor: __props.editor,
@@ -9345,7 +9345,7 @@ var _sfc_main$67 = {
 //#region src/features/tasks/TaskManager.vue
 var TaskGanttView = asyncComponent(() => __vitePreload(() => import("./TaskGanttView.js"), __vite__mapDeps([21,2,3,4,5,6,7,8,22])));
 var TaskCalendarView = asyncComponent(() => __vitePreload(() => import("./TaskCalendarView.js"), __vite__mapDeps([23,2,3,4,5,6,7,8,24])));
-var TaskProcessPanel = asyncComponent(() => __vitePreload(() => import("./TaskProcessPanel.js"), __vite__mapDeps([25,2,3,4,5,6,7,8,26,1,9,10,11,14,12,27,28,29,13,15,16,17,18,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46])));
+var TaskProcessPanel = asyncComponent(() => __vitePreload(() => import("./TaskProcessPanel.js"), __vite__mapDeps([25,2,3,4,5,6,7,8,26,1,9,10,11,14,13,15,16,17,18,27,12,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42])));
 var readCommand = "tactic.ui.table.task_workspace.TaskWorkspaceCmd";
 var editCommand = "tactic.ui.table.task_workspace_edits.TaskWorkspaceEditCmd";
 var scheduleCommand = "tactic.ui.table.task_schedule.TaskScheduleCmd";
@@ -9414,7 +9414,7 @@ var _sfc_main$66 = {
 		TaskWorkspaceFooter: _sfc_main$75,
 		AppDateField: _sfc_main$112,
 		AppButton: _sfc_main$103,
-		ActionRows: _sfc_main$128,
+		ActionRows: _sfc_main$132,
 		AppCheckbox: _sfc_main$113,
 		AppMenu: _sfc_main$107,
 		AppSegmentedButton: _sfc_main$114,
@@ -9422,8 +9422,8 @@ var _sfc_main$66 = {
 		Timesheet: Timesheet_default,
 		TaskWorkspaceTable: _sfc_main$82,
 		MobileTasks: _sfc_main$71,
-		TaskWorkspaceEditor: _sfc_main$126,
-		TaskTableEditor: _sfc_main$129,
+		TaskWorkspaceEditor: _sfc_main$125,
+		TaskTableEditor: _sfc_main$127,
 		TaskWorkspaceFilters: _sfc_main$69,
 		TaskWorkspaceScope: _sfc_main$68,
 		TaskGanttView,
@@ -12802,7 +12802,7 @@ var _sfc_main$64 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 					popup.value.hidePopover();
 					revealed.value = null;
 				}, ["esc"]))]
-			}, [revealed.value && actions.value ? (openBlock(), createBlock(_sfc_main$128, {
+			}, [revealed.value && actions.value ? (openBlock(), createBlock(_sfc_main$132, {
 				key: 0,
 				actions: actions$1(__props.tabs.findIndex((tab) => tab.id === revealed.value.id), __props.tabs.length, revealed.value.title),
 				onTriggered: _cache[3] || (_cache[3] = (command) => command === "close" ? close(revealed.value.id) : reorder(command === "up" ? -1 : 1))
@@ -13620,7 +13620,7 @@ var _sfc_main$62 = {
 							role: "menu",
 							"aria-label": unref(t)("Open search tabs")
 						}, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.tabs, (tab, index) => {
-							return openBlock(), createBlock(_sfc_main$130, {
+							return openBlock(), createBlock(_sfc_main$133, {
 								key: tab.id,
 								label: tab.title,
 								icon: "tab",
@@ -13667,7 +13667,7 @@ var _sfc_main$62 = {
 							_cache[20] || (_cache[20] = createBaseVNode("hr", null, null, -1)),
 							createBaseVNode("strong", null, toDisplayString(unref(t)("Closed search tabs")), 1),
 							(openBlock(true), createElementBlock(Fragment, null, renderList(__props.closedTabs, (tab) => {
-								return openBlock(), createBlock(_sfc_main$130, {
+								return openBlock(), createBlock(_sfc_main$133, {
 									key: tab.id,
 									label: tab.title,
 									icon: "history",
@@ -13724,7 +13724,7 @@ var _sfc_main$62 = {
 							role: "menu",
 							"aria-label": unref(t)("Closed search tabs")
 						}, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.closedTabs, (tab) => {
-							return openBlock(), createBlock(_sfc_main$130, {
+							return openBlock(), createBlock(_sfc_main$133, {
 								key: tab.id,
 								label: tab.title,
 								icon: "history",
@@ -16888,7 +16888,7 @@ var _sfc_main$56 = {
 				anchor: anchor.value,
 				width: 300
 			}, {
-				default: withCtx(() => [createVNode(_sfc_main$128, {
+				default: withCtx(() => [createVNode(_sfc_main$132, {
 					actions: actions$4.value,
 					onTriggered: _cache[0] || (_cache[0] = (type) => emit("event", { type }))
 				}, null, 8, ["actions"])]),
@@ -18030,7 +18030,7 @@ var _sfc_main$52 = {
 				onToggle: opened
 			}, {
 				trigger: withCtx(() => [createVNode(_sfc_main$104, { name: __props.icon }, null, 8, ["name"]), !__props.iconOnly ? (openBlock(), createElementBlock("span", _hoisted_1$31, toDisplayString(unref(t)(__props.label)), 1)) : createCommentVNode("", true)]),
-				default: withCtx(() => [createVNode(_sfc_main$128, {
+				default: withCtx(() => [createVNode(_sfc_main$132, {
 					actions: actions.value,
 					onTriggered: choose
 				}, null, 8, ["actions"])]),
@@ -21890,23 +21890,23 @@ var _sfc_main$43 = {
 					overlay: ""
 				}, {
 					default: withCtx(() => [
-						createVNode(_sfc_main$130, {
+						createVNode(_sfc_main$133, {
 							label: "Help for this dock",
 							icon: "help",
 							onClick: _cache[1] || (_cache[1] = ($event) => emit("help", "dock." + contextPanel.value))
 						}),
 						_cache[24] || (_cache[24] = createBaseVNode("hr", null, null, -1)),
-						createVNode(_sfc_main$130, {
+						createVNode(_sfc_main$133, {
 							label: state.value.panels[contextPanel.value].floating ? "Dock to workspace" : "Float panel",
 							icon: "MDI_DOCK_WINDOW",
 							onClick: _cache[2] || (_cache[2] = ($event) => state.value.panels[contextPanel.value].floating ? dock(contextPanel.value) : float(contextPanel.value))
 						}, null, 8, ["label"]),
-						createVNode(_sfc_main$130, {
+						createVNode(_sfc_main$133, {
 							label: maximized.value === contextPanel.value ? "Restore panel" : "Maximize panel",
 							icon: "MDI_FIT_TO_SCREEN",
 							onClick: _cache[3] || (_cache[3] = ($event) => maximize(contextPanel.value))
 						}, null, 8, ["label"]),
-						contextPanel.value !== "results" ? (openBlock(), createBlock(_sfc_main$130, {
+						contextPanel.value !== "results" ? (openBlock(), createBlock(_sfc_main$133, {
 							key: 0,
 							label: "Close dock",
 							icon: "close",
@@ -21942,25 +21942,25 @@ var _sfc_main$43 = {
 								createVNode(_sfc_main$104, { name: "chevron-right" })
 							]),
 							default: withCtx(() => [
-								createVNode(_sfc_main$130, {
+								createVNode(_sfc_main$133, {
 									label: "Results",
 									icon: "view-kanban",
 									checked: state.value.panels.results.visible,
 									disabled: ""
 								}, null, 8, ["checked"]),
-								createVNode(_sfc_main$130, {
+								createVNode(_sfc_main$133, {
 									label: "Snapshot Browser",
 									icon: "movie",
 									checked: state.value.panels.snapshot.visible,
 									onClick: _cache[5] || (_cache[5] = ($event) => toggle("snapshot"))
 								}, null, 8, ["checked"]),
-								createVNode(_sfc_main$130, {
+								createVNode(_sfc_main$133, {
 									label: "Description",
 									icon: "description",
 									checked: state.value.panels.description.visible,
 									onClick: _cache[6] || (_cache[6] = ($event) => toggle("description"))
 								}, null, 8, ["checked"]),
-								createVNode(_sfc_main$130, {
+								createVNode(_sfc_main$133, {
 									label: "Knowledge Base",
 									icon: "book-open",
 									checked: state.value.panels.knowledge.visible,
@@ -21984,20 +21984,20 @@ var _sfc_main$43 = {
 								createVNode(_sfc_main$104, { name: "chevron-right" })
 							]),
 							default: withCtx(() => [
-								__props.canAdminister ? (openBlock(), createBlock(_sfc_main$130, {
+								__props.canAdminister ? (openBlock(), createBlock(_sfc_main$133, {
 									key: 0,
 									label: "Task Manager",
 									icon: "task-alt",
 									checked: state.value.panels.tasks.visible,
 									onClick: _cache[8] || (_cache[8] = ($event) => toggle("tasks"))
 								}, null, 8, ["checked"])) : createCommentVNode("", true),
-								createVNode(_sfc_main$130, {
+								createVNode(_sfc_main$133, {
 									label: "Task Inspector",
 									icon: "comment",
 									checked: state.value.panels.notes.visible,
 									onClick: _cache[9] || (_cache[9] = ($event) => toggle("notes"))
 								}, null, 8, ["checked"]),
-								__props.canAdminister ? (openBlock(), createBlock(_sfc_main$130, {
+								__props.canAdminister ? (openBlock(), createBlock(_sfc_main$133, {
 									key: 1,
 									label: "Task Calendar",
 									icon: "calendar-month",
@@ -22022,25 +22022,25 @@ var _sfc_main$43 = {
 								createVNode(_sfc_main$104, { name: "chevron-right" })
 							]),
 							default: withCtx(() => [
-								createVNode(_sfc_main$130, {
+								createVNode(_sfc_main$133, {
 									label: "Drop Plate",
 									icon: "publish",
 									checked: state.value.panels.drop_plate.visible,
 									onClick: _cache[11] || (_cache[11] = ($event) => toggle("drop_plate"))
 								}, null, 8, ["checked"]),
-								createVNode(_sfc_main$130, {
+								createVNode(_sfc_main$133, {
 									label: "Commit Queue",
 									icon: "publish",
 									checked: state.value.panels.commit_queue.visible,
 									onClick: _cache[12] || (_cache[12] = ($event) => toggle("commit_queue"))
 								}, null, 8, ["checked"]),
 								_cache[25] || (_cache[25] = createBaseVNode("hr", null, null, -1)),
-								createVNode(_sfc_main$130, {
+								createVNode(_sfc_main$133, {
 									label: state.value.panels.results.floating ? "Dock results" : "Float results",
 									icon: "MDI_DOCK_WINDOW",
 									onClick: _cache[13] || (_cache[13] = ($event) => state.value.panels.results.floating ? dock("results") : float("results"))
 								}, null, 8, ["label"]),
-								createVNode(_sfc_main$130, {
+								createVNode(_sfc_main$133, {
 									label: maximized.value === "results" ? "Restore panel" : "Maximize panel",
 									icon: "MDI_FIT_TO_SCREEN",
 									onClick: _cache[14] || (_cache[14] = ($event) => maximize("results"))
@@ -22713,7 +22713,7 @@ var _sfc_main$41 = {
 					scene: pickerScene.value,
 					style: { "height": "80px" },
 					onEvent: pageEvent
-				}, null, 8, ["scene"])) : (openBlock(), createBlock(_sfc_main$128, {
+				}, null, 8, ["scene"])) : (openBlock(), createBlock(_sfc_main$132, {
 					key: 1,
 					actions: actions.value,
 					onTriggered: choose
@@ -22969,7 +22969,7 @@ var ErrorDetails_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 			canConfigure: false
 		}));
 		const scene = computed(() => describe$9(model.value, viewport.value.width, viewport.value.height, appearance.language));
-		const codeComponent = markRaw(_sfc_main$136);
+		const codeComponent = markRaw(_sfc_main$129);
 		const views = computed(() => ({ requests: {
 			component: codeComponent,
 			props: {
@@ -24513,7 +24513,7 @@ var _sfc_main$36 = {
 		}
 		__expose({ open });
 		return (_ctx, _cache) => {
-			return openBlock(), createBlock(_sfc_main$137, {
+			return openBlock(), createBlock(_sfc_main$130, {
 				ref_key: "dialog",
 				ref: dialog,
 				title: "System Info",
@@ -26834,7 +26834,7 @@ var _sfc_main$26 = {
 			}, [createVNode(_sfc_main$105, {
 				scene: scene.value,
 				onEvent: action
-			}, null, 8, ["scene"]), createVNode(_sfc_main$137, {
+			}, null, 8, ["scene"]), createVNode(_sfc_main$130, {
 				ref_key: "dialog",
 				ref: dialog,
 				title: "Initialize server features?",
@@ -27737,7 +27737,7 @@ var _sfc_main$20 = {
 						forwarded: true,
 						onActivate: () => emit("action", "original", props.row.__forwarded_from__)
 					});
-					else if (part === "previews") content = h("div", { class: "message-skey-previews" }, keys.value.map((key) => h(_sfc_main$131, {
+					else if (part === "previews") content = h("div", { class: "message-skey-previews" }, keys.value.map((key) => h(_sfc_main$134, {
 						key,
 						preview: props.previews?.[key] || skeyPlaceholder(key),
 						previews: props.previews,
@@ -27746,7 +27746,7 @@ var _sfc_main$20 = {
 						onRetry: (value) => emit("preview-retry", value),
 						onCopy: (value) => emit("copy-link", value)
 					})));
-					else if (part === "attachments") content = h(_sfc_main$132, {
+					else if (part === "attachments") content = h(_sfc_main$135, {
 						minimumCellWidth: metrics$2.minimumCellWidth,
 						preferredCellWidth: metrics$2.preferredCellWidth,
 						maximumColumns: metrics$2.maximumColumns
@@ -28013,7 +28013,7 @@ var _sfc_main$19 = {
 					overlay: ""
 				}, {
 					default: withCtx(() => [
-						unref(mobile) && __props.permissions.reaction ? (openBlock(), createBlock(_sfc_main$133, {
+						unref(mobile) && __props.permissions.reaction ? (openBlock(), createBlock(_sfc_main$136, {
 							key: 0,
 							"text-trigger": "",
 							label: "Add reaction",
@@ -28077,7 +28077,7 @@ var _sfc_main$19 = {
 						}, null, 8, ["disabled"])
 					]),
 					_: 1
-				}, 8, ["anchor"]), createVNode(_sfc_main$133, {
+				}, 8, ["anchor"]), createVNode(_sfc_main$136, {
 					ref_key: "reactionPicker",
 					ref: reactionPicker,
 					"external-trigger": "",
@@ -30397,7 +30397,7 @@ var _sfc_main$10 = {
 								"busy",
 								"upload"
 							]),
-							createVNode(_sfc_main$134, {
+							createVNode(_sfc_main$128, {
 								ref_key: "composer",
 								ref: composer,
 								modelValue: draft.value,
@@ -31081,7 +31081,7 @@ var ConnectionMenu_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 					}, null, 8, ["style"]),
 					createBaseVNode("span", _hoisted_1$6, toDisplayString(unref(t)(busy.value ? "Connecting" : __props.online ? "Connected" : "Offline")), 1)
 				]),
-				default: withCtx(() => [createVNode(_sfc_main$128, {
+				default: withCtx(() => [createVNode(_sfc_main$132, {
 					actions: actions.value,
 					onTriggered: invoke
 				}, null, 8, ["actions"]), error.value || __props.updatesError ? (openBlock(), createElementBlock("p", _hoisted_2$4, toDisplayString(unref(t)(error.value || __props.updatesError)), 1)) : message.value ? (openBlock(), createElementBlock("p", _hoisted_3$2, toDisplayString(unref(t)(message.value)), 1)) : createCommentVNode("", true)]),
@@ -32278,7 +32278,7 @@ var _sfc_main$1 = {
 			topicsVisible: topicsVisible.value
 		}, data.value, viewport.value.width, viewport.value.height, appearance.language));
 		const models = computed(() => ({ helpTopics: scene.value.topicRows }));
-		const documentComponent = markRaw(_sfc_main$135);
+		const documentComponent = markRaw(_sfc_main$137);
 		const busyComponent = markRaw(BusyIndicator_default);
 		const captureDocument = (value) => {
 			documentView.value = value;
@@ -32462,24 +32462,24 @@ var _sfc_main$1 = {
 //#endregion
 //#region src/App.vue
 var App_exports = /* @__PURE__ */ __exportAll({ default: () => App_default });
-var FileWorkspace = asyncComponent(() => __vitePreload(() => import("./FileWorkspaceInspection.js"), __vite__mapDeps([47,2,3,4,5,6,10,11,7,8,12,15,16,26,1,9,14,27,28,29,13,17,18,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,48])));
-var DescriptionEditor = asyncComponent(() => __vitePreload(() => import("./DescriptionEditor.js"), __vite__mapDeps([49,2,3,4,5,6,10,11,13,7,8,14,15,16,17,18,50])));
-var SnapshotBrowser = asyncComponent(() => __vitePreload(() => import("./SnapshotBrowser.js"), __vite__mapDeps([51,2,3,4,5,6,10,11,7,8,27,1,9,28,14,12,29,13,15,16,17,18,26,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,52])));
-var KnowledgeBase = asyncComponent(() => __vitePreload(() => import("./KnowledgeBase.js"), __vite__mapDeps([53,2,3,4,5,6,10,11,7,8,13,14,15,16,17,18,26,1,9,12,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,54])));
-var Configuration = asyncComponent(() => __vitePreload(() => import("./Configuration.js"), __vite__mapDeps([55,2,3,4,5,6,10,11,7,8,56,57,27,1,9,28,14,12,29,13,15,16,17,18,26,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,58,59,60,61])));
-var SearchTypes = asyncComponent(() => __vitePreload(() => import("./SearchTypes.js"), __vite__mapDeps([62,2,3,4,5,6,10,11,7,8,28,12,13,14,15,16,17,18,0,1,9])));
-var SchemaEditor = asyncComponent(() => __vitePreload(() => import("./SchemaEditor.js"), __vite__mapDeps([63,2,3,4,5,6,10,11,7,8,13,14,15,16,17,18,62,28,12,0,1,9,64,65,66])));
-var WorkflowEditor = asyncComponent(() => __vitePreload(() => import("./WorkflowEditor.js"), __vite__mapDeps([67,2,3,4,5,6,10,11,7,8,68,12,13,14,15,16,17,18,69,64,65])));
-var SidebarEditor = asyncComponent(() => __vitePreload(() => import("./SidebarEditor.js"), __vite__mapDeps([70,2,3,4,5,6,10,11,7,8,12,13,14,15,16,17,18,65])));
-var PageLayoutEditor = asyncComponent(() => __vitePreload(() => import("./PageLayoutEditor.js"), __vite__mapDeps([71,2,3,4,5,6,10,11,7,8,12,13,14,15,16,17,18,26,1,9,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,65,72])));
-var LayoutEditor = asyncComponent(() => __vitePreload(() => import("./LayoutEditor.js"), __vite__mapDeps([73,2,3,4,5,6,10,11,7,8,12,13,14,15,16,17,18,26,1,9,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,74])));
-var ColumnsEditor = asyncComponent(() => __vitePreload(() => import("./ColumnsEditor.js"), __vite__mapDeps([75,2,3,4,5,6,10,11,7,8,12,13,14,15,16,17,18,26,1,9,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45])));
-var RawDatabase = asyncComponent(() => __vitePreload(() => import("./RawDatabase.js"), __vite__mapDeps([76,2,3,4,5,6,10,11,7,8,13,14,15,16,17,18,77])));
-var SecurityUsers = asyncComponent(() => __vitePreload(() => import("./SecurityUsers.js"), __vite__mapDeps([78,2,3,4,5,6,10,11,7,8,79])));
-var SecurityGroups = asyncComponent(() => __vitePreload(() => import("./SecurityGroups.js"), __vite__mapDeps([80,2,3,4,5,6,10,11,7,8,79])));
-var SecurityRules = asyncComponent(() => __vitePreload(() => import("./SecurityRules.js"), __vite__mapDeps([81,2,3,4,5,6,10,11,7,8,13,14,15,16,17,18])));
-var ComponentShowcase = asyncComponent(() => __vitePreload(() => import("./ComponentShowcase.js"), __vite__mapDeps([82,2,3,4,5,6,7,8,56,57,27,1,9,10,11,28,14,12,29,13,15,16,17,18,26,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,65,83])));
-var Plugins = asyncComponent(() => __vitePreload(() => import("./Plugins.js"), __vite__mapDeps([84,2,3,4,5,6,10,11,7,8,26,1,9,14,12,27,28,29,13,15,16,17,18,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,72])));
+var FileWorkspace = asyncComponent(() => __vitePreload(() => import("./FileWorkspaceInspection.js"), __vite__mapDeps([43,2,3,4,5,6,10,11,7,8,12,15,16,32,33,26,1,9,14,13,17,18,27,28,29,30,31,34,35,36,37,38,39,40,41,44])));
+var DescriptionEditor = asyncComponent(() => __vitePreload(() => import("./DescriptionEditor.js"), __vite__mapDeps([45,2,3,4,5,6,10,11,13,7,8,14,15,16,17,18,46])));
+var SnapshotBrowser = asyncComponent(() => __vitePreload(() => import("./SnapshotBrowser.js"), __vite__mapDeps([47,2,3,4,5,6,10,11,7,8,28,1,9,29,14,12,30,13,15,16,17,18,26,27,31,32,33,34,35,36,37,38,39,40,41,48])));
+var KnowledgeBase = asyncComponent(() => __vitePreload(() => import("./KnowledgeBase.js"), __vite__mapDeps([49,2,3,4,5,6,10,11,7,8,13,14,15,16,17,18,26,1,9,27,12,28,29,30,31,32,33,34,35,36,37,38,39,40,41,50])));
+var Configuration = asyncComponent(() => __vitePreload(() => import("./Configuration.js"), __vite__mapDeps([51,2,3,4,5,6,10,11,7,8,52,53,28,1,9,29,14,12,30,13,15,16,17,18,26,27,31,32,33,34,35,36,37,38,39,40,41,54,55,56,57])));
+var SearchTypes = asyncComponent(() => __vitePreload(() => import("./SearchTypes.js"), __vite__mapDeps([58,2,3,4,5,6,10,11,7,8,29,12,13,14,15,16,17,18,0,1,9])));
+var SchemaEditor = asyncComponent(() => __vitePreload(() => import("./SchemaEditor.js"), __vite__mapDeps([59,2,3,4,5,6,10,11,7,8,13,14,15,16,17,18,58,29,12,0,1,9,60,61,62])));
+var WorkflowEditor = asyncComponent(() => __vitePreload(() => import("./WorkflowEditor.js"), __vite__mapDeps([63,2,3,4,5,6,10,11,7,8,64,12,13,14,15,16,17,18,65,60,61])));
+var SidebarEditor = asyncComponent(() => __vitePreload(() => import("./SidebarEditor.js"), __vite__mapDeps([66,2,3,4,5,6,10,11,7,8,12,13,14,15,16,17,18,61])));
+var PageLayoutEditor = asyncComponent(() => __vitePreload(() => import("./PageLayoutEditor.js"), __vite__mapDeps([67,2,3,4,5,6,10,11,7,8,12,13,14,15,16,17,18,27,1,9,28,29,30,31,32,33,34,35,36,37,38,39,26,41,40,61,68])));
+var LayoutEditor = asyncComponent(() => __vitePreload(() => import("./LayoutEditor.js"), __vite__mapDeps([69,2,3,4,5,6,10,11,7,8,12,13,14,15,16,17,18,26,1,9,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,70])));
+var ColumnsEditor = asyncComponent(() => __vitePreload(() => import("./ColumnsEditor.js"), __vite__mapDeps([71,2,3,4,5,6,10,11,7,8,12,13,14,15,16,17,18,26,1,9,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41])));
+var RawDatabase = asyncComponent(() => __vitePreload(() => import("./RawDatabase.js"), __vite__mapDeps([72,2,3,4,5,6,10,11,7,8,13,14,15,16,17,18,73])));
+var SecurityUsers = asyncComponent(() => __vitePreload(() => import("./SecurityUsers.js"), __vite__mapDeps([74,2,3,4,5,6,10,11,7,8,75])));
+var SecurityGroups = asyncComponent(() => __vitePreload(() => import("./SecurityGroups.js"), __vite__mapDeps([76,2,3,4,5,6,10,11,7,8,75])));
+var SecurityRules = asyncComponent(() => __vitePreload(() => import("./SecurityRules.js"), __vite__mapDeps([77,2,3,4,5,6,10,11,7,8,13,14,15,16,17,18])));
+var ComponentShowcase = asyncComponent(() => __vitePreload(() => import("./ComponentShowcase.js"), __vite__mapDeps([78,2,3,4,5,6,7,8,52,53,28,1,9,10,11,29,14,12,30,13,15,16,17,18,33,38,39,26,27,31,32,34,35,36,37,40,41,61,79])));
+var Plugins = asyncComponent(() => __vitePreload(() => import("./Plugins.js"), __vite__mapDeps([80,2,3,4,5,6,10,11,7,8,26,1,9,14,13,15,16,17,18,27,12,28,29,30,31,32,33,34,35,36,37,38,39,40,41,68])));
 var compactLayout = window.matchMedia("(max-width: 900px)");
 var shortcutLayout = mobileLayout;
 var _sfc_main = {
@@ -32492,7 +32492,7 @@ var _sfc_main = {
 		SearchHeader: _sfc_main$40,
 		SearchFooter: _sfc_main$41,
 		SignIn: SignIn_default,
-		ActionRows: _sfc_main$128,
+		ActionRows: _sfc_main$132,
 		DockWorkspaceFooter: _sfc_main$95,
 		AdministrationShell: AdministrationShell_default,
 		PageLayoutEditor,
@@ -33367,7 +33367,7 @@ var _sfc_main = {
 				context.search_keys = [...new Set(records.map((record) => record.__search_key__))];
 			}
 			try {
-				const module = await __vitePreload(() => import("./AgentRequest.js"), __vite__mapDeps([85,2,3,4,5,6,10,11,7,8,26,1,9,14,12,27,28,29,13,15,16,17,18,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,65,59,86]));
+				const module = await __vitePreload(() => import("./AgentRequest.js"), __vite__mapDeps([81,2,3,4,5,6,10,11,7,8,33,26,1,9,14,13,15,16,17,18,27,12,28,29,30,31,32,34,35,36,37,38,39,40,41,61,55,82]));
 				if (this.session !== session) return;
 				this.agentRequestComponent ||= markRaw(module.default);
 				await nextTick();
@@ -33379,7 +33379,7 @@ var _sfc_main = {
 		async openAgentProviders() {
 			const session = this.session;
 			try {
-				const module = await __vitePreload(() => import("./AgentProviders.js"), __vite__mapDeps([58,2,3,4,5,6,10,11,7,8,35,59,60]));
+				const module = await __vitePreload(() => import("./AgentProviders.js"), __vite__mapDeps([54,2,3,4,5,6,10,11,7,8,33,55,56]));
 				if (this.session !== session) return;
 				this.agentProvidersComponent ||= markRaw(module.default);
 				await nextTick();
@@ -33391,7 +33391,7 @@ var _sfc_main = {
 		async openAgentMcp(context, connectionId = "") {
 			const session = this.session;
 			try {
-				const module = await __vitePreload(() => import("./AgentMcp.js"), __vite__mapDeps([87,2,3,4,5,6,10,11,7,8,35,88]));
+				const module = await __vitePreload(() => import("./AgentMcp.js"), __vite__mapDeps([83,2,3,4,5,6,10,11,7,8,33,84]));
 				if (this.session !== session) return;
 				this.agentMcpComponent ||= markRaw(module.default);
 				await nextTick();
@@ -33407,7 +33407,7 @@ var _sfc_main = {
 			const current = () => this.session === session && this.workspaceProject === project;
 			this.scriptEditorLoading = true;
 			try {
-				const module = await __vitePreload(() => import("./ScriptEditor.js"), __vite__mapDeps([89,2,3,4,5,6,10,11,7,8,90]));
+				const module = await __vitePreload(() => import("./ScriptEditor.js"), __vite__mapDeps([85,2,3,4,5,6,10,11,7,8,86]));
 				if (!current()) return;
 				this.scriptEditorComponent ||= markRaw(module.default);
 				await nextTick();

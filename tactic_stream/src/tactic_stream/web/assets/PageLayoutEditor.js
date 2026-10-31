@@ -4,8 +4,8 @@ import { A as rpc, It as randomUuid } from "./index.js";
 import { G as button, H as observeFrameSizes, K as label, X as rect, Y as node, t as _sfc_main$1, w as translate } from "./FrameView.js";
 import { n as sections } from "./sections.ui.js";
 import { T as projectPath, i as sectionSelector, n as notices, o as toolbar$1, t as documentEvent } from "./admin.document.js";
-import { $t as kinds, Bt as mode, Gt as appearances, Ht as scope$1, J as roots, Jt as copy, Kt as block, Lt as change$1, Q as spacingField, Qt as geometry$1, Rt as fields$1, Ut as type, Vt as options, Wt as add, X as toggle, Xt as fingerprint, Y as selected, Yt as duplicate, Zt as geometries, an as siblings, c as zooms, en as layers, in as reparent, nn as remove, o as _sfc_main$2, on as sizing, q as alignment, qt as change, rn as reorder, s as controls, sn as spacing, tn as path, zt as filter } from "./ConfiguredView.js";
-import { n as buttonWidth } from "./metrics.js";
+import { A as block, B as remove, C as filter, D as type, E as scope$1, F as geometries, G as spacing, H as reparent, I as geometry$1, L as kinds, M as copy, N as duplicate, O as add, P as fingerprint, R as layers, S as fields$1, T as options, U as siblings, V as reorder, W as sizing, a as zooms, i as controls, j as change, k as appearances, r as _sfc_main$2, w as mode, x as change$1, z as path } from "./ConfiguredView.js";
+import { F as toggle, Ft as buttonWidth, M as alignment, N as roots, P as selected, R as spacingField } from "./RelatedObjects.js";
 import { t as listAction } from "./tree.ui.js";
 import { t as _sfc_main$3 } from "./PageEditorTools.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/layouts/page.links.mjs

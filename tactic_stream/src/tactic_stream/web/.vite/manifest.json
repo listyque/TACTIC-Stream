@@ -1,20 +1,4 @@
 {
-  "_ActionRow.css": {
-    "file": "assets/ActionRow.css",
-    "src": "_ActionRow.css"
-  },
-  "_ActionRow.js": {
-    "file": "assets/ActionRow.js",
-    "name": "ActionRow",
-    "imports": [
-      "_vue.js",
-      "_AppButton.js",
-      "_FrameView.js"
-    ],
-    "css": [
-      "assets/ActionRow.css"
-    ]
-  },
   "_AppButton.css": {
     "file": "assets/AppButton.css",
     "src": "_AppButton.css"
@@ -91,22 +75,20 @@
       "_file_values.js",
       "_files.js",
       "_CodeBlock.js",
-      "_metrics.js",
       "_confirmation.ui.js",
-      "_ActionRow.js",
       "_AppDialog.js",
-      "_MarkdownText.js",
       "_VirtualCollection.js",
       "_Timesheet.js",
-      "_ContentLoadingOverlay.js"
+      "_ContentLoadingOverlay.js",
+      "src/features/objects/RelatedObjects.vue"
     ],
     "dynamicImports": [
-      "src/assets/emoji.json",
       "src/features/checkin/ObjectCheckin.vue",
       "src/features/checkin/IngestFiles.vue",
       "src/features/objects/DuplicateSObject.vue",
       "_ConfiguredView.js",
       "src/features/interface/TableViewsManager.vue",
+      "src/features/objects/RelatedObjects.vue",
       "src/features/checkin/SnapshotCheckout.vue"
     ],
     "css": [
@@ -150,23 +132,6 @@
     ],
     "css": [
       "assets/FrameView.css"
-    ]
-  },
-  "_MarkdownText.css": {
-    "file": "assets/MarkdownText.css",
-    "src": "_MarkdownText.css"
-  },
-  "_MarkdownText.js": {
-    "file": "assets/MarkdownText.js",
-    "name": "MarkdownText",
-    "imports": [
-      "_vue.js",
-      "_FrameView.js",
-      "_admin.document.js",
-      "_markdown-it.js"
-    ],
-    "css": [
-      "assets/MarkdownText.css"
     ]
   },
   "_MilestoneManager.css": {
@@ -222,7 +187,7 @@
     "imports": [
       "_vue.js",
       "_FrameView.js",
-      "_ConfiguredView.js"
+      "src/features/objects/RelatedObjects.vue"
     ]
   },
   "_ProjectTemplates.css": {
@@ -361,20 +326,6 @@
     "file": "assets/locales.js",
     "name": "locales"
   },
-  "_markdown-it.js": {
-    "file": "assets/markdown-it.js",
-    "name": "markdown-it",
-    "imports": [
-      "_ObjectFieldFrame.js"
-    ]
-  },
-  "_metrics.js": {
-    "file": "assets/metrics.js",
-    "name": "metrics",
-    "imports": [
-      "_AppButton.js"
-    ]
-  },
   "_previewImage.js": {
     "file": "assets/previewImage.js",
     "name": "previewImage"
@@ -421,7 +372,7 @@
     ],
     "dynamicImports": [
       "_Timesheet.js",
-      "_ConfiguredView.js",
+      "src/features/objects/RelatedObjects.vue",
       "src/features/objects/RecordForm.vue",
       "src/features/administration/ProcessRules.vue",
       "src/features/objects/DuplicateSObject.vue",
@@ -459,9 +410,9 @@
       "_ConfiguredView.js",
       "_CodeBlock.js",
       "_confirmation.ui.js",
-      "_ActionRow.js",
       "_AppDialog.js",
       "_Timesheet.js",
+      "src/features/objects/RelatedObjects.vue",
       "_tree.ui.js",
       "_FrameProgress.js",
       "_toggle.ui.js",
@@ -535,7 +486,7 @@
       "_FrameView.js",
       "_sections.ui.js",
       "_admin.document.js",
-      "_ConfiguredView.js"
+      "src/features/objects/RelatedObjects.vue"
     ]
   },
   "src/features/administration/ComponentShowcase.vue": {
@@ -550,10 +501,9 @@
       "_AppearanceControls.js",
       "src/features/objects/RecordForm.vue",
       "_admin.document.js",
-      "_ConfiguredView.js",
-      "_ActionRow.js",
       "_AppDialog.js",
       "_ContentLoadingOverlay.js",
+      "src/features/objects/RelatedObjects.vue",
       "_tree.ui.js",
       "src/App.vue"
     ],
@@ -573,7 +523,7 @@
       "_FrameView.js",
       "_sections.ui.js",
       "_admin.document.js",
-      "_ConfiguredView.js"
+      "src/features/objects/RelatedObjects.vue"
     ],
     "dynamicImports": [
       "_ConfiguredView.js"
@@ -595,7 +545,7 @@
       "_sections.ui.js",
       "_admin.document.js",
       "_ConfiguredView.js",
-      "_metrics.js",
+      "src/features/objects/RelatedObjects.vue",
       "_tree.ui.js",
       "_PageEditorTools.js"
     ]
@@ -610,7 +560,7 @@
       "_AppButton.js",
       "index.html",
       "_FrameView.js",
-      "_ConfiguredView.js",
+      "src/features/objects/RelatedObjects.vue",
       "_PageEditorTools.js"
     ]
   },
@@ -872,7 +822,7 @@
       "_AppearanceControls.js",
       "src/features/objects/RecordForm.vue",
       "_admin.document.js",
-      "_ConfiguredView.js",
+      "src/features/objects/RelatedObjects.vue",
       "src/App.vue",
       "src/features/configuration/AgentProviders.vue"
     ],
@@ -910,10 +860,9 @@
       "_sections.ui.js",
       "_file_values.js",
       "_files.js",
-      "_ConfiguredView.js",
-      "_metrics.js",
       "_confirmation.ui.js",
       "_AppDialog.js",
+      "src/features/objects/RelatedObjects.vue",
       "src/App.vue"
     ],
     "css": [
@@ -930,8 +879,8 @@
       "_AppButton.js",
       "index.html",
       "_FrameView.js",
-      "_ConfiguredView.js",
-      "_AppDialog.js"
+      "_AppDialog.js",
+      "src/features/objects/RelatedObjects.vue"
     ],
     "css": [
       "assets/TableViewsManager.css"
@@ -949,8 +898,7 @@
       "index.html",
       "_FrameView.js",
       "_admin.document.js",
-      "_ConfiguredView.js",
-      "_markdown-it.js",
+      "src/features/objects/RelatedObjects.vue",
       "src/App.vue"
     ],
     "css": [
@@ -1010,6 +958,31 @@
       "assets/RecordForm.css"
     ]
   },
+  "src/features/objects/RelatedObjects.vue": {
+    "file": "assets/RelatedObjects.js",
+    "name": "RelatedObjects",
+    "src": "src/features/objects/RelatedObjects.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_ObjectFieldFrame.js",
+      "_vue.js",
+      "_AppButton.js",
+      "index.html",
+      "_FrameView.js",
+      "_textMetrics.js",
+      "_admin.document.js",
+      "_file_values.js",
+      "_ConfiguredView.js",
+      "_VirtualCollection.js",
+      "_ContentLoadingOverlay.js"
+    ],
+    "dynamicImports": [
+      "src/assets/emoji.json"
+    ],
+    "css": [
+      "assets/RelatedObjects.css"
+    ]
+  },
   "src/features/objects/SnapshotBrowser.vue": {
     "file": "assets/SnapshotBrowser.js",
     "name": "SnapshotBrowser",
@@ -1023,7 +996,7 @@
       "src/features/objects/RecordForm.vue",
       "_admin.document.js",
       "_file_values.js",
-      "_ConfiguredView.js"
+      "src/features/objects/RelatedObjects.vue"
     ],
     "css": [
       "assets/SnapshotBrowser.css"
@@ -1039,9 +1012,8 @@
       "_AppButton.js",
       "index.html",
       "_FrameView.js",
-      "_ConfiguredView.js",
       "_AppDialog.js",
-      "_MarkdownText.js",
+      "src/features/objects/RelatedObjects.vue",
       "_tree.ui.js",
       "src/App.vue",
       "_executor.ui.js"
@@ -1103,7 +1075,7 @@
       "_vue.js",
       "_AppButton.js",
       "_FrameView.js",
-      "_ConfiguredView.js"
+      "src/features/objects/RelatedObjects.vue"
     ],
     "css": [
       "assets/TaskProcessPanel.css"

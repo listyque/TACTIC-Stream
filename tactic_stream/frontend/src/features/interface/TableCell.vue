@@ -62,6 +62,20 @@ export default {
     'select'
   ],
   computed: {
+    displayOptions() {
+      return Cells.presentationOptions(
+        this.element.display?.options,
+        this.element.attributes
+      );
+    },
+    valuePresentation() {
+      return this.element.cell?.kind === 'text' && !this.cell?.statusColor
+        ? Cells.valuePresentation(
+            this.element.cell.field || this.element.name,
+            this.displayOptions
+          )
+        : null;
+    },
     value() {
       return Cells.text(
         this.cell || {},
@@ -154,6 +168,7 @@ export default {
   <TableServiceCell
     v-else-if="element.cell?.kind === 'commands'"
     :cell="cell"
+    :display-options="displayOptions"
     :height="height - 6"
     :editable="editable"
     :nested-state="nestedState"
@@ -325,6 +340,13 @@ export default {
     rel="noopener noreferrer"
     >{{ value }}</a
   >
+  <TableServiceCell
+    v-else-if="valuePresentation"
+    :cell="{ text, valuePresentation }"
+    :height="height - 6"
+    :editable="false"
+    :title="tooltip"
+  />
   <StatusChip
     v-else-if="cell?.statusColor && !cell?.error"
     class="table-status-badge"

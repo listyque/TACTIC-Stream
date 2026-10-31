@@ -192,10 +192,14 @@ try {
         left: '100px',
         width: '180px',
         height: '58px',
-        background: 'var(--workspace)'
+        background: 'var(--page)'
       });
       const cell = {
         text: '4 assets',
+        displayOptions: {
+          icon: 'FAS_CUBE',
+          label: '{@COUNT(demo/asset)} assets'
+        },
         columnName: 'assets',
         nestedTable: {
           searchType: 'demo/asset',
@@ -233,6 +237,36 @@ try {
             }
           })
       }).mount(host);
+      const { default: ValueCell } = await import(
+        '/frontend/src/features/interface/TableCell.vue'
+      );
+      const durationHost = document.createElement('div');
+      document.body.append(durationHost);
+      durationHost.id = 'duration-value';
+      Object.assign(durationHost.style, {
+        position: 'fixed',
+        zIndex: '10000',
+        top: '180px',
+        left: '100px',
+        width: '180px',
+        height: '58px',
+        background: 'var(--page)'
+      });
+      window.durationFixture = reactive({
+        name: 'duration',
+        attributes: {},
+        cell: { kind: 'text', field: 'duration' },
+        supported: true
+      });
+      createApp({
+        render: () =>
+          h(ValueCell, {
+            element: window.durationFixture,
+            record: {},
+            cell: { text: '2 Minutes' },
+            height: 64
+          })
+      }).mount(durationHost);
     },
     entry.code.match(/from "([^"]+)"/)[1]
   );
@@ -241,7 +275,15 @@ try {
   );
   await combined.waitFor();
   assert.equal(await page.locator('#combined-count button').count(), 1);
-  for (const id of ['tableServiceValue', 'tableServiceDisclosure']) {
+  assert.equal(
+    await combined.locator('[data-frame="tableServiceValue"]').innerText(),
+    'Assets 4'
+  );
+  for (const id of [
+    'tableServiceLeadingIcon',
+    'tableServiceValue',
+    'tableServiceDisclosure'
+  ]) {
     const box = await page
       .locator('#combined-count [data-frame="' + id + '"]')
       .boundingBox();
@@ -249,7 +291,7 @@ try {
   }
   assert.equal(
     (await page.evaluate(() => window.combinedCount.events)).length,
-    2
+    3
   );
   assert.deepEqual(await page.evaluate(() => window.combinedCount.events[0]), [
     'nested-table',
@@ -261,9 +303,10 @@ try {
   await combined.tap();
   assert.equal(
     (await page.evaluate(() => window.combinedCount.events)).length,
-    5
+    6
   );
   await page.evaluate(() => {
+    window.combinedCount.nested.open = true;
     window.combinedCount.nested.busy = true;
   });
   await page.locator('#combined-count [data-icon="loading"]').waitFor();
@@ -277,9 +320,78 @@ try {
   await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
   assert.equal(
     (await page.evaluate(() => window.combinedCount.events)).length,
-    5
+    6
   );
   assert.deepEqual(errors, []);
+  const duration = page.locator('#duration-value');
+  await duration.locator('[data-frame="tableValueLabel"]').waitFor();
+  assert.equal(
+    await duration.locator('[data-frame="tableValueLabel"]').innerText(),
+    '2 Minutes'
+  );
+  assert.equal(await duration.locator('[data-icon="clock"]').count(), 1);
+  assert.equal(await duration.locator('button').count(), 0);
+  await duration.evaluate((el) => {
+    el.style.width = '80px';
+  });
+  await page.waitForFunction(
+    () =>
+      document
+        .querySelector('#duration-value [data-frame="tableValueBadge"]')
+        .getBoundingClientRect().width <= 80
+  );
+  const bounds = await duration.boundingBox(),
+    badge = await duration
+      .locator('[data-frame="tableValueBadge"]')
+      .boundingBox();
+  assert.ok(
+    badge.x >= bounds.x && badge.x + badge.width <= bounds.x + bounds.width
+  );
+  await duration.evaluate((el) => {
+    el.style.width = '180px';
+  });
+  const xmlProof = await page.evaluate(async () => {
+    const { definitionWizard, changeDefinition } = await import(
+      '/frontend/src/features/administration/columnsEditor.js'
+    );
+    let source =
+      '<config><!--keep--><table><element name="duration" custom="keep"><display widget="hidden_row"><icon>FAS_CUBE</icon><option>keep</option></display></element></table></config>';
+    let row = definitionWizard(source).elements[0];
+    const inherited = row.valueIcon;
+    for (const [field, value] of [
+      ['valueIcon', 'FAS_CLOCK'],
+      ['valueStyle', 'badge']
+    ])
+      source = changeDefinition(source, row.path, field, value);
+    row = definitionWizard(source).elements[0];
+    let rejected = 0;
+    for (const [field, value] of [
+      ['valueIcon', '<script>'],
+      ['valueStyle', 'unknown']
+    ]) {
+      try {
+        changeDefinition(source, row.path, field, value);
+      } catch {
+        rejected++;
+      }
+    }
+    return {
+      inherited,
+      icon: row.valueIcon,
+      style: row.valueStyle,
+      source,
+      rejected
+    };
+  });
+  assert.equal(xmlProof.inherited, 'FAS_CUBE');
+  assert.equal(xmlProof.icon, 'FAS_CLOCK');
+  assert.equal(xmlProof.style, 'badge');
+  assert.equal(xmlProof.rejected, 2);
+  assert.ok(
+    xmlProof.source.includes('<!--keep-->') &&
+      xmlProof.source.includes('custom="keep"') &&
+      xmlProof.source.includes('<option>keep</option>')
+  );
   if (process.env.TABLE_DISCLOSURE_OUTPUT) {
     mkdirSync(process.env.TABLE_DISCLOSURE_OUTPUT, { recursive: true });
     await page.evaluate(() => {
@@ -287,8 +399,12 @@ try {
       window.combinedCount.nested.open = false;
       window.combinedCount.nested.busy = false;
     });
+    await page.mouse.move(0, 0);
     await page.locator('#combined-count').screenshot({
       path: process.env.TABLE_DISCLOSURE_OUTPUT + '/browser-count-button.png'
+    });
+    await duration.screenshot({
+      path: process.env.TABLE_DISCLOSURE_OUTPUT + '/browser-duration.png'
     });
     writeFileSync(
       process.env.TABLE_DISCLOSURE_OUTPUT + '/browser.json',

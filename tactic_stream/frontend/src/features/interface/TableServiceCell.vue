@@ -11,6 +11,7 @@ import { onMounted, onBeforeUnmount } from 'vue';
 
 const props = defineProps({
   cell: Object,
+  displayOptions: Object,
   height: Number,
   editable: Boolean,
   nestedState: Object
@@ -32,7 +33,10 @@ function connectionRow(_node, record) {
 }
 const scene = computed(() =>
   UI.describe(
-    props.cell || {},
+    {
+      ...props.cell,
+      displayOptions: { ...props.cell?.displayOptions, ...props.displayOptions }
+    },
     width.value,
     props.height,
     appearance.language,

@@ -174,6 +174,14 @@ export function definitionWizard(source, viewName = '') {
             title: node.getAttribute('title') || name,
             visible: !flag(node.getAttribute('hidden')),
             width: width(node.getAttribute('width')),
+            ...(node.hasAttribute('value_icon')
+              ? { valueIcon: node.getAttribute('value_icon') }
+              : display?.querySelector('icon')
+                ? { valueIcon: display.querySelector('icon').textContent }
+                : {}),
+            ...(node.hasAttribute('value_style')
+              ? { valueStyle: node.getAttribute('value_style') }
+              : {}),
             widget:
               display?.getAttribute('class') ||
               display?.getAttribute('widget') ||
@@ -218,7 +226,20 @@ export function changeDefinition(source, path, field, value) {
   } else if (field === 'visible')
     node.setAttribute('hidden', value ? 'false' : 'true');
   else if (field === 'width') node.setAttribute('width', String(width(value)));
-  else if (field === 'widget') {
+  else if (field === 'valueIcon' || field === 'valueStyle') {
+    const text = String(value || '').trim();
+    if (field === 'valueStyle' && !['', 'text', 'badge'].includes(text))
+      throw new Error('Invalid value appearance');
+    if (
+      field === 'valueIcon' &&
+      (text.length > 128 || !/^[\w:.-]*$/.test(text))
+    )
+      throw new Error('Invalid icon name');
+    node.setAttribute(
+      field === 'valueIcon' ? 'value_icon' : 'value_style',
+      text
+    );
+  } else if (field === 'widget') {
     let display = [...node.children].find(
       (child) => child.tagName === 'display'
     );

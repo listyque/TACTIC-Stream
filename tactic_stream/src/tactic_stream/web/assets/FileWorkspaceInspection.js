@@ -5,10 +5,9 @@ import { G as button, H as observeFrameSizes, K as label, P as _sfc_main$18, U a
 import { t as captionHeight } from "./sections.ui.js";
 import { r as prettySize } from "./file_values.js";
 import "./files.js";
-import { $ as _sfc_main$22 } from "./ConfiguredView.js";
-import { t as actionLayout } from "./metrics.js";
 import { t as describe$7 } from "./confirmation.ui.js";
-import { t as _sfc_main$23 } from "./AppDialog.js";
+import { t as _sfc_main$22 } from "./AppDialog.js";
+import { Pt as actionLayout, z as _sfc_main$23 } from "./RelatedObjects.js";
 import { C as _sfc_main$24 } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/files/workspace/toolbar.ui.mjs
 function views$1(model, width, height, language) {
@@ -126,7 +125,7 @@ var WorkspaceToolbar_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 				"align-start": ""
 			}, {
 				default: withCtx(() => [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.presets, (view) => {
-					return openBlock(), createBlock(_sfc_main$22, {
+					return openBlock(), createBlock(_sfc_main$23, {
 						key: view.id,
 						label: view.title,
 						icon: view.icon,
@@ -2187,7 +2186,7 @@ var _sfc_main$2 = {
 			}, [createVNode(_sfc_main$17, {
 				scene: scene.value,
 				onEvent: event
-			}, null, 8, ["scene"])], 8, _hoisted_1$1), createVNode(_sfc_main$23, {
+			}, null, 8, ["scene"])], 8, _hoisted_1$1), createVNode(_sfc_main$22, {
 				ref_key: "dialog",
 				ref: dialog,
 				title: "Run safe GC",
