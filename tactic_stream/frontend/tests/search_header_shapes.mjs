@@ -98,13 +98,11 @@ try {
     await button.first().waitFor();
     for (const hover of [false, true]) {
       if (hover) await button.first().hover();
-      const geometry = await button
-        .first()
-        .evaluate((el) => ({
-          width: el.offsetWidth,
-          height: el.offsetHeight,
-          radius: getComputedStyle(el).borderTopLeftRadius
-        }));
+      const geometry = await button.first().evaluate((el) => ({
+        width: el.offsetWidth,
+        height: el.offsetHeight,
+        radius: getComputedStyle(el).borderTopLeftRadius
+      }));
       assert.equal(geometry.width, geometry.height, label);
       assert.ok(
         geometry.radius === '50%' ||
