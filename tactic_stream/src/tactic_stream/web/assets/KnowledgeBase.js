@@ -1,7 +1,7 @@
 import { A as onMounted, C as inject, E as nextTick, G as withCtx, H as watch, K as withDirectives, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, X as ref, Y as reactive, _ as createElementBlock, b as createVNode, et as unref, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, q as isRef, rt as toDisplayString, s as vShow, tt as normalizeClass, u as Fragment, y as createTextVNode } from "./vue.js";
 import { a as _sfc_main$4, o as t, s as appearance, t as _sfc_main$3 } from "./AppButton.js";
 import { i as semanticName, r as aliases } from "./icons.js";
-import { Ft as randomId, h as messageFileRequest, m as linkPreviews, p as knowledgeRequest } from "./index.js";
+import { It as randomId, g as messageFileRequest, h as linkPreviews, m as knowledgeRequest } from "./index.js";
 import { A as _sfc_main$11, B as _sfc_main$7, G as button, H as observeFrameSizes, K as label, M as _sfc_main$10, P as _sfc_main$6, U as _sfc_main$9, X as rect, Y as node, d as javascriptTokens, f as pythonTokens, h as copyText, k as AppSearchField_default, p as xmlTokens, t as _sfc_main$5, w as translate, z as _sfc_main$8 } from "./FrameView.js";
 import { M as extractSkeys, j as escapeHtml, u as _sfc_main$12, x as browserLink } from "./admin.document.js";
 import { h as messageDate, rt as MarkdownItCallable, s as _sfc_main$14, z as _sfc_main$13 } from "./RelatedObjects.js";

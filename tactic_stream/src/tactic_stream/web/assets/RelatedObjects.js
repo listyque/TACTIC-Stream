@@ -1,7 +1,7 @@
 import { n as arrange, r as __exportAll$1 } from "./ObjectFieldFrame.js";
 import { A as onMounted, E as nextTick, F as resolveComponent, G as withCtx, H as watch, I as resolveDirective, K as withDirectives, L as resolveDynamicComponent, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, T as mergeProps, X as ref, _ as createElementBlock, b as createVNode, c as withKeys, et as unref, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment, v as createSlots, y as createTextVNode } from "./vue.js";
 import { D as spacing, R as BusyIndicator_default, T as metrics, _ as controls, a as _sfc_main$17, b as fontFamily, o as t, s as appearance, t as _sfc_main$16, z as _plugin_vue_export_helper_default } from "./AppButton.js";
-import { A as rpc, a as __vitePreload, b as objectStatus, ht as serverTimestamp, mt as serverClock, v as objectDeletion, yt as mobile } from "./index.js";
+import { a as __vitePreload, bt as mobile, gt as serverTimestamp, ht as serverClock, j as rpc, x as objectStatus, y as objectDeletion } from "./index.js";
 import { G as button, H as observeFrameSizes, J as muted, K as label, O as ItemPreview_default, P as _sfc_main$19, Q as virtualRange, X as rect, Y as node, Z as revealListOffset, a as _sfc_main$20, d as javascriptTokens, f as pythonTokens, p as xmlTokens, t as _sfc_main$18, w as translate } from "./FrameView.js";
 import { n as qtLabelTextWidth } from "./textMetrics.js";
 import { j as escapeHtml$1, u as _sfc_main$21, v as timestampLabel, x as browserLink } from "./admin.document.js";

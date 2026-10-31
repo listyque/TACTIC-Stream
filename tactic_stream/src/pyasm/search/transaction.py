@@ -136,15 +136,14 @@ class Transaction(Base):
         context = _context.get()
         if key == context.store.get_db_resource()._get_connection_key() or key in self.created_databases:
             return True
-        if key != DbResource.get_default(resource.get_database())._get_connection_key():
-            return False
         # An existing project must actually own the configured resource. A name
         # supplied to Sql alone does not authorize writes to another database.
-        parameter = resource.get_database_impl().get_parameter()
+        parameter = context.store.get_db_resource().get_database_impl().get_parameter()
         with context.store.connection() as db:
-            return bool(db.execute('SELECT 1 FROM project WHERE COALESCE(NULLIF("database",\'\'),code)=' + parameter +
-                                   ' AND (s_status IS NULL OR s_status<>\'retired\')',
-                                   (resource.get_database(),)).fetchone())
+            owners = db.execute('SELECT db_resource FROM project WHERE COALESCE(NULLIF("database",\'\'),code)=' + parameter +
+                                ' AND (s_status IS NULL OR s_status<>\'retired\')', (resource.get_database(),)).fetchall()
+        return any((DbResource.get_by_code(owner['db_resource'], resource.get_database()) if owner['db_resource'] else
+                    DbResource.get_default(resource.get_database()))._get_connection_key() == key for owner in owners)
 
     def _has_multiple_writers(self):
         return sum(bool(getattr(sql, '_has_writes', False)) for sql in self.databases.values()) > 1

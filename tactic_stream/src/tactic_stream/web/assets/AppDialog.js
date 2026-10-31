@@ -1,6 +1,6 @@
 import { A as onMounted, E as nextTick, K as withDirectives, M as openBlock, O as onBeforeUnmount, P as renderSlot, X as ref, _ as createElementBlock, et as unref, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, rt as toDisplayString, tt as normalizeClass } from "./vue.js";
 import { o as t, t as _sfc_main$1 } from "./AppButton.js";
-import { t as windowDirective, vt as fit } from "./index.js";
+import { t as windowDirective, yt as fit } from "./index.js";
 import { H as observeFrameSizes } from "./FrameView.js";
 //#region src/controls/AppDialog.vue
 var _hoisted_1 = ["aria-label"];

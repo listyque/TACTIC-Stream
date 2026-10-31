@@ -75,7 +75,7 @@ def request_context(context: RequestContext):
 class SObject:
     SEARCH_TYPE = "pyasm.search.SObject"
 
-    SECURITY_TYPES = ('sthpw/login', 'sthpw/login_group', 'sthpw/login_in_group', 'sthpw/ticket')
+    SECURITY_TYPES = ('sthpw/login', 'sthpw/login_group', 'sthpw/login_in_group', 'sthpw/db_resource', 'sthpw/ticket')
     BUSINESS_TYPES = ('sthpw/transaction_state', 'sthpw/project', 'sthpw/project_type', 'sthpw/milestone', 'sthpw/task', 'sthpw/note', 'sthpw/work_hour', 'sthpw/status_log', 'sthpw/message', 'sthpw/message_log', 'config/process_state', 'config/custom_script', 'sthpw/custom_script', 'config/process', 'sthpw/snapshot', 'sthpw/file', 'sthpw/pref_setting', 'sthpw/retire_log', 'sthpw/pipeline', 'sthpw/connection', 'sthpw/search_object', 'sthpw/schema', 'config/naming', 'sthpw/sobject_list', 'config/plugin', 'config/plugin_content', 'config/url', 'config/widget_config', 'config/prod_setting', 'config/trigger', 'config/client_trigger', 'sthpw/trigger', 'config/pipeline', 'config/custom_property', 'config/ingest_rule', 'config/ingest_session', 'config/translation', 'sthpw/notification', 'sthpw/notification_log', 'sthpw/notification_login', 'sthpw/subscription', 'sthpw/interaction', 'sthpw/wdg_settings', 'sthpw/queue', 'sthpw/exception_log', 'sthpw/debug_log')
 
     def __init__(self, search_type, columns=None, result=None, remote=False, fast_data=None):
@@ -1593,7 +1593,7 @@ class SObject:
                     changed_on[name], changed_by[name] = 'CHANGED', Environment.get_user_name()
                 log.set_json_value('changed_on', changed_on)
                 log.set_json_value('changed_by', changed_by)
-        if log_transaction:
+        if log_transaction and self.get_base_search_type() != 'sthpw/db_resource':
             SObjectUndo.log_undo(self, code, search_id, is_insert, prev_code=prev_code)
         trigger_update_data = self.update_data.copy()
         trigger_prev_data = {name: self.data.get(name) for name in trigger_update_data}
@@ -1874,7 +1874,7 @@ class SObject:
                 sql._do_security_dml(table, id_col=self.get_id_col(), search_id=search_id, sobject=self)
             else:
                 sql._do_update(statement, native_table=table)
-        if log:
+        if log and self.get_base_search_type() != 'sthpw/db_resource':
             SObjectUndo.log_undo_for_delete(self)
         if return_sql:
             return statement

@@ -2,7 +2,7 @@ const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/NamingEditor.js
 import { r as __exportAll } from "./ObjectFieldFrame.js";
 import { $ as toRaw, A as onMounted, B as useModel, C as inject, E as nextTick, F as resolveComponent, G as withCtx, H as watch, I as resolveDirective, J as markRaw, K as withDirectives, L as resolveDynamicComponent, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, Q as shallowRef, S as h, T as mergeProps, V as useSlots, X as ref, Y as reactive, Z as shallowReactive, _ as createElementBlock, b as createVNode, c as withKeys, d as KeepAlive, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, o as vModelText, p as computed, q as isRef, rt as toDisplayString, s as vShow, t as Transition, tt as normalizeClass, u as Fragment, v as createSlots, w as mergeModels, y as createTextVNode, z as useId } from "./vue.js";
 import { C as layout$6, D as spacing$1, E as readableText, M as savePreferencePage, N as normalizeColumns, O as textStyles, P as taskColumns, R as BusyIndicator_default, S as fontMetricHeight, T as metrics$9, _ as controls$1, a as _sfc_main$104, b as fontFamily, g as blend, h as saveAppearance, j as preferences, k as configurationPreview, o as t, p as projectPalette, s as appearance, t as _sfc_main$103, u as frameColors, w as lineHeights, x as fontLineHeight, z as _plugin_vue_export_helper_default } from "./AppButton.js";
-import { $ as setUpdatesAvailable, A as rpc, B as serverUpdates, C as projectNavigation, Ct as debugSettings, D as resolveCustomUrl, Dt as importSession, E as resetRequestActivity, Et as formatEvent, Ft as randomId, J as uploadFormFile, Lt as asyncComponent, Mt as savedSessions, N as scriptShelf, Nt as sessionRecords, Ot as levels, P as searchConfiguration, Pt as setServerDebugContext, Q as workspaceLayouts, S as projectCreationCatalog, St as debugLog, T as requestActivity, Tt as forgetSessions, V as sessionAction, X as userProfile, Y as userAvatar, Z as widgetConfiguration, _ as navigationLink, _t as dockMinimumWidth, a as __vitePreload, at as clearNotificationHistory, bt as mobileLayout, c as beginActivity, ct as failNotificationReply, dt as resetNotifications, et as updateDelay, f as interfaceDefinition, ft as setNotificationProgress, g as messagesRequest, gt as dockMinimumHeight, h as messageFileRequest, ht as serverTimestamp, i as readWindowPage, it as cancelNotificationReply, k as resultItems, lt as notificationHistory, m as linkPreviews, mt as serverClock, n as bootstrapWindowPage, nt as activeNotifications, ot as dismissNotification, pt as submitNotificationReply, r as installWindowPages, rt as beginNotificationReply, s as activityFeed, st as editNotificationReply, tt as updatesAvailable, u as endActivity, ut as notify, wt as exportSession, x as projectCatalog, xt as clearLive, yt as mobile } from "./index.js";
+import { $ as workspaceLayouts, A as resultItems, C as projectCreationCatalog, Ct as debugLog, D as resetRequestActivity, Dt as formatEvent, E as requestActivity, Et as forgetSessions, F as searchConfiguration, Ft as setServerDebugContext, H as sessionAction, It as randomId, Nt as savedSessions, O as resolveCustomUrl, Ot as importSession, P as scriptShelf, Pt as sessionRecords, Q as widgetConfiguration, Rt as asyncComponent, S as projectCatalog, St as clearLive, Tt as exportSession, V as serverUpdates, X as userAvatar, Y as uploadFormFile, Z as userProfile, _ as messagesRequest, _t as dockMinimumHeight, a as __vitePreload, at as cancelNotificationReply, bt as mobile, c as beginActivity, ct as editNotificationReply, d as endActivity, dt as notify, et as setUpdatesAvailable, ft as resetNotifications, g as messageFileRequest, gt as serverTimestamp, h as linkPreviews, ht as serverClock, i as readWindowPage, it as beginNotificationReply, j as rpc, kt as levels, lt as failNotificationReply, mt as submitNotificationReply, n as bootstrapWindowPage, nt as updatesAvailable, ot as clearNotificationHistory, p as interfaceDefinition, pt as setNotificationProgress, r as installWindowPages, rt as activeNotifications, s as activityFeed, st as dismissNotification, tt as updateDelay, ut as notificationHistory, v as navigationLink, vt as dockMinimumWidth, w as projectNavigation, wt as debugSettings, xt as mobileLayout } from "./index.js";
 import { A as _sfc_main$113, B as _sfc_main$111, E as AppProgress_default, F as localDate, G as button, H as observeFrameSizes, I as monthLabel, J as muted, K as label, L as parse, M as _sfc_main$108, N as _sfc_main$112, O as ItemPreview_default, P as _sfc_main$107, S as _sfc_main$116, U as _sfc_main$106, V as frameContentWidth, W as _sfc_main$115, X as rect$1, Y as node, Z as revealListOffset, b as _sfc_main$110, g as readClipboardImages, h as copyText, k as AppSearchField_default, m as copyImage, o as _sfc_main$117, t as _sfc_main$105, w as translate, x as matchesUser$1, y as _sfc_main$114, z as _sfc_main$109 } from "./FrameView.js";
 import { t as _sfc_main$118 } from "./AppearanceControls.js";
 import { n as qtLabelTextWidth, t as layoutTextWidth } from "./textMetrics.js";
@@ -13948,6 +13948,13 @@ var pages = [
 		help: "repository_configuration"
 	},
 	{
+		id: "database_resources",
+		title: "Database resources",
+		icon: "database",
+		description: "Project connections and schema updates",
+		help: "database_resources"
+	},
+	{
 		id: "project",
 		title: "Projects",
 		icon: "project-diagram",
@@ -20430,10 +20437,11 @@ function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
 			icon: "filter",
 			"max-height": 400,
 			"show-label": $props.overlay,
-			overlay: $props.overlay,
+			overlay: $props.overlay || !!$data.groupKey,
 			"close-on-select": false,
 			boundary: $props.boundary || $data.menuBoundary,
 			anchor: $data.groupAnchor,
+			"align-start": !!$data.groupKey,
 			onToggle: $options.toggled
 		}, {
 			trigger: withCtx(() => [
@@ -20515,6 +20523,7 @@ function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
 			"overlay",
 			"boundary",
 			"anchor",
+			"align-start",
 			"onToggle"
 		]),
 		createVNode(_component_AppMenu, {
@@ -20522,7 +20531,7 @@ function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
 			class: "quick-filter-assignees",
 			label: "ASSIGNED TO",
 			icon: "groups",
-			overlay: $props.overlay,
+			overlay: $props.overlay || !!$data.groupAnchor,
 			anchor: $data.groupAnchor || _ctx.$refs.menu?.$el.querySelector("summary"),
 			"close-on-select": false,
 			boundary: $props.boundary || $data.menuBoundary,
@@ -32692,7 +32701,7 @@ var FileWorkspace = asyncComponent(() => __vitePreload(() => import("./FileWorks
 var DescriptionEditor = asyncComponent(() => __vitePreload(() => import("./DescriptionEditor.js"), __vite__mapDeps([45,2,3,4,5,6,10,11,13,7,8,14,15,16,17,18,46])));
 var SnapshotBrowser = asyncComponent(() => __vitePreload(() => import("./SnapshotBrowser.js"), __vite__mapDeps([47,2,3,4,5,6,10,11,7,8,28,1,9,29,14,12,30,13,15,16,17,18,26,27,31,32,33,34,35,36,37,38,39,40,41,48])));
 var KnowledgeBase = asyncComponent(() => __vitePreload(() => import("./KnowledgeBase.js"), __vite__mapDeps([49,2,3,4,5,6,10,11,7,8,13,14,15,16,17,18,26,1,9,27,12,28,29,30,31,32,33,34,35,36,37,38,39,40,41,50])));
-var Configuration = asyncComponent(() => __vitePreload(() => import("./Configuration.js"), __vite__mapDeps([51,2,3,4,5,6,10,11,7,8,52,53,28,1,9,29,14,12,30,13,15,16,17,18,26,27,31,32,33,34,35,36,37,38,39,40,41,54,55,56,57])));
+var Configuration = asyncComponent(() => __vitePreload(() => import("./Configuration.js"), __vite__mapDeps([51,2,3,4,5,6,10,11,7,8,52,53,28,1,9,29,14,12,30,13,15,16,17,18,32,26,27,31,33,34,35,36,37,38,39,40,41,54,55,56,57])));
 var SearchTypes = asyncComponent(() => __vitePreload(() => import("./SearchTypes.js"), __vite__mapDeps([58,2,3,4,5,6,10,11,7,8,29,12,13,14,15,16,17,18,0,1,9])));
 var SchemaEditor = asyncComponent(() => __vitePreload(() => import("./SchemaEditor.js"), __vite__mapDeps([59,2,3,4,5,6,10,11,7,8,13,14,15,16,17,18,58,29,12,0,1,9,60,61,62])));
 var WorkflowEditor = asyncComponent(() => __vitePreload(() => import("./WorkflowEditor.js"), __vite__mapDeps([63,2,3,4,5,6,10,11,7,8,64,12,13,14,15,16,17,18,65,60,61])));

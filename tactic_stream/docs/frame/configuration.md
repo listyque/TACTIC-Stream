@@ -1,5 +1,15 @@
 # Tactic Frame: Configuration and projects
 
+Handler's authenticated project bootstrap publishes `server_api` from the native
+server API implementation. `env_inst.server_api` binds the result to the exact
+address/login/ticket; cached catalogs cannot promote an unknown session to
+Stream. The application exposes `server_api` and `is_stream_server` and hides
+Stream-only pages, process controls, AI/MCP/drafts and remote System Info in
+legacy/unknown sessions. Direct controller entries and automatic companion/SSE
+requests use the same guard. Legacy polling preserves a saved SSE preference.
+Standard administration, DCC and legacy script-hook CRUD stay available. HTTP
+error handling retains the original status when a response is empty or HTML.
+
 This contract describes source ownership, behavior and verification scope.
 TH and TS ship independently; native-only actions remain native capabilities.
 Use [the shared contract](contract.md) and [the feature index](index.md).
@@ -102,3 +112,24 @@ TH uses its standard asynchronous administration owner and the same authenticate
 HTTP configuration endpoints, with per-request timeouts and no new
 QML global binding; an explicit subclass status signal keeps native property
 notification separate from inherited document-state notifications.
+
+
+## Database resources
+
+`features/configuration/database_resources.ui.mjs` owns the connection form,
+responsive field grid, protected password field, bindings, operations and
+confirmations. Browser DatabaseResources and native DatabaseResourcesEditor use
+the same administrator-only `/admin/configuration/database-resources/{action}`
+contract. Configuration includes its dirty/busy/unknown-write state and resumes
+Save only after a confirmed remote commit. Cancellation clears pending Close.
+Resource passwords are omitted from read documents and undo snapshots; revisions
+include only their digest. Project routing resolves credentials internally while
+client/expression reads retain their administrator guard. External project
+configuration migrations use the existing upgrade path, serialize per PostgreSQL
+database and roll back failures. Database creation, data movement and distributed
+transactions are outside this page.
+
+Focused checks: `tests/test_database_resources.py`, browser
+`frontend/tests/database_resources.mjs`, native
+`tests/test_configuration_database_resources.py`. The PostgreSQL opt-in uses a
+unique test database and deletes only that database without FORCE.

@@ -421,10 +421,11 @@ export default {
       icon="filter"
       :max-height="400"
       :show-label="overlay"
-      :overlay="overlay"
+      :overlay="overlay || !!groupKey"
       :close-on-select="false"
       :boundary="boundary || menuBoundary"
       :anchor="groupAnchor"
+      :align-start="!!groupKey"
       @toggle="toggled"
     >
       <template #trigger
@@ -483,7 +484,7 @@ export default {
       class="quick-filter-assignees"
       label="ASSIGNED TO"
       icon="groups"
-      :overlay="overlay"
+      :overlay="overlay || !!groupAnchor"
       :anchor="groupAnchor || $refs.menu?.$el.querySelector('summary')"
       :close-on-select="false"
       :boundary="boundary || menuBoundary"

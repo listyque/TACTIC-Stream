@@ -163,9 +163,6 @@ class Store:
                 db.execute("BEGIN")
                 changed = self._upgrade_schema(db)
         from pyasm.search.search import RequestContext, Search, request_context
-        from pyasm.search.sql import DbResource
-        upgrade = json.loads((files('tactic_stream') / 'compatibility/config_upgrade.json').read_text(encoding='utf-8'))
-        upgrade.update(registry=[], indexes=[])
         with request_context(RequestContext(self, 'admin')):
             visited = {resource._get_connection_key()}
             for project in Search('sthpw/project').get_sobjects():
@@ -173,16 +170,19 @@ class Store:
                 key = project_resource._get_connection_key()
                 if key in visited:
                     continue
-                if key != DbResource.get_default(project_resource.get_database())._get_connection_key():
-                    raise UnsupportedContract('Automatic upgrade of external project resources is not migrated')
-                if project_resource.get_vendor() == 'PostgreSQL':
-                    changed = project_resource.get_database_impl().upgrade(project_resource, upgrade) or changed
-                else:
-                    with self.connection(project_resource, write=True) as db:
-                        db.execute('BEGIN')
-                        changed = self._upgrade_schema(db, upgrade) or changed
+                changed = self.upgrade_project_resource(project_resource) or changed
                 visited.add(key)
         return changed
+
+    def upgrade_project_resource(self, resource):
+        """Apply project configuration migrations, never system bootstrap or data import."""
+        upgrade = json.loads((files('tactic_stream') / 'compatibility/config_upgrade.json').read_text(encoding='utf-8'))
+        upgrade.update(registry=[], indexes=[])
+        if resource.get_vendor() == 'PostgreSQL':
+            return resource.get_database_impl().upgrade(resource, upgrade)
+        with self.connection(resource, write=True) as db:
+            db.execute('BEGIN IMMEDIATE')
+            return self._upgrade_schema(db, upgrade)
 
     def _configured_resource(self):
         from pyasm.common.common import Container

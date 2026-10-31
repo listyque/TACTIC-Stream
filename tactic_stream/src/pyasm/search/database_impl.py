@@ -985,6 +985,7 @@ class PostgresImpl(DatabaseImpl):
         from pyasm.search.storage import Store
         with self._connect(resource) as db:
             import psycopg
+            db.execute("SELECT pg_advisory_xact_lock(hashtext('tactic-stream-schema-upgrade'))")
             db.execute(psycopg.sql.SQL('SET search_path TO {}').format(psycopg.sql.Identifier(resource.get_schema() or 'public')))
             return self._upgrade_schema(db, Store._get_upgrade() if upgrade is None else upgrade)
 

@@ -822,6 +822,7 @@
       "_AppearanceControls.js",
       "src/features/objects/RecordForm.vue",
       "_admin.document.js",
+      "_confirmation.ui.js",
       "src/features/objects/RelatedObjects.vue",
       "src/App.vue",
       "src/features/configuration/AgentProviders.vue"

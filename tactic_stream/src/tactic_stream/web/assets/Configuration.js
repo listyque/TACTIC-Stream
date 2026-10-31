@@ -1,15 +1,16 @@
 import { A as onMounted, D as onActivated, E as nextTick, F as resolveComponent, G as withCtx, H as watch, I as resolveDirective, K as withDirectives, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, X as ref, Y as reactive, _ as createElementBlock, b as createVNode, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, k as onDeactivated, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, s as vShow, tt as normalizeClass, u as Fragment, y as createTextVNode } from "./vue.js";
-import { A as normalizePreferences, F as accentPresets, I as iconSets, L as themes, M as savePreferencePage, _ as controls, a as _sfc_main$7, c as colorModes, f as languages, h as saveAppearance, j as preferences, k as configurationPreview, l as effectiveColorMode, o as t, s as appearance, t as _sfc_main$8, z as _plugin_vue_export_helper_default } from "./AppButton.js";
-import { A as rpc, Ct as debugSettings, It as randomUuid, O as restartServer, R as serverConfiguration, j as saveServerConfiguration, x as projectCatalog, z as serverRuntime } from "./index.js";
-import { G as button, H as observeFrameSizes, J as muted, K as label, U as _sfc_main$10, X as rect, Y as node, k as AppSearchField_default, t as _sfc_main$9, w as translate } from "./FrameView.js";
-import { n as _sfc_main$11 } from "./AppearanceControls.js";
+import { A as normalizePreferences, D as spacing, F as accentPresets, I as iconSets, L as themes, M as savePreferencePage, _ as controls, a as _sfc_main$8, c as colorModes, f as languages, h as saveAppearance, j as preferences, k as configurationPreview, l as effectiveColorMode, o as t, s as appearance, t as _sfc_main$9, z as _plugin_vue_export_helper_default } from "./AppButton.js";
+import { B as serverRuntime, Lt as randomUuid, M as saveServerConfiguration, S as projectCatalog, j as rpc, k as restartServer, u as databaseResources, wt as debugSettings, z as serverConfiguration } from "./index.js";
+import { G as button, H as observeFrameSizes, J as muted, K as label, U as _sfc_main$11, X as rect, Y as node, k as AppSearchField_default, t as _sfc_main$10, w as translate } from "./FrameView.js";
+import { n as _sfc_main$12 } from "./AppearanceControls.js";
 import RecordForm_default, { a as unsupportedField, i as fieldKind, r as ImagePicker_default } from "./RecordForm.js";
 import { _ as timestampFullLabel } from "./admin.document.js";
+import { t as describe$3 } from "./confirmation.ui.js";
 import { et as views } from "./RelatedObjects.js";
-import { S as pages, _ as editColumn, a as updateModes, b as confirmation, f as lifecycle, g as describe$2, h as contentWidth, i as updateIntervals, m as change, n as networkSettings, p as ProjectCreation_default, r as updateBatchDelays, v as fieldsFor, x as describe$4, y as describe$3 } from "./App.js";
-import _sfc_main$12 from "./AgentProviders.js";
+import { S as pages, _ as editColumn, a as updateModes, b as confirmation, f as lifecycle, g as describe$4, h as contentWidth, i as updateIntervals, m as change, n as networkSettings, p as ProjectCreation_default, r as updateBatchDelays, v as fieldsFor, x as describe$6, y as describe$5 } from "./App.js";
+import _sfc_main$13 from "./AgentProviders.js";
 //#region src/features/configuration/FrameSettings.vue
-var _sfc_main$6 = {
+var _sfc_main$7 = {
 	__name: "FrameSettings",
 	props: {
 		page: String,
@@ -41,7 +42,7 @@ var _sfc_main$6 = {
 		}));
 		const fields = computed(() => props.fields || fieldsFor(props.page, model.value));
 		const scene = computed(() => {
-			const result = describe$2({
+			const result = describe$4({
 				...model.value,
 				fields: fields.value
 			}, viewport.value.width, viewport.value.height, appearance.language);
@@ -50,7 +51,7 @@ var _sfc_main$6 = {
 		});
 		const height = computed(() => props.natural ? scene.value.nodes[0].contentHeight + "px" : "100%");
 		const views = computed(() => Object.fromEntries(["light", "dark"].map((mode) => [mode + "Accent", {
-			component: _sfc_main$11,
+			component: _sfc_main$12,
 			props: {
 				options: accentPresets,
 				mode,
@@ -91,7 +92,7 @@ var _sfc_main$6 = {
 				ref: host,
 				class: normalizeClass(["frame-settings", { "frame-settings-natural": __props.natural }]),
 				style: normalizeStyle({ height: height.value })
-			}, [createVNode(_sfc_main$9, {
+			}, [createVNode(_sfc_main$10, {
 				scene: scene.value,
 				views: views.value,
 				onEvent: dispatch
@@ -207,12 +208,12 @@ function fields$3(model, language) {
 }
 //#endregion
 //#region src/features/configuration/ServerConfiguration.vue
-var _sfc_main$5 = {
+var _sfc_main$6 = {
 	components: {
-		FrameSettings: _sfc_main$6,
-		FrameView: _sfc_main$9,
-		AppIcon: _sfc_main$7,
-		AppButton: _sfc_main$8
+		FrameSettings: _sfc_main$7,
+		FrameView: _sfc_main$10,
+		AppIcon: _sfc_main$8,
+		AppButton: _sfc_main$9
 	},
 	props: {
 		ticket: {
@@ -255,7 +256,7 @@ var _sfc_main$5 = {
 			return !this.search && this.groups.some((group) => group.title === "Services and workers");
 		},
 		controlScene() {
-			return describe$3({
+			return describe$5({
 				workers: this.draft["services/process_count"],
 				runtime: this.configuration?.runtime,
 				dirty: this.hasChanges,
@@ -694,7 +695,414 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 		], 64)) : createCommentVNode("", true)
 	], 8, _hoisted_1$4);
 }
-var ServerConfiguration_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$5, [["render", _sfc_render]]);
+var ServerConfiguration_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$6, [["render", _sfc_render]]);
+//#endregion
+//#region ../src/tactic_stream/shared_ui/features/configuration/database_resources.ui.mjs
+function describe$2(model, width, language) {
+	const tr = (key) => translate(key, language);
+	const inset = spacing.content, gap = spacing.compact, body = width - 2 * inset;
+	const enabled = !!model.canWrite && !model.busy && !model.uncertain;
+	const saved = model.identity && model.identity !== "new";
+	const clean = enabled && saved && !model.dirty;
+	const document = model.document || {}, metadata = model.metadata || {};
+	if (model.confirm) return Object.assign(describe$3({
+		message: tr({
+			delete: "Delete this unused connection? Project databases and their data will remain intact.",
+			bind: "Change the project connection? Existing data is not moved. Verify that the target database contains the project data.",
+			unbind: "Use the server default connection for this project? Existing data is not moved.",
+			upgrade: "Update the bound project database schema? Configuration migrations run in a transaction. Back up this database before proceeding.",
+			save: "Change this connection for its bound projects? Their next requests will use the new connection. Existing data is not moved."
+		}[model.confirm]),
+		accept: "Continue",
+		reject: "Cancel",
+		busy: model.busy,
+		acceptId: "databaseResourceConfirm",
+		rejectId: "databaseResourceReject"
+	}, width, 220, language), { height: 220 });
+	const nodes = [];
+	let y = inset;
+	function text(id, value, height = 24, props = {}) {
+		nodes.push(label(id, rect(inset, y, body, height), tr(value), props));
+		y += height + gap;
+	}
+	if (!model.canWrite && !model.busy) {
+		text("resourceAccess", "Database resources require administrator access", 60, { wrap: true });
+		return {
+			nodes,
+			height: y
+		};
+	}
+	nodes.push(node("Choice", "resourceSelector", rect(inset, y, Math.max(80, body - 88), 38), {
+		value: model.identity,
+		options: (model.catalog || []).map((row) => ({
+			value: row.identity,
+			label: row.identity === "new" ? tr("New resource") : row.title
+		})),
+		enabled: enabled && !model.dirty,
+		action: { type: "select" },
+		label: tr("Database resource")
+	}));
+	nodes.push(button("resourceNew", rect(width - inset - 80, y, 36, 36), tr("New resource"), "add", { type: "new" }, enabled && !model.dirty, { iconOnly: true }));
+	nodes.push(button("resourceRefresh", rect(width - inset - 36, y, 36, 36), tr("Refresh"), "refresh", { type: "refresh" }, !model.busy && (!model.dirty || model.uncertain), { iconOnly: true }));
+	y += 38 + spacing.section;
+	if (model.busy) text("resourceBusy", "Working…");
+	if (model.error) text("resourceError", model.error, 60, {
+		wrap: true,
+		color: "error"
+	});
+	if (metadata.notice) text("resourceNotice", metadata.notice, 44, { wrap: true });
+	if (model.uncertain) text("resourceUncertain", "The save result is unknown. Reload before editing again.", 60, {
+		wrap: true,
+		color: "error"
+	});
+	const fields = [
+		[
+			"code",
+			"Resource code",
+			"Field"
+		],
+		[
+			"vendor",
+			"Database engine",
+			"Choice"
+		],
+		[
+			"host",
+			"Database host",
+			"Field"
+		],
+		[
+			"port",
+			"Database port",
+			"Field"
+		],
+		[
+			"login",
+			"Database user",
+			"Field"
+		],
+		[
+			"password",
+			metadata.hasPassword ? "Replacement password (leave empty to keep)" : "Database password",
+			"Field"
+		]
+	];
+	const columns = width >= 640 ? 2 : 1, cell = (body - gap * (columns - 1)) / columns;
+	fields.forEach(([key, title, kind], index) => {
+		const x = inset + index % columns * (cell + gap), row = y + Math.floor(index / columns) * 76;
+		nodes.push(label("resourceLabel_" + key, rect(x, row, cell, 24), tr(title)));
+		nodes.push(node(kind, "resourceField_" + key, rect(x, row + 28, cell, 38), {
+			value: document[key] || "",
+			text: document[key] || "",
+			label: tr(title),
+			enabled: enabled && (key !== "code" || !saved),
+			password: key === "password",
+			action: {
+				type: "field",
+				field: key
+			},
+			options: key === "vendor" ? [{
+				value: "PostgreSQL",
+				label: "PostgreSQL"
+			}, {
+				value: "Sqlite",
+				label: "SQLite"
+			}] : []
+		}));
+	});
+	y += Math.ceil(fields.length / columns) * 76;
+	nodes.push(node("CheckBox", "resourceClearPassword", rect(inset, y, body, 36), {
+		text: tr("Clear stored password"),
+		checked: !!document.clearPassword,
+		enabled: enabled && !!metadata.hasPassword,
+		action: {
+			type: "field",
+			field: "clearPassword"
+		}
+	}));
+	y += 44;
+	text("resourceSaveHint", "Save connection changes before testing or changing project bindings.", 44, {
+		wrap: true,
+		color: "muted"
+	});
+	const buttons = [
+		[
+			"save",
+			"Save connection",
+			"save",
+			enabled && model.dirty
+		],
+		[
+			"discard",
+			"Discard changes",
+			"undo",
+			!model.busy && model.dirty
+		],
+		[
+			"delete",
+			"Delete connection",
+			"delete",
+			clean
+		]
+	];
+	const buttonColumns = width >= 640 ? 3 : 1, buttonWidth = (body - gap * (buttonColumns - 1)) / buttonColumns;
+	buttons.forEach(([type, title, icon, active], index) => nodes.push(button("resource_" + type, rect(inset + index % buttonColumns * (buttonWidth + gap), y + Math.floor(index / buttonColumns) * 44, buttonWidth, 36), tr(title), icon, { type }, active, {
+		destructive: type === "delete",
+		highlighted: type === "save"
+	})));
+	y += Math.ceil(buttons.length / buttonColumns) * 44 + spacing.section;
+	text("resourceDatabaseTitle", "Connection and schema", 24, { bold: true });
+	nodes.push(node("Field", "resourceDatabase", rect(inset, y, body, 38), {
+		text: model.database || "",
+		label: tr("Database name"),
+		placeholder: tr("Database name"),
+		enabled: clean,
+		action: { type: "database" }
+	}));
+	y += 46;
+	const targets = [[
+		"test",
+		"Test connection",
+		"link"
+	], [
+		"upgrade",
+		"Update schema",
+		"database"
+	]];
+	targets.forEach(([type, title, icon], index) => nodes.push(button("resource_" + type, rect(inset + index % columns * (body + gap) / columns, y + Math.floor(index / columns) * 44, (body - gap * (columns - 1)) / columns, 36), tr(title), icon, { type }, clean && !!model.database)));
+	y += Math.ceil(targets.length / columns) * 44 + spacing.section;
+	text("resourceProjectTitle", "Project connection", 24, { bold: true });
+	nodes.push(node("Choice", "resourceProject", rect(inset, y, body, 38), {
+		value: model.project || "",
+		options: (metadata.projects || []).filter((row) => !row.retired).map((row) => ({
+			value: row.code,
+			label: row.title + " · " + row.database
+		})),
+		enabled: clean,
+		label: tr("Project"),
+		action: { type: "project" }
+	}));
+	y += 46;
+	[["bind", "Bind project"], ["unbind", "Use server defaults"]].forEach(([type, title], index) => nodes.push(button("resource_" + type, rect(inset + index % columns * (body + gap) / columns, y + Math.floor(index / columns) * 44, (body - gap * (columns - 1)) / columns, 36), tr(title), "link", { type }, clean && !!model.project)));
+	y += Math.ceil(2 / columns) * 44;
+	text("resourceBindHint", "Binding changes the connection only. It does not create a database or copy project data.", 60, {
+		wrap: true,
+		color: "muted"
+	});
+	text("resourceBindingsTitle", "Bound projects", 24, { bold: true });
+	const bound = (metadata.projects || []).filter((row) => row.resource === model.identity);
+	if (!bound.length) text("resourceNoBindings", "No projects use this connection", 36, { wrap: true });
+	bound.forEach((row, index) => text("resourceBound_" + index, row.title + " · " + row.database, 36, { wrap: true }));
+	return {
+		nodes,
+		height: y + inset
+	};
+}
+function page(model, width, height, language) {
+	const content = describe$2(model, Math.max(0, width - spacing.content), language);
+	return { nodes: [node("Scroll", "resourceScroll", rect(0, 0, width, height), {
+		contentHeight: content.height,
+		scrollbarId: "resourceScrollbar",
+		children: content.nodes
+	})] };
+}
+var DatabaseResources_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
+	__name: "DatabaseResources",
+	props: {
+		ticket: String,
+		active: Boolean,
+		canAdminister: Boolean
+	},
+	emits: ["session-expired"],
+	setup(__props, { expose: __expose, emit: __emit }) {
+		const props = __props;
+		const emit = __emit;
+		const host = ref(null), viewport = ref({
+			width: 800,
+			height: 600
+		}), state = ref({
+			document: {},
+			metadata: {},
+			catalog: [],
+			identity: "",
+			revision: "",
+			canWrite: false
+		});
+		const original = ref("{}"), busy = ref(false), error = ref(""), uncertain = ref(false), confirm = ref(""), database = ref(""), project = ref("");
+		const dirty = computed(() => JSON.stringify(state.value.document) !== original.value);
+		const scene = computed(() => page({
+			...state.value,
+			dirty: dirty.value,
+			busy: busy.value,
+			error: error.value,
+			uncertain: uncertain.value,
+			confirm: confirm.value,
+			database: database.value,
+			project: project.value
+		}, viewport.value.width, viewport.value.height, appearance.language));
+		let generation = 0, observer, confirmSaveResolve;
+		async function request(action, identity = state.value.identity, confirmed = false) {
+			if (busy.value || !props.canAdminister) return false;
+			busy.value = true;
+			error.value = "";
+			const token = ++generation;
+			try {
+				const result = await databaseResources(action, props.ticket, {
+					identity,
+					expected_revision: state.value.revision,
+					...action === "save" ? { document: state.value.document } : {},
+					...confirmed ? { confirmation: action } : {},
+					...action === "test" ? {
+						document: state.value.document,
+						database: database.value
+					} : {},
+					...action === "upgrade" ? { database: database.value } : {},
+					...["bind", "unbind"].includes(action) ? { project_code: project.value } : {}
+				});
+				if (token !== generation) return false;
+				state.value = result;
+				original.value = JSON.stringify(result.document);
+				uncertain.value = false;
+				const bound = result.metadata.projects.filter((row) => row.resource === result.identity);
+				if (!database.value) database.value = bound[0]?.database || "";
+				if (!project.value) project.value = bound[0]?.code || "";
+				return true;
+			} catch (failure) {
+				if (token !== generation) return false;
+				error.value = failure.message;
+				if ([
+					"save",
+					"delete",
+					"bind",
+					"unbind"
+				].includes(action) && failure.status !== 400 && failure.status !== 403 && failure.status !== 409) uncertain.value = true;
+				if (failure.status === 403) emit("session-expired");
+				return false;
+			} finally {
+				if (token === generation) busy.value = false;
+			}
+		}
+		function discard() {
+			state.value.document = JSON.parse(original.value);
+			error.value = "";
+			confirm.value = "";
+		}
+		async function save() {
+			if (uncertain.value || busy.value) return false;
+			if (!dirty.value) return !uncertain.value;
+			if (state.value.metadata.projects?.some((row) => row.resource === state.value.identity)) {
+				confirm.value = "save";
+				return new Promise((resolve) => {
+					confirmSaveResolve = resolve;
+				});
+			}
+			return await request("save");
+		}
+		async function dispatch(action) {
+			if (action.type === "field" && !busy.value) {
+				state.value.document[action.field] = action.value;
+				return;
+			}
+			if (action.type === "database") {
+				database.value = action.value;
+				return;
+			}
+			if (action.type === "project") {
+				project.value = action.value;
+				database.value = state.value.metadata.projects.find((row) => row.code === action.value)?.database || "";
+				return;
+			}
+			if (action.type === "reject") {
+				confirm.value = "";
+				confirmSaveResolve?.(false);
+				confirmSaveResolve = null;
+				return;
+			}
+			if (action.type === "accept") {
+				const type = confirm.value;
+				confirm.value = "";
+				const result = await request(type, state.value.identity, true);
+				confirmSaveResolve?.(result);
+				confirmSaveResolve = null;
+				return;
+			}
+			if (busy.value) return;
+			if (action.type === "discard") discard();
+			else if (action.type === "save") await save();
+			else if (action.type === "select" && !dirty.value) {
+				database.value = project.value = "";
+				await request("load", action.value);
+			} else if (action.type === "new" && !dirty.value) {
+				database.value = project.value = "";
+				await request("load", "new");
+			} else if (action.type === "refresh" && (!dirty.value || uncertain.value)) await request("list");
+			else if (action.type === "test" && !dirty.value) await request("test");
+			else if ([
+				"delete",
+				"bind",
+				"unbind",
+				"upgrade"
+			].includes(action.type) && !dirty.value) confirm.value = action.type;
+		}
+		watch(() => [props.ticket, props.canAdminister], () => {
+			generation++;
+			confirmSaveResolve?.(false);
+			confirmSaveResolve = null;
+			confirm.value = "";
+			database.value = project.value = "";
+			busy.value = false;
+			state.value = {
+				document: {},
+				metadata: {},
+				catalog: [],
+				identity: "",
+				revision: "",
+				canWrite: false
+			};
+			original.value = "{}";
+			error.value = "";
+			uncertain.value = false;
+			if (props.active && props.canAdminister) request("list");
+		});
+		watch(() => props.active, (value) => {
+			if (value && props.canAdminister && !state.value.revision) request("list");
+		}, { immediate: true });
+		onMounted(() => {
+			observer = observeFrameSizes((entries) => {
+				const size = entries.at(-1).contentRect;
+				viewport.value = {
+					width: size.width,
+					height: size.height
+				};
+			});
+			observer.observe(host.value);
+		});
+		onBeforeUnmount(() => {
+			generation++;
+			observer?.disconnect();
+			state.value.document.password = "";
+			confirmSaveResolve?.(false);
+		});
+		__expose({
+			dirty,
+			busy,
+			save,
+			discard,
+			request,
+			uncertain
+		});
+		return (_ctx, _cache) => {
+			return openBlock(), createElementBlock("div", {
+				ref_key: "host",
+				ref: host,
+				class: "database-resources"
+			}, [createVNode(_sfc_main$10, {
+				scene: scene.value,
+				onEvent: dispatch
+			}, null, 8, ["scene"])], 512);
+		};
+	}
+}, [["__scopeId", "data-v-cb76b7a7"]]);
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/projects/catalog.ui.mjs
 var fields$2 = ["projectCode", "projectDetails"];
@@ -949,7 +1357,7 @@ function describe(model, width, height, language) {
 		button("projectEditorHelp", rect(width - 86, 12, 32, 32), text("Project help"), "help", { type: "help" }, true, { iconOnly: true }),
 		button("projectEditorClose", rect(width - 48, 12, 32, 32), text("Close"), "close", { type: "close" }, !model.busy, { iconOnly: true })
 	];
-	const body = describe$2({
+	const body = describe$4({
 		fields: formFields,
 		values: model.values || {},
 		busy: model.busy || model.loading || model.uncertain || model.blocked,
@@ -1115,7 +1523,7 @@ var _sfc_main$4 = {
 				ref_key: "host",
 				ref: host,
 				class: "project-editor-frame"
-			}, [createVNode(_sfc_main$9, {
+			}, [createVNode(_sfc_main$10, {
 				scene: scene.value,
 				views: views.value,
 				onEvent: dispatch
@@ -1293,7 +1701,7 @@ var _sfc_main$3 = {
 				class: "configuration-projects-frame",
 				"aria-busy": busy.value
 			}, [
-				createVNode(_sfc_main$9, {
+				createVNode(_sfc_main$10, {
 					scene: scene.value,
 					models: { projects: visible.value },
 					"describe-row": row,
@@ -1501,7 +1909,7 @@ function editor(model, width, height, language) {
 	if (showDetails) {
 		const left = compact ? 0 : sidebar + margin + 12, top = compact ? 90 : 48;
 		if (compact) nodes.push(button("repositoryBack", rect(16, 50, 150, 34), text("Repositories"), "previous", { type: "back" }, true));
-		const body = describe$2({
+		const body = describe$4({
 			fields: editorFields(model),
 			values: model.record || {},
 			busy: model.busy,
@@ -1579,7 +1987,7 @@ function summary(model, width, height, language) {
 	});
 	const values = { currentPath: model.currentPath || "" };
 	for (const record of model.records || []) values["repositoryPath_" + record.alias] = record.path || record.windowsPath || record.linuxPath || "";
-	return describe$2({
+	return describe$4({
 		fields,
 		values,
 		error: model.error,
@@ -1690,7 +2098,7 @@ var _sfc_main$2 = {
 				ref: host,
 				class: "repository-settings repository-summary-frame",
 				"aria-busy": checking.value
-			}, [createVNode(_sfc_main$9, {
+			}, [createVNode(_sfc_main$10, {
 				scene: scene.value,
 				onEvent: dispatch
 			}, null, 8, ["scene"])], 8, _hoisted_1$2);
@@ -1909,7 +2317,7 @@ var _sfc_main$1 = {
 				ref_key: "host",
 				ref: host,
 				class: "repository-editor-frame"
-			}, [createVNode(_sfc_main$9, {
+			}, [createVNode(_sfc_main$10, {
 				scene: scene.value,
 				models: { repositories: canonical.value },
 				"describe-row": row$2,
@@ -1997,7 +2405,7 @@ var _sfc_main = {
 			observer.observe(host.value);
 		});
 		onBeforeUnmount(() => observer?.disconnect());
-		const scene = computed(() => describe$4({
+		const scene = computed(() => describe$6({
 			product: "TACTIC STREAM",
 			page: page.value,
 			pages: pages$1,
@@ -2023,14 +2431,15 @@ var _sfc_main = {
 		const page = ref(pages$1.some((item) => item.id === savedPage) ? savedPage : "server");
 		const origin = location.origin;
 		const current = computed(() => pages$1.find((item) => item.id === page.value));
-		const server = ref(null), error = ref(""), notice = ref(""), saving = ref(false), clearing = ref(false), confirmClose = ref(null), confirmClear = ref(null);
+		const server = ref(null), databaseResources = ref(null), error = ref(""), notice = ref(""), saving = ref(false), clearing = ref(false), confirmClose = ref(null), confirmClear = ref(null);
 		const repositoryEditor = ref(null), repositories = ref(null);
 		const cacheScope = ref("server");
 		const clone = (value) => JSON.parse(JSON.stringify(value));
 		const drafts = reactive(clone(preferences)), networkDraft = reactive(clone(networkSettings)), debugDraft = reactive(clone(debugSettings));
 		const appearanceBaseline = ref(JSON.stringify(appearance)), networkBaseline = ref(JSON.stringify(networkSettings)), debugBaseline = ref(JSON.stringify(debugSettings)), baselines = ref(clone(preferences));
-		const busy = computed(() => saving.value || clearing.value || !!server.value?.loading || !!server.value?.saving);
+		const busy = computed(() => saving.value || clearing.value || !!server.value?.loading || !!server.value?.saving || !!databaseResources.value?.busy);
 		function pageDirty(id) {
+			if (id === "database_resources") return !!databaseResources.value?.dirty || !!databaseResources.value?.uncertain;
 			if (id === "appearance") return JSON.stringify(appearance) !== appearanceBaseline.value;
 			const settingsDirty = id in drafts && JSON.stringify(drafts[id]) !== JSON.stringify(baselines.value[id]);
 			const groups = pages$1.find((item) => item.id === id)?.groups || [];
@@ -2174,6 +2583,7 @@ var _sfc_main = {
 			});
 		}
 		function restore(id) {
+			if (id === "database_resources") databaseResources.value?.discard();
 			if (id === "appearance") Object.assign(appearance, JSON.parse(appearanceBaseline.value));
 			if (id in drafts) drafts[id] = clone(baselines.value[id]);
 			if (id === "server") Object.assign(networkDraft, JSON.parse(networkBaseline.value));
@@ -2216,6 +2626,7 @@ var _sfc_main = {
 			}
 		}
 		async function applyPage(id) {
+			if (id === "database_resources") return databaseResources.value ? await databaseResources.value.save() : true;
 			const definition = pages$1.find((item) => item.id === id);
 			if (id === "checkin" && (!Number.isInteger(drafts.checkin.displayLimit) || drafts.checkin.displayLimit < 1 || drafts.checkin.displayLimit > 500)) {
 				page.value = id;
@@ -2378,7 +2789,7 @@ var _sfc_main = {
 				"aria-busy": busy.value
 			}, [
 				createBaseVNode("span", _hoisted_2, toDisplayString(unref(t)("Configuration")), 1),
-				createVNode(_sfc_main$9, {
+				createVNode(_sfc_main$10, {
 					scene: scene.value,
 					onEvent: dispatch
 				}, null, 8, ["scene"]),
@@ -2388,6 +2799,18 @@ var _sfc_main = {
 				}, [
 					error.value ? (openBlock(), createElementBlock("p", _hoisted_3, toDisplayString(unref(t)(error.value)), 1)) : createCommentVNode("", true),
 					notice.value ? (openBlock(), createElementBlock("p", _hoisted_4, toDisplayString(unref(t)(notice.value)), 1)) : createCommentVNode("", true),
+					withDirectives(createVNode(DatabaseResources_default, {
+						ref_key: "databaseResources",
+						ref: databaseResources,
+						ticket: __props.ticket,
+						active: page.value === "database_resources",
+						"can-administer": __props.canAdminister,
+						onSessionExpired: _cache[0] || (_cache[0] = ($event) => emit("session-expired"))
+					}, null, 8, [
+						"ticket",
+						"active",
+						"can-administer"
+					]), [[vShow, page.value === "database_resources"]]),
 					[
 						"server",
 						"appearance",
@@ -2395,7 +2818,7 @@ var _sfc_main = {
 						"global",
 						"cache",
 						"tasks"
-					].includes(page.value) ? (openBlock(), createBlock(_sfc_main$6, {
+					].includes(page.value) ? (openBlock(), createBlock(_sfc_main$7, {
 						key: 2,
 						page: page.value,
 						values: pageValues.value,
@@ -2403,7 +2826,7 @@ var _sfc_main = {
 						busy: busy.value,
 						natural: ["server", "tasks"].includes(page.value) && __props.canAdminister,
 						onField: editField,
-						onColumns: _cache[0] || (_cache[0] = ($event) => drafts.tasks.columns = $event),
+						onColumns: _cache[1] || (_cache[1] = ($event) => drafts.tasks.columns = $event),
 						onAction: settingsAction
 					}, null, 8, [
 						"page",
@@ -2412,7 +2835,7 @@ var _sfc_main = {
 						"busy",
 						"natural"
 					])) : createCommentVNode("", true),
-					withDirectives(createVNode(_sfc_main$12, {
+					withDirectives(createVNode(_sfc_main$13, {
 						ref_key: "providerEditor",
 						ref: providerEditor,
 						embedded: "",
@@ -2430,7 +2853,7 @@ var _sfc_main = {
 						project: __props.project,
 						"can-administer": __props.canAdminister,
 						"open-project": __props.openProject,
-						onHelp: _cache[1] || (_cache[1] = ($event) => emit("help", $event))
+						onHelp: _cache[2] || (_cache[2] = ($event) => emit("help", $event))
 					}, null, 8, [
 						"ticket",
 						"project",
@@ -2443,12 +2866,12 @@ var _sfc_main = {
 						ref: repositories,
 						ticket: __props.ticket,
 						busy: busy.value,
-						onEdit: _cache[2] || (_cache[2] = ($event) => repositoryEditor.value.show()),
-						onSessionExpired: _cache[3] || (_cache[3] = ($event) => emit("session-expired"))
+						onEdit: _cache[3] || (_cache[3] = ($event) => repositoryEditor.value.show()),
+						onSessionExpired: _cache[4] || (_cache[4] = ($event) => emit("session-expired"))
 					}, null, 8, ["ticket", "busy"])) : createCommentVNode("", true),
-					__props.canAdminister && ["server", "tasks"].includes(page.value) && server.value?.configuration ? (openBlock(), createElementBlock("section", _hoisted_5, [createVNode(_sfc_main$10, {
+					__props.canAdminister && ["server", "tasks"].includes(page.value) && server.value?.configuration ? (openBlock(), createElementBlock("section", _hoisted_5, [createVNode(_sfc_main$11, {
 						modelValue: server.value.activeGroup,
-						"onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => server.value.activeGroup = $event),
+						"onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => server.value.activeGroup = $event),
 						options: currentGroups.value.map((title) => ({
 							value: title,
 							label: title
@@ -2456,7 +2879,7 @@ var _sfc_main = {
 						label: "Server settings section"
 					}, null, 8, ["modelValue", "options"]), createVNode(AppSearchField_default, {
 						modelValue: server.value.search,
-						"onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => server.value.search = $event),
+						"onUpdate:modelValue": _cache[6] || (_cache[6] = ($event) => server.value.search = $event),
 						label: "Find a setting",
 						placeholder: "Find a setting…"
 					}, null, 8, ["modelValue"])])) : createCommentVNode("", true),
@@ -2471,7 +2894,7 @@ var _sfc_main = {
 						"group-titles": currentGroups.value,
 						ticket: __props.ticket,
 						"show-details": "",
-						onSessionExpired: _cache[6] || (_cache[6] = ($event) => emit("session-expired"))
+						onSessionExpired: _cache[7] || (_cache[7] = ($event) => emit("session-expired"))
 					}, null, 8, ["group-titles", "ticket"])), [[vShow, serverPages.value.includes(page.value)]]) : createCommentVNode("", true)], 8, ["disabled"])),
 					!__props.canAdminister && page.value === "repository" ? (openBlock(), createElementBlock("p", _hoisted_6, toDisplayString(unref(t)("Repository configuration requires administrator access.")), 1)) : createCommentVNode("", true)
 				], 4),
@@ -2486,12 +2909,12 @@ var _sfc_main = {
 					repositories: repositories.value?.records || [],
 					busy: busy.value || repositories.value?.checking,
 					dirty: pageDirty("repository"),
-					onCheck: _cache[7] || (_cache[7] = ($event) => repositories.value.load("check", $event)),
+					onCheck: _cache[8] || (_cache[8] = ($event) => repositories.value.load("check", $event)),
 					onClose: closeRepository,
-					onReset: _cache[8] || (_cache[8] = ($event) => restore("repository")),
+					onReset: _cache[9] || (_cache[9] = ($event) => restore("repository")),
 					onSave: applyRepository
 				}, {
-					default: withCtx(() => [..._cache[10] || (_cache[10] = [createBaseVNode("div", { id: "configuration-repository-editor-body" }, null, -1)])]),
+					default: withCtx(() => [..._cache[11] || (_cache[11] = [createBaseVNode("div", { id: "configuration-repository-editor-body" }, null, -1)])]),
 					_: 1
 				}, 8, [
 					"server",
@@ -2506,7 +2929,7 @@ var _sfc_main = {
 					class: "record-dialog configuration-confirmation",
 					style: normalizeStyle({ width: confirmationWidth.value + "px" }),
 					"aria-label": unref(t)("Unsaved changes")
-				}, [createBaseVNode("header", null, [createBaseVNode("h2", null, toDisplayString(unref(t)("Unsaved changes")), 1)]), createVNode(_sfc_main$9, {
+				}, [createBaseVNode("header", null, [createBaseVNode("h2", null, toDisplayString(unref(t)("Unsaved changes")), 1)]), createVNode(_sfc_main$10, {
 					scene: closeScene.value,
 					style: { "height": "248px" },
 					onEvent: confirmationAction
@@ -2517,10 +2940,10 @@ var _sfc_main = {
 					class: "record-dialog configuration-confirmation",
 					style: normalizeStyle({ width: confirmationWidth.value + "px" }),
 					"aria-label": unref(t)(cacheScope.value === "tabs" ? "Clear saved branch expansion?" : "Clear cached server data?")
-				}, [createBaseVNode("header", null, [createBaseVNode("h2", null, toDisplayString(unref(t)(cacheScope.value === "tabs" ? "Clear saved branch expansion?" : "Clear cached server data?")), 1)]), createVNode(_sfc_main$9, {
+				}, [createBaseVNode("header", null, [createBaseVNode("h2", null, toDisplayString(unref(t)(cacheScope.value === "tabs" ? "Clear saved branch expansion?" : "Clear cached server data?")), 1)]), createVNode(_sfc_main$10, {
 					scene: clearScene.value,
 					style: { "height": "220px" },
-					onEvent: _cache[9] || (_cache[9] = ($event) => $event.type === "accept" ? clearCache() : confirmClear.value.close())
+					onEvent: _cache[10] || (_cache[10] = ($event) => $event.type === "accept" ? clearCache() : confirmClear.value.close())
 				}, null, 8, ["scene"])], 12, _hoisted_9)
 			], 8, _hoisted_1);
 		};

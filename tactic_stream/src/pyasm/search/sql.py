@@ -1038,14 +1038,19 @@ class DbResource(Base):
 
     @classmethod
     def get_by_code(cls, code, database):
-        from pyasm.search.search import Search
+        from pyasm.search.search import _context
         from pyasm.common.common import TacticException
-        resource = Search.get_by_code('sthpw/db_resource', code)
+        # Project routing needs server-side credentials for ordinary users too;
+        # direct client/expression reads of this table retain their admin guard.
+        store = _context.get().store
+        parameter = store.get_db_resource().get_database_impl().get_parameter()
+        with store.connection() as db:
+            row = db.execute('SELECT host,port,vendor,login,password FROM db_resource WHERE code=' + parameter, (code,)).fetchone()
+            resource = dict(row) if row else None
         if resource is None:
             raise TacticException('Database Resource [%s] does not exist' % code)
-        return cls(database, host=resource.get_value('host'), port=resource.get_value('port'),
-                   vendor=resource.get_value('vendor'), user=resource.get_value('login'),
-                   password=resource.get_value('password'))
+        return cls(database, host=resource['host'], port=resource['port'],
+                   vendor=resource['vendor'], user=resource['login'], password=resource['password'])
 
     @classmethod
     def clear_cache(cls):

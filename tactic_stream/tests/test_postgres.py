@@ -631,9 +631,9 @@ result = {
                     with self.assertRaises(SecurityException):
                         api.dispatch('query', (ordinary, 'sthpw/db_resource'))
                     with request_context(RequestContext(store, 'ordinary', 'one')):
-                        for stype in ('sthpw/db_resource', 'contract/entity'):
-                            with self.assertRaises(SecurityException):
-                                Search(stype)
+                        with self.assertRaises(SecurityException):
+                            Search('sthpw/db_resource')
+                        self.assertEqual(Search('contract/entity').get_sobject_codes(), ['A', 'B'])
                         import xml.etree.ElementTree as ET
                         from pyasm.biz.schema import Schema
                         ET.SubElement(Schema.get(project_code='sthpw').xml, 'connect', {

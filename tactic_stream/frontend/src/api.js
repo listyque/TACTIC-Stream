@@ -75,6 +75,10 @@ export function serverRuntime(ticket) {
   return post('/admin/configuration/runtime', { ticket }, AbortSignal.timeout(3000), true)
 }
 
+export function databaseResources(action, ticket, values = {}) {
+  return post('/admin/configuration/database-resources/' + action, { ticket, ...values })
+}
+
 export function rawDatabase(action, ticket, project, values = {}) {
   return post('/admin/raw-database/' + action, { ticket, project, ...values })
 }

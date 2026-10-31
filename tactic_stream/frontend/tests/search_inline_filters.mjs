@@ -195,6 +195,17 @@ try {
   await button('status').click();
   const menu = page.locator('.search-quick-filters');
   await menu.getByRole('button', { name: 'Review', exact: true }).waitFor();
+  async function anchoredAtGroup(key) {
+    const anchor = await button(key).boundingBox();
+    const panel = await menu.locator('.account-panel').boundingBox();
+    const expected = Math.max(4, Math.min(anchor.x, 1500 - panel.width - 4));
+    assert(
+      Math.abs(panel.x - expected) < 1,
+      `Popup left ${panel.x}; group anchor ${anchor.x}; expected ${expected}`
+    );
+    assert(panel.y >= anchor.y + anchor.height);
+  }
+  await anchoredAtGroup('status');
   assert.equal(await menu.getByRole('region').count(), 1);
   await menu.getByRole('button', { name: 'Review', exact: true }).click();
   await page.waitForFunction(
@@ -213,6 +224,7 @@ try {
   await button('assigned')
     .locator('[data-frame="searchQuickGroup_assignedIndicator"]')
     .tap();
+  await menu.getByRole('button', { name: 'MY TASKS', exact: true }).waitFor();
   assert.equal(await menu.getByRole('region').count(), 1);
   await menu.getByRole('button', { name: 'MY TASKS', exact: true }).click();
   await page.waitForFunction(
@@ -242,6 +254,7 @@ try {
   await button('status').focus();
   await page.keyboard.press('Enter');
   await menu.getByRole('button', { name: 'Review', exact: true }).waitFor();
+  await anchoredAtGroup('status');
   await page.keyboard.press('Escape');
   await page.evaluate(() => (window.host.tab = 'two'));
   await page.waitForFunction(

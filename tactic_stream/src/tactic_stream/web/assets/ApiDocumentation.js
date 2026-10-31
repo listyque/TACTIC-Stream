@@ -1,6 +1,6 @@
 import { A as onMounted, E as nextTick, G as withCtx, K as withDirectives, L as resolveDynamicComponent, M as openBlock, N as renderList, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, et as unref, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, o as vModelText, p as computed, rt as toDisplayString, s as vShow, tt as normalizeClass, u as Fragment, y as createTextVNode } from "./vue.js";
 import { a as _sfc_main$2, o as t, s as appearance, t as _sfc_main$3 } from "./AppButton.js";
-import { A as rpc } from "./index.js";
+import { j as rpc } from "./index.js";
 import { H as observeFrameSizes, K as label, U as _sfc_main$5, X as rect, Y as node, h as copyText, t as _sfc_main$4, w as translate } from "./FrameView.js";
 import { t as _sfc_main$6 } from "./AppearanceControls.js";
 import { t as _sfc_main$7 } from "./CodeBlock.js";

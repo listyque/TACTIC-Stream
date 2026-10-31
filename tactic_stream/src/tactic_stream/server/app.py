@@ -1026,6 +1026,38 @@ def create_app(data_dir: Path, thread_count=None, *, event_collector=True) -> Fa
             status, code, message = 500, 'request_failed', 'Request failed.'
         return JSONResponse({'error': message, 'error_code': code}, status_code=status, headers={'Cache-Control': 'no-store'})
 
+    def database_resource_request(body, action):
+        from tactic_stream.server.database_resources import database_resources_request
+        from tactic_stream.server.widget_configuration import WidgetConfigConflict
+        try:
+            payload = json.loads(body.decode('utf-8'), parse_constant=reject_json_constant)
+            allowed = {'ticket', 'identity', 'document', 'expected_revision', 'database', 'project_code', 'confirmation'}
+            if not isinstance(payload, dict) or set(payload) - allowed or not isinstance(payload.get('ticket'), str):
+                raise ValueError('Invalid database resource request')
+            ticket = payload.pop('ticket')
+            login = api.auth.validate(ticket)
+            with request_context(RequestContext(api.store, login, 'admin')):
+                api.auth.bind_security(login, ticket)
+                result = database_resources_request(action, **payload)
+            return JSONResponse({'result': result}, headers={'Cache-Control': 'no-store'})
+        except (AuthenticationError, SecurityException):
+            status, message = 403, 'Database resources require administrator access'
+        except WidgetConfigConflict as error:
+            status, message = 409, str(error)
+        except ValueError as error:
+            status, message = 400, str(error)
+        except Exception:
+            # Neither driver diagnostics nor connection documents belong in responses/logs.
+            status, message = 500, 'Database resource operation failed. Check the connection and database permissions.'
+        return JSONResponse({'error': message}, status_code=status, headers={'Cache-Control': 'no-store'})
+
+    @app.post('/admin/configuration/database-resources/{action}', include_in_schema=False)
+    async def admin_database_resources(request: Request, action: str):
+        body = await admin_body(request)
+        if isinstance(body, Response):
+            return body
+        return await run_in_threadpool(database_resource_request, body, action)
+
     @app.post('/admin/raw-database/{action}', include_in_schema=False)
     async def admin_raw_database(request: Request, action: str):
         if action not in ('list', 'load', 'save', 'drop', 'export'):

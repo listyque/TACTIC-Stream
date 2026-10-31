@@ -1,7 +1,7 @@
 import { r as __exportAll } from "./ObjectFieldFrame.js";
 import { A as onMounted, E as nextTick, F as resolveComponent, I as resolveDirective, K as withDirectives, M as openBlock, N as renderList, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, u as Fragment } from "./vue.js";
 import { D as spacing, T as metrics, o as t, s as appearance, t as _sfc_main$4, z as _plugin_vue_export_helper_default } from "./AppButton.js";
-import { A as rpc } from "./index.js";
+import { j as rpc } from "./index.js";
 import { G as button, H as observeFrameSizes, I as monthLabel, K as label, L as parse, X as rect, Y as node, t as _sfc_main$5, w as translate } from "./FrameView.js";
 //#region ../src/tactic_stream/shared_ui/features/tasks/milestones.ui.mjs
 function layout(width, height, controlHeight = 36) {

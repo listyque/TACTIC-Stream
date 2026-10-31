@@ -31,6 +31,7 @@ import {
   colorModes
 } from '../../appearance.js';
 import ServerConfiguration from './ServerConfiguration.vue';
+import DatabaseResources from './DatabaseResources.vue';
 import { debugSettings } from '../debug/debugLog.js';
 import {
   networkSettings,
@@ -131,6 +132,7 @@ const page = ref(
 const origin = location.origin;
 const current = computed(() => pages.find((item) => item.id === page.value));
 const server = ref(null),
+  databaseResources = ref(null),
   error = ref(''),
   notice = ref(''),
   saving = ref(false),
@@ -153,9 +155,14 @@ const busy = computed(
     saving.value ||
     clearing.value ||
     !!server.value?.loading ||
-    !!server.value?.saving
+    !!server.value?.saving ||
+    !!databaseResources.value?.busy
 );
 function pageDirty(id) {
+  if (id === 'database_resources')
+    return (
+      !!databaseResources.value?.dirty || !!databaseResources.value?.uncertain
+    );
   if (id === 'appearance')
     return JSON.stringify(appearance) !== appearanceBaseline.value;
   const settingsDirty =
@@ -323,6 +330,7 @@ function begin() {
   });
 }
 function restore(id) {
+  if (id === 'database_resources') databaseResources.value?.discard();
   if (id === 'appearance')
     Object.assign(appearance, JSON.parse(appearanceBaseline.value));
   if (id in drafts) drafts[id] = clone(baselines.value[id]);
@@ -373,6 +381,10 @@ function persist(entries) {
   }
 }
 async function applyPage(id) {
+  if (id === 'database_resources')
+    return databaseResources.value
+      ? await databaseResources.value.save()
+      : true;
   const definition = pages.find((item) => item.id === id);
   if (
     id === 'checkin' &&
@@ -587,6 +599,14 @@ defineExpose({
       <p v-if="notice" class="notice configuration-feedback" role="status">
         {{ t(notice) }}
       </p>
+      <DatabaseResources
+        ref="databaseResources"
+        v-show="page === 'database_resources'"
+        :ticket="ticket"
+        :active="page === 'database_resources'"
+        :can-administer="canAdminister"
+        @session-expired="emit('session-expired')"
+      />
       <FrameSettings
         v-if="
           [
