@@ -33244,7 +33244,6 @@ var _sfc_main = {
 			else if (action.type === "next") this.changePage(1);
 			else if (action.type === "size") this.changePageSize(action.value);
 			else if (action.type === "mode") this.setLoadingMode(action.value);
-			else if (action.type === "queue") this.openCommitQueue();
 			else if (action.type === "create") this.createRecord();
 		},
 		t,
@@ -37567,7 +37566,6 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 									count: $data.rows.length,
 									total: $data.totalCount,
 									range: $options.rowRange,
-									queue: !$data.compactShortcuts,
 									fileProject: $options.fileProject,
 									canCreate: (!$data.compactShortcuts || $data.type !== "sthpw/project") && !!($data.interfaceConfig?.operations?.create || $data.type === "sthpw/project" && $data.canAdminister)
 								},

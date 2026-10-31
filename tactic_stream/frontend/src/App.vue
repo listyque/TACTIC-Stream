@@ -431,7 +431,6 @@ export default {
       else if (action.type === 'next') this.changePage(1)
       else if (action.type === 'size') this.changePageSize(action.value)
       else if (action.type === 'mode') this.setLoadingMode(action.value)
-      else if (action.type === 'queue') this.openCommitQueue()
       else if (action.type === 'create') this.createRecord()
     },
     t,
@@ -2332,7 +2331,7 @@ export default {
         </div>
       </div>
       <DockWorkspaceFooter class="pagination workspace-footer frame-search-footer">
-        <SearchFooter :boundary="$refs.results?.parentElement" :model="{mode:continuous?'infinite':'pages',busy,page:page+1,pageCount,pageSize,pageNumbers,hasNext,count:rows.length,total:totalCount,range:rowRange,queue:!compactShortcuts,fileProject,canCreate:(!compactShortcuts || type!=='sthpw/project') && !!(interfaceConfig?.operations?.create || (type==='sthpw/project'&&canAdminister))}"
+        <SearchFooter :boundary="$refs.results?.parentElement" :model="{mode:continuous?'infinite':'pages',busy,page:page+1,pageCount,pageSize,pageNumbers,hasNext,count:rows.length,total:totalCount,range:rowRange,fileProject,canCreate:(!compactShortcuts || type!=='sthpw/project') && !!(interfaceConfig?.operations?.create || (type==='sthpw/project'&&canAdminister))}"
           @event="searchFooterEvent" />
       </DockWorkspaceFooter>
     </section>
