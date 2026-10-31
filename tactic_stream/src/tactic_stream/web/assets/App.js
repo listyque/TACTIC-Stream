@@ -6586,7 +6586,7 @@ function row$9(model, geometry, language) {
 			iconOnly: true,
 			iconAction: true,
 			iconSize: 17,
-			round: true,
+			round: false,
 			iconColor: model.notes ? "action" : "secondaryText",
 			badgeCount: model.notes || 0
 		}));
@@ -6605,7 +6605,7 @@ function row$9(model, geometry, language) {
 		iconOnly: true,
 		iconAction: true,
 		iconSize: 17,
-		round: true,
+		round: false,
 		iconColor: model.notes ? "action" : "secondaryText",
 		badgeCount: model.notes || 0
 	}));
@@ -8862,7 +8862,7 @@ var QuickFilterChip_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 			]);
 		};
 	}
-}, [["__scopeId", "data-v-bf604941"]]);
+}, [["__scopeId", "data-v-8937c7f3"]]);
 //#endregion
 //#region ../src/tactic_stream/shared_ui/controls/lists/chips.mjs
 function packTagRows(records, width, measure, allLabel, maximumChipWidth = 260, metrics = {}) {
@@ -13856,6 +13856,7 @@ var _sfc_main$61 = {
 				}, null, 8, ["scene"]),
 				__props.editable ? (openBlock(), createBlock(_sfc_main$103, {
 					key: 0,
+					round: "",
 					class: "navigation-drawer-action",
 					style: normalizeStyle(bounds("navigationEdit")),
 					"icon-only": "",
@@ -13865,6 +13866,7 @@ var _sfc_main$61 = {
 					onClick: edit
 				}, null, 8, ["style", "disabled"])) : createCommentVNode("", true),
 				createVNode(_sfc_main$103, {
+					round: "",
 					class: "navigation-drawer-action",
 					style: normalizeStyle(bounds("navigationClose")),
 					"icon-only": "",
@@ -22690,7 +22692,7 @@ function describe$10(model, width, language) {
 		iconOnly: true,
 		visible: !compact && model.shelf !== false,
 		iconAction: true,
-		round: true,
+		round: false,
 		iconColor: model.shelfOpen ? "action" : "secondaryText"
 	}));
 	if (!compact && model.shelf !== false) right -= spacing$1.tight;

@@ -9,7 +9,7 @@ defineProps({ checked: Boolean });
 .app-tab-button.app-button:not(.icon-button) {
   border: 0;
   background: transparent;
-  border-radius: var(--item-radius);
+  border-radius: var(--button-radius);
   font-size: var(--control-text-size);
   font-weight: 400;
   padding: 0 6px;

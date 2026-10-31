@@ -96,6 +96,7 @@ function node(kind, id, rect, properties) {
 		"height",
 		"fontSize"
 	]) if (Object.prototype.hasOwnProperty.call(options, key)) throw Error("Reserved Frame property: " + id + "." + key);
+	if (options.titlebar && options.children) options.children = options.children.map((child) => child.kind === "Button" ? Object.assign({}, child, { round: true }) : child);
 	const fontRole = options.fontRole === void 0 ? "body" : options.fontRole;
 	if (!Object.prototype.hasOwnProperty.call(textStyles, fontRole)) throw Error("Unknown Frame font role: " + id + "." + fontRole);
 	const button = kind === "Button";
@@ -10333,7 +10334,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 						"frame-radio-selected": node.radio && node.selected
 					}]),
 					style: normalizeStyle(Object.assign(style(node), {
-						borderRadius: node.round ? "50%" : void 0,
+						borderRadius: node.round ? "999px" : void 0,
 						color: node.iconAction && node.enabled !== false && (node.iconColor || node.highlighted) ? color(node.iconColor || "selectedText") : void 0
 					})),
 					label: node.text,
@@ -10342,6 +10343,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					tooltip: node.toolTip || (node.iconOnly ? node.label || node.text : void 0),
 					icon: node.icon,
 					"icon-only": node.iconOnly,
+					round: !!node.round,
 					href: node.href,
 					target: node.target,
 					rel: node.href ? "noopener noreferrer" : void 0,
@@ -10376,6 +10378,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"tooltip",
 					"icon",
 					"icon-only",
+					"round",
 					"href",
 					"target",
 					"rel",

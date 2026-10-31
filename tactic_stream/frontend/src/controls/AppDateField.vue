@@ -471,7 +471,7 @@ onBeforeUnmount(() => observer?.disconnect());
   z-index: -1;
   width: var(--calendar-day-size);
   height: var(--calendar-day-size);
-  border-radius: 50%;
+  border-radius: var(--button-radius);
 }
 .date-calendar .date-calendar-grid > .calendar-day:hover {
   background: transparent;

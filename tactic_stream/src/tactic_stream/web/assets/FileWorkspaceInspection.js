@@ -31,7 +31,7 @@ function views$1(model, width, height, language) {
 	}, true, {
 		iconOnly: true,
 		iconAction: true,
-		round: true
+		round: false
 	}));
 	x += h + 4;
 	const right = (model.canCreate ? 32 : 0) + (model.canMaximize ? 32 : 0) + (model.canActions === false ? 0 : 32);

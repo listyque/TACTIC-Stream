@@ -27,7 +27,7 @@ async function checkIcons(locator) {
     const m = ctx.measureText(glyph.textContent)
     const baseline = g.y + (parseFloat(style.lineHeight) - m.fontBoundingBoxAscent - m.fontBoundingBoxDescent) / 2 + m.fontBoundingBoxAscent
     return { label:button.getAttribute('aria-label'), width:b.width, height:b.height,
-      circle:button.classList.contains('icon-button'), radius:getComputedStyle(button).borderRadius, iconSize:parseFloat(getComputedStyle(icon).fontSize),
+      circle:button.classList.contains('icon-button'), round: !!button.closest('.topbar,.app-window-titlebar,.navigation-drawer-action,.round-button'), radius:getComputedStyle(button).borderRadius, iconSize:parseFloat(getComputedStyle(icon).fontSize),
       glyphSize:parseFloat(style.fontSize), pack:icon.className,
       boxX:i.x + i.width / 2 - b.x - b.width / 2, boxY:i.y + i.height / 2 - b.y - b.height / 2,
       glyphX:g.x + g.width / 2 - i.x - i.width / 2, glyphY:g.y + g.height / 2 - i.y - i.height / 2,
@@ -38,7 +38,7 @@ async function checkIcons(locator) {
   for (const row of rows) {
     const message = JSON.stringify(row)
     if (row.circle) {
-      assert.equal(row.radius, '50%', message)
+      assert(row.round ? parseFloat(row.radius) >= row.width / 2 || row.radius === '50%' : parseFloat(row.radius) <= 4, message)
       assert(Math.abs(row.width - row.height) < .1, message)
       assert(Math.abs(row.boxX) < .1, message)
       assert(row.iconSize / row.width <= .65, message)

@@ -64,7 +64,7 @@ function move(event) {
   padding: 2px;
   height: var(--control-height);
   border: 1px solid var(--outline-variant);
-  border-radius: var(--item-radius);
+  border-radius: var(--button-radius);
   background: var(--surface-high);
 }
 .app-segmented-button .app-button {
@@ -74,7 +74,7 @@ function move(event) {
   min-height: 0;
   padding: 0 5px;
   border: 0;
-  border-radius: max(3px, calc(var(--item-radius) - 2px));
+  border-radius: var(--button-radius);
   background: transparent;
   gap: 6px;
   font-size: var(--control-text-size);

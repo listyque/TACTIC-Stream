@@ -126,6 +126,7 @@ defineExpose({ open, close });
     >
       <FrameView :scene="chrome" :interactive="false" />
       <AppButton
+        round
         v-if="editable"
         class="navigation-drawer-action"
         :style="bounds('navigationEdit')"
@@ -136,6 +137,7 @@ defineExpose({ open, close });
         @click="edit"
       />
       <AppButton
+        round
         class="navigation-drawer-action"
         :style="bounds('navigationClose')"
         icon-only

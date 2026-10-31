@@ -525,7 +525,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         }"
         :style="
           Object.assign(style(node), {
-            borderRadius: node.round ? '50%' : undefined,
+            borderRadius: node.round ? '999px' : undefined,
             color:
               node.iconAction &&
               node.enabled !== false &&
@@ -542,6 +542,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         "
         :icon="node.icon"
         :icon-only="node.iconOnly"
+        :round="!!node.round"
         :href="node.href"
         :target="node.target"
         :rel="node.href ? 'noopener noreferrer' : undefined"

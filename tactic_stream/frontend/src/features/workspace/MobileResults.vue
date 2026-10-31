@@ -725,7 +725,7 @@ const snapshotFooter = ref(null);
   }
   .workspace-tabs.mobile-tabs > .icon-button {
     padding: 0;
-    border-radius: 50%;
+    border-radius: var(--button-radius);
   }
   .mobile-tabs #workspace-mobile-view-actions .inline-menu > .account-panel {
     display: grid;

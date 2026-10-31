@@ -57,7 +57,7 @@ const geometry = computed(() => filterGeometry(props.emphasis));
   min-height: 0;
   width: max-content;
   border: 1px solid var(--outline);
-  border-radius: 999px;
+  border-radius: var(--button-radius);
   padding: 0;
   background: var(--chip-surface);
   color: var(--chip-content);

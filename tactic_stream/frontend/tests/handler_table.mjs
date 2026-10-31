@@ -912,7 +912,7 @@ try {
     const paint = await shelf.evaluate(el => {const s=getComputedStyle(el);return {width:el.offsetWidth,height:el.offsetHeight,background:s.backgroundColor,radius:s.borderTopLeftRadius};});
     assert.equal(paint.width, paint.height);
     assert.equal(paint.background, 'rgba(0, 0, 0, 0)');
-    assert(['50%', '999px'].includes(paint.radius) || parseFloat(paint.radius) >= paint.width / 2);
+    assert.equal(parseFloat(paint.radius), 4);
   }
   await page.evaluate(() => window.host.page = 'empty');
   const arrow = page.locator('svg[data-frame="taskWorkspaceEmptyArrow"]');

@@ -93,3 +93,9 @@ defineEmits(['click']);
   justify-content: center;
 }
 </style>
+
+<style>
+.summary-chip.clickable {
+  border-radius: var(--button-radius);
+}
+</style>

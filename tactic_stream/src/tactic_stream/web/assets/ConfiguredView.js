@@ -16820,7 +16820,7 @@ function describe$5(model, width, height, language) {
 	const direction = model.direction || "add";
 	nodes.push(button("linkTransferButton", rect(narrow ? (width - 42) / 2 : 14 + paneWidth + 5, narrow ? 82 + paneHeight + 1 : 82 + (bodyHeight - 42) / 2, 42, 42), tr(direction === "remove" ? "Remove selected links" : "Link selected objects"), direction === "remove" ? narrow ? "arrow-upward" : "arrow-left" : narrow ? "arrow-downward" : "arrow-forward", { type: "transfer" }, !model.busy && !model.uncertain && model.canTransfer, {
 		iconOnly: true,
-		round: true,
+		round: false,
 		iconSize: 18
 	}));
 	if (errorHeight) nodes.push(node("Box", "linkError", rect(0, height - footerHeight - errorHeight, width, errorHeight), {

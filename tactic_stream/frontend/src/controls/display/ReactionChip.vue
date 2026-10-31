@@ -31,7 +31,7 @@ defineProps({
   width: max-content;
   padding: 0 var(--reaction-chip-padding);
   border: 0;
-  border-radius: 14px;
+  border-radius: var(--button-radius);
   background: color-mix(
     in srgb,
     var(--cyan) var(--reaction-mix),

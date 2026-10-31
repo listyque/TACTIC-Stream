@@ -1005,6 +1005,7 @@ var _sfc_main = {
 				}, [createBaseVNode("strong", _hoisted_1, toDisplayString(__props.title), 1)], 8, ["to"])) : createCommentVNode("", true),
 				__props.openSeparate && !minimized.value ? (openBlock(), createBlock(_sfc_main$1, {
 					key: 1,
+					round: "",
 					class: "app-window-separate",
 					"icon-only": "",
 					icon: "open-in-new",
@@ -1013,6 +1014,7 @@ var _sfc_main = {
 				}, null, 8, ["onClick"])) : createCommentVNode("", true),
 				__props.helpButton && !minimized.value ? (openBlock(), createBlock(_sfc_main$1, {
 					key: 2,
+					round: "",
 					class: "app-window-help",
 					"icon-only": "",
 					icon: "help",
@@ -1023,6 +1025,7 @@ var _sfc_main = {
 				}, null, 8, ["label", "disabled"])) : createCommentVNode("", true),
 				__props.element.dataset.windowType === "window" && !__props.pageRoot ? (openBlock(), createBlock(_sfc_main$1, {
 					key: 3,
+					round: "",
 					"icon-only": "",
 					icon: minimized.value ? "window-restore" : "minus",
 					label: minimized.value ? "Restore window" : "Minimize window",
@@ -1035,6 +1038,7 @@ var _sfc_main = {
 				])) : createCommentVNode("", true),
 				!minimized.value && !__props.pageRoot ? (openBlock(), createBlock(_sfc_main$1, {
 					key: 4,
+					round: "",
 					"icon-only": "",
 					icon: maximized.value ? "window-restore" : "open-in-full",
 					label: maximized.value ? "Restore window" : "Maximize window",
@@ -1047,6 +1051,7 @@ var _sfc_main = {
 				])) : createCommentVNode("", true),
 				__props.closeRequired ? (openBlock(), createBlock(_sfc_main$1, {
 					key: 5,
+					round: "",
 					"icon-only": "",
 					icon: "close",
 					label: "Close",
@@ -1055,6 +1060,7 @@ var _sfc_main = {
 				}, null, 8, ["disabled"])) : createCommentVNode("", true),
 				(openBlock(), createBlock(Teleport, { to: __props.header }, [unref(mobile) && !__props.backProvided ? (openBlock(), createBlock(_sfc_main$1, {
 					key: 0,
+					round: "",
 					class: "app-window-back",
 					"icon-only": "",
 					icon: "MDI_ARROW_LEFT",
@@ -1067,12 +1073,14 @@ var _sfc_main = {
 				}, [createBaseVNode("header", _hoisted_2, [
 					createBaseVNode("strong", null, toDisplayString(__props.element.getAttribute("aria-label") || __props.header.querySelector("[role=\"heading\"]")?.textContent || unref(t)("Restore window")), 1),
 					createVNode(_sfc_main$1, {
+						round: "",
 						"icon-only": "",
 						icon: "window-restore",
 						label: "Restore window",
 						onClick: minimize
 					}),
 					createVNode(_sfc_main$1, {
+						round: "",
 						"icon-only": "",
 						icon: "close",
 						label: "Close",

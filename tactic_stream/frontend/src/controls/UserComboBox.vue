@@ -219,7 +219,7 @@ function optionKey(event) {
   min-height: 0;
   padding: 0 11px;
   border: 0;
-  border-radius: min(14px, var(--item-radius));
+  border-radius: var(--button-radius);
   background: var(--surface);
 }
 .workspace-menu.user-combo-box > summary:hover {

@@ -362,6 +362,7 @@ onBeforeUnmount(() => {
   <Teleport v-if="title" :to="header"
     ><strong class="app-window-caption">{{ title }}</strong></Teleport
   ><AppButton
+    round
     v-if="openSeparate && !minimized"
     class="app-window-separate"
     icon-only
@@ -369,6 +370,7 @@ onBeforeUnmount(() => {
     label="Open in separate page"
     @click="openSeparate"
   /><AppButton
+    round
     v-if="helpButton && !minimized"
     class="app-window-help"
     icon-only
@@ -378,6 +380,7 @@ onBeforeUnmount(() => {
     :disabled="helpDisabled"
     @click="helpButton.click()"
   /><AppButton
+    round
     v-if="element.dataset.windowType === 'window' && !pageRoot"
     icon-only
     :icon="minimized ? 'window-restore' : 'minus'"
@@ -385,6 +388,7 @@ onBeforeUnmount(() => {
     :aria-pressed="minimized"
     @click="minimize"
   /><AppButton
+    round
     v-if="!minimized && !pageRoot"
     icon-only
     :icon="maximized ? 'window-restore' : 'open-in-full'"
@@ -392,6 +396,7 @@ onBeforeUnmount(() => {
     :aria-pressed="maximized"
     @click="toggle"
   /><AppButton
+    round
     v-if="closeRequired"
     icon-only
     icon="close"
@@ -400,6 +405,7 @@ onBeforeUnmount(() => {
     @click="closeButton ? closeButton.click() : back()"
   /><Teleport :to="header"
     ><AppButton
+      round
       v-if="mobile && !backProvided"
       class="app-window-back"
       icon-only
@@ -414,12 +420,14 @@ onBeforeUnmount(() => {
         t('Restore window')
       }}</strong>
       <AppButton
+        round
         icon-only
         icon="window-restore"
         label="Restore window"
         @click="minimize"
       />
       <AppButton
+        round
         icon-only
         icon="close"
         label="Close"

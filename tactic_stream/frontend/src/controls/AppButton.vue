@@ -14,6 +14,7 @@ const props = defineProps({
   icon: String,
   iconOnly: Boolean,
   compact: Boolean,
+  round: Boolean,
   highlighted: Boolean,
   filledAction: Boolean,
   destructive: Boolean,
@@ -39,6 +40,7 @@ const paint = computed(() => buttonVariables(props));
     :class="{
       'icon-button': iconOnly || compact,
       'compact-button': compact,
+      'round-button': round,
       primary: highlighted,
       'filled-action': filledAction,
       danger: destructive,
@@ -173,7 +175,7 @@ const paint = computed(() => buttonVariables(props));
 a.app-button.icon-button {
   padding: 0;
   border: 0;
-  border-radius: 50%;
+  border-radius: var(--icon-button-radius);
   background: transparent;
 }
 a.app-button.icon-button:hover,
@@ -236,7 +238,7 @@ a.app-button.icon-button:focus-visible {
 .frame-view > .frame-node.frame-button.app-button.filled-action {
   padding: 2px;
   border: 0;
-  border-radius: calc(var(--item-radius) + 2px);
+  border-radius: calc(var(--button-radius) + 2px);
   background: transparent;
   box-shadow: none;
   isolation: isolate;
@@ -245,7 +247,7 @@ a.app-button.icon-button:focus-visible {
   content: '';
   position: absolute;
   inset: 2px;
-  border-radius: var(--item-radius);
+  border-radius: var(--button-radius);
   background: var(--primary);
   z-index: -1;
   pointer-events: none;
@@ -259,5 +261,14 @@ a.app-button.icon-button:focus-visible {
 }
 .frame-view > .frame-button.app-button.filled-action:disabled::before {
   background: var(--surface-high);
+}
+</style>
+
+<style>
+.app-button.round-button {
+  border-radius: 999px;
+}
+.app-button.round-button.filled-action::before {
+  border-radius: 999px;
 }
 </style>
