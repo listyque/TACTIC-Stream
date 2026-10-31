@@ -1,6 +1,6 @@
 import { A as onMounted, M as openBlock, O as onBeforeUnmount, P as renderSlot, X as ref, _ as createElementBlock, b as createVNode, g as createCommentVNode, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString } from "./vue.js";
-import { T as metrics, _ as controls, s as appearance } from "./AppButton.js";
-import { G as node, H as label, K as rect, S as translate, t as _sfc_main$1, w as observeFrameSizes } from "./FrameView.js";
+import { D as spacing, T as metrics, _ as controls, s as appearance } from "./AppButton.js";
+import { G as node, H as label, K as rect, R as observeFrameSizes, S as translate, t as _sfc_main$1 } from "./FrameView.js";
 //#region \0rolldown/runtime.js
 var __defProp = Object.defineProperty;
 var __exportAll = (all, no_symbols) => {
@@ -14,10 +14,10 @@ var __exportAll = (all, no_symbols) => {
 };
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/objects/fields.ui.mjs
-function columnCount(width, count, minimum = 430, maximum = 3, gap = 10) {
+function columnCount(width, count, minimum = 430, maximum = 3, gap = spacing.content) {
 	return Math.max(1, Math.min(maximum, Math.max(1, count), Math.floor((width + gap) / (minimum + gap))));
 }
-function arrange(width, heights, minimum = 430, maximum = 3, gap = 10) {
+function arrange(width, heights, minimum = 430, maximum = 3, gap = spacing.content) {
 	const columns = columnCount(width, heights.length, minimum, maximum, gap);
 	const cellWidth = Math.max(0, (width - gap * (columns - 1)) / columns);
 	const bottoms = Array(columns).fill(0);

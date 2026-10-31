@@ -18,17 +18,17 @@ defineProps({ title: String, description: String, fillContentHeight: Boolean });
 .configuration-section {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--space-compact);
   min-width: 0;
 }
 .configuration-section > strong {
-  margin-left: 1px;
+  margin-left: 0;
   font-size: var(--font-body-large-size);
   line-height: var(--font-body-large-line-height);
   font-weight: 600;
 }
 .configuration-section > p {
-  margin: 0 1px;
+  margin: 0;
   color: var(--muted);
   font-size: var(--font-caption-size);
   line-height: var(--font-caption-line-height);
@@ -36,7 +36,7 @@ defineProps({ title: String, description: String, fillContentHeight: Boolean });
   overflow-wrap: anywhere;
 }
 .configuration-section > div {
-  padding: 16px;
+  padding: var(--space-content);
   border-radius: var(--section-radius);
   background: var(--surface);
   box-shadow: inset 0 0 0 1px var(--outline-variant);

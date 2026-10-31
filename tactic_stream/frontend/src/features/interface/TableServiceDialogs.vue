@@ -77,9 +77,6 @@ defineExpose({
   </AppDialog>
 </template>
 <style scoped>
-.table-service-confirmation :deep(.app-dialog-content) {
-  padding: 20px;
-}
 .table-service-confirmation-body {
   position: relative;
   flex: 1;

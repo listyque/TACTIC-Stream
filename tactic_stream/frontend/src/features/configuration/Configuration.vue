@@ -745,7 +745,7 @@ defineExpose({
   overflow: hidden;
 }
 .configuration-confirmation > header {
-  padding: 20px 20px 0;
+  padding: var(--space-content) var(--space-content) 0;
   margin: 0;
 }
 .configuration-confirmation > .frame-view {
@@ -779,7 +779,7 @@ defineExpose({
   font-weight: 600;
 }
 .configuration-native .configuration-navigation {
-  padding-top: 16px;
+  padding-top: var(--space-content);
 }
 .configuration-native .configuration-navigation > button {
   min-height: 48px;
@@ -810,8 +810,8 @@ defineExpose({
   flex: none;
 }
 .configuration-native .content {
-  padding: 20px 22px;
-  gap: 14px;
+  padding: var(--space-content);
+  gap: var(--space-content);
   overflow: visible;
   height: auto;
   flex: none;
@@ -826,18 +826,18 @@ defineExpose({
   font-size: 14px;
 }
 .configuration-native .configuration-group {
-  padding: 16px;
+  padding: var(--space-content);
 }
 .configuration-native .settings-row {
   grid-template-columns: minmax(0, 1fr) 240px;
-  gap: 20px;
-  padding: 10px 4px;
+  gap: var(--space-content);
+  padding: calc(var(--space-content) / 2) 0;
 }
 .configuration-native .settings-row.appearance-palette-row {
   grid-template-columns: minmax(0, 1fr) min(380px, 48%);
 }
 .configuration-native .setting-description {
-  gap: 3px;
+  gap: var(--space-tight);
 }
 .configuration-native .settings-row {
   line-height: normal;
@@ -858,8 +858,8 @@ defineExpose({
 }
 .configuration-server-tools {
   display: flex;
-  gap: 8px;
-  padding: 0 22px;
+  gap: var(--space-compact);
+  padding: 0 var(--space-content);
 }
 .configuration-server-tools > .app-select {
   width: 250px;
@@ -868,7 +868,7 @@ defineExpose({
   flex: 1;
 }
 .configuration-feedback {
-  margin: 14px 22px;
+  margin: var(--space-content);
 }
 .configuration-repository-editor {
   padding: 0;
@@ -878,7 +878,7 @@ defineExpose({
   max-width: calc(100vw - 32px);
 }
 .configuration-repository-editor .content {
-  padding: 16px 0;
+  padding: var(--space-content) 0;
 }
 .configuration-repository-editor > header > div {
   flex: 1;

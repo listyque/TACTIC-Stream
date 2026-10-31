@@ -1,7 +1,7 @@
 import { A as onMounted, E as nextTick, F as resolveComponent, G as withCtx, H as watch, J as markRaw, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, Q as shallowRef, X as ref, _ as createElementBlock, b as createVNode, c as withKeys, et as unref, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment } from "./vue.js";
-import { R as _plugin_vue_export_helper_default, T as metrics, o as t, s as appearance, t as _sfc_main$16, u as frameColors, y as cssRoles } from "./AppButton.js";
+import { T as metrics, o as t, s as appearance, t as _sfc_main$16, u as frameColors, y as cssRoles, z as _plugin_vue_export_helper_default } from "./AppButton.js";
 import { Dt as logEvent, kt as redact } from "./index.js";
-import { G as node, H as label, K as rect, L as _sfc_main$20, M as _sfc_main$18, S as translate, V as button, a as _sfc_main$21, m as copyText, t as _sfc_main$17, w as observeFrameSizes, z as _sfc_main$19 } from "./FrameView.js";
+import { A as _sfc_main$18, F as _sfc_main$20, G as node, H as label, K as rect, R as observeFrameSizes, S as translate, V as button, a as _sfc_main$21, m as copyText, t as _sfc_main$17, z as _sfc_main$19 } from "./FrameView.js";
 import { t as captionHeight } from "./sections.ui.js";
 import { r as prettySize } from "./file_values.js";
 import "./files.js";

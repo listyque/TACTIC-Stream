@@ -1,6 +1,7 @@
 <script setup>
 import { t } from '../i18n.js';
 import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { observeFrameSizes, frameContentWidth } from '../frame/resize.js';
 
 defineProps({
   controlId: String,
@@ -14,9 +15,12 @@ const root = ref(null),
   stacked = ref(false);
 let observer;
 onMounted(() => {
-  observer = new ResizeObserver(() => {
+  observer = observeFrameSizes(() => {
     stacked.value =
-      root.value.clientWidth - 28 - accessory.value.scrollWidth < 210;
+      frameContentWidth(root.value) -
+        parseFloat(getComputedStyle(root.value).columnGap) -
+        accessory.value.scrollWidth <
+      210;
   });
   observer.observe(root.value);
   observer.observe(accessory.value);
@@ -46,15 +50,16 @@ onBeforeUnmount(() => observer?.disconnect());
 .settings-row.configuration-setting {
   position: relative;
   grid-template-columns: minmax(0, 1fr) max-content;
-  column-gap: 20px;
-  row-gap: 8px;
-  padding: 10px 4px;
+  column-gap: var(--space-content);
+  row-gap: var(--space-compact);
+  padding: calc(var(--space-content) / 2) 0;
+  min-height: calc(var(--control-height) + var(--space-content));
 }
 .settings-row.configuration-setting::after {
   content: '';
   position: absolute;
-  left: 4px;
-  right: 4px;
+  left: 0;
+  right: 0;
   bottom: 0;
   height: 1px;
   background: var(--outline-variant);
@@ -63,7 +68,7 @@ onBeforeUnmount(() => observer?.disconnect());
   display: none;
 }
 .settings-row.configuration-setting .setting-description {
-  gap: 3px;
+  gap: var(--space-tight);
 }
 .settings-row.configuration-setting .setting-description strong {
   font-size: var(--font-body-size);

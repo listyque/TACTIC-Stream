@@ -1,5 +1,5 @@
 import { A as onMounted, B as useModel, E as nextTick, F as resolveComponent, G as withCtx, H as watch, K as withDirectives, L as resolveDynamicComponent, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, R as useAttrs, T as mergeProps, X as ref, _ as createElementBlock, a as vModelSelect, b as createVNode, c as withKeys, et as unref, g as createCommentVNode, h as createBlock, j as onUpdated, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, o as vModelText, p as computed, q as isRef, rt as toDisplayString, s as vShow, tt as normalizeClass, u as Fragment, w as mergeModels, y as createTextVNode, z as useId } from "./vue.js";
-import { D as textStyles, E as readableText, F as iconSets, L as BusyIndicator_default, R as _plugin_vue_export_helper_default, T as metrics, _ as controls, a as _sfc_main$33, g as blend, i as ripple, n as tooltipDirective, o as t, r as capturePress, s as appearance, t as _sfc_main$34, u as frameColors, v as cssColor, y as cssRoles } from "./AppButton.js";
+import { E as readableText, I as iconSets, O as textStyles, R as BusyIndicator_default, T as metrics, _ as controls, a as _sfc_main$33, g as blend, i as ripple, n as tooltipDirective, o as t, r as capturePress, s as appearance, t as _sfc_main$34, u as frameColors, v as cssColor, y as cssRoles, z as _plugin_vue_export_helper_default } from "./AppButton.js";
 import { t as iconMaps } from "./icons.js";
 //#region ../src/tactic_stream/shared_ui/core/frame.mjs
 /** @typedef {{x:number, y:number, width:number, height:number}} Bounds Logical pixels. */
@@ -367,6 +367,46 @@ var _sfc_main$31 = {
 		};
 	}
 };
+//#endregion
+//#region src/frame/resize.js
+function observeFrameSizes(apply) {
+	const pending = /* @__PURE__ */ new Map();
+	let frame = 0;
+	let disconnected = false;
+	const observer = new ResizeObserver((entries) => {
+		if (disconnected) return;
+		for (const entry of entries) pending.set(entry.target, entry);
+		if (frame) return;
+		frame = requestAnimationFrame(() => {
+			frame = 0;
+			const entries = [...pending.values()];
+			pending.clear();
+			if (!disconnected && entries.length) apply(entries);
+		});
+	});
+	return {
+		observe(target) {
+			if (!disconnected) observer.observe(target);
+		},
+		unobserve(target) {
+			pending.delete(target);
+			observer.unobserve(target);
+		},
+		disconnect() {
+			disconnected = true;
+			observer.disconnect();
+			cancelAnimationFrame(frame);
+			frame = 0;
+			pending.clear();
+		}
+	};
+}
+function frameContentWidth(element) {
+	const style = getComputedStyle(element);
+	const width = parseFloat(style.width);
+	if (!Number.isFinite(width)) return element.clientWidth;
+	return style.boxSizing === "border-box" ? Math.max(0, width - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight) - parseFloat(style.borderLeftWidth) - parseFloat(style.borderRightWidth)) : width;
+}
 //#endregion
 //#region src/controls/AppSlider.vue
 var _hoisted_1$28 = [
@@ -2090,46 +2130,6 @@ var _sfc_main$17 = {
 		};
 	}
 };
-//#endregion
-//#region src/frame/resize.js
-function observeFrameSizes(apply) {
-	const pending = /* @__PURE__ */ new Map();
-	let frame = 0;
-	let disconnected = false;
-	const observer = new ResizeObserver((entries) => {
-		if (disconnected) return;
-		for (const entry of entries) pending.set(entry.target, entry);
-		if (frame) return;
-		frame = requestAnimationFrame(() => {
-			frame = 0;
-			const entries = [...pending.values()];
-			pending.clear();
-			if (!disconnected && entries.length) apply(entries);
-		});
-	});
-	return {
-		observe(target) {
-			if (!disconnected) observer.observe(target);
-		},
-		unobserve(target) {
-			pending.delete(target);
-			observer.unobserve(target);
-		},
-		disconnect() {
-			disconnected = true;
-			observer.disconnect();
-			cancelAnimationFrame(frame);
-			frame = 0;
-			pending.clear();
-		}
-	};
-}
-function frameContentWidth(element) {
-	const style = getComputedStyle(element);
-	const width = parseFloat(style.width);
-	if (!Number.isFinite(width)) return element.clientWidth;
-	return style.boxSizing === "border-box" ? Math.max(0, width - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight) - parseFloat(style.borderLeftWidth) - parseFloat(style.borderRightWidth)) : width;
-}
 //#endregion
 //#region ../src/tactic_stream/shared_ui/core/strings.mjs
 var russian = {
@@ -11130,6 +11130,6 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 	}
 });
 //#endregion
-export { _sfc_main$24 as A, _sfc_main$32 as B, frameContentWidth as C, ItemPreview_default as D, _sfc_main$19 as E, parse as F, node as G, label as H, _sfc_main$27 as I, virtualRange as J, rect as K, _sfc_main$29 as L, _sfc_main$26 as M, localDate as N, AppSearchField_default as O, monthLabel as P, _sfc_main$30 as R, translate as S, AppProgress_default as T, listRowHeight as U, button as V, muted as W, _sfc_main$13 as _, _sfc_main$5 as a, _sfc_main$15 as b, completions as c, pythonTokens as d, xmlTokens as f, describe as g, readClipboardImages as h, _sfc_main$4 as i, _sfc_main$25 as j, _sfc_main$22 as k, documentSymbols as l, copyText as m, _sfc_main$1 as n, toolbar as o, copyImage as p, revealListOffset as q, _sfc_main$2 as r, _sfc_main$8 as s, _sfc_main as t, javascriptTokens as u, _sfc_main$14 as v, observeFrameSizes as w, _sfc_main$16 as x, matchesUser as y, _sfc_main$31 as z };
+export { _sfc_main$26 as A, _sfc_main$32 as B, AppProgress_default as C, _sfc_main$22 as D, AppSearchField_default as E, _sfc_main$29 as F, node as G, label as H, _sfc_main$30 as I, virtualRange as J, rect as K, frameContentWidth as L, monthLabel as M, parse as N, _sfc_main$24 as O, _sfc_main$27 as P, observeFrameSizes as R, translate as S, ItemPreview_default as T, listRowHeight as U, button as V, muted as W, _sfc_main$13 as _, _sfc_main$5 as a, _sfc_main$15 as b, completions as c, pythonTokens as d, xmlTokens as f, describe as g, readClipboardImages as h, _sfc_main$4 as i, localDate as j, _sfc_main$25 as k, documentSymbols as l, copyText as m, _sfc_main$1 as n, toolbar as o, copyImage as p, revealListOffset as q, _sfc_main$2 as r, _sfc_main$8 as s, _sfc_main as t, javascriptTokens as u, _sfc_main$14 as v, _sfc_main$19 as w, _sfc_main$16 as x, matchesUser as y, _sfc_main$31 as z };
 
 //# sourceMappingURL=FrameView.js.map

@@ -69,10 +69,10 @@
   --result-indent: 24px;
   --result-title-size: 15px;
 
-  --space-xs: 4px;
-  --space-sm: 8px;
-  --space-md: 12px;
-  --space-lg: 20px;
+  --space-xs: var(--space-tight);
+  --space-sm: var(--space-compact);
+  --space-md: var(--space-content);
+  --space-lg: var(--space-section);
 
   --motion-easing-out-cubic: cubic-bezier(0.215, 0.61, 0.355, 1);
   --motion-easing: cubic-bezier(0.2, 0, 0, 1);

@@ -344,10 +344,10 @@ for (const width of [0, 140, 320, 880]) {
     width,
     { text: 44, previews: 72, attachments: 134 }
   );
-  assert.equal(layout.height, 262);
+  assert.equal(layout.height, 266);
   assert.deepEqual(
     layout.nodes.map((n) => n.y),
-    [0, 50, 128]
+    [0, 52, 132]
   );
   assert.equal(
     Note.edit({ text: 'Draft', uncertain: true }, width, 'en').nodes.find(

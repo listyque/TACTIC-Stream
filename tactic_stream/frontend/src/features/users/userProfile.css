@@ -64,7 +64,7 @@
 }
 .user-profile-editor > header {
   height: 62px;
-  padding-inline: 20px 8px;
+  padding-inline: var(--space-content) var(--space-compact);
   background: var(--surface-highest);
 }
 .user-profile-editor > header > strong {

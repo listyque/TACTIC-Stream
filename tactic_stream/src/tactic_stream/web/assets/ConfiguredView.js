@@ -1,9 +1,9 @@
 const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ObjectCheckin.js","assets/vue.js","assets/AppButton.js","assets/locales.js","assets/icons.js","assets/AppButton.css","assets/index.js","assets/index.css","assets/FrameView.js","assets/FrameView.css","assets/sections.ui.js","assets/file_values.js","assets/files.js","assets/confirmation.ui.js","assets/AppDialog.js","assets/toggle.ui.js","assets/ObjectCheckin.css","assets/IngestFiles.js","assets/VirtualCollection.js","assets/VirtualCollection.css","assets/IngestFiles.css","assets/DuplicateSObject.js","assets/ObjectFieldFrame.js","assets/ObjectFieldFrame.css","assets/ContentLoadingOverlay.js","assets/ContentLoadingOverlay.css","assets/DuplicateSObject.css","assets/TableViewsManager.js","assets/TableViewsManager.css","assets/SnapshotCheckout.js","assets/files2.js","assets/FrameProgress.js","assets/SnapshotCheckout.css"])))=>i.map(i=>d[i]);
 import { n as arrange, r as __exportAll } from "./ObjectFieldFrame.js";
 import { $ as toRaw, A as onMounted, C as inject, E as nextTick, F as resolveComponent, G as withCtx, H as watch, I as resolveDirective, J as markRaw, K as withDirectives, L as resolveDynamicComponent, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, S as h, T as mergeProps, V as useSlots, X as ref, Y as reactive, _ as createElementBlock, b as createVNode, c as withKeys, d as KeepAlive, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, o as vModelText, p as computed, q as isRef, rt as toDisplayString, s as vShow, t as Transition, tt as normalizeClass, u as Fragment, v as createSlots, y as createTextVNode, z as useId } from "./vue.js";
-import { A as preferences, D as textStyles, L as BusyIndicator_default, R as _plugin_vue_export_helper_default, S as fontMetricHeight, T as metrics$3, _ as controls$1, a as _sfc_main$70, b as fontFamily, m as readableText, o as t, s as appearance, t as _sfc_main$69, u as frameColors, y as cssRoles } from "./AppButton.js";
+import { D as spacing$1, O as textStyles, R as BusyIndicator_default, S as fontMetricHeight, T as metrics$3, _ as controls$1, a as _sfc_main$70, b as fontFamily, j as preferences, m as readableText, o as t, s as appearance, t as _sfc_main$69, u as frameColors, y as cssRoles, z as _plugin_vue_export_helper_default } from "./AppButton.js";
 import { Ft as asyncComponent, G as transactionDetails, H as tableDependencies, K as uploadFormFile, N as searchConfiguration, O as resultItems, Ot as logRequest, U as tableDependencyFile, V as tableCells, W as tableParentGroup, Y as widgetConfiguration, _ as navigationLink, _t as mobile, a as __vitePreload, b as objectStatus, bt as debugLog, c as beginActivity, ct as notify, f as interfaceDefinition, ft as serverClock, h as messageFileRequest, k as rpc, m as linkPreviews, o as fileBlob, pt as serverTimestamp, u as endActivity, v as objectDeletion, y as objectRelations } from "./index.js";
-import { A as _sfc_main$80, C as frameContentWidth, D as ItemPreview_default, E as _sfc_main$76, G as node, H as label, J as virtualRange, K as rect, L as _sfc_main$81, M as _sfc_main$74, O as AppSearchField_default, R as _sfc_main$78, S as translate, V as button, W as muted, a as _sfc_main$84, d as pythonTokens, f as xmlTokens, g as describe$24, h as readClipboardImages, i as _sfc_main$83, j as _sfc_main$82, k as _sfc_main$72, m as copyText, n as _sfc_main$73, p as copyImage, q as revealListOffset, r as _sfc_main$75, t as _sfc_main$71, u as javascriptTokens, v as _sfc_main$79, w as observeFrameSizes, z as _sfc_main$77 } from "./FrameView.js";
+import { A as _sfc_main$74, D as _sfc_main$72, E as AppSearchField_default, F as _sfc_main$81, G as node, H as label, I as _sfc_main$78, J as virtualRange, K as rect, L as frameContentWidth, O as _sfc_main$80, R as observeFrameSizes, S as translate, T as ItemPreview_default, V as button, W as muted, a as _sfc_main$84, d as pythonTokens, f as xmlTokens, g as describe$24, h as readClipboardImages, i as _sfc_main$83, k as _sfc_main$82, m as copyText, n as _sfc_main$73, p as copyImage, q as revealListOffset, r as _sfc_main$75, t as _sfc_main$71, u as javascriptTokens, v as _sfc_main$79, w as _sfc_main$76, z as _sfc_main$77 } from "./FrameView.js";
 import { n as qtLabelTextWidth, t as layoutTextWidth } from "./textMetrics.js";
 import { t as captionHeight } from "./sections.ui.js";
 import RecordForm_default, { a as fieldKind, o as unsupportedField, t as _sfc_main$85 } from "./RecordForm.js";
@@ -1103,8 +1103,8 @@ var metrics$1 = {
 	maximumColumn: 640,
 	resizeHandle: 12,
 	dragThreshold: 6,
-	firstPadding: 14,
-	padding: 10,
+	firstPadding: spacing$1.content,
+	padding: spacing$1.content,
 	heights: [
 		52,
 		68,
@@ -7131,7 +7131,7 @@ var _sfc_main$51 = {
 		},
 		contentInset: {
 			type: Number,
-			default: 14
+			default: spacing$1.content
 		}
 	},
 	emits: ["link", "scroll"],
@@ -12121,7 +12121,7 @@ var metrics = {
 	inset: 2,
 	emoji: 28,
 	emojiRight: 7,
-	gap: 10,
+	gap: spacing$1.compact,
 	compactBreakpoint: 620,
 	sendWidth: 92,
 	sendSize: 38
@@ -12803,7 +12803,7 @@ var titles = {
 	milestone_code: "Milestone"
 };
 function describe$7(model, width, language) {
-	const tr = (text) => translate(text, language), nodes = [], gap = 12, columns = width >= (model.live ? 420 : 520) ? 2 : 1, cell = (width - gap * (columns - 1)) / columns;
+	const tr = (text) => translate(text, language), nodes = [], gap = spacing$1.content, columns = width >= (model.live ? 420 : 520) ? 2 : 1, cell = (width - gap * (columns - 1)) / columns;
 	let y = 0, slot = 0;
 	if (model.inline) {
 		nodes.push(label("taskInlineTitle", rect(0, 0, width - 40, 28), tr(model.title || "Edit task draft"), {
@@ -13363,7 +13363,7 @@ function header(model, width, language) {
 	};
 }
 var bodyMetrics = {
-	gap: 6,
+	gap: spacing$1.compact,
 	minimumCellWidth: 210,
 	preferredCellWidth: 240,
 	maximumColumns: 2
@@ -13389,7 +13389,7 @@ function body(model, width, heights = {}) {
 	};
 }
 function edit(model, width, language) {
-	const tr = (text) => translate(text, language), gap = 8;
+	const tr = (text) => translate(text, language), gap = spacing$1.compact;
 	const cancelWidth = 94, saveWidth = 94;
 	const nodes = [node("Area", "noteEditText", rect(0, 0, width, 150), {
 		text: model.text || "",
@@ -16152,7 +16152,7 @@ function dependency(record, width) {
 	};
 }
 function describe$6(model, width, height, language) {
-	const tr = (text) => translate(text, language), margin = 16, w = Math.max(0, width - 32), groups = model.groups || [];
+	const tr = (text) => translate(text, language), margin = spacing$1.content, w = Math.max(0, width - margin * 2), groups = model.groups || [];
 	const selected = groups.reduce((sum, row) => sum + (row.checked ? row.count : 0), 0), total = groups.reduce((sum, row) => sum + row.count, 0);
 	const targets = model.targets || [], targetHeight = Math.min(132, Math.max(56, targets.length * 30 + 20));
 	const footerY = Math.max(0, height - 80), contentTop = 100 + targetHeight + 12;
@@ -16162,7 +16162,7 @@ function describe$6(model, width, height, language) {
 			background: "panelDeep",
 			radius: 0
 		}),
-		node("Box", "deleteSObjectHeader", rect(margin, 16, w, 72), {
+		node("Box", "deleteSObjectHeader", rect(margin, margin, w, 72), {
 			background: "surfaceContainer",
 			children: [
 				node("Box", "deleteIconSurface", rect(14, 15, 42, 42), {
@@ -16195,11 +16195,11 @@ function describe$6(model, width, height, language) {
 			background: "surfaceContainerHigh",
 			radiusRole: "sectionRadius"
 		}),
-		node("Box", "deleteTargetRail", rect(17, 108, 3, targetHeight - 16), {
+		node("Box", "deleteTargetRail", rect(margin + 1, 108, 3, targetHeight - 16), {
 			background: "error",
 			radius: 1.5
 		}),
-		node("List", "deleteSObjectTargets", rect(30, 110, w - 28, targetHeight - 20), {
+		node("List", "deleteSObjectTargets", rect(margin + 14, 110, w - 28, targetHeight - 20), {
 			source: "targets",
 			keyField: "searchKey",
 			rowHeight: 30,
@@ -16264,7 +16264,7 @@ function describe$6(model, width, height, language) {
 			icon: "check-circle",
 			color: "action"
 		}));
-		nodes.push(label("deleteSObjectEmptyState", rect(40, contentTop + bodyHeight / 2 + 6, w - 48, 36), tr("No dependencies were found. Only the selected objects will be deleted."), {
+		nodes.push(label("deleteSObjectEmptyState", rect(margin + 24, contentTop + bodyHeight / 2 + 6, w - 48, 36), tr("No dependencies were found. Only the selected objects will be deleted."), {
 			align: "center",
 			wrap: true,
 			color: "secondaryText"
@@ -20461,7 +20461,7 @@ var TableServiceDialogs_default = /*#__PURE__*/ _plugin_vue_export_helper_defaul
 			}, 8, ["style"]);
 		};
 	}
-}, [["__scopeId", "data-v-d81e368a"]]);
+}, [["__scopeId", "data-v-0273c17c"]]);
 //#endregion
 //#region src/features/interface/TableParentPicker.vue
 var _hoisted_1$4 = ["aria-label"];

@@ -1,9 +1,9 @@
 const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/NamingEditor.js","assets/ObjectFieldFrame.js","assets/vue.js","assets/AppButton.js","assets/locales.js","assets/icons.js","assets/AppButton.css","assets/FrameView.js","assets/FrameView.css","assets/ObjectFieldFrame.css","assets/index.js","assets/index.css","assets/sections.ui.js","assets/admin.document.js","assets/textMetrics.js","assets/file_values.js","assets/files.js","assets/files2.js","assets/admin.css","assets/MatchingTemplates.js","assets/MatchingTemplates.css","assets/TaskGanttView.js","assets/TaskGanttView.css","assets/TaskCalendarView.js","assets/TaskCalendarView.css","assets/TaskProcessPanel.js","assets/ConfiguredView.js","assets/RecordForm.js","assets/RecordForm.css","assets/CodeBlock.js","assets/metrics.js","assets/confirmation.ui.js","assets/ActionRow.js","assets/ActionRow.css","assets/AppDialog.js","assets/markdown-it.js","assets/VirtualCollection.js","assets/VirtualCollection.css","assets/Timesheet.js","assets/Timesheet.css","assets/ContentLoadingOverlay.js","assets/ContentLoadingOverlay.css","assets/ConfiguredView.css","assets/TaskProcessPanel.css","assets/FileWorkspaceInspection.js","assets/FileWorkspaceInspection.css","assets/DescriptionEditor.js","assets/DescriptionEditor.css","assets/SnapshotBrowser.js","assets/SnapshotBrowser.css","assets/KnowledgeBase.js","assets/KnowledgeBase.css","assets/Configuration.js","assets/AppearanceControls.js","assets/AppearanceControls.css","assets/AgentProviders.js","assets/executor.ui.js","assets/AgentProviders.css","assets/Configuration.css","assets/SearchTypes.js","assets/SchemaEditor.js","assets/graphFrame.js","assets/tree.ui.js","assets/SchemaEditor.css","assets/WorkflowEditor.js","assets/ProcessRules.js","assets/ProcessRules.css","assets/SidebarEditor.js","assets/PageLayoutEditor.js","assets/PageEditorTools.js","assets/LayoutEditor.js","assets/LayoutEditor.css","assets/ColumnsEditor.js","assets/RawDatabase.js","assets/RawDatabase.css","assets/SecurityUsers.js","assets/groups.ui.js","assets/SecurityGroups.js","assets/SecurityRules.js","assets/ComponentShowcase.js","assets/ComponentShowcase.css","assets/Plugins.js","assets/AgentRequest.js","assets/AgentRequest.css","assets/AgentMcp.js","assets/AgentMcp.css","assets/ScriptEditor.js","assets/ScriptEditor.css"])))=>i.map(i=>d[i]);
 import { r as __exportAll } from "./ObjectFieldFrame.js";
 import { $ as toRaw, A as onMounted, B as useModel, C as inject, E as nextTick, F as resolveComponent, G as withCtx, H as watch, I as resolveDirective, J as markRaw, K as withDirectives, L as resolveDynamicComponent, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, Q as shallowRef, S as h, T as mergeProps, V as useSlots, X as ref, Y as reactive, Z as shallowReactive, _ as createElementBlock, b as createVNode, c as withKeys, d as KeepAlive, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, o as vModelText, p as computed, q as isRef, rt as toDisplayString, s as vShow, t as Transition, tt as normalizeClass, u as Fragment, v as createSlots, w as mergeModels, y as createTextVNode, z as useId } from "./vue.js";
-import { A as preferences, C as layout$6, D as textStyles, E as readableText, L as BusyIndicator_default, M as normalizeColumns, N as taskColumns, O as configurationPreview, R as _plugin_vue_export_helper_default, S as fontMetricHeight, T as metrics$9, _ as controls$1, a as _sfc_main$104, b as fontFamily, g as blend, h as saveAppearance, j as savePreferencePage, o as t, p as projectPalette, s as appearance, t as _sfc_main$103, u as frameColors, w as lineHeights, x as fontLineHeight } from "./AppButton.js";
+import { C as layout$6, D as spacing$1, E as readableText, M as savePreferencePage, N as normalizeColumns, O as textStyles, P as taskColumns, R as BusyIndicator_default, S as fontMetricHeight, T as metrics$9, _ as controls$1, a as _sfc_main$104, b as fontFamily, g as blend, h as saveAppearance, j as preferences, k as configurationPreview, o as t, p as projectPalette, s as appearance, t as _sfc_main$103, u as frameColors, w as lineHeights, x as fontLineHeight, z as _plugin_vue_export_helper_default } from "./AppButton.js";
 import { $ as updatesAvailable, At as savedSessions, C as projectNavigation, Ct as forgetSessions, D as resolveCustomUrl, E as resetRequestActivity, Et as levels, Ft as asyncComponent, J as userProfile, K as uploadFormFile, M as scriptShelf, Mt as setServerDebugContext, N as searchConfiguration, Nt as randomId, O as resultItems, Q as updateDelay, R as serverUpdates, S as projectCreationCatalog, St as exportSession, T as requestActivity, Tt as importSession, X as workspaceLayouts, Y as widgetConfiguration, Z as setUpdatesAvailable, _ as navigationLink, _t as mobile, a as __vitePreload, at as editNotificationReply, bt as debugLog, c as beginActivity, ct as notify, dt as submitNotificationReply, et as activeNotifications, f as interfaceDefinition, ft as serverClock, g as messagesRequest, h as messageFileRequest, ht as dockMinimumWidth, i as readWindowPage, it as dismissNotification, jt as sessionRecords, k as rpc, lt as resetNotifications, m as linkPreviews, mt as dockMinimumHeight, n as bootstrapWindowPage, nt as cancelNotificationReply, ot as failNotificationReply, pt as serverTimestamp, q as userAvatar, r as installWindowPages, rt as clearNotificationHistory, s as activityFeed, st as notificationHistory, tt as beginNotificationReply, u as endActivity, ut as setNotificationProgress, vt as mobileLayout, wt as formatEvent, x as projectCatalog, xt as debugSettings, yt as clearLive, z as sessionAction } from "./index.js";
-import { A as _sfc_main$108, B as _sfc_main$115, C as frameContentWidth, D as ItemPreview_default, F as parse, G as node, H as label, K as rect$1, L as _sfc_main$109, M as _sfc_main$107, N as localDate, O as AppSearchField_default, P as monthLabel, R as _sfc_main$111, S as translate, T as AppProgress_default, V as button, W as muted, _ as _sfc_main$114, a as _sfc_main$117, b as _sfc_main$116, h as readClipboardImages, j as _sfc_main$112, k as _sfc_main$113, m as copyText, p as copyImage, q as revealListOffset, t as _sfc_main$105, v as _sfc_main$110, w as observeFrameSizes, y as matchesUser$1, z as _sfc_main$106 } from "./FrameView.js";
+import { A as _sfc_main$107, B as _sfc_main$115, C as AppProgress_default, D as _sfc_main$113, E as AppSearchField_default, F as _sfc_main$109, G as node, H as label, I as _sfc_main$111, K as rect$1, L as frameContentWidth, M as monthLabel, N as parse, O as _sfc_main$108, R as observeFrameSizes, S as translate, T as ItemPreview_default, V as button, W as muted, _ as _sfc_main$114, a as _sfc_main$117, b as _sfc_main$116, h as readClipboardImages, j as localDate, k as _sfc_main$112, m as copyText, p as copyImage, q as revealListOffset, t as _sfc_main$105, v as _sfc_main$110, y as matchesUser$1, z as _sfc_main$106 } from "./FrameView.js";
 import { t as _sfc_main$118 } from "./AppearanceControls.js";
 import { n as qtLabelTextWidth, t as layoutTextWidth } from "./textMetrics.js";
 import { n as sections$1, t as captionHeight } from "./sections.ui.js";
@@ -996,14 +996,14 @@ function describe$36(model, width, height, language) {
 			background: "outlineVariant",
 			radius: 0
 		}),
-		label("workspacePageTitle", rect$1(16, 12, Math.max(0, width - (model.canEdit ? 116 : 76)), 28), model.title || "", {
+		label("workspacePageTitle", rect$1(spacing$1.content, 12, Math.max(0, width - (model.canEdit ? 104 : 64)), 28), model.title || "", {
 			fontRole: "heading",
 			weight: 600
 		}),
-		button("workspacePageRefresh", rect$1(width - 48, 8, 32, 32), tr("Refresh"), "refresh", { type: "refresh" }, !model.busy, { iconOnly: true })
+		button("workspacePageRefresh", rect$1(width - spacing$1.content - 32, 10, 32, 32), tr("Refresh"), "refresh", { type: "refresh" }, !model.busy, { iconOnly: true })
 	];
-	if (model.canEdit) nodes.push(button("workspacePageEdit", rect$1(width - 88, 8, 32, 32), tr("Edit page layout"), "edit", { type: "edit" }, !model.busy, { iconOnly: true }));
-	if (model.busy || model.error) nodes.push(label("workspacePageStatus", rect$1(16, 64, Math.max(0, width - 32), 64), model.error || tr("Loading interface…"), {
+	if (model.canEdit) nodes.push(button("workspacePageEdit", rect$1(width - spacing$1.content - 64 - spacing$1.compact, 10, 32, 32), tr("Edit page layout"), "edit", { type: "edit" }, !model.busy, { iconOnly: true }));
+	if (model.busy || model.error) nodes.push(label("workspacePageStatus", rect$1(spacing$1.content, 64, Math.max(0, width - spacing$1.content * 2), 64), model.error || tr("Loading interface…"), {
 		wrap: true,
 		color: model.error ? "error" : "secondaryText"
 	}));
@@ -1554,7 +1554,7 @@ var rect = (x, y, width, height) => ({
 	height: Math.max(0, height)
 });
 function geometry(width, height, collapsed) {
-	const mobile = width < 1e3, nav = mobile ? 0 : collapsed ? 56 : 250, body = width - nav, pad = 12;
+	const mobile = width < 1e3, nav = mobile ? 0 : collapsed ? 56 : 250, body = width - nav, pad = spacing$1.content;
 	const header = mobile ? 166 : 77;
 	return {
 		mobile,
@@ -1565,7 +1565,7 @@ function geometry(width, height, collapsed) {
 		toolbar: Math.max(0, Math.min(body - (mobile ? 24 : 434), 620)),
 		compactHeight: sections.length * 48 - 8,
 		compactWidth: nav - (height - 88 - 12 < sections.length * 48 - 8 ? 16 : 0),
-		content: rect(nav + pad, header + pad, body - 24, height - header - 24)
+		content: rect(nav + pad, header + pad, body - pad * 2, height - header - pad * 2)
 	};
 }
 function describe$34(model, ui, width, height, language) {
@@ -2156,9 +2156,9 @@ var _sfc_main$95 = {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/objects/description.ui.mjs
 var metrics$8 = {
-	margin: 8,
-	compactMargin: 6,
-	gap: 6,
+	margin: spacing$1.content,
+	compactMargin: spacing$1.compact,
+	gap: spacing$1.compact,
 	heading: 16,
 	action: 28,
 	actionGap: 2,
@@ -3394,7 +3394,7 @@ function sourceRow(model, record, width, language) {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/files/queue/queue.ui.mjs
 function layout$5(model, width, height, language) {
-	const compact = width < 700, margin = 10, gap = 10, progress = describe$32(model.progress, width - 20, language), top = margin + (progress.height ? progress.height + gap : 0) + (compact ? 44 : 0), available = Math.max(0, width - 20 - gap), pane = compact ? width - 20 : Math.max(Math.min(270, available * .45), Math.min(model.paneWidth || available * .36, available - Math.min(320, available * .5))), bodyHeight = Math.max(0, height - top - margin);
+	const compact = width < 700, margin = spacing$1.content, gap = 10, progress = describe$32(model.progress, width - margin * 2, language), top = margin + (progress.height ? progress.height + gap : 0) + (compact ? 44 : 0), available = Math.max(0, width - margin * 2 - gap), pane = compact ? width - margin * 2 : Math.max(Math.min(270, available * .45), Math.min(model.paneWidth || available * .36, available - Math.min(320, available * .5))), bodyHeight = Math.max(0, height - top - margin);
 	return {
 		compact,
 		progress,
@@ -3404,7 +3404,7 @@ function layout$5(model, width, height, language) {
 		showDetails: !compact || !!model.details,
 		queue: rect$1(margin, top, pane, bodyHeight),
 		splitter: rect$1(margin + pane, top, gap, bodyHeight),
-		details: rect$1(compact ? margin : margin + pane + gap, top, compact ? width - 20 : available - pane, bodyHeight)
+		details: rect$1(compact ? margin : margin + pane + gap, top, compact ? width - margin * 2 : available - pane, bodyHeight)
 	};
 }
 function describe$27(model, width, height, language) {
@@ -14069,12 +14069,12 @@ function describe$18(model, width, height, language) {
 	}
 	nodes.push(...actionNodes.reverse());
 	if (actions.length <= 2 && width > 700) actionX -= 80;
-	nodes.push(label("configurationPageTitle", rect$1(sidebar + 24, 11, Math.max(0, actionX - sidebar - 30), 28), text(current.title), {
+	nodes.push(label("configurationPageTitle", rect$1(sidebar + spacing$1.content, 11, Math.max(0, actionX - sidebar - spacing$1.content * 2), 28), text(current.title), {
 		fontRole: "display",
 		weight: 600,
 		role: "heading"
 	}));
-	if (!phone) nodes.push(label("configurationPageDescription", rect$1(sidebar + 24, 46, contentWidth - 48, 20), text(current.description), muted));
+	if (!phone) nodes.push(label("configurationPageDescription", rect$1(sidebar + spacing$1.content, 46, contentWidth - spacing$1.content * 2, 20), text(current.description), muted));
 	nodes.push(node("Box", "configurationHeaderDivider", rect$1(0, header - 1, width, 1), { background: "outlineVariant" }));
 	const headerNodes = nodes.filter((item) => item.id !== "configurationSurface" && item.id !== "configurationSidebar" && item.y < header);
 	const headerBox = describe$35("configurationHeader", width, header, headerNodes);
@@ -15310,10 +15310,10 @@ function field(definition, values, options, language, busy) {
 	return result;
 }
 function contentWidth(width) {
-	return Math.max(1, width - Math.min(22, width / 12) * 2 - controls$1.scrollBar.extent);
+	return Math.max(1, width - Math.min(spacing$1.content, width / 12) * 2 - controls$1.scrollBar.extent);
 }
 function describe$17(model, width, height, language) {
-	const margin = Math.min(22, width / 12), viewportWidth = Math.max(1, width - margin * 2), inner = contentWidth(width);
+	const margin = Math.min(spacing$1.content, width / 12), viewportWidth = Math.max(1, width - margin * 2), inner = contentWidth(width);
 	const fields = model.fields.map((definition) => {
 		const result = field(definition, model.values || {}, model.options, language, model.busy);
 		if (["lightAccent", "darkAccent"].includes(definition.field)) {
@@ -15326,7 +15326,7 @@ function describe$17(model, width, height, language) {
 	});
 	const form = sections$1(fields, inner, language, !model.busy, model.style);
 	const nodes = [];
-	let top = 20;
+	let top = spacing$1.content;
 	for (const [id, message, color] of [[
 		"Error",
 		model.error,
@@ -15398,7 +15398,7 @@ function describe$17(model, width, height, language) {
 		bottom += rowHeight + 4;
 	}
 	return { nodes: [node("Scroll", "configurationSettings", rect$1(margin, 0, viewportWidth, height), {
-		contentHeight: bottom + 20,
+		contentHeight: bottom + spacing$1.content,
 		scrollbarId: "configurationSettingsScrollBar",
 		children: nodes
 	})] };
@@ -16465,10 +16465,10 @@ var editors_ui_exports = /* @__PURE__ */ __exportAll({
 	tabName: () => tabName
 });
 var editor = {
-	inset: 14,
-	gap: 12,
-	groupGap: 6,
-	optionGap: 7
+	inset: spacing$1.content,
+	gap: spacing$1.content,
+	groupGap: spacing$1.compact,
+	optionGap: spacing$1.compact
 };
 function tabName(model, width, language) {
 	const text = (key) => translate(key, language);
@@ -20341,9 +20341,9 @@ var dimensions = {
 	actionExtent: 30,
 	actionIcon: 14,
 	gripHeight: 34,
-	spacing: 8,
-	leftInset: 12,
-	rightInset: 6,
+	spacing: spacing$1.compact,
+	leftInset: spacing$1.content,
+	rightInset: spacing$1.compact,
 	iconExtent: 16,
 	surfaceInset: 5,
 	floatingSurfaceInset: 6,
@@ -22660,14 +22660,14 @@ var _sfc_main$41 = {
 //#region ../src/tactic_stream/shared_ui/features/search/header.ui.mjs
 function describe$10(model, width, language) {
 	const text = (key) => translate(key, language), compact = !!model.compact, nodes = [];
-	let right = width - 7;
+	let right = width - spacing$1.compact;
 	const view = (id, name, show) => {
 		if (show) right -= 38;
 		nodes.push(node("View", id, rect$1(right, 5, 38, 38), {
 			view: name,
 			visible: show
 		}));
-		if (show) right -= 3;
+		if (show) right -= spacing$1.tight;
 	};
 	view("searchHeaderPanels", "panels", model.panels !== false);
 	if (!compact) right -= 38;
@@ -22675,7 +22675,7 @@ function describe$10(model, width, language) {
 		iconOnly: true,
 		visible: !compact
 	}));
-	if (!compact) right -= 3;
+	if (!compact) right -= spacing$1.tight;
 	view("searchHeaderQuick", "quick", model.quick !== false && (!compact || !model.collapseSearch));
 	view("searchHeaderTags", "tags", !compact && model.tags !== false);
 	right -= !compact && model.shelf !== false ? 38 : 0;
@@ -22686,10 +22686,10 @@ function describe$10(model, width, language) {
 		round: true,
 		iconColor: model.shelfOpen ? "action" : "secondaryText"
 	}));
-	if (!compact && model.shelf !== false) right -= 3;
-	const refreshLeft = model.reserveGrip === false ? 8 : 38;
-	const left = refreshLeft + 42;
-	nodes.push(node("View", "searchHeaderField", rect$1(left, 5, right - left - 8, 38), {
+	if (!compact && model.shelf !== false) right -= spacing$1.tight;
+	const refreshLeft = model.reserveGrip === false ? spacing$1.compact : 38;
+	const left = refreshLeft + 38 + spacing$1.tight;
+	nodes.push(node("View", "searchHeaderField", rect$1(left, 5, right - left - spacing$1.compact, 38), {
 		view: "field",
 		visible: !compact || !model.collapseSearch || !!model.searchOpen
 	}));
@@ -22781,7 +22781,7 @@ function primaryAction(type) {
 	].includes(type) ? "Configuration" : "";
 }
 function describe$9(model, width, height, language) {
-	const text = (key) => translate(key, language), compact = width < 600, margin = compact ? 12 : 24, inner = width - margin * 2;
+	const text = (key) => translate(key, language), compact = width < 600, margin = spacing$1.content, inner = width - margin * 2;
 	const actions = [[
 		"openErrorDebugLog",
 		"Open Debug Log",
@@ -23411,7 +23411,7 @@ function row$4(model, record, width, language) {
 }
 function describe$7(model, width, height, language) {
 	const text = (key) => translate(key, language);
-	const compact = width < 600, margin = compact ? 10 : 16;
+	const compact = width < 600, margin = spacing$1.content;
 	const inner = Math.max(0, width - margin * 2), contentHeight = Math.max(height, compact ? 610 : 490);
 	const toolbarHeight = compact ? 80 : 40;
 	const summary = model.summary || {
@@ -24141,7 +24141,7 @@ function resultText(result, language) {
 	return tr(result.message || "");
 }
 function describe$6(model, width, height, language) {
-	const tr = (text) => translate(text, language), pad = 12, bodyWidth = Math.max(0, width - 24), inner = Math.max(0, bodyWidth - 16), compact = inner < 580, content = [], enabled = !model.busy;
+	const tr = (text) => translate(text, language), pad = spacing$1.content, bodyWidth = Math.max(0, width - pad * 2), inner = Math.max(0, bodyWidth - 16), compact = inner < 580, content = [], enabled = !model.busy;
 	let y = 0, serial = 0;
 	function heading(title) {
 		content.push(node("Box", "systemHeadingBackground_" + serial, rect$1(0, y, inner, 32), {
@@ -24264,7 +24264,7 @@ function describe$6(model, width, height, language) {
 	heading("Python Script Test");
 	field("systemScriptPath", "Script Path", model.scriptPath, "scriptPath");
 	test("systemScriptTest", "Run script", "script");
-	const nodes = [button("systemRefresh", rect$1(pad, pad, 132, 36), tr("Refresh"), "refresh", { type: "refresh" }, enabled), button("systemCopy", rect$1(152, pad, 140, 36), tr("Copy"), "content_copy", { type: "copy" }, enabled && !!model.sections?.length)];
+	const nodes = [button("systemRefresh", rect$1(pad, pad, 132, 36), tr("Refresh"), "refresh", { type: "refresh" }, enabled), button("systemCopy", rect$1(pad + 140, pad, 140, 36), tr("Copy"), "content_copy", { type: "copy" }, enabled && !!model.sections?.length)];
 	if (model.error) nodes.push(label("systemStatus", rect$1(pad, 56, inner, 44), tr(model.error), {
 		wrap: true,
 		color: "red",
@@ -26789,8 +26789,8 @@ var _sfc_main$26 = {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/messages/conversation.ui.mjs
 var metrics$3 = {
-	margin: 14,
-	gap: 12,
+	margin: spacing$1.content,
+	gap: spacing$1.content,
 	header: 26,
 	row: 68,
 	rowGap: 6,
@@ -26813,8 +26813,8 @@ function layout$1(width, height) {
 	const inner = Math.max(0, width - 2 * metrics$3.margin);
 	return {
 		inner,
-		header: rect$1(14, 14, inner, 26),
-		list: rect$1(14, 52, inner, Math.max(0, height - 66)),
+		header: rect$1(metrics$3.margin, metrics$3.margin, inner, metrics$3.header),
+		list: rect$1(metrics$3.margin, metrics$3.margin + metrics$3.header + metrics$3.gap, inner, Math.max(0, height - metrics$3.margin * 2 - metrics$3.header - metrics$3.gap)),
 		rowWidth: Math.max(0, inner - metrics$3.scrollbar)
 	};
 }
@@ -27053,7 +27053,7 @@ var _sfc_main$25 = {
 //#region ../src/tactic_stream/shared_ui/features/messages/message.ui.mjs
 var metrics$2 = {
 	header: 18,
-	gap: 6,
+	gap: spacing$1.compact,
 	action: 28,
 	minimumCellWidth: 210,
 	preferredCellWidth: 240,
@@ -31990,8 +31990,8 @@ function transition(model, articles, action) {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/support/help/help.ui.mjs
 var metrics = {
-	margin: 12,
-	gap: 10,
+	margin: spacing$1.content,
+	gap: spacing$1.content,
 	topicRow: 61,
 	phoneWidth: 760,
 	topicMin: 236,

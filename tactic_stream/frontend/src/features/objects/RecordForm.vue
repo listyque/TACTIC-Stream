@@ -1246,7 +1246,7 @@ export default {
   flex: 1;
   min-height: 0;
   overflow: auto;
-  padding: 18px 18px 20px 20px;
+  padding: var(--space-content);
   scrollbar-gutter: stable;
 }
 .record-form-dialog .record-form > footer {

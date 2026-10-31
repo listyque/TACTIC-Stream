@@ -56,7 +56,7 @@ onBeforeUnmount(() => observer?.disconnect());
 .activity-user-menu > .account-panel {
   display: flex;
   flex-direction: column;
-  padding: 14px;
+  padding: var(--space-content);
   width: min(396px, calc(100dvw - 24px));
   height: min(516px, calc(100dvh - 48px));
   gap: 0;

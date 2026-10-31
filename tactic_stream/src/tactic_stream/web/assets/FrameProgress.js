@@ -1,5 +1,5 @@
 import { M as openBlock, h as createBlock } from "./vue.js";
-import { T as AppProgress_default } from "./FrameView.js";
+import { C as AppProgress_default } from "./FrameView.js";
 //#region src/frame/controls/display/FrameProgress.vue
 var _sfc_main = {
 	__name: "FrameProgress",

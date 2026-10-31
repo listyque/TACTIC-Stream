@@ -299,6 +299,7 @@
     "file": "assets/file_values.js",
     "name": "file_values",
     "imports": [
+      "_AppButton.js",
       "_FrameView.js"
     ]
   },
@@ -331,6 +332,7 @@
     "file": "assets/groups.ui.js",
     "name": "groups.ui",
     "imports": [
+      "_AppButton.js",
       "_FrameView.js"
     ]
   },

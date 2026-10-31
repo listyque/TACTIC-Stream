@@ -1,8 +1,8 @@
 import { r as __exportAll, t as _sfc_main$2 } from "./ObjectFieldFrame.js";
 import { A as onMounted, E as nextTick, F as resolveComponent, G as withCtx, I as resolveDirective, K as withDirectives, M as openBlock, N as renderList, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, s as vShow, u as Fragment } from "./vue.js";
-import { R as _plugin_vue_export_helper_default, _ as controls, o as t, s as appearance, t as _sfc_main$3 } from "./AppButton.js";
+import { _ as controls, o as t, s as appearance, t as _sfc_main$3, z as _plugin_vue_export_helper_default } from "./AppButton.js";
 import { ct as notify, k as rpc } from "./index.js";
-import { A as _sfc_main$5, G as node, H as label, I as _sfc_main$10, K as rect, L as _sfc_main$9, S as translate, V as button, j as _sfc_main$6, k as _sfc_main$7, t as _sfc_main$4, w as observeFrameSizes, z as _sfc_main$8 } from "./FrameView.js";
+import { D as _sfc_main$7, F as _sfc_main$9, G as node, H as label, K as rect, O as _sfc_main$5, P as _sfc_main$10, R as observeFrameSizes, S as translate, V as button, k as _sfc_main$6, t as _sfc_main$4, z as _sfc_main$8 } from "./FrameView.js";
 import { t as captionHeight } from "./sections.ui.js";
 import { a as duplicateProfile, i as contentChoices, n as applyDuplicateProfile, o as saveDuplicateProfile, r as changeContent, t as _sfc_main$11 } from "./ContentLoadingOverlay.js";
 //#region ../src/tactic_stream/shared_ui/features/objects/duplicate.ui.mjs

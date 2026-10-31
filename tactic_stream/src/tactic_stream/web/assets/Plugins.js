@@ -1,7 +1,7 @@
 import { A as onMounted, H as watch, K as withDirectives, M as openBlock, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, m as createBaseVNode, nt as normalizeStyle, p as computed, s as vShow } from "./vue.js";
-import { s as appearance } from "./AppButton.js";
+import { D as spacing, s as appearance } from "./AppButton.js";
 import { K as uploadFormFile, k as rpc } from "./index.js";
-import { G as node, H as label, K as rect, S as translate$1, U as listRowHeight, V as button, t as _sfc_main$1, w as observeFrameSizes } from "./FrameView.js";
+import { G as node, H as label, K as rect, R as observeFrameSizes, S as translate$1, U as listRowHeight, V as button, t as _sfc_main$1 } from "./FrameView.js";
 import { Ct as describe$2 } from "./ConfiguredView.js";
 import { t as _sfc_main$2 } from "./PageEditorTools.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/plugins/plugins.resources.mjs
@@ -1004,7 +1004,7 @@ function toolbar(model, width, language) {
 }
 var metaNew = (model) => !!model.metadata?.new;
 function describe(model, ui, width, height, language) {
-	const tr = (text) => translate(text, language), nodes = [], gap = 12, compact = width < 760, nav = !!!(model.catalog || []).length || metaNew(model) ? 0 : ui.collapsed ? 44 : compact ? 200 : 250, right = nav ? nav + gap : 0, bodyWidth = Math.max(0, width - right), editable = !model.busy && !model.uncertain && model.canWrite, clean = !model.busy && !model.dirty && !model.uncertain, doc = model.document || {}, meta = model.metadata || {}, exists = !!model.identity;
+	const tr = (text) => translate(text, language), nodes = [], gap = spacing.content, compact = width < 760, nav = !!!(model.catalog || []).length || metaNew(model) ? 0 : ui.collapsed ? 44 : compact ? 200 : 250, right = nav ? nav + gap : 0, bodyWidth = Math.max(0, width - right), editable = !model.busy && !model.uncertain && model.canWrite, clean = !model.busy && !model.dirty && !model.uncertain, doc = model.document || {}, meta = model.metadata || {}, exists = !!model.identity;
 	const btn = (id, r, text, icon, action, enabled = clean, extra = {}) => button(id, r, tr(text), icon, action, enabled, extra);
 	if (nav) {
 		if (!ui.collapsed) nodes.push(label("pluginCatalogueCaption", rect(0, 0, nav - 36, 28), tr("Plugin catalogue"), { weight: 600 }));

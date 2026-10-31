@@ -1,7 +1,7 @@
 import { E as nextTick, G as withCtx, H as watch, M as openBlock, O as onBeforeUnmount, X as ref, b as createVNode, h as createBlock, m as createBaseVNode, p as computed } from "./vue.js";
 import { _ as controls, s as appearance } from "./AppButton.js";
 import { k as rpc } from "./index.js";
-import { G as node, H as label, K as rect, S as translate, V as button, W as muted, m as copyText, t as _sfc_main$1, w as observeFrameSizes } from "./FrameView.js";
+import { G as node, H as label, K as rect, R as observeFrameSizes, S as translate, V as button, W as muted, m as copyText, t as _sfc_main$1 } from "./FrameView.js";
 import { t as _sfc_main$2 } from "./AppDialog.js";
 //#region ../src/tactic_stream/shared_ui/features/configuration/mcp.ui.mjs
 function initial() {

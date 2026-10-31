@@ -1,7 +1,7 @@
 import { A as onMounted, E as nextTick, G as withCtx, M as openBlock, N as renderList, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, h as createBlock, p as computed, u as Fragment } from "./vue.js";
-import { _ as controls, o as t, s as appearance, t as _sfc_main$1 } from "./AppButton.js";
+import { D as spacing, _ as controls, o as t, s as appearance, t as _sfc_main$1 } from "./AppButton.js";
 import { Nt as randomId, k as rpc } from "./index.js";
-import { G as node, H as label, K as rect, M as _sfc_main$3, S as translate, V as button, t as _sfc_main$2, w as observeFrameSizes } from "./FrameView.js";
+import { A as _sfc_main$3, G as node, H as label, K as rect, R as observeFrameSizes, S as translate, V as button, t as _sfc_main$2 } from "./FrameView.js";
 import { t as captionHeight } from "./sections.ui.js";
 //#region ../src/tactic_stream/shared_ui/features/files/matching.ui.mjs
 function testResult(text, language, matchedType) {
@@ -37,7 +37,7 @@ function actions(model) {
 	];
 }
 function layout(model, width, height) {
-	const compact = width < 620, inset = 12, gap = 10;
+	const compact = width < 620, inset = 12, gap = spacing.content;
 	const available = Math.max(0, width - 24);
 	const left = compact ? available : Math.max(200, Math.min(model.paneWidth || Math.max(300, width * .48), available - gap - 260));
 	return {

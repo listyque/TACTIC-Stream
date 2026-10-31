@@ -1,10 +1,11 @@
+import { D as spacing } from "./AppButton.js";
 import { G as node, H as label, K as rect, S as translate, V as button } from "./FrameView.js";
 //#region ../src/tactic_stream/shared_ui/features/objects/snapshot.ui.mjs
 var metrics = {
 	toolbar: 46,
 	summary: 59,
 	splitter: 8,
-	bodyMargin: 10,
+	bodyMargin: spacing.content,
 	minimumRatio: .22,
 	maximumRatio: .78
 };

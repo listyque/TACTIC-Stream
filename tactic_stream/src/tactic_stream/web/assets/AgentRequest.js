@@ -1,7 +1,7 @@
 import { C as inject, E as nextTick, G as withCtx, H as watch, J as markRaw, M as openBlock, N as renderList, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment } from "./vue.js";
-import { a as _sfc_main$2, o as t, s as appearance, t as _sfc_main$3, y as cssRoles } from "./AppButton.js";
+import { D as spacing, a as _sfc_main$2, o as t, s as appearance, t as _sfc_main$3, y as cssRoles } from "./AppButton.js";
 import { Pt as randomUuid, ct as notify, k as rpc } from "./index.js";
-import { G as node, H as label, K as rect, M as _sfc_main$4, S as translate, V as button, W as muted, t as _sfc_main$5, w as observeFrameSizes } from "./FrameView.js";
+import { A as _sfc_main$4, G as node, H as label, K as rect, R as observeFrameSizes, S as translate, V as button, W as muted, t as _sfc_main$5 } from "./FrameView.js";
 import { Q as _sfc_main$6, lt as _sfc_main$7 } from "./ConfiguredView.js";
 import { t as _sfc_main$8 } from "./AppDialog.js";
 import { t as listAction } from "./tree.ui.js";
@@ -480,9 +480,9 @@ function describe$1(model, width, height, language) {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/scripts/request.ui.mjs
 var metrics = {
-	inset: 12,
-	bubblePadding: 14,
-	messageGap: 16,
+	inset: spacing.content,
+	bubblePadding: spacing.content,
+	messageGap: spacing.section,
 	attachmentHeight: 28
 };
 function initial(context = {}) {

@@ -499,6 +499,15 @@ var typography = {
 	title: 12
 };
 var fontFamily = "Segoe UI";
+var spacing = Object.freeze({
+	none: 0,
+	text: 2,
+	tight: 4,
+	compact: 8,
+	content: 12,
+	section: 16,
+	major: 24
+});
 function fontMetricHeight(pixelSize) {
 	return pixelSize * 1.328125;
 }
@@ -539,10 +548,10 @@ var textStyles = Object.freeze({
 });
 var controls = {
 	dialog: {
-		padding: 20,
-		spacing: 12,
+		padding: spacing.content,
+		spacing: spacing.none,
 		headerHeight: 40,
-		headerPadding: 12,
+		headerPadding: spacing.content,
 		titleSize: 13,
 		shadowY: 6,
 		shadowBlur: 14
@@ -587,14 +596,14 @@ var controls = {
 	},
 	calendar: {
 		popupWidth: 304,
-		padding: 10,
+		padding: spacing.content,
 		rowHeight: 30,
 		daySize: 28
 	},
 	colorPicker: {
 		popupWidth: 380,
 		planeHeight: 190,
-		padding: 20
+		padding: spacing.content
 	},
 	iconPicker: {
 		popupWidth: 560,
@@ -711,31 +720,31 @@ var controls = {
 		checkedTintOpacity: .34
 	},
 	editorPanel: {
-		padding: 14,
-		spacing: 12,
-		contentSpacing: 10,
-		headerSpacing: 10,
-		textSpacing: 3,
-		actionsSpacing: 6,
+		padding: spacing.content,
+		spacing: spacing.content,
+		contentSpacing: spacing.compact,
+		headerSpacing: spacing.compact,
+		textSpacing: spacing.text,
+		actionsSpacing: spacing.compact,
 		iconSize: 20
 	},
 	formField: {
-		padding: 14,
+		padding: spacing.content,
 		labelWidth: 220,
-		columnSpacing: 20,
-		rowSpacing: 12,
+		columnSpacing: spacing.content,
+		rowSpacing: spacing.compact,
 		iconExtent: 34,
 		iconSize: 17,
-		labelSpacing: 11,
-		textSpacing: 2,
-		editorSpacing: 5,
+		labelSpacing: spacing.compact,
+		textSpacing: spacing.text,
+		editorSpacing: spacing.tight,
 		compactBreakpoint: 700
 	},
 	editorListItem: {
-		padding: 12,
-		spacing: 10,
+		padding: spacing.content,
+		spacing: spacing.compact,
 		iconSize: 19,
-		textSpacing: 4,
+		textSpacing: spacing.tight,
 		minimumExtraHeight: 12
 	},
 	emptyState: {
@@ -1057,6 +1066,7 @@ function cssColor(channels) {
 }
 function cssVariables(style, dark, base, accent, preferences) {
 	const colors = palette(style, dark, base, accent), values = metrics(style), result = {};
+	for (const name of Object.keys(spacing)) result["--space-" + name] = spacing[name] + "px";
 	for (const role of Object.keys(cssRoles)) result[cssRoles[role]] = cssColor(colors[role]);
 	for (const name of Object.keys(values)) {
 		const cssName = "--" + name.replace(/[A-Z]/g, (letter) => "-" + letter.toLowerCase());
@@ -1547,6 +1557,6 @@ var _sfc_main = {
 	}
 };
 //#endregion
-export { preferences as A, layout as C, textStyles as D, readableText$1 as E, iconSets as F, themes as I, BusyIndicator_default as L, normalizeColumns as M, taskColumns as N, configurationPreview as O, accentPresets as P, _plugin_vue_export_helper_default as R, fontMetricHeight as S, metrics as T, controls as _, _sfc_main$1 as a, fontFamily as b, colorModes as c, initializeAppearance as d, languages as f, blend as g, saveAppearance as h, ripple as i, savePreferencePage as j, normalizePreferences as k, effectiveColorMode as l, readableText as m, tooltipDirective as n, t as o, projectPalette as p, capturePress as r, appearance as s, _sfc_main as t, frameColors as u, cssColor as v, lineHeights as w, fontLineHeight as x, cssRoles as y };
+export { normalizePreferences as A, layout as C, spacing as D, readableText$1 as E, accentPresets as F, iconSets as I, themes as L, savePreferencePage as M, normalizeColumns as N, textStyles as O, taskColumns as P, BusyIndicator_default as R, fontMetricHeight as S, metrics as T, controls as _, _sfc_main$1 as a, fontFamily as b, colorModes as c, initializeAppearance as d, languages as f, blend as g, saveAppearance as h, ripple as i, preferences as j, configurationPreview as k, effectiveColorMode as l, readableText as m, tooltipDirective as n, t as o, projectPalette as p, capturePress as r, appearance as s, _sfc_main as t, frameColors as u, cssColor as v, lineHeights as w, fontLineHeight as x, cssRoles as y, _plugin_vue_export_helper_default as z };
 
 //# sourceMappingURL=AppButton.js.map

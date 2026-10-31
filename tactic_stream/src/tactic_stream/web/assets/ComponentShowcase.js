@@ -1,6 +1,6 @@
 import { A as onMounted, E as nextTick, G as withCtx, H as watch, M as openBlock, N as renderList, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, et as unref, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, u as Fragment } from "./vue.js";
-import { D as textStyles, R as _plugin_vue_export_helper_default, o as t, s as appearance, t as _sfc_main$3, w as lineHeights } from "./AppButton.js";
-import { G as node, H as label, K as rect, M as _sfc_main$4, S as translate, V as button, g as describe$3, t as _sfc_main$5, w as observeFrameSizes } from "./FrameView.js";
+import { D as spacing, O as textStyles, o as t, s as appearance, t as _sfc_main$3, w as lineHeights, z as _plugin_vue_export_helper_default } from "./AppButton.js";
+import { A as _sfc_main$4, G as node, H as label, K as rect, R as observeFrameSizes, S as translate, V as button, g as describe$3, t as _sfc_main$5 } from "./FrameView.js";
 import { t as _sfc_main$6 } from "./ActionRow.js";
 import { t as _sfc_main$7 } from "./AppDialog.js";
 import { t as listAction } from "./tree.ui.js";
@@ -3309,7 +3309,7 @@ function row(list, record, model, language) {
 }
 function describe(model, catalog, width, height, language = "en") {
 	const tr = (text) => translate(text, language), narrow = width < 740, nav = narrow ? 0 : 228;
-	const x = nav + (narrow ? 0 : 20), w = Math.max(0, width - x), top = narrow ? 96 : 48;
+	const x = nav + (narrow ? spacing.none : spacing.content), w = Math.max(0, width - x), top = narrow ? 96 : 48;
 	const visible = families(catalog, model, language), family = catalog.families.find((f) => f.id === model.family) || catalog.families[0];
 	const nodes = [];
 	nodes.push(node("Field", "showcaseSearch", rect(0, 0, narrow ? width : nav, 36), {

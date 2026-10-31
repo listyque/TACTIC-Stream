@@ -1,4 +1,5 @@
 .app-dialog {
+  --dialog-body-inset: max(0px, calc(var(--dialog-padding) - 1px));
   position: fixed;
   inset: 0;
   margin: auto;
@@ -85,11 +86,11 @@
   min-height: 0;
   min-width: 0;
   box-sizing: border-box;
-  padding: calc(var(--dialog-padding) + var(--dialog-spacing))
-    var(--dialog-padding) var(--dialog-padding);
+  padding: calc(var(--dialog-body-inset) + var(--dialog-spacing))
+    var(--dialog-body-inset) var(--dialog-body-inset);
 }
 .app-dialog-untitled > .app-dialog-content {
-  padding-top: var(--dialog-padding);
+  padding-top: var(--dialog-body-inset);
 }
 
 /* Window chrome owns the title bar; feature headers remain content toolbars. */

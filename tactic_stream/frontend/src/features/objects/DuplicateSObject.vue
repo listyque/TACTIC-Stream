@@ -539,13 +539,13 @@ export default {
 .duplicate-sobject {
   width: min(960px, calc(100vw - 32px));
   height: min(620px, calc(100dvh - 32px));
-  padding: 14px;
+  padding: var(--space-content);
   background: var(--workspace);
 }
 .duplicate-sobject[open] {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: var(--space-content);
   overflow: hidden;
 }
 .app-window.duplicate-sobject > header {

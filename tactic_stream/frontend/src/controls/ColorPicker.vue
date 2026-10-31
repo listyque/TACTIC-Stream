@@ -224,21 +224,21 @@ defineExpose({
 .color-picker > header {
   display: flex;
   align-items: center;
-  gap: 8px;
-  height: 62px;
-  padding: 0 var(--color-picker-padding);
+  gap: var(--space-compact);
+  height: var(--dialog-header-height);
+  padding: 0 var(--dialog-header-padding);
   border-bottom: 1px solid var(--outline-variant);
   background: var(--surface-highest, var(--hover));
 }
 .color-picker > header h2 {
   flex: 1;
-  font-size: 16px;
+  font-size: var(--dialog-title-size);
   font-weight: 600;
 }
 .color-picker-fields {
   display: grid;
-  gap: 12px;
-  padding: 32px var(--color-picker-padding) var(--color-picker-padding);
+  gap: var(--space-content);
+  padding: calc(var(--color-picker-padding) - 1px);
 }
 .color-picker-plane {
   height: var(--color-picker-plane-height);
@@ -297,8 +297,8 @@ defineExpose({
 .color-picker > footer {
   display: flex;
   justify-content: flex-end;
-  gap: 8px;
-  padding: 24px 14px 12px;
+  gap: var(--space-compact);
+  padding: var(--space-content);
 }
 .color-picker > footer .app-button {
   min-width: 70px;

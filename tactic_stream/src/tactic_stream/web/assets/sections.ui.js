@@ -1,4 +1,4 @@
-import { T as metrics } from "./AppButton.js";
+import { D as spacing, T as metrics } from "./AppButton.js";
 import { G as node, H as label, K as rect, S as translate, W as muted } from "./FrameView.js";
 //#region ../src/tactic_stream/shared_ui/controls/forms/fields.mjs
 function fieldProperties(field, language, enabled) {
@@ -46,18 +46,18 @@ function captionHeight(text, width) {
 }
 function choices(field, properties, width, controlHeight) {
 	const options = properties.options, columns = width >= 206 ? 2 : 1;
-	const cellWidth = (width - (columns - 1) * 6) / columns;
+	const cellWidth = (width - (columns - 1) * spacing.compact) / columns;
 	return {
-		children: options.map((option, index) => node("Action", field.id + "_" + option.value, rect(index % columns * (cellWidth + 6), Math.floor(index / columns) * (controlHeight + 6), cellWidth, controlHeight), {
+		children: options.map((option, index) => node("Action", field.id + "_" + option.value, rect(index % columns * (cellWidth + spacing.compact), Math.floor(index / columns) * (controlHeight + spacing.compact), cellWidth, controlHeight), {
 			text: option.label,
 			enabled: properties.enabled,
 			selected: properties.value === option.value,
 			normalColor: "surfaceContainerHigh",
 			selectedColor: "contentSelection",
-			children: [label(field.id + "_label_" + option.value, rect(10, 0, cellWidth - 20, controlHeight), option.label)],
+			children: [label(field.id + "_label_" + option.value, rect(spacing.content, 0, cellWidth - spacing.content * 2, controlHeight), option.label)],
 			action: Object.assign({}, properties.action, { value: option.value })
 		})),
-		height: Math.max(0, Math.ceil(options.length / columns) * (controlHeight + 6) - 6)
+		height: Math.max(0, Math.ceil(options.length / columns) * (controlHeight + spacing.compact) - spacing.compact)
 	};
 }
 function sections(fields, width, language, enabled, style) {
@@ -78,62 +78,64 @@ function sections(fields, width, language, enabled, style) {
 	}
 	let contentY = 0;
 	for (const group of groups) {
+		if (contentY) contentY += spacing.section;
 		if (group.heading) {
 			const heading = group.heading;
 			const title = heading.dataLabel ? heading.title : translate(heading.title, language);
-			nodes.push(label(heading.id, rect(1, contentY, width - 2, 20), title, {
+			nodes.push(label(heading.id, rect(0, contentY, width, 20), title, {
 				fontRole: "bodyLarge",
 				weight: 600,
 				role: "heading",
 				level: 3
 			}));
-			contentY += 28;
+			contentY += 20 + spacing.compact;
 			if (heading.description) {
 				const description = translate(heading.description, language);
-				const height = captionHeight(description, width - 2);
-				nodes.push(label(heading.id + "Description", rect(1, contentY, width - 2, height), description, Object.assign({}, muted, {
+				const height = captionHeight(description, width);
+				nodes.push(label(heading.id + "Description", rect(0, contentY, width, height), description, Object.assign({}, muted, {
 					fontRole: "caption",
 					wrap: true
 				})));
-				contentY += height + 8;
+				contentY += height + spacing.compact;
 			}
 		}
 		if (!group.fields.length) continue;
-		const children = [], rowWidth = Math.max(1, width - 40);
-		let rowY = 16;
+		const children = [], pad = Math.min(spacing.content, Math.max(0, width / 2)), rowWidth = Math.max(0, width - pad * 2);
+		let rowY = pad;
 		for (let index = 0; index < group.fields.length; index++) {
 			const field = group.fields[index];
 			const properties = fieldProperties(field, language, enabled);
 			if (field.kind === "CheckBox") properties.text = "";
 			const controlHeight = field.height || sizing.controlHeight;
 			if (field.kind === "ChoiceGrid") {
-				const grid = choices(field, properties, width - 32, controlHeight);
-				children.push(node("Box", field.id, rect(16, rowY, width - 32, grid.height), { children: grid.children }));
-				rowY += grid.height + 8;
+				const grid = choices(field, properties, rowWidth, controlHeight);
+				children.push(node("Box", field.id, rect(pad, rowY, rowWidth, grid.height), { children: grid.children }));
+				rowY += grid.height + spacing.content;
 				continue;
 			}
 			if (field.fullWidth || field.kind === "Button") {
-				children.push(node(field.kind, field.id, rect(16, rowY, width - 32, controlHeight), properties));
-				rowY += controlHeight + 8;
+				children.push(node(field.kind, field.id, rect(pad, rowY, rowWidth, controlHeight), properties));
+				rowY += controlHeight + spacing.content;
 				continue;
 			}
-			const controlWidth = Math.max(1, Math.min(field.controlWidth || 280, width - 48));
-			const stacked = rowWidth - controlWidth - 20 < 210;
-			const textWidth = stacked ? rowWidth : rowWidth - controlWidth - 20;
+			const controlWidth = Math.max(0, Math.min(field.controlWidth || 280, rowWidth));
+			const stacked = rowWidth - controlWidth - spacing.content < 210;
+			const textWidth = stacked ? rowWidth : rowWidth - controlWidth - spacing.content;
 			const description = translate(field.description || "", language);
 			const descriptionHeight = captionHeight(description, textWidth);
-			const textHeight = 18 + (description ? 3 + descriptionHeight : 0);
-			const rowHeight = Math.max(54, stacked ? textHeight + 8 + controlHeight + 20 : Math.max(textHeight, controlHeight) + 20);
-			children.push(label(field.id + "Label", rect(20, rowY + 10, textWidth, 18), properties.label, {
+			const textHeight = 18 + (description ? spacing.tight + descriptionHeight : 0);
+			const rowHeight = stacked ? textHeight + spacing.compact + controlHeight : Math.max(textHeight, controlHeight);
+			const textY = rowY + (stacked ? 0 : (rowHeight - textHeight) / 2);
+			children.push(label(field.id + "Label", rect(pad, textY, textWidth, 18), properties.label, {
 				fontRole: "body",
 				weight: 600
 			}));
-			if (description) children.push(label(field.id + "Description", rect(20, rowY + 31, textWidth, descriptionHeight), description, Object.assign({}, muted, {
+			if (description) children.push(label(field.id + "Description", rect(pad, textY + 18 + spacing.tight, textWidth, descriptionHeight), description, Object.assign({}, muted, {
 				fontRole: "caption",
 				wrap: true
 			})));
-			const controlY = stacked ? rowY + 10 + textHeight + 8 : rowY + (rowHeight - controlHeight) / 2;
-			const controlX = width - 20 - controlWidth;
+			const controlY = stacked ? rowY + textHeight + spacing.compact : rowY + (rowHeight - controlHeight) / 2;
+			const controlX = stacked ? pad : width - pad - controlWidth;
 			if (field.kind === "Number") children.push(node("Box", field.id, rect(controlX, controlY, controlWidth, controlHeight), {
 				background: "surfaceContainerHigh",
 				border: "outlineVariant",
@@ -169,7 +171,7 @@ function sections(fields, width, language, enabled, style) {
 			}));
 			else {
 				const trailing = field.trailingAction;
-				children.push(node(field.kind || "Field", field.id, rect(controlX, controlY, Math.max(0, controlWidth - (trailing ? controlHeight + 6 : 0)), controlHeight), properties));
+				children.push(node(field.kind || "Field", field.id, rect(controlX, controlY, Math.max(0, controlWidth - (trailing ? controlHeight + spacing.compact : 0)), controlHeight), properties));
 				if (trailing) children.push(node("Button", field.id + "Open", rect(controlX + controlWidth - controlHeight, controlY, controlHeight, controlHeight), {
 					text: translate(trailing.title, language),
 					icon: trailing.icon,
@@ -178,11 +180,10 @@ function sections(fields, width, language, enabled, style) {
 					action: trailing.action
 				}));
 			}
-			rowY += rowHeight;
-			if (index < group.fields.length - 1 && field.showDivider !== false) children.push(node("Box", field.id + "Divider", rect(20, rowY - 1, rowWidth, 1), { background: "outlineVariant" }));
+			rowY += rowHeight + spacing.content;
+			if (index < group.fields.length - 1 && field.showDivider !== false) children.push(node("Box", field.id + "Divider", rect(pad, rowY - spacing.content / 2, rowWidth, 1), { background: "outlineVariant" }));
 		}
-		const last = group.fields[group.fields.length - 1];
-		const cardHeight = rowY + (last.fullWidth || last.kind === "Button" ? 8 : 16);
+		const cardHeight = rowY - spacing.content + pad;
 		nodes.push(node("Box", "section_" + (group.heading ? group.heading.id : group.fields[0].id), rect(0, contentY, width, cardHeight), {
 			background: "surfaceContainerLow",
 			border: "outlineVariant",
@@ -190,7 +191,7 @@ function sections(fields, width, language, enabled, style) {
 			radius: sizing.sectionRadius,
 			children
 		}));
-		contentY += cardHeight + 16;
+		contentY += cardHeight;
 	}
 	return {
 		nodes,

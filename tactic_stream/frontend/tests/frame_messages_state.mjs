@@ -188,7 +188,7 @@ for (const width of [240, 316, 408, 900])
       body.nodes.map((node) => node.view),
       ['reply', 'attachments', 'text']
     );
-    assert.equal(body.height, 124);
+    assert.equal(body.height, 128);
     const panel = Attachments.panel({ previews: true }, width, 256, language);
     validateScene(panel, { drafts: [] }, {});
     assert.equal(panel.nodes.at(-1).rowHeight, 100);

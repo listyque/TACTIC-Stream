@@ -1,8 +1,8 @@
 import { n as arrange, r as __exportAll, t as _sfc_main$5 } from "./ObjectFieldFrame.js";
 import { A as onMounted, E as nextTick, F as resolveComponent, G as withCtx, H as watch, I as resolveDirective, K as withDirectives, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, S as h, X as ref, _ as createElementBlock, a as vModelSelect, b as createVNode, g as createCommentVNode, h as createBlock, i as vModelCheckbox, j as onUpdated, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, o as vModelText, p as computed, rt as toDisplayString, s as vShow, tt as normalizeClass, u as Fragment, y as createTextVNode, z as useId } from "./vue.js";
-import { D as textStyles, R as _plugin_vue_export_helper_default, _ as controls, o as t, s as appearance, t as _sfc_main$6 } from "./AppButton.js";
+import { D as spacing, O as textStyles, _ as controls, o as t, s as appearance, t as _sfc_main$6, z as _plugin_vue_export_helper_default } from "./AppButton.js";
 import { K as uploadFormFile, _t as mobile, d as formDefinition, k as rpc } from "./index.js";
-import { A as _sfc_main$12, B as _sfc_main$10, D as ItemPreview_default, G as node, H as label, I as _sfc_main$11, K as rect, L as _sfc_main$7, S as translate, V as button, j as _sfc_main$9, t as _sfc_main$8, w as observeFrameSizes, x as _sfc_main$14, z as _sfc_main$13 } from "./FrameView.js";
+import { B as _sfc_main$10, F as _sfc_main$7, G as node, H as label, K as rect, O as _sfc_main$12, P as _sfc_main$11, R as observeFrameSizes, S as translate, T as ItemPreview_default, V as button, k as _sfc_main$9, t as _sfc_main$8, x as _sfc_main$14, z as _sfc_main$13 } from "./FrameView.js";
 import { n as qtLabelTextWidth } from "./textMetrics.js";
 import { t as captionHeight } from "./sections.ui.js";
 //#region src/features/objects/recordFields.js
@@ -570,7 +570,7 @@ var editor_ui_exports = /* @__PURE__ */ __exportAll({
 	tools: () => tools
 });
 function header(model, width, language) {
-	const tr = (text) => translate(text, language), compact = width < 660, height = compact ? 90 : 98, margin = compact ? 16 : 22;
+	const tr = (text) => translate(text, language), compact = width < 660, height = compact ? 90 : 98, margin = spacing.content;
 	const publishing = model.mode === "publish", context = publishing ? model.recordKey || tr("New object") : model.parentTitle;
 	const actions = model.mode === "insert" ? Math.min(238, Math.max(80, width - margin * 2 - 142)) : 0;
 	const refreshX = width - margin - 28, modeX = refreshX - 8 - actions;
@@ -728,7 +728,7 @@ function tools(model, width, language) {
 	};
 }
 function footer(model, width, language) {
-	const tr = (text) => translate(text, language), compact = width < 660, margin = compact ? 16 : 22;
+	const tr = (text) => translate(text, language), compact = width < 660, margin = spacing.content;
 	const submit = model.submitLabel || (model.mode === "publish" ? tr("Publish") : model.mode === "edit" ? tr("Save changes") : model.batchPreview ? translate("Create {count} objects", language, { count: model.batchTotal }) : model.batchEnabled ? translate("Preview {count} objects", language, { count: model.batchCount }) : tr("Create"));
 	const submitWidth = Math.min(width * .52, Math.max(72, submit.length * 6 + 32)), backWidth = model.batchPreview ? 86 : 0, checkWidth = model.uncertain ? 148 : 0, closeWidth = 72, submitX = width - margin - submitWidth;
 	const nodes = [

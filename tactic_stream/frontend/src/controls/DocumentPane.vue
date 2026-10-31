@@ -3,7 +3,10 @@
 import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import AppIcon from './AppIcon.vue';
 import MarkdownText from './MarkdownText.vue';
-import { controls } from '../../../src/tactic_stream/shared_ui/core/foundation.mjs';
+import {
+  controls,
+  spacing
+} from '../../../src/tactic_stream/shared_ui/core/foundation.mjs';
 const documentStyle = Object.fromEntries(
   Object.entries(controls.document).map(([key, value]) => [
     '--document-' + key,
@@ -18,7 +21,7 @@ const props = defineProps({
   error: String,
   scrollOffset: { type: Number, default: 0 },
   presented: { type: Boolean, default: true },
-  contentInset: { type: Number, default: 14 }
+  contentInset: { type: Number, default: spacing.content }
 });
 const emit = defineEmits(['link', 'scroll']);
 const viewport = ref(null),
@@ -88,19 +91,19 @@ defineExpose({ capture, focus, restore, viewport });
   scrollbar-gutter: stable;
 }
 .document-pane article {
-  margin: var(--document-inset, 14px);
+  margin: var(--document-inset, var(--space-content));
   min-width: 0;
 }
 .document-notice {
   font-size: var(--text-caption);
-  margin: 0 0 14px;
+  margin: 0 0 var(--space-section);
 }
 .document-summary {
   display: flex;
   align-items: flex-start;
-  gap: 10px;
-  padding: 12px;
-  margin-bottom: 14px;
+  gap: var(--space-compact);
+  padding: var(--space-content);
+  margin-bottom: var(--space-section);
   border: 0;
   box-shadow: inset 0 0 0 1px var(--outline-variant);
   border-radius: var(--item-radius);

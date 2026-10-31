@@ -1,11 +1,12 @@
 <script setup>
 import AppIcon from '../AppIcon.vue';
 import { t } from '../../i18n.js';
+import { controls } from '../../../../src/tactic_stream/shared_ui/core/foundation.mjs';
 defineProps({
   title: String,
   description: String,
   icon: String,
-  padding: { type: Number, default: 14 },
+  padding: { type: Number, default: controls.editorPanel.padding },
   fillContentHeight: { type: Boolean, default: true }
 });
 </script>

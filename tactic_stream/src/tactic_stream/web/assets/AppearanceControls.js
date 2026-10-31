@@ -1,6 +1,6 @@
 import { A as onMounted, B as useModel, G as withCtx, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, X as ref, _ as createElementBlock, b as createVNode, et as unref, g as createCommentVNode, h as createBlock, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment, w as mergeModels } from "./vue.js";
-import { F as iconSets, I as themes, P as accentPresets, a as _sfc_main$5, c as colorModes, f as languages, l as effectiveColorMode, m as readableText, o as t, s as appearance, t as _sfc_main$4 } from "./AppButton.js";
-import { B as _sfc_main$7, z as _sfc_main$6 } from "./FrameView.js";
+import { F as accentPresets, I as iconSets, L as themes, a as _sfc_main$5, c as colorModes, f as languages, l as effectiveColorMode, m as readableText, o as t, s as appearance, t as _sfc_main$4 } from "./AppButton.js";
+import { B as _sfc_main$7, L as frameContentWidth, R as observeFrameSizes, z as _sfc_main$6 } from "./FrameView.js";
 //#region src/controls/SettingRow.vue
 var _hoisted_1$3 = { class: "setting-description" };
 var _hoisted_2$2 = ["for"];
@@ -22,8 +22,8 @@ var _sfc_main$3 = {
 		const root = ref(null), accessory = ref(null), stacked = ref(false);
 		let observer;
 		onMounted(() => {
-			observer = new ResizeObserver(() => {
-				stacked.value = root.value.clientWidth - 28 - accessory.value.scrollWidth < 210;
+			observer = observeFrameSizes(() => {
+				stacked.value = frameContentWidth(root.value) - parseFloat(getComputedStyle(root.value).columnGap) - accessory.value.scrollWidth < 210;
 			});
 			observer.observe(root.value);
 			observer.observe(accessory.value);

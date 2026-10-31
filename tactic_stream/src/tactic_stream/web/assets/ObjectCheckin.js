@@ -1,7 +1,7 @@
 import { A as onMounted, E as nextTick, F as resolveComponent, G as withCtx, I as resolveDirective, K as withDirectives, M as openBlock, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment, y as createTextVNode } from "./vue.js";
-import { A as preferences, R as _plugin_vue_export_helper_default, _ as controls, o as t, s as appearance, t as _sfc_main$3 } from "./AppButton.js";
+import { D as spacing, _ as controls, j as preferences, o as t, s as appearance, t as _sfc_main$3, z as _plugin_vue_export_helper_default } from "./AppButton.js";
 import { K as uploadFormFile, O as resultItems, _ as navigationLink, _t as mobile, k as rpc } from "./index.js";
-import { G as node, H as label, K as rect, S as translate, V as button, t as _sfc_main$4, w as observeFrameSizes } from "./FrameView.js";
+import { G as node, H as label, K as rect, R as observeFrameSizes, S as translate, V as button, t as _sfc_main$4 } from "./FrameView.js";
 import { t as captionHeight } from "./sections.ui.js";
 import { i as sourceIcon, r as prettySize } from "./file_values.js";
 import { a as sourcePath } from "./files.js";
@@ -44,7 +44,7 @@ function revision(model, width, height, language) {
 	}, width, height, language);
 }
 function describe(model, width, height, language) {
-	const tr = (text) => translate(text, language), margin = 10, inner = Math.max(0, width - 20 - 16), nodes = [], body = [], footerHeight = width < 370 ? 96 : 52;
+	const tr = (text) => translate(text, language), margin = spacing.content, inner = Math.max(0, width - margin * 2 - 16), nodes = [], body = [], footerHeight = width < 370 ? 96 : 52;
 	const canChoose = !model.busy && (!model.append || !!model.ready) && !model.appendUncertain;
 	let y = 0;
 	if (model.append) nodes.push(node("Box", "snapshotAppendSurface", rect(0, 0, width, height), {
@@ -186,14 +186,14 @@ function describe(model, width, height, language) {
 		body.push(button("objectCheckinDiscard", rect(w + 8, y, w, 38), tr("Discard"), "", { type: "discard" }, !model.busy, { destructive: true }));
 		y += 48;
 	}
-	nodes.push(node("Scroll", "objectCheckinBody", rect(margin, margin, width - 20, Math.max(0, height - footerHeight - margin - 8)), {
+	nodes.push(node("Scroll", "objectCheckinBody", rect(margin, margin, width - margin * 2, Math.max(0, height - footerHeight - margin - 8)), {
 		contentHeight: y,
 		scrollbarId: "objectCheckinBodyScrollBar",
 		children: body
 	}));
-	const stacked = width < 370, buttonWidth = stacked ? width - 20 : 96, buttonY = height - footerHeight + 6;
+	const stacked = width < 370, buttonWidth = stacked ? width - margin * 2 : 96, buttonY = height - footerHeight + 6;
 	nodes.push(button("objectCheckinCancel", rect(margin, buttonY, buttonWidth, 38), tr("Cancel"), "", { type: "close" }, !model.busy));
-	nodes.push(button("objectCheckinSubmit", rect(stacked ? margin : margin + buttonWidth + 8, buttonY + (stacked ? 46 : 0), stacked ? buttonWidth : width - 20 - buttonWidth - 8, 38), tr(model.append ? "Attach files" : "Add to Commit Queue"), "save", { type: "submit" }, !!model.ready && !model.busy && !model.appendUncertain && model.count > 0 && !!(String(model.context || "").trim() || model.process) && (!model.revision || !!model.confirmed) && (model.append || !!model.hasQueue), { highlighted: true }));
+	nodes.push(button("objectCheckinSubmit", rect(stacked ? margin : margin + buttonWidth + 8, buttonY + (stacked ? 46 : 0), stacked ? buttonWidth : width - margin * 2 - buttonWidth - 8, 38), tr(model.append ? "Attach files" : "Add to Commit Queue"), "save", { type: "submit" }, !!model.ready && !model.busy && !model.appendUncertain && model.count > 0 && !!(String(model.context || "").trim() || model.process) && (!model.revision || !!model.confirmed) && (model.append || !!model.hasQueue), { highlighted: true }));
 	return { nodes };
 }
 function fileRow(record, width, language) {

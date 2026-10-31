@@ -1,3 +1,4 @@
+import { D as spacing } from "./AppButton.js";
 import { G as node } from "./FrameView.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/groups/groups.state.mjs
 function initial() {
@@ -125,9 +126,9 @@ function transition(ui, model, event) {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/administration/groups/groups.ui.mjs
 var metrics = {
-	gap: 12,
-	toolbarGap: 8,
-	padding: 14,
+	gap: spacing.content,
+	toolbarGap: spacing.compact,
+	padding: spacing.content,
 	control: 38,
 	groupRow: 64,
 	memberRow: 58,
