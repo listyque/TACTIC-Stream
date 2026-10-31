@@ -7659,6 +7659,9 @@ function groupRecords(records, mode, nodes = [], organization = {}) {
 }
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/search/card.ui.mjs
+function compactRows(mode, width) {
+	return mode === "compact" || width > 0 && width < 445 && mode !== "table";
+}
 var tileShade = [
 	{
 		position: 0,
@@ -18163,6 +18166,7 @@ var _sfc_main$10 = {
 			operationRequest: 0,
 			mobilePath: [],
 			mobileScroll: { ...this.state?.mobileScroll },
+			presentationWidth: 0,
 			mobileDirection: "forward"
 		};
 	},
@@ -18179,7 +18183,7 @@ var _sfc_main$10 = {
 			];
 		},
 		split() {
-			return !this.mobile && this.mode.startsWith("splitted_");
+			return !this.mobile && !this.compact && this.mode.startsWith("splitted_");
 		},
 		mobileParent() {
 			return this.find(this.mobilePath.at(-1));
@@ -18188,7 +18192,10 @@ var _sfc_main$10 = {
 			return this.workspaceId ? this.project + ":" + this.workspaceId + ":" + this.searchType : "";
 		},
 		compact() {
-			return this.mode === "compact";
+			return compactRows(this.mode, this.presentationWidth);
+		},
+		tiles() {
+			return this.mode === "tiles" && !this.compact;
 		},
 		selectedNode() {
 			return this.find(this.selectedId);
@@ -18203,8 +18210,8 @@ var _sfc_main$10 = {
 			return this.cardParent?.children || this.nodes;
 		},
 		groups() {
-			const nodes = (this.mode === "tiles" ? this.cardNodes : this.nodes).filter(this.nodeVisible);
-			if (this.cardPath.length && this.mode === "tiles") return [{
+			const nodes = (this.tiles ? this.cardNodes : this.nodes).filter(this.nodeVisible);
+			if (this.cardPath.length && this.tiles) return [{
 				key: "",
 				label: "",
 				nodes
@@ -18289,6 +18296,12 @@ var _sfc_main$10 = {
 		}
 	},
 	mounted() {
+		this.sizeObserver = observeFrameSizes((entries) => {
+			const entry = entries.at(-1);
+			const width = entry.borderBoxSize?.[0]?.inlineSize || entry.contentRect.width;
+			if (width > 0) this.presentationWidth = width;
+		});
+		this.sizeObserver.observe(this.$el.parentElement);
 		this.scrollHost = this.$el.closest(".table-container");
 		this.scrollHost?.addEventListener("scroll", this.scrolling, { passive: true });
 		window.addEventListener("popstate", this.mobilePopstate, true);
@@ -18298,6 +18311,7 @@ var _sfc_main$10 = {
 		this.versionRequest++;
 		this.operationRequest++;
 		clearTimeout(this.scrollTimer);
+		this.sizeObserver?.disconnect();
 		this.scrollHost?.removeEventListener("scroll", this.scrolling);
 		window.removeEventListener("popstate", this.mobilePopstate, true);
 	},
@@ -18343,13 +18357,13 @@ var _sfc_main$10 = {
 			}, 120);
 		},
 		collectionItems(nodes) {
-			return (this.mode === "tiles" ? nodes : this.visible(nodes)).map((node) => ({
+			return (this.tiles ? nodes : this.visible(nodes)).map((node) => ({
 				key: node.id,
 				data: node,
 				height: layout$2({
 					kind: node.kind === "branch" ? node.branch?.kind === "relation" ? "relation" : "process" : node.kind,
 					compact: this.compact,
-					tile: this.mode === "tiles"
+					tile: this.tiles
 				}, 212).height
 			}));
 		},
@@ -18681,7 +18695,7 @@ var _sfc_main$10 = {
 		},
 		async doubleClick(node, event) {
 			if (this.mobile) return;
-			if (this.mode === "tiles") {
+			if (this.tiles) {
 				await this.openCard(node, event);
 				return;
 			}
@@ -19049,8 +19063,8 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
 	const _directive_window = resolveDirective("window");
 	return openBlock(), createElementBlock("div", {
 		class: normalizeClass(["result-presentation", {
-			"result-split-right": $props.mode === "splitted_vertical",
-			"result-split-bottom": $props.mode === "splitted_horizontal",
+			"result-split-right": $options.split && $props.mode === "splitted_vertical",
+			"result-split-bottom": $options.split && $props.mode === "splitted_horizontal",
 			"result-moving": $data.moving
 		}]),
 		style: normalizeStyle({ "--result-split": $data.splitRatio + "%" }),
@@ -19124,7 +19138,7 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
 				role: "status",
 				"aria-label": $options.t("Loading data…")
 			}, [createVNode(_component_BusyIndicator, { running: "" })], 8, _hoisted_4$2)) : createCommentVNode("", true),
-			$props.mode === "tiles" && $data.cardPath.length ? (openBlock(), createElementBlock("nav", {
+			$options.tiles && $data.cardPath.length ? (openBlock(), createElementBlock("nav", {
 				key: 2,
 				class: "result-card-navigation",
 				"aria-label": $options.t("Card navigation")
@@ -19186,9 +19200,9 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
 					key: 2,
 					class: "result-item-list",
 					items: $options.collectionItems(group.nodes),
-					"cell-width": $props.mode === "tiles" ? $props.itemLayout?.card_width || 212 : void 0,
-					"column-gap": $props.mode === "tiles" ? 18 : 0,
-					"row-gap": $props.mode === "tiles" ? 14 : 3
+					"cell-width": $options.tiles ? $props.itemLayout?.card_width || 212 : void 0,
+					"column-gap": $options.tiles ? 18 : 0,
+					"row-gap": $options.tiles ? 14 : 3
 				}, {
 					default: withCtx(({ item: node, index }) => [createBaseVNode("div", {
 						class: "result-tree-row",
@@ -19203,8 +19217,8 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
 							onElement: _cache[16] || (_cache[16] = ($event) => _ctx.$emit("element", $event)),
 							node,
 							compact: $options.compact,
-							card: $props.mode === "tiles",
-							tree: $props.mode === "continious" && !$options.mobile,
+							card: $options.tiles,
+							tree: ($props.mode === "continious" || $options.compact) && !$options.mobile,
 							selected: node.depth ? $data.selectedIds.includes(node.id) : $props.selectedKeys.includes(node.record?.__search_key__),
 							checked: $props.selectedKeys.includes(node.record?.__search_key__),
 							selectable: !$props.readOnly && !node.depth && node.kind !== "branch",

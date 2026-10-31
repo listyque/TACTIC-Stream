@@ -246,3 +246,18 @@ for (const shelfOpen of [false, true]) {
 const noGrip = Header.describe({reserveGrip:false}, 900, 'en');
 assert.equal(noGrip.nodes.find(node => node.id === 'searchRefreshButton').x, 8);
 assert.equal(noGrip.nodes.find(node => node.id === 'searchHeaderField').x, 50);
+
+for (const mode of [
+  'continious',
+  'compact',
+  'tiles',
+  'splitted_vertical',
+  'table'
+]) {
+  for (const width of [320, 444, 445, 800]) {
+    assert.equal(
+      Card.compactRows(mode, width),
+      mode === 'compact' || (width < 445 && mode !== 'table')
+    );
+  }
+}

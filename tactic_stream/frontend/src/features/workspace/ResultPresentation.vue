@@ -7,6 +7,7 @@ import {
 } from '../../api.js';
 import { fileBlob } from '../objects/previewFiles.js';
 import { nextTick, toRaw } from 'vue';
+import { observeFrameSizes } from '../../frame/resize.js';
 import { t } from '../../i18n.js';
 import { mobile } from '../../mobile.js';
 import { groupRecords } from './resultViews.js';
@@ -128,6 +129,7 @@ export default {
       operationRequest: 0,
       mobilePath: [],
       mobileScroll: { ...this.state?.mobileScroll },
+      presentationWidth: 0,
       mobileDirection: 'forward'
     };
   },
@@ -139,7 +141,7 @@ export default {
       return [this.rows, this.ticket, this.project, this.searchType];
     },
     split() {
-      return !this.mobile && this.mode.startsWith('splitted_');
+      return !this.mobile && !this.compact && this.mode.startsWith('splitted_');
     },
     mobileParent() {
       return this.find(this.mobilePath.at(-1));
@@ -150,7 +152,10 @@ export default {
         : '';
     },
     compact() {
-      return this.mode === 'compact';
+      return Card.compactRows(this.mode, this.presentationWidth);
+    },
+    tiles() {
+      return this.mode === 'tiles' && !this.compact;
     },
     selectedNode() {
       return this.find(this.selectedId);
@@ -167,10 +172,10 @@ export default {
       return this.cardParent?.children || this.nodes;
     },
     groups() {
-      const nodes = (
-        this.mode === 'tiles' ? this.cardNodes : this.nodes
-      ).filter(this.nodeVisible);
-      if (this.cardPath.length && this.mode === 'tiles')
+      const nodes = (this.tiles ? this.cardNodes : this.nodes).filter(
+        this.nodeVisible
+      );
+      if (this.cardPath.length && this.tiles)
         return [{ key: '', label: '', nodes }];
       const byRecord = new Map(nodes.map((node) => [node.record, node]));
       return groupRecords(
@@ -264,6 +269,13 @@ export default {
     }
   },
   mounted() {
+    this.sizeObserver = observeFrameSizes((entries) => {
+      const entry = entries.at(-1);
+      const width =
+        entry.borderBoxSize?.[0]?.inlineSize || entry.contentRect.width;
+      if (width > 0) this.presentationWidth = width;
+    });
+    this.sizeObserver.observe(this.$el.parentElement);
     this.scrollHost = this.$el.closest('.table-container');
     this.scrollHost?.addEventListener('scroll', this.scrolling, {
       passive: true
@@ -275,6 +287,7 @@ export default {
     this.versionRequest++;
     this.operationRequest++;
     clearTimeout(this.scrollTimer);
+    this.sizeObserver?.disconnect();
     this.scrollHost?.removeEventListener('scroll', this.scrolling);
     window.removeEventListener('popstate', this.mobilePopstate, true);
   },
@@ -332,25 +345,23 @@ export default {
       }, 120);
     },
     collectionItems(nodes) {
-      return (this.mode === 'tiles' ? nodes : this.visible(nodes)).map(
-        (node) => ({
-          key: node.id,
-          data: node,
-          height: Card.layout(
-            {
-              kind:
-                node.kind === 'branch'
-                  ? node.branch?.kind === 'relation'
-                    ? 'relation'
-                    : 'process'
-                  : node.kind,
-              compact: this.compact,
-              tile: this.mode === 'tiles'
-            },
-            212
-          ).height
-        })
-      );
+      return (this.tiles ? nodes : this.visible(nodes)).map((node) => ({
+        key: node.id,
+        data: node,
+        height: Card.layout(
+          {
+            kind:
+              node.kind === 'branch'
+                ? node.branch?.kind === 'relation'
+                  ? 'relation'
+                  : 'process'
+                : node.kind,
+            compact: this.compact,
+            tile: this.tiles
+          },
+          212
+        ).height
+      }));
     },
     configured(node) {
       return Composition.supports(this.itemLayout, node, window.innerWidth);
@@ -831,7 +842,7 @@ export default {
     },
     async doubleClick(node, event) {
       if (this.mobile) return;
-      if (this.mode === 'tiles') {
+      if (this.tiles) {
         await this.openCard(node, event);
         return;
       }
@@ -1275,8 +1286,8 @@ export default {
   <div
     class="result-presentation"
     :class="{
-      'result-split-right': mode === 'splitted_vertical',
-      'result-split-bottom': mode === 'splitted_horizontal',
+      'result-split-right': split && mode === 'splitted_vertical',
+      'result-split-bottom': split && mode === 'splitted_horizontal',
       'result-moving': moving
     }"
     :style="{ '--result-split': splitRatio + '%' }"
@@ -1333,7 +1344,7 @@ export default {
         <BusyIndicator running />
       </p>
       <nav
-        v-if="mode === 'tiles' && cardPath.length"
+        v-if="tiles && cardPath.length"
         class="result-card-navigation"
         :aria-label="t('Card navigation')"
       >
@@ -1389,11 +1400,9 @@ export default {
           v-show="!closedGroups[group.key]"
           class="result-item-list"
           :items="collectionItems(group.nodes)"
-          :cell-width="
-            mode === 'tiles' ? itemLayout?.card_width || 212 : undefined
-          "
-          :column-gap="mode === 'tiles' ? 18 : 0"
-          :row-gap="mode === 'tiles' ? 14 : 3"
+          :cell-width="tiles ? itemLayout?.card_width || 212 : undefined"
+          :column-gap="tiles ? 18 : 0"
+          :row-gap="tiles ? 14 : 3"
         >
           <template #default="{ item: node, index }">
             <div class="result-tree-row" :data-sequence="index">
@@ -1407,8 +1416,8 @@ export default {
                 @element="$emit('element', $event)"
                 :node="node"
                 :compact="compact"
-                :card="mode === 'tiles'"
-                :tree="mode === 'continious' && !mobile"
+                :card="tiles"
+                :tree="(mode === 'continious' || compact) && !mobile"
                 :selected="
                   node.depth
                     ? selectedIds.includes(node.id)

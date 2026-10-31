@@ -3,3 +3,4 @@
 *.vue text eol=lf
 tactic_stream/frontend/src/**/*.js text eol=lf
 tactic_stream/frontend/src/**/*.css text eol=lf
+tactic_stream/src/tactic_stream/shared_ui/**/*.json text eol=lf
