@@ -150,6 +150,20 @@ try {
     .focus();
   await page.keyboard.press('End');
   assert.equal(await page.evaluate(() => window.viewFixture.mode), 'table');
+  assert.equal(
+    await picker
+      .getByRole('radio', { name: 'Table', exact: true })
+      .evaluate((el) => el === document.activeElement && el.tabIndex === 0),
+    true,
+    'keyboard selection transfers focus to the new Tab entry'
+  );
+  assert.equal(
+    await picker
+      .getByRole('radio', { name: 'Continuous tree', exact: true })
+      .evaluate((el) => el.tabIndex),
+    -1,
+    'the previous radio leaves Tab order after focus moves'
+  );
   await picker.getByRole('radio', { name: 'Cards', exact: true }).tap();
   assert.equal(await page.evaluate(() => window.viewFixture.mode), 'tiles');
   await page.evaluate(() => (window.viewFixture.busy = true));
