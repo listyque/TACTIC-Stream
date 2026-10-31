@@ -77,7 +77,7 @@ export default {
         };
         item.textWidth = qtLabelTextWidth(
           Header.quickLabel(item, appearance.language),
-          `600 ${textStyles.body}px "${fontFamily}"`
+          `400 ${textStyles.body}px "${fontFamily}"`
         );
         return item;
       });

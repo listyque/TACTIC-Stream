@@ -9862,7 +9862,7 @@ var _sfc_main$4 = {
 		accent: String,
 		selected: Boolean,
 		cornerRadius: {
-			type: Number,
+			type: [Number, String],
 			default: 10
 		},
 		inset: {
@@ -9890,7 +9890,7 @@ var _sfc_main$4 = {
 				style: normalizeStyle({
 					"--item-base": (__props.selected ? __props.selectedColor : __props.normalColor) || void 0,
 					"--item-accent": __props.accent || "var(--primary)",
-					"--item-corner": __props.cornerRadius + "px",
+					"--item-corner": typeof __props.cornerRadius === "number" ? __props.cornerRadius + "px" : __props.cornerRadius,
 					"--item-inset": __props.inset + "px"
 				})
 			}, [__props.railVisible ? (openBlock(), createElementBlock("span", _hoisted_1$4)) : createCommentVNode("", true), renderSlot(_ctx.$slots, "default")], 6);
@@ -10432,7 +10432,6 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					tooltip: node.toolTip || (node.iconOnly ? node.label || node.text : void 0),
 					icon: node.icon,
 					"icon-only": node.iconOnly,
-					"icon-at-end": node.iconAtEnd,
 					round: !!node.round,
 					href: node.href,
 					target: node.target,
@@ -10468,7 +10467,6 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"tooltip",
 					"icon",
 					"icon-only",
-					"icon-at-end",
 					"round",
 					"href",
 					"target",
@@ -10497,7 +10495,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"data-frame": node.id,
 					"data-layout-element": node.layoutElement,
 					class: normalizeClass(["frame-node frame-action", { "frame-secondary-action": node.revealOnRowInteraction }]),
-					style: normalizeStyle(Object.assign(style(node), { borderRadius: (node.radius === void 0 ? 10 : node.radius) + "px" })),
+					style: normalizeStyle(Object.assign(style(node), { borderRadius: node.radiusRole ? background(node).borderRadius : (node.radius === void 0 ? 10 : node.radius) + "px" })),
 					label: node.text,
 					"translate-label": false,
 					disabled: !node.enabled,
@@ -10525,7 +10523,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					default: withCtx(() => [createVNode(_sfc_main$4, {
 						selected: node.selected,
 						accent: color(node.accent),
-						"corner-radius": node.radius === void 0 ? 10 : node.radius,
+						"corner-radius": node.radiusRole ? background(node).borderRadius : node.radius === void 0 ? 10 : node.radius,
 						"normal-color": color(node.normalColor) || "transparent",
 						"selected-color": color(node.selectedColor) || "transparent",
 						"rail-visible": !!node.rail,

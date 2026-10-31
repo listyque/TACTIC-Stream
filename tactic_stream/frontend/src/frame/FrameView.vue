@@ -546,7 +546,6 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         "
         :icon="node.icon"
         :icon-only="node.iconOnly"
-        :icon-at-end="node.iconAtEnd"
         :round="!!node.round"
         :href="node.href"
         :target="node.target"
@@ -584,7 +583,9 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         :class="{ 'frame-secondary-action': node.revealOnRowInteraction }"
         :style="
           Object.assign(style(node), {
-            borderRadius: (node.radius === undefined ? 10 : node.radius) + 'px'
+            borderRadius: node.radiusRole
+              ? background(node).borderRadius
+              : (node.radius === undefined ? 10 : node.radius) + 'px'
           })
         "
         :label="node.text"
@@ -619,7 +620,13 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         <ItemSurface
           :selected="node.selected"
           :accent="color(node.accent)"
-          :corner-radius="node.radius === undefined ? 10 : node.radius"
+          :corner-radius="
+            node.radiusRole
+              ? background(node).borderRadius
+              : node.radius === undefined
+                ? 10
+                : node.radius
+          "
           :normal-color="color(node.normalColor) || 'transparent'"
           :selected-color="color(node.selectedColor) || 'transparent'"
           :rail-visible="!!node.rail"

@@ -172,6 +172,23 @@ try {
   const button = (key) =>
     page.locator(`[data-frame="searchQuickGroup_${key}"]`);
   await button('status').waitFor();
+  const fieldPaint = await button('status').evaluate((el) => ({
+    radius: getComputedStyle(el).borderTopLeftRadius,
+    expected: getComputedStyle(document.documentElement)
+      .getPropertyValue('--field-radius')
+      .trim(),
+    weight: getComputedStyle(
+      el.querySelector('[data-frame="searchQuickGroup_statusLabel"]')
+    ).fontWeight
+  }));
+  assert.equal(fieldPaint.radius, fieldPaint.expected);
+  assert.equal(fieldPaint.weight, '400');
+  assert.equal(
+    await button('status')
+      .locator('[data-frame="searchQuickGroup_statusIcon"]')
+      .getAttribute('data-icon'),
+    'status'
+  );
   assert.equal(reads.length, 1, 'one cached catalog read');
   assert.equal(await button('column:hidden').count(), 0);
   await button('status').click();
@@ -192,7 +209,9 @@ try {
     ]),
     ['hero', ['cg'], 0, 1]
   );
-  await button('assigned').locator('.app-icon').tap();
+  await button('assigned')
+    .locator('[data-frame="searchQuickGroup_assignedIndicator"]')
+    .tap();
   assert.equal(await menu.getByRole('region').count(), 1);
   await menu.getByRole('button', { name: 'MY TASKS', exact: true }).click();
   await page.waitForFunction(
