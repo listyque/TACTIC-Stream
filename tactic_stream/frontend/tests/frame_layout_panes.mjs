@@ -47,14 +47,15 @@ for (const height of [420, 900]) {
   assert.ok(split, 'An Items/Details navigator needs the existing splitter');
   assert.equal(left.y, right.y);
   assert.equal(left.height, right.height);
-  assert.equal(left.height, height);
-  assert.equal(split.height, height);
+  assert.equal(left.height, height - 24);
+  assert.equal(split.height, height - 24);
   assert.equal(
     nodes.find((node) => node.id === 'customLayoutScroll').contentHeight,
     height
   );
   assert.ok(
-    nodes.find((node) => node.id === 'customLayout_0_1').contentHeight >= height
+    nodes.find((node) => node.id === 'customLayout_0_1').contentHeight >=
+      height - 24
   );
   if (height === 420)
     assert.ok(

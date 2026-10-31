@@ -3787,7 +3787,7 @@ function describe$14(cell, width, height$2, language, editable = true, server = 
 					const seam = navigator ? Math.max(childGap, controls$1.splitter.extent) : childGap;
 					const budget = Math.max(0, available - seam * (item.children.length - 1));
 					const widths = rowWidths(item.children, budget, measure);
-					const paneHeight = navigator ? Math.max(0, Math.min(slotCapacity ?? Infinity, Number.isFinite(item.height) ? item.height : height$2 - tabOffset - top - margin[2] - padding[2])) : null;
+					const paneHeight = navigator ? Math.max(0, Math.min(slotCapacity ?? Infinity, Number.isFinite(item.height) ? item.height : Math.min(height$2 - tabOffset, bottom) - top - margin[2] - padding[2])) : null;
 					if (navigator) {
 						const minimum = Math.min(budget / 2, Math.max(160, item.children[0].sizing?.min_width || 0));
 						const maximum = budget - Math.min(budget / 2, Math.max(240, item.children[1].sizing?.min_width || 0));
@@ -4078,47 +4078,58 @@ function describe$14(cell, width, height$2, language, editable = true, server = 
 		return Math.max(start, top - (entries.length ? gap : 0), visualBottom(output));
 	}
 	function header(space) {
-		const filters = describe$18(cell.layoutFilters, cell.layoutFilterDraft || initial$2(cell.layoutFilters), Math.max(0, space), language, editable && !cell.layoutBusy && !cell.layoutFilterBusy && !cell.layoutEditing);
+		const innerWidth = Math.max(0, space - spacing$1.content * 2);
+		const filters = describe$18(cell.layoutFilters, cell.layoutFilterDraft || initial$2(cell.layoutFilters), innerWidth, language, editable && !cell.layoutBusy && !cell.layoutFilterBusy && !cell.layoutEditing);
 		const output = [];
-		const contextHeight = drawRegion("header", Math.max(0, space), output);
+		const contextHeight = drawRegion("header", innerWidth, output);
 		const filterTop = contextHeight + (contextHeight && filters.height ? gap : 0);
 		for (const item of filters.nodes) {
 			item.y += filterTop;
 			output.push(item);
 		}
 		const extent = filterTop + filters.height;
-		for (const item of output) item.y += 12;
+		for (const item of output) {
+			item.x += spacing$1.content;
+			item.y += spacing$1.content;
+		}
 		return {
 			nodes: output,
-			height: output.length ? extent + 24 : 0
+			height: output.length ? extent + spacing$1.content * 2 : 0
 		};
 	}
 	let head = header(width);
 	let foot = [];
-	let footerExtent = drawRegion("footer", Math.max(0, width), foot);
-	footerHeight = foot.length ? Math.min(footerExtent + 24, viewportHeight * .3) : 0;
+	let footerExtent = drawRegion("footer", Math.max(0, width - spacing$1.content * 2), foot);
+	footerHeight = foot.length ? Math.min(footerExtent + spacing$1.content * 2, viewportHeight * .3) : 0;
 	headerHeight = Math.min(head.height, Math.max(0, viewportHeight - footerHeight - Math.min(180, viewportHeight * .45)));
 	if (head.height > headerHeight) head = header(Math.max(0, width - controls$1.scrollBar.extent - 4));
 	headerNodes = head.nodes;
-	if (footerExtent + 24 > footerHeight && footerHeight) {
+	if (footerExtent + spacing$1.content * 2 > footerHeight && footerHeight) {
 		foot = [];
-		footerExtent = drawRegion("footer", Math.max(0, width - controls$1.scrollBar.extent - 4), foot);
+		footerExtent = drawRegion("footer", Math.max(0, width - spacing$1.content * 2 - controls$1.scrollBar.extent - 4), foot);
 	}
-	for (const item of foot) item.y += 12;
+	for (const item of foot) {
+		item.x += spacing$1.content;
+		item.y += spacing$1.content;
+	}
 	footerNodes = foot;
 	const bodyHeight = Math.max(0, viewportHeight - headerHeight - footerHeight);
 	if (headerHeight || footerHeight) tableHeight = Math.max(160, bodyHeight - 32);
 	function render(contentWidth) {
 		children.length = 0;
-		const flowExtent = drawRegion("content", contentWidth, children, 0, bodyHeight);
-		return Math.max(flowExtent, visualBottom(children));
+		const flowExtent = drawRegion("content", Math.max(0, contentWidth - spacing$1.content * 2), children, 0, Math.max(0, bodyHeight - spacing$1.content * 2));
+		for (const item of children) {
+			item.x += spacing$1.content;
+			item.y += spacing$1.content;
+		}
+		return children.length ? Math.max(flowExtent + spacing$1.content * 2, visualBottom(children) + spacing$1.content) : 0;
 	}
 	let contentWidth = Math.max(0, width), extent = render(contentWidth);
 	if (extent + (cell.layoutError ? 80 : 0) > bodyHeight) {
 		contentWidth = Math.max(0, width - controls$1.scrollBar.extent - 4);
 		extent = render(contentWidth);
 	}
-	if (cell.layoutError) children.push(label("layoutError", rect(0, extent + gap, contentWidth, 64), cell.layoutError, {
+	if (cell.layoutError) children.push(label("layoutError", rect(spacing$1.content, extent + gap, Math.max(0, contentWidth - spacing$1.content * 2), 64), cell.layoutError, {
 		wrap: true,
 		color: "error"
 	}));
@@ -4137,7 +4148,7 @@ function describe$14(cell, width, height$2, language, editable = true, server = 
 		height$2 - footerHeight,
 		footerHeight,
 		footerNodes,
-		footerExtent + 24
+		footerExtent + spacing$1.content * 2
 	]]) {
 		if (!extent) continue;
 		nodes.push(node("Box", "customLayout" + name, rect(0, y, width, extent), {

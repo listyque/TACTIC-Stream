@@ -3,6 +3,7 @@ import { describe } from '../../src/tactic_stream/shared_ui/features/table/layou
 import * as Document from '../../src/tactic_stream/shared_ui/features/administration/layouts/page.document.mjs';
 import * as Page from '../../src/tactic_stream/shared_ui/features/table/page.ui.mjs';
 import * as Nested from '../../src/tactic_stream/shared_ui/features/table/nested.ui.mjs';
+import { spacing } from '../../src/tactic_stream/shared_ui/core/foundation.mjs';
 
 const definitions = Array.from({ length: 4 }, (_, index) => ({
   name: 'field' + index,
@@ -55,6 +56,27 @@ for (const [width, height] of [
   assert.equal(body.y, header.y + header.height);
   assert.equal(body.y + body.height, footer.y);
   assert.equal(footer.y + footer.height, height);
+  assert.equal(header.x, 0, 'The panel surface remains edge-to-edge');
+  assert.equal(header.width, width);
+  for (const id of [
+    'customLayout_0_block',
+    'customLayout_1_block',
+    'customLayout_2_block'
+  ]) {
+    const block = rows.find((row) => row.id === id);
+    assert.ok(block.absoluteX >= spacing.content, id + ' left interior');
+    assert.ok(
+      block.absoluteX + block.width <= width - spacing.content,
+      id + ' right interior'
+    );
+  }
+  for (const item of rows.filter((row) => row.id.startsWith('pageRuntime'))) {
+    assert.ok(item.absoluteX >= spacing.content, item.id + ' left interior');
+    assert.ok(
+      item.absoluteX + item.width <= width - spacing.content,
+      item.id + ' right interior (including the scrollbar reserve)'
+    );
+  }
   assert.ok(body.height >= Math.min(180, height * 0.45) - 1);
   assert.equal(
     rows.find((row) => row.id === 'customLayout_1' && row.kind === 'View').key,
@@ -71,10 +93,10 @@ for (const [width, height] of [
     rows.find((row) => row.id === 'customLayout_1_block').height <= body.height
   );
   if (width === 1800) {
-    const last = rows.find((row) => row.id === 'pageRuntime_field3_value');
+    const last = rows.find((row) => row.id === 'pageRuntimeReset');
     assert.ok(
       last.absoluteX + last.width > width - 32,
-      'Filter fields use the available header width'
+      'The filter row uses the available interior width, including its actions'
     );
   }
   if (width === 800) {

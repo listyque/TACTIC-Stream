@@ -149,12 +149,12 @@ const content = scene.nodes.find(
   (node) => node.id === "customLayoutScroll",
 ).children;
 const styled = content.find((node) => node.id === "customLayout_0_block");
-assert.equal(styled.x, 12);
-assert.equal(styled.y, 8);
+assert.equal(styled.x, 24);
+assert.equal(styled.y, 20);
 assert.equal(styled.borderWidth, 2);
 assert.equal(styled.radius, 6);
 assert.ok(styled.motion.y);
-assert.equal(content.filter((node) => node.id.includes("_shadow")).length, 2);
+assert.ok(styled.shadow, "The existing surface owner paints its shadow");
 assert.equal(Document.fingerprint(doc), before);
 const metrics = Layout.describe(
   {

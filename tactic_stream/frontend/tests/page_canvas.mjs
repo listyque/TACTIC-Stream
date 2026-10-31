@@ -257,8 +257,8 @@ assert.equal(
 );
 assert.equal(Canvas.decorate(scene, 'editorPath').canvasBoxes.length, 2);
 const bounds = selected.canvasBoxes.find((b) => b.key === '0.0');
-assert.equal(bounds.x, 45);
-assert.equal(bounds.y, 12);
+assert.equal(bounds.x, 57);
+assert.equal(bounds.y, 24);
 assert.deepEqual(
   Canvas.transform({ x: 1, y: 2, width: 80, height: 30 }, 'move', 3.4, -8),
   { x: 4, y: -6, width: 80, height: 30 }
