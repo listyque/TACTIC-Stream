@@ -30,8 +30,11 @@ The shared `features/support/diagnostics/system.ui.mjs` owns the structured
 sections, inputs, buttons, formatted results, spacing and responsive bounds.
 Client adapters run sequential/parallel probes off the native GUI thread or with
 async browser requests. Parallelism is bounded at eight; request count follows
-CPU count up to 256. Balancing samples 11 requests for one observed worker, up
-to 50 otherwise, and distinguishes workers sharing one listener. These request
+CPU count up to 256. Balancing always samples 50 requests with up to eight in
+flight, even when initial replies identify one worker. Handler creates independent
+clients; browser connections are managed by the browser. The result is an observed
+sample, not the configured worker count, and distinguishes processes sharing one
+listener. Connection affinity can still return only one worker. These request
 measurements include transport/server time. Window/session generations reject
 stale results and stop further probes. No polling or automatic write retries.
 

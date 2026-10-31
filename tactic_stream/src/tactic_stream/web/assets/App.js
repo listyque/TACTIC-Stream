@@ -24115,8 +24115,11 @@ function testPlan(model) {
 		parallel: 8
 	};
 }
-function balanceComplete(samples) {
-	return samples.length >= 50 || samples.length >= 11 && samples.every((item) => item.pid === samples[0].pid && item.node === samples[0].node && item.port === samples[0].port);
+function balancePlan() {
+	return {
+		iterations: 50,
+		parallel: 8
+	};
 }
 function resultText(result, language) {
 	const tr = (text) => translate(text, language);
@@ -24131,7 +24134,7 @@ function resultText(result, language) {
 			if (workers.indexOf(identity) < 0) workers.push(identity);
 			if (sample.port && ports.indexOf(String(sample.port)) < 0) ports.push(String(sample.port));
 		}
-		return tr("Observed workers") + ": " + workers.length + " · " + tr("Ports") + ": " + (ports.join(", ") || "—") + "\n" + tr("Samples") + ": " + result.samples.length;
+		return tr("Observed workers") + ": " + workers.length + " · " + tr("Ports") + ": " + (ports.join(", ") || "—") + "\n" + tr("Samples") + ": " + result.samples.length + "\n" + tr("This sample does not show the configured worker count.");
 	}
 	if (result.paths) return result.paths.map((row) => row.path + ": " + tr(row.available ? "Accessible" : "Not accessible")).join("\n");
 	return tr(result.message || "");
@@ -24343,9 +24346,8 @@ var _sfc_main$36 = {
 				if (kind === "info") result = await call("get_info");
 				else if (kind === "balance") {
 					const samples = [];
-					do
-						samples.push(await call("connection_probe"));
-					while (!balanceComplete(samples));
+					const { iterations, parallel } = balancePlan();
+					for (let offset = 0; offset < iterations; offset += parallel) samples.push(...await Promise.all(Array.from({ length: Math.min(parallel, iterations - offset) }, () => call("connection_probe"))));
 					result = { samples };
 				} else if (kind === "performance") {
 					const count = plan.iterations, parallel = Math.min(8, count);

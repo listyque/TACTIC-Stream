@@ -73,9 +73,17 @@ async function run(kind, plan = UI.testPlan(model.value)) {
     if (kind === 'info') result = await call('get_info');
     else if (kind === 'balance') {
       const samples = [];
-      do {
-        samples.push(await call('connection_probe'));
-      } while (!UI.balanceComplete(samples));
+      const { iterations, parallel } = UI.balancePlan();
+      for (let offset = 0; offset < iterations; offset += parallel) {
+        samples.push(
+          ...(await Promise.all(
+            Array.from(
+              { length: Math.min(parallel, iterations - offset) },
+              () => call('connection_probe')
+            )
+          ))
+        );
+      }
       result = { samples };
     } else if (kind === 'performance') {
       const count = plan.iterations,

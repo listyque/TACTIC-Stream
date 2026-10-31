@@ -6,7 +6,9 @@ import vue from '@vitejs/plugin-vue';
 import { chromium } from 'playwright';
 import {
   describe,
-  report
+  report,
+  balancePlan,
+  resultText
 } from '../../src/tactic_stream/shared_ui/features/support/diagnostics/system.ui.mjs';
 
 const facts = {
@@ -44,6 +46,25 @@ for (const language of ['en', 'ru'])
     assert.ok(report(facts, language).includes('Fixture OS'));
   }
 assert.ok(report(facts, 'ru').includes('Нет'));
+assert.deepEqual(balancePlan(), { iterations: 50, parallel: 8 });
+for (const language of ['en', 'ru']) {
+  const text = resultText(
+    {
+      samples: Array.from({ length: 50 }, () => ({
+        node: 'one',
+        pid: 1,
+        port: 8081
+      }))
+    },
+    language
+  );
+  assert.ok(text.includes('50'));
+  assert.ok(
+    text.includes(
+      language === 'ru' ? 'Выборка не показывает' : 'This sample does not show'
+    )
+  );
+}
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const server = await createServer({
   root,
@@ -84,7 +105,11 @@ try {
   page.on('pageerror', (e) => errors.push(e.message));
   let reads = 0,
     fail = false,
-    hold;
+    hold,
+    probeWorkers = 1,
+    inFlight = 0,
+    maxInFlight = 0;
+  let probePair = [];
   const actions = [];
   await page.addInitScript(() => {
     window.openedPages = [];
@@ -107,13 +132,36 @@ try {
     );
     const method = payload.args[2];
     actions.push({ method, values: payload.args[3] });
+    const probeNumber = actions.filter(
+      (row) => row.method === 'connection_probe'
+    ).length;
+    if (method === 'connection_probe') {
+      ++inFlight;
+      maxInFlight = Math.max(maxInFlight, inFlight);
+      await new Promise((resolve) => {
+        probePair.push(resolve);
+        if (probePair.length === 2) {
+          const pair = probePair;
+          probePair = [];
+          pair.forEach((release) => release());
+        }
+      });
+      --inFlight;
+    }
     if (method !== 'get_info')
       return route.fulfill({
         contentType: 'application/json',
         body: JSON.stringify({
           result:
             method === 'connection_probe'
-              ? { node: 'fixture', pid: 1, port: 8081 }
+              ? {
+                  node: 'fixture',
+                  pid:
+                    probeWorkers === 1 || probeNumber % 50 <= 11
+                      ? 1
+                      : 1 + (probeNumber % 3),
+                  port: 8081
+                }
               : method === 'performance_probe'
                 ? { rows: 1, columns: 2 }
                 : { message: 'Script completed' }
@@ -230,7 +278,35 @@ try {
   await dialog.locator('[data-frame=systemBalanceTestResult]').waitFor();
   assert.equal(
     actions.filter((row) => row.method === 'connection_probe').length,
-    11
+    50
+  );
+  assert.ok(maxInFlight >= 2 && maxInFlight <= 8, maxInFlight);
+  assert.ok(
+    (
+      await dialog.locator('[data-frame=systemBalanceTestResult]').innerText()
+    ).includes('Выборка не показывает')
+  );
+  const summary = dialog.locator('[data-frame=systemBalanceTestResult]');
+  const summaryBounds = await summary.evaluate((element) => ({
+    height: element.clientHeight,
+    content: element.scrollHeight
+  }));
+  assert.ok(
+    summaryBounds.content <= summaryBounds.height + 1,
+    JSON.stringify(summaryBounds)
+  );
+  if (output)
+    await dialog.screenshot({ path: output + '/balance-browser.png' });
+  probeWorkers = 3;
+  await dialog.locator('[data-frame=systemBalanceTest]').click();
+  await page.waitForFunction(() =>
+    document
+      .querySelector('[data-frame=systemBalanceTestResult]')
+      ?.textContent.includes('процессов: 3')
+  );
+  assert.equal(
+    actions.filter((row) => row.method === 'connection_probe').length,
+    100
   );
   await dialog.locator('[data-frame=systemPerformanceTest]').click();
   await dialog.locator('[data-frame=systemPerformanceTestResult]').waitFor();

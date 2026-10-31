@@ -3044,6 +3044,7 @@ var russian = {
 	requests: "запросов",
 	"parallel requests": "параллельных запросов",
 	"Observed workers": "Обнаружено процессов",
+	"This sample does not show the configured worker count.": "Выборка не показывает настроенное число процессов.",
 	Ports: "Порты",
 	Samples: "Замеров",
 	Accessible: "Доступен",
