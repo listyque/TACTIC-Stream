@@ -175,7 +175,7 @@ defineExpose({ open, close });
   gap: 7px;
 }
 .task-table-editor.in-cell .user-combo-label {
-  font-size: var(--text-caption);
+  font-size: var(--control-text-size);
 }
 .task-table-editor.in-cell .user-combo-box > summary .item-preview {
   width: min(22px, calc(var(--editor-height) - 4px));

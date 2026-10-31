@@ -87,7 +87,18 @@ const painted = computed(
   padding: 0;
   background: transparent;
   border: 0;
+  border-radius: var(--item-radius);
   font-weight: 400;
+}
+.task-row-value
+  > button.task-cell-value:is(:hover, :focus-visible, :active):not(:disabled),
+.task-row-value > button.task-cell-value:disabled {
+  background: transparent;
+}
+.task-cell-value:focus-visible
+  .task-cell-display
+  [data-frame='taskTableCellSurface'] {
+  box-shadow: inset 0 0 0 1px var(--primary);
 }
 .task-row-value > .task-cell-input {
   opacity: 0;

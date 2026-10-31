@@ -219,8 +219,9 @@ function optionKey(event) {
   min-height: 0;
   padding: 0 11px;
   border: 0;
-  border-radius: var(--button-radius);
+  border-radius: var(--item-radius);
   background: var(--surface);
+  color: var(--on-surface);
 }
 .workspace-menu.user-combo-box > summary:hover {
   background: var(--surface-high);
@@ -242,7 +243,7 @@ function optionKey(event) {
   min-height: 22px;
   flex: 0 0 22px;
 }
-.user-combo-box.disabled > summary {
+.user-combo-box.disabled > summary.icon-button {
   color: var(--disabled);
   cursor: default;
 }

@@ -102,3 +102,5 @@ Task Manager's shared table/field editors, virtual creation and opt-in bulk work
 The calendar month fills its dock as seven columns and six week rows. Resizing or maximizing the dock keeps every day inside the panel; the agenda remains a separate scrolling view.
 
 Status cell editing keeps the same caption, color marker and size as its idle value. Status menus show the pipeline colors for every option and keep disabled or removed choices unavailable. Choose with the mouse, touch or keyboard; Escape dismisses the menu without staging a value.
+
+Opening a user picker keeps the task cell corners and text size. Its original button contributes no extra filled background; keyboard focus is drawn inside the existing cell surface.
