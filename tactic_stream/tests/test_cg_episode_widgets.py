@@ -39,7 +39,7 @@ class EpisodeWidgets(unittest.TestCase):
             for row in configurations():
                 if row['view'] in ('definition', 'table', 'episode_shots', 'episode_related_assets'):
                     if row['search_type'] == 'cg/scenes' and row['view'] == 'table':
-                        row['config'] = row['config'].replace('<element name="duration"', '<element value_icon="FAS_CLOCK" value_style="badge" name="duration"')
+                        row['config'] = row['config'].replace('<element name="duration"', '<element value_icon="FAS_CLOCK" value_style="badge" value_text_style="small" name="duration"')
                     api.dispatch('insert', (auth, 'config/widget_config',
                         {key: row[key] for key in ('search_type', 'view', 'config')}))
             records = [api.dispatch('insert', (auth, 'cg/scenes', dict(name=name)))
@@ -52,6 +52,7 @@ class EpisodeWidgets(unittest.TestCase):
                 duration = next(element for element in elements if element['name'] == 'duration')
                 self.assertEqual(duration['attributes']['value_icon'], 'FAS_CLOCK')
                 self.assertEqual(duration['attributes']['value_style'], 'badge')
+                self.assertEqual(duration['attributes']['value_text_style'], 'small')
                 self.assertEqual([e['name'] for e in elements if not e['cell']['supported']], [])
                 cells = read_table_cells('cg/scenes', 'table', [r['__search_key__'] for r in records])
                 for record in records:

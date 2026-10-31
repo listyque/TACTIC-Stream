@@ -182,6 +182,9 @@ export function definitionWizard(source, viewName = '') {
             ...(node.hasAttribute('value_style')
               ? { valueStyle: node.getAttribute('value_style') }
               : {}),
+            ...(node.hasAttribute('value_text_style')
+              ? { valueTextStyle: node.getAttribute('value_text_style') }
+              : {}),
             widget:
               display?.getAttribute('class') ||
               display?.getAttribute('widget') ||
@@ -239,6 +242,11 @@ export function changeDefinition(source, path, field, value) {
       field === 'valueIcon' ? 'value_icon' : 'value_style',
       text
     );
+  } else if (field === 'valueTextStyle') {
+    const text = String(value || '').trim();
+    if (!['', 'heading', 'small'].includes(text))
+      throw new Error('Invalid cell text style');
+    node.setAttribute('value_text_style', text);
   } else if (field === 'widget') {
     let display = [...node.children].find(
       (child) => child.tagName === 'display'

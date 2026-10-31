@@ -20,8 +20,32 @@ import { A as _sfc_main$83, At as describe$22, B as _sfc_main$79, D as insertion
 //#region ../src/tactic_stream/shared_ui/features/table/cells.ui.mjs
 function presentationOptions(options = {}, attributes = {}) {
 	const result = Object.assign({}, options);
-	for (const key of ["value_icon", "value_style"]) if (Object.prototype.hasOwnProperty.call(attributes, key)) result[key] = attributes[key];
+	for (const key of [
+		"value_icon",
+		"value_style",
+		"value_text_style"
+	]) if (Object.prototype.hasOwnProperty.call(attributes, key)) result[key] = attributes[key];
 	return result;
+}
+var valueFonts = {
+	heading: {
+		role: "title",
+		size: textStyles.title,
+		weight: 600
+	},
+	small: {
+		role: "secondary",
+		size: textStyles.secondary,
+		weight: 400
+	},
+	body: {
+		role: "body",
+		size: textStyles.body,
+		weight: 0
+	}
+};
+function valueFont(options = {}) {
+	return Object.prototype.hasOwnProperty.call(valueFonts, options.value_text_style) ? valueFonts[options.value_text_style] : valueFonts.body;
 }
 function valuePresentation(field, options = {}) {
 	const badge = options.value_style ? options.value_style === "badge" : field === "duration";
@@ -29,13 +53,17 @@ function valuePresentation(field, options = {}) {
 	return badge || icon ? {
 		badge,
 		icon,
-		align: alignment(options)
+		align: alignment(options),
+		value_text_style: options.value_text_style || ""
 	} : null;
 }
 function valueLabel(text, width, height, presentation) {
 	text = String(text ?? "");
-	const icon = presentation.icon || "", h = Math.max(0, Math.min(30, height)), w = Math.min(Math.max(0, width - 12), buttonWidth(text.length * 7, !!icon)), left = icon ? 36 : 12;
-	const children = [label("tableValueLabel", rect(left, 0, Math.max(0, w - left - 12), h), text)];
+	const font = valueFont(presentation), icon = presentation.icon || "", h = Math.max(0, Math.min(30, height)), w = Math.min(Math.max(0, width - 12), buttonWidth(text.length * 7 * font.size / textStyles.body, !!icon)), left = icon ? 36 : 12;
+	const children = [label("tableValueLabel", rect(left, 0, Math.max(0, w - left - 12), h), text, {
+		fontRole: font.role,
+		weight: font.weight || 400
+	})];
 	if (icon) children.unshift(node("Icon", "tableValueIcon", rect(12, (h - 16) / 2, 16, 16), {
 		icon,
 		color: "action"
@@ -3967,7 +3995,7 @@ function describe$8(cell$2, width, height, language, editable = true, expanded =
 			view: action.view || ""
 		};
 		if (combined) {
-			const options = cell$2.displayOptions || {}, leadingIcon = Object.prototype.hasOwnProperty.call(options, "value_icon") ? options.value_icon : options.icon || options.title_icon || "", text = relatedLabel(cell$2.text, options), left = leadingIcon ? 36 : 12, w = Math.min(inner, buttonWidth(text.length * 7, true) + (leadingIcon ? 24 : 0));
+			const options = cell$2.displayOptions || {}, font = valueFont(options), leadingIcon = Object.prototype.hasOwnProperty.call(options, "value_icon") ? options.value_icon : options.icon || options.title_icon || "", text = relatedLabel(cell$2.text, options), left = leadingIcon ? 36 : 12, w = Math.min(inner, buttonWidth(text.length * 7 * font.size / metrics$2.bodyFont, true) + (leadingIcon ? 24 : 0));
 			children.push(node("Action", "tableServiceAction_" + index, rect((width - w) / 2, 0, w, size), {
 				text,
 				icon,
@@ -3984,7 +4012,8 @@ function describe$8(cell$2, width, height, language, editable = true, expanded =
 						radius: 4
 					}),
 					label("tableServiceValue", rect(left, 0, Math.max(0, w - left - 36), size), text, {
-						weight: 600,
+						fontRole: font.role,
+						weight: font.weight || 600,
 						color: enabled ? "primaryText" : "disabledText"
 					}),
 					...leadingIcon ? [node("Icon", "tableServiceLeadingIcon", rect(12, (size - 16) / 2, 16, 16), {
@@ -4175,6 +4204,13 @@ var _sfc_main$44 = {
 		"select"
 	],
 	computed: {
+		textFont() {
+			const font = valueFont(this.displayOptions);
+			return {
+				fontSize: font.size + "px",
+				fontWeight: font.weight || void 0
+			};
+		},
 		displayOptions() {
 			return presentationOptions(this.element.display?.options, this.element.attributes);
 		},
@@ -4448,10 +4484,11 @@ function _sfc_render$6(_ctx, _cache, $props, $setup, $data, $options) {
 	}, null, 8, ["name", "style"])) : createCommentVNode("", true)], 8, _hoisted_9$8)) : $props.element.cell?.kind === "link" && $options.href ? (openBlock(), createElementBlock("a", {
 		key: 20,
 		class: "table-cell-text table-cell-link",
+		style: normalizeStyle($options.textFont),
 		href: $options.href,
 		target: $options.href.startsWith("/") ? void 0 : "_blank",
 		rel: "noopener noreferrer"
-	}, toDisplayString($options.value), 9, _hoisted_10$6)) : $options.valuePresentation ? (openBlock(), createBlock(_component_TableServiceCell, {
+	}, toDisplayString($options.value), 13, _hoisted_10$6)) : $options.valuePresentation ? (openBlock(), createBlock(_component_TableServiceCell, {
 		key: 21,
 		cell: {
 			text: $options.text,
@@ -4478,7 +4515,10 @@ function _sfc_render$6(_ctx, _cache, $props, $setup, $data, $options) {
 		key: 23,
 		class: normalizeClass(["table-cell-text", { "table-cell-multiline": $props.cell?.multiline }]),
 		title: $options.tooltip,
-		style: normalizeStyle({ color: $options.foreground })
+		style: normalizeStyle({
+			...$options.textFont,
+			color: $options.foreground
+		})
 	}, toDisplayString($options.text), 15, _hoisted_11$6));
 }
 var TableCell_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$44, [["render", _sfc_render$6]]);

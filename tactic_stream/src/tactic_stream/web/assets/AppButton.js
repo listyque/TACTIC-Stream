@@ -948,7 +948,7 @@ function palette(style, dark, base, accent) {
 	colors.primaryText = readableText$1(colors.workspace);
 	colors.tableHeader = dark ? blend(colors.panelRaised, accent, .1) : blend(colors.surfaceContainerLowest, colors.primaryText, .035);
 	colors.tableAlternateRow = blend(colors.surfaceContainerLowest, colors.primaryText, dark ? .018 : .014);
-	colors.tableDivider = blend(colors.panel, colors.primaryText, dark ? .075 : .1);
+	colors.tableDivider = blend(colors.panel, colors.primaryText, dark ? .13 : .14);
 	colors.contentAccent = blend(accent, colors.primaryText, dark ? .12 : .08);
 	colors.selectedText = readableText$1(colors.selected);
 	colors.contentSelectionText = readableText$1(colors.contentSelection);

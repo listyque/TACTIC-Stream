@@ -573,7 +573,7 @@ h2 { font-size: var(--text-heading); }
 .toolbar { display: flex; flex-wrap: wrap; gap: var(--space-sm); align-items: center; padding: var(--space-sm); background: var(--surface-container); border-radius: var(--surface-radius); }
 .toolbar select { max-width: 200px; }
 .toolbar input:not([type="checkbox"]) { width: min(320px, 100%); flex: 1; }
-.table-container { flex: 1; min-height: 180px; container-type: inline-size; border: 1px solid var(--outline-variant); background: var(--surface-high); border-radius: var(--surface-radius); overflow: auto; }
+.table-container { flex: 1; min-height: 180px; container-type: inline-size; border: 0; background: var(--surface-high); border-radius: 0; overflow: auto; }
 table { border-collapse: separate; border-spacing: 0; width: 100%; font-size: var(--text-small); white-space: nowrap; }
 thead { position: sticky; top: 0; z-index: 1; background: var(--surface-high); }
 th { border-bottom: 1px solid var(--outline-variant); text-align: left; }

@@ -62,6 +62,13 @@ export default {
     'select'
   ],
   computed: {
+    textFont() {
+      const font = Cells.valueFont(this.displayOptions);
+      return {
+        fontSize: font.size + 'px',
+        fontWeight: font.weight || undefined
+      };
+    },
     displayOptions() {
       return Cells.presentationOptions(
         this.element.display?.options,
@@ -335,6 +342,7 @@ export default {
   <a
     v-else-if="element.cell?.kind === 'link' && href"
     class="table-cell-text table-cell-link"
+    :style="textFont"
     :href="href"
     :target="href.startsWith('/') ? undefined : '_blank'"
     rel="noopener noreferrer"
@@ -362,6 +370,7 @@ export default {
     }"
     :title="tooltip"
     :style="{
+      ...textFont,
       color: foreground
     }"
     >{{ text }}</span

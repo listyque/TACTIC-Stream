@@ -243,6 +243,7 @@ try {
       const durationHost = document.createElement('div');
       document.body.append(durationHost);
       durationHost.id = 'duration-value';
+      durationHost.className = 'handler-table-cell';
       Object.assign(durationHost.style, {
         position: 'fixed',
         zIndex: '10000',
@@ -258,15 +259,82 @@ try {
         cell: { kind: 'text', field: 'duration' },
         supported: true
       });
+      window.valueText = ref('2 Minutes');
       createApp({
         render: () =>
           h(ValueCell, {
             element: window.durationFixture,
             record: {},
-            cell: { text: '2 Minutes' },
+            cell: { text: window.valueText.value },
             height: 64
           })
       }).mount(durationHost);
+      const { default: Table } = await import(
+        '/frontend/src/features/interface/TableView.vue'
+      );
+      const tableHost = document.createElement('div');
+      document.body.append(tableHost);
+      tableHost.id = 'typography-table';
+      tableHost.className = 'table-container';
+      Object.assign(tableHost.style, {
+        position: 'fixed',
+        zIndex: '10000',
+        left: '100px',
+        top: '320px',
+        width: '800px',
+        height: '220px',
+        display: 'flex',
+        background: 'var(--page)'
+      });
+      const columns = [
+        ['name', 'Name', 240, 'heading'],
+        ['description', 'Description', 360, 'small']
+      ].map(([name, title, width, style]) => ({
+        name,
+        field: name,
+        title,
+        width,
+        supported: true,
+        attributes: { value_text_style: style },
+        cell: { kind: 'text', field: name }
+      }));
+      const records = [
+        {
+          __search_key__: 'A',
+          name: 'Episode 02 — Repair',
+          description: 'The workshop repair sequence.'
+        },
+        {
+          __search_key__: 'B',
+          name: 'Episode 03',
+          description: 'Arrival at the station.'
+        }
+      ];
+      createApp({
+        render: () =>
+          h(
+            Table,
+            {
+              columns,
+              groups: [{ key: 'records', records }],
+              selectedKeys: [],
+              selectable: true,
+              readOnly: false,
+              state: {
+                table: {
+                  rowHeight: 58,
+                  automaticRowHeight: false,
+                  autoFit: false,
+                  scrollColumns: true
+                }
+              }
+            },
+            {
+              cell: ({ record, column, height }) =>
+                h(ValueCell, { record, element: column, height })
+            }
+          )
+      }).mount(tableHost);
     },
     entry.code.match(/from "([^"]+)"/)[1]
   );
@@ -360,14 +428,16 @@ try {
     const inherited = row.valueIcon;
     for (const [field, value] of [
       ['valueIcon', 'FAS_CLOCK'],
-      ['valueStyle', 'badge']
+      ['valueStyle', 'badge'],
+      ['valueTextStyle', 'heading']
     ])
       source = changeDefinition(source, row.path, field, value);
     row = definitionWizard(source).elements[0];
     let rejected = 0;
     for (const [field, value] of [
       ['valueIcon', '<script>'],
-      ['valueStyle', 'unknown']
+      ['valueStyle', 'unknown'],
+      ['valueTextStyle', 'huge']
     ]) {
       try {
         changeDefinition(source, row.path, field, value);
@@ -379,6 +449,7 @@ try {
       inherited,
       icon: row.valueIcon,
       style: row.valueStyle,
+      textStyle: row.valueTextStyle,
       source,
       rejected
     };
@@ -386,7 +457,8 @@ try {
   assert.equal(xmlProof.inherited, 'FAS_CUBE');
   assert.equal(xmlProof.icon, 'FAS_CLOCK');
   assert.equal(xmlProof.style, 'badge');
-  assert.equal(xmlProof.rejected, 2);
+  assert.equal(xmlProof.textStyle, 'heading');
+  assert.equal(xmlProof.rejected, 3);
   assert.ok(
     xmlProof.source.includes('<!--keep-->') &&
       xmlProof.source.includes('custom="keep"') &&
@@ -411,6 +483,96 @@ try {
       JSON.stringify(captures)
     );
   }
+  for (const [style, size, weight] of [
+    ['heading', '16px', '600'],
+    ['small', '12px', '400'],
+    ['', '13px', '400']
+  ]) {
+    await page.evaluate((style) => {
+      window.durationFixture.name = 'name';
+      window.durationFixture.cell.field = 'name';
+      window.durationFixture.attributes = { value_text_style: style };
+      window.valueText.value = 'Episode 02 — Repair';
+    }, style);
+    const value = duration.locator('.table-cell-text');
+    await value.waitFor();
+    await page.waitForFunction(
+      ({ size }) =>
+        getComputedStyle(
+          document.querySelector('#duration-value .table-cell-text')
+        ).fontSize === size,
+      { size }
+    );
+    assert.deepEqual(
+      await value.evaluate((el) => ({
+        size: getComputedStyle(el).fontSize,
+        weight: getComputedStyle(el).fontWeight
+      })),
+      { size, weight }
+    );
+    if (process.env.TABLE_DISCLOSURE_OUTPUT && style)
+      await duration.screenshot({
+        path: process.env.TABLE_DISCLOSURE_OUTPUT + '/browser-' + style + '.png'
+      });
+  }
+  const table = page.locator('#typography-table');
+  await table.locator('.handler-table-row').nth(1).waitFor();
+  const tablePaint = await table.evaluate((el) => ({
+    border: getComputedStyle(el).borderWidth,
+    radius: getComputedStyle(el).borderRadius,
+    divider: getComputedStyle(el.querySelector('.handler-table-row'))
+      .borderBottomWidth
+  }));
+  assert.deepEqual(tablePaint, {
+    border: '0px',
+    radius: '0px',
+    divider: '1px'
+  });
+  assert.equal(
+    await table
+      .locator('.handler-table-cell .table-cell-text')
+      .nth(0)
+      .evaluate((el) => getComputedStyle(el).fontSize),
+    '16px'
+  );
+  assert.equal(
+    await table
+      .locator('.handler-table-cell .table-cell-text')
+      .nth(1)
+      .evaluate((el) => getComputedStyle(el).fontSize),
+    '12px'
+  );
+  if (process.env.TABLE_DISCLOSURE_OUTPUT)
+    await table.screenshot({
+      path: process.env.TABLE_DISCLOSURE_OUTPUT + '/browser-table.png'
+    });
+  const darkRow = await table
+    .locator('.handler-table-row')
+    .first()
+    .evaluate((el) => getComputedStyle(el).backgroundColor);
+  await page.evaluate(async () => {
+    const { appearance } = await import('/frontend/src/appearance.js');
+    appearance.mode = 'light';
+  });
+  await page.waitForFunction(
+    (dark) =>
+      getComputedStyle(
+        document.querySelector('#typography-table .handler-table-row')
+      ).backgroundColor !== dark,
+    darkRow
+  );
+  assert.equal(
+    await table
+      .locator('.handler-table-cell .table-cell-text')
+      .nth(0)
+      .evaluate((el) => getComputedStyle(el).fontSize),
+    '16px'
+  );
+  if (process.env.TABLE_DISCLOSURE_OUTPUT)
+    await table.screenshot({
+      path: process.env.TABLE_DISCLOSURE_OUTPUT + '/browser-table-light.png'
+    });
+  assert.deepEqual(errors, []);
   console.log(
     'PASS: disclosure and loading icons follow only the active row, column and nested scope'
   );

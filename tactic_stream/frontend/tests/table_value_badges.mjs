@@ -7,9 +7,15 @@ import * as State from '../../src/tactic_stream/shared_ui/features/administratio
 assert.deepEqual(Cells.valuePresentation('duration'), {
   badge: true,
   icon: 'clock',
-  align: 'center'
+  align: 'center',
+  value_text_style: ''
 });
 assert.equal(Cells.valuePresentation('name'), null);
+assert.equal(Cells.valueFont({ value_text_style: 'heading' }).size, 16);
+assert.equal(Cells.valueFont({ value_text_style: 'heading' }).weight, 600);
+assert.equal(Cells.valueFont({ value_text_style: 'small' }).size, 12);
+assert.equal(Cells.valueFont({ value_text_style: '' }).size, 13);
+assert.equal(Cells.valueFont({ value_text_style: 'constructor' }).size, 13);
 assert.equal(
   Cells.valuePresentation('duration', { value_style: 'text' }),
   null
@@ -17,12 +23,14 @@ assert.equal(
 assert.deepEqual(Cells.valuePresentation('duration', { value_icon: '' }), {
   badge: true,
   icon: '',
-  align: 'center'
+  align: 'center',
+  value_text_style: ''
 });
 assert.deepEqual(Cells.valuePresentation('name', { value_icon: 'FAS_CUBE' }), {
   badge: false,
   icon: 'FAS_CUBE',
-  align: 'center'
+  align: 'center',
+  value_text_style: ''
 });
 assert.deepEqual(
   Cells.presentationOptions(
@@ -104,6 +112,10 @@ assert.equal(
 );
 assert.equal(
   nodes.find((node) => node.id === 'definitionCatalogValueStyle').kind,
+  'Choice'
+);
+assert.equal(
+  nodes.find((node) => node.id === 'definitionCatalogTextStyle').kind,
   'Choice'
 );
 assert.deepEqual(

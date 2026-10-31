@@ -2185,6 +2185,10 @@ var _sfc_main$17 = {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/core/strings.mjs
 var russian = {
+	"Cell text style": "Стиль текста ячейки",
+	"Size and emphasis of text values in this column.": "Размер и начертание текстовых значений в этой колонке.",
+	Standard: "Обычный",
+	"Invalid cell text style": "Неверный стиль текста ячейки",
 	"Cell icon": "Иконка значения",
 	"Icon beside text values and related-table counts.": "Иконка рядом с текстом и количеством связанных объектов.",
 	"Value appearance": "Оформление значения",
