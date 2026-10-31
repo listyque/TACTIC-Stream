@@ -634,7 +634,7 @@ tbody tr:last-child td { border-bottom: 0; }
 .workspace-menu .account-panel select, .search-filter-panel input:not([type="checkbox"]), .search-filter-panel select { width: 100%; }
 .search-help p { margin-top: var(--space-sm); line-height: 1.5; }
 .workspace-results { min-height: 0; margin: var(--space-sm) var(--space-sm) 0; background: var(--surface); overscroll-behavior: contain; scrollbar-gutter: stable; }
-.workspace-results:has(.result-presentation) { background: var(--page); border: 0; border-radius: 0; }
+.workspace-results:has(.result-presentation) { background: var(--page); border: 0; border-radius: 0; scrollbar-gutter: auto; }
 .workspace-load-more { display: flex; align-items: center; justify-content: center; padding: var(--space-sm); min-height: 48px; color: var(--muted); }
 .workspace-footer { position: relative; z-index: 3; container-type: inline-size; flex-shrink: 0; height: var(--workspace-footer-height); flex-wrap: nowrap; padding: 5px 8px 5px 12px; background: var(--surface-container); border-top: 1px solid var(--outline-variant); }
 .workspace-footer .account-panel { top: auto; bottom: calc(100% + var(--space-xs)); }

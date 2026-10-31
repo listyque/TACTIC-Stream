@@ -37,9 +37,9 @@ import AppSplitter from '/src/controls/AppSplitter.vue';
 import {initializeAppearance} from '/src/appearance.js';
 import '/src/theme.css';import '/src/style.css';
 initializeAppearance();
-const state=reactive({width:800,mode:'continious',active:true,rows:[${JSON.stringify(item.record)}],saved:{}});
+const state=reactive({width:800,height:650,mode:'continious',active:true,rows:[${JSON.stringify(item.record)}],saved:{}});
 window.fixture=state;
-createApp({setup(){return()=>h('div',{style:'display:flex;height:650px'},[
+createApp({setup(){return()=>h('div',{style:{display:'flex',height:state.height+'px'}},[
  h('main',{class:'workspace-results table-container',style:{width:state.width+'px',flex:'0 0 '+state.width+'px',overflow:'auto'}},[
   h(ResultPresentation,{ref:value=>window.presentation=value,rows:state.rows,selectedKeys:[],state:state.saved,
     active:state.active,ticket:'fixture',project:'demo',searchType:'demo/episode',
@@ -76,6 +76,7 @@ try {
   await server.listen();
   browser = await chromium.launch({
     headless: true,
+    ignoreDefaultArgs: ['--hide-scrollbars'],
     channel: process.env.STREAM_BROWSER_CHANNEL || 'msedge'
   });
   const page = await browser.newPage({
@@ -200,6 +201,75 @@ try {
     assert.equal(
       await page.evaluate(() => window.fixture.mode),
       'splitted_vertical'
+    );
+    await page.evaluate(() => {
+      window.fixture.mode = 'continious';
+      window.fixture.width = 800;
+      window.fixture.height = 200;
+    });
+    const viewport = page.locator('main.workspace-results');
+    await page.waitForFunction(() => !window.presentation.compact);
+    const insets = () =>
+      viewport.evaluate((el) => {
+        const box = el.getBoundingClientRect(),
+          card = el.querySelector('.result-surface').getBoundingClientRect();
+        return {
+          left: card.left - box.left,
+          right: box.right - card.right,
+          bar: el.offsetWidth - el.clientWidth,
+          overflow: el.scrollHeight > el.clientHeight
+        };
+      });
+    const clear = await insets();
+    assert.equal(clear.overflow, false);
+    assert.equal(clear.bar, 0, 'No empty scrollbar reserve for a short list');
+    assert.equal(clear.left, clear.right, 'Equal item insets without overflow');
+    assert.equal(
+      clear.left,
+      10,
+      'Native delegate gutter plus full-card elevation inset'
+    );
+    await page.evaluate(() => (window.fixture.height = 100));
+    await page.waitForFunction(() => {
+      const el = document.querySelector('main.workspace-results');
+      return el.scrollHeight > el.clientHeight;
+    });
+    await page.waitForFunction(() => {
+      const el = document.querySelector('main.workspace-results'),
+        box = el.getBoundingClientRect(),
+        card = el.querySelector('.result-surface').getBoundingClientRect();
+      return (
+        Math.abs(
+          box.right -
+            card.right -
+            (card.left - box.left) -
+            (el.offsetWidth - el.clientWidth)
+        ) < 0.5
+      );
+    });
+    const scrolling = await insets();
+    assert.equal(scrolling.left, clear.left);
+    assert.equal(scrolling.bar, 12);
+    assert.equal(
+      scrolling.right,
+      clear.right + scrolling.bar,
+      'Only the actual scrollbar adds right reserve'
+    );
+    await page.evaluate(() => (window.fixture.height = 200));
+    await page.waitForFunction(() => {
+      const el = document.querySelector('main.workspace-results');
+      return el.scrollHeight <= el.clientHeight;
+    });
+    await page.waitForFunction(() => {
+      const el = document.querySelector('main.workspace-results'),
+        box = el.getBoundingClientRect(),
+        card = el.querySelector('.result-surface').getBoundingClientRect();
+      return Math.abs(box.right - card.right - (card.left - box.left)) < 0.5;
+    });
+    assert.deepEqual(
+      await insets(),
+      clear,
+      'Gutter disappears when the viewport fits again'
     );
   }
   assert.deepEqual(errors, []);
