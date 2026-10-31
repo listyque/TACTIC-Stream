@@ -6,6 +6,12 @@ successful modern-client screen is not proof of complete legacy compatibility.
 Use live API discovery for the selected installation and check actual arguments,
 results, authorization, revisions, transaction effects and failure paths.
 
+Transported Handler procedures use public `pyasm.common` exception exports.
+Legacy TACTIC re-exports `SecurityException` from `common_exception.py` and lacks
+Stream's `pyasm.common.errors` module. Physical-table tests execute both products'
+procedure sources without that import and verify administrator enforcement;
+the native Python procedure transport also exercises the actual Handler source.
+
 Handler security-group catalog procedures and Stream's native counterpart use
 the legacy `Search.add_column` signature. Fixed aggregate expressions such as
 `MAX(id)` use `Search.get_select().set_quoted_mode('none')` instead of a `quoted`

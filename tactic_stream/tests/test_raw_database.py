@@ -1,15 +1,17 @@
 """Physical table CRUD, optimistic conflicts, rollback and administrator boundary."""
 import copy
+import builtins
 import json
 import inspect
 import os
 from pathlib import Path
 import tempfile
 import unittest
+from runpy import run_path
+from types import SimpleNamespace
 from unittest.mock import patch
 
-from pyasm.common import Config
-from pyasm.common.errors import SecurityException
+from pyasm.common import Config, Environment, SecurityException
 from pyasm.search import DbContainer, DbResource
 from pyasm.search.search import RequestContext, request_context
 from pyasm.search.storage import Store
@@ -19,6 +21,14 @@ from tactic_stream.server.raw_database import raw_database_operation, raw_databa
 
 
 class RawDatabaseTests(unittest.TestCase):
+    def procedure_sources(self):
+        handler = run_path(str(Path(__file__).resolve().parents[3]
+                               / 'TH/thlib/ui/admin/raw_database_api.py'))
+        return {
+            'handler': inspect.getsource(handler['raw_database_request']),
+            'stream': inspect.getsource(raw_database_request),
+        }
+
     def setUp(self):
         self.directory = tempfile.TemporaryDirectory()
         self.addCleanup(self.directory.cleanup)
@@ -144,17 +154,38 @@ class RawDatabaseTests(unittest.TestCase):
             self.request('save', 'raw_secret_key', document=loaded['document'], expected_revision=loaded['revision'])
 
     def test_handler_source_runs_through_native_python_procedure_transport(self):
-        source = inspect.getsource(raw_database_request)
-        code = source + '\nreturn raw_database_request(**kwargs["parameters"])'
-        api = Api(self.store)
-        auth = dict(ticket=self.ticket, project='admin', language='python')
-        def call(action, **values):
-            parameters = dict(action=action, project_code='admin', identity=json.dumps(['sthpw', 'raw_sample']), **values)
-            return api.dispatch('execute_python_script', (auth, '', dict(code=code, parameters=parameters)))['info']
-        loaded = call('load')
-        loaded['document']['rows'][0]['values']['text'] = 'Handler remote edit'
-        saved = call('save', document=loaded['document'], expected_revision=loaded['revision'])
-        self.assertEqual(saved['document']['rows'][0]['values']['text'], 'Handler remote edit')
+        for name, source in self.procedure_sources().items():
+            with self.subTest(procedure=name):
+                code = source + '\nreturn raw_database_request(**kwargs["parameters"])'
+                api = Api(self.store)
+                auth = dict(ticket=self.ticket, project='admin', language='python')
+                def call(action, **values):
+                    parameters = dict(action=action, project_code='admin', identity=json.dumps(['sthpw', 'raw_sample']), **values)
+                    return api.dispatch('execute_python_script', (auth, '', dict(code=code, parameters=parameters)))['info']
+                loaded = call('load')
+                loaded['document']['rows'][0]['values']['text'] = name + ' remote edit'
+                saved = call('save', document=loaded['document'], expected_revision=loaded['revision'])
+                self.assertEqual(saved['document']['rows'][0]['values']['text'], name + ' remote edit')
+
+    def test_procedures_work_without_stream_errors_module_and_keep_admin_guard(self):
+        def legacy_import(name, *args, **kwargs):
+            if name == 'pyasm.common.errors':
+                raise ModuleNotFoundError("No module named 'pyasm.common.errors'")
+            return builtins.__import__(name, *args, **kwargs)
+
+        for name, source in self.procedure_sources().items():
+            with self.subTest(procedure=name):
+                scope = {'__builtins__': {**vars(builtins), '__import__': legacy_import}}
+                exec(source, scope)
+                procedure = scope['raw_database_request']
+                catalog = procedure('list')['catalog']
+                identity = json.dumps(['sthpw', 'raw_sample'])
+                self.assertIn(identity, [row['identity'] for row in catalog])
+                loaded = procedure('load', identity=identity)
+                self.assertEqual(loaded['document']['rows'][0]['values']['password'], '[redacted]')
+                with patch.object(Environment, 'get_security', return_value=SimpleNamespace(is_admin=lambda: False)):
+                    with self.assertRaises(SecurityException):
+                        procedure('list')
 
     def test_pagination_null_empty_and_large_integer_precision(self):
         with self.store.connection(write=True) as db:
