@@ -25,10 +25,10 @@ class NormalizedNote(Note):
         return 'review' if name == 'process' and value == 'layout' else value
 
 
-def procedure_source():
+def procedure_source(name='query_sobjects'):
     source = (ROOT.parents[1] / 'TH/thlib/tactic_query.py').read_text(encoding='utf-8')
-    node = next(node for node in ast.parse(source).body if isinstance(node, ast.FunctionDef) and node.name == 'query_sobjects')
-    return ast.get_source_segment(source, node) + '\nreturn query_sobjects(**kwargs["options"])'
+    node = next(node for node in ast.parse(source).body if isinstance(node, ast.FunctionDef) and node.name == name)
+    return ast.get_source_segment(source, node) + '\nreturn %s(**kwargs["options"])' % name
 
 
 class CompoundSearchPerformance(unittest.TestCase):
@@ -52,6 +52,12 @@ class CompoundSearchPerformance(unittest.TestCase):
         if result.startswith('zlib:'):
             result = zlib.decompress(bytes.fromhex(result[5:])).decode()
         return json.loads(result)
+
+    def test_bootstrap_identifies_stream_without_a_feature_probe(self):
+        script = procedure_source('get_projects_and_logins')
+        result = self.api.dispatch('execute_python_script',
+            (self.ticket, '', dict(code=script, options={})))['info']
+        self.assertEqual(json.loads(result)['server_api'], 'stream')
 
     def note(self, db, code, parent='A', kind='contract/entity?project=one', process='publish', **extra):
         values = dict(code=code, search_code=parent, search_type=kind, process=process,

@@ -47,6 +47,7 @@ class Application(QObject):
     signing_out = Signal()
     project_state_changed = Signal()
     current_project_code = 'files'
+    is_stream_server = True
 
     def __init__(self):
         super().__init__()

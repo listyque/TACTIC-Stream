@@ -15204,7 +15204,7 @@ function describe$18(model, width, language) {
 //#region ../src/tactic_stream/shared_ui/features/configuration/settings.ui.mjs
 function fieldsFor(page, model) {
 	const native = model.native === true;
-	let fields = (definitions[page] || []).filter((field) => !field.nativeOnly || native).map((field) => Object.assign({}, field));
+	let fields = (definitions[page] || []).filter((field) => !field.nativeOnly || native).filter((field) => !native || model.streamApi !== false || !["serverUpdateMode", "serverUpdateBatchDelay"].includes(field.field)).map((field) => Object.assign({}, field));
 	if (page === "server" && !native) {
 		fields = definitions.server.filter((field) => field.kind === "Heading" && field.title !== "Application updates" || [
 			"serverUpdateMode",

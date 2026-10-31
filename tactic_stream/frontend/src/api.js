@@ -190,12 +190,16 @@ async function post(url, payload, signal, quiet = false) {
       signal,
     })
     serverClock.observeResponse(response, started)
-    data = await response.json()
+    try { data = await response.json() }
+    catch (error) {
+      if (response.ok || !(error instanceof SyntaxError)) throw error
+      data = null
+    }
     if (!response.ok) {
-      const error = new Error(data.error || 'Request failed.')
+      const error = new Error(data?.error || `HTTP ${response.status}: ${response.statusText || 'Request failed.'}`)
       error.status = response.status
-      error.code = data.error_code
-      error.field = data.error_field
+      error.code = data?.error_code
+      error.field = data?.error_field
       throw error
     }
     return data.result

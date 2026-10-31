@@ -56,7 +56,7 @@ def main():
                 target.parent.mkdir(parents=True, exist_ok=True)
                 target.write_bytes(data)
         paths = [
-            str(work / "installed" / name)
+            str(Path("installed") / name)
             for name in sorted(shipped)
             if name.endswith(".mjs")
         ]
