@@ -177,3 +177,7 @@ the existing height limit; longer drafts scroll inside the field. Status events
 keep their tinted card and outline, using the theme accent if no workflow color
 is available. Dashboard pages use the full body width when they fit; overflowing
 pages retain room for their outer scrollbar.
+
+On browser HTTP connections or denied clipboard permission, the clipboard button focuses the
+note field and shows a Ctrl+V / Paste hint instead of an access error. Existing text and
+attachments stay intact. HTTPS with clipboard permission supports direct insertion.

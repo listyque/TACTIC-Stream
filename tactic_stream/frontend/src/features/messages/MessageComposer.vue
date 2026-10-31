@@ -29,6 +29,7 @@ const props = defineProps({
 });
 const emit = defineEmits(['update:modelValue', 'submit', 'files']);
 const field = ref(null),
+  pastePending = ref(false),
   mention = ref(null),
   activeMention = ref(0);
 const root = ref(null),
@@ -98,6 +99,7 @@ function findMention() {
   activeMention.value = 0;
 }
 function input() {
+  pastePending.value = false;
   emit('update:modelValue', field.value.value);
   findMention();
 }
@@ -165,10 +167,18 @@ watch(
 watch(
   () => props.sending || props.disabled,
   (value) => {
-    if (value) mention.value = null;
+    if (value) {
+      mention.value = null;
+      pastePending.value = false;
+    }
   }
 );
 defineExpose({
+  promptPaste() {
+    if (props.disabled || props.sending) return;
+    pastePending.value = true;
+    field.value?.focus();
+  },
   focus() {
     field.value?.focus();
   }
@@ -178,8 +188,16 @@ defineExpose({
   <div
     ref="root"
     class="message-composer"
-    :style="{ height: geometry.height + 'px' }"
+    :style="pastePending ? undefined : { height: geometry.height + 'px' }"
   >
+    <p
+      v-if="pastePending"
+      class="message-composer-paste-hint"
+      role="status"
+      :style="{ paddingTop: geometry.height + UI.metrics.gap + 'px' }"
+    >
+      {{ t('Press Ctrl+V or use Paste in this field to attach the image.') }}
+    </p>
     <div class="message-composer-field" :style="bounds(geometry.field)">
       <textarea
         ref="field"
@@ -211,10 +229,12 @@ defineExpose({
         aria-autocomplete="list"
         rows="1"
         @input="input"
+        @blur="pastePending = false"
         @click="findMention"
         @keydown="key"
         @paste="
           (event) => {
+            pastePending = false;
             if (event.clipboardData.files.length && !sending && !disabled) {
               event.preventDefault();
               emit('files', event.clipboardData.files);
@@ -275,6 +295,11 @@ defineExpose({
   display: block;
   flex: 1;
   min-width: 0;
+}
+.message-composer-paste-hint {
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--text-small);
 }
 .message-composer-field {
   position: relative;

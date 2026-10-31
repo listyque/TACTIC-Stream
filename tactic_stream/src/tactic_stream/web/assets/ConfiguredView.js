@@ -12460,7 +12460,7 @@ var _sfc_main$34 = {
 	setup(__props, { expose: __expose, emit: __emit }) {
 		const props = __props;
 		const emit = __emit;
-		const field$2 = ref(null), mention$1 = ref(null), activeMention = ref(0);
+		const field$2 = ref(null), pastePending = ref(false), mention$1 = ref(null), activeMention = ref(0);
 		const root = ref(null), width = ref(400), fieldHeight = ref(metrics.minimum);
 		let observer;
 		const geometry = computed(() => layout(width.value, fieldHeight.value, props.label === "Note text", mobile.value));
@@ -12509,6 +12509,7 @@ var _sfc_main$34 = {
 			activeMention.value = 0;
 		}
 		function input() {
+			pastePending.value = false;
 			emit("update:modelValue", field$2.value.value);
 			findMention();
 		}
@@ -12548,18 +12549,34 @@ var _sfc_main$34 = {
 			if (value !== field$2.value?.value) mention$1.value = null;
 		});
 		watch(() => props.sending || props.disabled, (value) => {
-			if (value) mention$1.value = null;
+			if (value) {
+				mention$1.value = null;
+				pastePending.value = false;
+			}
 		});
-		__expose({ focus() {
-			field$2.value?.focus();
-		} });
+		__expose({
+			promptPaste() {
+				if (props.disabled || props.sending) return;
+				pastePending.value = true;
+				field$2.value?.focus();
+			},
+			focus() {
+				field$2.value?.focus();
+			}
+		});
 		return (_ctx, _cache) => {
 			return openBlock(), createElementBlock("div", {
 				ref_key: "root",
 				ref: root,
 				class: "message-composer",
-				style: normalizeStyle({ height: geometry.value.height + "px" })
+				style: normalizeStyle(pastePending.value ? void 0 : { height: geometry.value.height + "px" })
 			}, [
+				pastePending.value ? (openBlock(), createElementBlock("p", {
+					key: 0,
+					class: "message-composer-paste-hint",
+					role: "status",
+					style: normalizeStyle({ paddingTop: geometry.value.height + metrics.gap + "px" })
+				}, toDisplayString(unref(t)("Press Ctrl+V or use Paste in this field to attach the image.")), 5)) : createCommentVNode("", true),
 				createBaseVNode("div", {
 					class: "message-composer-field",
 					style: normalizeStyle(bounds(geometry.value.field))
@@ -12576,9 +12593,11 @@ var _sfc_main$34 = {
 					"aria-autocomplete": "list",
 					rows: "1",
 					onInput: input,
+					onBlur: _cache[0] || (_cache[0] = ($event) => pastePending.value = false),
 					onClick: findMention,
 					onKeydown: key,
-					onPaste: _cache[0] || (_cache[0] = (event) => {
+					onPaste: _cache[1] || (_cache[1] = (event) => {
+						pastePending.value = false;
 						if (event.clipboardData.files.length && !__props.sending && !__props.disabled) {
 							event.preventDefault();
 							emit("files", event.clipboardData.files);
@@ -12593,7 +12612,7 @@ var _sfc_main$34 = {
 					onSelected: insert
 				}, null, 8, ["style", "disabled"])) : createCommentVNode("", true)], 4),
 				mention$1.value !== null && matches.value.length ? (openBlock(), createElementBlock("div", {
-					key: 0,
+					key: 1,
 					id: unref(mentionId) + "-members",
 					class: "message-mentions",
 					role: "listbox",
@@ -12607,7 +12626,7 @@ var _sfc_main$34 = {
 							selected: index === activeMention.value,
 							elementId: optionId(member.login)
 						}, Math.max(0, Math.min(296, geometry.value.field.width) - 30)),
-						onEvent: _cache[1] || (_cache[1] = (event) => insert("@" + event.login + " ", mention$1.value.length + 1))
+						onEvent: _cache[2] || (_cache[2] = (event) => insert("@" + event.login + " ", mention$1.value.length + 1))
 					}, null, 8, ["scene"]);
 				}), 128))], 12, _hoisted_2$8)) : createCommentVNode("", true),
 				createVNode(_sfc_main$69, {
@@ -12619,7 +12638,7 @@ var _sfc_main$34 = {
 					icon: "send",
 					highlighted: "",
 					disabled: __props.disabled || __props.sending || !__props.modelValue.trim() && !__props.hasAttachments,
-					onClick: _cache[2] || (_cache[2] = ($event) => emit("submit"))
+					onClick: _cache[3] || (_cache[3] = ($event) => emit("submit"))
 				}, null, 8, [
 					"style",
 					"icon-only",
@@ -15016,9 +15035,12 @@ var _sfc_main$20 = {
 			const key = this.draftKey;
 			try {
 				const files = await readClipboardImages();
-				if (this.validContext && this.opened && key === this.draftKey) this.attach(files);
-			} catch {
-				this.error = "Clipboard access is unavailable. Paste an image into the reply field or choose a file.";
+				if (this.validContext && this.opened && key === this.draftKey) {
+					if (files === null) this.$refs.body?.promptPaste();
+					else this.attach(files);
+				}
+			} catch (failure) {
+				if (this.validContext && this.opened && key === this.draftKey) this.error = failure.message;
 			}
 		},
 		async reply(note) {

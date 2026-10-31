@@ -29599,9 +29599,12 @@ var _sfc_main$10 = {
 			const generation = epoch, chat = current.value;
 			try {
 				const files = await readClipboardImages();
-				if (generation === epoch && chat === current.value && visible.value) addFiles(files);
-			} catch {
-				error.value = "Clipboard access is unavailable. Paste an image into the reply field or choose a file.";
+				if (generation === epoch && chat === current.value && visible.value) {
+					if (files === null) composer.value?.promptPaste();
+					else addFiles(files);
+				}
+			} catch (failure) {
+				if (generation === epoch && chat === current.value && visible.value) error.value = failure.message;
 			}
 		}
 		const fileBlob = (snapshot, file, chat = current.value) => messageFileRequest(props.ticket, props.project, {

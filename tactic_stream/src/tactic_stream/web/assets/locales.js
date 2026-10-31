@@ -2026,6 +2026,7 @@ var en_default = {
 	"No available models. Check AI providers.": "No available models. Check AI providers."
 };
 var ru_default = {
+	"Press Ctrl+V or use Paste in this field to attach the image.": "Нажмите Ctrl+V или выберите «Вставить» в этом поле, чтобы прикрепить изображение.",
 	Plugins: "Плагины",
 	"Packages, versions and project activation": "Пакеты, версии и активация в проекте",
 	"Install plugin ZIP": "Установить ZIP плагина",

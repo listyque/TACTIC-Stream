@@ -8479,13 +8479,22 @@ async function readClipboard() {
 	return navigator.clipboard.readText();
 }
 async function readClipboardImages() {
+	if (!navigator.clipboard?.read) return null;
+	let items;
+	try {
+		items = await navigator.clipboard.read();
+	} catch (error) {
+		if (["NotAllowedError", "SecurityError"].includes(error.name)) return null;
+		throw error;
+	}
 	const files = [];
-	for (const item of await navigator.clipboard.read()) {
+	for (const item of items) {
 		const type = item.types.includes("image/png") ? "image/png" : item.types.find((type) => type.startsWith("image/"));
 		if (!type) continue;
 		const extension = type === "image/jpeg" ? "jpg" : type.split("/")[1].split("+")[0];
 		files.push(new File([await item.getType(type)], "clipboard" + (files.length ? "-" + (files.length + 1) : "") + "." + extension, { type }));
 	}
+	if (!files.length) throw new Error("The clipboard does not contain an image");
 	return files;
 }
 async function copyImage(blob) {

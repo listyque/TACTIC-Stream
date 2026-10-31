@@ -954,11 +954,13 @@ export default {
       const key = this.draftKey;
       try {
         const files = await readClipboardImages();
+        if (this.validContext && this.opened && key === this.draftKey) {
+          if (files === null) this.$refs.body?.promptPaste();
+          else this.attach(files);
+        }
+      } catch (failure) {
         if (this.validContext && this.opened && key === this.draftKey)
-          this.attach(files);
-      } catch {
-        this.error =
-          'Clipboard access is unavailable. Paste an image into the reply field or choose a file.';
+          this.error = failure.message;
       }
     },
     async reply(note) {

@@ -154,7 +154,9 @@ ownership, draft isolation, refresh, conflicts and attachment-only notes.
 
 The browser shares its composer, clipboard helper, attachment cards and window controls across
 notes and messages. Clipboard image reading needs browser permission and a secure context; on
-LAN HTTP use paste or the file chooser when the explicit clipboard button is unavailable. Browser
+LAN HTTP, or when permission is denied, the clipboard button focuses the reply field and shows
+a compact hint to press Ctrl+V or use the field’s Paste command. The same path works in notes;
+the draft stays intact. A clipboard with no image is reported separately. Browser
 local files cannot be restored automatically after a full reload. No Handler or DCC bridge is used.
 
 
