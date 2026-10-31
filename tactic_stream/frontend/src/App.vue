@@ -157,7 +157,7 @@ export default {
       filterRecords: [], savedSearch: '', quickSelections: {}, quickLayout: null, scopeKey: '', presetOrderBys: [],
       selectedTags: [], tagColumn: '',
       searchRelation: 'contains',
-      resultMode: defaultResultView, groupMode: 'none', resultState: {},
+      resultMode: defaultResultView, mobileResultMode: 'continious', groupMode: 'none', resultState: {},
     }
   },
   computed: {
@@ -444,6 +444,12 @@ export default {
       if (!resultViews.some(item => item.value === mode) || !this.canCloseTaskViews(this.workspaceProject, [this.activeSearchTab?.id])) return
       this.resultMode = mode
       this.persistWorkspace()
+    },
+    changeMobileResultView(mode) {
+      if (!['continious', 'table'].includes(mode) || !this.canCloseTaskViews(this.workspaceProject, [this.activeSearchTab?.id])) return
+      this.mobileResultMode = mode
+      this.persistWorkspace()
+      this.$refs.resultActions.close(true)
     },
     prepareResultGroups() {
       const presentation = this.$refs.taskViews?.find(view =>
@@ -2280,7 +2286,7 @@ export default {
         <template #views><template v-if="openSections.length > 1"><strong>{{ t('Open views') }}</strong><AppButton v-for="item in openSections" :key="item.id" class="mobile-section-choice" :label="item.title" role="menuitemradio" :aria-checked="item.id === activeWorkspace?.current" @click="activateSection(item.id)"><ItemPreview class="mobile-section-badge" :style="{ width:'24px', height:'24px', minWidth:'24px', flex:'0 0 24px', borderRadius:'50%' }" :fallback-icon="item.icon || 'link'" :accent="item.accent" :preview-size="24" round /><span class="mobile-section-title">{{ item.title }}</span><AppIcon v-if="item.id === activeWorkspace?.current" name="check-circle" class="menu-check" /></AppButton><hr></template></template>
         <template #actions="{ compact }">
           <AppButton v-if="compactShortcuts" ref="mobileSearchToggle" icon-only label="Open search" icon="search" :aria-expanded="mobileSearchOpen" :highlighted="!!searchText" :disabled="busy" @click="mobileSearchOpen = !mobileSearchOpen; mobileSearchOpen && $nextTick(()=>$refs.workspaceSearch.focus())" />
-          <AppMenu ref="resultActions" class="compact-result-actions" label="Result actions" :inline="!compact" :overlay="compactShortcuts" :close-on-select="false" @toggle="menuToggled"><div id="workspace-sort-actions"></div><div v-show="compactShortcuts" id="workspace-mobile-search-tools"></div><AppButton v-if="compactShortcuts" label="Saved searches" icon="filter" :disabled="busy" @click="openAdvancedSearch(); $refs.resultActions.close(true)" /><div v-show="compactShortcuts" :ref="element => mobileViewMenuTarget = element" id="workspace-mobile-view-actions"></div></AppMenu>
+          <AppMenu ref="resultActions" class="compact-result-actions" label="Result actions" :inline="!compact" :overlay="compactShortcuts" :close-on-select="false" @toggle="menuToggled"><template v-if="compactShortcuts"><AppButton label="Cards" icon="MDI_FORMAT_LIST_BULLETED" role="menuitemradio" :aria-checked="mobileResultMode === 'continious'" :disabled="busy" @click="changeMobileResultView('continious')"><span>{{ t('Cards') }}</span><AppIcon v-if="mobileResultMode === 'continious'" name="check-circle" class="menu-check" /></AppButton><AppButton label="Table" icon="MDI_TABLE" role="menuitemradio" :aria-checked="mobileResultMode === 'table'" :disabled="busy" @click="changeMobileResultView('table')"><span>{{ t('Table') }}</span><AppIcon v-if="mobileResultMode === 'table'" name="check-circle" class="menu-check" /></AppButton><hr></template><div id="workspace-sort-actions"></div><div v-show="compactShortcuts" id="workspace-mobile-search-tools"></div><AppButton v-if="compactShortcuts" label="Saved searches" icon="filter" :disabled="busy" @click="openAdvancedSearch(); $refs.resultActions.close(true)" /><div v-show="compactShortcuts" :ref="element => mobileViewMenuTarget = element" id="workspace-mobile-view-actions"></div></AppMenu>
         </template>
       </WorkspaceTabs>
       <Teleport v-if="!administrationOpen" defer to="#workspace-sort-actions">
@@ -2316,6 +2322,7 @@ export default {
             :rows="entry.tab === displayedSearchTab ? rows : entry.tab.state.rows"
             :configured="entry.tab === displayedSearchTab ? configuredView : entry.tab.state.configuredView"
             :result-mode="entry.tab === displayedSearchTab ? resultMode : entry.tab.state.resultMode"
+            :mobile-result-mode="entry.tab === displayedSearchTab ? mobileResultMode : entry.tab.state.mobileResultMode"
             :group-mode="entry.tab === displayedSearchTab ? groupMode : entry.tab.state.groupMode"
             :result-state="entry.tab === displayedSearchTab ? resultState : entry.tab.state.resultState" @result-state="resultStateChanged(entry, $event)"
             :read-only="false" :ticket="session.ticket" :project="entry.project" :accent="entry.section.accent"

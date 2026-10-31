@@ -37,6 +37,7 @@ const props = defineProps({
   sortDirection: String,
   groupMode: String,
   state: Object,
+  scrollAllColumns: Boolean,
   views: Array,
   closedGroups: Object,
   expandedRows: { type: Object, default: () => ({}) },
@@ -81,8 +82,12 @@ const overrides = ref({}),
   viewName = ref('');
 let observer, frame, resizeFrame;
 const preferences = computed(() => props.state?.table || {});
-const autoFit = computed(() => !!preferences.value.autoFit);
-const scrollColumns = computed(() => !!preferences.value.scrollColumns);
+const autoFit = computed(
+  () => !props.scrollAllColumns && !!preferences.value.autoFit
+);
+const scrollColumns = computed(
+  () => props.scrollAllColumns || !!preferences.value.scrollColumns
+);
 const layout = computed(() =>
   Host.describe(
     {
@@ -125,6 +130,8 @@ const viewActions = computed(() =>
     props.editable && !props.busy,
     appearance.language,
     scrollColumns.value
+  ).filter(
+    (action) => !props.scrollAllColumns || action.command !== 'scroll_columns'
   )
 );
 function columnWidth(column) {
@@ -694,7 +701,7 @@ defineExpose({ viewport });
       <div class="handler-table-actions" role="columnheader">
         <BusyIndicator v-if="busy" />
         <AppButton
-          v-show="!busy"
+          v-show="!busy && !scrollAllColumns"
           label="Auto Fit columns"
           icon="fit-width"
           icon-only

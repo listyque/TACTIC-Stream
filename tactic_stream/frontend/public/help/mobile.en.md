@@ -13,7 +13,9 @@ Use navigation to select the project view or an open panel. The search button op
 
 The tab button and Open views menu show the current section's coloured circular icon. Each section keeps its own colour and icon; the active section is marked in the menu. Switching search tabs keeps the section identity visible.
 
-The coloured edge of an object card is widest at the left centre and tapers to zero at the upper and lower corners, following the outline without gaps. Its preview fills the left part and progressively blurs and fades towards the right, using the larger web image when available. If the image is missing or fails to load, the initials appear over a fading object accent without changing the card size. The content header remains rectangular.
+Object cards show a complete thumbnail or initials beside the title and description, with tasks, notes and file actions below the text. The coloured edge identifies the object type; the item menu and navigation arrow stay separate.
+
+Open Result actions (the three dots beside the section title) to switch between Cards and Table. Each search tab remembers its phone view independently of the desktop mode. Phone tables retain all columns: swipe horizontally across a data row to scroll inside the table. Switching back preserves your selection and card navigation.
 
 When a snapshot contains several files, the preview selector shows document icons, names, extensions and sizes. A check marks the displayed file; selecting another row loads that file immediately. Long names are shortened without horizontal scrolling.
 

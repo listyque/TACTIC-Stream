@@ -112,6 +112,7 @@ export default {
     sortDirection: String,
     selectedKeys: { type: Array, default: () => [] },
     resultMode: { type: String, default: 'table' },
+    mobileResultMode: { type: String, default: 'continious' },
     groupMode: { type: String, default: 'none' },
     resultState: Object,
     parentKey: String,
@@ -202,6 +203,7 @@ export default {
       return mobile.value;
     },
     displayedMode() {
+      if (this.mobile && this.workspaceId) return this.mobileResultMode;
       return this.table.item_layout
         ? {
             grid: 'tiles',
@@ -209,9 +211,7 @@ export default {
             tree: 'continious',
             table: 'layout_table'
           }[this.table.item_layout.collection]
-        : this.mobile && this.workspaceId
-          ? 'continious'
-          : this.resultMode;
+        : this.resultMode;
     },
     itemLayout() {
       return this.table.item_layout || null;
@@ -503,7 +503,7 @@ export default {
     closedGroups: {
       deep: true,
       handler(value) {
-        if (this.resultMode === 'table')
+        if (this.displayedMode === 'table')
           this.tableStateChanged({
             ...this.tableState,
             closedGroups: { ...value }
@@ -2390,6 +2390,7 @@ export default {
           :busy="columnBusy || editBusy || taskBusy"
           :accent="accent"
           :state="tableState"
+          :scroll-all-columns="mobile && !!workspaceId"
           :views="tableViews"
           :closed-groups="closedGroups"
           :expanded-rows="expandedTables"

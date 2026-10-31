@@ -4741,6 +4741,7 @@ var _sfc_main$43 = {
 		sortDirection: String,
 		groupMode: String,
 		state: Object,
+		scrollAllColumns: Boolean,
 		views: Array,
 		closedGroups: Object,
 		expandedRows: {
@@ -4784,8 +4785,8 @@ var _sfc_main$43 = {
 		const overrides = ref({}), drag = ref(null), focusedKey = ref(""), anchorKey = ref(""), savingView = ref(false), viewName = ref("");
 		let observer, frame, resizeFrame;
 		const preferences = computed(() => props.state?.table || {});
-		const autoFit = computed(() => !!preferences.value.autoFit);
-		const scrollColumns = computed(() => !!preferences.value.scrollColumns);
+		const autoFit = computed(() => !props.scrollAllColumns && !!preferences.value.autoFit);
+		const scrollColumns = computed(() => props.scrollAllColumns || !!preferences.value.scrollColumns);
 		const layout = computed(() => describe$16({
 			columns: props.columns,
 			overrides: overrides.value,
@@ -4808,7 +4809,7 @@ var _sfc_main$43 = {
 			rowHeight: rowHeight.value,
 			automaticRowHeight: preferences.value.automaticRowHeight
 		}, appearance.language));
-		const viewActions$1 = computed(() => viewActions(props.views || [], props.editable && !props.busy, appearance.language, scrollColumns.value));
+		const viewActions$1 = computed(() => viewActions(props.views || [], props.editable && !props.busy, appearance.language, scrollColumns.value).filter((action) => !props.scrollAllColumns || action.command !== "scroll_columns"));
 		function columnWidth(column) {
 			return layout.value.cells.find((cell) => cell.name === column.name)?.width || 48;
 		}
@@ -5254,7 +5255,7 @@ var _sfc_main$43 = {
 									autoFit: !autoFit.value,
 									scrollColumns: false
 								}))
-							}, null, 8, ["aria-pressed", "highlighted"]), [[vShow, !__props.busy]]),
+							}, null, 8, ["aria-pressed", "highlighted"]), [[vShow, !__props.busy && !__props.scrollAllColumns]]),
 							withDirectives(createVNode(_sfc_main$60, {
 								label: "Table views and columns",
 								icon: "view-column",
@@ -18176,6 +18177,10 @@ var _sfc_main = {
 			type: String,
 			default: "table"
 		},
+		mobileResultMode: {
+			type: String,
+			default: "continious"
+		},
 		groupMode: {
 			type: String,
 			default: "none"
@@ -18272,12 +18277,13 @@ var _sfc_main = {
 			return mobile.value;
 		},
 		displayedMode() {
+			if (this.mobile && this.workspaceId) return this.mobileResultMode;
 			return this.table.item_layout ? {
 				grid: "tiles",
 				list: "list",
 				tree: "continious",
 				table: "layout_table"
-			}[this.table.item_layout.collection] : this.mobile && this.workspaceId ? "continious" : this.resultMode;
+			}[this.table.item_layout.collection] : this.resultMode;
 		},
 		itemLayout() {
 			return this.table.item_layout || null;
@@ -18485,7 +18491,7 @@ var _sfc_main = {
 		closedGroups: {
 			deep: true,
 			handler(value) {
-				if (this.resultMode === "table") this.tableStateChanged({
+				if (this.displayedMode === "table") this.tableStateChanged({
 					...this.tableState,
 					closedGroups: { ...value }
 				});
@@ -20019,6 +20025,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 					busy: $data.columnBusy || $data.editBusy || $data.taskBusy,
 					accent: $props.accent,
 					state: $options.tableState,
+					"scroll-all-columns": $options.mobile && !!$props.workspaceId,
 					views: $options.tableViews,
 					"closed-groups": $data.closedGroups,
 					"expanded-rows": $data.expandedTables,
@@ -20130,6 +20137,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 					"busy",
 					"accent",
 					"state",
+					"scroll-all-columns",
 					"views",
 					"closed-groups",
 					"expanded-rows",

@@ -11,6 +11,7 @@ assert.equal(navigationEntries([{...legacyLink,default_view_mode:''}],legacyType
 globalThis.localStorage = { getItem: key => storage.get(key), setItem: (key, value) => storage.set(key, value) }
 const tab = searchTab('Search', { type: 'demo/assets', page: 2, selectedKeys: ['demo/assets?code=ONE'], focusedKey:'demo/assets?code=ONE', rows: [{ code: 'DO_NOT_CACHE' }] })
 assert.equal(tab.state.resultMode, 'continious')
+assert.equal(tab.state.mobileResultMode, 'continious')
 tab.loadingMode = 'pages'
 const projects = [{ code: 'demo' }], types = [{ search_type: 'demo/assets' }]
 const workspace = { demo: { current: 'assets', sections: [{ id: 'assets', type: 'demo/assets', tabs: [tab], current: tab.id }] } }
@@ -25,6 +26,12 @@ assert.equal(restored().loaded, false)
 assert.deepEqual(readWorkspace('bob', projects, types), {}, 'Preferences belong to the account')
 const saved = JSON.parse(storage.get('tactic_stream.workspace.alice'))
 const record = saved.demo.sections[0].tabs[0]
+for (const mode of ['table', 'continious', undefined, 'invalid']) {
+  record.state.mobileResultMode = mode
+  storage.set('tactic_stream.workspace.alice', JSON.stringify(saved))
+  assert.equal(restored().state.mobileResultMode, mode === 'table' ? 'table' : 'continious')
+  assert.equal(restored().state.resultMode, 'continious', 'Mobile view preserves the desktop mode')
+}
 for (const mode of ['table', 'compact', 'tiles']) {
   record.state.resultMode = mode
   storage.set('tactic_stream.workspace.alice', JSON.stringify(saved))

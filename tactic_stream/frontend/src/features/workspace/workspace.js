@@ -2,7 +2,7 @@
 // Persist search settings and selection keys. Records, tickets and server definitions stay in memory.
 import { defaultResultView } from './resultViews.js'
 import { preferences } from '../configuration/preferences.js'
-export const searchFields = ['type', 'view', 'viewTitle', 'configuredView', 'navigationLink', 'layoutView', 'layoutTarget', 'resultMode', 'groupMode', 'resultState', 'searchText', 'filterField', 'filterValue',
+export const searchFields = ['type', 'view', 'viewTitle', 'configuredView', 'navigationLink', 'layoutView', 'layoutTarget', 'resultMode', 'mobileResultMode', 'groupMode', 'resultState', 'searchText', 'filterField', 'filterValue',
   'searchRelation', 'sortField', 'sortDirection', 'page', 'pageSize', 'showRetired', 'selectedKeys', 'focusedKey', 'columns', 'rows',
   'hasNext', 'totalCount', 'nextOffset', 'loadedQuery', 'interfaceConfig', 'error', 'filterRecords', 'savedSearch', 'quickSelections', 'quickLayout', 'scopeKey', 'presetOrderBys', 'selectedTags', 'tagColumn']
 const savedFields = searchFields.filter(name => !['columns', 'rows', 'hasNext', 'totalCount', 'nextOffset', 'loadedQuery', 'interfaceConfig', 'error'].includes(name))
@@ -25,7 +25,7 @@ export function navigationEntries(items, types) {
 export function searchTab(title, state = {}, number = 0) {
   return { id: 'search-' + Date.now().toString(36) + '-' + ++serial, title, number, loaded: false,
     scrollTop: 0, scrollLeft: 0, workspaceLayout: null, loadedOffsets: [], loadingMode:preferences.checkin.loadingMode,
-    state: { type: '', view: 'table', viewTitle: '', configuredView: false, navigationLink: '', layoutView: '', layoutTarget: '', resultMode: preferences.checkin.defaultViewMode, groupMode: 'none', resultState: {}, searchText: '', filterField: '', filterValue: '',
+    state: { type: '', view: 'table', viewTitle: '', configuredView: false, navigationLink: '', layoutView: '', layoutTarget: '', resultMode: preferences.checkin.defaultViewMode, mobileResultMode: 'continious', groupMode: 'none', resultState: {}, searchText: '', filterField: '', filterValue: '',
       searchRelation: 'contains', sortField: '', sortDirection: 'asc', page: 0, pageSize: preferences.checkin.displayLimit, showRetired: false, selectedKeys: [], focusedKey:'',
       columns: {}, rows: [], hasNext: false, totalCount: null, nextOffset: 0, loadedQuery: null, interfaceConfig: null, error: '', filterRecords: [], savedSearch: '', quickSelections: {}, quickLayout: null, scopeKey: '', presetOrderBys: [], selectedTags: [], tagColumn: '', ...state } }
 }
@@ -93,6 +93,7 @@ export function readWorkspace(login, projects, types) {
           ? [...new Set(tab.state.selectedKeys.filter(key => typeof key === 'string' && key && key.length <= 16384).slice(0, 5000))] : []
         if (typeof tab.state.focusedKey !== 'string' || tab.state.focusedKey.length > 16384) tab.state.focusedKey = ''
         if (!['continious', 'tiles', 'table', 'compact', 'splitted_vertical', 'splitted_horizontal'].includes(tab.state.resultMode)) tab.state.resultMode = defaultResultView
+        if (!['continious', 'table'].includes(tab.state.mobileResultMode)) tab.state.mobileResultMode = 'continious'
         if (!['none', 'status', 'pipeline'].includes(tab.state.groupMode) && !/^task_status:.{1,256}$/.test(tab.state.groupMode || '')) tab.state.groupMode = 'none'
         if (!preferences.cache.cacheProcessTabs || !tab.state.resultState || Array.isArray(tab.state.resultState)) tab.state.resultState = {}
         if (!['contains', '='].includes(tab.state.searchRelation)) tab.state.searchRelation = 'contains'
