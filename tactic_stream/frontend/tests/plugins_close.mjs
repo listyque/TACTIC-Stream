@@ -137,7 +137,11 @@ try {
         height: el.offsetHeight,
         radius: getComputedStyle(el).borderTopLeftRadius
       }));
-      assert.deepEqual(style, { width: 34, height: 34, radius: '4px' }, id);
+      assert.equal(style.width, 34, id);
+      assert.equal(style.height, 34, id);
+      if (id === 'pluginCollapse') assert.equal(style.radius, '4px', id);
+      else
+        assert.ok(style.radius === '50%' || parseFloat(style.radius) >= 17, id);
     }
   }
   for (const button of await dialog

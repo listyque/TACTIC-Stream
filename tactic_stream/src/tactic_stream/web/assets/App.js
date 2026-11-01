@@ -1672,7 +1672,6 @@ function describe$35(model, ui, width, height, language) {
 	head.unshift(...branding);
 	head.push(node("Box", "administrationHeaderDivider", rect(0, g.header - 1, width, 1), { background: "outlineVariant" }));
 	const header = describe$36("administrationHeader", width, g.header, head);
-	for (const child of header.children) if (child.kind === "Button") child.round = false;
 	nodes.push(header);
 	nodes.push(node("View", "administrationContent", g.content, { view: "content" }));
 	return {

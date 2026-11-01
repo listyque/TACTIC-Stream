@@ -297,7 +297,11 @@ for (const width of [1100, 1400, 1800]) {
     'Commands leave a gap before the page Help action'
   );
   for (const button of head.children.filter((node) => node.kind === 'Button'))
-    assert.equal(button.round, false, button.id + ' is a service action');
+    assert.equal(
+      button.round,
+      true,
+      button.id + ' belongs to the window header'
+    );
   assert(
     head.children.find((node) => node.id === 'administrationSectionTitle')
       .width >= 200,

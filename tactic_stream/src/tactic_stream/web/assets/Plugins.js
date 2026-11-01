@@ -1000,7 +1000,7 @@ function toolbar(model, width, language) {
 		nodes.push(button(id, rect(x, 2, w, 34), tr(title), icon, event, enabled, {
 			iconOnly: w === 34,
 			iconAction: w === 34,
-			round: false
+			round: w === 34
 		}));
 		x += w + 4;
 	}
