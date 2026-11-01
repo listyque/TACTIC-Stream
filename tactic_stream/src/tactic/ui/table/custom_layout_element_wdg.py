@@ -5,7 +5,7 @@ from pyasm.command import Command
 
 
 def read_custom_layout(
-    search_key='', view='', html='', include_mako=True, _depth=0, _behaviors=None, detail_key='', filter_values=None, filter_query=None
+    search_key='', view='', html='', include_mako=True, _depth=0, _behaviors=None, detail_key='', filter_values=None, filter_query=None, stream_api=True
 ):
     import ast
     import json
@@ -64,6 +64,9 @@ def read_custom_layout(
             (node for node in root if node.tag == view or node.get('name') == view),
             None,
         )
+        if (definition is not None and not stream_api and
+                (definition.get('layout') == 'sobject-layout' or definition.find('dashboard') is not None)):
+            return dict(streamRequired=True, layoutNodes=[], layoutView=view, targetSearchKey=search_key)
         if definition is not None and definition.get('layout') == 'sobject-layout':
             from tactic_stream.server.interface import read_interface
             interface = read_interface(obj.get_base_search_type(), view)
@@ -483,6 +486,7 @@ def read_custom_layout(
                         include_mako=options.get('include_mako', True),
                         _depth=_depth + 1,
                         _behaviors=behaviors,
+                        stream_api=stream_api,
                     )['layoutNodes']
                 )
             elif handler in (

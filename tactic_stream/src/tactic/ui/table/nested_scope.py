@@ -404,20 +404,26 @@ def read_nested_scope(
                         'Simple search choices require a read-only field expression'
                     )
                 from pyasm.common import Container
-                from tactic_stream.server.api import check_record_access
-                from tactic_stream.server.search_configuration import (
-                    deny_expression_write,
-                )
-
-                previous_read = Container.get('Expression:check_record_access')
-                previous_write = Container.get('Expression:check_method_access')
-                Container.put('Expression:check_record_access', check_record_access)
-                Container.put('Expression:check_method_access', deny_expression_write)
                 try:
+                    from tactic_stream.server.api import check_record_access
+                    from tactic_stream.server.search_configuration import (
+                        deny_expression_write,
+                    )
+
+                except ImportError as error:
+                    if getattr(error, 'name', 'tactic_stream') != 'tactic_stream':
+                        raise
                     values = Search.eval(expression)
-                finally:
-                    Container.put('Expression:check_record_access', previous_read)
-                    Container.put('Expression:check_method_access', previous_write)
+                else:
+                    previous_read = Container.get('Expression:check_record_access')
+                    previous_write = Container.get('Expression:check_method_access')
+                    Container.put('Expression:check_record_access', check_record_access)
+                    Container.put('Expression:check_method_access', deny_expression_write)
+                    try:
+                        values = Search.eval(expression)
+                    finally:
+                        Container.put('Expression:check_record_access', previous_read)
+                        Container.put('Expression:check_method_access', previous_write)
                 values = values if isinstance(values, list) else [values]
                 values = list(
                     dict.fromkeys(str(value) for value in values if value is not None)
@@ -463,7 +469,9 @@ def read_nested_scope(
                 unpack_filters,
                 validate_filters,
             )
-        except ImportError:
+        except ImportError as error:
+            if getattr(error, 'name', 'tactic_stream') != 'tactic_stream':
+                raise
             from tactic.ui.app import SearchWdg
 
             saved = Search(search_type)

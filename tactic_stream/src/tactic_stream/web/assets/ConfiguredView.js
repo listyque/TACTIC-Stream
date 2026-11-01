@@ -4630,7 +4630,7 @@ function columnActions(model, language) {
 		}))
 	]);
 }
-function viewActions(views, enabled, language, scrollColumns = false) {
+function viewActions(views, enabled, language, scrollColumns = false, streamApi = true) {
 	const actions = [{
 		title: "Table views",
 		header: true
@@ -4647,13 +4647,12 @@ function viewActions(views, enabled, language, scrollColumns = false) {
 		});
 	}
 	return actions.concat([
-		{ separator: true },
-		{
+		...streamApi ? [{ separator: true }, {
 			title: "Manage table views…",
 			icon: "view-column",
 			command: "manage",
 			enabled
-		},
+		}] : [],
 		{ separator: true },
 		{
 			title: "Horizontal scrolling",
