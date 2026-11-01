@@ -40,6 +40,12 @@ Stream's `pyasm.common.errors` module. Physical-table tests execute both product
 procedure sources without that import and verify administrator enforcement;
 the native Python procedure transport also exercises the actual Handler source.
 
+Legacy `Sql.clear_results()` replaces rows in its previous result list with
+`None` before each query. Raw PostgreSQL metadata must be consumed before the
+primary-key query. Both procedure sources follow this ordering; the regression
+executes the original legacy clearing method and checks empty tables, NULL
+defaults and NULL cells alongside the normal SQL-backed CRUD/rollback tests.
+
 Handler security-group catalog procedures and Stream's native counterpart use
 the legacy `Search.add_column` signature. Fixed aggregate expressions such as
 `MAX(id)` use `Search.get_select().set_quoted_mode('none')` instead of a `quoted`

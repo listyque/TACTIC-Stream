@@ -1,5 +1,6 @@
 """Physical table CRUD, optimistic conflicts, rollback and administrator boundary."""
 import copy
+import ast
 import builtins
 import json
 import inspect
@@ -186,6 +187,64 @@ class RawDatabaseTests(unittest.TestCase):
                 with patch.object(Environment, 'get_security', return_value=SimpleNamespace(is_admin=lambda: False)):
                     with self.assertRaises(SecurityException):
                         procedure('list')
+
+    def test_postgres_metadata_survives_legacy_query_buffer_reuse(self):
+        original = Path(__file__).resolve().parents[2] / 'legacy/src/pyasm/search/sql.py'
+        module = ast.parse(original.read_text(encoding='utf-8'))
+        sql_class = next(node for node in module.body if isinstance(node, ast.ClassDef) and node.name == 'Sql')
+        clear = next(node for node in sql_class.body if isinstance(node, ast.FunctionDef) and node.name == 'clear_results')
+        namespace = {}
+        exec(compile(ast.Module(body=[clear], type_ignores=[]), str(original), 'exec'), namespace)
+
+        class LegacySql:
+            clear_results = namespace['clear_results']
+
+            def __init__(self, empty):
+                self.results = []
+                self.empty = empty
+
+            def get_database_impl(self):
+                return SimpleNamespace(get_database_type=lambda: 'PostgreSQL')
+
+            def get_vendor(self):
+                return 'PostgreSQL'
+
+            def do_query(self, query):
+                self.clear_results()
+                if 'FROM pg_tables' in query:
+                    self.results = [('raw_sample',)]
+                elif 'FROM information_schema.columns' in query:
+                    self.results = [('id', 'integer', None, 'NEVER'),
+                                    ('text', 'text', None, 'NEVER')]
+                elif 'FROM pg_index' in query:
+                    self.results = [('id',)]
+                elif query.startswith('SELECT count(*)'):
+                    self.results = [(0 if self.empty else 1,)]
+                elif query.startswith('SELECT "id", "text" FROM '):
+                    self.results = [] if self.empty else [(1, None)]
+                else:
+                    raise AssertionError(query)
+                return self.results
+
+            def get_int(self, query):
+                return self.do_query(query)[0][0]
+
+        for name, source in self.procedure_sources().items():
+            for empty in (False, True):
+                with self.subTest(procedure=name, empty=empty):
+                    scope = {}
+                    exec(source, scope)
+                    with patch('pyasm.search.Search', return_value=SimpleNamespace(get_sobjects=lambda: [])), \
+                            patch.object(DbContainer, 'get', return_value=LegacySql(empty)):
+                        result = scope['raw_database_request']('load', identity=json.dumps(['sthpw', 'raw_sample']))
+                    self.assertEqual([column['name'] for column in result['metadata']['columns']], ['id', 'text'])
+                    self.assertIsNone(result['metadata']['columns'][1]['default'])
+                    self.assertEqual(result['metadata']['total'], 0 if empty else 1)
+                    if empty:
+                        self.assertEqual(result['document']['rows'], [])
+                    else:
+                        self.assertEqual(result['document']['rows'][0]['key'], [1])
+                        self.assertEqual(result['document']['rows'][0]['values'], dict(id=1, text=None))
 
     def test_pagination_null_empty_and_large_integer_precision(self):
         with self.store.connection(write=True) as db:
