@@ -6,6 +6,14 @@ successful modern-client screen is not proof of complete legacy compatibility.
 Use live API discovery for the selected installation and check actual arguments,
 results, authorization, revisions, transaction effects and failure paths.
 
+Handler activity requests bind their RPC context to the selected project, falling
+back to `sthpw` only without a project. Original `Schema.get_foreign_keys` strips
+project qualifiers and inspects column metadata in the active request database;
+selecting schema XML alone is insufficient. Journal Search Types retain explicit
+`sthpw/...` qualification. Browser Activity Feed already runs in its request
+project. The XML-RPC regression invokes the actual Handler client with legacy
+metadata behavior and checks linked titles, keys and the database context.
+
 Handler's maintained Stream-boundary inventory lives in its
 `docs/tactic_compatibility/stream_api.md` and `stream_boundaries.json`.
 The desktop client enables extensions only for a confirmed server/login/ticket;

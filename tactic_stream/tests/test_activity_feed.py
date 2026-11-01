@@ -2,11 +2,13 @@
 import ast
 import inspect
 import json
+import sys
 from pathlib import Path
 import unittest
 import xml.etree.ElementTree as ET
 from urllib.error import HTTPError
 from urllib.request import Request, urlopen
+from unittest.mock import patch
 
 import test_transport
 from pyasm.security.authenticator import hash_password
@@ -22,6 +24,54 @@ class ActivityFeed(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         test_transport.Transport.tearDownClass()
+
+    def test_handler_rpc_context_supports_legacy_schema_introspection(self):
+        handler = Path(__file__).resolve().parents[3] / 'TH'
+        with patch.object(sys, 'path', [str(handler), *sys.path]):
+            from thlib import tactic_classes as tc
+        from pyasm.biz import Project, Schema
+        from pyasm.search import SearchType
+        from pyasm.search.sql import SqlException
+
+        store = test_transport.Transport.store
+        with store.connection(write=True) as db:
+            db.execute('INSERT INTO transaction_log (code, login, namespace, timestamp, "transaction") VALUES (?,?,?,?,?)',
+                       ('FEED_CLIENT_CONTEXT', 'admin', 'one', '2026-10-11 12:00:00', '''<transaction>
+                         <sobject search_type="contract/entity_in_collection" search_code="J1" action="insert">
+                           <column name="collection_code" to="G1"/>
+                           <column name="entity_code" to="A"/>
+                         </sobject></transaction>'''))
+        checked_projects = []
+        native_keys = Schema.get_foreign_keys
+
+        def legacy_keys(schema, source, target, path=None):
+            checked_projects.append(Project.get_project_code())
+            for search_type in (source, target):
+                if not SearchType.get_column_info(search_type):
+                    raise SqlException('Legacy metadata lookup used the wrong database')
+            return native_keys(schema, source, target, path)
+
+        with test_transport.Transport.proxy(self) as proxy:
+            ticket = proxy.get_ticket('admin', 'private-test-password')
+
+            class Server:
+                def __init__(self, project):
+                    self.project = project
+
+                def execute_python_script(self, path, kwargs):
+                    return proxy.execute_python_script(dict(ticket=ticket, project=self.project), path, kwargs)
+
+            with patch.object(tc, 'server_start', side_effect=lambda project: Server(project)), \
+                    patch.object(tc, 'env_read_config', return_value={}), \
+                    patch.object(tc.env_server, 'get_server', return_value='fixture'), \
+                    patch.object(Schema, 'get_foreign_keys', legacy_keys):
+                records = tc.get_user_recent_activity(project_code='one', kinds=['create'],
+                    instance_relations={'contract/entity_in_collection': ['contract/entity', 'contract/collection']})
+            linked = next(row for row in records if row.get('relationAction') == 'link')
+            self.assertEqual((linked['itemTitle'], linked['targetTitle']), ('Первый', 'First'))
+            self.assertIn('project=one', linked['targetSearchKey'])
+            self.assertTrue(checked_projects)
+            self.assertEqual(set(checked_projects), {'one'})
 
     def test_instance_audit_uses_requested_project_from_system_context(self):
         store = test_transport.Transport.store
