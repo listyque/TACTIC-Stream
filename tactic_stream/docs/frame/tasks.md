@@ -20,6 +20,15 @@ ACL and mutation executors remain with these owners. Portable modules describe
 presentation and decisions only. Each product ships its own physical Frame copy.
 Native filesystem/DCC capabilities remain native; no WebEngine is introduced.
 
+Native first-batch readiness must survive revealing the task table; resetting it
+from effective visibility creates a Loader binding loop. A disabled unopened list
+still needs real layout when activated. Stream's TaskWorkspaceTable measures its
+parent through observeFrameSizes and does not own that Qt readiness gate.
+`frontend/tests/task_surface_presentation.mjs` checks hidden mounting, first reveal,
+row input, loading flags, resize and re-opening without browser warnings. Native
+coverage lives in Handler's initial-batch and task-surface presentation tests;
+the browser test does not establish identical surface lifetimes between engines.
+
 ## Acceptance checklist
 
 - Original Handler → Frame Handler → Frame Stream comparisons on matching data,

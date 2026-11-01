@@ -11,6 +11,9 @@ order: 16
 
 ## Main controls
 
+Switching between the table and Gantt keeps the loaded task page and unsaved
+changes. Returning to the table recalculates its layout for the current width.
+
 Click an editable task cell once to open its user/status picker directly. Progress uses a slider with a percentage readout. Planned hours use increase/decrease buttons in 15-minute steps, with a visible hour unit; project values stored in minutes are converted automatically. Start and deadline retain a combined two-field editor. Cell changes remain staged until Save task changes.
 
 Use scope, team filters, quick filters, columns, sorting, grouping, bulk selection, status and
