@@ -125,10 +125,39 @@ try {
     () => document.querySelectorAll('.profile-activity-cards > *').length === 6
   );
   assert.equal(await cards.count(), 6);
-  await page.setViewportSize({ width: 700, height: 850 });
-  await page.waitForFunction(
-    () => document.querySelectorAll('.profile-activity-cards > *').length === 6
-  );
+  for (const width of [700, 360, 1450]) {
+    await page.setViewportSize({ width, height: 850 });
+    await page.evaluate(async () => {
+      await document.fonts.ready;
+      await new Promise(requestAnimationFrame);
+      await new Promise(requestAnimationFrame);
+    });
+    await page.waitForFunction(() => {
+      const content = document.querySelector('.profile-activity-cards');
+      const host = document.querySelector(
+        '[data-frame="profileActivityCards"]'
+      );
+      return (
+        content?.children.length === 6 &&
+        host?.getBoundingClientRect().height > 0 &&
+        Math.abs(
+          host.getBoundingClientRect().height -
+            content.getBoundingClientRect().height
+        ) < 1
+      );
+    });
+    const heights = await page.evaluate(async () => {
+      const height = () =>
+        document
+          .querySelector('[data-frame="profileActivityCards"]')
+          .getBoundingClientRect().height;
+      const first = height();
+      await new Promise(requestAnimationFrame);
+      await new Promise(requestAnimationFrame);
+      return [first, height()];
+    });
+    assert.equal(heights[0], heights[1]);
+  }
   assert.deepEqual(
     requests.sort(),
     [
