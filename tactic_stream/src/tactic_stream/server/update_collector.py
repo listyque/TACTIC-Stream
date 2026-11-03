@@ -22,27 +22,38 @@ class UpdateCollector:
 
     def tick(self):
         changed = self.dirty or not self.feed.exists()
+        seen = set()
         for path in [*self.directory.glob('*.json'), *self.directory.glob('*.pending')]:
             try:
                 stat = path.stat()
             except FileNotFoundError:
                 continue
+            seen.add(path)
             stamp = (stat.st_mtime_ns, stat.st_ino)
             if self.stamps.get(path) == stamp:
                 continue
             try:
                 value = read_text(path)
             except FileNotFoundError:
+                seen.discard(path)
                 continue
-            project, search_type, revision, *audience = json.loads(value)
+            try:
+                project, search_type, revision, *audience = json.loads(value)
+                committed = int(audience[1]) if len(audience) > 1 else stat.st_mtime_ns
+            except (ValueError, TypeError, IndexError):
+                path.unlink(missing_ok=True)
+                seen.discard(path)
+                self.stamps.pop(path, None)
+                continue
             key = project, search_type, audience[0] if audience else ''
-            committed = audience[1] if len(audience) > 1 else stat.st_mtime_ns
             if self.revisions.get(key, ('', 0))[1] > committed:
                 self.stamps[path] = stamp
                 continue
             changed |= self.revisions.get(key, (None,))[0] != revision
             self.revisions[key] = revision, committed
             self.stamps[path] = stamp
+        if len(self.stamps) > len(seen):
+            self.stamps = {path: stamp for path, stamp in self.stamps.items() if path in seen}
         self.dirty = changed
         if changed:
             try:
@@ -55,9 +66,19 @@ class UpdateCollector:
                 try:
                     # Keep the canonical record for collector restarts; never replace a newer revision.
                     target = path.with_name(path.name.split('.')[0] + '.json')
-                    pending = json.loads(read_text(path))
+                    try:
+                        pending = json.loads(read_text(path))
+                        pending_ts = int(pending[-1])
+                    except (ValueError, TypeError, IndexError):
+                        path.unlink(missing_ok=True)
+                        self.stamps.pop(path, None)
+                        continue
                     with byte_lock(target):
-                        if target.exists() and json.loads(read_text(target))[-1] > pending[-1]:
+                        try:
+                            target_ts = int(json.loads(read_text(target))[-1]) if target.exists() else -1
+                        except (ValueError, TypeError, IndexError):
+                            target_ts = -1
+                        if target_ts > pending_ts:
                             path.unlink()
                         else:
                             replace(path, target)

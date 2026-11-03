@@ -131,6 +131,18 @@ def details(payload):
         raise ValueError('Invalid transaction XML')
     hidden = 0
     security = Environment.get_security()
+    note_codes = [node.get('search_code') for node in root if node.get('search_type', '').split('?')[0] == 'sthpw/note' and node.get('search_code')]
+    note_ids = [node.get('search_id') for node in root if node.get('search_type', '').split('?')[0] == 'sthpw/note' and not node.get('search_code') and node.get('search_id')]
+    visible_note_codes = set()
+    visible_note_ids = set()
+    if note_codes:
+        note_search = Search('sthpw/note')
+        note_search.add_filters('code', note_codes)
+        visible_note_codes = {str(item.get_code()) for item in note_search.get_sobjects()}
+    if note_ids:
+        note_search = Search('sthpw/note')
+        note_search.add_filters('id', note_ids)
+        visible_note_ids = {str(item.get_id()) for item in note_search.get_sobjects()}
     for node in list(root):
         base = node.get('search_type', '').split('?')[0]
         if base:
@@ -144,10 +156,10 @@ def details(payload):
             if not security.check_access('search_type', keys, 'view', default='allow' if base.startswith('sthpw/') else 'deny'):
                 root.remove(node); hidden += 1; continue
         if base == 'sthpw/note':
-            note_search = Search(base)
-            note_search.add_filter('code' if node.get('search_code') else 'id', node.get('search_code') or node.get('search_id'))
-            note = note_search.get_sobject()
-            if not note:
+            if node.get('search_code'):
+                if str(node.get('search_code')) not in visible_note_codes:
+                    root.remove(node); hidden += 1; continue
+            elif not node.get('search_id') or str(node.get('search_id')) not in visible_note_ids:
                 root.remove(node); hidden += 1; continue
         for element in node.iter():
             for name in list(element.attrib):

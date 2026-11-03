@@ -202,7 +202,7 @@ def messages_request(action, payload, uploads=None):
         command.get_transaction().set_sync(False)
 
         def execute():
-            if action != 'people' and any(_access(kind, 'edit', 'deny') for kind in CHAT_TYPES):
+            if action not in ('people', 'file', 'file-info') and any(_access(kind, 'edit', 'deny') for kind in CHAT_TYPES):
                 sql = Search('sthpw/message').get_sql()
                 # ponytail: serialize chat metadata in sthpw; replace this coarse lock if chat load warrants it.
                 sql.get_database_impl().lock_collection_table(sql, 'message')

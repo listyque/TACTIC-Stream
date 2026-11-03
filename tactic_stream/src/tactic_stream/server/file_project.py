@@ -13,10 +13,17 @@ from pyasm.common.errors import AuthenticationError, SecurityException
 from tactic.command.file_project_cmd import TRANSFER_LIMIT
 
 
+_ATTACHMENT_SUFFIXES = {
+    '.html', '.htm', '.xhtml', '.svg', '.svgz', '.xml', '.xsl',
+    '.js', '.mjs', '.cjs', '.swf', '.mhtml',
+}
+
+
 class FileProjectStaticFiles(StaticFiles):
-    def __init__(self, *args, private_jobs=None, **kwargs):
+    def __init__(self, *args, private_jobs=None, api=None, **kwargs):
         super().__init__(*args, **kwargs)
         self.private_jobs=Path(private_jobs).resolve() if private_jobs else None
+        self.api = api
 
     async def get_response(self, path, scope):
         absolute = (Path(self.directory) / path).resolve()
@@ -24,7 +31,42 @@ class FileProjectStaticFiles(StaticFiles):
             raise HTTPException(404)
         if any(part.casefold() == 'file-projects' or part.casefold().endswith('.file-projects') for part in absolute.parts):
             raise HTTPException(404)
-        return await super().get_response(path, scope)
+        if self.api is not None:
+            def check_auth():
+                from pyasm.common import Config
+                from pyasm.search.search import RequestContext, request_context
+                with request_context(RequestContext(self.api.store, 'admin')):
+                    if Config.get_value('security', 'require_asset_auth') != 'true':
+                        return True
+                request = Request(scope)
+                ticket = (
+                    request.headers.get('X-Tactic-Ticket')
+                    or request.query_params.get('ticket')
+                    or request.query_params.get('login_ticket')
+                    or request.cookies.get('login_ticket')
+                    or ''
+                )
+                auth_header = request.headers.get('Authorization', '')
+                if not ticket and auth_header.lower().startswith('bearer '):
+                    ticket = auth_header[7:].strip()
+                if not ticket:
+                    return False
+                try:
+                    self.api.auth.validate(ticket)
+                    return True
+                except Exception:
+                    return False
+            if not await run_in_threadpool(check_auth):
+                raise HTTPException(403)
+        response = await super().get_response(path, scope)
+        response.headers.setdefault('X-Content-Type-Options', 'nosniff')
+        response.headers.setdefault(
+            'Content-Security-Policy',
+            "default-src 'none'; img-src 'self' data:; media-src 'self'; style-src 'unsafe-inline'; sandbox",
+        )
+        if absolute.suffix.lower() in _ATTACHMENT_SUFFIXES:
+            response.headers.setdefault('Content-Disposition', 'attachment')
+        return response
 
 
 def install_routes(app, api):

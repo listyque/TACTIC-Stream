@@ -1,10 +1,11 @@
 """Refresh the two native Handler algorithms used by browser preparation (EPL-1.0)."""
 import ast
+import os
 import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-HANDLER = Path('D:/grav/Tactic Stream/TH/thlib')
+HANDLER = Path(os.environ.get('TACTIC_HANDLER_ROOT') or (ROOT.parents[1] / 'TH')) / 'thlib' 
 
 # Native range metadata, calculated from present frames rather than enumerating gaps.
 FRAME_RANGES = '''    def get_sequence_frameranges(self, padding=False):

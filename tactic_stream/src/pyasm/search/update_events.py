@@ -29,7 +29,11 @@ def publish_changes(data_dir, changes):
         try:
             target = directory / (name + '.json')
             with byte_lock(target):
-                if target.exists() and json.loads(read_text(target))[-1] > json.loads(read_text(temporary))[-1]:
+                try:
+                    existing_ts = json.loads(read_text(target))[-1] if target.exists() else -1
+                except (ValueError, TypeError, IndexError):
+                    existing_ts = -1
+                if existing_ts > json.loads(read_text(temporary))[-1]:
                     temporary.unlink()
                 else:
                     replace(temporary, target)
@@ -113,6 +117,6 @@ def publish_transaction(transaction):
     if changes:
         try:
             publish_changes(context.store.data_dir, changes)
-        except OSError:
+        except Exception:
             # The data is committed: never make the caller retry a successful write.
             logging.getLogger(__name__).exception('Committed changes could not notify SSE clients; reconnect to resynchronise')

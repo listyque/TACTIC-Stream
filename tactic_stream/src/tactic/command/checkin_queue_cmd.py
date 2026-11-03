@@ -158,109 +158,122 @@ class SubmitCheckinChunkCmd(Command):
             digest.update(hashlib.sha256(content).digest())
         digest = digest.hexdigest()
         from pyasm.search import Transaction
+        from uuid import uuid4
         uploaded = _UploadedParts()
         Transaction.get().register(uploaded)
-        with queue_lock():
-            search = Search('sthpw/queue'); search.add_filter('code', code)
-            batch = search.get_sobject()
-            if batch is None:
-                batch = new_row(code, BATCH_QUEUE, 'staging', dict(chunks={}, jobs={}, updates={}, revision=0))
-            batch = owned_batch(code)
-            data = batch.get_json_value('data')
-            if chunk_id in data['chunks']:
-                if data['chunks'][chunk_id] != digest:
-                    raise UserException('A check-in chunk identity was reused with different content')
-                return dict(batch_id=self.kwargs['batch_id'], accepted=True, duplicate=True)
-            if batch.get_value('state') != 'staging':
-                raise UserException('This check-in batch no longer accepts files')
-            if len(data['chunks']) >= 10000:
-                raise UserException('Check-in batch has too many chunks')
-            jobs, values = {}, {}
-            for operation in operations:
-                if not isinstance(operation, dict) or set(operation) != {'operation_id', 'options'}:
-                    raise ValueError('Invalid queued check-in')
-                op_id = identity(operation['operation_id'])
-                options = operation['options']
-                if not isinstance(options, dict) or set(options) - {'search_key', 'context', 'process', 'description', 'source_files', 'templates', 'padding', 'repository_alias', 'keep_file_name', 'is_revision', 'version', 'explicit_filename', 'update_versionless', 'only_versionless', 'create_icon', 'versionless_mode', 'application_info'}:
-                    raise ValueError('Invalid queued check-in options')
-                records = options.get('source_files')
-                matched_files(records, options.get('templates'), options.get('padding', 3), max_files=MAX_FILES)
-                if any(record.get('sha256') is not None and not re.fullmatch(r'[a-f0-9]{64}', str(record['sha256'])) for record in records):
-                    raise ValueError('Invalid check-in source checksum')
-                parent = SearchKey.get_by_search_key(options.get('search_key'))
-                if parent is None or parent.get_project_code() != Project.get_project_code():
-                    raise SecurityException('Check-in requires a visible object in its project')
-                parent._check_business_write('edit')
-                if op_id in data['jobs']:
-                    job = Search.get_by_code('sthpw/queue', data['jobs'][op_id])
-                    if job.get_json_value('data')['options'] != options:
-                        raise UserException('A check-in operation identity was reused with different options')
-                else:
-                    if len(data['jobs']) >= MAX_OPERATIONS:
-                        raise UserException('Check-in batch has too many operations')
-                    total = data.get('file_count', 0) + len(records)
-                    if total > MAX_FILES:
-                        raise UserException('Check-in batch has too many files; split the selection')
-                    data['file_count'] = total
-                    job = new_row(code + '_' + op_id, QUEUE, 'staging',
-                                  dict(batch_code=code, operation_id=op_id, options=options, parts={}))
-                    data['jobs'][op_id] = job.get_code()
-                jobs[op_id] = job
-                values[op_id] = job.get_json_value('data')
+        prepared_parts = []
+        root_dir = staging_root(code)
+        try:
             for piece, (_name, content) in zip(pieces, uploads):
                 if not isinstance(piece, dict) or set(piece) != {'operation_id', 'file_index', 'offset'}:
                     raise ValueError('Invalid check-in file part')
-                op_id = identity(piece['operation_id'])
-                if op_id not in data['jobs']:
-                    raise ValueError('File part has no check-in operation')
-                job = jobs.get(op_id) or Search.get_by_code('sthpw/queue', data['jobs'][op_id])
-                if job.get_value('state') != 'staging':
-                    raise UserException('This operation no longer accepts files')
-                if op_id not in values:
-                    values[op_id] = job.get_json_value('data')
-                value = values[op_id]
-                index, offset = piece['file_index'], piece['offset']
-                records = value['options']['source_files']
-                if type(index) is not int or not 0 <= index < len(records) or type(offset) is not int or offset < 0 or offset + len(content) > records[index]['size'] or not content and records[index]['size']:
-                    raise ValueError('Invalid check-in file part range')
-                parts = value['parts'].setdefault(str(index), {})
-                if str(offset) in parts:
-                    raise UserException('File part overlaps an accepted part')
-                if any(offset < int(start) + part['size'] and int(start) < offset + len(content) for start, part in parts.items()):
-                    raise UserException('File parts overlap')
                 sha = hashlib.sha256(content).hexdigest()
-                path = staging_root(code) / op_id / str(index) / (str(offset) + '_' + sha)
-                if not path.resolve().is_relative_to(staging_root(code).resolve()):
-                    raise SecurityException('File part points outside staging')
-                path.parent.mkdir(parents=True, exist_ok=True)
-                if not path.exists():
-                    uploaded.paths.append(path)
-                temporary = path.with_suffix('.part')
-                try:
-                    with temporary.open('wb') as stream:
-                        stream.write(content); stream.flush(); os.fsync(stream.fileno())
+                root_dir.mkdir(parents=True, exist_ok=True)
+                temporary = root_dir / ('.upload_' + uuid4().hex + '.part')
+                with temporary.open('wb') as stream:
+                    stream.write(content); stream.flush(); os.fsync(stream.fileno())
+                prepared_parts.append((piece, content, sha, temporary))
+            with queue_lock():
+                search = Search('sthpw/queue'); search.add_filter('code', code)
+                batch = search.get_sobject()
+                if batch is None:
+                    batch = new_row(code, BATCH_QUEUE, 'staging', dict(chunks={}, jobs={}, updates={}, revision=0))
+                batch = owned_batch(code)
+                data = batch.get_json_value('data')
+                if chunk_id in data['chunks']:
+                    if data['chunks'][chunk_id] != digest:
+                        raise UserException('A check-in chunk identity was reused with different content')
+                    return dict(batch_id=self.kwargs['batch_id'], accepted=True, duplicate=True)
+                if batch.get_value('state') != 'staging':
+                    raise UserException('This check-in batch no longer accepts files')
+                if len(data['chunks']) >= 10000:
+                    raise UserException('Check-in batch has too many chunks')
+                jobs, values = {}, {}
+                for operation in operations:
+                    if not isinstance(operation, dict) or set(operation) != {'operation_id', 'options'}:
+                        raise ValueError('Invalid queued check-in')
+                    op_id = identity(operation['operation_id'])
+                    options = operation['options']
+                    if not isinstance(options, dict) or set(options) - {'search_key', 'context', 'process', 'description', 'source_files', 'templates', 'padding', 'repository_alias', 'keep_file_name', 'is_revision', 'version', 'explicit_filename', 'update_versionless', 'only_versionless', 'create_icon', 'versionless_mode', 'application_info'}:
+                        raise ValueError('Invalid queued check-in options')
+                    records = options.get('source_files')
+                    matched_files(records, options.get('templates'), options.get('padding', 3), max_files=MAX_FILES)
+                    if any(record.get('sha256') is not None and not re.fullmatch(r'[a-f0-9]{64}', str(record['sha256'])) for record in records):
+                        raise ValueError('Invalid check-in source checksum')
+                    parent = SearchKey.get_by_search_key(options.get('search_key'))
+                    if parent is None or parent.get_project_code() != Project.get_project_code():
+                        raise SecurityException('Check-in requires a visible object in its project')
+                    parent._check_business_write('edit')
+                    if op_id in data['jobs']:
+                        job = Search.get_by_code('sthpw/queue', data['jobs'][op_id])
+                        if job.get_json_value('data')['options'] != options:
+                            raise UserException('A check-in operation identity was reused with different options')
+                    else:
+                        if len(data['jobs']) >= MAX_OPERATIONS:
+                            raise UserException('Check-in batch has too many operations')
+                        total = data.get('file_count', 0) + len(records)
+                        if total > MAX_FILES:
+                            raise UserException('Check-in batch has too many files; split the selection')
+                        data['file_count'] = total
+                        job = new_row(code + '_' + op_id, QUEUE, 'staging',
+                                      dict(batch_code=code, operation_id=op_id, options=options, parts={}))
+                        data['jobs'][op_id] = job.get_code()
+                    jobs[op_id] = job
+                    values[op_id] = job.get_json_value('data')
+                for piece, content, sha, temporary in prepared_parts:
+                    op_id = identity(piece['operation_id'])
+                    if op_id not in data['jobs']:
+                        raise ValueError('File part has no check-in operation')
+                    job = jobs.get(op_id) or Search.get_by_code('sthpw/queue', data['jobs'][op_id])
+                    if job.get_value('state') != 'staging':
+                        raise UserException('This operation no longer accepts files')
+                    if op_id not in values:
+                        values[op_id] = job.get_json_value('data')
+                    value = values[op_id]
+                    index, offset = piece['file_index'], piece['offset']
+                    records = value['options']['source_files']
+                    if type(index) is not int or not 0 <= index < len(records) or type(offset) is not int or offset < 0 or offset + len(content) > records[index]['size'] or not content and records[index]['size']:
+                        raise ValueError('Invalid check-in file part range')
+                    parts = value['parts'].setdefault(str(index), {})
+                    if str(offset) in parts:
+                        raise UserException('File part overlaps an accepted part')
+                    if any(offset < int(start) + part['size'] and int(start) < offset + len(content) for start, part in parts.items()):
+                        raise UserException('File parts overlap')
+                    path = root_dir / op_id / str(index) / (str(offset) + '_' + sha)
+                    if not path.resolve().is_relative_to(root_dir.resolve()):
+                        raise SecurityException('File part points outside staging')
+                    path.parent.mkdir(parents=True, exist_ok=True)
+                    if not path.exists():
+                        uploaded.paths.append(path)
                     os.replace(temporary, path)
-                finally:
-                    temporary.unlink(missing_ok=True)
-                parts[str(offset)] = dict(size=len(content), sha256=sha)
-                jobs[op_id] = job
-            for op_id, job in jobs.items():
-                value = values[op_id]
-                ready = len(value['parts']) == len(value['options']['source_files'])
-                for index, record in enumerate(value['options']['source_files']):
-                    position = 0
-                    for start, part in sorted(value['parts'].get(str(index), {}).items(), key=lambda item:int(item[0])):
-                        if int(start) != position:
-                            ready = False
-                        position = int(start) + part['size']
-                    ready = ready and position == record['size']
-                if ready:
-                    job.set_value('state', 'pending')
-                job.set_json_value('data', value)
-                save_queue(job)
-                record_update(data, job)
-            data['chunks'][chunk_id] = digest
-            batch.set_json_value('data', data); save_queue(batch)
+                    parts[str(offset)] = dict(size=len(content), sha256=sha)
+                    jobs[op_id] = job
+                for op_id, job in jobs.items():
+                    value = values[op_id]
+                    ready = len(value['parts']) == len(value['options']['source_files'])
+                    if ready:
+                        for index, record in enumerate(value['options']['source_files']):
+                            position = 0
+                            for start, part in sorted(value['parts'].get(str(index), {}).items(), key=lambda item:int(item[0])):
+                                if int(start) != position:
+                                    ready = False
+                                    break
+                                position = int(start) + part['size']
+                            if not ready or position != record['size']:
+                                ready = False
+                                break
+                    if ready:
+                        job.set_value('state', 'pending')
+                    job.set_json_value('data', value)
+                    save_queue(job)
+                    record_update(data, job)
+                data['chunks'][chunk_id] = digest
+                batch.set_json_value('data', data); save_queue(batch)
+        finally:
+            for _piece, _content, _sha, temporary in prepared_parts:
+                temporary.unlink(missing_ok=True)
+            if root_dir.exists() and not any(root_dir.iterdir()):
+                root_dir.rmdir()
         return dict(batch_id=self.kwargs['batch_id'], accepted=True, duplicate=False)
 
 
@@ -358,6 +371,10 @@ class CancelCheckinBatchCmd(Command):
             for job in search.get_sobjects() if data['jobs'] else []:
                 if job.get_value('state') in ('staging', 'pending'):
                     job.set_value('state', 'terminated'); save_queue(job); record_update(data, job)
+                    try:
+                        cleanup_job(job)
+                    except OSError:
+                        pass
             batch.set_json_value('data', data)
             batch.set_value('state', 'cancelled'); save_queue(batch)
             states = {job.get_json_value('data')['operation_id']: job.get_value('state')
@@ -366,10 +383,13 @@ class CancelCheckinBatchCmd(Command):
 
 
 def cleanup_job(job):
-    if job.get_value('command') == JOB_COMMAND and job.get_value('state') == 'complete':
+    if job and job.get_value('command') == JOB_COMMAND and job.get_value('state') in ('complete', 'error', 'terminated'):
         value = job.get_json_value('data')
-        path = staging_root(value['batch_code']) / identity(value['operation_id'])
-        if not path.resolve().is_relative_to(staging_root(value['batch_code']).resolve()):
+        batch_dir = staging_root(value['batch_code'])
+        path = batch_dir / identity(value['operation_id'])
+        if not path.resolve().is_relative_to(batch_dir.resolve()):
             raise SecurityException('Invalid staging cleanup directory')
         if path.exists():
             shutil.rmtree(path)
+        if batch_dir.exists() and not any(batch_dir.iterdir()):
+            batch_dir.rmdir()

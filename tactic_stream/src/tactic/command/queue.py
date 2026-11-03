@@ -364,13 +364,12 @@ class JobTask(SchedulerTask):
                     return
             if not completed:
                 Command.execute_cmd(_FinishJobsCmd(host=self.get_process_key(), job_id=job.get_id(), state='error', error=failure))
-            else:
-                from .checkin_queue_cmd import cleanup_job
-                saved = Search.get_by_id('sthpw/queue', job.get_id())
-                try:
-                    cleanup_job(saved)
-                except OSError:
-                    log.exception('Completed job staging cleanup failed: %s', job.get_code())
+            from .checkin_queue_cmd import cleanup_job
+            saved = Search.get_by_id('sthpw/queue', job.get_id())
+            try:
+                cleanup_job(saved)
+            except OSError:
+                log.exception('Completed job staging cleanup failed: %s', job.get_code())
             self.jobs_completed += 1
             log.info('Job %s: %s', job.get_code(), 'complete' if completed else 'error or cancelled')
         finally:

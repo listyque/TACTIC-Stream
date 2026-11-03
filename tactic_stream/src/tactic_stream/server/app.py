@@ -212,7 +212,7 @@ def create_app(data_dir: Path, thread_count=None, *, event_collector=True) -> Fa
     from tactic_stream.server.file_project import FileProjectStaticFiles
     for path, alias in repository_web_paths(roots, web_dirs):
         app.mount(path, FileProjectStaticFiles(directory=roots[alias], check_dir=False,
-            private_jobs=api.store.data_dir / 'temp/file-jobs'), name='repository-' + alias)
+            private_jobs=api.store.data_dir / 'temp/file-jobs', api=api), name='repository-' + alias)
 
     @app.get("/", include_in_schema=False)
     @app.get("/projects/{project}/", include_in_schema=False)

@@ -39,7 +39,7 @@ def check_modules(root):
             ), f"Control depends on {target_layer}: {path}"
 
 
-def sync(handler_root, check=False, copy_from=None):
+def sync(handler_root, check=False, copy_from=None, force=False):
     handler = Path(handler_root).resolve() / "thlib/ui/qml/tactic_frame"
     if copy_from:
         if check or copy_from not in ("stream", "handler"):
@@ -47,6 +47,16 @@ def sync(handler_root, check=False, copy_from=None):
         source, target = (
             (SOURCE, handler) if copy_from == "stream" else (handler, SOURCE)
         )
+        if not force and target.is_dir():
+            import subprocess
+            status = subprocess.run(
+                ["git", "-C", str(target), "status", "--porcelain", "--", str(target)],
+                capture_output=True, text=True, check=False,
+            )
+            if status.returncode == 0 and status.stdout.strip():
+                raise RuntimeError(
+                    f"Target Tactic Frame directory ({target}) has uncommitted changes; pass --force to overwrite:\n{status.stdout.strip()}"
+                )
         check_modules(source)
         files = portable_files(source)
         assert files, "No Tactic Frame modules to copy"
@@ -113,5 +123,6 @@ if __name__ == "__main__":
         choices=("stream", "handler"),
         help="Explicitly copy UI modules from this product",
     )
+    parser.add_argument("--force", action="store_true", help="Allow overwriting uncommitted target Frame changes")
     args = parser.parse_args()
-    sync(args.handler_root, args.check, args.copy_from)
+    sync(args.handler_root, args.check, args.copy_from, args.force)

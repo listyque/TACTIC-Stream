@@ -206,11 +206,13 @@ class Transaction(Base):
             except Exception:
                 self.rollback()
                 raise
-            from pyasm.search.update_events import publish_transaction
-            publish_transaction(self)
-            if self.file_journal:
-                self.file_journal.close(resolved=True)
-            self._reset()
+            try:
+                from pyasm.search.update_events import publish_transaction
+                publish_transaction(self)
+            finally:
+                if self.file_journal:
+                    self.file_journal.close(resolved=True)
+                self._reset()
             return
         self.counter -= 1
         if self.counter < 0:
@@ -236,11 +238,13 @@ class Transaction(Base):
             self.counter = 1
             self.rollback()
             raise
-        from pyasm.search.update_events import publish_transaction
-        publish_transaction(self)
-        if self.file_journal:
-            self.file_journal.close(resolved=True)
-        self._reset()
+        try:
+            from pyasm.search.update_events import publish_transaction
+            publish_transaction(self)
+        finally:
+            if self.file_journal:
+                self.file_journal.close(resolved=True)
+            self._reset()
 
     def abort(self):
         return self.rollback()

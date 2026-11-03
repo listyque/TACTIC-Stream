@@ -64,8 +64,8 @@ def deletion_groups(records):
     for related_type in dict.fromkeys(SearchType.get_related_types(base, direction='children')):
         if related_type in (base, 'sthpw/file'):
             continue
-        related = {item.get_id(): item for record in records
-                   for item in record.get_related_sobjects(related_type, show_retired=True)}
+        related = {item.get_id(): item for items in Search.get_related_by_sobjects(records, related_type, show_retired=True).values()
+                   for item in items}
         if related:
             groups.append(dict(search_type=related_type, title=SearchType.get(related_type).get_title(),
                                count=len(related), selected=related_type in ('sthpw/note', 'sthpw/task', 'sthpw/snapshot', 'sthpw/status_log'),
