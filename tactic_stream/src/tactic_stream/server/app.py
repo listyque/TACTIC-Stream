@@ -1095,7 +1095,7 @@ def create_app(data_dir: Path, thread_count=None, *, event_collector=True) -> Fa
         path = PurePosixPath(asset)
         if '\\' in asset or any(part in (".", "..") for part in asset.split('/')) or path.is_absolute():
             return Response(status_code=404)
-        content_type = {".js": "text/javascript", ".css": "text/css", ".ttf": "font/ttf", ".png": "image/png"}.get(path.suffix) if path.parts and path.parts[0] == 'assets' else None
+        content_type = {".js": "text/javascript", ".css": "text/css", ".ttf": "font/ttf", ".png": "image/png", ".ico": "image/x-icon"}.get(path.suffix) if path.parts and path.parts[0] == 'assets' else None
         if path.parts and path.parts[0] == 'assets' and path.name.endswith(('.js.map', '.css.map')):
             content_type = 'application/json'
         if path.parts[:2] == ('licenses', 'icon-fonts') and path.suffix in ('.txt', '.md'):
