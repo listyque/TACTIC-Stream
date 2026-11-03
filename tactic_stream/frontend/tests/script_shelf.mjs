@@ -40,7 +40,8 @@ for (const [title, language, script] of [
     'server_js',
     "return {project:server.get_project(), runtime:'server-js'};"
   ],
-  ['local', 'local_python', 'raise RuntimeError("must not run")']
+  ['local', 'local_python', 'raise RuntimeError("must not run")'],
+  ['dcc', 'dcc_python', 'raise RuntimeError("must not run")']
 ]) {
   await api('insert', [
     'config/custom_script',
@@ -113,6 +114,13 @@ await request('/admin/script-shelf/save', {
         description: '',
         icon: 'FAS_PLAY',
         script: 'demo/local'
+      },
+      {
+        id: 'dcc',
+        title: 'Maya',
+        description: '',
+        icon: 'FAS_PLAY',
+        script: 'demo/dcc'
       }
     ]
   }
@@ -199,18 +207,23 @@ try {
       .evaluate((node) => getComputedStyle(node).fontSize),
     '16px'
   );
-  assert(
-    await bar.getByRole('button', { name: 'Local', exact: true }).isDisabled()
-  );
-  const local = bar.getByRole('button', { name: 'Local', exact: true });
   assert.equal(
-    await local.locator('[data-frame="scriptShelfRuntime"]').innerText(),
-    'TH'
+    await bar.getByRole('button', { name: 'Local', exact: true }).count(),
+    0
   );
-  assert(
-    (await local.getAttribute('aria-description')).includes(
-      'TACTIC Handler only'
-    )
+  assert.equal(
+    await bar.getByRole('button', { name: 'Maya', exact: true }).count(),
+    0
+  );
+  assert.equal(
+    await bar.locator('[data-frame="scriptShelfRuntime"]').count(),
+    0
+  );
+  const stored = await request('/admin/script-shelf/read', { ticket, project });
+  assert.equal(
+    stored.shelves.find((row) => row.view === 'script_shelf@global')
+      .configuration.buttons.length,
+    5
   );
   assert(
     (

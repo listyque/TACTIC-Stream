@@ -7690,7 +7690,12 @@ var ru_default = {
 	"Search this page…": "Поиск по странице…",
 	"Choose a configured page filter": "Выберите настроенный фильтр страницы",
 	"Choose a suggestion or enter Field: value": "Выберите подсказку или введите Поле: значение",
-	"Choose a value": "Выберите значение"
+	"Choose a value": "Выберите значение",
+	Runners: "Раннеры",
+	"Clear a checkbox to deny a runner to a group. Any group denial wins. Unconfigured runners stay available; administrators are exempt.": "Снимите галочку, чтобы запретить раннер группе. Запрет в любой группе имеет приоритет. Без настроенного запрета доступ сохраняется; администратор имеет доступ всегда.",
+	"Your groups cannot run this script: %1": "Вашим группам запрещён запуск скрипта: %1",
+	"Custom scripts": "Кастомные скрипты",
+	"Clear a checkbox to deny a custom script to a group. Any group denial wins. Unconfigured scripts stay available; administrators are exempt.": "Снимите галочку, чтобы запретить кастомный скрипт группе. Запрет в любой группе имеет приоритет. Без настроенного запрета доступ сохраняется; администратор имеет доступ всегда."
 };
 //#endregion
 export { en_default as n, ru_default as t };

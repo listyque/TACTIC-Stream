@@ -2185,6 +2185,11 @@ var _sfc_main$17 = {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/core/strings.mjs
 var russian = {
+	"Custom scripts": "Кастомные скрипты",
+	"Clear a checkbox to deny a custom script to a group. Any group denial wins. Unconfigured scripts stay available; administrators are exempt.": "Снимите галочку, чтобы запретить кастомный скрипт группе. Запрет в любой группе имеет приоритет. Без настроенного запрета доступ сохраняется; администратор имеет доступ всегда.",
+	Runners: "Раннеры",
+	"Clear a checkbox to deny a runner to a group. Any group denial wins. Unconfigured runners stay available; administrators are exempt.": "Снимите галочку, чтобы запретить раннер группе. Запрет в любой группе имеет приоритет. Без настроенного запрета доступ сохраняется; администратор имеет доступ всегда.",
+	"Your groups cannot run this script: %1": "Вашим группам запрещён запуск скрипта: %1",
 	"Database resources": "Ресурсы БД",
 	"Project connections and schema updates": "Подключения проектов и обновление схем",
 	"Database resources require administrator access": "Управление ресурсами БД доступно только администратору",

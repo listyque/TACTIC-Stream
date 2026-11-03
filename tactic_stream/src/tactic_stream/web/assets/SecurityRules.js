@@ -26,7 +26,8 @@ var scopeLabels = {
 	link: "Sidebar links",
 	gear_menu: "Menu actions",
 	agent_tool: "AI tools",
-	mcp_tool: "MCP tools"
+	mcp_tool: "MCP tools",
+	script_runner: "Custom scripts"
 };
 function toolSettings(model, scope) {
 	const rules = model.records.filter((row) => (row.group || row.category) === scope);
@@ -227,7 +228,8 @@ var matrixScopes$1 = [
 	"gear_menu",
 	"search_type",
 	"process",
-	"tasks"
+	"tasks",
+	"script_runner"
 ];
 function initial() {
 	return {
@@ -494,6 +496,7 @@ var scopes = [
 	["search_type", "Search Types"],
 	["process", "Processes"],
 	["tasks", "Task statuses"],
+	["script_runner", "Custom scripts"],
 	["sobject", "Search Objects"],
 	["sobject_column", "Field access"],
 	["search_filter", "Search restrictions"],
@@ -530,6 +533,7 @@ var scopeDetails = {
 	search_type: ["sobject", "Control access to entity types in this project."],
 	process: ["workflow", "Control access to the project workflow processes."],
 	tasks: ["tasks", "Control access to task workflow statuses."],
+	script_runner: ["play", "Clear a checkbox to deny a custom script to a group. Any group denial wins. Unconfigured scripts stay available; administrators are exempt."],
 	sobject: ["sobject", "Set permissions for individual records or record keys."],
 	sobject_column: ["table-view", "Control access to individual entity fields."],
 	builtin: ["security", "Choose access to individual application features. Legacy rules are marked explicitly."],
@@ -544,6 +548,7 @@ var names = {
 	sobject: ["key"],
 	sobject_column: ["search_type", "column"],
 	builtin: ["key"],
+	script_runner: ["key"],
 	gear_menu: ["submenu", "label"],
 	search_filter: [
 		"search_type",
@@ -632,7 +637,11 @@ function describe(model, ui, width, height, language) {
 				"builtin"
 			]],
 			["Agent access", ["agent_tool", "mcp_tool"]],
-			["Interface", ["link", "gear_menu"]],
+			["Interface", [
+				"link",
+				"gear_menu",
+				"script_runner"
+			]],
 			["Data and workflow", [
 				"search_type",
 				"process",
@@ -1202,7 +1211,8 @@ var matrixScopes = [
 	"gear_menu",
 	"search_type",
 	"process",
-	"tasks"
+	"tasks",
+	"script_runner"
 ];
 var meta = /* @__PURE__ */ new Set([
 	"group",
@@ -1336,6 +1346,18 @@ function resolve(index, keys) {
 		"__DEFAULT__"
 	])) || "deny" : "deny";
 }
+function runnerDenied(document, metadata, identity, path, project, omit = []) {
+	const visited = /* @__PURE__ */ new Set();
+	const names = new Map(metadata.groups.map((group) => [group.label, group.identity]));
+	function denied(code) {
+		if (visited.has(code) || !document.groups[code]) return false;
+		visited.add(code);
+		const group = document.groups[code];
+		if (rules(group.xml).some((rule) => !(code === identity && omit.includes(rule.ruleIndex)) && (rule.group || rule.category) === "script_runner" && ["deny", "false"].includes(rule.access) && ["*", path].includes(rule.key) && ["*", project].includes(group.project || rule.project || "*"))) return true;
+		return group.subGroups.split("|").some((name) => names.has(name) && denied(names.get(name)));
+	}
+	return denied(identity);
+}
 function matrix(document, metadata, scope, project, targets, groups) {
 	return groups.map((group) => {
 		const identity = group.identity, settings = document.groups[identity], index = compile(document, metadata, identity);
@@ -1344,6 +1366,30 @@ function matrix(document, metadata, scope, project, targets, groups) {
 			const nativeScope = scope === "tasks" ? "process" : scope, bound = settings.project;
 			const targetKey = key(nativeScope, target.attributes, bound || target.attributes.project || "*");
 			const exact = records.filter((record) => key(record.group || record.category, record, bound || record.project || "*") === targetKey);
+			if (scope === "script_runner") {
+				const indices = exact.map((rule) => rule.ruleIndex);
+				if (index.has(key("__admin__", {}))) return {
+					group: identity,
+					checked: true,
+					inherited: !exact.length,
+					explicit: !!exact.length,
+					custom: false,
+					access: "allow",
+					locked: true,
+					ruleIndices: indices
+				};
+				const denied = runnerDenied(document, metadata, identity, target.attributes.key, project);
+				return {
+					group: identity,
+					checked: !denied,
+					inherited: !exact.length,
+					explicit: !!exact.length,
+					custom: false,
+					access: denied ? "deny" : "allow",
+					locked: !!(bound && bound !== project) || runnerDenied(document, metadata, identity, target.attributes.key, project, indices),
+					ruleIndices: indices
+				};
+			}
 			const keys = lookupKeys(scope, target.attributes, project), level = resolve(index, keys);
 			const custom = exact.some((record) => ![
 				"allow",
@@ -1845,7 +1891,7 @@ var _sfc_main = {
 			if (cell.custom || !inherit && cell.locked) return;
 			const settings = this.document.groups[cell.group];
 			for (const index of [...cell.ruleIndices].reverse()) settings.xml = changeRule(settings.xml, index);
-			if (!inherit) settings.xml = changeRule(settings.xml, -1, {
+			if (!inherit && (this.scope !== "script_runner" || cell.checked)) settings.xml = changeRule(settings.xml, -1, {
 				group: this.scope === "tasks" ? "process" : this.scope,
 				...this.matrixTargets[row].attributes,
 				access: cell.checked ? "deny" : "allow"

@@ -98,8 +98,10 @@ show Used on this tab. Help opens the general Help window at this article.
 
 ## Where a script runs
 
-Shelf actions marked **TH** require TACTIC Handler. Their tooltip says whether
-they use local Python or a connected DCC. They stay disabled in TACTIC Stream.
+Shelf buttons show a centered icon and their title without a TH badge.
+TACTIC Stream shows only buttons the current user can execute there; local
+Python and DCC actions are hidden. Saved shelf configurations are preserved
+and can still be managed in the editor. Tooltips describe the runtime.
 Server Python, Server JavaScript and browser JavaScript identify their runtime
 in the tooltip; the Stream result window repeats it, including on errors.
 
@@ -107,3 +109,27 @@ The saved script language determines its runtime, not its folder or title.
 Server Python is not a Handler script. A server trigger that expects event
 `input` must run from its configured event; clicking a shelf button does not
 provide a trigger payload.
+
+## Custom script access by group
+
+Open **Administration → Access rules → Custom scripts**, choose the project,
+and clear the group checkboxes for prohibited scripts. The table includes every
+active custom script: client scripts, server scripts, helpers and other stored
+languages. Search filters script paths and group names. The **All** row denies
+every custom script for that group. Save commits the draft; Reset discards it.
+Checking a box again removes its own denial. Remove inherited or All-row denials
+at their source. Any matching group denial wins; administrators are exempt.
+
+Shelf buttons inherit their script's access, including personal shelves. No rule
+means the previous access is preserved. Rules control explicit named execution;
+they do not change language capabilities or imports inside an allowed script.
+Refresh scripts/shelves after changing permissions or membership. Re-export an
+old Maya shelf to remove obsolete visible buttons; the updated connector also
+checks current permission when a cached button is clicked.
+
+Rules retain the native group `access_rules` XML format with
+`group="script_runner"`, `key="folder/title"`, `project="project_code"`,
+`access="deny"`. Script bodies, schema and other native permissions are unchanged.
+Legacy clients ignore this optional scope. Local Python and copied source are
+not a security sandbox: server data permissions remain authoritative. Reconnect
+old Maya sessions after updating Handler to load the updated connector.

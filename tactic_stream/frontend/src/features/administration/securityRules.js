@@ -16,7 +16,8 @@ export const matrixScopes = [
   'gear_menu',
   'search_type',
   'process',
-  'tasks'
+  'tasks',
+  'script_runner'
 ];
 const meta = new Set(['group', 'category', 'access', 'project', 'ruleIndex']);
 
@@ -183,6 +184,33 @@ function resolve(index, keys) {
       ) || 'deny'
     : 'deny';
 }
+function runnerDenied(document, metadata, identity, path, project, omit = []) {
+  const visited = new Set();
+  const names = new Map(
+    metadata.groups.map((group) => [group.label, group.identity])
+  );
+  function denied(code) {
+    if (visited.has(code) || !document.groups[code]) return false;
+    visited.add(code);
+    const group = document.groups[code];
+    if (
+      rules(group.xml).some(
+        (rule) =>
+          !(code === identity && omit.includes(rule.ruleIndex)) &&
+          (rule.group || rule.category) === 'script_runner' &&
+          ['deny', 'false'].includes(rule.access) &&
+          ['*', path].includes(rule.key) &&
+          ['*', project].includes(group.project || rule.project || '*')
+      )
+    )
+      return true;
+    return group.subGroups
+      .split('|')
+      .some((name) => names.has(name) && denied(names.get(name)));
+  }
+  return denied(identity);
+}
+
 export function matrix(document, metadata, scope, project, targets, groups) {
   return groups.map((group) => {
     const identity = group.identity,
@@ -205,6 +233,46 @@ export function matrix(document, metadata, scope, project, targets, groups) {
             bound || record.project || '*'
           ) === targetKey
       );
+      if (scope === 'script_runner') {
+        const indices = exact.map((rule) => rule.ruleIndex);
+        if (index.has(key('__admin__', {})))
+          return {
+            group: identity,
+            checked: true,
+            inherited: !exact.length,
+            explicit: !!exact.length,
+            custom: false,
+            access: 'allow',
+            locked: true,
+            ruleIndices: indices
+          };
+        const denied = runnerDenied(
+          document,
+          metadata,
+          identity,
+          target.attributes.key,
+          project
+        );
+        return {
+          group: identity,
+          checked: !denied,
+          inherited: !exact.length,
+          explicit: !!exact.length,
+          custom: false,
+          access: denied ? 'deny' : 'allow',
+          locked:
+            !!(bound && bound !== project) ||
+            runnerDenied(
+              document,
+              metadata,
+              identity,
+              target.attributes.key,
+              project,
+              indices
+            ),
+          ruleIndices: indices
+        };
+      }
       const keys = lookupKeys(scope, target.attributes, project),
         level = resolve(index, keys);
       const custom = exact.some(

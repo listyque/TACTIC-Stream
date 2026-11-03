@@ -18,6 +18,7 @@ def main():
     parser.add_argument("--handler-root", type=Path, required=True)
     parser.add_argument("--reference-archive", type=Path, required=True)
     parser.add_argument("--quick", action="store_true")
+    parser.add_argument("--screen", action="append", choices=("editor", "shelf", "bar", "triggers", "dcc", "server", "database", "database_batch"))
     args = parser.parse_args()
     handler = args.handler_root.resolve()
     reference = ROOT / ".tmp/b13/reference"
@@ -93,7 +94,7 @@ def main():
     path.write_text(json.dumps(result, indent=2), encoding="utf-8")
     try:
         variants = product(
-            SCREENS,
+            args.screen or SCREENS,
             (True, False),
             ["md3"] if args.quick else ["md3", "material5", "fluent"],
             [(True, "en")]

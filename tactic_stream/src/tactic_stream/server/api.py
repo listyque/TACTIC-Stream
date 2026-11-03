@@ -942,6 +942,12 @@ class ApiXMLRPC:
     def execute_js_script(self, ticket, script_path, kwargs={}):
         from tactic.command import JsCmd
         from pyasm.command import Command
+        if script_path:
+            from tactic_stream.server.script_access import query_runner_access
+            from pyasm.biz import Project
+            denied = json.loads(query_runner_access(Project.get_project_code()))['denied']
+            if '*' in denied or script_path in denied:
+                raise SecurityException('Your groups cannot run this script: ' + script_path)
         cmd = JsCmd(script_path=script_path, **kwargs)
         Command.execute_cmd(cmd)
         return {'status': 'OK', 'description': cmd.get_description(), 'info': cmd.get_info()}
@@ -1037,6 +1043,12 @@ class ApiXMLRPC:
         from tactic.command import PythonCmd
         if not isinstance(script_path, (str, type(None))) or not isinstance(kwargs, dict):
             raise ValueError('A script path and dictionary arguments are required')
+        if script_path:
+            from tactic_stream.server.script_access import query_runner_access
+            from pyasm.biz import Project
+            denied = json.loads(query_runner_access(Project.get_project_code()))['denied']
+            if '*' in denied or script_path in denied:
+                raise SecurityException('Your groups cannot run this script: ' + script_path)
         if not script_path and not (kwargs.get('code') or kwargs.get('file_path')):
             raise ValueError('A saved script path, inline code or file path is required')
         for name in ('code', 'file_path'):

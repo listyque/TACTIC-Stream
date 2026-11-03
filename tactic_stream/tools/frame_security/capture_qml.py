@@ -5,7 +5,7 @@ from pathlib import Path
 import sys
 
 REPO = Path(__file__).resolve().parents[2]
-TH = Path('D:/grav/Tactic Stream/TH')
+TH = Path(os.environ.get('TACTIC_HANDLER_ROOT', 'D:/grav/Tactic Stream/TH'))
 HERE = Path(__file__).resolve().parent
 OUT = HERE / 'output'
 OUT.mkdir(exist_ok=True)
@@ -29,6 +29,8 @@ for name in ('segoeui.ttf', 'seguisb.ttf'):
     QFontDatabase.addApplicationFont('C:/Windows/Fonts/' + name)
 samples = []
 cases = json.loads((HERE / 'cases.json').read_text())
+if os.environ.get('FRAME_CAPTURE_PHASES'):
+    cases = [case for case in cases if case['phase'] in os.environ['FRAME_CAPTURE_PHASES'].split(',')]
 quick = os.environ.get('FRAME_CAPTURE_QUICK') == '1'
 for mode in ('dark',) if quick else ('dark', 'light'):
     for language in ('en',) if quick else ('en', 'ru'):
@@ -41,7 +43,10 @@ for mode in ('dark',) if quick else ('dark', 'light'):
                 seed_security(editor, group_count=12, row_count=40)
                 catalog = dict(document=editor.document, metadata=editor.metadata, canWrite=True, identity='demo', revision='fixture-revision')
                 (OUT / 'catalog.json').write_text(json.dumps(catalog, ensure_ascii=False), encoding='utf-8')
-                component = QQmlComponent(fixture.fixture.engine, QUrl.fromLocalFile(str(HERE / 'SecurityHarness.qml')))
+                component = QQmlComponent(fixture.fixture.engine)
+                harness = (HERE / 'SecurityHarness.qml').read_text(encoding='utf-8')
+                harness = harness.replace('D:/grav/Tactic Stream/TH', TH.as_posix())
+                component.setData(harness.encode('utf-8'), QUrl.fromLocalFile(str(HERE / 'SecurityHarness.qml')))
                 assert not component.isError(), [error.toString() for error in component.errors()]
                 window = component.create()
                 assert window is not None, [error.toString() for error in component.errors()]

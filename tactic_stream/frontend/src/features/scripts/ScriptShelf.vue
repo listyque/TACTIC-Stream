@@ -470,14 +470,16 @@ async function run(button) {
   }
 }
 const barButtons = computed(() =>
-  (effective.value?.configuration.buttons || []).map((button) => ({
-    ...button,
-    buttonId: button.id,
-    iconName: button.icon,
-    language: script(button.script)?.language || '',
-    available: runnable(button),
-    running: running.value === button.id
-  }))
+  (effective.value?.configuration.buttons || [])
+    .filter(runnable)
+    .map((button) => ({
+      ...button,
+      buttonId: button.id,
+      iconName: button.icon,
+      language: script(button.script)?.language || '',
+      available: runnable(button),
+      running: running.value === button.id
+    }))
 );
 function runButton(id) {
   const button = effective.value?.configuration.buttons.find(

@@ -8,6 +8,8 @@ from pyasm.common.errors import SecurityException
 from pyasm.search import Search, SearchType
 from tactic_stream.server.script_history import script_history_request
 from tactic_stream.server.widget_configuration import WidgetConfigConflict
+from tactic_stream.server.script_access import query_runner_access
+from pyasm.biz import Project
 
 TYPE = 'config/custom_script'
 LANGUAGES = ('python', 'javascript', 'server_js')
@@ -39,7 +41,10 @@ def describe(item):
 
 def read_scripts():
     items = records()
-    return dict(scripts=[describe(item) for item in items], revision=revision(items),
+    denied = json.loads(query_runner_access(Project.get_project_code()))['denied']
+    visible = [item for item in items if '*' not in denied and '/'.join(filter(None, (
+        item.get_value('folder'), item.get_value('title')))) not in denied]
+    return dict(scripts=[describe(item) for item in visible], revision=revision(items),
         canEdit=Environment.get_security().is_admin())
 
 

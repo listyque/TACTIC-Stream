@@ -34,5 +34,8 @@
  {"phase":"builtin-legacy","actions":[{"type":"scope","value":"builtin"},{"type":"click","id":"adminAddAccessRule"}]},
  {"phase":"builtin-server","actions":[{"type":"feature","value":"view_private_notes"}]},
  {"phase":"builtin-allowed","actions":[{"type":"click","id":"adminAccessLevel_allow"}]},
- {"phase":"builtin-inherited","actions":[{"type":"focus","id":"adminRemoveAccessRule"},{"type":"click","id":"adminRemoveAccessRule"}]}
+ {"phase":"builtin-inherited","actions":[{"type":"focus","id":"adminRemoveAccessRule"},{"type":"click","id":"adminRemoveAccessRule"}]},
+ {"phase":"runners","actions":[{"type":"scope","value":"script_runner"}]},
+ {"phase":"runners-denied","actions":[{"type":"click","id":"adminSecurityCell_1_0"}]},
+ {"phase":"runners-restored","actions":[{"type":"click","id":"adminSecurityCell_1_0"}]}
 ]

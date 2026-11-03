@@ -24,7 +24,8 @@ const scopeLabels = {
     link: 'Sidebar links',
     gear_menu: 'Menu actions',
     agent_tool: 'AI tools',
-    mcp_tool: 'MCP tools'
+    mcp_tool: 'MCP tools',
+    script_runner: 'Custom scripts'
 };
 
 export function toolSettings(model, scope) {

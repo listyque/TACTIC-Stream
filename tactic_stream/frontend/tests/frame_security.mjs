@@ -14,6 +14,14 @@ const native = JSON.parse(await readFile(out + 'qml.json', 'utf8')),
   cases = JSON.parse(
     await readFile(repo + 'tools/frame_security/cases.json', 'utf8')
   );
+if (process.env.FRAME_CAPTURE_PHASES) {
+  const selected = process.env.FRAME_CAPTURE_PHASES.split(',');
+  cases.splice(
+    0,
+    cases.length,
+    ...cases.filter((entry) => selected.includes(entry.phase))
+  );
+}
 for (const [name, hash] of Object.entries(native.sha256))
   assert.equal(
     createHash('sha256')
@@ -25,7 +33,13 @@ for (const [name, hash] of Object.entries(native.sha256))
 for (const [name, hash] of Object.entries(native.nativeSources))
   assert.equal(
     createHash('sha256')
-      .update(await readFile('D:/grav/Tactic Stream/TH/' + name))
+      .update(
+        await readFile(
+          (process.env.TACTIC_HANDLER_ROOT || 'D:/grav/Tactic Stream/TH') +
+            '/' +
+            name
+        )
+      )
       .digest('hex'),
     hash,
     'stale native renderer: ' + name

@@ -9,6 +9,8 @@ from pyasm.common.errors import SecurityException
 from pyasm.search import Search, SearchType
 from tactic_stream.server.search_configuration import configuration_records, parse_xml, revision
 from tactic_stream.server.widget_configuration import WidgetConfigConflict
+from tactic_stream.server.script_access import query_runner_access
+from pyasm.biz import Project
 
 CATEGORY = 'script_shelf'
 PREFIX = 'script_shelf@'
@@ -84,6 +86,7 @@ def read_shelves():
             row.update(valid=False, error=str(error))
         rows.append(row)
     scripts = []
+    denied = json.loads(query_runner_access(Project.get_project_code()))['denied']
     if Environment.get_security().check_access('search_type', 'config/custom_script', 'view'):
         for item in Search('config/custom_script').get_sobjects():
             if item.get_value('s_status', no_exception=True) == 'retired':
@@ -92,9 +95,11 @@ def read_shelves():
             folder = (item.get_value('folder') or '').replace('\\', '/').strip('/')
             title = item.get_value('title') or ''
             path = '/'.join(part for part in (folder, title) if part)
+            if '*' in denied or path in denied:
+                continue
             scripts.append(dict(path=path, title=title, language=language, runnable=language in LANGUAGES,
                 executable=bool((item.get_value('script') or '').strip()) and (language == 'javascript' or language in ('python', 'server_js') and Environment.get_security().is_admin())))
-    return dict(shelves=rows, scripts=sorted(scripts, key=lambda item: item['path'].casefold()),
+    return dict(shelves=rows, scripts=sorted(scripts, key=lambda item: item['path'].casefold()), deniedRunners=denied,
         revision=revision(records), canManage=can_manage(), canWrite=Environment.get_security().is_admin())
 
 
@@ -151,6 +156,9 @@ def script_shelf_request(action, payload):
         path = payload.get('path')
         if not isinstance(path, str) or not path or len(path) > 1024 or '\\' in path or '\x00' in path:
             raise ValueError('Invalid saved script path')
+        denied = json.loads(query_runner_access(Project.get_project_code()))['denied']
+        if '*' in denied or path in denied:
+            raise SecurityException('Your groups cannot run this script: ' + path)
         if not Environment.get_security().check_access('search_type', 'config/custom_script', 'view'):
             raise SecurityException('Saved scripts are not accessible')
         folder, _, title = path.rpartition('/')

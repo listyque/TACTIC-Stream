@@ -25320,23 +25320,14 @@ function action(record, running, language, height) {
 			type: "run",
 			buttonId: record.buttonId
 		},
-		children: [
-			node("Icon", "scriptShelfActionIcon", rect$1(runtime.handlerOnly ? 2 : 12, 1, 16, 16), {
-				icon: record.running ? "hourglass-empty" : record.iconName,
-				color: enabled ? "primaryText" : "disabledText"
-			}),
-			label("scriptShelfRuntime", rect$1(21, 1, 19, 16), "TH", {
-				visible: runtime.handlerOnly,
-				fontRole: "caption",
-				align: "center",
-				color: enabled ? "secondaryText" : "disabledText"
-			}),
-			label("scriptShelfActionLabel", rect$1(0, height - 16, 40, 15), record.title, {
-				fontRole: "caption",
-				align: "center",
-				color: enabled ? "primaryText" : "disabledText"
-			})
-		]
+		children: [node("Icon", "scriptShelfActionIcon", rect$1(12, 1, 16, 16), {
+			icon: record.running ? "hourglass-empty" : record.iconName,
+			color: enabled ? "primaryText" : "disabledText"
+		}), label("scriptShelfActionLabel", rect$1(0, height - 16, 40, 15), record.title, {
+			fontRole: "caption",
+			align: "center",
+			color: enabled ? "primaryText" : "disabledText"
+		})]
 	})] };
 }
 //#endregion
@@ -25761,7 +25752,7 @@ var _sfc_main$31 = {
 				if (id === generation) running.value = "";
 			}
 		}
-		const barButtons = computed(() => (effective.value?.configuration.buttons || []).map((button) => ({
+		const barButtons = computed(() => (effective.value?.configuration.buttons || []).filter(runnable).map((button) => ({
 			...button,
 			buttonId: button.id,
 			iconName: button.icon,

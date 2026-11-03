@@ -600,7 +600,7 @@ export default {
       const settings = this.document.groups[cell.group];
       for (const index of [...cell.ruleIndices].reverse())
         settings.xml = changeRule(settings.xml, index);
-      if (!inherit)
+      if (!inherit && (this.scope !== 'script_runner' || cell.checked))
         settings.xml = changeRule(settings.xml, -1, {
           group: this.scope === 'tasks' ? 'process' : this.scope,
           ...this.matrixTargets[row].attributes,

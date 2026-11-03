@@ -657,4 +657,28 @@ See [Plugins](plugins) for package creation, installation, activation, files and
 
 **Backend server** provides the shared worker-count, actual running-count and explicit server-restart controls. See [Server configuration](help://server_configuration).
 
-Administration header icon buttons (reload, Help, close and navigation collapse) are round. Text actions and local catalogue controls retain their existing shape.
+Administration page and plugin catalogue actions use compact square buttons. The outer window title bar retains round controls.
+
+## Custom script access by group
+
+Open **Administration → Access rules → Custom scripts**, choose the project,
+and clear the group checkboxes for prohibited scripts. The table includes every
+active custom script: client scripts, server scripts, helpers and other stored
+languages. Search filters script paths and group names. The **All** row denies
+every custom script for that group. Save commits the draft; Reset discards it.
+Checking a box again removes its own denial. Remove inherited or All-row denials
+at their source. Any matching group denial wins; administrators are exempt.
+
+Shelf buttons inherit their script's access, including personal shelves. No rule
+means the previous access is preserved. Rules control explicit named execution;
+they do not change language capabilities or imports inside an allowed script.
+Refresh scripts/shelves after changing permissions or membership. Re-export an
+old Maya shelf to remove obsolete visible buttons; the updated connector also
+checks current permission when a cached button is clicked.
+
+Rules retain the native group `access_rules` XML format with
+`group="script_runner"`, `key="folder/title"`, `project="project_code"`,
+`access="deny"`. Script bodies, schema and other native permissions are unchanged.
+Legacy clients ignore this optional scope. Local Python and copied source are
+not a security sandbox: server data permissions remain authoritative. Reconnect
+old Maya sessions after updating Handler to load the updated connector.

@@ -97,15 +97,12 @@ for (const language of [
   const marker = action.children.find(
     (child) => child.id === 'scriptShelfRuntime'
   );
-  assert.equal(
-    marker.visible,
-    language === 'local_python' || language === 'dcc_python'
-  );
+  assert.equal(marker, undefined);
   assert(action.toolTip.startsWith(runtime.label + '\n'));
   const icon = action.children.find(
     (child) => child.id === 'scriptShelfActionIcon'
   );
-  if (marker.visible) assert(icon.x + icon.width <= marker.x);
+  assert.equal(icon.x + icon.width / 2, action.width / 2);
 }
 assert.equal(Bar.scriptRuntime('local_python', 'ru').label, 'Только в ТХ');
 assert.equal(Bar.scriptRuntime('python', 'ru').label, 'Серверный Python');
