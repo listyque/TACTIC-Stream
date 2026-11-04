@@ -91,11 +91,11 @@ class TransactionLog(SObject):
         # Config.install.server/multisite are outside the owned local scope.
         log.commit(triggers=False)
         if length_before <= cutoff:
-            cls.create_sobject_log(log, transaction_data)
+            cls.create_sobject_log(log, transaction_data, xml=xml)
         return log
 
     @classmethod
-    def create_sobject_log(cls, log, transaction_data=None):
+    def create_sobject_log(cls, log, transaction_data=None, xml=None):
         from pyasm.search.transaction import Transaction
         transaction = Transaction.get()
         if transaction is None or not transaction.is_in_transaction() or Environment.get_security() is None:
@@ -104,10 +104,11 @@ class TransactionLog(SObject):
         from pyasm.search.sobject_log import SObjectLog
         from pyasm.search.search import SearchException
         from pyasm.search.sql import SqlException
-        transaction_data = transaction_data or log.get_value('transaction')
-        if transaction_data.startswith('zlib:'):
-            transaction_data = Common.decompress_transaction(transaction_data)
-        xml = Xml(transaction_data)
+        if xml is None:
+            transaction_data = transaction_data or log.get_value('transaction')
+            if transaction_data.startswith('zlib:'):
+                transaction_data = Common.decompress_transaction(transaction_data)
+            xml = Xml(transaction_data)
         nodes = xml.get_nodes('transaction/*')
         if any(Xml.get_attribute(node, 'site') for node in nodes):
             raise UnsupportedContract('Site-specific SObject logs are not migrated')

@@ -138,15 +138,16 @@ def select_labels(search_type):
     return output
 
 
-def info_items(obj, labels):
+def info_items(obj, labels, columns=None):
     # Handler builds its metadata strip from the configured table columns,
     # not every database field and not the SearchType name.
-    from pyasm.widget import WidgetConfigView
-    from .interface import describe_view
-    definition = describe_view(WidgetConfigView.get_by_search_type(obj.get_base_search_type(), 'table'))
+    if columns is None:
+        from pyasm.widget import WidgetConfigView
+        from .interface import describe_view
+        definition = describe_view(WidgetConfigView.get_by_search_type(obj.get_base_search_type(), 'table'))
+        columns = {element['name']: element for element in definition['elements']}
     excluded = {'name', 'code', 'keywords', 'description', 'timestamp'}
     output = []
-    columns = {element['name']: element for element in definition['elements']}
     for column, value in obj.get_sobject_dict().items():
         element = columns.get(column)
         if element is None:
@@ -225,11 +226,26 @@ def describe(items, relation_counts=False, organization=None):
     records = list(items.values())
     from .knowledge_query import knowledge_request
     from .file_presentation import file_display, repository_display
+    from .interface import describe_view
+    from pyasm.widget import WidgetConfigView
     from pyasm.biz import File
     from pathlib import Path
     import json
     project = Project.get_project_code()
-    labels = {base: select_labels(base) for base in dict.fromkeys(row.get_base_search_type() for row in records)}
+    bases = list(dict.fromkeys(row.get_base_search_type() for row in records))
+    labels = {base: select_labels(base) for base in bases}
+    table_columns = {
+        base: {element['name']: element for element in describe_view(WidgetConfigView.get_by_search_type(base, 'table'))['elements']}
+        for base in bases
+    }
+    relation_cache = {}
+    def cached_relations(obj, direction='child'):
+        base = obj.get_base_search_type()
+        in_project = base.startswith('sthpw/') and obj.get_value('project_code', no_exception=True) == project
+        cache_key = (base, in_project, direction)
+        if cache_key not in relation_cache:
+            relation_cache[cache_key] = relations(obj, direction)
+        return [dict(branch) for branch in relation_cache[cache_key]]
     articles = []
     if SearchType.get(project + '/th_knowledge_article', no_exception=True):
         from .navigation_links import check_type
@@ -267,7 +283,7 @@ def describe(items, relation_counts=False, organization=None):
             names = ['icon', 'attachment', 'publish']
         if 'attachment' not in names and any((row.get_value('context') or '').split('/')[0] == 'attachment' for row in own_snapshots):
             names.append('attachment')
-        branches = relations(obj) if obj.get_base_search_type() not in ('sthpw/snapshot', 'sthpw/file') else []
+        branches = cached_relations(obj) if obj.get_base_search_type() not in ('sthpw/snapshot', 'sthpw/file') else []
         if relation_counts:
             for branch in branches:
                 branch['count'] = relation_search(obj, branch).get_count()
@@ -315,11 +331,11 @@ def describe(items, relation_counts=False, organization=None):
         pipeline_title = pipeline.get_value('name') or pipeline.get_code() if pipeline else obj.get_value('pipeline_code', no_exception=True)
         category_column = 'category' if row.get('category') else next((name for name, value in row.items() if name.endswith('_category_code') and value), '')
         output.append(dict(record=row, preview=preview, branches=branches, snapshot_display=snapshot_display,
-            related_parents=relations(obj, 'parent') if obj.get_base_search_type() not in ('sthpw/snapshot', 'sthpw/file') else [],
+            related_parents=cached_relations(obj, 'parent') if obj.get_base_search_type() not in ('sthpw/snapshot', 'sthpw/file') else [],
             knowledge=[dict(identity=article['identity'], title=article['title'], searchKey='skey://' + SearchType.build_search_type(project + '/th_knowledge_article', project) + '&id=' + article['identity'])
                        for article in articles if 'skey://' + key in article['linkedSearchKeys']],
             accent=accent, subtitle=' · '.join(str(value) for value in (row.get('description'), pipeline_title, labels[obj.get_base_search_type()].get(category_column, {}).get(row.get(category_column), row.get(category_column))) if value),
-            info_items=info_items(obj, labels[obj.get_base_search_type()]), progress_items=progress_items(obj, pipeline, branches), pipeline=pipeline_title,
+            info_items=info_items(obj, labels[obj.get_base_search_type()], columns=table_columns.get(obj.get_base_search_type())), progress_items=progress_items(obj, pipeline, branches), pipeline=pipeline_title,
             task_count=len(own_tasks), note_count=len(own_notes),
             note_counts={name: sum((note.get_value('process') or note.get_value('context')) == name for note in own_notes)
                          for name in dict.fromkeys((note.get_value('process') or note.get_value('context')) for note in own_notes)},

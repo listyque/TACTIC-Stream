@@ -1861,12 +1861,13 @@ class Sql(Base):
         if not query:
             return
         # Only known native DML without SQL triggers leaves routing/schema unchanged.
-        invalidate_metadata = (not native_table or native_table in ('search_object', 'project') or
-                               self.database_impl.has_table_triggers(self, native_table))
-        if invalidate_metadata:
+        invalidate_schema = not native_table or self.database_impl.has_table_triggers(self, native_table)
+        invalidate_routing = invalidate_schema or native_table in ('search_object', 'project')
+        if invalidate_schema:
             Container.clear_dict('DatabaseImpl:table_info')
-            Container.clear_dict('Store:resolve')
             Container.clear_dict('SearchType:column_info')
+        if invalidate_routing:
+            Container.clear_dict('Store:resolve')
         if self.conn is None:
             self.connect()
         if not self._admin_sql and not ((Container.get('Security:writing') or Container.get('Chat:writing') or Container.get('UserProfile:writing') or getattr(self, '_sobject_write_table', None)) and
@@ -1890,7 +1891,7 @@ class Sql(Base):
             if self.transaction_count and not self.conn.in_transaction:
                 # sqlite3 starts implicit transactions for DML, but not ALTER/
                 # CREATE TABLE or writable CTEs. They must join Command rollback.
-                self.conn.execute('BEGIN')
+                self.conn.execute('BEGIN IMMEDIATE')
         self.query = query
         try:
             self.cursor = self.conn.cursor()
@@ -1918,10 +1919,11 @@ class Sql(Base):
                 self.conn.rollback()
             raise SqlException(str(exc)) from exc
         finally:
-            if invalidate_metadata:
+            if invalidate_schema:
                 Container.clear_dict('DatabaseImpl:table_info')
-                Container.clear_dict('Store:resolve')
                 Container.clear_dict('SearchType:column_info')
+            if invalidate_routing:
+                Container.clear_dict('Store:resolve')
 
     def set_savepoint(self, name="save_pt"):
         # Both PostgreSQL and SQLite emit real SAVEPOINT statements.

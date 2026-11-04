@@ -332,7 +332,7 @@ class ThumbWdg(BaseTableElementWdg):
         self.snapshot = snapshot
         xml = snapshot.get_xml_value('snapshot')
         self.info = {}
-        if not self.file_objects:
+        if not self.file_objects and (not self.is_preprocess_run or redirect or redirect_expr or isinstance(sobject, Snapshot)):
             file_objects = {}
             snapshot_file_objects = File.get_by_snapshot(snapshot)
             for file_object in snapshot_file_objects:

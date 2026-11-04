@@ -258,17 +258,35 @@ function key(event, node) {
     send(node.keys[name]);
   }
 }
-const listLayouts = computed(
-  () =>
-    new Map(
-      nodes.value
-        .filter((node) => node.kind === 'List')
-        .map((node) => [
-          node.id,
-          listOffsets(node, props.models[node.source] || [])
-        ])
-    )
-);
+const listLayoutCache = new Map();
+const listLayouts = computed(() => {
+  const next = new Map();
+  for (const node of nodes.value) {
+    if (node.kind !== 'List') continue;
+    const rows = props.models[node.source] || [];
+    const prev = listLayoutCache.get(node.id);
+    if (
+      prev &&
+      prev.rows === rows &&
+      prev.rowHeightField === node.rowHeightField &&
+      prev.rowHeight === node.rowHeight &&
+      prev.rowGap === node.rowGap
+    ) {
+      next.set(node.id, prev.offsets);
+    } else {
+      const offsets = listOffsets(node, rows);
+      listLayoutCache.set(node.id, {
+        rows,
+        rowHeightField: node.rowHeightField,
+        rowHeight: node.rowHeight,
+        rowGap: node.rowGap,
+        offsets
+      });
+      next.set(node.id, offsets);
+    }
+  }
+  return next;
+});
 function listHeight(node) {
   const rows = props.models[node.source] || [],
     offsets = listLayouts.value.get(node.id);

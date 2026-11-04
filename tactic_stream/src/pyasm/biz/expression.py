@@ -13,7 +13,7 @@
 __all__ = ['ExpressionParser']
 
 
-import os, re, types, math
+import os, re, types, math, operator
 import dateutil
 from dateutil import parser
 from dateutil.relativedelta import relativedelta, MO, TU, WE, TH, FR, SA, SU
@@ -2418,6 +2418,7 @@ class MethodMode(ExpressionParser):
         values = []
         # Serializing all roots per result makes wide trees quadratic.
         cache = self.get_cache_sobjects()
+        col_types = {}
         for sobject in sobjects:
             # sobject could have been deleted
             if not sobject:
@@ -2425,7 +2426,10 @@ class MethodMode(ExpressionParser):
 
             if isinstance(sobject, dict):
                 value = sobject.get(column)
-                col_type = SearchType.get_column_type(sobject.get('search_type'), column)
+                stype = sobject.get('search_type')
+                if stype not in col_types:
+                    col_types[stype] = SearchType.get_column_type(stype, column)
+                col_type = col_types[stype]
                 if value and col_type in ['timestamp','datetime2']:
                     if not isinstance(value, datetime.datetime):
                         value = parser.parse(value)
@@ -2445,7 +2449,10 @@ class MethodMode(ExpressionParser):
             else:
                 value = sobject.get_value(column)
             
-            col_type = SearchType.get_column_type(sobject.get_search_type(), column)
+            stype = sobject.get_search_type()
+            if stype not in col_types:
+                col_types[stype] = SearchType.get_column_type(stype, column)
+            col_type = col_types[stype]
             #col_type = sobject.get_search_type_obj().get_column_type(column)
             if value and col_type in ['timestamp','datetime2']:
                 if not isinstance(value, datetime.datetime):
@@ -2525,6 +2532,8 @@ class MethodMode(ExpressionParser):
         else:
             best = None
 
+        _CMP_OPS = {'<': operator.lt, '<=': operator.le, '>': operator.gt, '>=': operator.ge, '==': operator.eq, '!=': operator.ne}
+        cmp_fn = _CMP_OPS.get(op)
         for sobject in sobjects:
             value = sobject.get_value(column)
             if data_type == 'timestamp':
@@ -2534,13 +2543,13 @@ class MethodMode(ExpressionParser):
                 if not best:
                     best = value
                 else:
-                    if eval("str(value) %s str(best)" %op):
+                    if (cmp_fn(str(value), str(best)) if cmp_fn else eval("str(value) %s str(best)" %op)):
                         best = value
 
             else:
                 if best == None:
                     best = value
-                elif value != '' and eval("value %s best" %op):
+                elif value != '' and (cmp_fn(value, best) if cmp_fn else eval("value %s best" %op)):
                     best = value
         return best
     fcmp = classmethod(fcmp)

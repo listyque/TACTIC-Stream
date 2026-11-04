@@ -1030,6 +1030,13 @@ class Snapshot(SObject):
             search.add_filter("level_id", None)
 
         search.add_filter("context", context)
+        if self.get_id() not in (None, -1, "-1", ""):
+            search.add_op("begin")
+            search.add_filter("is_latest", True)
+            search.add_filter("id", self.get_id())
+            search.add_op("or")
+        else:
+            search.add_filter("is_latest", True)
         other_snapshots = search.get_sobjects()
         
         
@@ -1125,6 +1132,13 @@ class Snapshot(SObject):
             search.add_filter("level_id", None)
 
         search.add_filter("context", context)
+        if self.get_id() not in (None, -1, "-1", ""):
+            search.add_op("begin")
+            search.add_filter("is_current", True)
+            search.add_filter("id", self.get_id())
+            search.add_op("or")
+        else:
+            search.add_filter("is_current", True)
         other_snapshots = search.get_sobjects()
         for other_snapshot in other_snapshots:
             if other_snapshot.get_search_key() == search_key:
