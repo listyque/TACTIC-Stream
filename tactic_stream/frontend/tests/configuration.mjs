@@ -142,7 +142,7 @@ try {
   const previewInput = projectEditor.getByLabel('Choose preview image',{exact:true})
   await previewInput.setInputFiles({name:'invalid.png',mimeType:'image/png',buffer:Buffer.from('invalid image')})
   await projectEditor.getByRole('alert').filter({hasText:'The selected preview is not a readable image'}).waitFor()
-  await previewInput.setInputFiles({name:'preview.png',mimeType:'image/png',buffer:Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jRZkAAAAASUVORK5CYII=','base64')})
+  await previewInput.setInputFiles({name:'preview.png',mimeType:'image/png',buffer:Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP4/x8AAwAB/2+Bq7YAAAAASUVORK5CYII=','base64')})
   await projectEditor.getByRole('button',{name:'Undo image selection',exact:true}).waitFor()
   await projectEditor.getByRole('alert').filter({hasText:'The selected preview is not a readable image'}).waitFor({state:'hidden'})
   await projectEditor.getByLabel('Name',{exact:true}).fill('One edited')

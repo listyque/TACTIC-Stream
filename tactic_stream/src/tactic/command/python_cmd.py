@@ -141,7 +141,7 @@ class PythonCmd(Command):
             cache = Container.get_full_dict('PythonCmd:compiled')
             key = (Project.get_project_code(), label, source)
             compiled = cache.get(key)
-            reusable = isinstance(source, str) and len(source) <= 65536
+            reusable = isinstance(source, str) and len(source) <= 262144
             # Only immutable code survives requests; inputs, globals and access checks stay fresh.
             if compiled is None and reusable:
                 with _compiled_scripts_lock:
@@ -170,7 +170,7 @@ spt_mako_results['spt_ret_val'] = spt_run_code()
                     with _compiled_scripts_lock:
                         _compiled_scripts[key] = (bytecode, module_source, None, code)
                         _compiled_scripts.move_to_end(key)
-                        if len(_compiled_scripts) > 32:
+                        if len(_compiled_scripts) > 64:
                             _compiled_scripts.popitem(last=False)
             else:
                 bytecode, module_source, _, code = compiled

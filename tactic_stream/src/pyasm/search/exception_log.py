@@ -33,7 +33,8 @@ class ExceptionLog(SObject):
         stacktrace_str = stacktrace_str.replace("\\", "/")
 
         # record the exception
-        user_name = Environment.get_user_name()
+        security = Environment.get_security()
+        user_name = security.get_user_name() if security else None
         if not user_name:
             user_name = "UNKNOWN"
 

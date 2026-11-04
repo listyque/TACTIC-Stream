@@ -1431,7 +1431,7 @@ class WidgetConfigView(Base):
                 
                 configs.append(def_config)
             
-            if not db_definition_found:
+            if not db_definition_found and not local_search:
                 # global db definition for all search types
                 def_db_config = WidgetDbConfig.get_by_search_type("ALL", default_definition)
                 if def_db_config:
@@ -1496,7 +1496,7 @@ class WidgetConfigView(Base):
         configs.append(config)
 
         # look at the database for definitions
-        if view not in ['edit', 'insert', 'preview']:
+        if view not in ['edit', 'insert', 'preview'] and not local_search:
             db_config = WidgetDbConfig.get_by_search_type(search_type,default_definition)
             if db_config:
                 xml = db_config.get_xml()

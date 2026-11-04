@@ -22,7 +22,7 @@ const nodes=Array.from({length:5},(_,i)=>({id:'asset'+i,kind:'object',depth:0,
  subtitle:'Mechanical arm for the main character, with a long description.',
  accent:'#d35f65',preview:{},task_count:1,note_count:2,hasChildren:true,children:[],
  progress_items:[],info_items:[]}));
-nodes[0].preview={image:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aNqUAAAAASUVORK5CYII='};
+nodes[0].preview={image:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP4/x8AAwAB/2+Bq7YAAAAASUVORK5CYII='};
 nodes[4].title='Very long asset name describing a robot with several mechanical parts and references';
 nodes[0].children=[{id:'reference',kind:'branch',title:'Reference',depth:1,
  branch:{kind:'process',process:'reference',count:1},record:{},hasChildren:true,

@@ -2650,7 +2650,7 @@ return {'single': single.get_input().get_value(), 'name': single.get_input().get
         root = Path(proxy.execute_python_script(auth, '', dict(code=
             'from pyasm.common import Environment\nreturn Environment.get_asset_dir()'))['info'])
         import base64
-        image = base64.b64decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jRZkAAAAASUVORK5CYII=')
+        image = base64.b64decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP4/x8AAwAB/2+Bq7YAAAAASUVORK5CYII=')
         for only_versionless, storage in ((False, 'copy'), (False, 'hardlink'), (True, 'copy'),
                                          (False, 'empty'), (True, 'empty')):
             context = ('handler_inplace_only' if only_versionless else 'handler_inplace') + '_' + storage

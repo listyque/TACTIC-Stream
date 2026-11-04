@@ -610,9 +610,14 @@ class SqliteImpl(DatabaseImpl):
         _context.get().store.database_path(resource.get_database()).unlink()
 
     def table_exists(self, db_resource, table):
-        from pyasm.search.sql import DbContainer
-        sql = DbContainer.get(db_resource)
-        return bool(sql.do_query("SELECT name FROM sqlite_master WHERE type='table' AND name=%s" % sql.quote(table)))
+        from pyasm.search.sql import DbContainer, Sql
+        sql = db_resource if isinstance(db_resource, Sql) else DbContainer.get(db_resource)
+        resource = sql.get_db_resource()
+        cache = Container.get_full_dict('DatabaseImpl:table_info')
+        key = resource._get_connection_key()
+        if key not in cache:
+            cache[key] = {name: name for name, in sql.do_query("SELECT name FROM sqlite_master WHERE type='table'")}
+        return table in cache[key]
 
     def get_serial(self, length=4, not_null=False):
         parts = []

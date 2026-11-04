@@ -761,6 +761,7 @@ class TaskElementWdg(BaseTableElementWdg):
         if logins:
             users = Search('sthpw/login'); users.set_show_retired(True); users.add_filters('login', list(logins))
             self.identities = {user['login']: user for user in user_identities(users.get_sobjects())}
+        self._pipeline_process_cache = {}
         self._prepared = True
 
     def __init__(self, **kwargs):
@@ -842,31 +843,34 @@ class TaskElementWdg(BaseTableElementWdg):
             if pipeline_code:
                 pipeline_code = pipeline_code.replace("$PROJECT", project_code)
 
-        if pipeline_code:
-            pipeline = Pipeline.get_by_code(pipeline_code)
+        supprocess = self.kwargs.get("parent_process")
+        cache = getattr(self, '_pipeline_process_cache', None)
+        if cache is None:
+            cache = self._pipeline_process_cache = {}
+        cache_key = (project_code, pipeline_code, tuple(processes) if processes else None, supprocess)
+        if cache_key in cache:
+            pipeline, processes = cache[cache_key]
+            if processes is not None:
+                processes = list(processes)
         else:
-            pipeline = None
+            pipeline = Pipeline.get_by_code(pipeline_code) if pipeline_code else None
+            if pipeline or processes:
+                if not processes:
+                    processes = pipeline.get_process_names()
+                if supprocess:
+                    processes = ["%s.%s" % (supprocess, x) for x in processes]
+                processes = [
+                    process for process in processes
+                    if security.check_access("process", [
+                        {"process": process},
+                        {"process": "*"},
+                        {"process": process, "project": project_code},
+                        {"process": "*", "project": project_code},
+                    ], "allow", default="deny")
+                ]
+            cache[cache_key] = (pipeline, tuple(processes) if processes is not None else None)
 
         if pipeline or processes:
-            if not processes:
-                processes = pipeline.get_process_names()
-
-            supprocess = self.kwargs.get("parent_process")
-            if supprocess:
-                processes = ["%s.%s" % (supprocess, x) for x in processes]
-
-            processes_remove = []
-            for process in processes:
-                keys = [
-                        { "process": process },
-                        { "process": "*" },
-                        { "process": process, "project": project_code },
-                        { "process": "*", "project": project_code }
-                ]
-                if not security.check_access("process", keys, "allow", default="deny"):
-                    processes_remove.append(process)
-            for process in processes_remove:
-                processes.remove(process)
 
             # filter by current pipeline's processes
             # show_current_pipeline_only is not in task_filter since

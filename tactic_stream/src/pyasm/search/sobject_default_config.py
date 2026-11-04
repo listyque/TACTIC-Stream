@@ -148,9 +148,7 @@ class SObjectDefaultConfig(Base):
         Xml.append_child(element, dis_element)
         Xml.append_child(element, act_element)
 
-        value = self.xml.to_string()
-        self.xml = Xml()
-        self.xml.read_string(value)
+        self.xml.clear_xpath_cache()
 
 
 
@@ -203,10 +201,7 @@ class SObjectDefaultConfig(Base):
 
                     self.xml.append_child(table, element)
                 
-        value = self.xml.to_string()
-        
-        self.xml = Xml()
-        self.xml.read_string(value)
+        self.xml.clear_xpath_cache()
 
 
     def get_type(self, element_name):

@@ -7,7 +7,7 @@ from tactic_stream.server.table_cells import read_table_cells, safe_link
 
 TYPE = 'sthpw/login_group'
 VIEW = 'cells_native'
-PNG = base64.b64decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jRZkAAAAASUVORK5CYII=')
+PNG = base64.b64decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP4/x8AAwAB/2+Bq7YAAAAASUVORK5CYII=')
 XML = '''<config><cells_native layout="tactic.ui.panel.TableLayoutWdg">
 <element name="login_group" title="Group" />
 <element name="id" title="Number"><display widget="format"><type>float</type><format>-1234.12</format></display></element>

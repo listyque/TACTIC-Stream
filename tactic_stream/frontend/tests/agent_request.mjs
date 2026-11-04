@@ -59,7 +59,7 @@ try {
     await dialog.locator('.agent-attachment-strip').getByText('dropped.bin', { exact: true }).waitFor();
     await dialog.getByLabel('What should the agent do?', { exact: true }).evaluate(element => {
       const transfer = new DataTransfer();
-      const bytes = Uint8Array.from(atob('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a1ioAAAAASUVORK5CYII='), char => char.charCodeAt(0));
+      const bytes = Uint8Array.from(atob('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP4/x8AAwAB/2+Bq7YAAAAASUVORK5CYII='), char => char.charCodeAt(0));
       transfer.items.add(new File([bytes], 'clipboard.png', { type: 'image/png' }));
       element.dispatchEvent(new ClipboardEvent('paste', { clipboardData: transfer, bubbles: true, cancelable: true }));
     });

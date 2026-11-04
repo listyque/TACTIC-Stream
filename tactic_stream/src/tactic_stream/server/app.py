@@ -707,8 +707,8 @@ def create_app(data_dir: Path, thread_count=None, *, event_collector=True) -> Fa
             LOG.exception('Server event watcher could not start')
             return JSONResponse({'error': 'Update notifications are unavailable.', 'error_code': 'request_failed'}, status_code=503)
         try:
-            # A fresh stream must invalidate retained client caches even without a journal cursor.
-            stream_body = json.dumps(dict(payload, invalidated_types=subscription['search_types'] if 'cache' in subscription['channels'] else [])).encode()
+            # A fresh stream must invalidate retained client caches only when connecting without a journal cursor.
+            stream_body = json.dumps(dict(payload, invalidated_types=subscription['search_types'] if 'cache' in subscription['channels'] and not payload.get('cache_after') else [])).encode()
             initial = await run_in_threadpool(interface_request, stream_body, server_updates='stream')
             if initial.status_code != 200:
                 events.unsubscribe(subscriber)

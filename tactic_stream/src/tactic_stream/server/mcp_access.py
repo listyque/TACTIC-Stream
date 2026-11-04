@@ -80,25 +80,33 @@ def permitted_tool(name):
     return not name.startswith(('ts_project_','ts_mcp_','agent_conversation','agent_provider'))
 
 
+_TOOL_CATALOG_CACHE = None
+
+
 def tool_catalog(transport='mcp'):
-    try:
-        from tactic_stream.admin_agent import StreamConnection,create_server
-    except ModuleNotFoundError as error:
-        if error.name and error.name.split('.')[0] in ('mcp', 'mcp_types'):
-            return []
-        raise
-    root=Path(__file__).resolve().parents[3]
-    server=create_server(StreamConnection('http://tactic.internal',Project.get_project_code(),'private-server-credential'),root,
-        allow_naming_save=True,allow_page_save=True,allow_automation_draft=True,
-        allow_project_edit=True,allow_project_create=True,allow_web_download=True,
-        allow_automation_activate=True,catalog_only=True,
-        request_id='00000000-0000-4000-8000-000000000000')
-    # Catalogue construction is local: do not create a Windows IO event loop
-    # (and sockets) merely to inspect the SDK's already registered tools.
-    tools=server._tool_manager.list_tools()
-    return [dict(name=tool.name,title=tool.title or tool.name.replace('_',' '),
-        description=(tool.description or '').split('\n')[0],readonly=bool(tool.annotations and tool.annotations.read_only_hint))
-        for tool in tools if transport == 'chat' or permitted_tool(tool.name)]
+    global _TOOL_CATALOG_CACHE
+    if _TOOL_CATALOG_CACHE is None:
+        try:
+            from tactic_stream.admin_agent import StreamConnection,create_server
+        except ModuleNotFoundError as error:
+            if error.name and error.name.split('.')[0] in ('mcp', 'mcp_types'):
+                return []
+            raise
+        root=Path(__file__).resolve().parents[3]
+        server=create_server(StreamConnection('http://tactic.internal',Project.get_project_code(),'private-server-credential'),root,
+            allow_naming_save=True,allow_page_save=True,allow_automation_draft=True,
+            allow_project_edit=True,allow_project_create=True,allow_web_download=True,
+            allow_automation_activate=True,catalog_only=True,
+            request_id='00000000-0000-4000-8000-000000000000')
+        # Catalogue construction is local: do not create a Windows IO event loop
+        # (and sockets) merely to inspect the SDK's already registered tools.
+        _TOOL_CATALOG_CACHE = tuple(
+            dict(name=tool.name,title=tool.title or tool.name.replace('_',' '),
+                 description=(tool.description or '').split('\n')[0],
+                 readonly=bool(tool.annotations and tool.annotations.read_only_hint))
+            for tool in server._tool_manager.list_tools()
+        )
+    return [dict(item) for item in _TOOL_CATALOG_CACHE if transport == 'chat' or permitted_tool(item['name'])]
 
 
 def authorize(api, code, token):

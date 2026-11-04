@@ -1864,6 +1864,7 @@ class Sql(Base):
         invalidate_metadata = (not native_table or native_table in ('search_object', 'project') or
                                self.database_impl.has_table_triggers(self, native_table))
         if invalidate_metadata:
+            Container.clear_dict('DatabaseImpl:table_info')
             Container.clear_dict('Store:resolve')
             Container.clear_dict('SearchType:column_info')
         if self.conn is None:
@@ -1918,11 +1919,12 @@ class Sql(Base):
             raise SqlException(str(exc)) from exc
         finally:
             if invalidate_metadata:
+                Container.clear_dict('DatabaseImpl:table_info')
                 Container.clear_dict('Store:resolve')
                 Container.clear_dict('SearchType:column_info')
 
     def set_savepoint(self, name="save_pt"):
-        # Original SqliteImpl inherits the no-op savepoint builders.
+        # Both PostgreSQL and SQLite emit real SAVEPOINT statements.
         if self.database_impl.has_savepoint():
             self._execute_savepoint(self.database_impl.set_savepoint(name))
 

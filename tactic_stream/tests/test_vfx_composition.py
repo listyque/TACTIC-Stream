@@ -181,7 +181,7 @@ class VfxComposition(unittest.TestCase):
         icon_path = self.store.data_dir / 'shot-icon.png'
         icon_path.write_bytes(
             base64.b64decode(
-                'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aE9kAAAAASUVORK5CYII='
+                'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP4/x8AAwAB/2+Bq7YAAAAASUVORK5CYII='
             )
         )
         self.api.dispatch(

@@ -207,7 +207,7 @@ def exercise(store, prefix):
     # Real upload/check-in operations exercise versionless -> version children.
     import base64
     from xmlrpc.client import Binary
-    image = base64.b64decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jRZkAAAAASUVORK5CYII=')
+    image = base64.b64decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP4/x8AAwAB/2+Bq7YAAAAASUVORK5CYII=')
     for filename in ('result-one.png', 'result-two.png'):
         api.dispatch('upload_file', (sample_context, filename, Binary(image)))
         api.dispatch('simple_checkin', (sample_context, key, 'publish', filename),

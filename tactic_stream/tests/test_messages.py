@@ -85,7 +85,7 @@ class Messages(unittest.TestCase):
             reader = dict(ticket=proxy.get_ticket('download_reader', 'chat-files-password'), project='one')
             chat = self.call('create', actor, recipients=['admin'])['conversationId']
             token = str(uuid.uuid4())
-            png = base64.b64decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a7u0AAAAASUVORK5CYII=')
+            png = base64.b64decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP4/x8AAwAB/2+Bq7YAAAAASUVORK5CYII=')
             snapshot = self.upload(actor, chat, token, 'test.png', png)
             self.assertEqual(snapshot['search_type'], 'sthpw/message')
             self.assertEqual(snapshot['search_code'], chat)

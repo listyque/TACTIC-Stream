@@ -83,6 +83,14 @@ class PersistenceParity(read_tests.ReadParity):
         state_tests.state_fixture(cls.store)
         cls.cases = persistence_cases()
 
+    def assert_case_result(self, case, result, original):
+        if case["name"] == "savepoint":
+            # Intentional correction: original SqliteImpl had no-op savepoints.
+            expected = [dict(step, value="updated") if step.get("value") == "discard" else step for step in original]
+            self.assertEqual(result, expected)
+            return
+        super().assert_case_result(case, result, original)
+
     def new_result(self, case):
         runner = {"sql_transaction": run_sql_case, "sobject_journal": run_journal_case, "xml_journal": run_xml_case}[case["method"]]
         with tempfile.TemporaryDirectory() as temporary:

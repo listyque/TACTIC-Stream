@@ -43,7 +43,7 @@ class Delivery(unittest.TestCase):
                 proxy.update(auth, settings[0]['__search_key__'], dict(value='copy'))
             else:
                 proxy.insert(auth, 'config/prod_setting', dict(key='versionless_mode', value='copy'))
-            image = base64.b64decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jRZkAAAAASUVORK5CYII=')
+            image = base64.b64decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP4/x8AAwAB/2+Bq7YAAAAASUVORK5CYII=')
             for version in (1, 2):
                 name = 'delivery-%s.png' % version
                 proxy.upload_file(auth, name, Binary(image))

@@ -6,6 +6,7 @@ by AND and trusted UTF-8 file loading are supported. Full XPath and namespaces
 remain unsupported.
 """
 import copy
+from functools import lru_cache
 import json
 import re
 from pathlib import Path
@@ -19,6 +20,29 @@ from pyasm.common.errors import UnsupportedContract
 _ATTRIBUTE_TEST = r'''@[A-Za-z_][\w.-]*(?:\s*=\s*(?:'[^']*'|"[^"]*"))?'''
 _STEP = r"(?:[A-Za-z_][\w.-]*|\*)(?:\[" + _ATTRIBUTE_TEST + r"(?:\s+and\s+" + _ATTRIBUTE_TEST + r")*\])*"
 _PARENTS = WeakKeyDictionary()
+
+
+@lru_cache(maxsize=1024)
+def _compile_xpath(xpath):
+    path = xpath.lstrip("/")
+    if xpath.startswith("//") or not re.fullmatch(_STEP + r"(?:/{1,2}" + _STEP + r")*(?:/@[\w.-]+)?", path):
+        raise UnsupportedContract("Only absolute Xml paths with attribute AND predicates are migrated")
+    # Tokenize steps, keeping slashes and 'and' inside quoted values intact.
+    parts = []
+    last_end = 0
+    for step in re.finditer(_STEP, path):
+        value = step.group()
+        name = value.split("[", 1)[0]
+        tests = re.finditer(_ATTRIBUTE_TEST, value[len(name):])
+        if parts:
+            parts.append(path[last_end:step.start()])
+        parts.append(name + "".join("[" + test.group() + "]" for test in tests))
+        last_end = step.end()
+        if step.end() == len(path) or path[step.end():].startswith("/@"):
+            break
+    suffix = path[step.end():]
+    attribute = suffix[2:] if suffix else None
+    return "".join(parts), attribute, (xpath if xpath.startswith("/") else "/" + xpath)
 
 
 class XmlException(TacticException):
@@ -39,6 +63,7 @@ class Xml(Base):
 
     def __init__(self, string=None, file_path=None, doc=None, strip_cdata=True):
         self.doc = None
+        self._xpath_root = None
         self.uri = "XmlWrapper"
         self.strip_cdata = strip_cdata
         self.cache_xpath = {}
@@ -186,35 +211,21 @@ class Xml(Base):
     def _evaluate(self, xpath, node=None):
         if node is None and xpath in self.cache_xpath:
             return self.cache_xpath[xpath]
-        path = xpath.lstrip("/")
-        if xpath.startswith("//") or not re.fullmatch(_STEP + r"(?:/{1,2}" + _STEP + r")*(?:/@[\w.-]+)?", path):
-            raise UnsupportedContract("Only absolute Xml paths with attribute AND predicates are migrated")
-        # Tokenize steps, keeping slashes and 'and' inside quoted values intact.
-        parts = []
-        last_end = 0
-        for step in re.finditer(_STEP, path):
-            value = step.group()
-            name = value.split("[", 1)[0]
-            tests = re.finditer(_ATTRIBUTE_TEST, value[len(name):])
-            if parts:
-                parts.append(path[last_end:step.start()])
-            parts.append(name + "".join("[" + test.group() + "]" for test in tests))
-            last_end = step.end()
-            if step.end() == len(path) or path[step.end():].startswith("/@"):
-                break
-        suffix = path[step.end():]
-        attribute = suffix[2:] if suffix else None
+        expr, attribute, cache_key = _compile_xpath(xpath)
         # A temporary parent lets ElementTree also evaluate predicates on the root.
         if node is None:
-            parent = ET.Element("_xpath_root")
-            parent.append(self.doc)
+            parent = self._xpath_root
+            if parent is None or len(parent) != 1 or parent[0] is not self.doc:
+                parent = ET.Element("_xpath_root")
+                parent.append(self.doc)
+                self._xpath_root = parent
         else:
             parent = node
-        nodes = [node for node in parent.findall("".join(parts)) if isinstance(node.tag, str)]
+        nodes = [node for node in parent.findall(expr) if isinstance(node.tag, str)]
         result = [item.get(attribute) for item in nodes if attribute in item.attrib] if attribute else nodes
         # Original looks up the caller's path, but stores its absolute form.
         if node is None:
-            self.cache_xpath[xpath if xpath.startswith("/") else "/" + xpath] = result
+            self.cache_xpath[cache_key] = result
         return result
 
     @classmethod
