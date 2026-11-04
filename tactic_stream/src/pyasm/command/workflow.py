@@ -1927,39 +1927,6 @@ class WorkflowManualNodeHandler(BaseWorkflowNodeHandler):
 
 
 
-
-    def handle_not_required(self):
-        _check_workflow(self.input)
-        status = "not_required"
-
-        # restore the state of the node
-        state = self.restore_state()
-
-        pipeline = self.input.get("pipeline")
-        process = self.input.get("process")
-        sobject = self.input.get("sobject")
-
-        # Handle remapped status.
-        process_sobj = self.get_process_sobj(pipeline, process)
-        workflow = process_sobj.get_json_value("workflow", {})
-        version = workflow.get("version") or 1
-        version_2 = version in [2, '2']
-
-        properties = workflow.get("properties") or {}
-
-        # build a standard output package
-        self.packages = self.get_output_packages()
-
-        # store the state
-        self.store_state()
-
-        return super(WorkflowManualNodeHandler, self).handle_not_required()
-
-
-
-
-
-
     def handle_reject(self):
         #self.input['error'] = "Rejected from '%s'" % self.process
         _check_workflow(self.input)

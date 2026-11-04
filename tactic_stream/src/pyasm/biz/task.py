@@ -823,7 +823,7 @@ class Task(SObject):
             # log the status creation event
             # CoreInit already records inserts. The original writes this twice.
             if triggers in (False, "none", "integral", "ingest"):
-                StatusLog.create(task, status)
+                StatusLog.create(task, status or task.get_value("status", no_exception=True))
 
         return task
     create = classmethod(create)
@@ -1308,9 +1308,9 @@ class Task(SObject):
 
             # check to see how many weekends there are between these two dates
             if end_date.weekday() == 5:
-                end_date = start_date + timedelta(days=2)
-            if start_date.weekday() == 6:
-                end_date = start_date + timedelta(days=1)
+                end_date += timedelta(days=2)
+            elif end_date.weekday() == 6:
+                end_date += timedelta(days=1)
 
 
 
@@ -2067,9 +2067,9 @@ class TaskGenerator(object):
 
             # shift the end date outside of the weekend
             if end_date.weekday() == 5:
-                end_date = self.start_date + timedelta(days=2)
-            if start_date.weekday() == 6:
-                end_date = self.start_date + timedelta(days=1)
+                end_date += timedelta(days=2)
+            elif end_date.weekday() == 6:
+                end_date += timedelta(days=1)
             
 
 

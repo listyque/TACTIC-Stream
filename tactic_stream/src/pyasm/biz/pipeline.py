@@ -100,16 +100,19 @@ class Process(Base):
         """ assuming the child pipeline is task related """
         task_pipeline_code = None
         process_name = self.get_name()
-        try:
-            search = Search('config/process')
-        except LookupError as exc:
-            if not str(exc).startswith('Unregistered SearchType:'):
-                raise
-            process = None
+        if self.parent_pipeline is not None:
+            process = self.parent_pipeline.get_process_sobject(process_name)
         else:
-            search.add_filter('process', process_name)
-            search.add_filter('pipeline_code', self.parent_pipeline_code)
-            process = search.get_sobject()
+            try:
+                search = Search('config/process')
+            except LookupError as exc:
+                if not str(exc).startswith('Unregistered SearchType:'):
+                    raise
+                process = None
+            else:
+                search.add_filter('process', process_name)
+                search.add_filter('pipeline_code', self.parent_pipeline_code)
+                process = search.get_sobject()
         if process:
             workflow_data = process.get_json_value('workflow', {})
             version = workflow_data.get('version') or 1

@@ -806,6 +806,10 @@ def knowledge_request(
             row_identity: str(row.get("parentCode") or "")
             for row_identity, row in rows_by_identity.items()
         }
+        items_by_ref = {}
+        for candidate in Search(search_type).get_sobjects():
+            for ref in item_references(candidate):
+                items_by_ref.setdefault(ref, candidate)
         changes = []
         seen = set()
         for raw_entry in organization:
@@ -815,12 +819,12 @@ def knowledge_request(
             if not entry_identity or entry_identity in seen:
                 raise ValueError("Knowledge Base entries must be unique")
             seen.add(entry_identity)
-            entry_item = item_for(entry_identity)
+            entry_item = items_by_ref.get(entry_identity) or item_for(entry_identity)
             if entry_item is None or not draft_is_visible(entry_item):
                 raise ValueError("A Knowledge Base entry no longer exists")
             canonical_identity = item_identity(entry_item)
             raw_parent = str(raw_entry.get("parentCode") or "").strip()
-            parent_item = item_for(raw_parent) if raw_parent else None
+            parent_item = (items_by_ref.get(raw_parent) or item_for(raw_parent)) if raw_parent else None
             if parent_item is not None and not draft_is_visible(parent_item):
                 parent_item = None
             if raw_parent and parent_item is None:

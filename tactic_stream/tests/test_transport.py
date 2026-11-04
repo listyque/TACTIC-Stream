@@ -3784,6 +3784,11 @@ return json.dumps({"native": json.loads(query_table_layout(kwargs["kind"], searc
                             self.assertEqual(gzip.decompress(response.read()), content)
                             self.assertEqual(response.headers['Content-Encoding'], 'gzip')
                 (assets / 'Small.js').write_bytes(b'export const small = true;')
+                (assets / 'NotoColorEmoji.ttf').write_bytes(content)
+                with patch('tactic_stream.server.app.gzip.compress', side_effect=AssertionError('Emoji font recompressed')):
+                    with urlopen(Request(self.url + '/ui/assets/NotoColorEmoji.ttf', headers={'Accept-Encoding': 'gzip'})) as response:
+                        self.assertEqual(response.read(), content)
+                        self.assertIsNone(response.headers.get('Content-Encoding'))
                 with urlopen(Request(self.url + '/ui/assets/Small.js', headers={'Accept-Encoding': 'gzip'})) as response:
                     self.assertEqual(response.read(), b'export const small = true;')
                     self.assertIsNone(response.headers.get('Content-Encoding'))

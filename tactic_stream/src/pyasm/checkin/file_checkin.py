@@ -559,7 +559,9 @@ class FileCheckin(BaseCheckin):
                     if os.path.normcase(actual_dir) != os.path.normcase(os.path.abspath(lib_dir)):
                         raise CheckinException('Preallocated file must be placed in its repository directory')
                     new_codes = {file.get_code() for file in self.file_objects}
-                    for old_file in self.snapshot.get_all_file_objects():
+                    if i == 0:
+                        self._preallocate_existing_files = self.snapshot.get_all_file_objects()
+                    for old_file in getattr(self, '_preallocate_existing_files', ()):
                         if old_file.get_code() in new_codes:
                             continue
                         old_path = os.path.join(old_file.get_lib_dir(snapshot=self.snapshot), old_file.get_file_name())

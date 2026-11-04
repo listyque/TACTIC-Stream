@@ -199,6 +199,21 @@ class SecurityAuthority(unittest.TestCase):
             security=self.api.auth.bind_security('admin',self.admin_ticket)
             self.assertTrue(tool_access(security,'agent_context'))
 
+    def test_api_method_denies_apply_to_dispatched_reads(self):
+        with self.session('admin', self.admin_ticket):
+            self.group('blocked_reads', '<rules><rule group="api_method" key="query" access="deny"/></rules>')
+            Login.get_by_login('operator').add_to_group('blocked_reads')
+        auth = dict(ticket=self.ticket, project='admin')
+        self.assertEqual(self.api.dispatch('query', (auth, 'sthpw/task')), '[]')
+        original = Config.get_value
+        def configured(section, name, *args, **kwargs):
+            return ('true' if (section, name) == ('security', 'api_method_restricted')
+                    else original(section, name, *args, **kwargs))
+        with patch.object(Config, 'get_value', side_effect=configured):
+            with self.assertRaises(SecurityException):
+                self.api.dispatch('query', (auth, 'sthpw/task'))
+            self.assertEqual(self.api.dispatch('ping', (auth,)), 'OK')
+
 
 if __name__ == '__main__':
     unittest.main()

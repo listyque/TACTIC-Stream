@@ -2314,6 +2314,7 @@ class Snapshot(SObject):
         builder.add_root_attr('ref_snapshot_code', self.get_code() )
         
         file_objects = []
+        orig_files = self._get_files_dict(snapshot_xml)
 
         paths = {}
         rejected  = False
@@ -2333,7 +2334,7 @@ class Snapshot(SObject):
             node_name = self._get_node_name(node)
 
 
-            orig_file_object = File.get_by_code(file_code)
+            orig_file_object = orig_files.get(file_code) or File.get_by_code(file_code)
 
             if not orig_file_object:
                 raise FileNotFoundError('Missing versionless source File: ' + file_code)
@@ -2492,9 +2493,6 @@ class Snapshot(SObject):
 
             file_object.set_value("checkin_dir", new_lib_dir)
             file_object.set_value("relative_dir", new_relative_dir)
-
-            # commit again
-            file_object.commit(triggers="none")
 
             new_paths = FileGroup.expand_paths(new_path, FileRange.get(file_object.get_file_range())) if base_type == 'sequence' else [new_path]
             for source, destination in zip(source_paths, new_paths):

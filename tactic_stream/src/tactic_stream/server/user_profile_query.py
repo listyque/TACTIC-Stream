@@ -22,16 +22,7 @@ def mutate_user_profile(login, values=None, password=None, groups=None,
     if require_admin and not Environment.get_security().is_admin():
         raise PermissionError('Only a TACTIC administrator can manage users')
 
-    group_search = Search('sthpw/login_in_group')
-    group_search.add_filter('login', current_login)
-    current_groups = [
-        str(item.get_value('login_group') or '').lower()
-        for item in group_search.get_sobjects()
-    ]
-    privileged = Environment.get_security().is_admin() or current_login.lower() == 'admin' or any(
-        group == 'admin' or 'supervisor' in group
-        for group in current_groups
-    )
+    privileged = bool(Environment.get_security().is_admin())
     if target_login != current_login and not privileged:
         raise PermissionError('You may only edit your own profile')
 
@@ -172,19 +163,9 @@ def create_user_profile(login, values=None, password=None, groups=None, require_
     if require_admin and not Environment.get_security().is_admin():
         raise PermissionError('Only a TACTIC administrator can manage users')
 
-    current_login = str(server.get_login() or '')
-    group_search = Search('sthpw/login_in_group')
-    group_search.add_filter('login', current_login)
-    current_groups = [
-        str(item.get_value('login_group') or '').lower()
-        for item in group_search.get_sobjects()
-    ]
-    privileged = Environment.get_security().is_admin() or current_login.lower() == 'admin' or any(
-        group == 'admin' or 'supervisor' in group
-        for group in current_groups
-    )
+    privileged = bool(Environment.get_security().is_admin())
     if not privileged:
-        raise PermissionError('Only an administrator or supervisor can create users')
+        raise PermissionError('Only a TACTIC administrator can create users')
 
     target_login = str(login or '').strip()
     if not target_login:
@@ -238,15 +219,6 @@ def query_user_profile_data(login, project_code='', activity_limit=25):
         return json.dumps({}, separators=(',', ':'))
 
     current_login = str(server.get_login() or '').strip()
-    is_admin = current_login.lower() == 'admin'
-    current_groups = []
-    if not is_admin:
-        membership_search = Search('sthpw/login_in_group')
-        membership_search.add_filter('login', current_login)
-        current_groups = [
-            str(item.get_value('login_group') or '').lower()
-            for item in membership_search.get_sobjects()
-        ]
     can_manage_work_hours = Environment.get_security().is_admin()
     can_view_work_hours = (
         current_login.casefold() == login.casefold()

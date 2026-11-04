@@ -1121,7 +1121,8 @@ def create_app(data_dir: Path, thread_count=None, *, event_collector=True) -> Fa
             "Cache-Control": "no-store" if help_asset else "public, max-age=31536000, immutable", "X-Content-Type-Options": "nosniff",
         }
         compress = False
-        if len(content) >= 1024 and content_type in ('text/javascript', 'text/css', 'text/plain', 'application/json', 'font/ttf'):
+        # Color emoji glyphs are already PNG-compressed; gzip saves little at high CPU cost.
+        if path.name != 'NotoColorEmoji.ttf' and len(content) >= 1024 and content_type in ('text/javascript', 'text/css', 'text/plain', 'application/json', 'font/ttf'):
             headers['Vary'] = 'Accept-Encoding'
             encodings = {}
             for encoding in request.headers.get('accept-encoding', '').lower().split(','):

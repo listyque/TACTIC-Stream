@@ -7,7 +7,7 @@ def query_user_recent_activity(
     """Return one enriched, pageable activity shape for profiles and feeds."""
     import json
     import xml.etree.ElementTree as ElementTree
-    from pyasm.search import Search, SearchKey
+    from pyasm.search import Search, SearchKey, SearchType
     from pyasm.common import Environment
 
     security = Environment.get_security()
@@ -417,6 +417,10 @@ def query_user_recent_activity(
             continue
         if include_day_counts:
             calendar_search = Search(search_type)
+            calendar_columns = set(SearchType.get_columns(search_type))
+            for col in ('id', 'code', 'timestamp', 'login', 'search_type', 'assigned', 'changed_by', 'access', 'project_code'):
+                if col in calendar_columns:
+                    calendar_search.add_column(col)
             apply_source_filters(
                 calendar_search, kind, filter_project, filter_day=False
             )

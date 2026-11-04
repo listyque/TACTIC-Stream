@@ -70,13 +70,12 @@ def get_virtual_snapshot_extended(server, search_key, context, files_dict, snaps
         search = Search('sthpw/snapshot')
         search.add_sobject_filter(sobject)
         search.add_filter('context', context)
+        search.add_column('version')
+        search.add_order_by('version desc')
+        search.set_limit(1)
         snaps = search.get_sobjects()
-        versions = []
-        for sn in snaps:
-            versions.append(sn.get_attr_value('version'))
-
-        if versions:
-            return max(versions)
+        if snaps:
+            return snaps[0].get_attr_value('version')
 
     if not version:
         ver = get_max_version(context=context, search_key=search_key)
@@ -233,13 +232,12 @@ def create_snapshot_extended(server, search_key, context, project_code=None, sna
         search = Search('sthpw/snapshot')
         search.add_sobject_filter(sobject)
         search.add_filter('context', context)
+        search.add_column('version')
+        search.add_order_by('version desc')
+        search.set_limit(1)
         snaps = search.get_sobjects()
-        versions = []
-        for sn in snaps:
-            versions.append(sn.get_attr_value('version'))
-
-        if versions:
-            return max(versions)
+        if snaps:
+            return snaps[0].get_attr_value('version')
 
     if not version:
         ver = get_max_version(context=context, search_key=search_key)
@@ -298,6 +296,9 @@ def create_snapshot_extended(server, search_key, context, project_code=None, sna
                 return '{0}.{1}'.format(name, extension)
             return name
 
+        from pyasm.biz import FileUndo
+        from .api import check_ticket_paths
+
         for index, (metadata, types) in enumerate(zip(
                 files_info['version_metadata'], files_info['files_types'])):
             original_name = file_name_with_extension(
@@ -311,6 +312,8 @@ def create_snapshot_extended(server, search_key, context, project_code=None, sna
             original_files_paths.append('{0}/{1}'.format(lib_dir, original_name))
             file_paths.append('{0}/{1}'.format(lib_dir, upload_name))
             file_types.append(types)
+
+        check_ticket_paths(file_paths, lib_dir)
 
         # generating previews if it's not explicitly passed
         if any(i in file_types for i in ['web', 'icon']):
@@ -329,15 +332,15 @@ def create_snapshot_extended(server, search_key, context, project_code=None, sna
                 # as the main file.
                 if context == 'icon':
                     if web_path:
-                        shutil.copy(web_path, original_file)
+                        FileUndo.copy(web_path, original_file)
                     elif icon_path:
-                        shutil.copy(icon_path, original_file)
+                        FileUndo.copy(icon_path, original_file)
 
                 # If web file is not generated and icon is, use original as web.
                 if icon_path and not web_path:
                     base, ext = os.path.splitext(original_file)
                     web_path = "%s_web.%s" % (base, ext)
-                    shutil.copy(original_file, web_path)
+                    FileUndo.copy(original_file, web_path)
 
                 if web_path:
                     file_paths.append(web_path)
@@ -448,9 +451,9 @@ def create_snapshot_extended(server, search_key, context, project_code=None, sna
 
             if repo_name:
                 versionless.set_value('repo', repo_name)
-                versionless.set_value('version', -1)
-                # snapshot.set_value('is_current', 1)
-                versionless.set_value('is_latest', 1)
+            versionless.set_value('version', -1)
+            # snapshot.set_value('is_current', 1)
+            versionless.set_value('is_latest', 1)
 
             versionless.commit(triggers=False, log_transaction=False)
 

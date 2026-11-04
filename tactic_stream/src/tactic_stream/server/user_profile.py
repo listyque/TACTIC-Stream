@@ -38,11 +38,12 @@ def selected_user(login):
     return user
 
 
-def group_catalog():
+def group_catalog(group_objects=None):
+    rows = group_objects if group_objects is not None else Search('sthpw/login_group').get_sobjects()
     return sorted([dict(code=row.get_value('login_group'), label=(row.get_value('name', no_exception=True) or row.get_value('login_group').replace('_', ' ')).title(),
                  description=row.get_value('description') or '', accessLevel=row.get_value('access_level') or '',
                  projectCode=row.get_value('project_code') or '', isDefault=bool(row.get_value('is_default')))
-            for row in Search('sthpw/login_group').get_sobjects()], key=lambda row: row['code'])
+            for row in rows], key=lambda row: row['code'])
 
 
 def membership(login):
@@ -50,24 +51,26 @@ def membership(login):
     return sorted({row.get_value('login_group') for row in search.get_sobjects()})
 
 
-def revision(user):
+def revision(user, assigned=None, groups=None):
     avatars = Search('sthpw/snapshot'); avatars.add_sobject_filter(user); avatars.add_filter('context', 'icon')
-    value = [user.get_data(), membership(user.get_value('login')), group_catalog(), [row.get_data() for row in avatars.get_sobjects()]]
+    value = [user.get_data(), assigned if assigned is not None else membership(user.get_value('login')),
+             groups if groups is not None else group_catalog(), [row.get_data() for row in avatars.get_sobjects()]]
     return hashlib.sha256(json.dumps(value, sort_keys=True, default=str).encode()).hexdigest()
 
 
 def read_profile(login):
     user = selected_user(login); privileged = authority(); current = login == Environment.get_user_name()
     identity = user_identities([user])[0]
-    groups = group_catalog(); assigned = membership(login)
+    group_objects = Search('sthpw/login_group').get_sobjects()
+    groups = group_catalog(group_objects); assigned = membership(login)
     columns = set(SearchType.get_columns('sthpw/login'))
     profile = {name: user.get_value(name) or '' for name in SELF_FIELDS if name in columns}
     profile['phone_number'] = next((user.get_value(name, no_exception=True) for name in ('phone_number', 'phone', 'telephone', 'mobile') if user.get_value(name, no_exception=True)), '')
     roles = user.get_value('roles', no_exception=True) or user.get_value('role', no_exception=True) or []
     if not isinstance(roles, (list, tuple, set)): roles = str(roles).replace('|', ',').split(',')
     roles = [str(part).strip() for part in roles if str(part).strip()]
-    group_objects = Search('sthpw/login_group').get_sobjects()
-    ranked = ranked_groups([dict(row, accessRules=next((item.get_value('access_rules') for item in group_objects if item.get_value('login_group') == row['code']), '')) for row in groups], Project.get_project_code())
+    rules_by_code = {item.get_value('login_group'): item.get_value('access_rules') for item in group_objects}
+    ranked = ranked_groups([dict(row, accessRules=rules_by_code.get(row['code'], '')) for row in groups], Project.get_project_code())
     profile.update(identity, current=current, searchKey=user.get_search_key(), groups=[row for row in ranked if row['code'] in assigned],
                    roles=list(roles), project=Project.get().get_value('title') or Project.get_project_code())
     for row in profile['groups']: row.pop('accessRules', None)
@@ -78,7 +81,8 @@ def read_profile(login):
         document.update(login=login, password='', groups=assigned)
     identities = user_directory(Search('sthpw/login').get_sobjects())
     return dict(profile=profile, users=identities,
-                groups=groups if privileged else [], document=document, revision=revision(user) if document is not None else '',
+                groups=groups if privileged else [], document=document,
+                revision=revision(user, assigned=assigned, groups=groups) if document is not None else '',
                 permissions=dict(edit=current or privileged, manage=privileged))
 
 

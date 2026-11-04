@@ -1366,7 +1366,7 @@ class Security(Base):
             if not ticket_key:
                 search = Search('sthpw/ticket')
                 search.add_filter('login', login.get_login())
-                ticket = next((row for row in search.get_sobjects() if Ticket.get_by_valid_key(row.get_key())), None)
+                ticket = next((row for row in search.get_sobjects() if _valid_ticket_expiry(row.get_value('expiry'))), None)
             with _security_transaction():
                 if ticket and ticket_key:
                     from pyasm.search import Sql

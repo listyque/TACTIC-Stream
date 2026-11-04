@@ -1310,7 +1310,7 @@ class Sql(Base):
             if profile['manage']: tables += ('login_group', 'login_in_group')
             if profile['avatar']: tables += ('snapshot', 'file')
         if Container.get('Security:writing'):
-            tables = ('login', 'ticket', 'transaction_log', 'sobject_log', 'change_timestamp')
+            tables += ('login', 'ticket', 'transaction_log', 'sobject_log', 'change_timestamp')
         if Container.get('Chat:writing'):
             tables += ('message', 'message_log', 'subscription', 'connection',
                        'transaction_log', 'sobject_log', 'change_timestamp')
@@ -1868,6 +1868,7 @@ class Sql(Base):
             Container.clear_dict('SearchType:column_info')
         if invalidate_routing:
             Container.clear_dict('Store:resolve')
+            Container.put('AccessManager:project_codes', None)
         if self.conn is None:
             self.connect()
         if not self._admin_sql and not ((Container.get('Security:writing') or Container.get('Chat:writing') or Container.get('UserProfile:writing') or getattr(self, '_sobject_write_table', None)) and
@@ -1924,6 +1925,7 @@ class Sql(Base):
                 Container.clear_dict('SearchType:column_info')
             if invalidate_routing:
                 Container.clear_dict('Store:resolve')
+                Container.put('AccessManager:project_codes', None)
 
     def set_savepoint(self, name="save_pt"):
         # Both PostgreSQL and SQLite emit real SAVEPOINT statements.

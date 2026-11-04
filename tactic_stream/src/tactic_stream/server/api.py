@@ -810,6 +810,9 @@ class ApiXMLRPC:
 
     @staticmethod
     def check_method_access(method, command=None):
+        from pyasm.common import Config
+        if Config.get_value('security', 'api_method_restricted') == 'true' and not Environment.get_security().check_access('api_method', method, 'allow', default='allow'):
+            raise SecurityException('Access denied')
         if method == 'class_exists' and not Environment.get_security().is_admin():
             raise SecurityException('Class lookup currently requires administrator access')
         if method not in WRITE_METHODS and method not in ('eval', 'get_preallocated_path', 'get_virtual_snapshot_path', 'class_exists'):
@@ -835,9 +838,6 @@ class ApiXMLRPC:
             'tactic.command.sobject_link_cmd.SObjectLinkCmd')
         if method in WRITE_METHODS and not Environment.get_security().is_admin() and not (chat_call or object_call or browser_checkin or table_call or method == 'log'):
             raise SecurityException('API writes currently require administrator access')
-        from pyasm.common import Config
-        if Config.get_value('security', 'api_method_restricted') == 'true' and not Environment.get_security().check_access('api_method', method, 'allow', default='allow'):
-            raise SecurityException('Access denied')
 
 
 
@@ -3302,8 +3302,12 @@ class ApiXMLRPC:
             snapshots = snapshots[:1]
         parents = {}
         if include_parent:
+            parent_by_ref = {}
             for snapshot in snapshots:
-                parents[snapshot.get_search_key()] = snapshot.get_parent()
+                ref = (snapshot.get_value('search_type'), snapshot.get_value('search_code'), snapshot.get_value('search_id'))
+                if ref not in parent_by_ref:
+                    parent_by_ref[ref] = snapshot.get_parent()
+                parents[snapshot.get_search_key()] = parent_by_ref[ref]
         if include_files or include_paths or include_paths_dict or include_web_paths_dict or include_full_xml:
             all_files = Snapshot.get_files_dict_by_snapshots(snapshots)
 

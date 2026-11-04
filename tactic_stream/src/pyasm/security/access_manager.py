@@ -239,10 +239,13 @@ class AccessManager(Base):
 
         # store all of the project codes (this will only run once)
         if self.project_codes == None:
-            search = Search('sthpw/project')
-            projects = search.get_sobjects()
-            self.project_codes = [x.get_code() for x in projects]
-            self.project_codes.append('*')
+            cached_codes = Container.get("AccessManager:project_codes")
+            if cached_codes is None:
+                search = Search('sthpw/project')
+                projects = search.get_sobjects()
+                cached_codes = [x.get_code() for x in projects] + ['*']
+                Container.put("AccessManager:project_codes", cached_codes)
+            self.project_codes = list(cached_codes)
 
         for rule_node in rule_nodes:
             # initiate the project_code here for each loop
