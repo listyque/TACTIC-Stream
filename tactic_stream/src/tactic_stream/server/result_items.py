@@ -220,6 +220,49 @@ def organization_catalog(records, pipelines, tasks):
     )
 
 
+def snapshot_summaries(records):
+    """Count visible snapshot contexts without materializing version histories."""
+    from pyasm.biz import Schema
+
+    if not records:
+        return {}
+    search = Search('sthpw/snapshot')
+    schema = Schema.get(project_code=records[0].get_project_code())
+    attrs = search._get_relationship_attrs(schema, records[0].get_base_search_type())
+    if not attrs:
+        return {}
+    attrs = schema.resolve_relationship_attrs(attrs, 'sthpw/snapshot', records[0].get_search_type())
+    relationship = attrs.get('relationship')
+    summaries = {obj.get_search_key(): {} for obj in records}
+    if relationship not in ('code', 'id', 'search_code', 'search_id'):
+        # Graph edges retain native duplicate/instance ownership semantics.
+        for key, snapshots in Search.get_related_by_sobjects(records, 'sthpw/snapshot').items():
+            for snapshot in snapshots:
+                counts = summaries[key].setdefault(snapshot.get_value('context'), [0, 0])
+                counts[0] += 1
+                counts[1] += snapshot.get_value('version') >= 0
+        return summaries
+    forward = attrs['from'] == 'sthpw/snapshot'
+    child_column, owner_column = ((attrs['from_col'], attrs['to_col']) if forward
+                                  else (attrs['to_col'], attrs['from_col']))
+    typed = relationship in ('search_code', 'search_id') and forward
+    prefix = attrs.get('prefix', '')
+    type_column = (prefix + '_' if prefix else '') + 'search_type'
+    columns = ([type_column] if typed else []) + [child_column, 'context']
+    owners = {}
+    for obj in records:
+        identity = (obj.get_search_type(), obj.get_value(owner_column)) if typed else (obj.get_value(owner_column),)
+        owners.setdefault(identity, []).append(obj.get_search_key())
+    search.add_relationship_filters(records)
+    for versioned in (False, True):
+        if versioned:
+            search.add_filter('version', 0, op='>=')
+        for *identity, context, count in search.get_group_counts(columns):
+            for key in owners.get(tuple(identity), []):
+                summaries[key].setdefault(context, [0, 0])[int(versioned)] += count
+    return summaries
+
+
 def describe(items, relation_counts=False, organization=None):
     if not items:
         return []
@@ -258,7 +301,7 @@ def describe(items, relation_counts=False, organization=None):
             articles = json.loads(knowledge_request('link_index', project)).get('links', [])
     tasks = Search.get_related_by_sobjects(records, 'sthpw/task')
     notes = Search.get_related_by_sobjects(records, 'sthpw/note')
-    snapshots = Search.get_related_by_sobjects(records, 'sthpw/snapshot')
+    snapshots = snapshot_summaries(records)
     pipeline_codes = list(dict.fromkeys(row.get_value('pipeline_code', no_exception=True) for row in records if row.get_value('pipeline_code', no_exception=True)))
     pipelines = {row.get_code(): row for row in Search.get_by_code('sthpw/pipeline', pipeline_codes)} if pipeline_codes else {}
     if organization is not None:
@@ -276,12 +319,12 @@ def describe(items, relation_counts=False, organization=None):
     for index, (key, obj) in enumerate(items.items()):
         own_key = obj.get_search_key()
         own_tasks, own_notes = tasks.get(own_key, []), notes.get(own_key, [])
-        own_snapshots = snapshots.get(own_key, [])
+        own_snapshots = snapshots.get(own_key, {})
         pipeline = pipelines.get(obj.get_value('pipeline_code', no_exception=True))
         names = list(pipeline.get_process_names()) if pipeline else []
         if not names:
             names = ['icon', 'attachment', 'publish']
-        if 'attachment' not in names and any((row.get_value('context') or '').split('/')[0] == 'attachment' for row in own_snapshots):
+        if 'attachment' not in names and any((context or '').split('/')[0] == 'attachment' for context in own_snapshots):
             names.append('attachment')
         branches = cached_relations(obj) if obj.get_base_search_type() not in ('sthpw/snapshot', 'sthpw/file') else []
         if relation_counts:
@@ -301,8 +344,8 @@ def describe(items, relation_counts=False, organization=None):
                 process_type=process.get_type() if process else 'manual',
                 task_count=sum(row.get_value('process') == name for row in own_tasks),
                 note_count=sum((row.get_value('process') or row.get_value('context')) == name for row in own_notes),
-                has_children=any((row.get_value('context') or '').split('/')[0] == name for row in own_snapshots),
-                count=sum((row.get_value('context') or '').split('/')[0] == name and row.get_value('version') >= 0 for row in own_snapshots)))
+                has_children=any((context or '').split('/')[0] == name for context in own_snapshots),
+                count=sum(counts[1] for context, counts in own_snapshots.items() if (context or '').split('/')[0] == name)))
         if obj.get_base_search_type() == 'sthpw/snapshot':
             branches = [dict(kind='versions', key='versions', process=obj.get_value('context'), title='Versions')] if obj.get_value('version') < 0 else []
         thumb.set_current_index(index)
@@ -339,7 +382,7 @@ def describe(items, relation_counts=False, organization=None):
             task_count=len(own_tasks), note_count=len(own_notes),
             note_counts={name: sum((note.get_value('process') or note.get_value('context')) == name for note in own_notes)
                          for name in dict.fromkeys((note.get_value('process') or note.get_value('context')) for note in own_notes)},
-            has_snapshot=any(snapshot.get_value('context') != 'icon' for snapshot in own_snapshots),
+            has_snapshot=any(context != 'icon' for context in own_snapshots),
             tasks=[dict(taskSearchKey=task.get_search_key(), process=task.get_value('process'), status=task.get_value('status'),
                         context=task.get_value('context') or task.get_value('process')) for task in own_tasks]))
     return output

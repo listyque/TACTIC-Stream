@@ -806,8 +806,10 @@ def knowledge_request(
             row_identity: str(row.get("parentCode") or "")
             for row_identity, row in rows_by_identity.items()
         }
-        items_by_ref = {}
-        for candidate in Search(search_type).get_sobjects():
+        candidates = Search(search_type).get_sobjects()
+        # item_for resolves numeric ids before codes; keep the same precedence.
+        items_by_ref = {str(item.get_id()): item for item in candidates if item.get_id()}
+        for candidate in candidates:
             for ref in item_references(candidate):
                 items_by_ref.setdefault(ref, candidate)
         changes = []

@@ -71,6 +71,8 @@ def get_virtual_snapshot_extended(server, search_key, context, files_dict, snaps
         search.add_sobject_filter(sobject)
         search.add_filter('context', context)
         search.add_column('version')
+        # Selecting s_status keeps the native retired-row filter active.
+        search.add_column('s_status')
         search.add_order_by('version desc')
         search.set_limit(1)
         snaps = search.get_sobjects()
@@ -233,6 +235,8 @@ def create_snapshot_extended(server, search_key, context, project_code=None, sna
         search.add_sobject_filter(sobject)
         search.add_filter('context', context)
         search.add_column('version')
+        # Selecting s_status keeps the native retired-row filter active.
+        search.add_column('s_status')
         search.add_order_by('version desc')
         search.set_limit(1)
         snaps = search.get_sobjects()
@@ -296,7 +300,6 @@ def create_snapshot_extended(server, search_key, context, project_code=None, sna
                 return '{0}.{1}'.format(name, extension)
             return name
 
-        from pyasm.biz import FileUndo
         from .api import check_ticket_paths
 
         for index, (metadata, types) in enumerate(zip(
@@ -332,15 +335,15 @@ def create_snapshot_extended(server, search_key, context, project_code=None, sna
                 # as the main file.
                 if context == 'icon':
                     if web_path:
-                        FileUndo.copy(web_path, original_file)
+                        shutil.copy(web_path, original_file)
                     elif icon_path:
-                        FileUndo.copy(icon_path, original_file)
+                        shutil.copy(icon_path, original_file)
 
                 # If web file is not generated and icon is, use original as web.
                 if icon_path and not web_path:
                     base, ext = os.path.splitext(original_file)
                     web_path = "%s_web.%s" % (base, ext)
-                    FileUndo.copy(original_file, web_path)
+                    shutil.copy(original_file, web_path)
 
                 if web_path:
                     file_paths.append(web_path)
