@@ -283,6 +283,7 @@ def run_gc(task, *, stopped=lambda: False, heartbeat=lambda: None):
             directory = Path(directory)
             if not directory.exists():
                 continue
+            seen_staging = set()
             with os.scandir(directory) as entries:
                 for entry in entries:
                     heartbeat()
@@ -292,6 +293,9 @@ def run_gc(task, *, stopped=lambda: False, heartbeat=lambda: None):
                         continue
                     path = Path(entry.path)
                     path = path.with_suffix('') if path.suffix == '.lock' else path
+                    if path in seen_staging:
+                        continue
+                    seen_staging.add(path)
                     try:
                         with byte_lock(path):
                             path.unlink(missing_ok=True)

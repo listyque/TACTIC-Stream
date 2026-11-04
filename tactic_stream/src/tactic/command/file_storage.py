@@ -3,7 +3,7 @@ from contextlib import contextmanager
 from copy import deepcopy
 from time import time
 
-from pyasm.biz.file_project import create, find, save, storage_schema, TABLES
+from pyasm.biz.file_project import commit_records, create, find, save, storage_schema, TABLES
 from pyasm.common import Container, Environment
 from pyasm.security.security import _require_admin
 from pyasm.search import Search
@@ -119,8 +119,9 @@ class FileStorageMixin:
                     self.gc_enqueue(data, references)
                     save(item, data)
             self.storage_merge()
-            save(self.storage_record, self.storage_data)
-            self.storage_original = deepcopy(self.storage_data)
+            if self.storage_data != self.storage_original:
+                save(self.storage_record, self.storage_data)
+                self.storage_original = deepcopy(self.storage_data)
             self.storage_seen = Container.get('FileProject:storage-write-revision')
 
     def reserve_storage(self, sizes):
@@ -207,16 +208,19 @@ class FileStorageMixin:
         search.add_filter('code', after, op='>')
         search.set_limit(1001)
         rows = search.get_sobjects()
-        for row in rows[:1000]:
-            blob = row.get_json_value('data')
-            if kind == 'blob' and blob['state'] != 'purged':
-                data['allocated_bytes'] += blob['size']
-                data['allocated_files'] += 1
-            with maintenance(self.project):
+        page = rows[:1000]
+        now = int(time())
+        with maintenance(self.project):
+            for row in page:
+                blob = row.get_json_value('data')
+                if kind == 'blob' and blob['state'] != 'purged':
+                    data['allocated_bytes'] += blob['size']
+                    data['allocated_files'] += 1
                 if row.get_value('created_at', no_exception=True) is None:
-                    row.set_value('created_at', int(time()))
-                save(row, blob)
-            data['index_after'] = row.get_code()
+                    row.set_value('created_at', now)
+                row.set_json_value('data', blob)
+                data['index_after'] = row.get_code()
+            commit_records(page)
         if len(rows) <= 1000:
             data['index_after'] = ''
             data['index_table'] = data.get('index_table', 0) + 1

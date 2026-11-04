@@ -247,11 +247,12 @@ def compatibility_manifest():
 
 
 class ApiXMLRPC:
+    _signatures = {}
+
     def __init__(self, store):
         self.store = store
         self.auth = Authenticator(store)
-        self.protocol = 'xmlrpc'
-        self._signatures = {}
+        self.protocol = 'xmlrpc' 
 
     def _get_data(self):
         # Original BaseApiXMLRPC state belongs to the current request Container.
@@ -1538,7 +1539,9 @@ class ApiXMLRPC:
                     continue
                 sobject.set_metadata_value(name, value)
             if parent_key:
-                sobject.set_parent(self._sobject(parent_key))
+                if index == 0:
+                    resolved_parent = self._sobject(parent_key)
+                sobject.set_parent(resolved_parent)
             sobject.commit(triggers=triggers)
             results.append(self._record(sobject, use_id=use_id, check_security=False))
         self.set_sobjects(objects)
@@ -2946,7 +2949,7 @@ class ApiXMLRPC:
         snapshots = []
 
         # preprocess and get all file objects
-        if include_files:
+        if include_files or include_paths or include_paths_dict:
             all_files = Snapshot.get_files_dict_by_snapshots(results)
 
 
@@ -3016,8 +3019,11 @@ class ApiXMLRPC:
 
         results = snapshot.get_all_ref_snapshots(mode=mode, type=type, show_retired=show_retired)
         snapshots = []
-
-
+        all_files = (
+            Snapshot.get_files_dict_by_snapshots(results)
+            if (include_files or include_paths or include_paths_dict)
+            else {}
+        )
 
         for result in results:
             snapshot = self._record(result)
@@ -3036,7 +3042,6 @@ class ApiXMLRPC:
 
         # preprocess and get all file objects
         if include_files:
-            all_files = Snapshot.get_files_dict_by_snapshots(results)
             for idx, result in enumerate(results):
                 snapshot = snapshots[idx]
 
@@ -3299,7 +3304,7 @@ class ApiXMLRPC:
         if include_parent:
             for snapshot in snapshots:
                 parents[snapshot.get_search_key()] = snapshot.get_parent()
-        if include_files:
+        if include_files or include_paths or include_paths_dict or include_web_paths_dict or include_full_xml:
             all_files = Snapshot.get_files_dict_by_snapshots(snapshots)
 
         results = []
@@ -4471,8 +4476,10 @@ class ApiXMLRPC:
             if file_type != '*':
                 nodes = nodes[:1]
             ranges = []
+            files_dict = snapshot._get_files_dict(snapshot.get_snapshot_xml()) if nodes else {}
             for node in nodes:
-                file = File.get_by_code(Xml.get_attribute(node, 'file_code'))
+                code = Xml.get_attribute(node, 'file_code')
+                file = files_dict.get(code) or File.get_by_code(code)
                 ranges.append(FileRange.get(file.get_file_range())
                               if file and file.get_value('base_type') == 'sequence' else None)
             if any(ranges):

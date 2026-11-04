@@ -203,6 +203,8 @@ class DataDirectories(unittest.TestCase):
             self.assertIn(meta['code'], catalog.cache)
             self.assertEqual(catalog.node(meta['code'])['items'][0]['path'], 'a.txt')
             self.assertEqual(loads, [])
+            from tactic_stream.server.api import ApiXMLRPC
+            self.assertIs(ApiXMLRPC(store)._signatures, ApiXMLRPC._signatures)
 
 
 if __name__ == '__main__':

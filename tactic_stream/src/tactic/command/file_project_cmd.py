@@ -11,7 +11,7 @@ from pyasm.biz import Project
 from pyasm.biz.file_catalog import FileCatalog
 from pyasm.biz.file_project import MODE, PageStore, access, blob_file_path, commit_records, create, encode, find, save, save_batch
 from pyasm.command import Command
-from pyasm.common import Environment
+from pyasm.common import Container, Environment
 from pyasm.common.errors import SecurityException
 from pyasm.search import Search
 from pyasm.search.search import _context
@@ -206,6 +206,9 @@ class FileProjectCmd(FileStreamMixin, FileSubmitMixin, FileRevertMixin, FileRead
     def lock(self, kind, code):
         item = find(kind, code)
         item.get_sql().lock_sobject(item, timeout=5000)
+        records = Container.get('FileProject:read-records')
+        if records is not None:
+            records.pop((kind, code), None)
         return find(kind, code)
 
     def stream(self, code=None, operation='read', lock=False):
@@ -391,7 +394,7 @@ class FileProjectCmd(FileStreamMixin, FileSubmitMixin, FileRevertMixin, FileRead
         raw = base64.b64decode(payload, validate=True) if isinstance(payload, str) else payload
         if not raw or len(raw) > TRANSFER_LIMIT or offset + len(raw) > data['size']:
             raise ValueError('Invalid upload chunk size')
-        path = self.blob_path(item.get_code())
+        path = self.blob_path(item.get_code(), data)
         digest = sha256(raw).hexdigest()
         if offset < data['received']:
             with path.open('rb') as stream:
@@ -456,13 +459,14 @@ class FileProjectCmd(FileStreamMixin, FileSubmitMixin, FileRevertMixin, FileRead
             else:
                 if data['received']:
                     raise ValueError('Cannot replace a partially uploaded blob in a small-file batch')
-                path = self.blob_path(code)
+                path = self.blob_path(code, data)
                 Transaction.get().register(UploadUndo(path, 0))
                 with path.open('wb') as stream:
                     stream.write(raw)
                     stream.flush()
-                    import os
-                    os.fsync(stream.fileno())
+                    if len(decoded) == 1:
+                        import os
+                        os.fsync(stream.fileno())
                 data.update(state='ready', received=len(raw), sha256=digest)
                 item.set_json_value('data', data)
                 rows.append(item)
@@ -547,7 +551,18 @@ class FileProjectCmd(FileStreamMixin, FileSubmitMixin, FileRevertMixin, FileRead
         search = Search('file_project/checkout')
         search.add_filters('code', keys)
         existing = {item.get_code(): item for item in search.get_sobjects()}
-        fresh, updated, states, modes = [], [], {}, {}
+        fresh, updated, states, modes = [], [], {code: data}, {}
+        holder_codes = {
+            holder['change']
+            for item in existing.values()
+            for holder in item.get_json_value('data').get('holders', ())
+            if holder.get('change') and holder['change'] != code
+        }
+        if holder_codes:
+            holder_search = Search('file_project/change')
+            holder_search.add_filters('code', list(holder_codes))
+            for item in holder_search.get_sobjects():
+                states[item.get_code()] = item.get_json_value('data')
         for path, key in zip(paths, keys):
             item = existing.get(key)
             opened = item.get_json_value('data') if item else {'stream': data['stream'], 'path': path, 'holders': []}

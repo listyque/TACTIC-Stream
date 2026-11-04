@@ -343,6 +343,12 @@ class Snapshot(SObject):
                 all_files[snapshot_code] = file_list
 
             file_list.append(file)
+        if attr == "snapshot_code" and not file_type:
+            for snapshot in snapshots:
+                if snapshot is not None:
+                    snapshot.files_dict = {
+                        f.get_code(): f for f in all_files.get(snapshot.get_code(), ())
+                    }
         return all_files 
     get_files_dict_by_snapshots = classmethod(get_files_dict_by_snapshots)
 
@@ -1157,9 +1163,10 @@ class Snapshot(SObject):
 
         # find the path for each file
         file_nodes = snapshot_xml.get_nodes("snapshot/file")
+        files_dict = self._get_files_dict(snapshot_xml) if file_nodes else {}
         for file_node in file_nodes:
             file_code = Xml.get_attribute(file_node, "file_code")
-            file_object = File.get_by_code(file_code)
+            file_object = files_dict.get(file_code) or File.get_by_code(file_code)
             if file_object is None:
                 raise FileNotFoundError('Missing Snapshot File: ' + file_code)
 

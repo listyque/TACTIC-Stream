@@ -131,7 +131,10 @@ class ApiXMLRPC:
                 raise UnsupportedContract('A local SDK connection cannot outlive its request context')
             if Environment.get_security() is None:
                 raise SecurityException('Local API requires authenticated security')
-            signature = inspect.signature(function)
+            signature = self.api._signatures.get(name)
+            if signature is None:
+                signature = inspect.signature(function)
+                self.api._signatures[name] = signature
             arguments = signature.bind(*args, **kwargs)
             if 'ticket' in signature.parameters:
                 ticket = arguments.arguments['ticket']

@@ -482,8 +482,9 @@ class FileTransferMixin:
                         remaining -= len(block)
                     if output:
                         output.flush()
-                        import os
-                        os.fsync(output.fileno())
+                        if len(members) == 1:
+                            import os
+                            os.fsync(output.fileno())
                 padding = (512 - member.size % 512) % 512
                 if len(source.read(padding)) != padding:
                     raise ValueError('Truncated archive padding')

@@ -252,21 +252,27 @@ def commit_records(rows):
                 row.commit()
             return
         for batch in ([row] for row in rows) if sequential else (rows,):
-            prepared = []
+            prepared, active_batch = [], []
             for row in batch:
-                try:prepared.append(row._prepare_commit(True, False, False))
+                try:
+                    item = row._prepare_commit(True, False, False)
                 except Exception as error:
                     data=row.get_json_value('data',{})
                     if data.get('path') and not getattr(error,'file_error',None):
                         error.file_error={'path':data['path'],'operation':'commit','cause':str(error)}
                     raise
+                if item is not None:
+                    prepared.append(item)
+                    active_batch.append(row)
+            if not prepared:
+                continue
             updates = [item[0] for item in prepared]
             # Independent workspaces can publish identical immutable pages concurrently.
-            ids = sql.do_update_multiple(updates, batch, ignore_existing=kind == 'page')
+            ids = sql.do_update_multiple(updates, active_batch, ignore_existing=kind == 'page' and all(row.is_insert() for row in active_batch))
             search = Search('file_project/' + kind)
-            search.add_filters('code', [row.get_code() for row in batch])
+            search.add_filters('code', [row.get_code() for row in active_batch])
             stored = {row.get_code(): row for row in search.get_sobjects()}
-            for row, (_, inserting, row_id, triggers) in zip(batch, prepared):
+            for row, (_, inserting, row_id, triggers) in zip(active_batch, prepared):
                 if kind == 'page' and row.get_code() not in ids:
                     if row.get_json_value('data') != stored[row.get_code()].get_json_value('data'):
                         raise ValueError('Immutable catalog page identity collision')
