@@ -296,6 +296,7 @@ export default {
           <QuickFilterChip
             v-for="cell in row.cells"
             :key="cell.index"
+            round
             :data-tag-index="cell.index"
             :checked="
               cell.index < 0

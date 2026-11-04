@@ -1,6 +1,6 @@
-import { A as onMounted, G as withCtx, J as markRaw, M as openBlock, N as renderList, O as onBeforeUnmount, S as h, X as ref, _ as createElementBlock, b as createVNode, et as unref, g as createCommentVNode, h as createBlock, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment } from "./vue.js";
+import { C as h, K as withCtx, N as openBlock, P as renderList, Y as markRaw, Z as ref, _ as createCommentVNode, d as Fragment, g as createBlock, h as createBaseVNode, it as toDisplayString, j as onMounted, k as onBeforeUnmount, m as computed, nt as normalizeClass, rt as normalizeStyle, tt as unref, v as createElementBlock, x as createVNode } from "./vue.js";
 import { o as t, s as appearance, t as _sfc_main$2 } from "./AppButton.js";
-import { G as button, H as observeFrameSizes, K as label, P as _sfc_main$5, V as frameContentWidth, X as rect, Y as node, b as _sfc_main$3, t as _sfc_main$4, w as translate } from "./FrameView.js";
+import { F as _sfc_main$5, H as frameContentWidth, K as button, T as translate, U as observeFrameSizes, X as node, Z as rect, d as _sfc_main$3, q as label, t as _sfc_main$4 } from "./FrameView.js";
 import { b as _sfc_main$6 } from "./RelatedObjects.js";
 //#region ../src/tactic_stream/shared_ui/features/tasks/process.ui.mjs
 var metrics = {

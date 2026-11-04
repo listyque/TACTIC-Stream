@@ -465,6 +465,8 @@
   "End date and time": "End date and time",
   "Dock actions": "Dock actions",
   "Help for this dock": "Help for this dock",
+  "Slide over left": "Slide over left",
+  "Slide over right": "Slide over right",
   "Dock to workspace": "Dock to workspace",
   "Close dock": "Close dock",
   "Attachment file was not found": "Attachment file was not found",
@@ -2023,5 +2025,17 @@
   "The agent executor stopped unexpectedly. Connect again.": "The agent executor stopped unexpectedly. Connect again.",
   "An external agent is already connected to this project": "An external agent is already connected to this project",
   "Agent connection failed": "Agent connection failed",
-  "No available models. Check AI providers.": "No available models. Check AI providers."
+  "No available models. Check AI providers.": "No available models. Check AI providers.",
+  "Manual · Task": "Manual · Task",
+  "Action · Auto script": "Action · Auto script",
+  "Condition · Branching": "Condition · Branching",
+  "Approval · Sign-off": "Approval · Sign-off",
+  "Hierarchy · Sub-workflow": "Hierarchy · Sub-workflow",
+  "Dependency · External wait": "Dependency · External wait",
+  "Progress · Tracker": "Progress · Tracker",
+  "Status · Task state": "Status · Task state",
+  "Choose how this stage behaves in the workflow and how it is drawn on the canvas:": "Choose how this stage behaves in the workflow and how it is drawn on the canvas:",
+  "Config table · config": "Config table · config",
+  "System table · sthpw": "System table · sthpw",
+  "External · {ns}": "External · {ns}"
 }

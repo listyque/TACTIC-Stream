@@ -1,6 +1,6 @@
-import { G as withCtx, M as openBlock, X as ref, _ as createElementBlock, b as createVNode, p as computed } from "./vue.js";
-import { G as button, P as _sfc_main$2, X as rect, t as _sfc_main$1 } from "./FrameView.js";
-import { dt as _sfc_main$3 } from "./RelatedObjects.js";
+import { K as withCtx, N as openBlock, Z as ref, m as computed, v as createElementBlock, x as createVNode } from "./vue.js";
+import { F as _sfc_main$2, K as button, Z as rect, t as _sfc_main$1 } from "./FrameView.js";
+import { ft as _sfc_main$3 } from "./RelatedObjects.js";
 //#region src/features/administration/PageEditorTools.vue
 var _sfc_main = {
 	__name: "PageEditorTools",

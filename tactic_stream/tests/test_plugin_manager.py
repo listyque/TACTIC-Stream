@@ -33,6 +33,7 @@ class PluginManagerTests(unittest.TestCase):
         return self.call(action, identity=current['identity'], expected_revision=current['revision'], **values)
 
     def test_package_file_manifest_publish_and_removal(self):
+        self.assertIn('catalog', self.call('load', identity=''))
         doc = self.create()
         self.assertTrue(doc['metadata']['active'])
         doc = self.change(doc, 'new_folder', path='docs')

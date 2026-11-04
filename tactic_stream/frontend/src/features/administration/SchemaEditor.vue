@@ -133,6 +133,7 @@ export default {
       columnRequest: 0,
       creating: false,
       creationPosition: null,
+      pendingDraftIdentity: '',
       deletionActive: false
     };
   },
@@ -167,21 +168,31 @@ export default {
       const types = Object.fromEntries(
         (this.metadata.searchTypes || []).map((row) => [row.identity, row])
       );
+      const drafts = this.document?.draftTypes || {};
       const nodes = [...this.xml.documentElement.children]
         .filter((node) => node.tagName === 'search_type')
         .map((node, index) => {
           const identity = node.getAttribute('name'),
-            type = types[identity] || {};
+            type = types[identity] || {},
+            draft = drafts[identity] || null;
           return {
             identity,
             attributes: attributes(node),
-            label: type.label || node.getAttribute('label') || identity,
+            label:
+              draft?.title ||
+              type.label ||
+              node.getAttribute('label') ||
+              identity,
             nodeX: Number(node.getAttribute('xpos') ?? 40 + (index % 3) * 240),
             nodeY: Number(
               node.getAttribute('ypos') ?? 40 + Math.floor(index / 3) * 130
             ),
-            color: node.getAttribute('color') || type.color,
-            kind: node.getAttribute('type') || 'search_type',
+            color: draft?.color || node.getAttribute('color') || type.color,
+            kind:
+              node.getAttribute('type') ||
+              node.getAttribute('node_type') ||
+              'search_type',
+            draftType: !!draft,
             referenceOnly: false
           };
         });
@@ -206,7 +217,8 @@ export default {
             const index = nodes.length;
             nodes.push({
               identity,
-              label: types[identity]?.label || identity,
+              label:
+                drafts[identity]?.title || types[identity]?.label || identity,
               attributes: { name: identity },
               kind: 'reference',
               referenceOnly: true,
@@ -247,8 +259,10 @@ export default {
     connection() {
       if (!this.edge) return null;
       const table =
+        this.document?.draftTypes?.[this.edge.to]?.table ||
         this.metadata.searchTypes?.find((row) => row.identity === this.edge.to)
-          ?.table || this.edge.to.split('/').pop();
+          ?.table ||
+        this.edge.to.split('/').pop();
       const key = this.edge.relationship || 'code';
       return {
         ...this.edge,
@@ -261,6 +275,13 @@ export default {
         [this.node?.identity, this.edge?.from].find(
           (name) => name && this.document?.newTypes?.[name]
         ) || ''
+      );
+    },
+    draftType() {
+      return (
+        (this.node?.identity &&
+          this.document?.draftTypes?.[this.node.identity]) ||
+        null
       );
     },
     instanceLinks() {
@@ -360,20 +381,21 @@ export default {
       }
     },
     canLeave() {
-      return (
-        !this.creating &&
-        !this.deletionActive &&
-        !this.busy &&
-        (!(this.dirty || this.uncertain) ||
-          window.confirm(t('Discard unsaved changes?')))
-      );
+      if (this.creating || this.deletionActive || this.busy) return false;
+      if (this.dirty || this.uncertain) {
+        this.error = '';
+        this.dispatch({ type: 'discard' });
+        return false;
+      }
+      return true;
     },
     openDeletion() {
       if (
         !this.editable ||
         !this.node ||
         this.node.referenceOnly ||
-        this.instance
+        this.instance ||
+        this.draftType
       )
         return;
       if (this.dirty) {
@@ -465,6 +487,7 @@ export default {
       if (
         !confirmed &&
         (Object.keys(this.document.newTypes || {}).length ||
+          Object.keys(this.document.draftTypes || {}).length ||
           this.document.createColumns?.length) &&
         !window.confirm(
           t(
@@ -560,6 +583,8 @@ export default {
       );
       for (const name of Object.keys(this.document.newTypes || {}))
         if (!names.has(name)) delete this.document.newTypes[name];
+      for (const name of Object.keys(this.document.draftTypes || {}))
+        if (!names.has(name)) delete this.document.draftTypes[name];
       const keys = [...xml.documentElement.children]
         .filter((node) => node.tagName === 'connect')
         .map((node) => JSON.stringify(edgeKey(attributes(node))));
@@ -567,7 +592,7 @@ export default {
         this.document.createColumns = this.document.createColumns.filter(
           (key) => keys.includes(JSON.stringify(key))
         );
-      for (const key of ['newTypes', 'createColumns'])
+      for (const key of ['newTypes', 'draftTypes', 'createColumns'])
         if (!Object.keys(this.document[key] || {}).length)
           delete this.document[key];
     },
@@ -607,6 +632,152 @@ export default {
         this.typeToAdd = '';
       }
     },
+    createDraftNode(position) {
+      if (!this.editable || !this.discardBuffers()) return;
+      const existing = new Set([
+        ...this.nodes.map((row) => row.identity),
+        ...(this.metadata.searchTypes || []).map((row) => row.identity)
+      ]);
+      let index =
+          Object.keys(this.document.draftTypes || {}).length + 1,
+        table = 'draft_entity_' + index,
+        name = this.context.project + '/' + table;
+      while (existing.has(name)) {
+        index++;
+        table = 'draft_entity_' + index;
+        name = this.context.project + '/' + table;
+      }
+      const title = 'Draft Entity ' + index;
+      const nodeIndex = this.nodes.length;
+      const xpos = Math.round((position?.x ?? 40 + (nodeIndex % 3) * 240) * 10) / 10;
+      const ypos = Math.round((position?.y ?? 40 + Math.floor(nodeIndex / 3) * 130) * 10) / 10;
+      (this.document.draftTypes ||= {})[name] = {
+        table,
+        title,
+        description: '',
+        color: '#8899aa',
+        hasPipeline: true
+      };
+      this.editXml((root, xml) => {
+        const node = xml.createElement('search_type');
+        for (const [key, value] of Object.entries({
+          name,
+          xpos,
+          ypos,
+          color: '#8899aa'
+        }))
+          node.setAttribute(key, String(value));
+        root.append(node);
+      });
+      if (!this.error) this.selectNode(name);
+    },
+    updateDraftType(key, value) {
+      if (!this.editable || !this.draftType || !this.node) return;
+      const identity = this.node.identity;
+      const draft = this.document.draftTypes?.[identity];
+      if (!draft) return;
+      draft[key] = value;
+      if (key === 'color') this.setAttribute('color', value);
+    },
+    renameDraftTable(rawTable) {
+      if (!this.editable || !this.draftType || !this.node) return;
+      const table = String(rawTable || '').trim().toLowerCase();
+      if (!/^[a-z][a-z0-9_]*$/.test(table)) {
+        this.error =
+          'Use a lowercase table name with letters, digits and underscores';
+        return;
+      }
+      const old = this.node.identity,
+        name = this.context.project + '/' + table;
+      if (name === old) return;
+      if (
+        this.nodes.some((row) => row.identity === name) ||
+        (this.metadata.searchTypes || []).some((row) => row.identity === name)
+      ) {
+        this.error = 'A Search Type with this name already exists';
+        return;
+      }
+      const draft = { ...this.document.draftTypes[old], table };
+      const oldTable = old.split('/').pop();
+      if (
+        !draft.title ||
+        draft.title.toLowerCase().replace(/\s+/g, '_') === oldTable
+      ) {
+        draft.title = table
+          .split('_')
+          .filter(Boolean)
+          .map((part) => part[0].toUpperCase() + part.slice(1))
+          .join(' ');
+      }
+      (this.document.draftTypes ||= {})[name] = draft;
+      delete this.document.draftTypes[old];
+      this.editXml((root) => {
+        for (const node of [...root.children]) {
+          if (
+            node.tagName === 'search_type' &&
+            node.getAttribute('name') === old
+          )
+            node.setAttribute('name', name);
+          else if (node.tagName === 'connect') {
+            if (node.getAttribute('from') === old)
+              node.setAttribute('from', name);
+            if (node.getAttribute('to') === old) {
+              node.setAttribute('to', name);
+              if (node.getAttribute('from_col') === oldTable + '_code')
+                node.setAttribute('from_col', table + '_code');
+            }
+          }
+        }
+      });
+      if (!this.error) this.selectNode(name);
+    },
+    async registerDraftType(identity = this.node?.identity) {
+      const draft = identity && this.document?.draftTypes?.[identity];
+      if (!this.editable || !draft) return;
+      this.error = '';
+      if (this.xmlPending) this.applyXml();
+      if (this.attributesPending) this.applyAttributes();
+      if (this.error || this.xmlPending || this.attributesPending) return;
+      const id = this.request;
+      this.busy = true;
+      try {
+        const result = await this.call('register_type', {
+          identity,
+          draft
+        });
+        if (id === this.request) {
+          this.metadata = result.metadata;
+          if (result.revision) this.revision = result.revision;
+          if (result.schemaXml)
+            this.baseline = JSON.stringify({ xml: result.schemaXml });
+          delete this.document.draftTypes[identity];
+          if (!Object.keys(this.document.draftTypes || {}).length)
+            delete this.document.draftTypes;
+          this.selectNode(identity);
+          this.$emit('saved');
+        }
+      } catch (error) {
+        if (id === this.request) this.error = error.message;
+      } finally {
+        if (id === this.request) this.busy = false;
+      }
+    },
+    async openDraftCreator(identity = this.node?.identity) {
+      const draft = identity && this.document?.draftTypes?.[identity];
+      const node = this.nodes.find((row) => row.identity === identity);
+      if (!this.editable || !draft || !node) return;
+      this.pendingDraftIdentity = identity;
+      await this.createType({ x: node.nodeX, y: node.nodeY });
+      await nextTick();
+      if (this.$refs.typeCreator?.document) {
+        Object.assign(this.$refs.typeCreator.document, {
+          title: draft.title || draft.table || '',
+          description: draft.description || '',
+          color: draft.color || '',
+          hasPipeline: draft.hasPipeline !== false
+        });
+      }
+    },
     moveNodes(positions) {
       this.editXml((root) => {
         for (const position of positions) {
@@ -630,7 +801,7 @@ export default {
         }
       });
     },
-    connect(source = this.source, target = this.target) {
+    connect(source = this.source, target = this.target, mode = 'hierarchy') {
       if (
         !this.options.some((row) => row.value === source) ||
         !this.options.some((row) => row.value === target) ||
@@ -645,18 +816,65 @@ export default {
         this.error = 'This connection already exists';
         return;
       }
+      const targetTable =
+        this.document?.draftTypes?.[target]?.table ||
+        this.metadata.searchTypes?.find((row) => row.identity === target)
+          ?.table ||
+        target.split('/').pop();
       this.editXml((root, xml) => {
         const edge = xml.createElement('connect');
         for (const [key, value] of Object.entries({
           from: source,
           to: target,
           relationship: 'code',
-          type: 'hierarchy'
+          type: mode === 'code' ? 'default' : 'hierarchy',
+          from_col: targetTable + '_code',
+          to_col: 'code'
         }))
           edge.setAttribute(key, value);
         root.append(edge);
       });
-      if (!this.error) this.selectEdge(this.edges.length - 1);
+      if (!this.error) {
+        this.selectEdge(this.edges.length - 1);
+        this.setCreateColumns(true);
+        if (mode === 'many_to_many') this.makeInstance();
+      }
+    },
+    applyEdgePreset(preset) {
+      if (!this.editable || !this.edge) return;
+      const targetTable =
+        this.document?.draftTypes?.[this.edge.to]?.table ||
+        this.metadata.searchTypes?.find((row) => row.identity === this.edge.to)
+          ?.table ||
+        this.edge.to.split('/').pop();
+      this.editXml((root) => {
+        const node = [...root.children].filter(
+          (node) => node.tagName === 'connect'
+        )[this.selectedEdge];
+        if (!node) return;
+        node.removeAttribute('instance_type');
+        if (preset === 'hierarchy') {
+          node.setAttribute('relationship', 'code');
+          node.setAttribute('type', 'hierarchy');
+          if (!node.getAttribute('from_col'))
+            node.setAttribute('from_col', targetTable + '_code');
+          if (!node.getAttribute('to_col'))
+            node.setAttribute('to_col', 'code');
+        } else if (preset === 'code') {
+          node.setAttribute('relationship', 'code');
+          node.setAttribute('type', 'default');
+          if (!node.getAttribute('from_col'))
+            node.setAttribute('from_col', targetTable + '_code');
+          if (!node.getAttribute('to_col'))
+            node.setAttribute('to_col', 'code');
+        } else if (preset === 'id') {
+          node.setAttribute('relationship', 'id');
+          node.setAttribute('type', 'default');
+          node.setAttribute('from_col', targetTable + '_id');
+          node.setAttribute('to_col', 'id');
+        }
+      });
+      if (!this.error) this.setCreateColumns(true);
     },
     remove(confirmed = false) {
       if (
@@ -733,7 +951,11 @@ export default {
       const endpoints = [
         ...new Set(
           [this.edge?.from, this.edge?.to].filter(
-            (name) => name && name !== '*' && !this.document.newTypes?.[name]
+            (name) =>
+              name &&
+              name !== '*' &&
+              !this.document.newTypes?.[name] &&
+              !this.document.draftTypes?.[name]
           )
         )
       ];
@@ -778,14 +1000,20 @@ export default {
       const types = Object.fromEntries(
         (this.metadata.searchTypes || []).map((row) => [row.identity, row])
       );
+      const drafts = this.document?.draftTypes || {};
       const endpoints = [edge.from, edge.to],
         tables = endpoints.map(
-          (name) => types[name]?.table || name.split('/').pop()
+          (name) =>
+            drafts[name]?.table || types[name]?.table || name.split('/').pop()
         );
       const base = tables.join('_in_');
       let name = this.context.project + '/' + base,
         suffix = 2;
-      while (this.nodes.some((row) => row.identity === name) || types[name])
+      while (
+        this.nodes.some((row) => row.identity === name) ||
+        types[name] ||
+        drafts[name]
+      )
         name = this.context.project + '/' + base + '_' + suffix++;
       const positions = this.nodes.filter((row) =>
           endpoints.includes(row.identity)
@@ -996,6 +1224,7 @@ export default {
         this.$refs.typeCreator?.previewValidating
       )
         return;
+      this.pendingDraftIdentity = '';
       this.$refs.creationDialog.close();
       this.creating = false;
     },
@@ -1012,6 +1241,29 @@ export default {
       if (!node) {
         this.error = 'The server did not return the created schema node';
         return;
+      }
+      const replacedDraft = this.pendingDraftIdentity;
+      this.pendingDraftIdentity = '';
+      if (replacedDraft && this.document?.draftTypes?.[replacedDraft]) {
+        const oldTable = replacedDraft.split('/').pop(),
+          newTable = result.identity.split('/').pop();
+        delete this.document.draftTypes[replacedDraft];
+        for (const child of [...xml.documentElement.children]) {
+          if (
+            child.tagName === 'search_type' &&
+            child.getAttribute('name') === replacedDraft
+          ) {
+            child.setAttribute('name', result.identity);
+          } else if (child.tagName === 'connect') {
+            if (child.getAttribute('from') === replacedDraft)
+              child.setAttribute('from', result.identity);
+            if (child.getAttribute('to') === replacedDraft) {
+              child.setAttribute('to', result.identity);
+              if (child.getAttribute('from_col') === oldTable + '_code')
+                child.setAttribute('from_col', newTable + '_code');
+            }
+          }
+        }
       }
       if (
         ![...xml.documentElement.children].some(

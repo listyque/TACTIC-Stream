@@ -66,6 +66,7 @@ function activate(action) {
         {
           ...props.cell,
           nestedTable: action.nestedTable || props.cell.nestedTable,
+          text: action.text ?? props.cell.text,
           href: action.href,
           displayOptions: {
             ...props.cell.displayOptions,

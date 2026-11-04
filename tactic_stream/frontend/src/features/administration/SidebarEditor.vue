@@ -372,8 +372,10 @@ export default {
       }
     },
     canLeave() {
-      if (this.dirty || this.busy || this.uncertain) {
-        this.error = 'Save or discard sidebar changes before leaving.';
+      if (this.busy) return false;
+      if (this.dirty || this.uncertain) {
+        this.error = '';
+        this.dispatch({ type: 'discard' });
         return false;
       }
       return true;

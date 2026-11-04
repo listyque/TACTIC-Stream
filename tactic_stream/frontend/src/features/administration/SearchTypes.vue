@@ -231,6 +231,28 @@ export default {
   },
   methods: {
     t,
+    storageKey() {
+      return 'tactic_stream.search_types.' + (this.project || 'admin');
+    },
+    saveViewState() {
+      if (this.creationOnly || !this.identity) return;
+      try {
+        sessionStorage.setItem(
+          this.storageKey(),
+          JSON.stringify({ identity: this.identity, page: this.ui.page })
+        );
+      } catch {
+        /* Session works without storage. */
+      }
+    },
+    readViewState() {
+      if (this.creationOnly) return null;
+      try {
+        return JSON.parse(sessionStorage.getItem(this.storageKey()) || 'null');
+      } catch {
+        return null;
+      }
+    },
     captureNaming(value) {
       this.namingView = value;
     },
@@ -256,6 +278,7 @@ export default {
             this.document[command.field] = command.value;
             break;
           case 'page':
+            this.saveViewState();
             break;
           case 'select':
             await this.select(command.identity);
@@ -337,17 +360,13 @@ export default {
     },
     canLeave() {
       if (this.namingView && !this.namingView.canLeave()) return false;
-      if (
-        !this.namingView &&
-        this.namingDirty &&
-        !window.confirm(t('Discard unsaved naming changes?'))
-      )
+      if (this.busy || this.previewValidating) return false;
+      if (this.documentDirty || this.uncertain) {
+        this.error = '';
+        this.dispatch({ type: 'discard' });
         return false;
-      return (
-        !this.busy &&
-        !this.previewValidating &&
-        (!this.documentDirty || window.confirm(t('Discard unsaved changes?')))
-      );
+      }
+      return true;
     },
     async call(action, values = {}) {
       const result = await rpc('execute_cmd', [
@@ -412,21 +431,30 @@ export default {
       this.context = { ticket: this.ticket, project: this.project };
       this.busy = true;
       this.error = '';
+      const saved = !this.identity ? this.readViewState() : null;
+      const targetIdentity = this.identity || saved?.identity || '';
+      const targetPage = this.identity ? this.ui.page : saved?.page || 'summary';
       try {
-        const result = await this.call('list');
+        const result = await this.call('load', { identity: targetIdentity });
         if (id !== this.request) return;
         this.catalog = result.catalog;
         this.canWrite = result.canWrite !== false;
         const selected =
-          this.catalog.find((row) => row.identity === this.identity) ||
+          this.catalog.find((row) => row.identity === targetIdentity) ||
           this.visibleTypes[0];
         if (selected) {
-          const loaded = await this.call('load', {
-            identity: selected.identity
-          });
+          const loaded =
+            result.identity === selected.identity
+              ? result
+              : await this.call('load', {
+                  identity: selected.identity
+                });
           if (id !== this.request) return;
           this.accept(loaded);
-          this.page = 'summary';
+          this.page = ['summary', 'workflow', 'naming', 'details', 'fields'].includes(targetPage)
+            ? targetPage
+            : 'summary';
+          this.saveViewState();
         } else {
           this.document = null;
           this.identity = '';
@@ -451,6 +479,7 @@ export default {
         if (id === this.request) {
           this.accept(result);
           this.page = 'summary';
+          this.saveViewState();
           this.uncertain = false;
         }
       } catch (error) {

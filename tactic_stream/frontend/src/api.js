@@ -207,6 +207,123 @@ async function post(url, payload, signal, quiet = false) {
   finally { endActivity(activity); recordRequest(url, payload, data, failure, started, session, quiet) }
 }
 
+const READ_CMD_ACTIONS = new Set([
+  'read',
+  'list',
+  'get',
+  'load',
+  'search',
+  'plan',
+  'check',
+  'match',
+  'templates',
+  'columns',
+  'preview',
+  'inspect',
+  'resolve',
+  'status',
+  'catalog',
+  'history',
+  'options',
+  'analyse',
+  'analyze'
+])
+
+const CMD_LABELS = {
+  TableCellEditCmd: 'Table cell updated',
+  TableTaskSaveCmd: 'Tasks saved',
+  TaskInspectorCmd: 'Task updated',
+  TaskWorkspaceCmd: 'Task updated',
+  SObjectTaskStatusElementWdg: 'Task status updated',
+  ParallelStatusEditWdg: 'Task added',
+  WorkElementWdg: 'Task updated',
+  DiscussionAddNoteCmd: 'Note saved',
+  DiscussionWdg: 'Note saved',
+  BrowserCheckinCmd: 'Files checked in',
+  FileIngestCmd: 'Files checked in',
+  TableSnapshotAppendCmd: 'Files attached',
+  SnapshotCheckoutCmd: 'Files checked out',
+  EditCmd: 'Record saved',
+  RecordFormCmd: 'Record saved',
+  DuplicateSObjectCmd: 'Record duplicated',
+  TableConnectionRemoveCmd: 'Connection removed',
+  TableConnectionsCmd: 'Related links updated',
+  TableParentGroupCmd: 'Parent group updated',
+  SchemaEditorCmd: 'Project schema updated',
+  DeleteSearchTypeCmd: 'Search Type deleted',
+  PipelineEditorCmd: 'Workflow saved',
+  SearchTypeManagerCmd: 'Search Type updated',
+  AlterSearchTypeCbk: 'Search Type updated',
+  NamingEditorCmd: 'Naming rules saved',
+  ProcessRulesCmd: 'Process rules saved',
+  PageLayoutEditorCmd: 'Page layout saved',
+  TableViewsManagerCmd: 'Table view saved',
+  ProjectSettingsCmd: 'Project settings saved',
+  ProjectTemplateCreatorCmd: 'Project template updated',
+  ProjectTemplateInstallCmd: 'Project template installed',
+  ProjectTemplateDeleteCmd: 'Project template deleted',
+  FileProjectCmd: 'Project created',
+  TimesheetCmd: 'Work hours saved',
+  MilestoneManagerCmd: 'Milestone saved',
+  SetPreferenceCmd: 'Preference saved',
+  NotificationTestCmd: 'Test notification sent'
+}
+
+function commandInfo(payload) {
+  const className = String(payload?.args?.[1] || '')
+  const shortName = className.split('.').pop() || ''
+  const cmdArgs =
+    payload?.args?.[2] && typeof payload.args[2] === 'object'
+      ? payload.args[2]
+      : payload?.kwargs?.args && typeof payload.kwargs.args === 'object'
+        ? payload.kwargs.args
+        : {}
+  const action = String(cmdArgs.action || '').trim().toLowerCase()
+  return { className, shortName, cmdArgs, action }
+}
+
+function isReadCommand(payload) {
+  if (payload?.method !== 'execute_cmd') return false
+  const { shortName, cmdArgs, action } = commandInfo(payload)
+  if (action) return READ_CMD_ACTIONS.has(action)
+  return (
+    shortName.endsWith('ReadCmd') ||
+    shortName === 'TableSnapshotFilesCmd' ||
+    (shortName === 'TableParentGroupCmd' && !cmdArgs.parent_key) ||
+    (shortName === 'TaskWorkspaceCmd' && Boolean(cmdArgs.scope))
+  )
+}
+
+function operationDetail(url, payload, data) {
+  const desc = typeof data?.result?.description === 'string' ? data.result.description.trim() : ''
+  if (desc) return desc
+  if (payload?.method === 'execute_cmd') {
+    const { shortName, cmdArgs } = commandInfo(payload)
+    if (shortName === 'TableObjectStatusCmd')
+      return cmdArgs.action === 'retire' ? 'Record retired' : 'Record reactivated'
+    if (CMD_LABELS[shortName]) return CMD_LABELS[shortName]
+    const clean = shortName.replace(/(?:ElementWdg|Cmd|Wdg|Cbk)$/, '').replace(/([a-z])([A-Z])/g, '$1 $2').trim()
+    return clean || 'Command executed'
+  }
+  if (payload?.method === 'execute_python_script')
+    return String(payload.args?.[1] || 'Python script')
+  if (payload?.method === 'insert') return 'Record created'
+  if (payload?.method === 'update') return 'Record updated'
+  if (payload?.method === 'delete_sobject') return 'Record deleted'
+  if (payload?.method === 'retire_sobject') return 'Record retired'
+  if (payload?.method === 'reactivate_sobject') return 'Record reactivated'
+  if (url.includes('/columns-editor/')) return 'Columns configuration saved'
+  if (url.includes('/search-configuration/')) return 'Quick filters saved'
+  if (url.includes('/sidebar/')) return 'Sidebar saved'
+  if (url.includes('/workspace-layout/')) return 'Workspace layout saved'
+  if (url.includes('/security-groups/')) return 'Security groups updated'
+  if (url.includes('/security-rules/')) return 'Security rules saved'
+  if (url.includes('/security-users/')) return 'User account updated'
+  if (url.includes('/script-editor/') || url.includes('/script-shelf/')) return 'Script saved'
+  if (url.includes('/configuration/')) return 'Server configuration saved'
+  return payload?.method || url
+}
+
 function recordRequest(url, payload, data, failure, started, session, quiet = false) {
   if (session === debugLog.sessionId) {
     try { logRequest(url, payload, data, failure, (performance.now() - started) / 1000) }
@@ -215,9 +332,9 @@ function recordRequest(url, payload, data, failure, started, session, quiet = fa
     if (url === '/admin/server-updates' || url.includes('/UploadServer/') || payload.method === 'simple_checkin') return
     if (quiet && failure && (failure instanceof TypeError || ['TimeoutError', 'AbortError'].includes(failure.name) || failure.code === 'updates_unavailable')) return
     if (failure) notify('error', failure instanceof TypeError ? 'Unable to reach the server.' : failure.message, '', 'server')
-    else if (!quiet && (['execute_cmd', 'execute_python_script', 'insert', 'update', 'delete_sobject', 'retire_sobject', 'reactivate_sobject'].includes(payload.method)
+    else if (!quiet && !isReadCommand(payload) && (['execute_cmd', 'execute_python_script', 'insert', 'update', 'delete_sobject', 'retire_sobject', 'reactivate_sobject'].includes(payload.method)
       || /\/(save|apply|create|delete|commit|activate|run|execute)$/.test(url))) {
-      notify('complete', 'Server operation completed', payload.method || url, 'server')
+      notify('complete', 'Server operation completed', operationDetail(url, payload, data), 'server')
     }
   }
 }

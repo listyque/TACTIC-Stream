@@ -290,6 +290,7 @@ onBeforeUnmount(() => {
   flex-direction: column;
   overflow: hidden;
   padding: var(--task-preview-padding);
+  background: var(--surface-deep);
 }
 .task-preview-content {
   flex: 1;

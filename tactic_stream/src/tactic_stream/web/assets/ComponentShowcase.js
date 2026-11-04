@@ -1,12 +1,12 @@
-import { A as onMounted, E as nextTick, G as withCtx, H as watch, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, X as ref, _ as createElementBlock, b as createVNode, et as unref, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment } from "./vue.js";
+import { D as nextTick, F as renderSlot, K as withCtx, N as openBlock, P as renderList, U as watch, Z as ref, _ as createCommentVNode, d as Fragment, g as createBlock, h as createBaseVNode, it as toDisplayString, j as onMounted, k as onBeforeUnmount, m as computed, nt as normalizeClass, rt as normalizeStyle, tt as unref, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
 import { D as spacing, O as textStyles, R as BusyIndicator_default, _ as controls, a as _sfc_main$15, o as t, s as appearance, t as _sfc_main$14, w as lineHeights, z as _plugin_vue_export_helper_default } from "./AppButton.js";
-import { B as _sfc_main$21, D as _sfc_main$22, E as AppProgress_default, G as button, H as observeFrameSizes, K as label, P as _sfc_main$16, S as _sfc_main$23, T as _sfc_main$27, W as _sfc_main$28, X as rect, Y as node, _ as describe$5, a as _sfc_main$17, i as _sfc_main$18, j as _sfc_main$26, k as AppSearchField_default, n as _sfc_main$24, r as _sfc_main$19, t as _sfc_main$29, w as translate, y as _sfc_main$20, z as _sfc_main$25 } from "./FrameView.js";
+import { A as AppSearchField_default, B as _sfc_main$25, D as AppProgress_default, E as _sfc_main$27, F as _sfc_main$16, G as _sfc_main$28, K as button, M as _sfc_main$26, O as _sfc_main$22, T as translate, U as observeFrameSizes, V as _sfc_main$21, X as node, Z as rect, a as _sfc_main$17, c as describe$5, i as _sfc_main$18, n as _sfc_main$24, p as _sfc_main$23, q as label, r as _sfc_main$19, t as _sfc_main$29, u as _sfc_main$20 } from "./FrameView.js";
 import { n as _sfc_main$30, r as _sfc_main$31 } from "./AppearanceControls.js";
 import { r as ImagePicker_default, t as _sfc_main$32 } from "./RecordForm.js";
 import { u as _sfc_main$33 } from "./admin.document.js";
 import { t as _sfc_main$34 } from "./AppDialog.js";
 import { t as _sfc_main$35 } from "./ContentLoadingOverlay.js";
-import { A as _sfc_main$38, B as _sfc_main$43, V as _sfc_main$39, b as _sfc_main$37, ft as _sfc_main$36, tt as _sfc_main$41, y as _sfc_main$42, z as _sfc_main$40 } from "./RelatedObjects.js";
+import { A as _sfc_main$38, B as _sfc_main$40, H as _sfc_main$39, V as _sfc_main$43, b as _sfc_main$37, nt as _sfc_main$41, pt as _sfc_main$36, y as _sfc_main$42 } from "./RelatedObjects.js";
 import { a as visibleRows, i as row$3, n as navigate, t as listAction } from "./tree.ui.js";
 import { E as surfaces, T as filterGeometry, d as _sfc_main$44, u as QuickFilterOptions_default, w as QuickFilterChip_default } from "./App.js";
 //#region src/features/administration/ShowcaseMenu.vue

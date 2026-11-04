@@ -242,21 +242,38 @@ def query_chat_conversations():
 
     unread_by_code = {}
     mentions_by_code = {}
-    cleared_values = [
-        str(own_by_code[code].get_value(
-            'last_cleared', no_exception=True
-        ) or '')[:19]
-        for code in active_codes if own_by_code.get(code)
-    ]
-    unread_search = Search('sthpw/message_log')
-    unread_search.add_filters('message_code', active_codes)
-    unread_search.add_filter('status', 'deleted', op='!=')
-    if cleared_values and all(cleared_values):
-        unread_search.add_filter('timestamp', min(cleared_values), op='>')
-    unread_logs = unread_search.get_sobjects()
     members_count = dict(
         (code, len(members_by_code.get(code, []))) for code in active_codes
     )
+    unread_candidate_codes = []
+    candidate_cleared = []
+    unread_logs = []
+    for code in active_codes:
+        own = own_by_code.get(code)
+        if not own or members_count.get(code, 0) <= 1:
+            continue
+        summary = summaries_by_code.get(code) or {}
+        if int(summary.get('messageCount') or 0) <= 0:
+            continue
+        cleared = str(
+            own.get_value('last_cleared', no_exception=True) or ''
+        )[:19]
+        latest_ts = str(summary.get('latestTimestamp') or '')[:19]
+        if cleared and latest_ts and latest_ts <= cleared:
+            continue
+        if code in missing_logs_by_code:
+            unread_logs.extend(missing_logs_by_code[code])
+        else:
+            unread_candidate_codes.append(code)
+            candidate_cleared.append(cleared)
+    if unread_candidate_codes:
+        unread_search = Search('sthpw/message_log')
+        unread_search.add_filters('message_code', unread_candidate_codes)
+        unread_search.add_filter('status', 'deleted', op='!=')
+        unread_search.add_filter('login', current_login, op='!=')
+        if candidate_cleared and all(candidate_cleared):
+            unread_search.add_filter('timestamp', min(candidate_cleared), op='>')
+        unread_logs.extend(unread_search.get_sobjects())
     mention_pattern = re.compile(
         r'(^|[^A-Za-z0-9_.@-])@{0}($|[^A-Za-z0-9_.-])'.format(
             re.escape(str(current_login or ''))
@@ -1052,7 +1069,7 @@ def toggle_chat_message_reaction(message_log_code, emoji):
             reactions[emoji] = logins
         else:
             reactions.pop(emoji, None)
-    updated_at = datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S.%f')
+    updated_at = datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%d %H:%M:%S.%f')
     metadata['reactions'] = reactions
     metadata['reactionUpdatedAt'] = updated_at
     message_log_key = SearchKey.get_by_sobject(message_log, use_id=False)
@@ -1123,7 +1140,7 @@ def pin_chat_message(message_log_code, unpin=False):
                 triggers=True,
             )
         return json.dumps(value, separators=(',', ':'))
-    pinned_at = datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
+    pinned_at = datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%d %H:%M:%S')
     message_id = SearchKey.get_by_sobject(message_log, use_id=False)
     pinned = {
         'messageId': message_id,
@@ -1155,7 +1172,7 @@ def query_chat_history(message_code, limit=31, offset=0, search_text=''):
     server = TacticServerStub.get(protocol='local')
     server.login = Environment.get_user_name()
     import json
-    from datetime import datetime
+    from datetime import datetime, timezone
     from pyasm.biz import Snapshot
     from pyasm.search import Search, SearchKey
 
@@ -1220,7 +1237,7 @@ def query_chat_history(message_code, limit=31, offset=0, search_text=''):
         message_log.set_value('code', code)
     metadata_by_log = {}
     delivery_updates = {}
-    delivered_at = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
+    delivered_at = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S')
     target_refs = set()
     for message_log in history:
         raw_metadata = message_log.get_json_value('metadata', default={}) or {}
@@ -1304,11 +1321,10 @@ def query_chat_history(message_code, limit=31, offset=0, search_text=''):
             snapshot_search.add_filters('id', list(set(snapshot_ids)))
             snapshots = snapshot_search.get_sobjects()
             files = Snapshot.get_files_dict_by_snapshots(snapshots)
-            for snapshot in snapshots:
+            snapshot_keys = SearchKey.get_by_sobjects(snapshots, use_id=False)
+            for snapshot, snapshot_key in zip(snapshots, snapshot_keys):
                 snapshot_data = snapshot.get_data()
-                snapshot_data['__search_key__'] = SearchKey.get_by_sobject(
-                    snapshot, use_id=False
-                )
+                snapshot_data['__search_key__'] = snapshot_key
                 snapshot_data['__files__'] = [
                     file_object.get_data()
                     for file_object in (files.get(snapshot.get_code()) or [])
@@ -1431,7 +1447,7 @@ def mark_chat_read(message_code, timestamp):
     server = TacticServerStub.get(protocol='local')
     server.login = Environment.get_user_name()
     import json
-    from datetime import datetime
+    from datetime import datetime, timezone
     from pyasm.search import Search, SearchKey
 
     def aggregate_delivery(delivery):
@@ -1467,8 +1483,9 @@ def mark_chat_read(message_code, timestamp):
         log_search.add_filter('message_code', message_code)
         log_search.add_filter('login', current_login, op='!=')
         log_search.add_filter('status', 'deleted', op='!=')
+        log_search.add_filter('status', 'read', op='!=')
         log_search.add_filter('timestamp', timestamp_second, op='<=')
-        read_at = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
+        read_at = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S')
         for message_log in log_search.get_sobjects():
             raw_metadata = message_log.get_json_value('metadata', default={}) or {}
             if isinstance(raw_metadata, dict):

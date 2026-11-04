@@ -1948,7 +1948,7 @@ class SObject:
         if base in ('config/widget_config', 'config/prod_setting', 'config/pipeline', 'config/custom_script'):
             suffix = SObject._get_cached_key(base)
             for key in list(Container.get_instance().get_data()):
-                if key == suffix or key.endswith('::' + suffix):
+                if key == suffix or (isinstance(key, str) and key.endswith('::' + suffix)):
                     Container.clear_dict(key)
             Container.clear_dict('SObject:xml_cache')
         if base == 'config/widget_config':

@@ -17,6 +17,10 @@ const short = {
 };
 assert.equal(extent(short, 600), 177);
 assert.equal(
+  extent({ busy: true, loaded: false, text: '2 assets', rows: [] }, 600),
+  235
+);
+assert.equal(
   extent(
     {
       ...short,

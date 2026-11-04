@@ -280,12 +280,13 @@ export default {
       }
     },
     canLeave() {
-      return (
-        !this.busy &&
-        !this.$refs.rules?.active &&
-        (!(this.dirty || this.uncertain) ||
-          window.confirm(t('Discard unsaved changes?')))
-      );
+      if (this.busy || this.$refs.rules?.active) return false;
+      if (this.dirty || this.uncertain) {
+        this.error = '';
+        this.dispatch({ type: 'discard' });
+        return false;
+      }
+      return true;
     },
     async call(action, values = {}) {
       const result = await rpc('execute_cmd', [
@@ -354,12 +355,16 @@ export default {
       if (!this.inline && !this.$refs.dialog.open)
         this.$refs.dialog.showModal();
       try {
-        let result = await this.call(
-          searchType ? 'new' : identity ? 'load' : 'list',
-          { identity: searchType || identity }
-        );
+        let result = await this.call(searchType ? 'new' : 'load', {
+          identity: searchType || identity
+        });
         if (id !== this.request) return;
-        if (!identity && !searchType && result.catalog.length)
+        if (
+          !identity &&
+          !searchType &&
+          !result.identity &&
+          result.catalog.length
+        )
           result = await this.call('load', {
             identity: result.catalog[0].identity
           });
@@ -555,6 +560,17 @@ export default {
         this.selectNode(name);
         this.nodeName = '';
       }
+    },
+    createProcessAt(position) {
+      if (!this.editable || !this.discardBuffers()) return;
+      let index = this.nodes.length + 1,
+        name = 'process_' + index;
+      while (
+        this.nodes.some((node) => node.identity === name && !node.referenceOnly)
+      )
+        name = 'process_' + ++index;
+      this.nodeName = name;
+      this.addNode(position);
     },
     connect(source = this.source, target = this.target) {
       if (

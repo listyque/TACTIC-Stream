@@ -59,7 +59,9 @@ const port = {
             : t(props.row.message)
           : part === 'error'
             ? t(props.row.replyError)
-            : props.row.detail;
+            : props.row.sourceType
+              ? props.row.detail
+              : t(props.row.detail);
       return h('div', attrs, [
         h(
           'div',

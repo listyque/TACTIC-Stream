@@ -1,9 +1,9 @@
 <script setup>
 import { computed } from 'vue'
-import { pythonTokens, javascriptTokens, xmlTokens } from './pythonSyntax.js'
+import { syntaxTokens } from './pythonSyntax.js'
 
-const props = defineProps({ code: { type: String, default: '' }, language: { type: String, default: 'python' } })
-const tokens = computed(() => props.language === 'text' ? [{ text: props.code }] : props.language === 'xml' ? xmlTokens(props.code) : props.language === 'javascript' ? javascriptTokens(props.code) : pythonTokens(props.code))
+const props = defineProps({ code: { type: String, default: '' }, language: { type: String, default: 'auto' } })
+const tokens = computed(() => syntaxTokens(props.code, props.language))
 </script>
 
 <template>

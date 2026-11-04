@@ -12,7 +12,7 @@ onMounted(() => {
   window.host = {
     a: a.value,
     configuration: configuration.value,
-    setHeader: value => headerPresent.value = value,
+    setHeader: (value) => (headerPresent.value = value),
     b: b.value,
     owner: owner.value,
     child: child.value
@@ -43,9 +43,16 @@ onMounted(() => {
       <strong>B</strong><AppButton label="Close B" @click="b.close()" />
     </header>
   </dialog>
-  <dialog ref="configuration" id="configuration" class="configuration-dialog"
-    v-window="{kind:'configuration', type:'window'}">
-    <header v-if="headerPresent"><strong>Configuration</strong><AppButton label="Close configuration" @click="configuration.close()" /></header>
+  <dialog
+    ref="configuration"
+    id="configuration"
+    class="configuration-dialog"
+    v-window="{ kind: 'configuration', type: 'window' }"
+  >
+    <header v-if="headerPresent">
+      <strong>Configuration</strong
+      ><AppButton label="Close configuration" @click="configuration.close()" />
+    </header>
   </dialog>
   <dialog ref="owner" id="owner">
     <button id="launcher" @click="child.show()">Open child</button>

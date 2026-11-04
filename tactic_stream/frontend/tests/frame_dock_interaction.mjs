@@ -328,24 +328,41 @@ try {
   );
   await client.detach();
 
-  assert.equal(await page.locator('#workspace-data').evaluate(host => {
-    const content = document.createElement('section');
-    content.className = 'content workspace-browser';
-    host.append(content);
-    const border = getComputedStyle(content).borderTopWidth;
-    content.remove();
-    return border;
-  }), '0px');
+  assert.equal(
+    await page.locator('#workspace-data').evaluate((host) => {
+      const content = document.createElement('section');
+      content.className = 'content workspace-browser';
+      host.append(content);
+      const border = getComputedStyle(content).borderTopWidth;
+      content.remove();
+      return border;
+    }),
+    '0px'
+  );
   const workspaceMenu = page.locator('.dock-menu').first();
   await workspaceMenu.locator(':scope > summary').click();
   const browsing = workspaceMenu.locator('.dock-group-menu').first();
   await browsing.locator(':scope > summary').click();
   // The native DockPanelModel order is Results, Snapshot Browser, Description, Knowledge Base.
-  assert.deepEqual(await browsing.locator(':scope > .account-panel .app-menu-item-label').allTextContents().then(items => items.map(text => text.trim())),
-    ['Results', 'Snapshot Browser', 'Description', 'Knowledge Base']);
-  assert.equal(await browsing.locator(':scope > summary [data-icon="chevron-right"]').count(), 1);
-  assert.deepEqual(await browsing.locator(':scope > .account-panel button .app-icon:not(.menu-check)').evaluateAll(items => items.map(item => item.dataset.icon)),
-    ['view-kanban', 'movie', 'description', 'book-open']);
+  assert.deepEqual(
+    await browsing
+      .locator(':scope > .account-panel .app-menu-item-label')
+      .allTextContents()
+      .then((items) => items.map((text) => text.trim())),
+    ['Results', 'Snapshot Browser', 'Description', 'Knowledge Base']
+  );
+  assert.equal(
+    await browsing
+      .locator(':scope > summary [data-icon="chevron-right"]')
+      .count(),
+    1
+  );
+  assert.deepEqual(
+    await browsing
+      .locator(':scope > .account-panel button .app-icon:not(.menu-check)')
+      .evaluateAll((items) => items.map((item) => item.dataset.icon)),
+    ['view-kanban', 'movie', 'description', 'book-open']
+  );
   await page.keyboard.press('Escape');
   await page.keyboard.press('Escape');
 
@@ -400,9 +417,15 @@ try {
   const corner = page.locator('.dock-floating-resize').first();
   assert.equal(await corner.count(), 1);
   {
-    assert.equal(await corner.evaluate(el => getComputedStyle(el).backgroundColor), 'rgba(0, 0, 0, 0)');
+    assert.equal(
+      await corner.evaluate((el) => getComputedStyle(el).backgroundColor),
+      'rgba(0, 0, 0, 0)'
+    );
     assert.equal(await corner.locator('.app-icon').count(), 0);
-    assert.equal(await corner.evaluate(el => getComputedStyle(el, '::after').height), '1px');
+    assert.equal(
+      await corner.evaluate((el) => getComputedStyle(el, '::after').height),
+      '1px'
+    );
   }
   assert.deepEqual(errors, []);
   console.log(

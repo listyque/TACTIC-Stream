@@ -12,6 +12,7 @@ import EmptyState from '../controls/display/EmptyState.vue';
 import AppFileInput from '../controls/forms/AppFileInput.vue';
 import AppTextField from '../controls/AppTextField.vue';
 import AppTextArea from '../controls/AppTextArea.vue';
+import CodeEditor from '../controls/CodeEditor.vue';
 import AppDateField from '../controls/AppDateField.vue';
 import UserComboBox from '../controls/UserComboBox.vue';
 import AppSegmentedButton from '../controls/AppSegmentedButton.vue';
@@ -628,6 +629,8 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
                 : node.radius
           "
           :normal-color="color(node.normalColor) || 'transparent'"
+          :hover-color="color(node.hoverColor)"
+          :pressed-color="color(node.pressedColor)"
           :selected-color="color(node.selectedColor) || 'transparent'"
           :rail-visible="!!node.rail"
           :separator-visible="false"
@@ -681,6 +684,8 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
           :selected="node.checked"
           :corner-radius="node.radius"
           :normal-color="color(node.normalColor) || 'transparent'"
+          :hover-color="color(node.hoverColor)"
+          :pressed-color="color(node.pressedColor)"
           :selected-color="color(node.selectedColor) || 'transparent'"
           :rail-visible="false"
           :separator-visible="false"
@@ -738,6 +743,22 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         @click="send(node.activateAction)"
         @blur="send(node.commitAction, $event.target.value)"
         @update:model-value="send(node.action, $event)"
+      />
+      <CodeEditor
+        v-else-if="node.kind === 'Area' && node.monospace && !node.notice"
+        :data-frame="node.id"
+        :data-layout-element="node.layoutElement"
+        class="frame-node frame-area frame-code-area"
+        :style="style(node)"
+        :buffer-key="node.id"
+        :language="node.syntax || 'auto'"
+        :source-toolbar="!node.readOnly && node.height >= 160"
+        :model-value="node.text"
+        :read-only="Boolean(node.readOnly)"
+        :disabled="!node.enabled"
+        :aria-label="node.label || undefined"
+        @blur="!node.readOnly && send(node.commitAction, $event)"
+        @update:model-value="!node.readOnly && send(node.action, $event)"
       />
       <AppTextArea
         v-else-if="node.kind === 'Area'"

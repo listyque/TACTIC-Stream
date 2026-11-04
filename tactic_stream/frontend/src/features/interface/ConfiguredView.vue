@@ -36,6 +36,7 @@ const SnapshotCheckout = asyncComponent(
   () => import('../checkin/SnapshotCheckout.vue')
 );
 import AppButton from '../../controls/AppButton.vue';
+import AppIcon from '../../controls/AppIcon.vue';
 import AppMenu from '../../controls/AppMenu.vue';
 import AppSelect from '../../controls/AppSelect.vue';
 import AppSearchField from '../../controls/AppSearchField.vue';
@@ -82,6 +83,7 @@ export default {
     ObjectOperations,
     ObjectAction,
     AppButton,
+    AppIcon,
     AppMenu,
     AppSelect,
     AppSearchField,
@@ -132,7 +134,8 @@ export default {
     'result-scroll',
     'saved',
     'organization',
-    'filter-apply'
+    'filter-apply',
+    'dirty-tasks'
   ],
   setup() {
     return { tabId: useId() };
@@ -483,6 +486,12 @@ export default {
     }
   },
   watch: {
+    dirtyTaskCount: {
+      immediate: true,
+      handler(value) {
+        this.$emit('dirty-tasks', value);
+      }
+    },
     active(value) {
       if (!value) {
         ++this.actionRequest;
@@ -608,6 +617,15 @@ export default {
       return true;
     },
     t,
+    splitError(raw) {
+      const text = String(raw || '').trim();
+      const lines = text.split(/\r?\n/).filter((line) => line.trim());
+      if (lines.length <= 1) return { summary: this.t(text), detail: '' };
+      const summary = text.includes('Traceback (most recent call last):')
+        ? lines.at(-1).trim()
+        : lines[0].trim();
+      return { summary, detail: text };
+    },
     invalidateContext() {
       this.expandedTables = {};
       this.nestedEditor = null;
@@ -1445,6 +1463,7 @@ export default {
             this.expandedTables[key] = {
               scope: cell.nestedTable,
               column: cell.columnName,
+              text: cell.text,
               open: true,
               selected: [],
               offset: 0,
@@ -2263,59 +2282,49 @@ export default {
         </component>
       </form>
       <p v-if="error" class="error" role="alert">{{ t(error) }}</p>
-      <p v-if="columnError" class="error" role="alert">{{ t(columnError) }}</p>
-      <p v-if="columnError" class="notice">
-        <span v-if="columnUncertain">{{
-          t('Check the server result before saving again.')
-        }}</span
-        ><AppButton
-          label="Reload from server"
-          icon="refresh"
-          @click="
-            columnUncertain = false;
-            tableConfig = null;
-            selectTableView(table.view || 'table');
-          "
-        />
-      </p>
+      <div v-if="columnError" class="error table-error-banner" role="alert">
+        <div class="table-error-header">
+          <AppIcon name="error" class="table-error-icon" />
+          <span class="table-error-summary">{{
+            splitError(columnError).summary
+          }}</span>
+          <span v-if="columnUncertain" class="table-error-hint">{{
+            t('Check the server result before saving again.')
+          }}</span>
+          <div class="table-error-actions">
+            <AppButton
+              label="Reload from server"
+              icon="refresh"
+              @click="
+                columnUncertain = false;
+                columnError = '';
+                tableConfig = null;
+                selectTableView(table.view || 'table');
+              "
+            />
+            <AppButton
+              label="Dismiss"
+              icon="close"
+              icon-only
+              @click="columnError = ''"
+            />
+          </div>
+        </div>
+        <details
+          v-if="splitError(columnError).detail"
+          class="table-error-details"
+        >
+          <summary>{{ t('Show stacktrace') }}</summary>
+          <pre class="table-error-trace">{{
+            splitError(columnError).detail
+          }}</pre>
+        </details>
+      </div>
       <p v-if="cellError" class="error" role="alert">{{ t(cellError) }}</p>
       <p v-if="taskError" class="error" role="alert">{{ t(taskError) }}</p>
       <p v-if="taskUncertain" class="notice">
         {{ t('Check the server result before saving again.') }}
       </p>
-      <div
-        v-if="dirtyTaskCount"
-        class="task-draft-actions"
-        role="region"
-        :aria-label="t('Pending task changes')"
-      >
-        <span role="status">{{
-          t('{count} unsaved tasks', { count: dirtyTaskCount })
-        }}</span>
-        <AppButton
-          label="Discard task changes"
-          icon="undo"
-          icon-only
-          :disabled="taskBusy"
-          @click="discardTasks"
-        />
-        <AppButton
-          v-if="taskUncertain"
-          label="Check saved task changes"
-          icon="refresh"
-          icon-only
-          :disabled="taskBusy"
-          @click="saveTasks(true)"
-        />
-        <AppButton
-          label="Save task changes"
-          icon="save"
-          icon-only
-          highlighted
-          :disabled="taskBusy || taskUncertain"
-          @click="saveTasks()"
-        />
-      </div>
       <div v-if="busy" class="table-message" role="status">
         {{ t('Loading data…') }}
       </div>
@@ -2353,25 +2362,6 @@ export default {
         "
       />
       <template v-if="!busy && supportedLayout && displayedMode === 'table'">
-        <div
-          v-if="embedded && tableSelection.length"
-          class="selection-actions"
-          role="group"
-          :aria-label="t('Selected record actions')"
-        >
-          <AppButton
-            :label="
-              t(
-                tableSelection.length === 1
-                  ? 'Deselect {count} item'
-                  : 'Deselect {count} items',
-                { count: tableSelection.length }
-              )
-            "
-            :translate-label="false"
-            @click="$emit('select', [], false)"
-          />
-        </div>
         <p v-if="elements.some((item) => !item.supported)" class="notice">
           {{ t('Some widgets in this view are not available yet.') }}
         </p>
@@ -2423,12 +2413,12 @@ export default {
           @header-action="tableHeaderAction"
           @create-child="createParentChild"
         >
-          <template #detail="{ record, height }">
+          <template #detail="{ record, width, height }">
             <NestedTable
               :ticket="ticket"
               :project="project"
               :state="expandedTables[record.__search_key__]"
-              :frame-node="{ height }"
+              :frame-node="{ width, height }"
               :ancestors="nestedAncestors"
               @close="expandedTables[record.__search_key__].open = false"
               @edit="openNestedEditor"
@@ -2489,7 +2479,59 @@ export default {
           <strong>{{ t('No records yet') }}</strong
           ><span>{{ t('Choose another type or change the filter.') }}</span>
         </div>
+        <div
+          v-if="embedded && tableSelection.length"
+          class="selection-actions"
+          role="group"
+          :aria-label="t('Selected record actions')"
+        >
+          <AppButton
+            :label="
+              t(
+                tableSelection.length === 1
+                  ? 'Deselect {count} item'
+                  : 'Deselect {count} items',
+                { count: tableSelection.length }
+              )
+            "
+            :translate-label="false"
+            @click="$emit('select', [], false)"
+          />
+        </div>
       </template>
+      <div
+        v-if="dirtyTaskCount"
+        class="task-draft-actions"
+        role="region"
+        :aria-label="t('Pending task changes')"
+      >
+        <span role="status">{{
+          t('{count} unsaved tasks', { count: dirtyTaskCount })
+        }}</span>
+        <AppButton
+          label="Discard task changes"
+          icon="undo"
+          icon-only
+          :disabled="taskBusy"
+          @click="discardTasks"
+        />
+        <AppButton
+          v-if="taskUncertain"
+          label="Check saved task changes"
+          icon="refresh"
+          icon-only
+          :disabled="taskBusy"
+          @click="saveTasks(true)"
+        />
+        <AppButton
+          label="Save task changes"
+          icon="save"
+          icon-only
+          highlighted
+          :disabled="taskBusy || taskUncertain"
+          @click="saveTasks()"
+        />
+      </div>
       <footer
         v-if="ownQuery && definition.panel?.show_search_limit !== false"
         class="pagination panel-pagination"

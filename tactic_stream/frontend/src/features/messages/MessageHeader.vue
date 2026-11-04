@@ -63,21 +63,20 @@ onMounted(() => {
   observer.observe(root.value);
 });
 onBeforeUnmount(() => observer?.disconnect());
+const headerScene = computed(() =>
+  UI.header(model.value, width.value, appearance.language)
+);
 </script>
 <template>
   <div
     ref="root"
     class="message-frame-header"
     :style="{
-      minWidth:
-        Math.min(
-          UI.header(model, width, appearance.language).naturalWidth,
-          maximumWidth || 9999
-        ) + 'px'
+      minWidth: Math.min(headerScene.naturalWidth, maximumWidth || 9999) + 'px'
     }"
   >
     <FrameView
-      :scene="UI.header(model, width, appearance.language)"
+      :scene="headerScene"
       @event="(action, source) => emit('event', action, source)"
     />
   </div>

@@ -56,7 +56,9 @@ const host = ref(null),
   width = ref(0),
   height = ref(0);
 const dragged = ref(''),
-  drop = ref(null);
+  drop = ref(null),
+  slideOpen = ref('');
+let lastShowTime = 0;
 const compactActive = computed({
   get: () => state.value.compactActive,
   set: (value) => {
@@ -126,7 +128,11 @@ watch(visible, (panels) => {
 });
 const projection = computed(() => {
   const available = visible.value
-    .filter((panel) => !state.value.panels[panel.id].floating)
+    .filter(
+      (panel) =>
+        !state.value.panels[panel.id].floating &&
+        !state.value.panels[panel.id].slide
+    )
     .map((panel) => panel.id);
   if (compact.value) {
     const panels = visible.value.map((panel) => panel.id);
@@ -163,17 +169,38 @@ const projection = computed(() => {
 });
 function dockedIds() {
   return visible.value
-    .filter((panel) => !state.value.panels[panel.id].floating)
+    .filter(
+      (panel) =>
+        !state.value.panels[panel.id].floating &&
+        !state.value.panels[panel.id].slide
+    )
     .map((panel) => panel.id);
+}
+function slidePanels(side) {
+  if (compact.value || maximized.value) return [];
+  return visible.value.filter(
+    (panel) => state.value.panels[panel.id].slide === side
+  );
 }
 function stackFor(id) {
   return projection.value.stacks.find((item) => item.panels.includes(id));
 }
 function presented(id) {
   if (!visible.value.some((panel) => panel.id === id)) return false;
+  if (!compact.value && !maximized.value && state.value.panels[id].slide)
+    return slideOpen.value === id;
   if (!compact.value && !maximized.value && state.value.panels[id].floating)
     return true;
   return stackFor(id)?.active === id;
+}
+function panelRendered(id) {
+  if (presented(id)) return true;
+  return (
+    !compact.value &&
+    !maximized.value &&
+    visible.value.some((panel) => panel.id === id) &&
+    !!state.value.panels[id].slide
+  );
 }
 watch(
   () => props.mobile,
@@ -222,6 +249,26 @@ function rectangle(id) {
     dragged.value === id
       ? state.value.panels[id].rect
       : stackFor(id)?.rect || state.value.panels[id].rect;
+  if (
+    !compact.value &&
+    state.value.panels[id].slide &&
+    dragged.value !== id &&
+    !maximized.value
+  ) {
+    const side = state.value.panels[id].slide;
+    const w = state.value.panels[id].rect[2];
+    const fw = Math.min(
+      width.value,
+      Math.max(DockLayout.minimum(id)[0], (w || 0.34) * width.value)
+    );
+    return {
+      left: (side === 'left' ? 0 : Math.max(0, width.value - fw)) + 'px',
+      top: '0px',
+      width: fw + 'px',
+      height: height.value + 'px',
+      zIndex: state.value.panels[id].z + 20
+    };
+  }
   if (
     !compact.value &&
     (state.value.panels[id].floating || dragged.value === id) &&
@@ -411,13 +458,20 @@ function show(id) {
     select(id);
     return;
   }
+  lastShowTime = performance.now();
   emit('changing');
   panel.visible = true;
   compactActive.value = id;
   maximized.value = '';
-  if (!panel.floating && !ids(state.value.layout).includes(id)) {
+  if (panel.slide) slideOpen.value = id;
+  else if (id === 'results') slideOpen.value = '';
+  if (!panel.floating && !panel.slide && !ids(state.value.layout).includes(id)) {
     const target = defaultStackTargets[id];
-    if (target && !state.value.panels[target].floating) {
+    if (
+      target &&
+      !state.value.panels[target].floating &&
+      !state.value.panels[target].slide
+    ) {
       if (!ids(state.value.layout).includes(target))
         state.value.layout = place(
           state.value.layout,
@@ -432,7 +486,7 @@ function show(id) {
         id === 'tasks' ? 'center' : 'right'
       );
   }
-  state.value.layout = activate(state.value.layout, id);
+  if (!panel.slide) state.value.layout = activate(state.value.layout, id);
   raise(id);
   changed();
 }
@@ -442,6 +496,7 @@ async function hide(id) {
     select('results');
     return;
   }
+  if (slideOpen.value === id) slideOpen.value = '';
   const next =
     DockKeys.neighbor(
       (stackFor(id)?.panels || [])
@@ -476,15 +531,48 @@ function toggle(id) {
 function move(id, side, target = '') {
   if (
     target === id ||
-    (side === 'swap' && state.value.panels[target]?.floating)
+    (side === 'swap' &&
+      (state.value.panels[target]?.floating ||
+        state.value.panels[target]?.slide))
   )
     return;
   emit('changing');
   maximized.value = '';
   state.value.panels[id].floating = false;
+  state.value.panels[id].slide = '';
+  if (slideOpen.value === id) slideOpen.value = '';
   state.value.layout = place(state.value.layout, id, side, target);
   compactActive.value = id;
   changed();
+}
+function slide(id, side) {
+  if (id === 'results' || !['left', 'right'].includes(side)) return;
+  emit('changing');
+  maximized.value = '';
+  const bounds = rectangle(id),
+    w = Math.max(
+      0.24,
+      Math.min(
+        0.68,
+        parseFloat(bounds.width) / Math.max(1, width.value) || 0.34
+      )
+    );
+  state.value.panels[id].rect = [side === 'left' ? 0 : 1 - w, 0, w, 1];
+  state.value.panels[id].floating = false;
+  state.value.panels[id].slide = side;
+  state.value.panels[id].visible = true;
+  lastShowTime = performance.now();
+  slideOpen.value = id;
+  raise(id);
+  changed();
+}
+function expandSlide(id) {
+  if (slideOpen.value === id) {
+    slideOpen.value = '';
+    return;
+  }
+  show(id);
+  emit('open', id);
 }
 function float(id) {
   emit('changing');
@@ -502,11 +590,15 @@ function float(id) {
     h
   ];
   state.value.panels[id].floating = true;
+  state.value.panels[id].slide = '';
+  if (slideOpen.value === id) slideOpen.value = '';
   raise(id);
   changed();
 }
 function dock(id) {
   state.value.panels[id].floating = false;
+  state.value.panels[id].slide = '';
+  if (slideOpen.value === id) slideOpen.value = '';
   show(id);
 }
 function maximize(id) {
@@ -519,6 +611,7 @@ function reset() {
   state.value = defaults();
   compactActive.value = 'results';
   maximized.value = '';
+  slideOpen.value = '';
   changed();
 }
 function capture() {
@@ -670,10 +763,31 @@ function cancelGesture() {
   if (gesture) stop({ pointerId: gesture.pointer, type: 'pointercancel' });
 }
 function escapeGesture(event) {
-  if (event.key !== 'Escape' || !gesture) return;
-  event.preventDefault();
-  event.stopImmediatePropagation();
-  cancelGesture();
+  if (event.key !== 'Escape') return;
+  if (gesture) {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    cancelGesture();
+    return;
+  }
+  if (
+    slideOpen.value &&
+    !document.querySelector('dialog[open], details.workspace-menu[open]')
+  )
+    slideOpen.value = '';
+}
+function workspaceClick(event) {
+  if (!slideOpen.value || gesture || dragged.value) return;
+  if (performance.now() - lastShowTime < 150) return;
+  const openPanel = host.value?.querySelector(
+    `[data-dock="${slideOpen.value}"]`
+  );
+  if (
+    openPanel?.contains(event.target) ||
+    event.target.closest('.dock-slide-launcher, dialog, .workspace-menu')
+  )
+    return;
+  slideOpen.value = '';
 }
 function start(event, id, kind, divider = null, edge = 'bottom-right') {
   if (
@@ -764,6 +878,11 @@ function pointer(event) {
     panel.rect = resized.map(
       (value, index) => value / (index % 2 ? bounds.height : bounds.width)
     );
+    if (panel.slide) {
+      panel.rect[0] = panel.slide === 'left' ? 0 : 1 - panel.rect[2];
+      panel.rect[1] = 0;
+      panel.rect[3] = 1;
+    }
     return;
   }
   if (!dragged.value && Math.hypot(dx, dy) < DockPlacement.dragThreshold)
@@ -983,6 +1102,7 @@ defineExpose({
   show,
   hide,
   move,
+  slide,
   maximize,
   reset,
   save,
@@ -1005,6 +1125,7 @@ defineExpose({
       '--dock-surface-border': chromeDimensions.surfaceBorder + 'px',
       '--dock-action-icon': chromeDimensions.actionIcon + 'px'
     }"
+    @click="workspaceClick"
     @pointermove="pointer"
     @pointerup="stop"
     @pointercancel="stop"
@@ -1026,17 +1147,24 @@ defineExpose({
     <section
       v-for="panel in dockPanels"
       :key="panel.id"
-      v-show="presented(panel.id)"
+      v-show="panelRendered(panel.id)"
       class="dock-panel"
       tabindex="-1"
       :data-dock="panel.id"
       :class="{
         floating: !compact && state.panels[panel.id].floating,
+        'slide-over': !compact && !!state.panels[panel.id].slide,
+        'slide-left': !compact && state.panels[panel.id].slide === 'left',
+        'slide-right': !compact && state.panels[panel.id].slide === 'right',
+        'slide-open':
+          !compact && state.panels[panel.id].slide && slideOpen === panel.id,
         dragging: dragged === panel.id
       }"
       :style="rectangle(panel.id)"
       @pointerdown="
-        !mobile && state.panels[panel.id].floating && raise(panel.id)
+        !mobile &&
+        (state.panels[panel.id].floating || state.panels[panel.id].slide) &&
+        raise(panel.id)
       "
     >
       <header
@@ -1156,7 +1284,9 @@ defineExpose({
                 visible
                   .filter(
                     (item) =>
-                      item.id !== panel.id && !state.panels[item.id].floating
+                      item.id !== panel.id &&
+                      !state.panels[item.id].floating &&
+                      !state.panels[item.id].slide
                   )
                   .map((item) => ({ value: item.id, label: item.title }))
               "
@@ -1176,19 +1306,47 @@ defineExpose({
               positionTarget === panel.id ||
               !visible.some(
                 (item) =>
-                  item.id === positionTarget && !state.panels[item.id].floating
+                  item.id === positionTarget &&
+                  !state.panels[item.id].floating &&
+                  !state.panels[item.id].slide
               )
             "
             @click="move(panel.id, side, positionTarget)"
           />
           <hr />
+          <template v-if="panel.id !== 'results'">
+            <AppButton
+              label="Slide over left"
+              icon="MDI_DOCK_LEFT"
+              :aria-pressed="state.panels[panel.id].slide === 'left'"
+              @click="
+                state.panels[panel.id].slide === 'left'
+                  ? dock(panel.id)
+                  : slide(panel.id, 'left')
+              "
+            />
+            <AppButton
+              label="Slide over right"
+              icon="MDI_DOCK_RIGHT"
+              :aria-pressed="state.panels[panel.id].slide === 'right'"
+              @click="
+                state.panels[panel.id].slide === 'right'
+                  ? dock(panel.id)
+                  : slide(panel.id, 'right')
+              "
+            />
+          </template>
           <AppButton
             :label="
-              state.panels[panel.id].floating ? 'Dock panel' : 'Float panel'
+              state.panels[panel.id].floating || state.panels[panel.id].slide
+                ? 'Dock panel'
+                : 'Float panel'
             "
             icon="MDI_DOCK_WINDOW"
             @click="
-              state.panels[panel.id].floating ? dock(panel.id) : float(panel.id)
+              state.panels[panel.id].floating || state.panels[panel.id].slide
+                ? dock(panel.id)
+                : float(panel.id)
             "
           />
         </AppMenu>
@@ -1235,7 +1393,47 @@ defineExpose({
           aria-hidden="true"
           @pointerdown.stop="start($event, panel.id, 'resize', null, edge)"
       /></template>
+      <span
+        v-if="
+          state.panels[panel.id].slide &&
+          slideOpen === panel.id &&
+          !compact &&
+          !maximized
+        "
+        class="dock-resize-edge resize-grip"
+        :class="state.panels[panel.id].slide === 'left' ? 'right' : 'left'"
+        aria-hidden="true"
+        @pointerdown.stop="
+          start(
+            $event,
+            panel.id,
+            'resize',
+            null,
+            state.panels[panel.id].slide === 'left' ? 'right' : 'left'
+          )
+        "
+      />
     </section>
+    <div
+      v-for="side in ['left', 'right']"
+      :key="'slide-' + side"
+      v-show="
+        slidePanels(side).length &&
+        (!slideOpen || state.panels[slideOpen]?.slide !== side)
+      "
+      class="dock-slide-launcher"
+      :class="side"
+    >
+      <AppButton
+        v-for="panel in slidePanels(side)"
+        :key="panel.id"
+        class="dock-slide-tab"
+        icon-only
+        :icon="panel.icon"
+        :label="panel.title"
+        @click.stop="expandSlide(panel.id)"
+      />
+    </div>
     <div
       v-for="item in projection.dividers"
       :key="item.path"
@@ -1280,15 +1478,39 @@ defineExpose({
         @click="emit('help', 'dock.' + contextPanel)"
       />
       <hr />
+      <template v-if="contextPanel !== 'results'">
+        <AppMenuItem
+          label="Slide over left"
+          icon="MDI_DOCK_LEFT"
+          :checked="state.panels[contextPanel].slide === 'left'"
+          @click="
+            state.panels[contextPanel].slide === 'left'
+              ? dock(contextPanel)
+              : slide(contextPanel, 'left')
+          "
+        />
+        <AppMenuItem
+          label="Slide over right"
+          icon="MDI_DOCK_RIGHT"
+          :checked="state.panels[contextPanel].slide === 'right'"
+          @click="
+            state.panels[contextPanel].slide === 'right'
+              ? dock(contextPanel)
+              : slide(contextPanel, 'right')
+          "
+        />
+      </template>
       <AppMenuItem
         :label="
-          state.panels[contextPanel].floating
+          state.panels[contextPanel].floating ||
+          state.panels[contextPanel].slide
             ? 'Dock to workspace'
             : 'Float panel'
         "
         icon="MDI_DOCK_WINDOW"
         @click="
-          state.panels[contextPanel].floating
+          state.panels[contextPanel].floating ||
+          state.panels[contextPanel].slide
             ? dock(contextPanel)
             : float(contextPanel)
         "

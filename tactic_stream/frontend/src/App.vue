@@ -231,7 +231,7 @@ export default {
     projectInitials() { return (this.currentProject?.title || this.workspaceView.project).replaceAll('_', ' ').split(/\s+/).filter(Boolean).slice(0, 2).map(word => word[0]).join('').toUpperCase() },
     administrationSections() { return administrationSections },
     activeAdministration() { return administrationSections.find(item => item.id === this.administrationSection) },
-    administrationEditors() { return Object.values(this.administrationInstances) },
+    administrationEditors() { return Object.values(this.administrationInstances).filter(Boolean) },
     administrationLocked() {
       return this.administrationEditors.some(editor => editor.dirty || editor.busy || editor.uncertain || editor.previewValidating || editor.$refs.naming?.dirty || editor.$refs.naming?.busy || editor.$refs.naming?.uncertain || editor.$refs.rules?.active || editor.creating || editor.$refs.deletion?.active)
     },
@@ -660,12 +660,32 @@ export default {
       if (kind === 'users') editor.focus(record.login)
       else if (kind === 'groups') editor.focus(record.code)
     },
+    saveAdministrationSession() {
+      if (this.windowPage || !this.session?.login) return
+      try {
+        const key = 'tactic_stream.administration.' + this.session.login
+        if (this.administrationOpen) sessionStorage.setItem(key, JSON.stringify({ open: true, section: this.administrationSection, project: this.project }))
+        else sessionStorage.removeItem(key)
+      } catch { /* Current session still works without storage. */ }
+    },
+    detailsClosed() {
+      if (this.openingLink || !String(this.navigationLink || '').startsWith('skey://') || this.knowledgeActive) return
+      this.navigationLink = ''
+      if (this.activeSearchTab?.state?.navigationLink?.startsWith('skey://')) this.activeSearchTab.state.navigationLink = ''
+      if (this.workspaceSelection?.navigationLink?.startsWith('skey://')) this.workspaceSelection.navigationLink = ''
+      if (this.session) {
+        saveWorkspace(this.session.login, this.workspaceProjects)
+        this.writeLocation(true)
+      }
+    },
     async showAdministration(section = null) {
       if (mobile.value) { this.showWorkspaceNotice('This editor is available on a desktop screen.'); return }
       if (!this.canAdminister || this.busy || this.administrationOpen) return
       if (section !== 'columns') this.columnsFocus = null
       this.$refs.settingsMenu.open = false
       this.closeNavigation()
+      this.$refs.details?.close()
+      this.detailsClosed()
       this.captureSearchTab()
       this.workspaceSelection = Object.fromEntries(['section', 'project', 'type', 'view', 'viewTitle',
         'configuredView', 'searchText', 'searchRelation', 'filterField', 'filterValue', 'sortField', 'sortDirection', 'page', 'pageSize',
@@ -675,12 +695,13 @@ export default {
       this.refreshAfterAdministration = false
       this.administrationOpen = true
       this.selectAdministration(typeof section === 'string' ? section : this.administrationSection)
+      this.saveAdministrationSession()
       await nextTick()
       this.$refs.administrationDialog.showModal()
     },
     administrationCommand(command) {
       if(command.type==='section')this.selectAdministration(command.value)
-      else if(command.type==='project'&&!this.administrationLocked){this.project=command.value;this.switchProject()}
+      else if(command.type==='project'&&!this.administrationLocked){this.project=command.value;this.switchProject();this.saveAdministrationSession()}
       else if(command.type==='help')this.$refs.help.open(command.topic)
       else if(command.type==='close')this.closeAdministrationClean()
       else if(command.type==='return-layout')this.returnToPageLayout()
@@ -705,6 +726,7 @@ export default {
       return true
     },
     administrationWorkflowMounted(editor) {
+      if (!editor) return
       this.administrationInstances.workflow=editor
       if(this.pendingWorkflow)this.runWorkflowRequest(editor)
       else editor.open()
@@ -723,6 +745,7 @@ export default {
       this.closeNavigation()
       this.administrationSection = id
       if (!this.administrationVisited.includes(id)) this.administrationVisited.push(id)
+      this.saveAdministrationSession()
       this.section = 'administration'
       this.type = item.type
       this.searchText = ''
@@ -748,7 +771,7 @@ export default {
     closeAdministrationClean() {
       if (this.$refs.adminTaskView && !this.$refs.adminTaskView.canLeave()) return
       for (const [section, editor] of Object.entries(this.administrationInstances)) {
-        if (!editor.canLeave()) { this.selectAdministration(section); return }
+        if (editor && !editor.canLeave()) { this.selectAdministration(section); return }
       }
       if (this.busy) return
       this.$refs.administrationDialog.close()
@@ -761,6 +784,7 @@ export default {
       if (this.workspaceSelection) Object.assign(this, this.workspaceSelection)
       this.workspaceSelection = null
       this.administrationOpen = false
+      this.saveAdministrationSession()
       this.administrationVisited = []
       this.administrationInstances = {}
       this.layoutLinks = []
@@ -864,6 +888,11 @@ export default {
       this.workspaceProject = this.project
       await this.loadNavigation()
       if (session !== this.session) return
+      let savedAdmin = null
+      if (this.canAdminister && !mobile.value) {
+        try { savedAdmin = JSON.parse(sessionStorage.getItem('tactic_stream.administration.' + this.session.login) || 'null') }
+        catch { savedAdmin = null }
+      }
       // Mount authenticated surfaces before restoring rows; handle the address only once.
       this.busy = true
       this.restoringSession = false
@@ -872,7 +901,10 @@ export default {
       this.routeReady = true
       const request = this.requestId
       const params = new URLSearchParams(location.search)
-      if (params.has('link') || params.has('chat') || addressProject(location)) await this.openBrowserLocation()
+      if (savedAdmin?.open && params.get('link')?.startsWith('skey://')) {
+        history.replaceState(history.state, '', workspaceAddress(this.workspaceProject, this.activeSearchTab ? this.type : '', this.view, ''))
+      }
+      if (params.has('link') && !(savedAdmin?.open && params.get('link')?.startsWith('skey://')) || params.has('chat') || addressProject(location)) await this.openBrowserLocation()
       else if (!this.activeWorkspace) {
         if (this.project) this.workspaceProjects[this.project] = { current: '', sections: [] }
         this.clearWorkspace()
@@ -882,6 +914,16 @@ export default {
       if (request === this.requestId) this.busy = false
       this.saveSession()
       if (!this.error) this.writeLocation(true)
+      if (savedAdmin?.open && this.canAdminister && !mobile.value && !params.has('chat') && !params.has('system_link') && !params.has('agent_mcp')) {
+        this.$refs.details?.close()
+        this.busy = false
+        await this.showAdministration(savedAdmin.section)
+        if (savedAdmin.project && this.projects.some(item => item.code === savedAdmin.project) && this.project !== savedAdmin.project) {
+          this.project = savedAdmin.project
+          this.switchProject()
+          this.saveAdministrationSession()
+        }
+      }
     },
     logout(message = '') {
       this.sessionRequest++
@@ -896,6 +938,7 @@ export default {
       this.configurationOpen = false
       this.$refs.administrationDialog?.close()
       this.administrationOpen = false
+      this.saveAdministrationSession()
       this.closeNavigation()
       this.requestId++
       this.linkRequest++; this.openingLink = false; this.routeReady = false
@@ -949,6 +992,11 @@ export default {
       if (this.types.find(item=>item.search_type===type)?.__record_read__?.available === false) return
       if (navigationRequest === null) { this.linkRequest++; this.openingLink = false }
       if (type === 'sthpw/transaction_log' && !link) link = { view: 'table' }
+      if ((!link || (!link.key && !link.name && !link.title)) && !filterField && !filterValue) {
+        const targetView = link?.view || 'table'
+        link = this.flatViewLinks.find(item => item.supported && item.search_type === type && item.view === targetView && !item.layoutView && !item.display?.options?.search_view) ||
+          this.flatViewLinks.find(item => item.supported && item.search_type === type && item.view === targetView && !item.layoutView) || link
+      }
       if (this.$refs.rules && !this.$refs.rules.canLeave()) return
       if (this.$refs.columnsEditor && !this.$refs.columnsEditor.canLeave()) return
       if (this.$refs.users && !this.$refs.users.canLeave()) return
@@ -1541,7 +1589,37 @@ export default {
         const links = []
         const collect = entries => { for (const entry of entries) { links.push(entry); collect(entry.children || []) } }
         collect(navigationEntries(result.entries, this.types))
-        for (const section of this.workspaceProjects[project]?.sections || []) {
+        const workspace = this.workspaceProjects[project]
+        if (workspace) {
+          for (let index = workspace.sections.length - 1; index >= 0; index--) {
+            const section = workspace.sections[index]
+            if (!section.navigationKey && section.id === JSON.stringify([section.type, '', section.view, false, '', ''])) {
+              const fallback = links.find(item => item.supported && item.search_type === section.type && item.view === section.view && !item.layoutView && !item.display?.options?.search_view) ||
+                links.find(item => item.supported && item.search_type === section.type && item.view === section.view && !item.layoutView)
+              if (fallback) {
+                const canonicalId = JSON.stringify([section.type, fallback.key || fallback.name || '', fallback.view || 'table', true, '', ''])
+                const canonical = workspace.sections.find(item => item !== section && item.id === canonicalId)
+                if (canonical) {
+                  if (workspace.current === section.id) workspace.current = canonical.id
+                  workspace.sections.splice(index, 1)
+                  continue
+                }
+                if (workspace.current === section.id) workspace.current = canonicalId
+                section.id = canonicalId; section.navigationKey = fallback.key; section.configuredView = true
+                const scope = fallback.name ? section.type.split('?')[0] + '@' + fallback.name : section.type.split('?')[0]
+                for (const tab of [...section.tabs, ...section.closedTabs]) {
+                  tab.state.configuredView = true
+                  if (!tab.state.scopeKey || tab.state.scopeKey === section.type.split('?')[0]) tab.state.scopeKey = scope
+                }
+                if (project === this.workspaceProject && this.activeWorkspaceSection === section && this.section === 'data') {
+                  this.configuredView = true
+                  if (!this.scopeKey || this.scopeKey === section.type.split('?')[0]) this.scopeKey = scope
+                }
+              }
+            }
+          }
+        }
+        for (const section of workspace?.sections || []) {
           const link = links.find(link => link.key === section.navigationKey && link.search_type === section.type && link.view === section.view)
           if (!link) continue
           section.title = link.title; section.icon = link.icon
@@ -1967,7 +2045,8 @@ export default {
         const view = params.get('view') || 'table'
         const workspace = this.activeWorkspace, tab = history.state?.tab
         const section = workspace?.sections.find(section => section.type === type && section.view === view && section.tabs.some(item => item.id === tab)) ||
-          workspace?.sections.find(section => section.type === type && section.view === view && section.id === workspace.current)
+          workspace?.sections.find(section => section.type === type && section.view === view && section.id === workspace.current) ||
+          workspace?.sections.find(section => section.type === type && section.view === view)
         // A browser address selects the retained tab, not a fresh unconfigured search.
         if (section) {
           if (section.tabs.some(item => item.id === tab)) section.current = tab
@@ -2010,9 +2089,11 @@ export default {
         const preset = result.preset
         let id = !showDetails ? 'object-tab:' + randomId() : preset ? 'preset-link:' + preset.view : 'skey-link:' + result.object.__search_key__ + ':' + result.process
         const retained = this.activeWorkspace?.sections.find(section => section.type === type && section.tabs.some(tab => tab.id === id ||
-          replace && preset && tab.id === (history.state?.tab || section.current) && tab.state.savedSearch === preset.view))
-        if (retained && !retained.tabs.some(tab => tab.id === id)) id = history.state?.tab || retained.current
-        if (retained) { retained.current = id; await this.activateSection(retained.id, request) }
+          replace && preset && tab.id === (history.state?.tab || section.current) && tab.state.savedSearch === preset.view)) ||
+          this.activeWorkspace?.sections.find(section => section.type === type && section.id === this.activeWorkspace.current) ||
+          this.activeWorkspace?.sections.find(section => section.type === type)
+        if (retained && !retained.tabs.some(tab => tab.id === id) && replace && preset && retained.tabs.some(tab => tab.id === (history.state?.tab || retained.current) && tab.state.savedSearch === preset.view)) id = history.state?.tab || retained.current
+        if (retained) { if (retained.tabs.some(tab => tab.id === id)) retained.current = id; await this.activateSection(retained.id, request) }
         else await this.selectType(type, null, '', '', request)
         if (request !== this.linkRequest || this.type !== type || this.project !== result.project || this.section !== 'data') return
         this.captureSearchTab()
@@ -2021,7 +2102,7 @@ export default {
         const title = preset?.title || object.name || object.title || object.code || String(object.id)
         const tab = searchTab(title, { type, pageSize: this.pageSize, view: section.view, configuredView: section.configuredView,
           resultMode: existing >= 0 ? section.tabs[existing].state.resultMode : this.resultMode,
-          navigationLink: value, scopeKey: type, savedSearch: preset?.view || '', filterRecords: preset?.records || [{ column: object.code ? 'code' : 'id', relation: '=', value: String(object.code || object.id), rowEnabled: true, operator: 'begin' }],
+          navigationLink: showDetails ? value : '', scopeKey: this.scopeKey || type, savedSearch: preset?.view || '', filterRecords: preset?.records || [{ column: object.code ? 'code' : 'id', relation: '=', value: String(object.code || object.id), rowEnabled: true, operator: 'begin' }],
           searchText: preset?.keyword || '', presetOrderBys: preset?.order_bys || [] })
         tab.id = id
         // Restoring a browser address must not replace an already retained draft.
@@ -2212,22 +2293,22 @@ export default {
       <KeepAlive><Configuration v-if="configurationOpen" ref="configuration" :ticket="session.ticket" :project="workspaceProject" :login="session.login" :can-administer="canAdminister" :open-project="configureProject" :reload-cache="reloadCache" @help="$refs.help.open($event)" @providers="openAgentProviders" @close="$refs.configurationDialog.close()" @session-expired="logout('Session ended. Sign in again.')" /></KeepAlive>
     </dialog>
     <dialog v-window="{kind:'administration'}" ref="administrationDialog" class="configuration-dialog administration-dialog" :aria-label="t('Administration')" @cancel.prevent="leaveAdministration" @close="administrationClosed">
-      <AdministrationShell ref="administrationShell" :model="{section:administrationSection,project,layoutParent,projects:administrationProjectOptions,locked:administrationLocked,busy, drafts:Object.entries(administrationInstances).filter(([,editor])=>editor.dirty||editor.uncertain).map(([id])=>id)}" @command="administrationCommand" />
+      <AdministrationShell ref="administrationShell" :model="{section:administrationSection,project,layoutParent,projects:administrationProjectOptions,locked:administrationLocked,busy, drafts:Object.entries(administrationInstances).filter(([,editor])=>editor&&(editor.dirty||editor.uncertain)).map(([id])=>id)}" @command="administrationCommand" />
     </dialog>
     <Teleport defer :disabled="!!windowPage && !administrationOpen" :to="administrationOpen ? '#administration-pages' : '#workspace-data'">
     <div v-if="administrationOpen && administrationVisited.includes('showcase')" v-show="administrationSection === 'showcase'" class="administration-page"><ComponentShowcase /></div>
     <div v-if="administrationOpen && administrationVisited.includes('plugins')" v-show="administrationSection === 'plugins'" class="administration-page"><Plugins :presentation-visible="administrationSection === 'plugins'" :ref="editor => { if (editor) administrationInstances.plugins = editor }" :ticket="session.ticket" :project="project" toolbar-target="#administration-actions" @saved="refreshTypes();loadNavigation();refreshAfterAdministration = true" @help="$refs.help.open('plugins')" /></div>
-    <div v-if="administrationOpen && administrationVisited.includes('types')" v-show="administrationSection === 'types'" class="administration-page"><SearchTypes :presentation-visible="administrationSection === 'types'" @vue:mounted="administrationInstances.types = $event.component.proxy" ref="searchTypes" @open-workflow="openAdministrationWorkflow" :ticket="session.ticket" :project="project" toolbar-target="#administration-actions" :queue-preview="queuePreview" :checkins="checkins" @saved="refreshTypes" @open-commit-queue="openCommitQueue()" /></div>
-    <div v-if="administrationOpen && administrationVisited.includes('schema')" v-show="administrationSection === 'schema'" class="administration-page"><SchemaEditor :presentation-visible="administrationSection === 'schema'" @vue:mounted="administrationInstances.schema = $event.component.proxy" ref="schema" @node-workflows="schemaNodeWorkflows" @type-workflow="values=>openAdministrationWorkflow(values,'schema')" :ticket="session.ticket" :project="project" toolbar-target="#administration-actions" :queue-preview="queuePreview" :checkins="checkins" @saved="refreshTypes" @open-commit-queue="openCommitQueue()" /></div>
-    <div v-if="administrationOpen && administrationVisited.includes('workflow')" v-show="administrationSection === 'workflow'" class="administration-page"><WorkflowEditor :presentation-visible="administrationSection === 'workflow'" @vue:mounted="administrationWorkflowMounted($event.component.proxy)" ref="workflow" :ticket="session.ticket" :project="project" inline defer-initial-load toolbar-target="#administration-actions" @saved="workflowAdministrationSaved" /></div>
-    <div v-if="administrationOpen && administrationVisited.includes('rules')" v-show="administrationSection === 'rules'" class="administration-page"><SecurityRules :presentation-visible="administrationSection === 'rules'" @vue:mounted="administrationInstances.rules = $event.component.proxy" ref="rules" :ticket="session.ticket" :project="project" toolbar-target="#administration-actions" @saved="loadNavigation" /></div>
-    <div v-if="administrationOpen && administrationVisited.includes('raw')" v-show="administrationSection === 'raw'" class="administration-page"><RawDatabase :presentation-visible="administrationSection === 'raw'" @vue:mounted="administrationInstances.raw = $event.component.proxy" :ticket="session.ticket" :project="project" toolbar-target="#administration-actions" @saved="refreshAfterAdministration = true" /></div>
-    <div v-if="administrationOpen && administrationVisited.includes('dashboards')" v-show="administrationSection === 'dashboards'" class="administration-page"><PageLayoutEditor :presentation-visible="administrationSection === 'dashboards'" @vue:mounted="administrationInstances.dashboards = $event.component.proxy" :ticket="session.ticket" :project="project" :search-types="types" :initial-focus="pagesFocus" toolbar-target="#administration-actions" @saved="layoutSaved" @card="openPageCard" @columns="openPageColumns" @linked-page="openLinkedPage" /></div>
-    <div v-if="administrationOpen && administrationVisited.includes('layouts')" v-show="administrationSection === 'layouts'" class="administration-page"><LayoutEditor :presentation-visible="administrationSection === 'layouts'" @vue:mounted="administrationInstances.layouts = $event.component.proxy" :ticket="session.ticket" :project="project" :initial-focus="layoutsFocus" toolbar-target="#administration-actions" @saved="layoutSaved" /></div>
-    <div v-if="administrationOpen && administrationVisited.includes('columns')" v-show="administrationSection === 'columns'" class="administration-page"><ColumnsEditor :presentation-visible="administrationSection === 'columns'" @vue:mounted="administrationInstances.columns = $event.component.proxy" ref="columnsEditor" :ticket="session.ticket" :project="project" :initial-focus="columnsFocus" toolbar-target="#administration-actions" @saved="columnsSaved" /></div>
-    <div v-if="administrationOpen && administrationVisited.includes('users')" v-show="administrationSection === 'users'" class="administration-page"><SecurityUsers :presentation-visible="administrationSection === 'users'" @vue:mounted="administrationInstances.users = $event.component.proxy" ref="users" :ticket="session.ticket" :project="project" toolbar-target="#administration-actions" @saved="loadNavigation" /></div>
-    <div v-if="administrationOpen && administrationVisited.includes('groups')" v-show="administrationSection === 'groups'" class="administration-page"><SecurityGroups :presentation-visible="administrationSection === 'groups'" @vue:mounted="administrationInstances.groups = $event.component.proxy" ref="groups" :ticket="session.ticket" :project="project" toolbar-target="#administration-actions" @saved="loadNavigation" /></div>
-    <div v-if="administrationOpen && administrationVisited.includes('sidebar')" v-show="administrationSection === 'sidebar'" class="administration-page"><SidebarEditor :presentation-visible="administrationSection === 'sidebar'" @vue:mounted="administrationInstances.sidebar = $event.component.proxy" ref="sidebar" :ticket="session.ticket" :project="project" toolbar-target="#administration-actions" @manage-groups="selectAdministration('groups')" @saved="sidebarSaved" @configure-search="configureSidebarSearch" @page-layout="openPageLayout" /></div>
+    <div v-if="administrationOpen && administrationVisited.includes('types')" v-show="administrationSection === 'types'" class="administration-page"><SearchTypes :presentation-visible="administrationSection === 'types'" @vue:mounted="$event.component?.proxy && (administrationInstances.types = $event.component.proxy)" ref="searchTypes" @open-workflow="openAdministrationWorkflow" :ticket="session.ticket" :project="project" toolbar-target="#administration-actions" :queue-preview="queuePreview" :checkins="checkins" @saved="refreshTypes" @open-commit-queue="openCommitQueue()" /></div>
+    <div v-if="administrationOpen && administrationVisited.includes('schema')" v-show="administrationSection === 'schema'" class="administration-page"><SchemaEditor :presentation-visible="administrationSection === 'schema'" @vue:mounted="$event.component?.proxy && (administrationInstances.schema = $event.component.proxy)" ref="schema" @node-workflows="schemaNodeWorkflows" @type-workflow="values=>openAdministrationWorkflow(values,'schema')" :ticket="session.ticket" :project="project" toolbar-target="#administration-actions" :queue-preview="queuePreview" :checkins="checkins" @saved="refreshTypes" @open-commit-queue="openCommitQueue()" /></div>
+    <div v-if="administrationOpen && administrationVisited.includes('workflow')" v-show="administrationSection === 'workflow'" class="administration-page"><WorkflowEditor :presentation-visible="administrationSection === 'workflow'" @vue:mounted="administrationWorkflowMounted($event.component?.proxy)" ref="workflow" :ticket="session.ticket" :project="project" inline defer-initial-load toolbar-target="#administration-actions" @saved="workflowAdministrationSaved" /></div>
+    <div v-if="administrationOpen && administrationVisited.includes('rules')" v-show="administrationSection === 'rules'" class="administration-page"><SecurityRules :presentation-visible="administrationSection === 'rules'" @vue:mounted="$event.component?.proxy && (administrationInstances.rules = $event.component.proxy)" ref="rules" :ticket="session.ticket" :project="project" toolbar-target="#administration-actions" @saved="loadNavigation" /></div>
+    <div v-if="administrationOpen && administrationVisited.includes('raw')" v-show="administrationSection === 'raw'" class="administration-page"><RawDatabase :presentation-visible="administrationSection === 'raw'" @vue:mounted="$event.component?.proxy && (administrationInstances.raw = $event.component.proxy)" :ticket="session.ticket" :project="project" toolbar-target="#administration-actions" @saved="refreshAfterAdministration = true" /></div>
+    <div v-if="administrationOpen && administrationVisited.includes('dashboards')" v-show="administrationSection === 'dashboards'" class="administration-page"><PageLayoutEditor :presentation-visible="administrationSection === 'dashboards'" @vue:mounted="$event.component?.proxy && (administrationInstances.dashboards = $event.component.proxy)" :ticket="session.ticket" :project="project" :search-types="types" :initial-focus="pagesFocus" toolbar-target="#administration-actions" @saved="layoutSaved" @card="openPageCard" @columns="openPageColumns" @linked-page="openLinkedPage" /></div>
+    <div v-if="administrationOpen && administrationVisited.includes('layouts')" v-show="administrationSection === 'layouts'" class="administration-page"><LayoutEditor :presentation-visible="administrationSection === 'layouts'" @vue:mounted="$event.component?.proxy && (administrationInstances.layouts = $event.component.proxy)" :ticket="session.ticket" :project="project" :initial-focus="layoutsFocus" toolbar-target="#administration-actions" @saved="layoutSaved" /></div>
+    <div v-if="administrationOpen && administrationVisited.includes('columns')" v-show="administrationSection === 'columns'" class="administration-page"><ColumnsEditor :presentation-visible="administrationSection === 'columns'" @vue:mounted="$event.component?.proxy && (administrationInstances.columns = $event.component.proxy)" ref="columnsEditor" :ticket="session.ticket" :project="project" :initial-focus="columnsFocus" toolbar-target="#administration-actions" @saved="columnsSaved" /></div>
+    <div v-if="administrationOpen && administrationVisited.includes('users')" v-show="administrationSection === 'users'" class="administration-page"><SecurityUsers :presentation-visible="administrationSection === 'users'" @vue:mounted="$event.component?.proxy && (administrationInstances.users = $event.component.proxy)" ref="users" :ticket="session.ticket" :project="project" toolbar-target="#administration-actions" @saved="loadNavigation" /></div>
+    <div v-if="administrationOpen && administrationVisited.includes('groups')" v-show="administrationSection === 'groups'" class="administration-page"><SecurityGroups :presentation-visible="administrationSection === 'groups'" @vue:mounted="$event.component?.proxy && (administrationInstances.groups = $event.component.proxy)" ref="groups" :ticket="session.ticket" :project="project" toolbar-target="#administration-actions" @saved="loadNavigation" /></div>
+    <div v-if="administrationOpen && administrationVisited.includes('sidebar')" v-show="administrationSection === 'sidebar'" class="administration-page"><SidebarEditor :presentation-visible="administrationSection === 'sidebar'" @vue:mounted="$event.component?.proxy && (administrationInstances.sidebar = $event.component.proxy)" ref="sidebar" :ticket="session.ticket" :project="project" toolbar-target="#administration-actions" @manage-groups="selectAdministration('groups')" @saved="sidebarSaved" @configure-search="configureSidebarSearch" @page-layout="openPageLayout" /></div>
     <Teleport defer to="#sidebar-search-pages" :disabled="!sidebarSearch">
     <template v-for="entry in retainedSearchTabs" :key="'page:' + entry.project + entry.tab.id">
       <WorkspacePage v-if="entry.tab.pageVisited && entry.tab.state.layoutView" ref="workspacePages"
@@ -2294,16 +2375,6 @@ export default {
           <SearchResultMenu kind="group" icon="group-items" label="Group items" :model="searchGroupMenuModel" @opening="prepareResultGroups" :boundary="$refs.results?.parentElement" @command="changeResultGroup" />
       </Teleport>
       <p v-if="error" class="error" role="alert">{{ t(error) }}</p>
-      <div v-if="selectedRecords.length && (resultMode !== 'continious' || selectedRecords.length > 1 || mobile)" class="selection-actions" role="group" :aria-label="t('Selected record actions')" @toggle.capture="menuToggled">
-        <AppButton :label="t(selectedRecords.length === 1 ? 'Deselect {count} item' : 'Deselect {count} items', { count: selectedRecords.length })" :translate-label="false" @click="selectedKeys = []" />
-        <AppMenu ref="selectionMenu" label="Selected record actions">
-            <AppButton v-if="canAdminister" label="Tasks for selected objects" icon="MDI_CLIPBOARD_TEXT_OUTLINE" @click="$refs.taskManager.open(true)" />
-            <AppButton v-if="interfaceConfig?.operations?.edit" label="Edit selected" icon="edit" @click="$refs.recordForm.open(selectedKeys)" />
-            <AppButton v-if="interfaceConfig?.operations?.retire && selectedRecords.some(record => record[interfaceConfig.operations.retire_column] !== 'retired')" label="Retire selected" icon="archive" @click="$refs.objectAction.open(selectedRecords, 'retire')" />
-            <AppButton v-if="interfaceConfig?.operations?.retire && selectedRecords.some(record => record[interfaceConfig.operations.retire_column] === 'retired')" label="Reactivate selected" icon="refresh" @click="$refs.objectAction.open(selectedRecords, 'reactivate')" />
-            <AppButton v-if="interfaceConfig?.operations?.delete" label="Delete selected" icon="delete" destructive @click="$refs.objectAction.open(selectedRecords, 'delete')" />
-        </AppMenu>
-      </div>
       <div ref="results" class="table-container workspace-results" :aria-busy="busy || loadingMore || (!administrationOpen && activeSearchTab && !activeSearchTab.loaded && !error)"
         @wheel.passive="armResultPagination" @touchstart.passive="armResultPagination" @pointerdown="armResultPagination" @keydown="armResultPagination" @scroll.passive="scrollResults"
         :id="!administrationOpen && activeSearchTab ? 'panel-' + activeSearchTab.id : undefined"
@@ -2336,6 +2407,16 @@ export default {
           <AppButton v-else :label="error ? 'Retry' : 'Load more'" :icon="error ? 'refresh' : 'next'" @click="loadMore(true)" />
         </div>
       </div>
+      <div v-if="selectedRecords.length && (resultMode !== 'continious' || selectedRecords.length > 1 || mobile)" class="selection-actions" role="group" :aria-label="t('Selected record actions')" @toggle.capture="menuToggled">
+        <AppButton :label="t(selectedRecords.length === 1 ? 'Deselect {count} item' : 'Deselect {count} items', { count: selectedRecords.length })" :translate-label="false" @click="selectedKeys = []" />
+        <AppMenu ref="selectionMenu" label="Selected record actions">
+            <AppButton v-if="canAdminister" label="Tasks for selected objects" icon="MDI_CLIPBOARD_TEXT_OUTLINE" @click="$refs.taskManager.open(true)" />
+            <AppButton v-if="interfaceConfig?.operations?.edit" label="Edit selected" icon="edit" @click="$refs.recordForm.open(selectedKeys)" />
+            <AppButton v-if="interfaceConfig?.operations?.retire && selectedRecords.some(record => record[interfaceConfig.operations.retire_column] !== 'retired')" label="Retire selected" icon="archive" @click="$refs.objectAction.open(selectedRecords, 'retire')" />
+            <AppButton v-if="interfaceConfig?.operations?.retire && selectedRecords.some(record => record[interfaceConfig.operations.retire_column] === 'retired')" label="Reactivate selected" icon="refresh" @click="$refs.objectAction.open(selectedRecords, 'reactivate')" />
+            <AppButton v-if="interfaceConfig?.operations?.delete" label="Delete selected" icon="delete" destructive @click="$refs.objectAction.open(selectedRecords, 'delete')" />
+        </AppMenu>
+      </div>
       <DockWorkspaceFooter class="pagination workspace-footer frame-search-footer">
         <SearchFooter :boundary="$refs.results?.parentElement" :model="{mode:continuous?'infinite':'pages',busy,page:page+1,pageCount,pageSize,pageNumbers,hasNext,count:rows.length,total:totalCount,range:rowRange,fileProject,canCreate:(!compactShortcuts || type!=='sthpw/project') && !!(interfaceConfig?.operations?.create || (type==='sthpw/project'&&canAdminister))}"
           @event="searchFooterEvent" />
@@ -2354,8 +2435,8 @@ export default {
       <div class="sidebar-search-shell"><header><div><h2>{{ t('Configure search') }}</h2><p>{{ sidebarSearch?.entry.title }} В· {{ sidebarSearch?.entry.searchType }}</p></div><div id="sidebar-search-actions" class="configuration-actions"><AppButton icon-only label="Quick filters" icon="filter" :disabled="busy" @click="$refs.quickFilterEditor.open()" /><AppButton label="Saved searches" icon="save" :disabled="busy" @click="$refs.searchLibrary.open()" /></div><AppButton label="Close" icon="close" @click="closeSidebarSearch" /></header><div id="sidebar-search-pages"></div></div>
     </dialog>
     <SearchLibrary ref="searchLibrary" :selections="quickSelections" :active="searchEditorActive" @closed="$event && $refs.docks?.hide('advanced_search')" :tab-id="activeSearchTab?.id" :tab-title="activeSearchTab ? searchTabTitle(activeSearchTab) : ''" @rename="renameCurrentSearchTab" :ticket="session.ticket" :project="project" :search-type="type" :scope="scopeKey || type.split('?')[0]" :records="filterRecords" :preset="savedSearch" :keyword="searchText" :order-bys="sortField ? [`${sortField} ${sortDirection}`] : presetOrderBys" :can-manage="canAdminister" @apply="applySearchLibrary" @changed="searchConfigurationChanged" />
-    <QuickFilterEditor ref="quickFilterEditor" :tab-id="activeSearchTab?.id" :ticket="session.ticket" :project="project" :search-type="type" :scope="scopeKey || type.split('?')[0]" :selections="quickSelections" :layout="quickLayout" :can-manage="canAdminister" @apply="applyQuickFilters" @changed="searchConfigurationChanged(); $refs.quickFilters?.load(true)" />
-    <dialog v-window="{kind:'sobject_info'}" ref="details" class="app-dialog object-details" :aria-label="t('Object details')">
+    <QuickFilterEditor ref="quickFilterEditor" :tab-id="activeSearchTab?.id" :ticket="session.ticket" :project="project" :search-type="type" :scope="scopeKey || type.split('?')[0]" :login="session.login" :selections="quickSelections" :layout="quickLayout" :can-manage="canAdminister" @apply="applyQuickFilters" @changed="searchConfigurationChanged(); $refs.quickFilters?.load(true)" />
+    <dialog v-window="{kind:'sobject_info'}" ref="details" class="app-dialog object-details" :aria-label="t('Object details')" @close="detailsClosed">
       <template v-if="detail">
         <header class="app-dialog-titlebar"><h2>{{ detailTitle }}</h2><AppButton v-if="interfaceConfig?.operations?.edit" label="Edit record" icon="edit" icon-only @click="editRecord()" /><AppButton label="Close details" icon="close" icon-only @click="$refs.details.close()" /></header>
         <ObjectReport :ticket="session.ticket" :project="detail.project_code || workspaceProject" :record="detail" @leave="$refs.details.close()" />

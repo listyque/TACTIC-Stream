@@ -228,6 +228,9 @@ export default {
             a.id - b.id
         );
       return records;
+    },
+    identitiesByLogin() {
+      return new Map(this.identities.map((user) => [user.login, user]));
     }
   },
   watch: {
@@ -401,7 +404,7 @@ export default {
     },
     identity(login) {
       return (
-        this.identities.find((user) => user.login === login) || {
+        this.identitiesByLogin.get(login) || {
           login,
           displayName: login || t('Removed user'),
           initials: (login || '?').slice(0, 2).toUpperCase()

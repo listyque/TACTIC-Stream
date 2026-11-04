@@ -1,6 +1,6 @@
-import { E as nextTick } from "./vue.js";
+import { D as nextTick } from "./vue.js";
 import { s as appearance } from "./AppButton.js";
-import { G as button, H as observeFrameSizes, J as muted, K as label, X as rect, Y as node, w as translate } from "./FrameView.js";
+import { K as button, T as translate, U as observeFrameSizes, X as node, Y as muted, Z as rect, q as label } from "./FrameView.js";
 import { n as sections } from "./sections.ui.js";
 import { i as sectionSelector, n as notices, o as toolbar$1, r as policy, t as documentEvent } from "./admin.document.js";
 import { t as listAction } from "./tree.ui.js";
@@ -257,6 +257,91 @@ var fieldGroups = [
 ];
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/administration/workflow/process.ui.mjs
+function nodeTypeMeta(kind, tr = (text) => text) {
+	const key = kind === "node" ? "manual" : kind || "manual";
+	return {
+		manual: {
+			value: "manual",
+			label: tr("Manual · Task"),
+			shortLabel: tr("Manual"),
+			icon: "person",
+			color: "#4d79b8",
+			badge: "TASK",
+			description: tr("Standard human task stage (rectangular card). Creates an artist task and advances when its status reaches complete.")
+		},
+		action: {
+			value: "action",
+			label: tr("Action · Auto script"),
+			shortLabel: tr("Action"),
+			icon: "bolt",
+			color: "#2e9b88",
+			badge: "AUTO",
+			description: tr("Automated process (rounded pill). Runs a server script or command class automatically when triggered by upstream stages.")
+		},
+		condition: {
+			value: "condition",
+			label: tr("Condition · Branching"),
+			shortLabel: tr("Condition"),
+			icon: "help",
+			color: "#cf8a2e",
+			badge: "IF / ?",
+			description: tr("Conditional branch (diamond markers). Evaluates a script condition and routes flow to success or failure output streams.")
+		},
+		approval: {
+			value: "approval",
+			label: tr("Approval · Sign-off"),
+			shortLabel: tr("Approval"),
+			icon: "approval",
+			color: "#8a5ec4",
+			badge: "GATE",
+			description: tr("Review gate (double-ring stadium). Requires supervisor approval; rejecting sends status back to upstream stages.")
+		},
+		hierarchy: {
+			value: "hierarchy",
+			label: tr("Hierarchy · Sub-workflow"),
+			shortLabel: tr("Hierarchy"),
+			icon: "hierarchy",
+			color: "#3e8eb8",
+			badge: "SUB",
+			description: tr("Nested sub-pipeline container. Expands into child workflow processes and can create parent and child tasks.")
+		},
+		dependency: {
+			value: "dependency",
+			label: tr("Dependency · External wait"),
+			shortLabel: tr("Dependency"),
+			icon: "link",
+			color: "#c76a3e",
+			badge: "WAIT",
+			description: tr("Cross-object dependency node. Waits for or triggers a process on a related Search Type (parent, child, or expression).")
+		},
+		progress: {
+			value: "progress",
+			label: tr("Progress · Tracker"),
+			shortLabel: tr("Progress"),
+			icon: "progress",
+			color: "#49a065",
+			badge: "%",
+			description: tr("Circular progress aggregator. Tracks completion across related objects in another Search Type and pipeline.")
+		},
+		status: {
+			value: "status",
+			label: tr("Status · Task state"),
+			shortLabel: tr("Status"),
+			icon: "status",
+			color: "#5b73c7",
+			badge: "STATE",
+			description: tr("Task status state (used in sthpw/task status pipelines). Defines a status name, color, and completion flag.")
+		}
+	}[key] || {
+		value: key,
+		label: key,
+		shortLabel: key,
+		icon: "schema",
+		color: "#4d79b8",
+		badge: String(key).toUpperCase(),
+		description: ""
+	};
+}
 function section(field, kind) {
 	return field.section === void 0 ? kind === "progress" ? "progress" : "default" : field.section;
 }
@@ -281,13 +366,13 @@ function options(model, field, language) {
 	})));
 }
 function fields(model, ui, language) {
-	const tr = (text) => translate(text, language), kind = model.processKind, settings = model.processSettings || {}, defaults = settings.default || {}, catalog = model.processCatalog || model.metadata || {};
+	const tr = (text) => translate(text, language), kind = model.processKind, currentMeta = nodeTypeMeta(kind, tr), settings = model.processSettings || {}, defaults = settings.default || {}, catalog = model.processCatalog || model.metadata || {};
 	const out = [{
 		kind: "Heading",
 		id: "processHeading",
 		title: model.selectedNode,
 		dataLabel: true,
-		description: tr("Node type: %1").replace("%1", kind)
+		description: tr("Node type: %1").replace("%1", currentMeta.label + " (" + kind + ")") + (currentMeta.description ? "\n" + currentMeta.description : "")
 	}, {
 		id: "adminProcessDescription",
 		title: "Description",
@@ -480,14 +565,25 @@ function fields(model, ui, language) {
 		}
 	]));
 	if (model.document.searchType !== "sthpw/task") out.push({
+		kind: "Heading",
+		id: "processKindHeading",
+		title: "Node type",
+		description: tr("Choose how this stage behaves in the workflow and how it is drawn on the canvas:") + "\n• " + currentMeta.label + ": " + currentMeta.description
+	}, {
 		kind: "ChoiceGrid",
 		id: "adminProcessKind",
 		title: "Node type",
 		description: "Choose the native behavior of this process.",
-		options: (model.metadata.nodeTypes || []).map((value) => ({
-			value,
-			label: value
-		})),
+		options: (model.metadata.nodeTypes || []).map((value) => {
+			const meta = nodeTypeMeta(value, tr);
+			return {
+				value,
+				label: meta.label,
+				icon: meta.icon,
+				color: meta.color,
+				description: meta.description
+			};
+		}),
 		props: {
 			value: kind,
 			action: {
@@ -600,10 +696,13 @@ function inspector(model, ui, width, language) {
 			kind: "Choice",
 			id: "adminNodeKind",
 			title: "Node type",
-			options: (model.metadata.nodeTypes || []).map((value) => ({
-				value,
-				label: value
-			})),
+			description: nodeTypeMeta(model.document.searchType === "sthpw/task" ? "status" : ui.nodeKind, tr).description,
+			options: (model.metadata.nodeTypes || []).map((value) => {
+				return {
+					value,
+					label: nodeTypeMeta(value, tr).label
+				};
+			}),
 			props: {
 				value: model.document.searchType === "sthpw/task" ? "status" : ui.nodeKind,
 				enabled: editable && model.document.searchType !== "sthpw/task",
@@ -612,6 +711,7 @@ function inspector(model, ui, width, language) {
 		}]);
 		else {
 			action("adminCreateSchemaTypeInspector", "New Search Type", "add", { type: "createType" });
+			action("adminCreateDraftNodeInspector", "New draft node (\"skeleton\")", "add", { type: "createDraftNode" }, editable);
 			addForm([{
 				id: "adminGraphTypeFilter",
 				title: "Find a Search Type",
@@ -651,8 +751,31 @@ function inspector(model, ui, width, language) {
 				value: ui.target,
 				action: { type: "target" }
 			}
-		}]);
-		action("adminConnectNodes", "Connect", "link", { type: "connect" }, editable && !!ui.source && !!ui.target && ui.source !== ui.target);
+		}].concat(model.mode === "schema" ? [{
+			kind: "Choice",
+			id: "adminConnectMode",
+			title: "Connection mode",
+			description: "Hierarchy connects Child → Parent by code. Many-to-many (M:N) automatically creates an intermediate link table.",
+			options: [
+				{
+					value: "hierarchy",
+					label: tr("Hierarchy · Child → Parent")
+				},
+				{
+					value: "many_to_many",
+					label: tr("Many-to-many · M:N (link table)")
+				},
+				{
+					value: "code",
+					label: tr("Direct key · code")
+				}
+			],
+			props: {
+				value: ui.connectMode || "hierarchy",
+				action: { type: "connectMode" }
+			}
+		}] : []));
+		action("adminConnectNodes", model.mode === "schema" && ui.connectMode === "many_to_many" ? "Connect Many-to-Many (M:N)" : "Connect", "link", { type: "connect" }, editable && !!ui.source && !!ui.target && ui.source !== ui.target);
 	} else if (selectedNode || selectedEdge) {
 		if (model.mode !== "workflow" || !selectedNode || referenceOnly) heading("graphSelectionHeading", selectedNode ? selectedNode.identity : selectedEdge.from + " → " + selectedEdge.to, referenceOnly ? model.mode === "workflow" ? "This process is referenced by a connection. Add the missing process or remove its connections before saving." : "This type is referenced by a connection. Add its registered node to the canvas to move it." : "");
 		if ((model.selectedNodes || []).length > 1) {
@@ -666,9 +789,71 @@ function inspector(model, ui, width, language) {
 		if (model.mode !== "workflow") action("adminRemoveGraphSelection", "Remove from canvas", "close", { type: "remove" }, editable && !referenceOnly || editable && !!selectedEdge);
 		if (selectedNode && !referenceOnly) {
 			if (model.mode === "schema") addPositionFields();
+			if (model.mode === "schema" && model.draftType) {
+				heading("schemaDraftTypeHeading", "Draft Search Type (\"skeleton\")", "This node exists only in your schema draft. You can rename it, wire connections, and register it in the database now or when saving the schema.");
+				addForm([
+					{
+						id: "adminDraftTypeTitle",
+						title: "Title",
+						props: {
+							text: model.draftType.title || "",
+							action: {
+								type: "draftField",
+								key: "title"
+							}
+						}
+					},
+					{
+						id: "adminDraftTypeTable",
+						title: "Table code (lowercase SQL)",
+						props: {
+							text: own$1(ui.text, "draftTable") ? ui.text.draftTable : model.draftType.table || selectedNode.identity.split("/").pop(),
+							action: {
+								type: "buffer",
+								key: "draftTable"
+							},
+							commitAction: { type: "commitDraftTable" }
+						}
+					},
+					{
+						kind: "ColorChoice",
+						id: "adminDraftTypeColor",
+						title: "Color",
+						props: {
+							value: model.draftType.color || "",
+							action: {
+								type: "draftField",
+								key: "color"
+							}
+						}
+					},
+					{
+						kind: "Switch",
+						id: "adminDraftTypePipeline",
+						title: "Pipeline support (pipeline_code)",
+						description: "Creates a pipeline_code column on registration so items can use Workflows.",
+						props: {
+							checked: model.draftType.hasPipeline !== false,
+							action: {
+								type: "draftField",
+								key: "hasPipeline"
+							}
+						}
+					}
+				]);
+				if (own$1(ui.text, "draftTable")) action("adminApplyDraftTable", "Apply table code", "check", { type: "commitDraftTable" }, editable);
+				action("adminRegisterDraftTypeNow", "Register Search Type in DB now", "check", {
+					type: "registerDraftType",
+					identity: selectedNode.identity
+				}, editable);
+				action("adminOpenDraftCreator", "Open full Search Type creator…", "tune", {
+					type: "openDraftCreator",
+					identity: selectedNode.identity
+				}, editable);
+			}
 			if (model.mode === "schema") {
-				action("adminNodeWorkflows", "Workflows", "schema", { type: "nodeWorkflows" }, !model.busy);
-				if (!model.instance && ["sthpw", "config"].indexOf(selectedNode.identity.split("/")[0]) < 0) action("adminDeleteSearchType", "Delete from project", "close", { type: "deleteType" }, editable);
+				if (!model.draftType) action("adminNodeWorkflows", "Workflows", "schema", { type: "nodeWorkflows" }, !model.busy);
+				if (!model.instance && !model.draftType && ["sthpw", "config"].indexOf(selectedNode.identity.split("/")[0]) < 0) action("adminDeleteSearchType", "Delete from project", "close", { type: "deleteType" }, editable);
 			}
 		}
 		if (model.mode === "workflow" && selectedEdge) {
@@ -742,26 +927,60 @@ function inspector(model, ui, width, language) {
 					action("adminSchemaRestoreDirect", "Restore direct connection", "undo", { type: "restoreDirect" });
 				}
 				if (selectedEdge) {
-					if (!model.instance) addForm([{
-						kind: "Choice",
-						id: "adminSchemaRelationship",
-						title: "Relationship type",
-						description: "Many-to-many creates a separate instance Search Type with two key connections.",
-						options: [{
-							value: "code",
-							label: "code"
-						}, {
-							value: "id",
-							label: "id"
-						}].concat([selectedEdge.from, selectedEdge.to].indexOf("*") < 0 ? [{
-							value: "many_to_many",
-							label: "many_to_many"
-						}] : []),
-						props: {
-							value: selectedEdge.relationship || "code",
-							action: { type: "relationship" }
-						}
-					}]);
+					if (!model.instance && selectedEdge.relationship !== "instance" && [selectedEdge.from, selectedEdge.to].indexOf("*") < 0) action("adminConvertEdgeToManyToMany", "Convert to Many-to-Many (M:N)", "link", {
+						type: "relationship",
+						value: "many_to_many"
+					}, editable);
+					if (!model.instance) {
+						const instanceChoices = (model.nodes || []).filter((row) => !row.referenceOnly && row.identity !== selectedEdge.from && row.identity !== selectedEdge.to).map((row) => ({
+							value: row.identity,
+							label: (row.label || row.identity) + " (" + row.identity + ")"
+						}));
+						addForm([{
+							kind: "Choice",
+							id: "adminSchemaRelationship",
+							title: "Relationship type",
+							description: "Many-to-many creates a separate instance Search Type with two key connections, or links through an existing intermediate table.",
+							options: [
+								{
+									value: "hierarchy",
+									label: tr("Hierarchy · Child → Parent (code)")
+								},
+								{
+									value: "code",
+									label: tr("Direct key · code")
+								},
+								{
+									value: "id",
+									label: tr("Direct key · id")
+								},
+								{
+									value: "instance",
+									label: tr("Many-to-many · via existing link table")
+								}
+							].concat([selectedEdge.from, selectedEdge.to].indexOf("*") < 0 ? [{
+								value: "many_to_many",
+								label: tr("Many-to-many · create new link table")
+							}] : []),
+							props: {
+								value: selectedEdge.relationship === "instance" ? "instance" : selectedEdge.type === "hierarchy" && (selectedEdge.relationship || "code") === "code" ? "hierarchy" : selectedEdge.relationship || "code",
+								action: { type: "relationship" }
+							}
+						}].concat(selectedEdge.relationship === "instance" ? [{
+							kind: "Choice",
+							id: "adminSchemaInstanceType",
+							title: "Link table (instance_type)",
+							description: "Intermediate Search Type storing foreign keys to both endpoints.",
+							options: instanceChoices,
+							props: {
+								value: selectedEdge.instance_type || "",
+								action: {
+									type: "attribute",
+									key: "instance_type"
+								}
+							}
+						}] : []));
+					}
 					addForm([{
 						kind: "Switch",
 						id: "adminSchemaCreateColumns",
@@ -991,18 +1210,22 @@ function models(model, ui, language) {
 function panel(model, ui, bounds, language, narrow = false) {
 	const tr = (text) => translate(text, language);
 	const w = bounds.width, h = bounds.height, children = [];
-	if (narrow || ui.catalogVisible) children.push(label("adminWorkflowCatalogTitle", rect(12, 12, w - (narrow ? 24 : 74), 38), tr("Workflows"), { weight: 600 }), node("Field", "adminWorkflowSearch", rect(12, 58, w - 24, 38), {
+	if (narrow || ui.catalogVisible) children.push(label("adminWorkflowCatalogTitle", rect(12, 10, Math.max(0, w - (narrow ? 24 : 62)), 34), tr("Workflows"), { weight: 600 }), node("Field", "adminWorkflowSearch", rect(12, 52, w - 24, 38), {
 		text: ui.query,
 		placeholder: tr("Find a workflow"),
 		label: tr("Find a workflow"),
 		action: { type: "query" }
-	}), node("List", "adminWorkflowCatalog", rect(12, 104, w - 24, Math.max(0, h - 116)), {
+	}), node("List", "adminWorkflowCatalog", rect(12, 98, w - 24, Math.max(0, h - 110)), {
 		source: "graphPipelines",
 		keyField: "key",
 		rowHeight: 42,
 		scrollbarId: "adminWorkflowCatalogScrollBar"
 	}));
-	if (!narrow) children.push(button("adminToggleWorkflowList", rect(ui.catalogVisible ? w - 50 : (w - 38) / 2, 12, 38, 38), tr(ui.catalogVisible ? "Hide workflow list" : "Show workflow list"), ui.catalogVisible ? "chevron-left" : "chevron-right", { type: "catalogVisible" }, true, { iconOnly: true }));
+	if (!narrow) children.push(button("adminToggleWorkflowList", rect(ui.catalogVisible ? w - 46 : (w - 34) / 2, 10, 34, 34), tr(ui.catalogVisible ? "Hide workflow list" : "Show workflow list"), ui.catalogVisible ? "chevron-left" : "chevron-right", { type: "catalogVisible" }, true, {
+		iconOnly: true,
+		iconAction: true,
+		round: false
+	}));
 	return node("Box", "adminWorkflowCatalogPanel", bounds, {
 		background: "surfaceContainerLow",
 		border: "outlineVariant",
@@ -1023,7 +1246,7 @@ function toolbar(model, ui, width, language) {
 }
 function describe(model, ui, width, height, language) {
 	if (width <= 0 || height <= 0) return { nodes: [] };
-	const tr = (text) => translate(text, language), workflow = model.mode === "workflow", internalCatalog = workflow, narrow = width < (workflow ? 1e3 : 800), edit = policy(model).editable && !ui.confirmation;
+	const tr = (text, values) => translate(text, language, values), workflow = model.mode === "workflow", internalCatalog = workflow, narrow = width < (workflow ? 1e3 : 800), edit = policy(model).editable && !ui.confirmation;
 	const noticeModel = Object.assign({}, model, { error: model.error || ui.error });
 	if (ui.confirmation === "remove") noticeModel.confirmationText = workflow ? "Remove the selection from this workflow draft?" : "Remove the selection from the schema draft? Search Types, tables and data will be kept.";
 	if (ui.confirmation === "selection") noticeModel.confirmationText = "Discard unapplied JSON changes?";
@@ -1042,6 +1265,67 @@ function describe(model, ui, width, height, language) {
 		const settingsY = width >= 560 ? y : y + 46;
 		nodes.push(button("adminEditPipeline", rect(width >= 560 ? 328 : 0, settingsY, Math.min(200, width), 38), tr("Pipeline settings"), "tune", { type: "clear" }, !model.busy));
 		if (width < 560) y += 46;
+	}
+	if (!workflow && ui.page === "canvas") {
+		const toggles = [
+			[
+				"adminSchemaToggleColumns",
+				tr("Columns: from → to"),
+				"code",
+				"showColumns",
+				172
+			],
+			[
+				"adminSchemaToggleRoles",
+				tr("Parent / Child & M:N"),
+				"hierarchy",
+				"showRoles",
+				188
+			],
+			[
+				"adminSchemaToggleCodes",
+				tr("Tables & codes"),
+				"table",
+				"showCodes",
+				148
+			],
+			[
+				"adminSchemaToggleLegend",
+				tr("Legend"),
+				"info",
+				"showLegend",
+				118
+			]
+		];
+		if (width >= 980) {
+			let bx = 332;
+			for (const [id, text, icon, key, btnW] of toggles) {
+				nodes.push(button(id, rect(bx, y, btnW, 38), text, icon, {
+					type: "toggleSchemaView",
+					key
+				}, !model.busy, {
+					highlighted: !!ui[key],
+					selected: !!ui[key],
+					round: false
+				}));
+				bx += btnW + 8;
+			}
+		} else {
+			y += 46;
+			const cols = width >= 680 ? 4 : width >= 340 ? 2 : 1, gap = 8, cellW = Math.max(40, Math.floor((width - (cols - 1) * gap) / cols));
+			toggles.forEach(([id, text, icon, key], idx) => {
+				const r = Math.floor(idx / cols), c = idx % cols;
+				nodes.push(button(id, rect(c * (cellW + gap), y + r * 44, cellW, 38), text, icon, {
+					type: "toggleSchemaView",
+					key
+				}, !model.busy, {
+					highlighted: !!ui[key],
+					selected: !!ui[key],
+					round: false
+				}));
+			});
+			y += (Math.ceil(toggles.length / cols) - 1) * 44;
+		}
 	}
 	y += 46;
 	if (workflow) {
@@ -1105,27 +1389,184 @@ function describe(model, ui, width, height, language) {
 		}));
 	}
 	const x = narrow ? 0 : internalCatalog ? catalogWidth + 10 : 0, graphWidth = narrow ? width : Math.max(1, width - x - propertiesWidth - 10);
-	const graphNodes = (model.nodes || []).map((row) => ({
-		identity: row.identity,
-		label: row.label || row.identity,
-		nodeX: row.nodeX,
-		nodeY: row.nodeY,
-		color: row.color || "",
-		kind: workflow && row.kind === "process" ? "manual" : row.kind,
-		referenceOnly: !!row.referenceOnly,
-		pendingCreation: !!model.document.newTypes && own(model.document.newTypes, row.identity)
-	}));
-	const graphEdges = (model.edges || []).map((row, index) => ({
-		from: row.from,
-		to: row.to,
-		edgeIndex: index,
-		relationship: row.relationship || "",
-		from_attr: row.from_attr || "",
-		to_attr: row.to_attr || "",
-		label: workflow ? row.from_attr || "" : row.relationship || "code",
-		color: row.color || ""
-	}));
-	nodes.push(node("Graph", "adminGraphCanvas", rect(x, y, graphWidth, h), {
+	const searchTypeMap = {}, linkTableSet = /* @__PURE__ */ new Set();
+	for (const item of model.metadata.searchTypes || []) searchTypeMap[item.identity] = item;
+	for (const row of model.nodes || []) if (row.kind === "instance" || row.attributes?.type === "instance" || row.attributes?.node_type === "instance" || searchTypeMap[row.identity]?.linkTable) linkTableSet.add(row.identity);
+	if (!workflow) {
+		const allEdges = model.edges || [];
+		for (const edge of allEdges) {
+			const inst = edge.instance_type || (edge.relationship === "instance" ? edge.path || "" : "");
+			if (inst) linkTableSet.add(inst);
+		}
+		for (const row of model.nodes || []) {
+			const id = String(row.identity || ""), outTargets = new Set(allEdges.filter((e) => e.from === id && e.to && e.to !== id).map((e) => e.to)), inEdges = allEdges.filter((e) => e.to === id && e.from !== id && e.relationship !== "instance");
+			if (/(^|\/)[a-z0-9_]+_in_[a-z0-9_]+$/i.test(id) || /\bin\b/i.test(row.label || "") && outTargets.size >= 2 && inEdges.length === 0) linkTableSet.add(id);
+		}
+	}
+	const namespaceCounts = {};
+	if (!workflow) for (const row of model.nodes || []) {
+		const id = String(row.identity || ""), ns = id.includes("/") ? id.split("/")[0] : "";
+		if (ns && ns !== "sthpw" && ns !== "config" && !linkTableSet.has(id)) namespaceCounts[ns] = (namespaceCounts[ns] || 0) + 1;
+	}
+	const primaryNamespace = Object.keys(namespaceCounts).sort((a, b) => namespaceCounts[b] - namespaceCounts[a])[0] || "";
+	const nodeShortLabel = (identity) => {
+		const found = (model.nodes || []).find((n) => n.identity === identity), meta = searchTypeMap[identity] || {}, raw = found && found.label || meta.label || meta.table || String(identity || "").split("/").pop() || String(identity || "");
+		return String(raw).length > 18 ? String(raw).slice(0, 16) + "…" : String(raw);
+	};
+	const graphNodes = (model.nodes || []).map((row) => {
+		const pendingCreation = !!model.document.newTypes && own(model.document.newTypes, row.identity), draftType = !!model.document.draftTypes && own(model.document.draftTypes, row.identity);
+		let subtitle, secondarySubtitle = "", visualKind = "", icon = "", badgeText = "", nodeColor = row.color || "";
+		if (workflow) {
+			const wfKind = row.referenceOnly ? "missing" : row.kind === "process" || !row.kind ? "manual" : row.kind, wfMeta = nodeTypeMeta(wfKind, tr);
+			visualKind = wfKind;
+			icon = row.referenceOnly ? "warning" : wfMeta.icon;
+			badgeText = row.referenceOnly ? "!" : wfMeta.badge;
+			nodeColor = row.color || (row.referenceOnly ? "" : wfMeta.color);
+			subtitle = row.referenceOnly ? tr("Missing process") : wfMeta.label;
+		} else {
+			const isLink = linkTableSet.has(row.identity) || pendingCreation, allEdges = model.edges || [], linkTargetSet = /* @__PURE__ */ new Set(), meta = searchTypeMap[row.identity] || {}, table = meta.table || String(row.identity || "").split("/").pop(), ns = String(row.identity || "").includes("/") ? String(row.identity || "").split("/")[0] : "", isSystem = ns === "sthpw" || ns === "config", isExternal = !isSystem && !draftType && !isLink && !!ns && !!primaryNamespace && ns !== primaryNamespace && Object.keys(namespaceCounts).length > 1;
+			if (isLink) for (const e of allEdges) {
+				if (e.from === row.identity && e.to && e.to !== row.identity) linkTargetSet.add(e.to);
+				if ((e.instance_type || (e.relationship === "instance" ? e.path || "" : "")) === row.identity) {
+					if (e.from) linkTargetSet.add(e.from);
+					if (e.to) linkTargetSet.add(e.to);
+				}
+			}
+			const linkTargets = Array.from(linkTargetSet), isSelfLink = isLink && linkTargets.length === 1, linkSummary = isSelfLink ? nodeShortLabel(linkTargets[0]) + " ⇄ " + nodeShortLabel(linkTargets[0]) + " · " + tr("Self M:N") : isLink && linkTargets.length >= 2 ? nodeShortLabel(linkTargets[0]) + " ⇄ " + nodeShortLabel(linkTargets[1]) + " · M:N" : tr("Link table · M:N");
+			visualKind = row.referenceOnly ? "missing" : draftType ? "draft" : isLink ? "instance" : isSystem ? "system" : isExternal ? "external" : "search_type";
+			icon = row.referenceOnly ? "warning" : draftType ? "edit" : isLink ? "link" : isSystem ? "dns" : isExternal ? "folder" : "table-view";
+			badgeText = row.referenceOnly ? "REF" : draftType ? tr("DRAFT") : isSelfLink ? "SELF M:N" : isLink ? "M:N" : isSystem ? ns === "config" ? "CFG" : "SYS" : isExternal ? ns.toUpperCase().slice(0, 8) : "";
+			nodeColor = row.color || meta.color || (row.referenceOnly ? "" : draftType ? "#c7923e" : isLink ? "#488599" : isSystem ? "#9a9248" : isExternal ? "#7a6fa8" : "#568c63");
+			let roleLabel = "";
+			if (ui.showRoles) {
+				if (draftType) roleLabel = tr("Draft (\"skeleton\") · not in DB");
+				else if (pendingCreation) roleLabel = tr("New · many-to-many");
+				else if (isLink) roleLabel = linkSummary;
+				else {
+					const edges = model.edges || [], isHierarchyChild = edges.some((e) => e.from === row.identity && e.type === "hierarchy"), isHierarchyParent = edges.some((e) => e.to === row.identity && e.type === "hierarchy"), isFrom = edges.some((e) => e.from === row.identity && !linkTableSet.has(e.from) && e.relationship !== "instance"), isTo = edges.some((e) => e.to === row.identity && e.relationship !== "instance"), isMany = edges.some((e) => (e.from === row.identity || e.to === row.identity) && (e.relationship === "instance" || e.type === "many_to_many" || !!e.instance_type));
+					if ((isHierarchyChild || isFrom) && (isHierarchyParent || isTo)) roleLabel = tr("Parent & Child");
+					else if (isHierarchyChild) roleLabel = tr("Child · hierarchy");
+					else if (isHierarchyParent) roleLabel = tr("Parent · hierarchy");
+					else if (isFrom) roleLabel = tr("Child / source (from)");
+					else if (isTo) roleLabel = tr("Parent / target (to)");
+					else roleLabel = tr("Search Type");
+					if (isMany) roleLabel += " · M:N";
+				}
+			}
+			const codeLabel = ui.showCodes ? row.identity + (table && !String(row.identity).endsWith("/" + table) ? " (" + table + ")" : "") : "";
+			if (ui.showRoles && ui.showCodes) {
+				subtitle = roleLabel;
+				secondarySubtitle = codeLabel;
+			} else if (ui.showRoles) subtitle = roleLabel;
+			else if (ui.showCodes) subtitle = codeLabel;
+			else if (draftType) subtitle = tr("Draft (\"skeleton\") · not in DB");
+			else if (pendingCreation) subtitle = tr("New · many-to-many");
+			else if (isLink) subtitle = linkSummary;
+			else if (isSystem) subtitle = ns === "config" ? tr("Config table · config") : tr("System table · sthpw");
+			else if (isExternal) subtitle = tr("External · {ns}", { ns });
+			else subtitle = table && table.toLowerCase() !== String(row.label || "").toLowerCase() ? "search_type · " + table : "search_type";
+		}
+		return {
+			identity: row.identity,
+			label: row.label || row.identity,
+			nodeX: row.nodeX,
+			nodeY: row.nodeY,
+			color: nodeColor,
+			kind: workflow ? row.kind === "process" ? "manual" : row.kind : linkTableSet.has(row.identity) || pendingCreation ? "instance" : row.kind,
+			visualKind,
+			icon,
+			badgeText,
+			subtitle,
+			secondarySubtitle,
+			referenceOnly: !!row.referenceOnly,
+			pendingCreation,
+			draftType
+		};
+	});
+	const nodeColorMap = {};
+	for (const n of graphNodes) nodeColorMap[n.identity] = n.color;
+	const graphEdges = (model.edges || []).map((row, index) => {
+		let badgeLines = [], primaryMono = false, tooltip = "";
+		if (!workflow) {
+			const toMeta = searchTypeMap[row.to] || {}, fromMeta = searchTypeMap[row.from] || {}, toTable = toMeta.table || String(row.to || "").split("/").pop(), fromTable = fromMeta.table || String(row.from || "").split("/").pop(), rel = row.relationship || "code", isVirtualInstance = (rel === "instance" || !!row.instance_type) && !row.from_col && !row.to_col, isInstance = isVirtualInstance || rel === "many_to_many" || row.type === "many_to_many", linkTable = row.instance_type || (rel === "instance" ? row.path || "" : ""), fromCol = row.from_col || (isVirtualInstance ? "" : rel === "search_type" ? "search_code" : toTable + "_" + rel), toCol = row.to_col || (isVirtualInstance ? "" : rel === "search_type" ? "code" : rel), pathSuffix = row.path && !isVirtualInstance ? " (" + row.path + ")" : "", columnLine = isVirtualInstance ? linkTable ? tr("via {table}", { table: ui.showCodes ? linkTable : linkTable.split("/").pop() }) : "M:N · instance" : (ui.showCodes ? fromTable + "." + fromCol + " → " + toTable + "." + toCol : fromCol + " → " + toCol) + (ui.showRoles ? "" : pathSuffix), sameDirCount = (model.edges || []).filter((e) => e.from === row.from && e.to === row.to).length;
+			let roleLine = "";
+			if (row.type === "hierarchy") roleLine = tr("Child → Parent · hierarchy");
+			else if (isVirtualInstance) roleLine = row.from === row.to ? tr("Self M:N · instance") : tr("M:N · instance");
+			else if (linkTableSet.has(row.from) || isInstance) roleLine = tr("Link → Target · {rel}", { rel });
+			else roleLine = tr("Child → Parent · {rel}", { rel });
+			if (pathSuffix) roleLine += pathSuffix;
+			if (ui.showRoles && roleLine) badgeLines.push(roleLine);
+			if (ui.showColumns && columnLine) badgeLines.push(columnLine);
+			if (!ui.showRoles && !ui.showColumns && ui.showCodes) badgeLines.push((row.from || "") + " → " + (row.to || ""));
+			if (!badgeLines.length && (sameDirCount > 1 || row.from === row.to)) badgeLines.push(isVirtualInstance ? linkTable ? "M:N · " + tr("via {table}", { table: linkTable.split("/").pop() }) : roleLine : columnLine);
+			primaryMono = badgeLines.length === 1 && !ui.showRoles;
+			tooltip = (row.from || "") + " → " + (row.to || "") + " · " + roleLine + " · " + columnLine;
+		}
+		return {
+			from: row.from,
+			to: row.to,
+			edgeIndex: index,
+			relationship: row.relationship || "",
+			from_attr: row.from_attr || "",
+			to_attr: row.to_attr || "",
+			label: workflow ? row.from_attr || "" : row.relationship || "code",
+			badgeLines,
+			primaryMono,
+			tooltip,
+			color: row.color || nodeColorMap[row.from] || ""
+		};
+	});
+	let canvasY = y, canvasH = h;
+	if (!workflow && ui.page === "canvas" && (!narrow || ui.panel === "canvas") && ui.showLegend) {
+		const legCols = graphWidth >= 760 ? 3 : 1, legPad = 12, legGap = 10, colW = Math.max(40, Math.floor((graphWidth - 24 - (legCols - 1) * legGap) / legCols)), cellH = legCols === 3 ? 98 : 82, legH = 24 + (legCols === 3 ? cellH : cellH * 3 + 20), items = [
+			[
+				"ports",
+				"arrow-forward",
+				tr("Ports & direction: from → to"),
+				tr("● Right port (Output / from): source table with foreign key (from_col) or Child in a hierarchy.\n○ Left port (Input / to): target table with key (to_col) or Parent in a hierarchy.")
+			],
+			[
+				"roles",
+				"hierarchy",
+				tr("Parent / Child & M:N"),
+				tr("• Hierarchy (Child → Parent): child links to parent (e.g. Shot.scenes_code → Episode.code).\n• M:N (instance): connects two types via a Link table (instance_type).")
+			],
+			[
+				"columns",
+				"code",
+				tr("Columns & colors"),
+				tr("• Direct key (code / id): maps source column from_col to target column to_col.\n• Line color matches the source (from) Search Type. Click any badge or line to edit.")
+			]
+		], legChildren = [];
+		items.forEach(([key, iconName, titleText, bodyText], idx) => {
+			const r = Math.floor(idx / legCols), c = idx % legCols, cx = legPad + c * (colW + legGap), cy = legPad + r * (cellH + legGap);
+			legChildren.push(node("Box", "adminSchemaLegendTile_" + key, rect(cx, cy, colW, cellH), {
+				background: "surfaceContainerHigh",
+				border: "outlineVariant",
+				radius: 8,
+				children: [
+					node("Icon", "adminSchemaLegendIcon_" + key, rect(10, 9, 16, 16), {
+						icon: iconName,
+						color: "action"
+					}),
+					label("adminSchemaLegendTitle_" + key, rect(32, 7, Math.max(0, colW - 40), 20), titleText, { weight: 600 }),
+					label("adminSchemaLegendBody_" + key, rect(10, 30, Math.max(0, colW - 20), cellH - 36), bodyText, Object.assign({
+						wrap: true,
+						fontRole: "caption"
+					}, muted))
+				]
+			}));
+		});
+		nodes.push(node("Box", "adminSchemaLegendCard", rect(x, y, graphWidth, legH), {
+			background: "surfaceContainerLow",
+			border: "outlineVariant",
+			radius: 10,
+			children: legChildren
+		}));
+		canvasY = y + legH + 8;
+		canvasH = Math.max(1, h - legH - 8);
+	}
+	nodes.push(node("Graph", "adminGraphCanvas", rect(x, canvasY, graphWidth, canvasH), {
 		toolbarRightInset: 46,
 		visible: ui.page === "canvas" && (!narrow || ui.panel === "canvas"),
 		help: false,
@@ -1135,6 +1576,7 @@ function describe(model, ui, width, height, language) {
 		selectedNode: model.selectedNode || "",
 		selectedNodes: model.selectedNodes || [],
 		selectedEdge: model.selectedEdge,
+		contextMenu: model.mode || "schema",
 		readOnly: !edit,
 		selectionEnabled: !model.busy,
 		resetKey: model.identity || "draft:" + model.document.searchType,
@@ -1145,21 +1587,27 @@ function describe(model, ui, width, height, language) {
 		const w = narrow ? width : propertiesWidth, px = narrow ? 0 : width - w, children = [];
 		if (narrow || ui.propertiesVisible) {
 			const inner = inspector(model, ui, w - 24, language);
-			children.push(node("Scroll", "adminGraphPropertiesScroll", rect(12, 62, w - 24, Math.max(0, h - 74)), {
+			children.push(node("Scroll", "adminGraphPropertiesScroll", rect(12, 52, w - 24, Math.max(0, h - 64)), {
 				contentHeight: inner.height,
 				resetKey: ui.inspector + ":" + ui.processPage + ":" + model.selectedNode + ":" + model.selectedEdge,
 				scrollbarId: "adminGraphPropertiesScrollBar",
 				children: inner.nodes
 			}));
 		}
-		if (!narrow) children.push(button("adminToggleGraphProperties", rect(ui.propertiesVisible ? workflow ? w - 50 : 12 : (w - 38) / 2, 12, 38, 38), tr(ui.propertiesVisible ? "Hide properties" : "Show properties"), ui.propertiesVisible ? "chevron-right" : "chevron-left", { type: "propertiesVisible" }, true, { iconOnly: true }));
-		if (narrow || ui.propertiesVisible) children.push(button("adminGraphAddNode", rect(workflow ? w - (narrow ? 50 : 94) : narrow ? 12 : 58, 12, workflow ? 38 : w - (narrow ? 24 : 70), 38), tr(ui.inspector === "add_node" ? "Selection" : "Add node"), ui.inspector === "add_node" ? "tune" : "add", {
-			type: "inspector",
-			value: ui.inspector === "add_node" ? "selection" : "add_node"
-		}, !model.busy, { iconOnly: workflow }));
-		if (workflow && (narrow || ui.propertiesVisible)) {
-			children.push(label("adminGraphInspectorTitle", rect(12, 12, Math.max(0, w - (narrow ? 112 : 156)), 38), tr("Inspector"), { weight: 600 }));
-			if (model.selectedNode || model.selectedEdge >= 0) {
+		if (!narrow) children.push(button("adminToggleGraphProperties", rect(ui.propertiesVisible ? w - 46 : (w - 34) / 2, 10, 34, 34), tr(ui.propertiesVisible ? "Hide properties" : "Show properties"), ui.propertiesVisible ? "chevron-right" : "chevron-left", { type: "propertiesVisible" }, true, {
+			iconOnly: true,
+			iconAction: true,
+			round: false
+		}));
+		if (narrow || ui.propertiesVisible) {
+			children.push(label("adminGraphInspectorTitle", rect(12, 10, Math.max(0, w - (narrow ? 104 : 148)), 34), tr("Inspector"), { weight: 600 }), button("adminGraphAddNode", rect(w - (narrow ? 46 : 86), 10, 34, 34), tr(ui.inspector === "add_node" ? "Selection" : "Add node"), ui.inspector === "add_node" ? "tune" : "add", {
+				type: "inspector",
+				value: ui.inspector === "add_node" ? "selection" : "add_node"
+			}, !model.busy, {
+				iconOnly: true,
+				round: false
+			}));
+			if (workflow && (model.selectedNode || model.selectedEdge >= 0)) {
 				const selectedNode = (model.nodes || []).find((record) => record.identity === model.selectedNode);
 				children.push(button("adminRemoveGraphSelection", rect(w - (narrow ? 94 : 138), 12, 38, 38), tr("Remove from canvas"), "delete", { type: "remove" }, edit && !(selectedNode && selectedNode.referenceOnly), {
 					iconOnly: true,
@@ -1198,7 +1646,7 @@ function describe(model, ui, width, height, language) {
 	}, edit && own(ui.text, "xml")));
 	if (ui.page === "canvas" && (!narrow || ui.panel === "canvas")) {
 		const toolbarX = x + 230, available = graphWidth - 230;
-		if (available > 130) nodes.push(node("Choice", "adminGraphLayoutStyle", rect(toolbarX, y, Math.max(80, available - 46), 38), {
+		if (available > 130) nodes.push(node("Choice", "adminGraphLayoutStyle", rect(toolbarX, canvasY, Math.max(80, available - 46), 38), {
 			label: tr("Automatic layout"),
 			options: [
 				{
@@ -1217,8 +1665,8 @@ function describe(model, ui, width, height, language) {
 			value: ui.arrange,
 			action: { type: "arrange" },
 			enabled: edit
-		}), button("adminArrangeGraph", rect(x + graphWidth - 38, y, 38, 38), tr("Arrange nodes"), "hierarchy", { type: "layout" }, edit && (model.nodes || []).length > 0, { iconOnly: true }));
-		else nodes.push(button("adminArrangeGraph", rect(x + graphWidth - 38, y, 38, 38), tr("Arrange nodes"), "hierarchy", { type: "layout" }, edit && (model.nodes || []).length > 0, { iconOnly: true }));
+		}), button("adminArrangeGraph", rect(x + graphWidth - 38, canvasY, 38, 38), tr("Arrange nodes"), "hierarchy", { type: "layout" }, edit && (model.nodes || []).length > 0, { iconOnly: true }));
+		else nodes.push(button("adminArrangeGraph", rect(x + graphWidth - 38, canvasY, 38, 38), tr("Arrange nodes"), "hierarchy", { type: "layout" }, edit && (model.nodes || []).length > 0, { iconOnly: true }));
 	}
 	return { nodes };
 }
@@ -1243,7 +1691,13 @@ function initial() {
 		typeToAdd: "",
 		source: "",
 		target: "",
+		connectMode: "hierarchy",
+		contextPosition: null,
 		arrange: "flow",
+		showColumns: false,
+		showRoles: false,
+		showCodes: false,
+		showLegend: false,
 		text: {},
 		confirmation: "",
 		pending: null,
@@ -1367,6 +1821,14 @@ function transition(ui, model, event) {
 		case "propertiesVisible":
 			next.propertiesVisible = !next.propertiesVisible;
 			break;
+		case "toggleSchemaView":
+			if ([
+				"showColumns",
+				"showRoles",
+				"showCodes",
+				"showLegend"
+			].indexOf(event.key) >= 0) next[event.key] = !next[event.key];
+			break;
 		case "catalogSplit":
 			next.catalogWidth = Math.max(180, Math.min(420, Number(event.value)));
 			break;
@@ -1384,11 +1846,41 @@ function transition(ui, model, event) {
 		case "typeToAdd":
 		case "source":
 		case "target":
+		case "connectMode":
 		case "arrange":
 			next[event.type] = event.value;
 			break;
+		case "openAddNodeAt":
+			next.inspector = "add_node";
+			next.propertiesVisible = true;
+			next.panel = "properties";
+			next.contextPosition = {
+				x: Number(event.x) || 40,
+				y: Number(event.y) || 40
+			};
+			break;
+		case "openConnectManyToMany":
+			next.inspector = "add_node";
+			next.propertiesVisible = true;
+			next.panel = "properties";
+			next.connectMode = "many_to_many";
+			if (event.source || event.from) next.source = event.source || event.from;
+			break;
 		case "buffer":
 			if (edit) next.text = Object.assign({}, next.text, { [event.key]: event.value });
+			break;
+		case "commitDraftTable":
+			if (edit && next.text.draftTable !== void 0) {
+				const value = next.text.draftTable.trim();
+				if (!/^[a-z][a-z0-9_]*$/.test(value)) {
+					next.error = "Use a lowercase table name with letters, digits and underscores";
+					break;
+				}
+				commands.push({
+					type: "renameDraftTable",
+					value
+				});
+			}
 			break;
 		case "commitInstance":
 			if (edit && next.text.instance !== void 0) {
@@ -1484,15 +1976,18 @@ function transition(ui, model, event) {
 				commands.push({
 					type: "addNode",
 					identity: name,
+					position: next.contextPosition,
 					kind: model.document.searchType === "sthpw/task" ? "status" : next.nodeKind
 				});
+				next.contextPosition = null;
 			}
 			break;
 		case "connect":
 			if (edit) commands.push({
 				type: "connect",
 				from: event.from || next.source,
-				to: event.to || next.target
+				to: event.to || next.target,
+				mode: event.mode || (event.from ? "hierarchy" : next.connectMode || "hierarchy")
 			});
 			break;
 		case "field":
@@ -1502,6 +1997,13 @@ function transition(ui, model, event) {
 		case "moveNodes":
 		case "column":
 		case "renameInstance":
+		case "renameDraftTable":
+		case "createDraftNode":
+		case "createProcessAt":
+		case "registerDraftType":
+		case "openDraftCreator":
+		case "draftField":
+		case "edgePreset":
 		case "relationship":
 		case "createColumns":
 		case "reverse":
@@ -1534,6 +2036,7 @@ function applied(ui, key) {
 }
 function completed(ui, command) {
 	if (command.type === "renameInstance") return applied(ui, "instance");
+	if (command.type === "renameDraftTable") return applied(ui, "draftTable");
 	if ([
 		"reload",
 		"discard",
@@ -1589,11 +2092,34 @@ var graphFrame_default = {
 	computed: {
 		frameModel() {
 			const workflow = this.frameMode === "workflow", document = this.document || {}, settings = workflow ? this.processSettings || {} : {}, kind = document.searchType === "sthpw/task" ? "status" : this.node?.kind || "manual", columnCatalog = workflow ? {} : { ...this.columnCatalog };
-			if (!workflow) for (const identity of Object.keys(document.newTypes || {})) columnCatalog[identity] = { columns: this.edges.filter((row) => row.from === identity && row.from_col).map((row) => ({
-				name: row.from_col,
-				type: "",
-				pending: true
-			})) };
+			if (!workflow) {
+				for (const identity of Object.keys(document.newTypes || {})) columnCatalog[identity] = { columns: this.edges.filter((row) => row.from === identity && row.from_col).map((row) => ({
+					name: row.from_col,
+					type: "",
+					pending: true
+				})) };
+				for (const identity of Object.keys(document.draftTypes || {})) {
+					const edgeCols = this.edges.filter((row) => row.from === identity && row.from_col).map((row) => ({
+						name: row.from_col,
+						type: "",
+						pending: true
+					}));
+					const seen = /* @__PURE__ */ new Set(["code", "id"]);
+					columnCatalog[identity] = { columns: [
+						{
+							name: "code",
+							type: "varchar",
+							pending: true
+						},
+						{
+							name: "id",
+							type: "integer",
+							pending: true
+						},
+						...edgeCols.filter((col) => !seen.has(col.name) && seen.add(col.name))
+					] };
+				}
+			}
 			return {
 				mode: this.frameMode,
 				style: appearance.theme,
@@ -1627,6 +2153,7 @@ var graphFrame_default = {
 				processCatalog: this.metadata,
 				connection: workflow ? {} : this.connection || {},
 				instance: workflow ? "" : this.instance || "",
+				draftType: workflow ? null : this.draftType || null,
 				instanceLinks: workflow ? [] : this.instanceLinks,
 				createColumns: workflow ? false : this.createColumns,
 				columnCatalog,
@@ -1705,7 +2232,7 @@ var graphFrame_default = {
 						this.moveNodes(command.positions);
 						break;
 					case "connect":
-						this.connect(command.from, command.to);
+						this.connect(command.from, command.to, command.mode);
 						break;
 					case "remove":
 						this.remove(true);
@@ -1714,7 +2241,7 @@ var graphFrame_default = {
 						this.nodeName = command.identity;
 						this.typeToAdd = command.identity;
 						this.nodeKind = command.kind;
-						this.addNode(this.insertionPoint());
+						this.addNode(command.position || this.insertionPoint());
 						if (!this.error) {
 							await nextTick();
 							this.graphCommand({ type: "reveal" });
@@ -1726,7 +2253,37 @@ var graphFrame_default = {
 						this.graphCommand({ type: "reset" });
 						break;
 					case "createType":
-						await this.createType(this.insertionPoint());
+						await this.createType(Number.isFinite(command.x) && Number.isFinite(command.y) ? {
+							x: command.x,
+							y: command.y
+						} : this.insertionPoint());
+						break;
+					case "createDraftNode":
+						this.createDraftNode?.(Number.isFinite(command.x) && Number.isFinite(command.y) ? {
+							x: command.x,
+							y: command.y
+						} : this.insertionPoint());
+						break;
+					case "createProcessAt":
+						this.createProcessAt?.(Number.isFinite(command.x) && Number.isFinite(command.y) ? {
+							x: command.x,
+							y: command.y
+						} : this.insertionPoint());
+						break;
+					case "draftField":
+						this.updateDraftType?.(command.key, command.value);
+						break;
+					case "renameDraftTable":
+						this.renameDraftTable?.(command.value);
+						break;
+					case "registerDraftType":
+						await this.registerDraftType?.(command.identity);
+						break;
+					case "openDraftCreator":
+						await this.openDraftCreator?.(command.identity);
+						break;
+					case "edgePreset":
+						this.applyEdgePreset?.(command.preset);
 						break;
 					case "deleteType":
 						this.openDeletion();
@@ -1754,6 +2311,7 @@ var graphFrame_default = {
 						break;
 					case "relationship":
 						if (command.value === "many_to_many") this.makeInstance();
+						else if (command.value === "hierarchy" || command.value === "code" || command.value === "id") this.applyEdgePreset?.(command.value);
 						else this.setAttribute("relationship", command.value);
 						break;
 					case "createColumns":

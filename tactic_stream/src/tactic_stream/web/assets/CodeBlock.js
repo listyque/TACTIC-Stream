@@ -1,5 +1,5 @@
-import { M as openBlock, N as renderList, _ as createElementBlock, m as createBaseVNode, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment } from "./vue.js";
-import { d as javascriptTokens, f as pythonTokens, p as xmlTokens } from "./FrameView.js";
+import { N as openBlock, P as renderList, d as Fragment, h as createBaseVNode, it as toDisplayString, m as computed, nt as normalizeClass, v as createElementBlock } from "./vue.js";
+import { y as syntaxTokens } from "./FrameView.js";
 //#region src/controls/CodeBlock.vue
 var _hoisted_1 = {
 	class: "code-block",
@@ -14,12 +14,12 @@ var _sfc_main = {
 		},
 		language: {
 			type: String,
-			default: "python"
+			default: "auto"
 		}
 	},
 	setup(__props) {
 		const props = __props;
-		const tokens = computed(() => props.language === "text" ? [{ text: props.code }] : props.language === "xml" ? xmlTokens(props.code) : props.language === "javascript" ? javascriptTokens(props.code) : pythonTokens(props.code));
+		const tokens = computed(() => syntaxTokens(props.code, props.language));
 		return (_ctx, _cache) => {
 			return openBlock(), createElementBlock("pre", _hoisted_1, [createBaseVNode("code", null, [(openBlock(true), createElementBlock(Fragment, null, renderList(tokens.value, (token, index) => {
 				return openBlock(), createElementBlock("span", {

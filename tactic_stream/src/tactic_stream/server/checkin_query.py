@@ -70,12 +70,13 @@ def get_virtual_snapshot_extended(server, search_key, context, files_dict, snaps
         search = Search('sthpw/snapshot')
         search.add_sobject_filter(sobject)
         search.add_filter('context', context)
-        search.add_column('version')
-        search.add_order_by('version desc')
-        search.set_limit(1)
         snaps = search.get_sobjects()
-        if snaps:
-            return snaps[0].get_attr_value('version')
+        versions = []
+        for sn in snaps:
+            versions.append(sn.get_attr_value('version'))
+
+        if versions:
+            return max(versions)
 
     if not version:
         ver = get_max_version(context=context, search_key=search_key)
@@ -190,44 +191,6 @@ def get_virtual_snapshot_extended(server, search_key, context, files_dict, snaps
 
     return json.dumps(result_list, separators=(',', ':'))
 
-def _reuse_versionless_snapshot(snapshot):
-    from pyasm.biz import Snapshot
-
-    existing = Snapshot._get_versionless(
-        snapshot.get_value('search_type'),
-        snapshot.get_value('search_code') or snapshot.get_value('search_id'),
-        snapshot.get_value('context'), mode='latest', create=False,
-        process=snapshot.get_value('process') or None,
-        level_type=snapshot.get_value('level_type') or None,
-        level_id=snapshot.get_value('level_id') or None)
-    if existing is None:
-        return snapshot, []
-    old_files = existing.get_related_sobjects('sthpw/file', show_retired=True)
-    for name, value in snapshot.get_data().items():
-        if name not in ('id', 'code', 'timestamp'):
-            existing.set_value(name, value, allow_none=True)
-    existing.set_now()
-    existing.files_dict = None
-    return existing, old_files
-
-
-def _retire_versionless_files(old_files, new_files):
-    import os
-    from pyasm.search import FileUndo
-    from tactic_stream.server.file_presentation import metadata_paths
-
-    if not old_files:
-        return
-    new_paths = {os.path.normcase(os.path.abspath(path))
-                 for file in new_files for path in metadata_paths(file)}
-    for file in old_files:
-        for path in metadata_paths(file):
-            if os.path.normcase(os.path.abspath(path)) not in new_paths:
-                FileUndo.remove(str(path))
-                FileUndo.remove(os.path.join(os.path.dirname(path), '.' + os.path.basename(path) + '.link'))
-        file.delete()
-
-
 def create_snapshot_extended(server, search_key, context, project_code=None, snapshot_type=None, is_revision=False, is_latest=True, is_current=False, description=None, version=None, level_key=None, update_versionless=True, only_versionless=False, keep_file_name=True, repo_name=None, files_info=None, mode=None, create_icon=True, transaction_title=None, transaction_description=None, process=None):
     import os
     import shutil
@@ -270,12 +233,13 @@ def create_snapshot_extended(server, search_key, context, project_code=None, sna
         search = Search('sthpw/snapshot')
         search.add_sobject_filter(sobject)
         search.add_filter('context', context)
-        search.add_column('version')
-        search.add_order_by('version desc')
-        search.set_limit(1)
         snaps = search.get_sobjects()
-        if snaps:
-            return snaps[0].get_attr_value('version')
+        versions = []
+        for sn in snaps:
+            versions.append(sn.get_attr_value('version'))
+
+        if versions:
+            return max(versions)
 
     if not version:
         ver = get_max_version(context=context, search_key=search_key)
@@ -433,7 +397,11 @@ def create_snapshot_extended(server, search_key, context, project_code=None, sna
             snapshot.set_value('is_current', 1)
             snapshot.set_value('is_latest', 1)
             update_versionless = False
-            snapshot, old_files = _reuse_versionless_snapshot(snapshot)
+            existing_versionless_snapshot = snapshot.get_by_sobjects([sobject], context, version=-1)
+            if existing_versionless_snapshot:
+                from tactic.ui.tools import DeleteCmd
+                cmd = DeleteCmd(sobject=existing_versionless_snapshot[0], auto_discover=True)
+                cmd.execute()
 
             snapshot.commit(triggers=True, log_transaction=True)
 
@@ -448,9 +416,7 @@ def create_snapshot_extended(server, search_key, context, project_code=None, sna
                 fl.set_value(name='st_size', value=files_info['file_sizes'][i])
                 fl.set_value(name='relative_dir', value=files_info['versionless_files_paths'][i])
                 fl.set_value(name='metadata', value=json.dumps(files_info['versionless_metadata'][i], separators=(',', ':')))
-                fl.commit(triggers=False, log_transaction=True)
-
-            _retire_versionless_files(old_files, files_list)
+                fl.commit(triggers=False, log_transaction=False)
 
         else:
 
@@ -467,20 +433,26 @@ def create_snapshot_extended(server, search_key, context, project_code=None, sna
                 fl.set_value(name='st_size', value=files_info['file_sizes'][i])
                 fl.set_value(name='relative_dir', value=files_info['version_files_paths'][i])
                 fl.set_value(name='metadata', value=json.dumps(files_info['version_metadata'][i], separators=(',', ':')))
-                fl.commit(triggers=False, log_transaction=True)
+                fl.commit(triggers=False, log_transaction=False)
 
         if update_versionless:
+            existing_versionless_snapshot = snapshot.get_by_sobjects([sobject], context, version=-1)
+            if existing_versionless_snapshot:
+                from tactic.ui.tools import DeleteCmd
+                cmd = DeleteCmd(sobject=existing_versionless_snapshot[0], auto_discover=True)
+                cmd.execute()
+
             versionless = Snapshot.create(sobject, snapshot_type=snapshot_type, process=process, context=context, description=description,
                                        is_revision=is_revision, is_latest=is_latest, is_current=is_current,
                                        level_type=level_type, level_id=level_id, commit=False, version=version)
 
             if repo_name:
                 versionless.set_value('repo', repo_name)
-            versionless.set_value('version', -1)
-            versionless.set_value('is_latest', 1)
-            versionless, old_files = _reuse_versionless_snapshot(versionless)
+                versionless.set_value('version', -1)
+                # snapshot.set_value('is_current', 1)
+                versionless.set_value('is_latest', 1)
 
-            versionless.commit(triggers=False, log_transaction=True)
+            versionless.commit(triggers=False, log_transaction=False)
 
             checkin = FileAppendCheckin(versionless.get_code(), files_info['versionless_files'], files_info['files_types'],
                                         keep_file_name=True, mode=mode, source_paths=files_info['versionless_files'],
@@ -498,15 +470,13 @@ def create_snapshot_extended(server, search_key, context, project_code=None, sna
                 fl.set_value(name='metadata', value=json.dumps(files_info['versionless_metadata'][i], separators=(',', ':')))
                 info = {'type': files_info['files_types'][i]}
                 builder.add_file(fl, info=info)
-                fl.commit(triggers=False, log_transaction=True)
+                fl.commit(triggers=False, log_transaction=False)
 
             builder.add_root_attr('ref_snapshot_code', snapshot.get_code())
 
             versionless.set_value("snapshot", builder.to_string())
 
-            versionless.commit(triggers=False, log_transaction=True)
-
-            _retire_versionless_files(old_files, files_list)
+            versionless.commit(triggers=False, log_transaction=False)
 
     snapshot_dict = api._get_sobject_dict(snapshot)
 

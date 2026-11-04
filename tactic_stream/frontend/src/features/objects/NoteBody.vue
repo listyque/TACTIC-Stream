@@ -48,13 +48,17 @@ const port = {
     const element = ref(null);
     let resize;
     onMounted(() => {
-      resize = observeFrameSizes(() => {
+      const updateHeight = () => {
         const part = port.frameNode.view;
-        if (!element.value) return;
-        const height = Math.round(element.value.getBoundingClientRect().height);
+        if (!element.value || port.frameNode.width < 20) return;
+        const rect = element.value.getBoundingClientRect();
+        if (rect.width < 20) return;
+        const height = Math.round(rect.height);
         if (height > 0 && Math.abs((heights.value[part] || 0) - height) > 1)
           heights.value = { ...heights.value, [part]: height };
-      });
+      };
+      updateHeight();
+      resize = observeFrameSizes(updateHeight);
       resize.observe(element.value);
     });
     onBeforeUnmount(() => resize?.disconnect());
@@ -157,7 +161,13 @@ const views = {
 };
 onMounted(() => {
   const measure = () => {
-    width.value = host.value.clientWidth;
+    const nextWidth =
+      host.value.clientWidth ||
+      UI.geometry(
+        { status: props.note.entry_type === 'status' },
+        host.value.closest('.notes-timeline')?.clientWidth || 0
+      ).contentWidth;
+    if (nextWidth > 0 && nextWidth !== width.value) width.value = nextWidth;
   };
   measure();
   observer = observeFrameSizes(measure);

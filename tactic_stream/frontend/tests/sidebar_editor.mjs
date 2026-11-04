@@ -162,7 +162,7 @@ try {
   await mainGroups.getByRole('radio', { name: 'Group details', exact: true }).tap()
   await mainGroups.getByLabel('Description', { exact: true }).fill('Uncommitted group description')
   await admin.getByRole('button', { name: 'Close administration', exact: true }).tap()
-  await mainGroups.getByText('Save or discard group changes before leaving.', { exact: true }).waitFor()
+  await mainGroups.getByText('Discard unsaved group changes?', { exact: true }).waitFor()
   await admin.getByRole('button', { name: 'Discard', exact: true }).tap()
   await mainGroups.getByRole('button', { name: 'Discard changes', exact: true }).tap()
   // The same group editor feeds the complete native Access Rules editor.
@@ -231,7 +231,8 @@ try {
   assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true)
   if (process.argv[3]) await page.screenshot({ path: process.argv[3].replace('.png', '-rules-mobile.png'), animations: 'disabled' })
   await admin.getByRole('button', { name: 'Close administration', exact: true }).tap()
-  await rules.getByText('Save or discard access changes before leaving.', { exact: true }).waitFor()
+  await rules.getByText('Discard unsaved access changes?', { exact: true }).waitFor()
+  await rules.getByRole('button', { name: 'Keep editing', exact: true }).tap()
   await admin.getByRole('button', { name: 'Save to server', exact: true }).tap()
   await rulesReady()
   await admin.getByRole('button', { name: 'Reload from server', exact: true }).tap()

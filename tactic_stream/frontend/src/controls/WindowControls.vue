@@ -84,13 +84,17 @@ function resizeEdges() {
   };
 }
 function syncHeaderPadding() {
-  const style = getComputedStyle(props.element);
+  const host =
+    props.header.parentElement === props.element
+      ? props.element
+      : props.header.parentElement?.parentElement === props.element
+        ? props.header.parentElement
+        : null;
+  const style = host ? getComputedStyle(host) : null;
   for (const side of ['top', 'left', 'right'])
     props.header.style.setProperty(
       '--window-padding-' + side,
-      props.header.parentElement === props.element
-        ? style.getPropertyValue('padding-' + side)
-        : '0px'
+      style ? style.getPropertyValue('padding-' + side) : '0px'
     );
 }
 function clamp(rect) {

@@ -382,7 +382,7 @@ export default {
             this.selectRule(command.index);
             break;
           case 'addRule':
-            this.addRule();
+            this.addRule(command.scope);
             break;
           case 'removeRule':
             this.setRule(this.selected);
@@ -408,7 +408,7 @@ export default {
             break;
           }
           case 'applyText':
-            this.applyText();
+            this.applyText(command);
             break;
           case 'save':
             await this.save();
@@ -435,8 +435,10 @@ export default {
       }
     },
     canLeave() {
-      if (this.dirty || this.busy || this.uncertain) {
-        this.error = 'Save or discard access changes before leaving.';
+      if (this.busy) return false;
+      if (this.dirty || this.uncertain) {
+        this.error = '';
+        this.dispatch({ type: 'discard' });
         return false;
       }
       return true;
@@ -569,8 +571,10 @@ export default {
         xml
       );
     },
-    addRule() {
+    addRule(scope = this.scope) {
       if (this.pendingText()) return;
+      const targetScope =
+        scope === 'tasks' ? 'process' : scope || this.scope;
       const defaults = {
         project: { code: '*' },
         search_type: { code: '*' },
@@ -583,13 +587,13 @@ export default {
         search_filter: { search_type: '', column: '', op: '=', value: '' }
       };
       const attrs = {
-        group: this.scope,
+        group: targetScope,
         access: 'deny',
-        ...(defaults[this.scope] || { key: '*' })
+        ...(defaults[targetScope] || { key: '*' })
       };
-      if (!['project', 'builtin'].includes(this.scope))
+      if (!['project', 'builtin'].includes(targetScope))
         attrs.project = this.project;
-      if (this.scope === 'search_filter') delete attrs.access;
+      if (targetScope === 'search_filter') delete attrs.access;
       this.setRule(-1, attrs);
       this.editing = true;
     },
@@ -612,11 +616,13 @@ export default {
       this.error = '';
       this.message = '';
     },
-    applyText() {
+    applyText(command) {
       if (!this.editable) return;
+      const page = command?.page || this.page;
+      const text = command?.text ?? this.ui.text;
       try {
-        if (this.page === 'rule') {
-          const attrs = JSON.parse(this.ui.text);
+        if (page === 'rule') {
+          const attrs = JSON.parse(text);
           if (
             !attrs ||
             Array.isArray(attrs) ||
@@ -628,8 +634,8 @@ export default {
             );
           this.setRule(this.selected, attrs);
         } else {
-          parseRules(this.ui.text);
-          this.setGroupXml(this.group, this.ui.text);
+          parseRules(text);
+          this.setGroupXml(this.group, text);
           this.selected = -1;
           this.syncText();
           this.error = '';

@@ -68,7 +68,9 @@ export function notify(
         ? 8000
         : ['error', 'warning'].includes(kind)
           ? 5000
-          : 3200
+          : message === 'Server operation completed'
+            ? 1200
+            : 1600
   );
   return row.notificationId;
 }

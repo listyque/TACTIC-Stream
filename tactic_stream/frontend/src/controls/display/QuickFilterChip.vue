@@ -9,6 +9,7 @@ const props = defineProps({
   accent: String,
   showAccentMarker: Boolean,
   subtle: Boolean,
+  round: Boolean,
   checked: Boolean,
   emphasis: { type: Number, default: 0 },
   maximumWidth: Number
@@ -19,7 +20,7 @@ const geometry = computed(() => filterGeometry(props.emphasis));
 <template>
   <AppButton
     class="quick-filter-chip"
-    :class="{ checked, subtle }"
+    :class="{ checked, subtle, round }"
     :label="text"
     :translate-label="false"
     :aria-pressed="checked"
@@ -56,12 +57,16 @@ const geometry = computed(() => filterGeometry(props.emphasis));
   min-width: 0;
   min-height: 0;
   width: max-content;
+  max-width: 100%;
   border: 1px solid var(--outline);
   border-radius: var(--button-radius);
-  padding: 0;
+  padding: 0 8px;
   background: var(--chip-surface);
   color: var(--chip-content);
   font-weight: 600;
+}
+.quick-filter-chip.round.app-button:not(.icon-button) {
+  border-radius: 999px;
 }
 .quick-filter-chip.app-button:not(.icon-button).checked {
   --chip-surface: var(--chip-accent);
@@ -84,7 +89,7 @@ const geometry = computed(() => filterGeometry(props.emphasis));
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  max-width: calc(100% - 18px);
+  max-width: 100%;
   flex: 0 1 auto;
   width: max-content;
 }

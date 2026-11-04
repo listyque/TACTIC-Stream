@@ -8,31 +8,49 @@ from pyasm.command import Command
 from pyasm.common import Environment
 from pyasm.search import Search, SearchType
 from pyasm.security.security import _require_admin
-from tactic_stream.dashboard_plan import DashboardBlock, DashboardDocument
+from tactic_stream.dashboard_plan import (
+    DashboardBlock,
+    DashboardDocument,
+    dashboard_from_xml,
+    dashboard_to_xml,
+)
 from tactic_stream.server.dashboards import dashboard_layout, dashboard_sources
+from tactic_stream.server.navigation import read_navigation
 from tactic_stream.server.widget_configuration import WidgetConfigConflict
 from tactic_stream.server.sidebar_editor import SidebarDraft, read_sidebar, save_sidebar
-from .page_cmd import digest, page_state
+from .page_cmd import digest
 
 
 def dashboard_state():
-    state=page_state('sthpw/project')
-    urls=[row.get_data() for row in Search('config/url').get_sobjects()]
-    state['revision']=digest([state['revision'],urls])
-    state['bricks']=list(get_args(DashboardBlock.model_fields['kind'].annotation))
-    state['regions']=list(get_args(DashboardBlock.model_fields['region'].annotation))
-    state['dashboards']=[dict(view=row.get_value('view'),source_id=row.get_id())
-        for row in Search('config/widget_config').get_sobjects()
-        if (row.get_value('view') or '').startswith('dashboard.') and '<dashboard>' in (row.get_value('config') or '')]
-    return state
+    sql = Search('config/widget_config').get_sql()
+    if not sql.table_exists('spt_widget_config_revision'):
+        raise ValueError('Upgrade the project schema before creating pages')
+    configuration = Search('config/widget_config')
+    configuration.add_order_by('id')
+    config_rows = configuration.get_sobjects()
+    urls = [row.get_data() for row in Search('config/url').get_sobjects()]
+    revision = digest([
+        Project.get_project_code(),
+        sql.get_value("SELECT revision FROM spt_widget_config_revision WHERE code='collection'"),
+        [row.get_data() for row in config_rows],
+        urls,
+    ])
+    return dict(
+        revision=revision,
+        navigation=read_navigation(),
+        bricks=list(get_args(DashboardBlock.model_fields['kind'].annotation)),
+        regions=list(get_args(DashboardBlock.model_fields['region'].annotation)),
+        dashboards=[
+            dict(view=row.get_value('view'), source_id=row.get_id())
+            for row in config_rows
+            if (row.get_value('view') or '').startswith('dashboard.')
+            and '<dashboard' in (row.get_value('config') or '')
+        ],
+    )
 
 
 def configuration_xml(document):
-    root = ET.Element('config')
-    definition = ET.SubElement(root, 'view', name='dashboard.' + document['name'])
-    ET.SubElement(definition, 'dashboard').text = json.dumps(document, ensure_ascii=False, indent=2)
-    ET.indent(root, space='  ')
-    return ET.tostring(root, encoding='unicode')
+    return dashboard_to_xml(document)
 
 
 class DashboardCmd(Command):
@@ -68,19 +86,21 @@ class DashboardCmd(Command):
             name=self.kwargs.get('name','')
             if not isinstance(name,str) or len(name)>48:
                 raise ValueError('Choose a dashboard name')
+            if not name and self.kwargs.get('default_first') and state['dashboards']:
+                name=state['dashboards'][0]['view'][10:]
             if name:
                 query=Search('config/widget_config');query.add_filter('view','dashboard.'+name)
                 rows=query.get_sobjects()
                 if len(rows)!=1:
                     raise ValueError('Choose an existing dashboard')
-                source=ET.fromstring(rows[0].get_value('config')).findtext('.//dashboard')
-                if not source:
-                    raise ValueError('Choose an existing dashboard')
-                state['document']=DashboardDocument.model_validate_json(source).model_dump(mode='json')
+                state['document']=dashboard_from_xml(rows[0].get_value('config'),name).model_dump(mode='json')
+                if self.kwargs.get('include_preview'):
+                    state['model']=dashboard_layout(state['document'],'dashboard.'+name)
+                    state['xml']=configuration_xml(state['document'])
             return state
         if self.kwargs.get('expected_revision')!=state['revision']:
             raise WidgetConfigConflict('Dashboard dependencies changed. Reload before saving.')
-        document=DashboardDocument.model_validate(self.kwargs.get('document')).model_dump(mode='json')
+        document=dashboard_from_xml(self.kwargs.get('document')).model_dump(mode='json')
         view='dashboard.'+document['name']
         path='/dashboard/'+document['name']
         filter_values = self.kwargs.get('filter_values') if action == 'preview' else None
@@ -88,7 +108,7 @@ class DashboardCmd(Command):
         root_type=(model.get('layoutItems') or {}).get('searchType') or 'sthpw/project'
         search=Search('config/widget_config');search.add_filter('view',view)
         sources=search.get_sobjects()
-        if len(sources)>1 or sources and '<dashboard>' not in (sources[0].get_value('config') or ''):
+        if len(sources)>1 or sources and '<dashboard' not in (sources[0].get_value('config') or ''):
             raise ValueError('Dashboard view belongs to another configuration')
         query=Search('config/url');query.add_filter('url',path)
         urls=query.get_sobjects()

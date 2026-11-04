@@ -101,8 +101,11 @@ ${source}
         } else if (message.type === 'progress')
           progress?.(message.title, message.detail);
         else if (message.type === 'result') finish(null, message.result);
-        else if (message.type === 'error')
-          finish(new Error(message.error + '\n' + message.stack));
+        else if (message.type === 'error') {
+          const error = new Error(message.error);
+          if (message.stack) error.stack = message.stack;
+          finish(error);
+        }
       };
       worker.onerror = (event) => {
         event.preventDefault();

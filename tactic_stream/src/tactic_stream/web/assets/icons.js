@@ -14322,7 +14322,13 @@ var semanticAliases = {
 	queue: "commit-queue",
 	appearance: "theme-mode",
 	"fact-check": "task",
-	"text-fields": "type"
+	"text-fields": "type",
+	speed: "ui-performance",
+	summarize: "donut-small",
+	title: "format-header-1",
+	"smart-button": "plus-box",
+	"horizontal-rule": "divider",
+	"space-bar": "fit-width"
 };
 var aliases = {
 	"account-circle": "user-circle",

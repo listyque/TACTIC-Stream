@@ -1,33 +1,47 @@
-import { A as onMounted, C as inject, E as nextTick, F as resolveComponent, G as withCtx, H as watch, I as resolveDirective, K as withDirectives, L as resolveDynamicComponent, M as openBlock, N as renderList, O as onBeforeUnmount, S as h, W as watchPostEffect, X as ref, _ as createElementBlock, b as createVNode, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment, y as createTextVNode } from "./vue.js";
+import { C as h, D as nextTick, G as watchPostEffect, I as resolveComponent, K as withCtx, L as resolveDirective, N as openBlock, P as renderList, R as resolveDynamicComponent, U as watch, Z as ref, _ as createCommentVNode, b as createTextVNode, d as Fragment, g as createBlock, h as createBaseVNode, it as toDisplayString, j as onMounted, k as onBeforeUnmount, m as computed, nt as normalizeClass, p as Teleport, q as withDirectives, rt as normalizeStyle, tt as unref, u as withModifiers, v as createElementBlock, w as inject, x as createVNode } from "./vue.js";
 import { T as metrics, a as _sfc_main$8, o as t, s as appearance, t as _sfc_main$7, z as _plugin_vue_export_helper_default } from "./AppButton.js";
 import { A as resultItems, bt as mobile, gt as serverTimestamp, ht as serverClock, o as fileBlob } from "./index.js";
-import { G as button, H as observeFrameSizes, J as muted, K as label, O as ItemPreview_default, P as _sfc_main$10, X as rect, Y as node, t as _sfc_main$9, w as translate } from "./FrameView.js";
+import { F as _sfc_main$10, K as button, T as translate, U as observeFrameSizes, X as node, Y as muted, Z as rect, k as ItemPreview_default, q as label, t as _sfc_main$9 } from "./FrameView.js";
 import { n as qtLabelTextWidth } from "./textMetrics.js";
 import { r as prettySize } from "./file_values.js";
 import "./files.js";
 import { t as downloadBlob } from "./files2.js";
 //#region src/controls/richText.js
+var HTML_ESCAPES = {
+	"&": "&amp;",
+	"<": "&lt;",
+	">": "&gt;",
+	"\"": "&quot;",
+	"'": "&#39;"
+};
+var HTML_ESCAPE_RE = /[&<>"']/g;
+var SKEY_RE = /skey:\/\/[^\s<>"]+/g;
+var LINK_RE = /(?:skey|tactic-search|https?|ftp):\/\/[^\s<>"]+/gi;
+var TRAILING_PUNCT_RE = /[.,;:!?\)\]}]+$/;
+var INTERNAL_LINK_RE = /^(skey|tactic-search):/i;
 function escapeHtml(value) {
-	return String(value ?? "").replace(/[&<>"']/g, (char) => ({
-		"&": "&amp;",
-		"<": "&lt;",
-		">": "&gt;",
-		"\"": "&quot;",
-		"'": "&#39;"
-	})[char]);
+	const text = String(value ?? "");
+	if (!HTML_ESCAPE_RE.test(text)) return text;
+	HTML_ESCAPE_RE.lastIndex = 0;
+	return text.replace(HTML_ESCAPE_RE, (char) => HTML_ESCAPES[char]);
 }
 function extractSkeys(value) {
-	return [...new Set([...String(value ?? "").matchAll(/skey:\/\/[^\s<>"]+/g)].map((match) => match[0].replace(/[.,;:!?\)\]}]+$/, "")))];
+	const text = String(value ?? "");
+	if (!text.includes("skey://")) return [];
+	return [...new Set([...text.matchAll(SKEY_RE)].map((match) => match[0].replace(TRAILING_PUNCT_RE, "")))];
 }
 function withoutSkeys(value) {
-	return String(value ?? "").replace(/skey:\/\/[^\s<>"]+/g, (raw) => raw.slice(raw.replace(/[.,;:!?\)\]}]+$/, "").length)).trim();
+	const text = String(value ?? "");
+	if (!text.includes("skey://")) return text.trim();
+	return text.replace(SKEY_RE, (raw) => raw.slice(raw.replace(TRAILING_PUNCT_RE, "").length)).trim();
 }
 function linkifyPlainText(value, linkHref = (value) => value) {
 	const text = String(value ?? "");
+	if (!text.includes("://")) return escapeHtml(text).replace(/\r?\n/g, "<br>");
 	let result = "", offset = 0;
-	for (const match of text.matchAll(/(?:skey|tactic-search|https?|ftp):\/\/[^\s<>"]+/gi)) {
-		const target = match[0].replace(/[.,;:!?\)\]}]+$/, "");
-		const internal = /^(skey|tactic-search):/i.test(target);
+	for (const match of text.matchAll(LINK_RE)) {
+		const target = match[0].replace(TRAILING_PUNCT_RE, "");
+		const internal = INTERNAL_LINK_RE.test(target);
 		result += escapeHtml(text.slice(offset, match.index));
 		result += "<a href=\"" + escapeHtml(linkHref(target)) + "\"" + (internal ? " data-rich-link=\"" + escapeHtml(target) + "\"" : " target=\"_blank\" rel=\"noopener noreferrer\"") + ">" + escapeHtml(target) + "</a>";
 		result += escapeHtml(match[0].slice(target.length));

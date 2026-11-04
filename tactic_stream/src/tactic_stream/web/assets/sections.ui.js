@@ -1,5 +1,5 @@
 import { D as spacing, T as metrics } from "./AppButton.js";
-import { J as muted, K as label, X as rect, Y as node, w as translate } from "./FrameView.js";
+import { T as translate, X as node, Y as muted, Z as rect, q as label } from "./FrameView.js";
 //#region ../src/tactic_stream/shared_ui/controls/forms/fields.mjs
 function fieldProperties(field, language, enabled) {
 	const title = field.dataLabel ? field.title : translate(field.title, language);
@@ -16,10 +16,16 @@ function fieldProperties(field, language, enabled) {
 		"CheckBox",
 		"Switch"
 	].indexOf(field.kind) >= 0) properties.text = title;
-	if (field.kind === "Choice" || field.kind === "ChoiceGrid") properties.options = (field.options || []).map((option) => ({
-		value: option.value,
-		label: option.label
-	}));
+	if (field.kind === "Choice" || field.kind === "ChoiceGrid") properties.options = (field.options || []).map((option) => {
+		const item = {
+			value: option.value,
+			label: option.label
+		};
+		if (option.icon) item.icon = option.icon;
+		if (option.color) item.color = option.color;
+		if (option.description) item.description = option.description;
+		return item;
+	});
 	return properties;
 }
 //#endregion
@@ -48,15 +54,27 @@ function choices(field, properties, width, controlHeight) {
 	const options = properties.options, columns = width >= 206 ? 2 : 1;
 	const cellWidth = (width - (columns - 1) * spacing.compact) / columns;
 	return {
-		children: options.map((option, index) => node("Action", field.id + "_" + option.value, rect(index % columns * (cellWidth + spacing.compact), Math.floor(index / columns) * (controlHeight + spacing.compact), cellWidth, controlHeight), {
-			text: option.label,
-			enabled: properties.enabled,
-			selected: properties.value === option.value,
-			normalColor: "surfaceContainerHigh",
-			selectedColor: "contentSelection",
-			children: [label(field.id + "_label_" + option.value, rect(spacing.content, 0, cellWidth - spacing.content * 2, controlHeight), option.label)],
-			action: Object.assign({}, properties.action, { value: option.value })
-		})),
+		children: options.map((option, index) => {
+			const selected = properties.value === option.value, hasAccent = !!option.color, hasIcon = !!option.icon, labelX = hasIcon ? (hasAccent ? 13 : 10) + 22 : hasAccent ? spacing.content + 6 : spacing.content, itemChildren = [];
+			if (hasAccent) itemChildren.push(node("Box", field.id + "_accent_" + option.value, rect(4, 7, 3, Math.max(8, controlHeight - 14)), {
+				background: option.color,
+				radius: 2
+			}));
+			if (hasIcon) itemChildren.push(node("Icon", field.id + "_icon_" + option.value, rect(hasAccent ? 13 : 10, Math.round((controlHeight - 16) / 2), 16, 16), {
+				icon: option.icon,
+				color: option.color || "primaryText"
+			}));
+			itemChildren.push(label(field.id + "_label_" + option.value, rect(labelX, 0, Math.max(0, cellWidth - labelX - spacing.content), controlHeight), option.label));
+			return node("Action", field.id + "_" + option.value, rect(index % columns * (cellWidth + spacing.compact), Math.floor(index / columns) * (controlHeight + spacing.compact), cellWidth, controlHeight), Object.assign({
+				text: option.label,
+				enabled: properties.enabled,
+				selected,
+				normalColor: "surfaceContainerHigh",
+				selectedColor: "contentSelection",
+				children: itemChildren,
+				action: Object.assign({}, properties.action, { value: option.value })
+			}, option.description ? { toolTip: option.description } : null));
+		}),
 		height: Math.max(0, Math.ceil(options.length / columns) * (controlHeight + spacing.compact) - spacing.compact)
 	};
 }

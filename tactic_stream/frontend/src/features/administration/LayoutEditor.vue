@@ -307,8 +307,10 @@ export default {
       }
     },
     canLeave() {
-      if (this.dirty || this.busy) {
-        this.error = 'Save or discard layout changes before leaving.';
+      if (this.busy) return false;
+      if (this.dirty || this.uncertain) {
+        this.error = '';
+        this.dispatch({ type: 'discard' });
         return false;
       }
       return true;

@@ -149,7 +149,11 @@ assert(
 );
 const xml = nodes.find((node) => node.id === 'pageXmlSource');
 assert.equal(xml.text, '<config/>');
-assert(xml.readOnly && xml.syntax === 'xml');
+assert(!xml.readOnly && xml.syntax === 'xml');
+const readOnlyXml = flatten(
+  UI.describe({ ...model(), canWrite: false }, ui, 1400, 800, 'en')
+).find((node) => node.id === 'pageXmlSource');
+assert(readOnlyXml.readOnly && readOnlyXml.syntax === 'xml');
 assert.equal(JSON.stringify(document), original);
 assert.equal(adminGeometry(1400, 900, true).nav, 56);
 assert.deepEqual(Chrome.toolEvent('moveUp'), { type: 'reorder', delta: -1 });

@@ -1,7 +1,7 @@
-import { F as resolveComponent, K as withDirectives, M as openBlock, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, m as createBaseVNode, nt as normalizeStyle, s as vShow } from "./vue.js";
+import { I as resolveComponent, N as openBlock, c as vShow, g as createBlock, h as createBaseVNode, p as Teleport, q as withDirectives, rt as normalizeStyle, v as createElementBlock, x as createVNode } from "./vue.js";
 import { o as t, s as appearance, z as _plugin_vue_export_helper_default } from "./AppButton.js";
 import { L as securityRules } from "./index.js";
-import { G as button, H as observeFrameSizes, J as muted, K as label, X as rect, Y as node, t as _sfc_main$1, w as translate } from "./FrameView.js";
+import { K as button, T as translate, U as observeFrameSizes, X as node, Y as muted, Z as rect, q as label, t as _sfc_main$1 } from "./FrameView.js";
 import { a as tabs, n as notices, o as toolbar$1, r as policy, t as documentEvent } from "./admin.document.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/security/security.access.mjs
 var accessLabels = {
@@ -240,6 +240,7 @@ function initial() {
 		groupQuery: "",
 		targetQuery: "",
 		editing: false,
+		railVisible: true,
 		selectedCell: null,
 		confirmation: "",
 		text: "",
@@ -409,7 +410,7 @@ function transition(ui, model, event) {
 			if (canNavigate) {
 				next.editing = true;
 				next.targetQuery = "";
-				if (ui.scope === "technical") next.page = "rule";
+				if (ui.scope === "technical" && event.openJson) next.page = "rule";
 				commands.push({
 					type: "selectRule",
 					index: event.index
@@ -419,12 +420,56 @@ function transition(ui, model, event) {
 		case "back":
 			next.editing = false;
 			break;
+		case "railVisible":
+			next.railVisible = ui.railVisible === false;
+			break;
 		case "addRule":
 			if (allow.editable && !pending(ui)) {
+				const targetScope = ui.scope === "technical" ? model.attributes?.group || model.attributes?.category || "project" : ui.scope;
 				next.editing = true;
 				commands.push({
 					type: "addRule",
-					scope: ui.scope
+					scope: targetScope
+				});
+			}
+			break;
+		case "ruleCategory":
+			if (allow.editable && model.selected >= 0 && !pending(ui)) {
+				const cat = String(event.value || "project");
+				const cur = model.attributes || {};
+				const nextAttrs = Object.assign({ group: cat }, {
+					project: { code: "*" },
+					search_type: { code: "*" },
+					process: {
+						process: "*",
+						pipeline: "*"
+					},
+					link: { element: "*" },
+					builtin: { key: "view_side_bar" },
+					script_runner: { key: "*" },
+					sobject: { key: "*" },
+					sobject_column: {
+						search_type: "*",
+						column: "*"
+					},
+					gear_menu: {
+						submenu: "*",
+						label: "*"
+					},
+					search_filter: {
+						search_type: "",
+						column: "",
+						op: "=",
+						value: ""
+					}
+				}[cat] || { key: "*" });
+				if (cat !== "search_filter") nextAttrs.access = cat === "builtin" || cat === "script_runner" ? cur.access === "allow" ? "allow" : "deny" : cur.access || "deny";
+				if (!["project", "builtin"].includes(cat) && (cur.project || model.groupDocument?.project)) nextAttrs.project = cur.project || model.groupDocument.project;
+				next.targetQuery = "";
+				commands.push({
+					type: "applyText",
+					page: "rule",
+					text: JSON.stringify(nextAttrs)
 				});
 			}
 			break;
@@ -608,7 +653,7 @@ function models(model, ui, language) {
 	const editorScope = model.attributes.group || model.attributes.category || ui.scope;
 	return Object.assign(models$1(model, ui, language), {
 		rules: model.records.filter((record) => (record.group || record.category) === ui.scope && contains(title(record, model, language) + " " + detail(record) + " " + JSON.stringify(record), ui.query)),
-		allRules: model.records,
+		allRules: model.records.filter((record) => contains(title(record, model, language) + " " + detail(record) + " " + JSON.stringify(record), ui.query)),
 		inheritance: inheritanceChoices(model),
 		targets: targets(model, editorScope).map((target, index) => Object.assign({ index }, target)).filter((target) => contains(target.label, ui.targetQuery))
 	});
@@ -621,7 +666,7 @@ var list = (id, bounds, source, rowHeight, keyField) => node("List", id, bounds,
 	scrollbarId: id + "ScrollBar"
 });
 function describe(model, ui, width, height, language) {
-	const tr = (text) => translate(text, language), navigate = !model.busy && !pending(ui), notice = notices(model, ui, width, language, "Discard unsaved access changes?"), nodes = notice.nodes, rail = width >= 900, railWidth = rail ? language === "ru" ? 232 : 212 : 0, offset = rail ? railWidth + 8 : 0, contentWidth = width - offset, details = scopeDetails[ui.scope] || scopeDetails.project, selected = scopes.find((entry) => entry[0] === ui.scope) || scopes[1];
+	const tr = (text) => translate(text, language), navigate = !model.busy && !pending(ui), notice = notices(model, ui, width, language, "Discard unsaved access changes?"), nodes = notice.nodes, rail = width >= 900, railVisible = ui.railVisible !== false, railWidth = rail ? railVisible ? language === "ru" ? 232 : 212 : 56 : 0, offset = rail ? railWidth + 8 : 0, contentWidth = width - offset, details = scopeDetails[ui.scope] || scopeDetails.project, selected = scopes.find((entry) => entry[0] === ui.scope) || scopes[1];
 	const confirmation = nodes.find((item) => item.id === "adminDocumentConfirmation");
 	if (confirmation) confirmation.children.forEach((item) => {
 		if (item.id === "adminCancelSave") item.icon = "close";
@@ -689,15 +734,21 @@ function describe(model, ui, width, height, language) {
 			});
 			y += 6;
 		});
+		const navChildren = [button("adminToggleSecurityNavigation", rect(railVisible ? railWidth - 46 : (railWidth - 34) / 2, 10, 34, 34), tr("Access rules"), railVisible ? "chevron-left" : "chevron-right", { type: "railVisible" }, true, {
+			iconOnly: true,
+			iconAction: true,
+			round: false
+		})];
+		if (railVisible) navChildren.push(label("adminSecurityNavigationTitle", rect(12, 10, Math.max(0, railWidth - 62), 34), tr("Access rules"), { weight: 600 }), node("Scroll", "adminSecurityNavigation", rect(0, 52, railWidth, Math.max(0, height - top - 52)), {
+			children: entries,
+			contentHeight: y,
+			scrollbarId: "adminSecurityNavigationScrollBar"
+		}));
 		nodes.push(node("Box", "adminSecurityNavigationPanel", rect(0, top, railWidth, height - top), {
 			background: "surfaceContainerLow",
 			border: "outlineVariant",
 			radius: 8,
-			children: [node("Scroll", "adminSecurityNavigation", rect(0, 0, railWidth, height - top), {
-				children: entries,
-				contentHeight: y,
-				scrollbarId: "adminSecurityNavigationScrollBar"
-			})]
+			children: navChildren
 		}));
 	} else {
 		nodes.push(node("Choice", "adminSecurityScope", rect(0, top, width, 38), {
@@ -869,7 +920,7 @@ function editor(nodes, model, ui, bounds, language, edit, back) {
 		color: "secondaryText"
 	}));
 	else {
-		const attrs = model.attributes, scope = attrs.group || attrs.category || ui.scope, fields = (names[scope] || []).slice();
+		const attrs = model.attributes, scope = attrs.group || attrs.category || (ui.scope === "technical" ? "project" : ui.scope), fields = (names[scope] || []).slice();
 		if (Object.prototype.hasOwnProperty.call(attrs, "project")) fields.push("project");
 		if (scope === "builtin") fields.splice(fields.indexOf("key"), 1);
 		children.push(label("adminAccessEditorTitle", rect(12, y, inner, 28), title(attrs, model, language), {
@@ -877,6 +928,35 @@ function editor(nodes, model, ui, bounds, language, edit, back) {
 			weight: 600
 		}));
 		y += 36;
+		if (ui.scope === "technical") {
+			const categoryChoices = [
+				["project", "Projects"],
+				["search_type", "Search Types"],
+				["process", "Processes"],
+				["link", "Sidebar links"],
+				["gear_menu", "Menu actions"],
+				["builtin", "Application features"],
+				["script_runner", "Custom scripts"],
+				["sobject", "Search Objects"],
+				["sobject_column", "Field access"],
+				["search_filter", "Search restrictions"]
+			].map(([value, text]) => ({
+				value,
+				label: tr(text)
+			}));
+			if (!categoryChoices.some((item) => item.value === scope)) categoryChoices.push({
+				value: scope,
+				label: scope
+			});
+			children.push(label("adminAccessRuleCategoryLabel", rect(12, y, inner, 22), tr("Rule type")), node("Choice", "adminAccessRuleCategory", rect(12, y + 26, inner, 38), {
+				value: scope,
+				options: categoryChoices,
+				label: tr("Rule type"),
+				enabled: edit,
+				action: { type: "ruleCategory" }
+			}));
+			y += 72;
+		}
 		if (scope === "builtin") {
 			const feature = builtinFeature(model, attrs.key), helpHeight = width < 380 ? 112 : 80, options = targets(model, "builtin").map((target) => ({
 				value: target.attributes.key,
@@ -978,8 +1058,8 @@ function technical(nodes, model, ui, bounds, language, edit, navigate) {
 	const options = [
 		[
 			"group",
-			"Group defaults",
-			"groups"
+			"Access rules",
+			"shield"
 		],
 		[
 			"xml",
@@ -1026,7 +1106,15 @@ function technical(nodes, model, ui, bounds, language, edit, navigate) {
 	groupSettings(nodes, model, ui, rect(0, top, width, remaining), language, edit);
 }
 function groupSettings(nodes, model, ui, bounds, language, edit) {
-	const tr = (text) => translate(text, language), width = bounds.width, formWidth = Math.max(1, width - 16), columns = width >= 600 ? 2 : 1, fieldWidth = (formWidth - (columns - 1) * 12) / columns;
+	const tr = (text) => translate(text, language), width = bounds.width, navigate = !model.busy && !pending(ui), formWidth = Math.max(1, width - 16), columns = width >= 600 ? 2 : 1, fieldWidth = (formWidth - (columns - 1) * 12) / columns;
+	const accessLevelLabels = {
+		none: "none — No default access",
+		min: "min — Minimal access",
+		low: "low — Basic artist access",
+		medium: "medium — Standard production access",
+		high: "high — Extended project access",
+		admin: "admin — Full administrator access"
+	};
 	const fields = [["accessLevel", "Access level"], ["project", "Project"]], form = [];
 	fields.forEach(([field, text], index) => {
 		const x = index % columns * (fieldWidth + 12), fy = Math.floor(index / columns) * 76;
@@ -1043,7 +1131,7 @@ function groupSettings(nodes, model, ui, bounds, language, edit) {
 				label: target.label
 			}))] : (model.metadata.accessLevels || []).map((value) => ({
 				value,
-				label: value
+				label: tr(accessLevelLabels[value] || value)
 			})),
 			enabled: edit,
 			action: {
@@ -1052,23 +1140,41 @@ function groupSettings(nodes, model, ui, bounds, language, edit) {
 			}
 		}));
 	});
-	const formHeight = Math.ceil(fields.length / columns) * 76, helpHeight = width >= 900 ? 48 : width >= 600 ? 64 : 112;
-	form.push(label("adminSecurityInheritanceHelp", rect(0, formHeight + 4, formWidth, helpHeight), tr("This group inherits permissions from the selected groups. For the same rule key, the highest access wins; a deny does not cancel another grant."), Object.assign({ wrap: true }, muted)));
+	const formHeight = Math.ceil(fields.length / columns) * 76, helpHeight = ui.scope === "technical" ? width >= 600 ? 28 : 48 : width >= 900 ? 48 : width >= 600 ? 64 : 112;
+	form.push(label("adminSecurityInheritanceHelp", rect(0, formHeight + 2, formWidth, helpHeight), tr(ui.scope === "technical" ? "Default access level and project restriction for this group. Select any rule below to edit its permissions and targets visually." : "This group inherits permissions from the selected groups. For the same rule key, the highest access wins; a deny does not cancel another grant."), Object.assign({ wrap: true }, muted)));
 	const known = new Set(model.groups.map((group) => group.label)), other = (model.groupDocument.subGroups || "").split("|").filter((name) => name && !known.has(name));
-	let contentHeight = formHeight + helpHeight + 12;
+	let contentHeight = formHeight + helpHeight + 8;
 	if (other.length) {
 		form.push(label("adminSecurityOtherInheritance", rect(0, contentHeight, formWidth, 48), tr("Other inherited groups: {groups}").replace("{groups}", other.join(", ")), { wrap: true }));
 		contentHeight += 56;
 	}
-	const headerHeight = Math.min(contentHeight, bounds.height * .58);
+	const headerHeight = Math.min(contentHeight, ui.scope === "technical" ? Math.max(96, bounds.height * .28) : bounds.height * .58);
 	nodes.push(node("Scroll", "adminSecurityDefaults", rect(0, bounds.y, width, headerHeight), {
 		children: form,
 		contentHeight,
 		scrollbarId: "adminSecurityDefaultsScrollBar"
 	}));
-	const listY = bounds.y + headerHeight + 8;
-	nodes.push(label("adminSecurityInheritanceCaption", rect(0, listY, width, 24), tr(ui.scope === "technical" ? "Access rules" : "Inherit permissions from")));
-	nodes.push(list(ui.scope === "technical" ? "adminSecurityAllRules" : "adminSecurityInheritanceList", rect(0, listY + 32, width, Math.max(1, bounds.y + bounds.height - listY - 32)), ui.scope === "technical" ? "allRules" : "inheritance", ui.scope === "technical" ? 62 : 42, ui.scope === "technical" ? "ruleIndex" : "identity"));
+	const listY = bounds.y + headerHeight + 8, rulesHeight = Math.max(1, bounds.y + bounds.height - listY);
+	if (ui.scope === "technical") {
+		const split = width >= 780, editorWidth = split ? Math.max(320, Math.round(width * .42)) : width, listWidth = split ? width - editorWidth - 12 : width;
+		if (split || !ui.editing) {
+			nodes.push(node("Field", "adminAccessSearch", rect(0, listY, listWidth - 46, 38), {
+				text: ui.query,
+				label: tr("Find a permission"),
+				placeholder: tr("Find a permission"),
+				enabled: navigate,
+				action: { type: "query" }
+			}), button("adminAddAccessRule", rect(listWidth - 38, listY, 38, 38), tr("Add rule"), "add", { type: "addRule" }, edit, { iconOnly: true }), list("adminSecurityAllRules", rect(0, listY + 46, listWidth, Math.max(1, rulesHeight - 46)), "allRules", 64, "ruleIndex"));
+			if (!models(model, ui, language).allRules.length) nodes.push(label("adminAccessRulesEmpty", rect(12, listY + 58, listWidth - 40, 60), tr("No rules match the search"), {
+				wrap: true,
+				color: "secondaryText"
+			}));
+		}
+		if (split || ui.editing) editor(nodes, model, ui, rect(split ? listWidth + 12 : 0, listY, editorWidth, rulesHeight), language, edit, !split);
+		return;
+	}
+	nodes.push(label("adminSecurityInheritanceCaption", rect(0, listY, width, 24), tr("Inherit permissions from")));
+	nodes.push(list("adminSecurityInheritanceList", rect(0, listY + 32, width, Math.max(1, bounds.y + bounds.height - listY - 32)), "inheritance", 42, "identity"));
 }
 function row(listNode, record, model, ui, language) {
 	if (listNode.source === "effective" || listNode.source === "agentTools") return row$1(listNode, record, model, ui, language);
@@ -1094,8 +1200,18 @@ function row(listNode, record, model, ui, language) {
 		},
 		children: [label("adminAccessTargetTitle_" + record.index, rect(12, 4, width - 24, 22), record.label), label("adminAccessTargetDetail_" + record.index, rect(12, 26, width - 24, 18), detail(record.attributes), muted)]
 	})] };
-	const index = record.ruleIndex, all = listNode.source === "allRules", quick = !all && !["search_filter", "builtin"].includes(ui.scope), small = width < 540, levelWidth = 36;
+	const index = record.ruleIndex, all = listNode.source === "allRules", ruleGroup = record.group || record.category || "", small = width < 540, quick = all ? !small && ruleGroup !== "search_filter" : !["search_filter", "builtin"].includes(ui.scope), levelWidth = 36;
 	const textWidth = quick && !small ? width - 144 - 42 : width - 44;
+	const scopeEntry = scopes.find((entry) => entry[0] === ruleGroup);
+	const scopeLabel = scopeEntry ? tr(scopeEntry[1]) : ruleGroup;
+	const levelEntry = levels.find((entry) => entry[0] === record.access);
+	const levelLabel = levelEntry ? tr(levelEntry[1]) : record.access || "";
+	const rawDetail = ruleGroup === "builtin" ? tr(record.access === "allow" ? "Allowed by this group" : record.access === "deny" ? "Denied by this group" : "Existing access: {access}").replace("{access}", record.access || "") : detail(record);
+	const subtitle = [
+		all ? scopeLabel : "",
+		rawDetail,
+		all && levelLabel && ruleGroup !== "builtin" ? levelLabel : ""
+	].filter(Boolean).join(" · ");
 	nodes.push(node("Action", "adminAccessRule_" + index, rect(0, 0, width, height), {
 		text: title(record, model, language),
 		selected: model.selected === index,
@@ -1107,7 +1223,7 @@ function row(listNode, record, model, ui, language) {
 			type: "selectRule",
 			index
 		},
-		children: [label("adminAccessRuleTitle_" + index, rect(12, 4, textWidth - 20, 24), title(record, model, language), { weight: 600 }), label("adminAccessRuleDetail_" + index, rect(12, 28, textWidth - 20, 20), (all ? (record.group || record.category || "") + " · " : "") + ((record.group || record.category) === "builtin" ? tr(record.access === "allow" ? "Allowed by this group" : record.access === "deny" ? "Denied by this group" : "Existing access: {access}").replace("{access}", record.access || "") : detail(record)), muted)]
+		children: [label("adminAccessRuleTitle_" + index, rect(12, 4, textWidth - 20, 24), title(record, model, language), { weight: 600 }), label("adminAccessRuleDetail_" + index, rect(12, 28, textWidth - 20, 20), subtitle, muted)]
 	}));
 	if (quick) [
 		"deny",
@@ -1686,7 +1802,7 @@ var _sfc_main = {
 					this.selectRule(command.index);
 					break;
 				case "addRule":
-					this.addRule();
+					this.addRule(command.scope);
 					break;
 				case "removeRule":
 					this.setRule(this.selected);
@@ -1712,7 +1828,7 @@ var _sfc_main = {
 					break;
 				}
 				case "applyText":
-					this.applyText();
+					this.applyText(command);
 					break;
 				case "save":
 					await this.save();
@@ -1737,8 +1853,10 @@ var _sfc_main = {
 			}
 		},
 		canLeave() {
-			if (this.dirty || this.busy || this.uncertain) {
-				this.error = "Save or discard access changes before leaving.";
+			if (this.busy) return false;
+			if (this.dirty || this.uncertain) {
+				this.error = "";
+				this.dispatch({ type: "discard" });
 				return false;
 			}
 			return true;
@@ -1849,10 +1967,11 @@ var _sfc_main = {
 		setGroupXml(identity, xml) {
 			this.document.groups[identity].xml = restoreOriginalXml(JSON.parse(this.baseline).groups[identity]?.xml, xml);
 		},
-		addRule() {
+		addRule(scope = this.scope) {
 			if (this.pendingText()) return;
+			const targetScope = scope === "tasks" ? "process" : scope || this.scope;
 			const attrs = {
-				group: this.scope,
+				group: targetScope,
 				access: "deny",
 				...{
 					project: { code: "*" },
@@ -1878,10 +1997,10 @@ var _sfc_main = {
 						op: "=",
 						value: ""
 					}
-				}[this.scope] || { key: "*" }
+				}[targetScope] || { key: "*" }
 			};
-			if (!["project", "builtin"].includes(this.scope)) attrs.project = this.project;
-			if (this.scope === "search_filter") delete attrs.access;
+			if (!["project", "builtin"].includes(targetScope)) attrs.project = this.project;
+			if (targetScope === "search_filter") delete attrs.access;
 			this.setRule(-1, attrs);
 			this.editing = true;
 		},
@@ -1905,16 +2024,18 @@ var _sfc_main = {
 			this.error = "";
 			this.message = "";
 		},
-		applyText() {
+		applyText(command) {
 			if (!this.editable) return;
+			const page = command?.page || this.page;
+			const text = command?.text ?? this.ui.text;
 			try {
-				if (this.page === "rule") {
-					const attrs = JSON.parse(this.ui.text);
+				if (page === "rule") {
+					const attrs = JSON.parse(text);
 					if (!attrs || Array.isArray(attrs) || typeof attrs !== "object" || Object.values(attrs).some((value) => typeof value !== "string")) throw new Error("Attributes must be a JSON object with string values");
 					this.setRule(this.selected, attrs);
 				} else {
-					parseRules(this.ui.text);
-					this.setGroupXml(this.group, this.ui.text);
+					parseRules(text);
+					this.setGroupXml(this.group, text);
 					this.selected = -1;
 					this.syncText();
 					this.error = "";

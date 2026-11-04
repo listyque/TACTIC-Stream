@@ -97,6 +97,11 @@ def workflow_request(action: str, project_code: str, identity: str = '',
         # Prepare editor catalogs only; a pipeline is persisted by Save.
         return json.dumps({'identity': '', 'revision': '', 'document': {},
                            'catalog': pipelines, 'metadata': metadata, 'canWrite': True})
+    if action == 'load' and not identity:
+        if not pipelines:
+            return json.dumps({'identity': '', 'revision': '', 'document': {},
+                               'catalog': pipelines, 'metadata': metadata, 'canWrite': True})
+        identity = pipelines[0]['identity']
     item = Pipeline.get_by_code(identity) if identity else None
     if identity and (not item or item.get_value('project_code') not in (project_code, '', None)):
         raise ValueError('This pipeline does not belong to the selected project')
@@ -110,20 +115,45 @@ def workflow_request(action: str, project_code: str, identity: str = '',
         query.add_filter('pipeline_code', identity)
         return query.get_sobjects() if identity else []
 
-    def read_document():
-        if not item:
-            return {}
+    def load_state():
         records = processes()
+        if not item:
+            return {}, [], records
         settings = {row.get_value('process'): row.get_json_value('workflow') or {}
                     for row in records}
+        codes = [row.get_code() for row in records if row.get_code()]
+        all_triggers = {}
+        action_triggers_by_process = {}
+        if codes:
+            query = Search('config/trigger')
+            query.add_filters('process', codes)
+            for trig in query.get_sobjects():
+                all_triggers[trig.get_code()] = trig.get_data()
+                if trig.get_value('event') == 'process|action':
+                    action_triggers_by_process.setdefault(trig.get_value('process'), trig)
+        listeners = [(row.get_json_value('workflow') or {}).get('progress', {}).get('trigger_code')
+                     for row in records]
+        listeners = [code for code in listeners if code and code not in all_triggers]
+        if listeners:
+            query = Search('config/trigger')
+            query.add_filters('code', listeners)
+            all_triggers.update({row.get_code(): row.get_data() for row in query.get_sobjects()})
+        script_keys = set()
+        for trig in action_triggers_by_process.values():
+            if not trig.get_value('class_name') and trig.get_value('script_path'):
+                script_keys.add(posixpath.split(trig.get_value('script_path')))
+        scripts_by_key = {}
+        if script_keys:
+            scripts = Search('config/custom_script')
+            scripts.add_filters('folder', list({f for f, _ in script_keys}))
+            scripts.add_filters('title', list({t for _, t in script_keys}))
+            for s in scripts.get_sobjects():
+                scripts_by_key[(s.get_value('folder') or '', s.get_value('title') or '')] = s
         # Native installations can keep action code only in custom_script,
         # rather than duplicating it in workflow JSON. Hydrate that source so
         # editing a description cannot accidentally disconnect its trigger.
         for row in records:
-            query = Search('config/trigger')
-            query.add_filter('process', row.get_code())
-            query.add_filter('event', 'process|action')
-            trigger = query.get_sobject()
+            trigger = action_triggers_by_process.get(row.get_code())
             if not trigger:
                 continue
             defaults = settings[row.get_value('process')].setdefault('default', {})
@@ -132,42 +162,21 @@ def workflow_request(action: str, project_code: str, identity: str = '',
                 defaults.update(action='command', on_action_class=trigger.get_value('class_name'))
             elif trigger.get_value('script_path'):
                 path = trigger.get_value('script_path')
-                folder, title = posixpath.split(path)
-                scripts = Search('config/custom_script')
-                scripts.add_filter('folder', folder)
-                scripts.add_filter('title', title)
-                script = scripts.get_sobject()
+                script = scripts_by_key.get(posixpath.split(path))
                 defaults.update(action='create_new', script_path=path,
                                 script=script.get_value('script') if script else '',
                                 language=script.get_value('language') if script else 'python')
         descriptions = {row.get_value('process'): row.get_value('description') or ''
                         for row in records}
-        return {'xml': item.get_value('pipeline') or '<pipeline/>',
-                'name': item.get_value('name') or '',
-                'description': item.get_value('description') or '',
-                'color': item.get_value('color') or '',
-                'searchType': item.get_value('search_type') or '',
-                'processSettings': settings, 'processDescriptions': descriptions}
+        doc = {'xml': item.get_value('pipeline') or '<pipeline/>',
+               'name': item.get_value('name') or '',
+               'description': item.get_value('description') or '',
+               'color': item.get_value('color') or '',
+               'searchType': item.get_value('search_type') or '',
+               'processSettings': settings, 'processDescriptions': descriptions}
+        return doc, list(all_triggers.values()), records
 
-    def trigger_data():
-        records = processes()
-        codes = [row.get_code() for row in records]
-        if not codes:
-            return []
-        query = Search('config/trigger')
-        query.add_filters('process', codes)
-        result = {row.get_code(): row.get_data() for row in query.get_sobjects()}
-        listeners = [(row.get_json_value('workflow') or {}).get('progress', {}).get('trigger_code')
-                     for row in records]
-        listeners = [code for code in listeners if code]
-        if listeners:
-            query = Search('config/trigger')
-            query.add_filters('code', listeners)
-            result.update({row.get_code(): row.get_data() for row in query.get_sobjects()})
-        return list(result.values())
-
-    current = read_document()
-    triggers = trigger_data()
+    current, triggers, process_records = load_state()
 
     def revision():
         owned_triggers = [row for row in triggers if row.get('event') == 'process|action'
@@ -266,7 +275,7 @@ def workflow_request(action: str, project_code: str, identity: str = '',
                                      description=description, version=2)
         # Native update_dependencies removes config/process records for removed
         # nodes. Reject deletion/renaming while operational data still uses them.
-        for process in processes():
+        for process in process_records:
             name = process.get_value('process')
             if name in names:
                 continue
@@ -310,13 +319,12 @@ def workflow_request(action: str, project_code: str, identity: str = '',
             NewProcessInfoCmd(**kwargs).execute()
         Pipeline.clear_cache(search_key=item.get_search_key())
         item = Pipeline.get_by_code(identity)
-        current = read_document()
-        triggers = trigger_data()
+        current, triggers, process_records = load_state()
         metadata['pipelines'] = catalog()
         metadata['processes'] = process_catalog(metadata['pipelines'])
     if not item:
         raise ValueError('Select a pipeline')
-    metadata['processCodes'] = {row.get_value('process'): row.get_code() for row in processes()}
+    metadata['processCodes'] = {row.get_value('process'): row.get_code() for row in process_records}
     return json.dumps({'identity': identity, 'revision': revision(),
                        'canWrite': not shared and bool(current['searchType']),
                        'catalog': metadata['pipelines'], 'metadata': metadata,

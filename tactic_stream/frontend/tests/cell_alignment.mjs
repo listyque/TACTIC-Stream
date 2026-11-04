@@ -127,6 +127,47 @@ try {
         }
         if (!rejected) throw Error('Invalid alignment accepted');
       }
+      if (!row.xml.includes('<justify>right</justify>'))
+        throw Error('Missing element XML');
+      const editedXml = Editor.changeDefinition(
+        source,
+        row.path,
+        'xml',
+        '<element name="description" title="Custom Desc" width="220"><display class="tactic.ui.table.ExpressionElementWdg"><expression>@GET(.description)</expression></display></element>'
+      );
+      const editedRow = Editor.definitionWizard(editedXml).elements[0];
+      if (
+        editedRow.title !== 'Custom Desc' ||
+        editedRow.width !== 220 ||
+        editedRow.widget !== 'tactic.ui.table.ExpressionElementWdg' ||
+        !editedRow.xml.includes('<expression>@GET(.description)</expression>')
+      )
+        throw Error('Element XML update failed');
+      const exprOptions = Editor.widgetOptionsFor(editedRow.widget);
+      if (
+        exprOptions.length !== 21 ||
+        !exprOptions.some(
+          (item) =>
+            item.value === 'tactic.ui.table.ExpressionElementWdg' &&
+            item.label === 'Expression'
+        ) ||
+        exprOptions.some((item) => item.value === 'expression')
+      )
+        throw Error('Widget alias dedup failed');
+      for (const badXml of [
+        '',
+        '<element/>',
+        '<other name="x"/>',
+        '<element name="x">broken'
+      ]) {
+        let rejected = false;
+        try {
+          Editor.changeDefinition(source, row.path, 'xml', badXml);
+        } catch {
+          rejected = true;
+        }
+        if (!rejected) throw Error('Invalid element XML accepted');
+      }
       const columns = reactive(
         ['left', 'center', 'right'].map((align, i) => ({
           name: 'd' + i,
@@ -360,6 +401,12 @@ try {
   assert.match(
     await page.evaluate(() => window.fixture.xml),
     /value_align="right"/
+  );
+  assert.match(
+    await page
+      .locator('[data-frame=definitionCatalogElementXml]')
+      .inputValue(),
+    /<justify>right<\/justify>/
   );
   if (process.env.CELL_ALIGNMENT_OUTPUT) {
     await mkdir(process.env.CELL_ALIGNMENT_OUTPUT, { recursive: true });

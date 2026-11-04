@@ -1,7 +1,7 @@
-import { E as nextTick, F as resolveComponent, I as resolveDirective, K as withDirectives, M as openBlock, _ as createElementBlock, b as createVNode, c as withKeys, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, rt as toDisplayString } from "./vue.js";
+import { D as nextTick, I as resolveComponent, L as resolveDirective, N as openBlock, _ as createCommentVNode, g as createBlock, h as createBaseVNode, it as toDisplayString, l as withKeys, q as withDirectives, rt as normalizeStyle, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
 import { a as _sfc_main$2, o as t, s as appearance, t as _sfc_main$1, z as _plugin_vue_export_helper_default } from "./AppButton.js";
 import { j as rpc } from "./index.js";
-import { G as button, H as observeFrameSizes, J as muted, K as label, X as rect, Y as node, t as _sfc_main$3, w as translate } from "./FrameView.js";
+import { K as button, T as translate, U as observeFrameSizes, X as node, Y as muted, Z as rect, q as label, t as _sfc_main$3 } from "./FrameView.js";
 import { n as sections } from "./sections.ui.js";
 import { i as sectionSelector, n as notices, o as toolbar$1, r as policy, s as _sfc_main$4, t as documentEvent } from "./admin.document.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/workflow/process_rules.ui.mjs

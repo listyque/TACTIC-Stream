@@ -39,9 +39,11 @@ const views = computed(() => ({
   }
 }));
 function dispatch(event) {
+  const lockedClose = event.type === 'close' && props.model.locked;
   const result = State.transition(ui.value, props.model, event);
   ui.value = result.ui;
   for (const command of result.commands) emit('command', command);
+  if (lockedClose) emit('command', event);
 }
 defineExpose({ dispatch, ui, scene });
 let observer;

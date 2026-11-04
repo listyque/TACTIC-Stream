@@ -1,7 +1,7 @@
-import { F as resolveComponent, K as withDirectives, M as openBlock, _ as createElementBlock, b as createVNode, f as Teleport, g as createCommentVNode, h as createBlock, m as createBaseVNode, nt as normalizeStyle, rt as toDisplayString, s as vShow } from "./vue.js";
+import { I as resolveComponent, N as openBlock, _ as createCommentVNode, c as vShow, g as createBlock, h as createBaseVNode, it as toDisplayString, p as Teleport, q as withDirectives, rt as normalizeStyle, v as createElementBlock, x as createVNode } from "./vue.js";
 import { o as t, s as appearance, z as _plugin_vue_export_helper_default } from "./AppButton.js";
 import { I as securityGroups } from "./index.js";
-import { H as observeFrameSizes, t as _sfc_main$1 } from "./FrameView.js";
+import { U as observeFrameSizes, t as _sfc_main$1 } from "./FrameView.js";
 import { i as toolbar, n as metrics, o as initial, r as row, s as transition, t as describe } from "./groups.ui.js";
 //#region src/features/administration/SecurityGroups.vue
 var _sfc_main = {
@@ -177,8 +177,10 @@ var _sfc_main = {
 			}
 		},
 		canLeave() {
-			if (this.dirty || this.busy || this.uncertain) {
-				this.error = "Save or discard group changes before leaving.";
+			if (this.busy) return false;
+			if (this.dirty || this.uncertain) {
+				this.error = "";
+				this.dispatch({ type: "discard" });
 				return false;
 			}
 			return true;

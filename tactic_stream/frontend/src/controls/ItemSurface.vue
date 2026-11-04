@@ -6,6 +6,8 @@ defineProps({
   cornerRadius: { type: [Number, String], default: 10 },
   inset: { type: Number, default: 1 },
   normalColor: String,
+  hoverColor: String,
+  pressedColor: String,
   selectedColor: String,
   railVisible: { type: Boolean, default: true },
   separatorVisible: { type: Boolean, default: true }
@@ -17,6 +19,8 @@ defineProps({
     :class="{ selected, 'without-separator': !separatorVisible }"
     :style="{
       '--item-base': (selected ? selectedColor : normalColor) || undefined,
+      '--item-hover': hoverColor || undefined,
+      '--item-pressed': pressedColor || undefined,
       '--item-accent': accent || 'var(--primary)',
       '--item-corner':
         typeof cornerRadius === 'number' ? cornerRadius + 'px' : cornerRadius,
@@ -44,17 +48,15 @@ defineProps({
   --item-state-color: var(--primary);
 }
 .item-surface:hover {
-  --item-interaction: color-mix(
-    in srgb,
-    var(--item-state-color) 8%,
-    var(--item-base)
+  --item-interaction: var(
+    --item-hover,
+    color-mix(in srgb, var(--item-state-color) 8%, var(--item-base))
   );
 }
 .item-surface:active {
-  --item-interaction: color-mix(
-    in srgb,
-    var(--item-state-color) 12%,
-    var(--item-base)
+  --item-interaction: var(
+    --item-pressed,
+    color-mix(in srgb, var(--item-state-color) 12%, var(--item-base))
   );
 }
 .item-surface-rail {

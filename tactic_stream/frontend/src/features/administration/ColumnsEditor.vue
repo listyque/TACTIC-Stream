@@ -7,7 +7,7 @@ import { appearance } from '../../appearance.js';
 import {
   definitionWizard,
   changeDefinition,
-  displayWidgets
+  widgetOptionsFor
 } from './columnsEditor.js';
 import * as UI from '../../../../src/tactic_stream/shared_ui/features/administration/columns/columns.ui.mjs';
 import * as State from '../../../../src/tactic_stream/shared_ui/features/administration/columns/columns.state.mjs';
@@ -59,6 +59,7 @@ export default {
         selected: this.selected || {},
         wizard: this.wizard,
         elements: this.wizard.elements || [],
+        definitionElements: this.wizard.definitionElements || [],
         element: this.element || {},
         typeOptions: this.catalog?.searchTypes || [],
         widgetOptions: this.widgets.map((row) => ({
@@ -111,22 +112,33 @@ export default {
     },
     wizard() {
       try {
-        return definitionWizard(this.xml, this.selected?.view);
+        return definitionWizard(
+          this.xml,
+          this.selected?.view,
+          this.selected?.searchType,
+          this.catalog?.records
+        );
       } catch (error) {
-        return { supported: false, elements: [], error: error.message };
+        return {
+          supported: false,
+          elements: [],
+          definitionElements: [],
+          error: error.message
+        };
       }
     },
     element() {
       return (
         this.wizard.elements.find((row) => row.path === this.ui.path) ||
-        this.wizard.elements[0]
+        (this.wizard.definitionElements || []).find(
+          (row) => row.path === this.ui.path
+        ) ||
+        this.wizard.elements[0] ||
+        (this.wizard.definitionElements || [])[0]
       );
     },
     widgets() {
-      const value = this.element?.widget;
-      return value && !displayWidgets.some((row) => row.value === value)
-        ? [{ value, label: value, translate: false }, ...displayWidgets]
-        : displayWidgets;
+      return widgetOptionsFor(this.element?.widget, this.ui.showAllWidgets);
     },
     typeChoices() {
       return [
@@ -189,8 +201,11 @@ export default {
       return UI.row(node, record, this.frameModel, this.ui);
     },
     applyText() {
-      for (const [field, value] of Object.entries(this.ui.text)) {
-        this.change(field, value);
+      const keys = Object.keys(this.ui.text).sort((a, b) =>
+        a === 'xml' ? -1 : b === 'xml' ? 1 : 0
+      );
+      for (const field of keys) {
+        this.change(field, this.ui.text[field]);
         if (this.error) return false;
       }
       this.ui = State.transition(this.ui, this.frameModel, {
@@ -275,8 +290,10 @@ export default {
       }
     },
     canLeave() {
-      if (this.dirty || this.busy || this.uncertain) {
-        this.error = 'Save or discard definition changes before leaving.';
+      if (this.busy) return false;
+      if (this.dirty || this.uncertain) {
+        this.error = '';
+        this.dispatch({ type: 'discard' });
         return false;
       }
       return true;
@@ -304,7 +321,13 @@ export default {
     change(field, value) {
       if (!this.editable || !this.element) return;
       try {
-        this.xml = changeDefinition(this.xml, this.element.path, field, value);
+        this.xml = changeDefinition(
+          this.xml,
+          this.element.path,
+          field,
+          value,
+          this.element
+        );
         this.error = '';
         this.message = '';
       } catch (error) {

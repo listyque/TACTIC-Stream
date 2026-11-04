@@ -234,18 +234,28 @@ console.log(
   'Search state: visibility identities, repeated edges, task grouping/order, stable preset commands and bounded card/editor scenes passed'
 );
 
-const Header = await import('../../src/tactic_stream/shared_ui/features/search/header.ui.mjs');
+const Header = await import(
+  '../../src/tactic_stream/shared_ui/features/search/header.ui.mjs'
+);
 for (const shelfOpen of [false, true]) {
-  const shelf = Header.describe({shelfOpen}, 900, 'en').nodes.find(node => node.id === 'scriptShelfButton');
+  const shelf = Header.describe({ shelfOpen }, 900, 'en').nodes.find(
+    (node) => node.id === 'scriptShelfButton'
+  );
   assert.equal(shelf.iconAction, true);
   assert.equal(shelf.width, shelf.height);
   assert(!shelf.tonal);
   assert.equal(shelf.iconColor, shelfOpen ? 'action' : 'secondaryText');
 }
 
-const noGrip = Header.describe({reserveGrip:false}, 900, 'en');
-assert.equal(noGrip.nodes.find(node => node.id === 'searchRefreshButton').x, 8);
-assert.equal(noGrip.nodes.find(node => node.id === 'searchHeaderField').x, 50);
+const noGrip = Header.describe({ reserveGrip: false }, 900, 'en');
+assert.equal(
+  noGrip.nodes.find((node) => node.id === 'searchRefreshButton').x,
+  8
+);
+assert.equal(
+  noGrip.nodes.find((node) => node.id === 'searchHeaderField').x,
+  50
+);
 
 for (const mode of [
   'continious',

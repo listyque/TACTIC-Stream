@@ -90,7 +90,11 @@ export function captureLayout(state) {
         visible: value.visible,
         closable: panel.closable,
         z: value.z,
-        dock_area: value.floating ? 'floating' : 'docked',
+        dock_area: value.slide
+          ? 'slide_' + value.slide
+          : value.floating
+            ? 'floating'
+            : 'docked',
         detached: false
       };
     })
@@ -122,9 +126,16 @@ export function decodeLayout(value) {
       throw new Error(
         'Detached workspace windows are not supported in this browser.'
       );
+    const slide =
+      panel.panel_id !== 'results' && panel.dock_area === 'slide_left'
+        ? 'left'
+        : panel.panel_id !== 'results' && panel.dock_area === 'slide_right'
+          ? 'right'
+          : '';
     state.panels[panel.panel_id] = {
       visible: panel.panel_id === 'results' || panel.visible,
       floating: panel.dock_area === 'floating',
+      slide,
       rect,
       z: panel.z
     };
@@ -135,6 +146,7 @@ export function decodeLayout(value) {
     if (
       state.panels[panel.id].visible &&
       !state.panels[panel.id].floating &&
+      !state.panels[panel.id].slide &&
       !ids(state.layout).includes(panel.id)
     )
       state.layout = place(
@@ -309,6 +321,7 @@ export function defaults() {
         {
           visible: panel.id === 'results',
           floating: false,
+          slide: '',
           rect: [0.16, 0.12, 0.68, 0.72],
           z: 1
         }
@@ -327,9 +340,14 @@ export function readDocks(login) {
       const value = saved?.panels?.[panel.id];
       if (!value || typeof value !== 'object') continue;
       const rect = value.rect;
+      const slide =
+        panel.id !== 'results' && ['left', 'right'].includes(value.slide)
+          ? value.slide
+          : '';
       state.panels[panel.id] = {
         visible: panel.closable ? value.visible === true : true,
-        floating: value.floating === true,
+        floating: !slide && value.floating === true,
+        slide,
         z: Number.isFinite(value.z)
           ? Math.max(1, Math.min(1000000, value.z))
           : 1,
@@ -347,6 +365,7 @@ export function readDocks(login) {
       };
       if (
         !state.panels[panel.id].floating &&
+        !state.panels[panel.id].slide &&
         !ids(state.layout).includes(panel.id) &&
         state.panels[panel.id].visible
       )

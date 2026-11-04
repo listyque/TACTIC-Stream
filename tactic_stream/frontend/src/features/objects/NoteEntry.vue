@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, onMounted, onBeforeUnmount } from 'vue';
+import { computed, nextTick, ref, onMounted, onBeforeUnmount } from 'vue';
 import FrameView from '../../frame/FrameView.vue';
 import { mobile } from '../../mobile.js';
 import { appearance } from '../../appearance.js';
@@ -28,12 +28,14 @@ onMounted(() => {
   const measure = () => {
     const parent = host.value?.parentElement;
     const nextWidth = parent ? parent.clientWidth : 0;
-    const nextBodyHeight = body.value
-      ? Math.round(body.value.getBoundingClientRect().height)
-      : 0;
     if (nextWidth > 0 && nextWidth !== width.value) {
       width.value = nextWidth;
+      nextTick(measure);
+      return;
     }
+    const bodyRect = body.value ? body.value.getBoundingClientRect() : null;
+    const nextBodyHeight =
+      bodyRect && bodyRect.width >= 20 ? Math.round(bodyRect.height) : 0;
     if (nextBodyHeight > 0 && Math.abs(nextBodyHeight - bodyHeight.value) > 1) {
       bodyHeight.value = nextBodyHeight;
     }

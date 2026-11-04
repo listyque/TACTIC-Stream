@@ -1,8 +1,8 @@
 import { n as arrange, r as __exportAll$1 } from "./ObjectFieldFrame.js";
-import { A as onMounted, E as nextTick, F as resolveComponent, G as withCtx, H as watch, I as resolveDirective, K as withDirectives, L as resolveDynamicComponent, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, T as mergeProps, X as ref, _ as createElementBlock, b as createVNode, c as withKeys, et as unref, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment, v as createSlots, y as createTextVNode } from "./vue.js";
+import { D as nextTick, E as mergeProps, F as renderSlot, I as resolveComponent, K as withCtx, L as resolveDirective, N as openBlock, P as renderList, R as resolveDynamicComponent, U as watch, Z as ref, _ as createCommentVNode, b as createTextVNode, d as Fragment, g as createBlock, h as createBaseVNode, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withKeys, m as computed, nt as normalizeClass, q as withDirectives, rt as normalizeStyle, tt as unref, u as withModifiers, v as createElementBlock, x as createVNode, y as createSlots } from "./vue.js";
 import { D as spacing, R as BusyIndicator_default, T as metrics, _ as controls, a as _sfc_main$17, b as fontFamily, o as t, s as appearance, t as _sfc_main$16, z as _plugin_vue_export_helper_default } from "./AppButton.js";
 import { a as __vitePreload, bt as mobile, gt as serverTimestamp, ht as serverClock, j as rpc, x as objectStatus, y as objectDeletion } from "./index.js";
-import { G as button, H as observeFrameSizes, J as muted, K as label, O as ItemPreview_default, P as _sfc_main$19, Q as virtualRange, X as rect, Y as node, Z as revealListOffset, a as _sfc_main$20, d as javascriptTokens, f as pythonTokens, p as xmlTokens, t as _sfc_main$18, w as translate } from "./FrameView.js";
+import { $ as virtualRange, F as _sfc_main$19, K as button, Q as revealListOffset, T as translate, U as observeFrameSizes, X as node, Y as muted, Z as rect, _ as javascriptTokens, a as _sfc_main$20, b as xmlTokens, k as ItemPreview_default, q as label, t as _sfc_main$18, v as pythonTokens } from "./FrameView.js";
 import { n as qtLabelTextWidth } from "./textMetrics.js";
 import { j as escapeHtml$1, u as _sfc_main$21, v as timestampLabel, x as browserLink } from "./admin.document.js";
 import { f as summary } from "./file_values.js";
@@ -7652,14 +7652,50 @@ function transform(box, handle, dx, dy) {
 	}
 	return next;
 }
+function combineRegions(scene) {
+	const nodes = scene?.nodes || [];
+	const index = nodes.findIndex((n) => n.id === "customLayoutScroll");
+	const header = nodes.find((n) => n.id === "customLayoutHeader");
+	const footer = nodes.find((n) => n.id === "customLayoutFooter");
+	if (index < 0 || !header && !footer) return scene;
+	const scroll = nodes[index];
+	const headerScroll = header?.children?.find((n) => n.id === "customLayoutHeaderScroll");
+	const footerScroll = footer?.children?.find((n) => n.id === "customLayoutFooterScroll");
+	const headerOffset = headerScroll ? headerScroll.contentHeight || 0 : 0;
+	const contentHeight = scroll.contentHeight || 0;
+	const footerOffset = headerOffset + contentHeight;
+	const footerHeight = footerScroll ? footerScroll.contentHeight || 0 : 0;
+	const children = [];
+	if (headerScroll) {
+		children.push(...headerScroll.children || []);
+		if (headerOffset > 0 && (contentHeight > 0 || footerHeight > 0)) children.push(node("Box", "customLayoutHeaderDivider", rect(0, headerOffset - 1, scroll.width, 1), {
+			background: "outlineVariant",
+			radius: 0
+		}));
+	}
+	children.push(...(scroll.children || []).map((item) => headerOffset ? Object.assign({}, item, { y: item.y + headerOffset }) : item));
+	if (footerScroll) {
+		if (footerHeight > 0 && footerOffset > 0) children.push(node("Box", "customLayoutFooterDivider", rect(0, footerOffset, scroll.width, 1), {
+			background: "outlineVariant",
+			radius: 0
+		}));
+		children.push(...(footerScroll.children || []).map((item) => footerOffset ? Object.assign({}, item, { y: item.y + footerOffset }) : item));
+	}
+	return Object.assign({}, scene, { nodes: nodes.filter((n) => n.id !== "customLayoutHeader" && n.id !== "customLayoutFooter").map((n) => n.id === "customLayoutScroll" ? Object.assign({}, scroll, {
+		y: 0,
+		contentHeight: headerOffset + contentHeight + footerHeight,
+		children
+	}) : n) });
+}
 function decorate(scene, field, view = "canvasOverlay", accept = () => true) {
-	const result = Object.assign({}, scene, { nodes: (scene.nodes || []).slice() });
+	const merged = combineRegions(scene);
+	const result = Object.assign({}, merged, { nodes: (merged.nodes || []).slice() });
 	const index = result.nodes.findIndex((n) => n.id === "customLayoutScroll");
 	const scroll = index < 0 ? null : Object.assign({}, result.nodes[index], { children: result.nodes[index].children.slice() });
 	if (scroll) result.nodes[index] = scroll;
 	const children = scroll ? scroll.children : result.nodes;
 	const targets = boxes(children, field).filter(accept);
-	if (!targets.length) return scene;
+	if (!targets.length) return merged;
 	children.push(node("View", "canvasOverlay", rect(0, 0, Math.max(...targets.map((b) => b.x + b.width)), Math.max(...targets.map((b) => b.y + b.height))), {
 		view,
 		layer: 1e3
@@ -8116,7 +8152,7 @@ var _sfc_main$8 = {
 					createBaseVNode("span", {
 						class: "canvas-size",
 						style: normalizeStyle({ fontSize: Math.round(11 / __props.scale) + "px" })
-					}, toDisplayString(Math.round(chosen.value.width)) + " Г— " + toDisplayString(Math.round(chosen.value.height)), 5),
+					}, toDisplayString(Math.round(chosen.value.width)) + " × " + toDisplayString(Math.round(chosen.value.height)), 5),
 					(openBlock(true), createElementBlock(Fragment, null, renderList(chosen.value.canTransform === false || chosen.value.group ? [] : handles, (handle) => {
 						return openBlock(), createElementBlock("div", {
 							key: handle,
@@ -9655,11 +9691,67 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 }
 var ObjectAction_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main, [["render", _sfc_render]]);
 //#endregion
+//#region ../src/tactic_stream/shared_ui/features/table/widgets.json
+var widgets_default = /*#__PURE__*/ JSON.parse("[{\"value\":\"\",\"label\":\"Automatic\",\"class\":\"tactic.ui.common.base_table_element_wdg.SimpleTableElementWdg\",\"aliases\":[\"TextWdg\",\"\",\"pyasm.widget.TextWdg\",\"tactic.ui.common.SimpleTableElementWdg\",\"tactic.ui.common.base_table_element_wdg.SimpleTableElementWdg\",\"SimpleTableElementWdg\",\"pyasm.widget.SimpleTableElementWdg\",\"pyasm.widget.table_element_wdg.SimpleTableElementWdg\",\"pyasm.widget.input_wdg.TextWdg\"],\"adapter\":\"value\"},{\"value\":\"format\",\"label\":\"Format\",\"class\":\"tactic.ui.table.format_element_wdg.FormatElementWdg\",\"aliases\":[\"tactic.ui.table.FormatElementWdg\",\"tactic.ui.table.format_element_wdg.FormatElementWdg\"],\"adapter\":\"formatted\"},{\"value\":\"expression\",\"label\":\"Expression\",\"class\":\"tactic.ui.table.expression_element_wdg.ExpressionElementWdg\",\"aliases\":[\"tactic.ui.table.ExpressionElementWdg\",\"tactic.ui.table.expression_element_wdg.ExpressionElementWdg\"],\"adapter\":\"expression\"},{\"value\":\"link\",\"label\":\"Link\",\"class\":\"tactic.ui.table.link_element_wdg.LinkElementWdg\",\"aliases\":[\"tactic.ui.table.LinkElementWdg\",\"tactic.ui.table.link_element_wdg.LinkElementWdg\"],\"adapter\":\"link\"},{\"value\":\"pyasm.widget.ThumbWdg\",\"label\":\"Thumbnail\",\"class\":\"pyasm.widget.file_wdg.ThumbWdg\",\"aliases\":[\"ThumbWdg\",\"pyasm.widget.ThumbWdg\",\"pyasm.widget.file_wdg.ThumbWdg\"],\"adapter\":\"preview\"},{\"value\":\"tactic.ui.widget.DiscussionElementWdg\",\"label\":\"Notes\",\"class\":\"tactic.ui.widget.discussion_wdg.DiscussionElementWdg\",\"aliases\":[\"tactic.ui.widget.DiscussionElementWdg\",\"tactic.ui.widget.discussion_wdg.DiscussionElementWdg\"],\"adapter\":\"notes\"},{\"value\":\"tactic.ui.table.SObjectDetailElementWdg\",\"label\":\"SObject details\",\"class\":\"tactic.ui.table.sobject_detail_wdg.SObjectDetailElementWdg\",\"aliases\":[\"tactic.ui.table.SObjectDetailElementWdg\",\"tactic.ui.table.sobject_detail_wdg.SObjectDetailElementWdg\"],\"adapter\":\"details\"},{\"value\":\"tactic.ui.table.CheckinButtonElementWdg\",\"label\":\"Check-in\",\"class\":\"tactic.ui.table.table_element_wdg.CheckinButtonElementWdg\",\"aliases\":[\"tactic.ui.table.CheckinButtonElementWdg\",\"tactic.ui.table.table_element_wdg.CheckinButtonElementWdg\"],\"adapter\":\"checkin\"},{\"value\":\"tactic.ui.table.TaskElementWdg\",\"label\":\"Tasks\",\"class\":\"tactic.ui.table.task_element_wdg.TaskElementWdg\",\"aliases\":[\"tactic.ui.table.TaskElementWdg\",\"tactic.ui.table.task_element_wdg.TaskElementWdg\"],\"adapter\":\"tasks\"},{\"value\":\"tactic.ui.table.TaskCompletionWdg\",\"label\":\"Task completion\",\"class\":\"tactic.ui.table.statistic_wdg.TaskCompletionWdg\",\"aliases\":[\"tactic.ui.table.TaskCompletionWdg\",\"tactic.ui.table.statistic_wdg.TaskCompletionWdg\"],\"adapter\":\"completion\"},{\"value\":\"tactic.ui.table.ExploreElementWdg\",\"label\":\"Explorer\",\"class\":\"tactic.ui.table.explorer_wdg.ExplorerElementWdg\",\"aliases\":[\"tactic.ui.table.ExploreElementWdg\",\"tactic.ui.table.ExplorerElementWdg\",\"tactic.ui.table.explorer_wdg.ExplorerElementWdg\"],\"adapter\":\"explorer\"},{\"value\":\"tactic.ui.table.SObjectFilesElementWdg\",\"label\":\"Files\",\"class\":\"tactic.ui.table.sobject_summary_wdg.SObjectFilesElementWdg\",\"aliases\":[\"tactic.ui.table.SObjectFilesElementWdg\",\"tactic.ui.table.sobject_summary_wdg.SObjectFilesElementWdg\"],\"adapter\":\"files\"},{\"value\":\"tactic.ui.table.MetadataElementWdg\",\"label\":\"Metadata\",\"class\":\"tactic.ui.table.metadata_element_wdg.MetadataElementWdg\",\"aliases\":[\"tactic.ui.table.MetadataElementWdg\",\"tactic.ui.table.metadata_element_wdg.MetadataElementWdg\"],\"adapter\":\"metadata\"},{\"value\":\"tactic.ui.table.DeleteElementWdg\",\"label\":\"Delete\",\"class\":\"tactic.ui.table.delete_element_wdg.DeleteElementWdg\",\"aliases\":[\"tactic.ui.table.DeleteElementWdg\",\"tactic.ui.table.delete_element_wdg.DeleteElementWdg\"],\"adapter\":\"delete\"},{\"value\":\"ArrayTableElementWdg\",\"label\":\"Array\",\"class\":\"pyasm.widget.table_element_wdg.ArrayTableElementWdg\",\"aliases\":[\"ArrayTableElementWdg\",\"pyasm.widget.ArrayTableElementWdg\",\"pyasm.widget.table_element_wdg.ArrayTableElementWdg\"],\"adapter\":\"value\"},{\"value\":\"XmlWdg\",\"label\":\"XML\",\"class\":\"pyasm.widget.table_element_wdg.XmlWdg\",\"aliases\":[\"XmlWdg\",\"pyasm.widget.XmlWdg\",\"pyasm.widget.table_element_wdg.XmlWdg\"],\"adapter\":\"structured\"},{\"value\":\"tactic.ui.table.JsonElementWdg\",\"label\":\"JSON\",\"class\":\"tactic.ui.table.json_element_wdg.JsonElementWdg\",\"aliases\":[\"tactic.ui.table.JsonElementWdg\",\"tactic.ui.table.json_element_wdg.JsonElementWdg\"],\"adapter\":\"structured\"},{\"value\":\"tactic.ui.table.SnapshotInfoWdg\",\"label\":\"Parent\",\"class\":\"tactic.ui.table.snapshot_element_wdg.SnapshotInfoWdg\",\"aliases\":[\"tactic.ui.table.SnapshotInfoWdg\",\"tactic.ui.table.snapshot_element_wdg.SnapshotInfoWdg\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.table.SnapshotVersionElementWdg\",\"label\":\"Snapshot version\",\"class\":\"tactic.ui.table.snapshot_element_wdg.SnapshotVersionElementWdg\",\"aliases\":[\"tactic.ui.table.SnapshotVersionElementWdg\",\"tactic.ui.table.snapshot_element_wdg.SnapshotVersionElementWdg\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.table.SnapshotLockedElementWdg\",\"label\":\"Snapshot lock\",\"class\":\"tactic.ui.table.snapshot_element_wdg.SnapshotLockedElementWdg\",\"aliases\":[\"tactic.ui.table.SnapshotLockedElementWdg\",\"tactic.ui.table.snapshot_element_wdg.SnapshotLockedElementWdg\"],\"adapter\":\"lock\"},{\"value\":\"tactic.ui.table.SnapshotFileElementWdg\",\"label\":\"Snapshot file\",\"class\":\"tactic.ui.table.snapshot_element_wdg.SnapshotFileElementWdg\",\"aliases\":[\"tactic.ui.table.SnapshotFileElementWdg\",\"tactic.ui.table.snapshot_element_wdg.SnapshotFileElementWdg\"],\"adapter\":\"link\"},{\"value\":\"tactic.ui.table.MilestoneCompletionWdg\",\"label\":\"Milestone completion\",\"class\":\"tactic.ui.table.statistic_wdg.MilestoneCompletionWdg\",\"aliases\":[\"tactic.ui.table.MilestoneCompletionWdg\",\"tactic.ui.table.statistic_wdg.MilestoneCompletionWdg\"],\"adapter\":\"completion\"},{\"value\":\"tactic.ui.table.TaskGroupCompletionWdg\",\"label\":\"Task group completion\",\"class\":\"tactic.ui.table.statistic_wdg.TaskGroupCompletionWdg\",\"aliases\":[\"tactic.ui.table.TaskGroupCompletionWdg\",\"tactic.ui.table.statistic_wdg.TaskGroupCompletionWdg\"],\"adapter\":\"groupCompletion\"},{\"value\":\"tactic.ui.table.TaskDaysDueElementWdg\",\"label\":\"Days until due\",\"class\":\"tactic.ui.table.statistic_wdg.TaskDaysDueElementWdg\",\"aliases\":[\"tactic.ui.table.TaskDaysDueElementWdg\",\"tactic.ui.table.statistic_wdg.TaskDaysDueElementWdg\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.table.SubContextElementWdg\",\"label\":\"Subcontext\",\"class\":\"tactic.ui.table.subcontext_wdg.SubContextElementWdg\",\"aliases\":[\"tactic.ui.table.SubContextElementWdg\",\"tactic.ui.table.subcontext_wdg.SubContextElementWdg\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.table.TaskSummaryElementWdg\",\"label\":\"Task summary\",\"class\":\"tactic.ui.table.task_element_wdg.TaskSummaryElementWdg\",\"aliases\":[\"TaskSummaryElementWdg\",\"tactic.ui.table.TaskSummaryElementWdg\",\"tactic.ui.table.task_element_wdg.TaskSummaryElementWdg\"],\"adapter\":\"taskSummary\"},{\"value\":\"pyasm.widget.CheckboxColWdg\",\"label\":\"Row selection\",\"class\":\"pyasm.widget.table_element_wdg.CheckboxColWdg\",\"aliases\":[\"CheckboxColWdg\",\"pyasm.widget.CheckboxColWdg\",\"pyasm.widget.table_element_wdg.CheckboxColWdg\"],\"adapter\":\"selection\"},{\"value\":\"pyasm.widget.SearchTypeElementWdg\",\"label\":\"Search Type title\",\"class\":\"pyasm.widget.table_element_wdg.SearchTypeElementWdg\",\"aliases\":[\"SearchTypeElementWdg\",\"pyasm.widget.SearchTypeElementWdg\",\"pyasm.widget.table_element_wdg.SearchTypeElementWdg\"],\"adapter\":\"value\"},{\"value\":\"pyasm.widget.statistic_wdg.TaskCompletionWdg\",\"label\":\"Legacy task completion (integer)\",\"class\":\"pyasm.widget.statistic_wdg.TaskCompletionWdg\",\"aliases\":[\"pyasm.widget.statistic_wdg.TaskCompletionWdg\",\"pyasm.widget.TaskCompletionWdg\",\"TaskCompletionWdg\"],\"adapter\":\"completion\"},{\"value\":\"tactic.ui.app.search_type_element_wdg.SearchTypeHasTableElementWdg\",\"label\":\"Table availability\",\"class\":\"tactic.ui.app.search_type_element_wdg.SearchTypeHasTableElementWdg\",\"aliases\":[\"tactic.ui.app.SearchTypeHasTableElementWdg\",\"tactic.ui.app.search_type_element_wdg.SearchTypeHasTableElementWdg\"],\"adapter\":\"flag\"},{\"value\":\"tactic.ui.common.base_table_element_wdg.RawTableElementWdg\",\"label\":\"Raw value\",\"class\":\"tactic.ui.common.base_table_element_wdg.RawTableElementWdg\",\"aliases\":[\"tactic.ui.common.RawTableElementWdg\",\"tactic.ui.common.base_table_element_wdg.RawTableElementWdg\"],\"adapter\":\"raw\"},{\"value\":\"tactic.ui.table.explorer_wdg.ExplorerTableElementWdg\",\"label\":\"Folder\",\"class\":\"tactic.ui.table.explorer_wdg.ExplorerTableElementWdg\",\"aliases\":[\"tactic.ui.table.ExplorerTableElementWdg\"],\"adapter\":\"explorer\"},{\"value\":\"tactic.ui.table.expression_element_wdg.ExpressionValueElementWdg\",\"label\":\"Expression value\",\"class\":\"tactic.ui.table.expression_element_wdg.ExpressionValueElementWdg\",\"aliases\":[\"tactic.ui.table.ExpressionValueElementWdg\",\"tactic.ui.table.expression_element_wdg.ExpressionValueElementWdg\"],\"adapter\":\"expression\"},{\"value\":\"tactic.ui.table.preference_wdg.PreferenceDescriptionWdg\",\"label\":\"Preference description\",\"class\":\"tactic.ui.table.preference_wdg.PreferenceDescriptionWdg\",\"aliases\":[\"tactic.ui.table.PreferenceDescriptionWdg\",\"tactic.ui.table.preference_wdg.PreferenceDescriptionWdg\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.table.project_wdg.ProjectWdg\",\"label\":\"Project database\",\"class\":\"tactic.ui.table.project_wdg.ProjectWdg\",\"aliases\":[\"tactic.ui.table.ProjectWdg\",\"tactic.ui.table.project_wdg.ProjectWdg\"],\"adapter\":\"fields\"},{\"value\":\"tactic.ui.table.related_element_wdg.RelatedElementWdg\",\"label\":\"Related value\",\"class\":\"tactic.ui.table.related_element_wdg.RelatedElementWdg\",\"aliases\":[\"tactic.ui.table.RelatedElementWdg\",\"tactic.ui.table.related_element_wdg.RelatedElementWdg\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.table.table_element_wdg.RecipientElementWdg\",\"label\":\"Notification recipients\",\"class\":\"tactic.ui.table.table_element_wdg.RecipientElementWdg\",\"aliases\":[\"tactic.ui.table.RecipientElementWdg\",\"tactic.ui.table.table_element_wdg.RecipientElementWdg\"],\"adapter\":\"fields\"},{\"value\":\"tactic.ui.widget.discussion_wdg.DiscussionWdg\",\"label\":\"Discussion\",\"class\":\"tactic.ui.widget.discussion_wdg.DiscussionWdg\",\"aliases\":[\"tactic.ui.widget.DiscussionWdg\",\"tactic.ui.widget.discussion_wdg.DiscussionWdg\"],\"adapter\":\"notes\"},{\"value\":\"pyasm.widget.discussion_wdg.DiscussionWdg\",\"label\":\"Legacy discussion\",\"class\":\"pyasm.widget.discussion_wdg.DiscussionWdg\",\"aliases\":[\"DiscussionWdg\",\"pyasm.widget.DiscussionWdg\",\"pyasm.widget.discussion_wdg.DiscussionWdg\"],\"adapter\":\"notes\"},{\"value\":\"pyasm.widget.task_wdg.SObjectTaskTableElement\",\"label\":\"Object tasks\",\"class\":\"pyasm.widget.task_wdg.SObjectTaskTableElement\",\"aliases\":[\"SObjectTaskTableElement\",\"pyasm.widget.SObjectTaskTableElement\",\"pyasm.widget.task_wdg.SObjectTaskTableElement\"],\"adapter\":\"tasks\"},{\"value\":\"pyasm.widget.task_wdg.TaskParentSpacingTableElement\",\"label\":\"Task context\",\"class\":\"pyasm.widget.task_wdg.TaskParentSpacingTableElement\",\"aliases\":[\"TaskParentSpacingTableElement\",\"pyasm.widget.TaskParentSpacingTableElement\",\"pyasm.widget.task_wdg.TaskParentSpacingTableElement\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.app.message_wdg.MessageTableElementWdg\",\"label\":\"Formatted message\",\"class\":\"tactic.ui.app.message_wdg.MessageTableElementWdg\",\"aliases\":[\"tactic.ui.app.MessageTableElementWdg\",\"tactic.ui.app.message_wdg.MessageTableElementWdg\"],\"adapter\":\"message\"},{\"value\":\"pyasm.widget.MyTacticSummaryWdg\",\"label\":\"My TACTIC summary\",\"class\":\"pyasm.widget.my_tactic_summary_wdg.MyTacticSummaryWdg\",\"aliases\":[\"MyTacticSummaryWdg\",\"pyasm.widget.MyTacticSummaryWdg\",\"pyasm.widget.my_tactic_summary_wdg.MyTacticSummaryWdg\"],\"adapter\":\"fields\"},{\"value\":\"pyasm.widget.UpdateWdg\",\"label\":\"Object actions\",\"class\":\"pyasm.widget.table_element_wdg.UpdateWdg\",\"aliases\":[\"UpdateWdg\",\"pyasm.widget.UpdateWdg\",\"pyasm.widget.table_element_wdg.UpdateWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.input.LoginTableElementWdg\",\"label\":\"Login\",\"class\":\"tactic.ui.input.process_group_select_wdg.LoginTableElementWdg\",\"aliases\":[\"tactic.ui.input.LoginTableElementWdg\",\"tactic.ui.input.process_group_select_wdg.LoginTableElementWdg\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.panel.SecurityManagerButtonWdg\",\"label\":\"Global Permissions\",\"class\":\"tactic.ui.panel.security_manager_wdg.SecurityManagerButtonWdg\",\"aliases\":[\"tactic.ui.panel.SecurityManagerButtonWdg\",\"tactic.ui.panel.security_manager_wdg.SecurityManagerButtonWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.PreferenceEditWdg\",\"label\":\"User preference\",\"class\":\"tactic.ui.table.preference_wdg.PreferenceEditWdg\",\"aliases\":[\"tactic.ui.table.PreferenceEditWdg\",\"tactic.ui.table.preference_wdg.PreferenceEditWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.ProjectTemplateUpdateWdg\",\"label\":\"Update Template\",\"class\":\"tactic.ui.table.project_wdg.ProjectTemplateUpdateWdg\",\"aliases\":[\"tactic.ui.table.ProjectTemplateUpdateWdg\",\"tactic.ui.table.project_wdg.ProjectTemplateUpdateWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.NotificationTriggerElementWdg\",\"label\":\"Email Test\",\"class\":\"tactic.ui.table.table_element_wdg.NotificationTriggerElementWdg\",\"aliases\":[\"tactic.ui.table.NotificationTriggerElementWdg\",\"tactic.ui.table.table_element_wdg.NotificationTriggerElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.ButtonElementWdg\",\"label\":\"Configured button\",\"class\":\"tactic.ui.table.button_wdg.ButtonElementWdg\",\"aliases\":[\"tactic.ui.table.ButtonElementWdg\",\"tactic.ui.table.button_wdg.ButtonElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"ParallelStatusWdg\",\"label\":\"Parallel task status\",\"class\":\"pyasm.widget.parallel_status.ParallelStatusWdg\",\"aliases\":[\"ParallelStatusWdg\",\"pyasm.widget.ParallelStatusWdg\",\"pyasm.widget.parallel_status.ParallelStatusWdg\"],\"adapter\":\"commands\"},{\"value\":\"ParallelStatusEditWdg\",\"label\":\"Add Task\",\"class\":\"pyasm.widget.parallel_status.ParallelStatusEditWdg\",\"aliases\":[\"ParallelStatusEditWdg\",\"pyasm.widget.ParallelStatusEditWdg\",\"pyasm.widget.parallel_status.ParallelStatusEditWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.SObjectTaskStatusElementWdg\",\"label\":\"Open tasks\",\"class\":\"tactic.ui.table.sobject_detail_wdg.SObjectTaskStatusElementWdg\",\"aliases\":[\"tactic.ui.table.SObjectTaskStatusElementWdg\",\"tactic.ui.table.sobject_detail_wdg.SObjectTaskStatusElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.ProcessElementWdg\",\"label\":\"Process\",\"class\":\"tactic.ui.table.subcontext_wdg.ProcessElementWdg\",\"aliases\":[\"tactic.ui.table.ProcessElementWdg\",\"tactic.ui.table.subcontext_wdg.ProcessElementWdg\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.widget.TaskStatusElementWdg\",\"label\":\"Task status\",\"class\":\"tactic.ui.widget.misc_input_wdg.TaskStatusElementWdg\",\"aliases\":[\"tactic.ui.widget.TaskStatusElementWdg\",\"tactic.ui.widget.misc_input_wdg.TaskStatusElementWdg\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.table.WorkElementWdg\",\"label\":\"Work on Task\",\"class\":\"tactic.ui.table.task_element_wdg.WorkElementWdg\",\"aliases\":[\"tactic.ui.table.WorkElementWdg\",\"tactic.ui.table.task_element_wdg.WorkElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.DropElementWdg\",\"label\":\"Instance links\",\"class\":\"tactic.ui.table.drop_element_wdg.DropElementWdg\",\"aliases\":[\"tactic.ui.table.DropElementWdg\",\"tactic.ui.table.drop_element_wdg.DropElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.CustomLayoutElementWdg\",\"label\":\"Custom Layout\",\"class\":\"tactic.ui.table.custom_layout_element_wdg.CustomLayoutElementWdg\",\"aliases\":[\"tactic.ui.table.CustomLayoutElementWdg\",\"tactic.ui.table.custom_layout_element_wdg.CustomLayoutElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.hidden_row_element_wdg.HiddenRowElementWdg\",\"label\":\"Show related table\",\"class\":\"tactic.ui.table.hidden_row_element_wdg.HiddenRowElementWdg\",\"aliases\":[\"tactic.ui.table.hidden_row_element_wdg.HiddenRowElementWdg\",\"tactic.ui.table.HiddenRowElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.hidden_row_element_wdg.RowAddElementWdg\",\"label\":\"Related tasks\",\"class\":\"tactic.ui.table.hidden_row_element_wdg.RowAddElementWdg\",\"aliases\":[\"tactic.ui.table.hidden_row_element_wdg.RowAddElementWdg\",\"tactic.ui.table.RowAddElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"HiddenRowToggleWdg\",\"label\":\"Show related table\",\"class\":\"pyasm.widget.table_element_wdg.HiddenRowToggleWdg\",\"aliases\":[\"HiddenRowToggleWdg\",\"pyasm.widget.table_element_wdg.HiddenRowToggleWdg\",\"pyasm.widget.HiddenRowToggleWdg\"],\"adapter\":\"commands\"},{\"value\":\"AuxDataWdg\",\"label\":\"Auxiliary data\",\"class\":\"pyasm.widget.table_element_wdg.AuxDataWdg\",\"aliases\":[\"AuxDataWdg\",\"pyasm.widget.table_element_wdg.AuxDataWdg\",\"pyasm.widget.AuxDataWdg\"],\"adapter\":\"value\"},{\"value\":\"GanttWdg\",\"label\":\"Gantt\",\"class\":\"pyasm.widget.gantt_wdg.GanttWdg\",\"aliases\":[\"GanttWdg\",\"pyasm.widget.gantt_wdg.GanttWdg\",\"pyasm.widget.GanttWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.gantt_element_wdg.GanttElementWdg\",\"label\":\"Gantt\",\"class\":\"tactic.ui.table.gantt_element_wdg.GanttElementWdg\",\"aliases\":[\"tactic.ui.table.gantt_element_wdg.GanttElementWdg\",\"tactic.ui.table.GanttElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"TimecardInfoTableElement\",\"label\":\"Timecard\",\"class\":\"pyasm.widget.timecard_wdg.TimecardInfoTableElement\",\"aliases\":[\"TimecardInfoTableElement\",\"pyasm.widget.timecard_wdg.TimecardInfoTableElement\",\"pyasm.widget.TimecardInfoTableElement\"],\"adapter\":\"commands\"},{\"value\":\"WeekTableElement\",\"label\":\"Week\",\"class\":\"pyasm.widget.timecard_wdg.WeekTableElement\",\"aliases\":[\"WeekTableElement\",\"pyasm.widget.timecard_wdg.WeekTableElement\",\"pyasm.widget.WeekTableElement\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.work_hours_element_wdg.WorkHoursElementWdg\",\"label\":\"Work Hours\",\"class\":\"tactic.ui.table.work_hours_element_wdg.WorkHoursElementWdg\",\"aliases\":[\"tactic.ui.table.work_hours_element_wdg.WorkHoursElementWdg\",\"tactic.ui.table.WorkHoursElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"FileAppendLinkTableElement\",\"label\":\"Attach files\",\"class\":\"pyasm.widget.table_element_wdg.FileAppendLinkTableElement\",\"aliases\":[\"FileAppendLinkTableElement\",\"pyasm.widget.table_element_wdg.FileAppendLinkTableElement\",\"pyasm.widget.FileAppendLinkTableElement\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.CheckoutButtonElementWdg\",\"label\":\"Check out\",\"class\":\"tactic.ui.table.table_element_wdg.CheckoutButtonElementWdg\",\"aliases\":[\"CheckoutButtonElementWdg\",\"tactic.ui.table.CheckoutButtonElementWdg\",\"tactic.ui.table.table_element_wdg.CheckoutButtonElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"pyasm.widget.SObjectConnectionElement\",\"label\":\"Connections\",\"class\":\"pyasm.widget.sobject_browser_wdg.SObjectConnectionElement\",\"aliases\":[\"SObjectConnectionElement\",\"pyasm.widget.SObjectConnectionElement\",\"pyasm.widget.sobject_browser_wdg.SObjectConnectionElement\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.sobject_summary_wdg.SObjectSummaryElementWdg\",\"label\":\"Object summary\",\"class\":\"tactic.ui.table.sobject_summary_wdg.SObjectSummaryElementWdg\",\"aliases\":[\"tactic.ui.table.sobject_summary_wdg.SObjectSummaryElementWdg\",\"tactic.ui.table.SObjectSummaryElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"DependencyLink\",\"label\":\"Dependencies\",\"class\":\"pyasm.widget.dependency_wdg.DependencyLink\",\"aliases\":[\"DependencyLink\",\"pyasm.widget.DependencyLink\",\"pyasm.widget.dependency_wdg.DependencyLink\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.ParentGroupTableElementWdg\",\"label\":\"Parent group\",\"class\":\"tactic.ui.table.group_element_wdg.ParentGroupTableElementWdg\",\"aliases\":[\"ParentGroupTableElementWdg\",\"tactic.ui.table.ParentGroupTableElementWdg\",\"tactic.ui.table.group_element_wdg.ParentGroupTableElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"PublishTableElement\",\"label\":\"Publish\",\"class\":\"pyasm.widget.table_element_wdg.PublishTableElement\",\"aliases\":[\"PublishTableElement\",\"pyasm.widget.PublishTableElement\",\"pyasm.widget.table_element_wdg.PublishTableElement\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.GeneralPublishElementWdg\",\"label\":\"General publish\",\"class\":\"tactic.ui.table.table_element_wdg.GeneralPublishElementWdg\",\"aliases\":[\"GeneralPublishElementWdg\",\"tactic.ui.table.GeneralPublishElementWdg\",\"tactic.ui.table.table_element_wdg.GeneralPublishElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"WikiElementWdg\",\"label\":\"Multiline text\",\"class\":\"pyasm.widget.table_element_wdg.WikiElementWdg\",\"aliases\":[\"WikiElementWdg\",\"pyasm.widget.WikiElementWdg\",\"pyasm.widget.table_element_wdg.WikiElementWdg\"],\"adapter\":\"value\"}]");
+//#endregion
 //#region src/features/administration/columnsEditor.js
-var displayWidgets = (/* @__PURE__ */ JSON.parse("[{\"value\":\"\",\"label\":\"Automatic\",\"class\":\"tactic.ui.common.base_table_element_wdg.SimpleTableElementWdg\",\"aliases\":[\"TextWdg\",\"\",\"pyasm.widget.TextWdg\",\"tactic.ui.common.SimpleTableElementWdg\",\"tactic.ui.common.base_table_element_wdg.SimpleTableElementWdg\",\"SimpleTableElementWdg\",\"pyasm.widget.SimpleTableElementWdg\",\"pyasm.widget.table_element_wdg.SimpleTableElementWdg\",\"pyasm.widget.input_wdg.TextWdg\"],\"adapter\":\"value\"},{\"value\":\"format\",\"label\":\"Format\",\"class\":\"tactic.ui.table.format_element_wdg.FormatElementWdg\",\"aliases\":[\"tactic.ui.table.FormatElementWdg\",\"tactic.ui.table.format_element_wdg.FormatElementWdg\"],\"adapter\":\"formatted\"},{\"value\":\"expression\",\"label\":\"Expression\",\"class\":\"tactic.ui.table.expression_element_wdg.ExpressionElementWdg\",\"aliases\":[\"tactic.ui.table.ExpressionElementWdg\",\"tactic.ui.table.expression_element_wdg.ExpressionElementWdg\"],\"adapter\":\"expression\"},{\"value\":\"link\",\"label\":\"Link\",\"class\":\"tactic.ui.table.link_element_wdg.LinkElementWdg\",\"aliases\":[\"tactic.ui.table.LinkElementWdg\",\"tactic.ui.table.link_element_wdg.LinkElementWdg\"],\"adapter\":\"link\"},{\"value\":\"pyasm.widget.ThumbWdg\",\"label\":\"Thumbnail\",\"class\":\"pyasm.widget.file_wdg.ThumbWdg\",\"aliases\":[\"ThumbWdg\",\"pyasm.widget.ThumbWdg\",\"pyasm.widget.file_wdg.ThumbWdg\"],\"adapter\":\"preview\"},{\"value\":\"tactic.ui.widget.DiscussionElementWdg\",\"label\":\"Notes\",\"class\":\"tactic.ui.widget.discussion_wdg.DiscussionElementWdg\",\"aliases\":[\"tactic.ui.widget.DiscussionElementWdg\",\"tactic.ui.widget.discussion_wdg.DiscussionElementWdg\"],\"adapter\":\"notes\"},{\"value\":\"tactic.ui.table.SObjectDetailElementWdg\",\"label\":\"SObject details\",\"class\":\"tactic.ui.table.sobject_detail_wdg.SObjectDetailElementWdg\",\"aliases\":[\"tactic.ui.table.SObjectDetailElementWdg\",\"tactic.ui.table.sobject_detail_wdg.SObjectDetailElementWdg\"],\"adapter\":\"details\"},{\"value\":\"tactic.ui.table.CheckinButtonElementWdg\",\"label\":\"Check-in\",\"class\":\"tactic.ui.table.table_element_wdg.CheckinButtonElementWdg\",\"aliases\":[\"tactic.ui.table.CheckinButtonElementWdg\",\"tactic.ui.table.table_element_wdg.CheckinButtonElementWdg\"],\"adapter\":\"checkin\"},{\"value\":\"tactic.ui.table.TaskElementWdg\",\"label\":\"Tasks\",\"class\":\"tactic.ui.table.task_element_wdg.TaskElementWdg\",\"aliases\":[\"tactic.ui.table.TaskElementWdg\",\"tactic.ui.table.task_element_wdg.TaskElementWdg\"],\"adapter\":\"tasks\"},{\"value\":\"tactic.ui.table.TaskCompletionWdg\",\"label\":\"Task completion\",\"class\":\"tactic.ui.table.statistic_wdg.TaskCompletionWdg\",\"aliases\":[\"tactic.ui.table.TaskCompletionWdg\",\"tactic.ui.table.statistic_wdg.TaskCompletionWdg\"],\"adapter\":\"completion\"},{\"value\":\"tactic.ui.table.ExploreElementWdg\",\"label\":\"Explorer\",\"class\":\"tactic.ui.table.explorer_wdg.ExplorerElementWdg\",\"aliases\":[\"tactic.ui.table.ExploreElementWdg\",\"tactic.ui.table.ExplorerElementWdg\",\"tactic.ui.table.explorer_wdg.ExplorerElementWdg\"],\"adapter\":\"explorer\"},{\"value\":\"tactic.ui.table.SObjectFilesElementWdg\",\"label\":\"Files\",\"class\":\"tactic.ui.table.sobject_summary_wdg.SObjectFilesElementWdg\",\"aliases\":[\"tactic.ui.table.SObjectFilesElementWdg\",\"tactic.ui.table.sobject_summary_wdg.SObjectFilesElementWdg\"],\"adapter\":\"files\"},{\"value\":\"tactic.ui.table.MetadataElementWdg\",\"label\":\"Metadata\",\"class\":\"tactic.ui.table.metadata_element_wdg.MetadataElementWdg\",\"aliases\":[\"tactic.ui.table.MetadataElementWdg\",\"tactic.ui.table.metadata_element_wdg.MetadataElementWdg\"],\"adapter\":\"metadata\"},{\"value\":\"tactic.ui.table.DeleteElementWdg\",\"label\":\"Delete\",\"class\":\"tactic.ui.table.delete_element_wdg.DeleteElementWdg\",\"aliases\":[\"tactic.ui.table.DeleteElementWdg\",\"tactic.ui.table.delete_element_wdg.DeleteElementWdg\"],\"adapter\":\"delete\"},{\"value\":\"ArrayTableElementWdg\",\"label\":\"Array\",\"class\":\"pyasm.widget.table_element_wdg.ArrayTableElementWdg\",\"aliases\":[\"ArrayTableElementWdg\",\"pyasm.widget.ArrayTableElementWdg\",\"pyasm.widget.table_element_wdg.ArrayTableElementWdg\"],\"adapter\":\"value\"},{\"value\":\"XmlWdg\",\"label\":\"XML\",\"class\":\"pyasm.widget.table_element_wdg.XmlWdg\",\"aliases\":[\"XmlWdg\",\"pyasm.widget.XmlWdg\",\"pyasm.widget.table_element_wdg.XmlWdg\"],\"adapter\":\"structured\"},{\"value\":\"tactic.ui.table.JsonElementWdg\",\"label\":\"JSON\",\"class\":\"tactic.ui.table.json_element_wdg.JsonElementWdg\",\"aliases\":[\"tactic.ui.table.JsonElementWdg\",\"tactic.ui.table.json_element_wdg.JsonElementWdg\"],\"adapter\":\"structured\"},{\"value\":\"tactic.ui.table.SnapshotInfoWdg\",\"label\":\"Parent\",\"class\":\"tactic.ui.table.snapshot_element_wdg.SnapshotInfoWdg\",\"aliases\":[\"tactic.ui.table.SnapshotInfoWdg\",\"tactic.ui.table.snapshot_element_wdg.SnapshotInfoWdg\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.table.SnapshotVersionElementWdg\",\"label\":\"Snapshot version\",\"class\":\"tactic.ui.table.snapshot_element_wdg.SnapshotVersionElementWdg\",\"aliases\":[\"tactic.ui.table.SnapshotVersionElementWdg\",\"tactic.ui.table.snapshot_element_wdg.SnapshotVersionElementWdg\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.table.SnapshotLockedElementWdg\",\"label\":\"Snapshot lock\",\"class\":\"tactic.ui.table.snapshot_element_wdg.SnapshotLockedElementWdg\",\"aliases\":[\"tactic.ui.table.SnapshotLockedElementWdg\",\"tactic.ui.table.snapshot_element_wdg.SnapshotLockedElementWdg\"],\"adapter\":\"lock\"},{\"value\":\"tactic.ui.table.SnapshotFileElementWdg\",\"label\":\"Snapshot file\",\"class\":\"tactic.ui.table.snapshot_element_wdg.SnapshotFileElementWdg\",\"aliases\":[\"tactic.ui.table.SnapshotFileElementWdg\",\"tactic.ui.table.snapshot_element_wdg.SnapshotFileElementWdg\"],\"adapter\":\"link\"},{\"value\":\"tactic.ui.table.MilestoneCompletionWdg\",\"label\":\"Milestone completion\",\"class\":\"tactic.ui.table.statistic_wdg.MilestoneCompletionWdg\",\"aliases\":[\"tactic.ui.table.MilestoneCompletionWdg\",\"tactic.ui.table.statistic_wdg.MilestoneCompletionWdg\"],\"adapter\":\"completion\"},{\"value\":\"tactic.ui.table.TaskGroupCompletionWdg\",\"label\":\"Task group completion\",\"class\":\"tactic.ui.table.statistic_wdg.TaskGroupCompletionWdg\",\"aliases\":[\"tactic.ui.table.TaskGroupCompletionWdg\",\"tactic.ui.table.statistic_wdg.TaskGroupCompletionWdg\"],\"adapter\":\"groupCompletion\"},{\"value\":\"tactic.ui.table.TaskDaysDueElementWdg\",\"label\":\"Days until due\",\"class\":\"tactic.ui.table.statistic_wdg.TaskDaysDueElementWdg\",\"aliases\":[\"tactic.ui.table.TaskDaysDueElementWdg\",\"tactic.ui.table.statistic_wdg.TaskDaysDueElementWdg\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.table.SubContextElementWdg\",\"label\":\"Subcontext\",\"class\":\"tactic.ui.table.subcontext_wdg.SubContextElementWdg\",\"aliases\":[\"tactic.ui.table.SubContextElementWdg\",\"tactic.ui.table.subcontext_wdg.SubContextElementWdg\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.table.TaskSummaryElementWdg\",\"label\":\"Task summary\",\"class\":\"tactic.ui.table.task_element_wdg.TaskSummaryElementWdg\",\"aliases\":[\"TaskSummaryElementWdg\",\"tactic.ui.table.TaskSummaryElementWdg\",\"tactic.ui.table.task_element_wdg.TaskSummaryElementWdg\"],\"adapter\":\"taskSummary\"},{\"value\":\"pyasm.widget.CheckboxColWdg\",\"label\":\"Row selection\",\"class\":\"pyasm.widget.table_element_wdg.CheckboxColWdg\",\"aliases\":[\"CheckboxColWdg\",\"pyasm.widget.CheckboxColWdg\",\"pyasm.widget.table_element_wdg.CheckboxColWdg\"],\"adapter\":\"selection\"},{\"value\":\"pyasm.widget.SearchTypeElementWdg\",\"label\":\"Search Type title\",\"class\":\"pyasm.widget.table_element_wdg.SearchTypeElementWdg\",\"aliases\":[\"SearchTypeElementWdg\",\"pyasm.widget.SearchTypeElementWdg\",\"pyasm.widget.table_element_wdg.SearchTypeElementWdg\"],\"adapter\":\"value\"},{\"value\":\"pyasm.widget.statistic_wdg.TaskCompletionWdg\",\"label\":\"Legacy task completion (integer)\",\"class\":\"pyasm.widget.statistic_wdg.TaskCompletionWdg\",\"aliases\":[\"pyasm.widget.statistic_wdg.TaskCompletionWdg\",\"pyasm.widget.TaskCompletionWdg\",\"TaskCompletionWdg\"],\"adapter\":\"completion\"},{\"value\":\"tactic.ui.app.search_type_element_wdg.SearchTypeHasTableElementWdg\",\"label\":\"Table availability\",\"class\":\"tactic.ui.app.search_type_element_wdg.SearchTypeHasTableElementWdg\",\"aliases\":[\"tactic.ui.app.SearchTypeHasTableElementWdg\",\"tactic.ui.app.search_type_element_wdg.SearchTypeHasTableElementWdg\"],\"adapter\":\"flag\"},{\"value\":\"tactic.ui.common.base_table_element_wdg.RawTableElementWdg\",\"label\":\"Raw value\",\"class\":\"tactic.ui.common.base_table_element_wdg.RawTableElementWdg\",\"aliases\":[\"tactic.ui.common.RawTableElementWdg\",\"tactic.ui.common.base_table_element_wdg.RawTableElementWdg\"],\"adapter\":\"raw\"},{\"value\":\"tactic.ui.table.explorer_wdg.ExplorerTableElementWdg\",\"label\":\"Folder\",\"class\":\"tactic.ui.table.explorer_wdg.ExplorerTableElementWdg\",\"aliases\":[\"tactic.ui.table.ExplorerTableElementWdg\"],\"adapter\":\"explorer\"},{\"value\":\"tactic.ui.table.expression_element_wdg.ExpressionValueElementWdg\",\"label\":\"Expression value\",\"class\":\"tactic.ui.table.expression_element_wdg.ExpressionValueElementWdg\",\"aliases\":[\"tactic.ui.table.ExpressionValueElementWdg\",\"tactic.ui.table.expression_element_wdg.ExpressionValueElementWdg\"],\"adapter\":\"expression\"},{\"value\":\"tactic.ui.table.preference_wdg.PreferenceDescriptionWdg\",\"label\":\"Preference description\",\"class\":\"tactic.ui.table.preference_wdg.PreferenceDescriptionWdg\",\"aliases\":[\"tactic.ui.table.PreferenceDescriptionWdg\",\"tactic.ui.table.preference_wdg.PreferenceDescriptionWdg\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.table.project_wdg.ProjectWdg\",\"label\":\"Project database\",\"class\":\"tactic.ui.table.project_wdg.ProjectWdg\",\"aliases\":[\"tactic.ui.table.ProjectWdg\",\"tactic.ui.table.project_wdg.ProjectWdg\"],\"adapter\":\"fields\"},{\"value\":\"tactic.ui.table.related_element_wdg.RelatedElementWdg\",\"label\":\"Related value\",\"class\":\"tactic.ui.table.related_element_wdg.RelatedElementWdg\",\"aliases\":[\"tactic.ui.table.RelatedElementWdg\",\"tactic.ui.table.related_element_wdg.RelatedElementWdg\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.table.table_element_wdg.RecipientElementWdg\",\"label\":\"Notification recipients\",\"class\":\"tactic.ui.table.table_element_wdg.RecipientElementWdg\",\"aliases\":[\"tactic.ui.table.RecipientElementWdg\",\"tactic.ui.table.table_element_wdg.RecipientElementWdg\"],\"adapter\":\"fields\"},{\"value\":\"tactic.ui.widget.discussion_wdg.DiscussionWdg\",\"label\":\"Discussion\",\"class\":\"tactic.ui.widget.discussion_wdg.DiscussionWdg\",\"aliases\":[\"tactic.ui.widget.DiscussionWdg\",\"tactic.ui.widget.discussion_wdg.DiscussionWdg\"],\"adapter\":\"notes\"},{\"value\":\"pyasm.widget.discussion_wdg.DiscussionWdg\",\"label\":\"Legacy discussion\",\"class\":\"pyasm.widget.discussion_wdg.DiscussionWdg\",\"aliases\":[\"DiscussionWdg\",\"pyasm.widget.DiscussionWdg\",\"pyasm.widget.discussion_wdg.DiscussionWdg\"],\"adapter\":\"notes\"},{\"value\":\"pyasm.widget.task_wdg.SObjectTaskTableElement\",\"label\":\"Object tasks\",\"class\":\"pyasm.widget.task_wdg.SObjectTaskTableElement\",\"aliases\":[\"SObjectTaskTableElement\",\"pyasm.widget.SObjectTaskTableElement\",\"pyasm.widget.task_wdg.SObjectTaskTableElement\"],\"adapter\":\"tasks\"},{\"value\":\"pyasm.widget.task_wdg.TaskParentSpacingTableElement\",\"label\":\"Task context\",\"class\":\"pyasm.widget.task_wdg.TaskParentSpacingTableElement\",\"aliases\":[\"TaskParentSpacingTableElement\",\"pyasm.widget.TaskParentSpacingTableElement\",\"pyasm.widget.task_wdg.TaskParentSpacingTableElement\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.app.message_wdg.MessageTableElementWdg\",\"label\":\"Formatted message\",\"class\":\"tactic.ui.app.message_wdg.MessageTableElementWdg\",\"aliases\":[\"tactic.ui.app.MessageTableElementWdg\",\"tactic.ui.app.message_wdg.MessageTableElementWdg\"],\"adapter\":\"message\"},{\"value\":\"pyasm.widget.MyTacticSummaryWdg\",\"label\":\"My TACTIC summary\",\"class\":\"pyasm.widget.my_tactic_summary_wdg.MyTacticSummaryWdg\",\"aliases\":[\"MyTacticSummaryWdg\",\"pyasm.widget.MyTacticSummaryWdg\",\"pyasm.widget.my_tactic_summary_wdg.MyTacticSummaryWdg\"],\"adapter\":\"fields\"},{\"value\":\"pyasm.widget.UpdateWdg\",\"label\":\"Object actions\",\"class\":\"pyasm.widget.table_element_wdg.UpdateWdg\",\"aliases\":[\"UpdateWdg\",\"pyasm.widget.UpdateWdg\",\"pyasm.widget.table_element_wdg.UpdateWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.input.LoginTableElementWdg\",\"label\":\"Login\",\"class\":\"tactic.ui.input.process_group_select_wdg.LoginTableElementWdg\",\"aliases\":[\"tactic.ui.input.LoginTableElementWdg\",\"tactic.ui.input.process_group_select_wdg.LoginTableElementWdg\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.panel.SecurityManagerButtonWdg\",\"label\":\"Global Permissions\",\"class\":\"tactic.ui.panel.security_manager_wdg.SecurityManagerButtonWdg\",\"aliases\":[\"tactic.ui.panel.SecurityManagerButtonWdg\",\"tactic.ui.panel.security_manager_wdg.SecurityManagerButtonWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.PreferenceEditWdg\",\"label\":\"User preference\",\"class\":\"tactic.ui.table.preference_wdg.PreferenceEditWdg\",\"aliases\":[\"tactic.ui.table.PreferenceEditWdg\",\"tactic.ui.table.preference_wdg.PreferenceEditWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.ProjectTemplateUpdateWdg\",\"label\":\"Update Template\",\"class\":\"tactic.ui.table.project_wdg.ProjectTemplateUpdateWdg\",\"aliases\":[\"tactic.ui.table.ProjectTemplateUpdateWdg\",\"tactic.ui.table.project_wdg.ProjectTemplateUpdateWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.NotificationTriggerElementWdg\",\"label\":\"Email Test\",\"class\":\"tactic.ui.table.table_element_wdg.NotificationTriggerElementWdg\",\"aliases\":[\"tactic.ui.table.NotificationTriggerElementWdg\",\"tactic.ui.table.table_element_wdg.NotificationTriggerElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.ButtonElementWdg\",\"label\":\"Configured button\",\"class\":\"tactic.ui.table.button_wdg.ButtonElementWdg\",\"aliases\":[\"tactic.ui.table.ButtonElementWdg\",\"tactic.ui.table.button_wdg.ButtonElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"ParallelStatusWdg\",\"label\":\"Parallel task status\",\"class\":\"pyasm.widget.parallel_status.ParallelStatusWdg\",\"aliases\":[\"ParallelStatusWdg\",\"pyasm.widget.ParallelStatusWdg\",\"pyasm.widget.parallel_status.ParallelStatusWdg\"],\"adapter\":\"commands\"},{\"value\":\"ParallelStatusEditWdg\",\"label\":\"Add Task\",\"class\":\"pyasm.widget.parallel_status.ParallelStatusEditWdg\",\"aliases\":[\"ParallelStatusEditWdg\",\"pyasm.widget.ParallelStatusEditWdg\",\"pyasm.widget.parallel_status.ParallelStatusEditWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.SObjectTaskStatusElementWdg\",\"label\":\"Open tasks\",\"class\":\"tactic.ui.table.sobject_detail_wdg.SObjectTaskStatusElementWdg\",\"aliases\":[\"tactic.ui.table.SObjectTaskStatusElementWdg\",\"tactic.ui.table.sobject_detail_wdg.SObjectTaskStatusElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.ProcessElementWdg\",\"label\":\"Process\",\"class\":\"tactic.ui.table.subcontext_wdg.ProcessElementWdg\",\"aliases\":[\"tactic.ui.table.ProcessElementWdg\",\"tactic.ui.table.subcontext_wdg.ProcessElementWdg\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.widget.TaskStatusElementWdg\",\"label\":\"Task status\",\"class\":\"tactic.ui.widget.misc_input_wdg.TaskStatusElementWdg\",\"aliases\":[\"tactic.ui.widget.TaskStatusElementWdg\",\"tactic.ui.widget.misc_input_wdg.TaskStatusElementWdg\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.table.WorkElementWdg\",\"label\":\"Work on Task\",\"class\":\"tactic.ui.table.task_element_wdg.WorkElementWdg\",\"aliases\":[\"tactic.ui.table.WorkElementWdg\",\"tactic.ui.table.task_element_wdg.WorkElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.DropElementWdg\",\"label\":\"Instance links\",\"class\":\"tactic.ui.table.drop_element_wdg.DropElementWdg\",\"aliases\":[\"tactic.ui.table.DropElementWdg\",\"tactic.ui.table.drop_element_wdg.DropElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.CustomLayoutElementWdg\",\"label\":\"Custom Layout\",\"class\":\"tactic.ui.table.custom_layout_element_wdg.CustomLayoutElementWdg\",\"aliases\":[\"tactic.ui.table.CustomLayoutElementWdg\",\"tactic.ui.table.custom_layout_element_wdg.CustomLayoutElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.hidden_row_element_wdg.HiddenRowElementWdg\",\"label\":\"Show related table\",\"class\":\"tactic.ui.table.hidden_row_element_wdg.HiddenRowElementWdg\",\"aliases\":[\"tactic.ui.table.hidden_row_element_wdg.HiddenRowElementWdg\",\"tactic.ui.table.HiddenRowElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.hidden_row_element_wdg.RowAddElementWdg\",\"label\":\"Related tasks\",\"class\":\"tactic.ui.table.hidden_row_element_wdg.RowAddElementWdg\",\"aliases\":[\"tactic.ui.table.hidden_row_element_wdg.RowAddElementWdg\",\"tactic.ui.table.RowAddElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"HiddenRowToggleWdg\",\"label\":\"Show related table\",\"class\":\"pyasm.widget.table_element_wdg.HiddenRowToggleWdg\",\"aliases\":[\"HiddenRowToggleWdg\",\"pyasm.widget.table_element_wdg.HiddenRowToggleWdg\",\"pyasm.widget.HiddenRowToggleWdg\"],\"adapter\":\"commands\"},{\"value\":\"AuxDataWdg\",\"label\":\"Auxiliary data\",\"class\":\"pyasm.widget.table_element_wdg.AuxDataWdg\",\"aliases\":[\"AuxDataWdg\",\"pyasm.widget.table_element_wdg.AuxDataWdg\",\"pyasm.widget.AuxDataWdg\"],\"adapter\":\"value\"},{\"value\":\"GanttWdg\",\"label\":\"Gantt\",\"class\":\"pyasm.widget.gantt_wdg.GanttWdg\",\"aliases\":[\"GanttWdg\",\"pyasm.widget.gantt_wdg.GanttWdg\",\"pyasm.widget.GanttWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.gantt_element_wdg.GanttElementWdg\",\"label\":\"Gantt\",\"class\":\"tactic.ui.table.gantt_element_wdg.GanttElementWdg\",\"aliases\":[\"tactic.ui.table.gantt_element_wdg.GanttElementWdg\",\"tactic.ui.table.GanttElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"TimecardInfoTableElement\",\"label\":\"Timecard\",\"class\":\"pyasm.widget.timecard_wdg.TimecardInfoTableElement\",\"aliases\":[\"TimecardInfoTableElement\",\"pyasm.widget.timecard_wdg.TimecardInfoTableElement\",\"pyasm.widget.TimecardInfoTableElement\"],\"adapter\":\"commands\"},{\"value\":\"WeekTableElement\",\"label\":\"Week\",\"class\":\"pyasm.widget.timecard_wdg.WeekTableElement\",\"aliases\":[\"WeekTableElement\",\"pyasm.widget.timecard_wdg.WeekTableElement\",\"pyasm.widget.WeekTableElement\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.work_hours_element_wdg.WorkHoursElementWdg\",\"label\":\"Work Hours\",\"class\":\"tactic.ui.table.work_hours_element_wdg.WorkHoursElementWdg\",\"aliases\":[\"tactic.ui.table.work_hours_element_wdg.WorkHoursElementWdg\",\"tactic.ui.table.WorkHoursElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"FileAppendLinkTableElement\",\"label\":\"Attach files\",\"class\":\"pyasm.widget.table_element_wdg.FileAppendLinkTableElement\",\"aliases\":[\"FileAppendLinkTableElement\",\"pyasm.widget.table_element_wdg.FileAppendLinkTableElement\",\"pyasm.widget.FileAppendLinkTableElement\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.CheckoutButtonElementWdg\",\"label\":\"Check out\",\"class\":\"tactic.ui.table.table_element_wdg.CheckoutButtonElementWdg\",\"aliases\":[\"CheckoutButtonElementWdg\",\"tactic.ui.table.CheckoutButtonElementWdg\",\"tactic.ui.table.table_element_wdg.CheckoutButtonElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"pyasm.widget.SObjectConnectionElement\",\"label\":\"Connections\",\"class\":\"pyasm.widget.sobject_browser_wdg.SObjectConnectionElement\",\"aliases\":[\"SObjectConnectionElement\",\"pyasm.widget.SObjectConnectionElement\",\"pyasm.widget.sobject_browser_wdg.SObjectConnectionElement\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.sobject_summary_wdg.SObjectSummaryElementWdg\",\"label\":\"Object summary\",\"class\":\"tactic.ui.table.sobject_summary_wdg.SObjectSummaryElementWdg\",\"aliases\":[\"tactic.ui.table.sobject_summary_wdg.SObjectSummaryElementWdg\",\"tactic.ui.table.SObjectSummaryElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"DependencyLink\",\"label\":\"Dependencies\",\"class\":\"pyasm.widget.dependency_wdg.DependencyLink\",\"aliases\":[\"DependencyLink\",\"pyasm.widget.DependencyLink\",\"pyasm.widget.dependency_wdg.DependencyLink\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.ParentGroupTableElementWdg\",\"label\":\"Parent group\",\"class\":\"tactic.ui.table.group_element_wdg.ParentGroupTableElementWdg\",\"aliases\":[\"ParentGroupTableElementWdg\",\"tactic.ui.table.ParentGroupTableElementWdg\",\"tactic.ui.table.group_element_wdg.ParentGroupTableElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"PublishTableElement\",\"label\":\"Publish\",\"class\":\"pyasm.widget.table_element_wdg.PublishTableElement\",\"aliases\":[\"PublishTableElement\",\"pyasm.widget.PublishTableElement\",\"pyasm.widget.table_element_wdg.PublishTableElement\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.GeneralPublishElementWdg\",\"label\":\"General publish\",\"class\":\"tactic.ui.table.table_element_wdg.GeneralPublishElementWdg\",\"aliases\":[\"GeneralPublishElementWdg\",\"tactic.ui.table.GeneralPublishElementWdg\",\"tactic.ui.table.table_element_wdg.GeneralPublishElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"WikiElementWdg\",\"label\":\"Multiline text\",\"class\":\"pyasm.widget.table_element_wdg.WikiElementWdg\",\"aliases\":[\"WikiElementWdg\",\"pyasm.widget.WikiElementWdg\",\"pyasm.widget.table_element_wdg.WikiElementWdg\"],\"adapter\":\"value\"}]")).map(({ value, label }) => ({
+var WIZARD_WIDGET_VALUES = /* @__PURE__ */ new Set([
+	"",
+	"format",
+	"expression",
+	"tactic.ui.table.expression_element_wdg.ExpressionValueElementWdg",
+	"link",
+	"pyasm.widget.ThumbWdg",
+	"tactic.ui.widget.DiscussionElementWdg",
+	"tactic.ui.table.TaskElementWdg",
+	"tactic.ui.table.TaskCompletionWdg",
+	"tactic.ui.table.gantt_element_wdg.GanttElementWdg",
+	"tactic.ui.table.hidden_row_element_wdg.HiddenRowElementWdg",
+	"tactic.ui.table.DropElementWdg",
+	"tactic.ui.table.ButtonElementWdg",
+	"tactic.ui.table.CustomLayoutElementWdg",
+	"tactic.ui.table.SObjectDetailElementWdg",
+	"tactic.ui.table.CheckinButtonElementWdg",
+	"tactic.ui.table.ExploreElementWdg",
+	"tactic.ui.table.SObjectFilesElementWdg",
+	"tactic.ui.table.MetadataElementWdg",
+	"tactic.ui.table.DeleteElementWdg",
+	"tactic.ui.common.base_table_element_wdg.RawTableElementWdg"
+]);
+var LEGACY_DUPLICATE_WIDGET_VALUES = /* @__PURE__ */ new Set([
+	"pyasm.widget.statistic_wdg.TaskCompletionWdg",
+	"tactic.ui.table.explorer_wdg.ExplorerTableElementWdg",
+	"tactic.ui.widget.discussion_wdg.DiscussionWdg",
+	"pyasm.widget.discussion_wdg.DiscussionWdg",
+	"pyasm.widget.task_wdg.SObjectTaskTableElement",
+	"HiddenRowToggleWdg",
+	"GanttWdg"
+]);
+var curatedCatalog = widgets_default.filter((row) => WIZARD_WIDGET_VALUES.has(row.value));
+var extendedCatalog = [...curatedCatalog, ...widgets_default.filter((row) => !WIZARD_WIDGET_VALUES.has(row.value) && !LEGACY_DUPLICATE_WIDGET_VALUES.has(row.value))];
+var displayWidgets = curatedCatalog.map(({ value, label }) => ({
 	value,
 	label
 }));
+var allDisplayWidgets = extendedCatalog.map(({ value, label }) => ({
+	value,
+	label
+}));
+function widgetOptionsFor(widget, showAll = false) {
+	const value = String(widget || "").trim(), activeCatalog = showAll ? extendedCatalog : curatedCatalog, activeList = showAll ? allDisplayWidgets : displayWidgets;
+	if (!value || activeList.some((row) => row.value === value)) return activeList;
+	const activeMatch = activeCatalog.find((row) => (row.aliases || []).includes(value));
+	if (activeMatch) return activeList.map((row) => row.value === activeMatch.value ? {
+		value,
+		label: row.label
+	} : row);
+	const catalogMatch = widgets_default.find((row) => row.value === value || (row.aliases || []).includes(value));
+	return [{
+		value,
+		label: catalogMatch ? catalogMatch.label : value,
+		translate: Boolean(catalogMatch)
+	}, ...activeList];
+}
 function parse(source) {
 	if (/<!DOCTYPE|<!ENTITY/i.test(source)) throw new Error("Document types and XML entities are not supported");
 	const document = new DOMParser().parseFromString(source.trim() || "<config/>", "application/xml");
@@ -9741,8 +9833,32 @@ function flag(value) {
 		"on"
 	].includes(String(value).trim().toLowerCase());
 }
-function definitionWizard(source, viewName = "") {
-	const root = parse(source).documentElement;
+function elementXml(node) {
+	const clone = node.cloneNode(true);
+	function indent(el, depth = 0) {
+		const items = [...el.childNodes].filter((child) => child.nodeType !== 3 || child.nodeValue.trim());
+		if (!items.some((child) => child.nodeType === 1)) return;
+		while (el.firstChild) el.removeChild(el.firstChild);
+		const doc = el.ownerDocument, pad = "\n" + "  ".repeat(depth + 1);
+		for (const child of items) {
+			el.appendChild(doc.createTextNode(pad));
+			if (child.nodeType === 1) indent(child, depth + 1);
+			el.appendChild(child);
+		}
+		el.appendChild(doc.createTextNode("\n" + "  ".repeat(depth)));
+	}
+	indent(clone);
+	return new XMLSerializer().serializeToString(clone);
+}
+function childElements(node) {
+	return node ? [...node.children].filter((child) => child.nodeType === 1) : [];
+}
+function childMap(node) {
+	const result = {};
+	for (const child of childElements(node)) result[child.tagName] = (child.textContent || "").trim();
+	return result;
+}
+function findViewNode(root, viewName = "") {
 	let view = null, viewPath = "";
 	function find(node, path = "") {
 		if (node.nodeType !== 1 || view) return;
@@ -9759,38 +9875,251 @@ function definitionWizard(source, viewName = "") {
 		children(node).forEach((child, index) => find(child, path ? `${path}/${index}` : String(index)));
 	}
 	find(root);
-	const elements = view ? children(view).flatMap((node, index) => {
+	return {
+		view,
+		viewPath
+	};
+}
+function parseElementNode(node, path) {
+	const display = childElements(node).find((child) => child.tagName === "display"), editNode = childElements(node).find((child) => child.tagName === "edit"), actionNode = childElements(node).find((child) => child.tagName === "action"), name = node.getAttribute("name") || "", rawTitle = node.getAttribute("title") || "", rawWidth = node.getAttribute("width") || "", displayClass = display?.getAttribute("class") || "", widgetKey = display?.getAttribute("widget") || "", widget = displayClass || widgetKey || "", editClass = editNode?.getAttribute("class") || "", editWidgetKey = editNode?.getAttribute("widget") || "", editWidget = editClass || editWidgetKey || "", actionClass = actionNode?.getAttribute("class") || "";
+	return {
+		path,
+		name,
+		rawTitle,
+		title: rawTitle || name,
+		visible: !flag(node.getAttribute("hidden")),
+		rawWidth,
+		width: width(rawWidth),
+		color: node.getAttribute("color") !== "false",
+		editable: node.getAttribute("edit") !== "false",
+		...node.hasAttribute("value_icon") ? { valueIcon: node.getAttribute("value_icon") } : display?.querySelector("icon") ? { valueIcon: display.querySelector("icon").textContent } : {},
+		...node.hasAttribute("value_style") ? { valueStyle: node.getAttribute("value_style") } : {},
+		...node.hasAttribute("value_text_style") ? { valueTextStyle: node.getAttribute("value_text_style") } : {},
+		...node.hasAttribute("value_align") ? { valueAlign: node.getAttribute("value_align") } : {},
+		widget,
+		widgetKey,
+		displayClass,
+		displayOptions: childMap(display),
+		editWidget,
+		editWidgetKey,
+		editClass,
+		editOptions: childMap(editNode),
+		actionClass,
+		actionOptions: childMap(actionNode),
+		xml: elementXml(node)
+	};
+}
+function parseRecordElements(xmlText, viewName = "") {
+	const map = /* @__PURE__ */ new Map();
+	if (!xmlText || !String(xmlText).trim()) return map;
+	try {
+		const root = parse(String(xmlText)).documentElement;
+		const { view, viewPath } = findViewNode(root, viewName);
+		if (!view) return map;
+		children(view).forEach((node, index) => {
+			if (node.nodeType !== 1 || node.tagName !== "element") return;
+			const parsed = parseElementNode(node, viewPath ? `${viewPath}/${index}` : String(index));
+			if (parsed.name) map.set(parsed.name, parsed);
+		});
+	} catch (_err) {}
+	return map;
+}
+function parseColorRecord(xmlText) {
+	const map = /* @__PURE__ */ new Map();
+	if (!xmlText || !String(xmlText).trim()) return map;
+	try {
+		const root = parse(String(xmlText)).documentElement;
+		const { view } = findViewNode(root, "color");
+		const container = view || root;
+		for (const el of childElements(container)) {
+			if (el.tagName !== "element") continue;
+			const name = el.getAttribute("name") || "";
+			if (!name) continue;
+			const colorsNode = childElements(el).find((c) => c.tagName === "colors") || childElements(el).find((c) => c.tagName === "display") || el;
+			const entries = [];
+			for (const child of childElements(colorsNode)) if (child.tagName === "color") entries.push({
+				label: child.getAttribute("name") || child.getAttribute("value") || (child.textContent || "").trim(),
+				color: child.getAttribute("color") || child.getAttribute("bg") || (child.textContent || "").trim()
+			});
+			else entries.push({
+				label: child.tagName,
+				color: (child.textContent || "").trim()
+			});
+			if (entries.length) map.set(name, entries);
+		}
+	} catch (_err) {}
+	return map;
+}
+function definitionWizard(source, viewName = "", searchType = "", records = []) {
+	const root = parse(source).documentElement;
+	const { view, viewPath } = findViewNode(root, viewName);
+	const rawElements = view ? children(view).flatMap((node, index) => {
 		if (node.nodeType !== 1 || node.tagName !== "element") return [];
-		const display = [...node.children].find((child) => child.tagName === "display"), name = node.getAttribute("name") || "";
-		return [{
-			path: viewPath ? `${viewPath}/${index}` : String(index),
-			name,
-			title: node.getAttribute("title") || name,
-			visible: !flag(node.getAttribute("hidden")),
-			width: width(node.getAttribute("width")),
-			...node.hasAttribute("value_icon") ? { valueIcon: node.getAttribute("value_icon") } : display?.querySelector("icon") ? { valueIcon: display.querySelector("icon").textContent } : {},
-			...node.hasAttribute("value_style") ? { valueStyle: node.getAttribute("value_style") } : {},
-			...node.hasAttribute("value_text_style") ? { valueTextStyle: node.getAttribute("value_text_style") } : {},
-			...node.hasAttribute("value_align") ? { valueAlign: node.getAttribute("value_align") } : {},
-			widget: display?.getAttribute("class") || display?.getAttribute("widget") || ""
-		}];
+		return [parseElementNode(node, viewPath ? `${viewPath}/${index}` : String(index))];
 	}) : [];
+	if (!searchType || !Array.isArray(records) || !records.length) return {
+		supported: !!view,
+		view: view?.tagName || "",
+		layout: view?.getAttribute("layout") || "",
+		elements: rawElements,
+		definitionElements: []
+	};
+	const baseStype = String(searchType).split("?")[0];
+	const stypeRecords = records.filter((row) => String(row.searchType || "").split("?")[0] === baseStype);
+	const findConfig = (v) => stypeRecords.find((row) => row.view === v && !row.login) || stypeRecords.find((row) => row.view === v);
+	const isEditView = viewName === "edit" || viewName === "edit_definition";
+	const defRec = findConfig("definition");
+	const defDefaultRec = findConfig("default_definition");
+	const editDefRec = findConfig("edit_definition");
+	const editRec = findConfig("edit");
+	const colorRec = findConfig("color");
+	const defMap = viewName === "definition" ? new Map(rawElements.map((e) => [e.name, e])) : parseRecordElements(defRec?.config, "definition");
+	const defaultDefMap = parseRecordElements(defDefaultRec?.config, "default_definition");
+	const editDefMap = viewName === "edit_definition" ? new Map(rawElements.map((e) => [e.name, e])) : parseRecordElements(editDefRec?.config, "edit_definition");
+	const editMap = viewName === "edit" ? new Map(rawElements.map((e) => [e.name, e])) : parseRecordElements(editRec?.config, "edit");
+	const colorMaps = parseColorRecord(colorRec?.config);
+	const activeViewName = viewName || view?.tagName || "table";
+	function enrichElement(base, inView) {
+		const name = base.name;
+		const defEl = defMap.get(name);
+		const defDefaultEl = defaultDefMap.get(name);
+		const editDefEl = editDefMap.get(name);
+		const editViewEl = editMap.get(name);
+		const inheritedDef = defEl || defDefaultEl;
+		const widget = isEditView ? defEl?.widget || defDefaultEl?.widget || "" : base.widget || inheritedDef?.widget || "";
+		const displayClass = isEditView ? defEl?.displayClass || defDefaultEl?.displayClass || "" : base.displayClass || inheritedDef?.displayClass || "";
+		const widgetKey = isEditView ? defEl?.widgetKey || defDefaultEl?.widgetKey || "" : base.widgetKey || inheritedDef?.widgetKey || "";
+		const displayOptions = Object.assign({}, defDefaultEl?.displayOptions || {}, defEl?.displayOptions || {}, isEditView ? {} : base.displayOptions || {});
+		const editWidget = isEditView ? base.editWidget || base.widget || editViewEl?.editWidget || editViewEl?.widget || editDefEl?.editWidget || editDefEl?.widget || "" : base.editWidget || defEl?.editWidget || editViewEl?.editWidget || editViewEl?.widget || editDefEl?.editWidget || editDefEl?.widget || "";
+		const editClass = isEditView ? base.editClass || base.displayClass || editViewEl?.editClass || editViewEl?.displayClass || editDefEl?.editClass || editDefEl?.displayClass || "" : base.editClass || defEl?.editClass || editViewEl?.editClass || editViewEl?.displayClass || editDefEl?.editClass || editDefEl?.displayClass || "";
+		const editOptions = Object.assign({}, editDefEl?.displayOptions || {}, editDefEl?.editOptions || {}, editViewEl?.displayOptions || {}, editViewEl?.editOptions || {}, defEl?.editOptions || {}, isEditView ? base.displayOptions || {} : {}, base.editOptions || {});
+		const actionClass = base.actionClass || defEl?.actionClass || editViewEl?.actionClass || editDefEl?.actionClass || "";
+		const actionOptions = Object.assign({}, editDefEl?.actionOptions || {}, editViewEl?.actionOptions || {}, defEl?.actionOptions || {}, base.actionOptions || {});
+		const configLayers = [];
+		if (activeViewName !== "definition" && activeViewName !== "default_definition") configLayers.push({
+			key: "view_db",
+			label: `${activeViewName} - [database]`,
+			defined: inView,
+			xml: inView ? base.xml : ""
+		});
+		configLayers.push({
+			key: "def_db",
+			label: "definition - [database]",
+			defined: !!defEl,
+			xml: defEl ? defEl.xml : ""
+		});
+		if (activeViewName !== "definition" && activeViewName !== "default_definition") configLayers.push({
+			key: "view_gen",
+			label: `${activeViewName} - [generated]`,
+			defined: false,
+			xml: ""
+		});
+		configLayers.push({
+			key: "def_default",
+			label: "default_definition - [predefined]",
+			defined: !!defDefaultEl,
+			xml: defDefaultEl ? defDefaultEl.xml : ""
+		});
+		const editConfigLayers = [{
+			key: "edit_db",
+			label: "edit - [database]",
+			defined: !!editViewEl,
+			xml: editViewEl ? editViewEl.xml : ""
+		}, {
+			key: "edit_def_db",
+			label: "edit_definition - [database]",
+			defined: !!editDefEl,
+			xml: editDefEl ? editDefEl.xml : ""
+		}];
+		return Object.assign({}, base, {
+			inView,
+			rawTitle: base.rawTitle || inheritedDef?.rawTitle || "",
+			title: base.rawTitle || inheritedDef?.rawTitle || name,
+			width: base.rawWidth ? base.width : inheritedDef?.rawWidth ? inheritedDef.width : base.width,
+			widget,
+			widgetKey,
+			displayClass,
+			displayOptions,
+			editWidget,
+			editClass,
+			editOptions,
+			actionClass,
+			actionOptions,
+			colorMap: colorMaps.get(name) || [],
+			configLayers,
+			editConfigLayers
+		});
+	}
+	const elements = rawElements.map((el) => enrichElement(el, true));
+	const viewByName = new Map(elements.map((el) => [el.name, el]));
+	const allNames = [];
+	const seen = /* @__PURE__ */ new Set();
+	for (const map of [
+		defMap,
+		defaultDefMap,
+		editDefMap,
+		editMap,
+		new Map(rawElements.map((e) => [e.name, e]))
+	]) for (const key of map.keys()) if (key && !seen.has(key)) {
+		seen.add(key);
+		allNames.push(key);
+	}
+	const definitionElements = allNames.map((name) => {
+		const viewEl = viewByName.get(name);
+		if (viewEl) return viewEl;
+		const enriched = enrichElement(defMap.get(name) || defaultDefMap.get(name) || editDefMap.get(name) || editMap.get(name), false);
+		enriched.path = "def:" + name;
+		return enriched;
+	});
 	return {
 		supported: !!view,
 		view: view?.tagName || "",
 		layout: view?.getAttribute("layout") || "",
-		elements
+		elements,
+		definitionElements
 	};
 }
-function changeDefinition(source, path, field, value) {
+function ensureChildOption(container, doc, key, val) {
+	let child = [...container.children].find((c) => c.tagName === key);
+	const text = String(val ?? "").trim();
+	if (!text) {
+		if (child) container.removeChild(child);
+		return;
+	}
+	if (!child) {
+		child = doc.createElement(key);
+		container.appendChild(child);
+	}
+	child.textContent = text;
+}
+function changeDefinition(source, path, field, value, fallbackElement = null) {
 	const document = parse(source);
 	let node = document.documentElement, parent = null;
-	for (const part of path.split("/").filter(Boolean)) {
+	if (String(path || "").startsWith("def:") || field === "addElement") {
+		const colName = String(path || "").startsWith("def:") ? String(path).slice(4) : String(value || "").trim();
+		if (!colName) throw new Error("Column name is required.");
+		const { view } = findViewNode(document.documentElement);
+		if (!view) throw new Error("The current table view is missing.");
+		parent = view;
+		node = [...view.children].find((child) => child.tagName === "element" && child.getAttribute("name") === colName);
+		if (!node) {
+			node = document.createElement("element");
+			node.setAttribute("name", colName);
+			view.appendChild(node);
+		}
+		if (field === "addElement") return new XMLSerializer().serializeToString(document);
+	} else for (const part of String(path || "").split("/").filter(Boolean)) {
 		if (!/^\d+$/.test(part) || !children(node)[Number(part)]) throw new Error("Definition XML path no longer exists.");
 		parent = node;
 		node = children(node)[Number(part)];
 	}
 	if (node.tagName !== "element") throw new Error("Definition XML path no longer points to a column.");
+	if (field === "removeElement") {
+		if (!parent) throw new Error("Invalid column removal");
+		if ([...parent.children].filter((child) => child.tagName === "element").length <= 1) throw new Error("At least one column must remain in the view");
+		parent.removeChild(node);
+		return new XMLSerializer().serializeToString(document);
+	}
 	if (field === "move") {
 		const offset = String(value);
 		if (!["-1", "1"].includes(offset) || !parent) throw new Error("Invalid column move");
@@ -9799,10 +10128,17 @@ function changeDefinition(source, path, field, value) {
 		if (!target) throw new Error("The column cannot be moved further.");
 		parent.insertBefore(node, offset === "1" ? target.nextSibling : target);
 	} else if (field === "title") {
-		if (!String(value).trim()) throw new Error("Column label cannot be empty.");
-		node.setAttribute("title", String(value).trim());
+		const text = String(value ?? "").trim();
+		if (!text) node.removeAttribute("title");
+		else node.setAttribute("title", text);
 	} else if (field === "visible") node.setAttribute("hidden", value ? "false" : "true");
-	else if (field === "width") node.setAttribute("width", String(width(value)));
+	else if (field === "color") {
+		if (flag(value)) node.removeAttribute("color");
+		else node.setAttribute("color", "false");
+	} else if (field === "editable") {
+		if (flag(value)) node.setAttribute("edit", "true");
+		else node.setAttribute("edit", "false");
+	} else if (field === "width") node.setAttribute("width", String(width(value)));
 	else if (field === "valueIcon" || field === "valueStyle") {
 		const text = String(value || "").trim();
 		if (field === "valueStyle" && ![
@@ -9829,20 +10165,96 @@ function changeDefinition(source, path, field, value) {
 			"right"
 		].includes(text)) throw new Error("Invalid cell alignment");
 		node.setAttribute("value_align", text);
-	} else if (field === "widget") {
+	} else if (field === "widget" || field === "displayClass") {
 		let display = [...node.children].find((child) => child.tagName === "display");
 		if (!display) {
 			display = document.createElement("display");
 			node.appendChild(display);
+			if (fallbackElement?.displayOptions) for (const [k, v] of Object.entries(fallbackElement.displayOptions)) ensureChildOption(display, document, k, v);
 		}
 		display.removeAttribute("widget");
 		display.removeAttribute("class");
 		const widget = String(value || "").trim();
-		if (widget) display.setAttribute(widget.includes(".") || widget.endsWith("Wdg") ? "class" : "widget", widget);
+		if (widget) display.setAttribute(field === "displayClass" || widget.includes(".") || widget.endsWith("Wdg") ? "class" : "widget", widget);
+	} else if (field.startsWith("option:")) {
+		const optKey = field.slice(7).trim();
+		if (!optKey || !/^[\w:.-]+$/.test(optKey)) throw new Error("Invalid option name");
+		let display = [...node.children].find((child) => child.tagName === "display");
+		if (!display) {
+			display = document.createElement("display");
+			if (fallbackElement?.widget) {
+				const w = fallbackElement.widget;
+				display.setAttribute(w.includes(".") || w.endsWith("Wdg") ? "class" : "widget", w);
+			}
+			node.appendChild(display);
+			if (fallbackElement?.displayOptions) for (const [k, v] of Object.entries(fallbackElement.displayOptions)) ensureChildOption(display, document, k, v);
+		}
+		ensureChildOption(display, document, optKey, value);
+	} else if (field === "extraOptionAdd") {
+		const raw = String(value || "").trim();
+		if (!raw) return new XMLSerializer().serializeToString(document);
+		const eq = raw.indexOf("=");
+		const optKey = (eq >= 0 ? raw.slice(0, eq) : raw).trim();
+		const optVal = eq >= 0 ? raw.slice(eq + 1).trim() : "true";
+		if (!optKey || !/^[A-Za-z_][\w.-]*$/.test(optKey)) throw new Error("Option name must be a valid XML tag (e.g. my_option=value)");
+		return changeDefinition(source, path, "option:" + optKey, optVal, fallbackElement);
+	} else if (field === "editWidget" || field === "editClass") {
+		const tagName = parent && ["edit", "edit_definition"].includes(parent.tagName) ? "display" : "edit";
+		let editNode = [...node.children].find((child) => child.tagName === tagName);
+		if (!editNode) {
+			editNode = document.createElement(tagName);
+			node.appendChild(editNode);
+		}
+		editNode.removeAttribute("widget");
+		editNode.removeAttribute("class");
+		const widget = String(value || "").trim();
+		if (widget) editNode.setAttribute(field === "editClass" || widget.includes(".") || widget.endsWith("Wdg") ? "class" : "widget", widget);
+	} else if (field.startsWith("editOption:")) {
+		const optKey = field.slice(11).trim();
+		if (!optKey || !/^[\w:.-]+$/.test(optKey)) throw new Error("Invalid edit option name");
+		const tagName = parent && ["edit", "edit_definition"].includes(parent.tagName) ? "display" : "edit";
+		let editNode = [...node.children].find((child) => child.tagName === tagName);
+		if (!editNode) {
+			editNode = document.createElement(tagName);
+			if (fallbackElement?.editWidget) {
+				const w = fallbackElement.editWidget;
+				editNode.setAttribute(w.includes(".") || w.endsWith("Wdg") ? "class" : "widget", w);
+			}
+			node.appendChild(editNode);
+		}
+		ensureChildOption(editNode, document, optKey, value);
+	} else if (field === "actionClass") {
+		let actionNode = [...node.children].find((child) => child.tagName === "action");
+		const cls = String(value || "").trim();
+		if (!cls) {
+			if (actionNode && !actionNode.children.length) node.removeChild(actionNode);
+			else if (actionNode) actionNode.removeAttribute("class");
+		} else {
+			if (!actionNode) {
+				actionNode = document.createElement("action");
+				node.appendChild(actionNode);
+			}
+			actionNode.setAttribute("class", cls);
+		}
+	} else if (field.startsWith("actionOption:")) {
+		const optKey = field.slice(13).trim();
+		if (!optKey || !/^[\w:.-]+$/.test(optKey)) throw new Error("Invalid action option name");
+		let actionNode = [...node.children].find((child) => child.tagName === "action");
+		if (!actionNode) {
+			actionNode = document.createElement("action");
+			node.appendChild(actionNode);
+		}
+		ensureChildOption(actionNode, document, optKey, value);
+	} else if (field === "xml") {
+		const snippet = String(value || "").trim();
+		if (!snippet) throw new Error("Invalid configuration XML");
+		const parsed = parse(snippet).documentElement;
+		if (parsed.tagName !== "element" || !(parsed.getAttribute("name") || "").trim() || !parent) throw new Error("Invalid configuration XML");
+		parent.replaceChild(document.importNode(parsed, true), node);
 	} else throw new Error("This column setting is only available in XML mode.");
 	return new XMLSerializer().serializeToString(document);
 }
 //#endregion
-export { viewPicker as $, _sfc_main$7 as A, variants as At, _sfc_main$10 as B, bubbleGeometry as C, actions as Ct, insertion as D, roles as Dt, formatFileSize as E, edit as Et, toggle as F, interrupted as Ft, filterActions as G, defaultResultView as H, decorate as I, settled as It, inlineViews as J, groupActions as K, itemScene as L, actionLayout as Lt, alignment as M, change as Mt, roots as N, describe$4 as Nt, mentionQuery as O, serialize as Ot, selected as P, field as Pt, viewActions as Q, spacingField as R, buttonWidth as Rt, bubbleContour as S, visible as St, emojiCount as T, describe$3 as Tt, groupRecords as U, _sfc_main$11 as V, describeViewPicker as W, sortColumn as X, sortActions as Y, sorts as Z, retainOlderMessages as _, tab as _t, tableDefinition as a, describe$1 as at, _sfc_main$6 as b, describe$2 as bt, attachmentName as c, row as ct, groupedMessages as d, RelatedObjects_default as default, _sfc_main$14 as dt, views as et, initials as f, _sfc_main$15 as ft, messageId as g, sectionWidth as gt, messageDate as h, key as ht, displayWidgets as i, choices$1 as it, _sfc_main$8 as j, widgets as jt, popup as k, template as kt, canChangeMessage as l, rows as lt, messageAttachments as m, dimensions as mt, changeTable as n, _sfc_main$13 as nt, ObjectAction_default as o, initial as ot, mergeMessages as p, row$1 as pt, groups as q, definitionWizard as r, MarkdownItCallable as rt, _sfc_main$3 as s, loaded as st, changeDefinition as t, _sfc_main$12 as tt, conversationAttachments as u, transition as ut, contextActions as v, viewTabWidth as vt, composerKey as w, binding as wt, bodyOrder as x, supports as xt, _sfc_main$5 as y, actionAvailable as yt, _sfc_main$9 as z };
+export { viewActions as $, _sfc_main$7 as A, template as At, _sfc_main$9 as B, bubbleGeometry as C, visible as Ct, insertion as D, edit as Dt, formatFileSize as E, describe$3 as Et, toggle as F, field as Ft, describeViewPicker as G, _sfc_main$11 as H, combineRegions as I, interrupted as It, groups as J, filterActions as K, decorate as L, settled as Lt, alignment as M, widgets as Mt, roots as N, change as Nt, mentionQuery as O, roles as Ot, selected as P, describe$4 as Pt, sorts as Q, itemScene as R, actionLayout as Rt, bubbleContour as S, supports as St, emojiCount as T, binding as Tt, defaultResultView as U, _sfc_main$10 as V, groupRecords as W, sortActions as X, inlineViews as Y, sortColumn as Z, retainOlderMessages as _, sectionWidth as _t, widgetOptionsFor as a, choices$1 as at, _sfc_main$6 as b, actionAvailable as bt, attachmentName as c, loaded as ct, groupedMessages as d, RelatedObjects_default as default, transition as dt, viewPicker as et, initials as f, _sfc_main$14 as ft, messageId as g, key as gt, messageDate as h, dimensions as ht, tableDefinition as i, MarkdownItCallable as it, _sfc_main$8 as j, variants as jt, popup as k, serialize as kt, canChangeMessage as l, row as lt, messageAttachments as m, row$1 as mt, changeTable as n, _sfc_main$12 as nt, ObjectAction_default as o, describe$1 as ot, mergeMessages as p, _sfc_main$15 as pt, groupActions as q, definitionWizard as r, _sfc_main$13 as rt, _sfc_main$3 as s, initial as st, changeDefinition as t, views as tt, conversationAttachments as u, rows as ut, contextActions as v, tab as vt, composerKey as w, actions as wt, bodyOrder as x, describe$2 as xt, _sfc_main$5 as y, viewTabWidth as yt, spacingField as z, buttonWidth as zt };
 
 //# sourceMappingURL=RelatedObjects.js.map

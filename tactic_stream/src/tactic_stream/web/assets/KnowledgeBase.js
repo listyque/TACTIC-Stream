@@ -1,10 +1,10 @@
-import { A as onMounted, C as inject, E as nextTick, G as withCtx, H as watch, K as withDirectives, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, X as ref, Y as reactive, _ as createElementBlock, b as createVNode, et as unref, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, q as isRef, rt as toDisplayString, s as vShow, tt as normalizeClass, u as Fragment, y as createTextVNode } from "./vue.js";
+import { D as nextTick, F as renderSlot, J as isRef, K as withCtx, N as openBlock, P as renderList, U as watch, X as reactive, Z as ref, _ as createCommentVNode, b as createTextVNode, c as vShow, d as Fragment, g as createBlock, h as createBaseVNode, it as toDisplayString, j as onMounted, k as onBeforeUnmount, m as computed, nt as normalizeClass, q as withDirectives, rt as normalizeStyle, tt as unref, u as withModifiers, v as createElementBlock, w as inject, x as createVNode } from "./vue.js";
 import { a as _sfc_main$4, o as t, s as appearance, t as _sfc_main$3 } from "./AppButton.js";
 import { i as semanticName, r as aliases } from "./icons.js";
 import { It as randomId, g as messageFileRequest, h as linkPreviews, m as knowledgeRequest } from "./index.js";
-import { A as _sfc_main$11, B as _sfc_main$7, G as button, H as observeFrameSizes, K as label, M as _sfc_main$10, P as _sfc_main$6, U as _sfc_main$9, X as rect, Y as node, d as javascriptTokens, f as pythonTokens, h as copyText, k as AppSearchField_default, p as xmlTokens, t as _sfc_main$5, w as translate, z as _sfc_main$8 } from "./FrameView.js";
+import { A as AppSearchField_default, B as _sfc_main$8, F as _sfc_main$6, K as button, N as _sfc_main$10, S as copyText, T as translate, U as observeFrameSizes, V as _sfc_main$7, W as _sfc_main$9, X as node, Z as rect, _ as javascriptTokens, b as xmlTokens, j as _sfc_main$11, q as label, t as _sfc_main$5, v as pythonTokens } from "./FrameView.js";
 import { M as extractSkeys, j as escapeHtml, u as _sfc_main$12, x as browserLink } from "./admin.document.js";
-import { h as messageDate, rt as MarkdownItCallable, s as _sfc_main$14, z as _sfc_main$13 } from "./RelatedObjects.js";
+import { B as _sfc_main$13, h as messageDate, it as MarkdownItCallable, s as _sfc_main$14 } from "./RelatedObjects.js";
 import { o as _sfc_main$15 } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/knowledge/workspace.ui.mjs
 var metrics = Object.freeze({

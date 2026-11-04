@@ -5,7 +5,7 @@ from pyasm.common import Environment
 from pyasm.search import Search, SearchType
 from .interface import _require_table_access, read_interface
 from .navigation_links import check_project
-from tactic_stream.dashboard_plan import DashboardDocument, DashboardPageFilter
+from tactic_stream.dashboard_plan import DashboardDocument, DashboardPageFilter, dashboard_from_xml
 
 
 def field_kind(column):
@@ -208,7 +208,7 @@ def dashboard_sources(
 
 
 def dashboard_layout(document, view, search_key='', *, detail_key='', filter_values=None, filter_query=None):
-    document = DashboardDocument.model_validate(document)
+    document = dashboard_from_xml(document, view[10:] if isinstance(view, str) and view.startswith('dashboard.') else '')
     project = Project.get()
     check_project(project.get_code())
     from tactic.ui.panel.agent_request_cmd import selected_object

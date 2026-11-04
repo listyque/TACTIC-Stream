@@ -25,13 +25,29 @@ export default {
             ? 'status'
             : this.node?.kind || 'manual',
         columnCatalog = workflow ? {} : { ...this.columnCatalog };
-      if (!workflow)
+      if (!workflow) {
         for (const identity of Object.keys(document.newTypes || {}))
           columnCatalog[identity] = {
             columns: this.edges
               .filter((row) => row.from === identity && row.from_col)
               .map((row) => ({ name: row.from_col, type: '', pending: true }))
           };
+        for (const identity of Object.keys(document.draftTypes || {})) {
+          const edgeCols = this.edges
+            .filter((row) => row.from === identity && row.from_col)
+            .map((row) => ({ name: row.from_col, type: '', pending: true }));
+          const seen = new Set(['code', 'id']);
+          columnCatalog[identity] = {
+            columns: [
+              { name: 'code', type: 'varchar', pending: true },
+              { name: 'id', type: 'integer', pending: true },
+              ...edgeCols.filter(
+                (col) => !seen.has(col.name) && seen.add(col.name)
+              )
+            ]
+          };
+        }
+      }
       return {
         mode: this.frameMode,
         style: appearance.theme,
@@ -71,6 +87,7 @@ export default {
         processCatalog: this.metadata,
         connection: workflow ? {} : this.connection || {},
         instance: workflow ? '' : this.instance || '',
+        draftType: workflow ? null : this.draftType || null,
         instanceLinks: workflow ? [] : this.instanceLinks,
         createColumns: workflow ? false : this.createColumns,
         columnCatalog,
@@ -166,7 +183,7 @@ export default {
             this.moveNodes(command.positions);
             break;
           case 'connect':
-            this.connect(command.from, command.to);
+            this.connect(command.from, command.to, command.mode);
             break;
           case 'remove':
             this.remove(true);
@@ -175,7 +192,7 @@ export default {
             this.nodeName = command.identity;
             this.typeToAdd = command.identity;
             this.nodeKind = command.kind;
-            this.addNode(this.insertionPoint());
+            this.addNode(command.position || this.insertionPoint());
             if (!this.error) {
               await nextTick();
               this.graphCommand({ type: 'reveal' });
@@ -187,7 +204,40 @@ export default {
             this.graphCommand({ type: 'reset' });
             break;
           case 'createType':
-            await this.createType(this.insertionPoint());
+            await this.createType(
+              Number.isFinite(command.x) && Number.isFinite(command.y)
+                ? { x: command.x, y: command.y }
+                : this.insertionPoint()
+            );
+            break;
+          case 'createDraftNode':
+            this.createDraftNode?.(
+              Number.isFinite(command.x) && Number.isFinite(command.y)
+                ? { x: command.x, y: command.y }
+                : this.insertionPoint()
+            );
+            break;
+          case 'createProcessAt':
+            this.createProcessAt?.(
+              Number.isFinite(command.x) && Number.isFinite(command.y)
+                ? { x: command.x, y: command.y }
+                : this.insertionPoint()
+            );
+            break;
+          case 'draftField':
+            this.updateDraftType?.(command.key, command.value);
+            break;
+          case 'renameDraftTable':
+            this.renameDraftTable?.(command.value);
+            break;
+          case 'registerDraftType':
+            await this.registerDraftType?.(command.identity);
+            break;
+          case 'openDraftCreator':
+            await this.openDraftCreator?.(command.identity);
+            break;
+          case 'edgePreset':
+            this.applyEdgePreset?.(command.preset);
             break;
           case 'deleteType':
             this.openDeletion();
@@ -220,6 +270,12 @@ export default {
             break;
           case 'relationship':
             if (command.value === 'many_to_many') this.makeInstance();
+            else if (
+              command.value === 'hierarchy' ||
+              command.value === 'code' ||
+              command.value === 'id'
+            )
+              this.applyEdgePreset?.(command.value);
             else this.setAttribute('relationship', command.value);
             break;
           case 'createColumns':

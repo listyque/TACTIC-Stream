@@ -1,11 +1,11 @@
 <script>
 import { t } from '../../i18n.js'
 import AppTextField from '../../controls/AppTextField.vue'
-import AppTextArea from '../../controls/AppTextArea.vue'
+import CodeEditor from '../../controls/CodeEditor.vue'
 import AppCheckBox from '../../controls/AppCheckBox.vue'
 import AppButton from '../../controls/AppButton.vue'
 export default {
-  components:{AppTextField,AppTextArea,AppCheckBox,AppButton},
+  components:{AppTextField,CodeEditor,AppCheckBox,AppButton},
   props:{modelValue:String,stream:String,disabled:Boolean},emits:['update:modelValue'],
   data(){return {rules:[],written:'',error:'',technical:false}},
   watch:{modelValue:{immediate:true,handler(value){if(value===this.written)return;try{const rules=value?JSON.parse(value):[];if(!Array.isArray(rules))throw new Error('Mappings must be an array');this.rules=rules.map(row=>({stream:row.stream || '',source:row.source || '',target:row.target || '...',exclude:!!row.exclude,writable:!!row.writable}));this.error=''}catch(error){this.error=error.message}}}},
@@ -24,7 +24,7 @@ export default {
         <div class="workspace-mapping-head"><AppCheckBox v-model="row.exclude" label="Exclude" :disabled="disabled" @update:model-value="publish" /><AppCheckBox v-model="row.writable" label="Writable" :disabled="disabled || row.exclude" @update:model-value="publish" /></div>
       </div>
     </template>
-    <AppTextArea v-else :model-value="modelValue" label="Workspace mappings (JSON)" :disabled="disabled" @update:model-value="$emit('update:modelValue',$event)" />
+    <CodeEditor v-else :model-value="modelValue" language="json" :source-toolbar="false" :read-only="disabled" :disabled="disabled" style="min-height:180px" @update:model-value="$emit('update:modelValue',$event)" />
   </section>
 </template>
 <style scoped>

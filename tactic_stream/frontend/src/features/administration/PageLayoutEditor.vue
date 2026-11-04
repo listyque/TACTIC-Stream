@@ -340,8 +340,10 @@ export default {
       if (this.ticket) this.reload();
     },
     canLeave() {
-      if (this.dirty || this.busy) {
-        this.error = 'Save or discard changes before continuing';
+      if (this.busy) return false;
+      if (this.dirty || this.uncertain) {
+        this.error = '';
+        this.dispatch({ type: 'discard' });
         return false;
       }
       return true;
@@ -357,7 +359,26 @@ export default {
       this.busy = true;
       this.error = '';
       try {
-        const state = await this.call('read', {}, scope);
+        const requested = this.document?.name || this.initialFocus || '';
+        let state;
+        try {
+          state = await this.call(
+            'read',
+            {
+              name: requested,
+              default_first: !requested,
+              include_preview: true
+            },
+            scope
+          );
+        } catch (err) {
+          if (!requested) throw err;
+          state = await this.call(
+            'read',
+            { default_first: true, include_preview: true },
+            scope
+          );
+        }
         if (generation !== this.generation) return;
         this.catalog = state.dashboards.map((row) => ({
           identity: row.view.slice(10),
@@ -366,17 +387,15 @@ export default {
         this.revision = state.revision;
         this.canWrite = true;
         this.sourceTypes = state.sourceTypes || [];
-        const name =
-          this.document?.name || this.initialFocus || this.catalog[0]?.identity;
         this.document = null;
         this.baseline = '';
         this.compiled = null;
-        if (name) {
-          const value = await this.call('read', { name }, scope);
-          if (generation !== this.generation) return;
-          this.document = value.document;
-          this.baseline = JSON.stringify(value.document);
-          this.revision = value.revision;
+        if (state.document) {
+          this.document = state.document;
+          this.baseline = JSON.stringify(state.document);
+          this.compiled = state.model || null;
+          this.sourceXml = state.xml || '';
+          this.checkedDocument = state.model ? this.baseline : '';
           this.ui = State.initial();
           this.dataEpoch++;
         }
@@ -385,7 +404,7 @@ export default {
       } finally {
         if (generation === this.generation) {
           this.busy = false;
-          if (this.document) this.schedule();
+          if (this.document && !this.compiled) this.schedule();
         }
       }
     },
@@ -396,22 +415,24 @@ export default {
       this.busy = true;
       this.error = '';
       try {
-        const value = await this.call('read', { name });
+        const value = await this.call('read', { name, include_preview: true });
         if (generation !== this.generation) return;
         this.document = value.document;
         this.revision = value.revision;
         this.baseline = JSON.stringify(value.document);
+        this.compiled = value.model || null;
+        this.sourceXml = value.xml || '';
+        this.checkedDocument = value.model ? this.baseline : '';
         this.ui = { ...State.initial(), ...this.contexts[name] };
         this.revealSelection();
         this.sourceTypes = value.sourceTypes || this.sourceTypes;
         this.dataEpoch++;
-        this.compiled = null;
       } catch (e) {
         if (generation === this.generation) this.error = e.message;
       } finally {
         if (generation === this.generation) {
           this.busy = false;
-          this.schedule();
+          if (this.document && !this.compiled) this.schedule();
         }
       }
     },

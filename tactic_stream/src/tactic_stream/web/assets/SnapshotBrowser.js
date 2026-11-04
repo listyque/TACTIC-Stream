@@ -1,11 +1,11 @@
-import { A as onMounted, E as nextTick, G as withCtx, H as watch, L as resolveDynamicComponent, M as openBlock, N as renderList, O as onBeforeUnmount, S as h, V as useSlots, X as ref, _ as createElementBlock, b as createVNode, c as withKeys, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment, y as createTextVNode } from "./vue.js";
+import { C as h, D as nextTick, H as useSlots, K as withCtx, N as openBlock, P as renderList, R as resolveDynamicComponent, U as watch, Z as ref, _ as createCommentVNode, b as createTextVNode, d as Fragment, g as createBlock, h as createBaseVNode, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withKeys, m as computed, nt as normalizeClass, p as Teleport, rt as normalizeStyle, tt as unref, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
 import { a as _sfc_main$3, o as t, s as appearance, t as _sfc_main$2, z as _plugin_vue_export_helper_default } from "./AppButton.js";
 import { A as resultItems, bt as mobile, dt as notify } from "./index.js";
-import { B as _sfc_main$7, H as observeFrameSizes, O as ItemPreview_default, P as _sfc_main$5, h as copyText, m as copyImage, r as _sfc_main$6, t as _sfc_main$4 } from "./FrameView.js";
+import { F as _sfc_main$5, S as copyText, U as observeFrameSizes, V as _sfc_main$7, k as ItemPreview_default, r as _sfc_main$6, t as _sfc_main$4, x as copyImage } from "./FrameView.js";
 import RecordForm_default from "./RecordForm.js";
 import { c as FilePreview_default } from "./admin.document.js";
 import { a as clampRatio, c as layout, d as optionChange, l as metrics, o as fileColumns, p as toolbar, s as fileIcon, u as optionActions } from "./file_values.js";
-import { dt as _sfc_main$8, o as ObjectAction_default } from "./RelatedObjects.js";
+import { ft as _sfc_main$8, o as ObjectAction_default } from "./RelatedObjects.js";
 //#region src/features/objects/SnapshotToolbar.vue
 var _sfc_main$1 = {
 	__name: "SnapshotToolbar",

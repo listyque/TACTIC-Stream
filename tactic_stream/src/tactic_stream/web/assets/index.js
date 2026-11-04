@@ -1,5 +1,5 @@
 const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/Timesheet.js","assets/ObjectFieldFrame.js","assets/vue.js","assets/AppButton.js","assets/locales.js","assets/icons.js","assets/AppButton.css","assets/FrameView.js","assets/FrameView.css","assets/ObjectFieldFrame.css","assets/Timesheet.css","assets/RelatedObjects.js","assets/textMetrics.js","assets/admin.document.js","assets/file_values.js","assets/files.js","assets/files2.js","assets/admin.css","assets/ConfiguredView.js","assets/sections.ui.js","assets/RecordForm.js","assets/previewImage.js","assets/RecordForm.css","assets/CodeBlock.js","assets/confirmation.ui.js","assets/AppDialog.js","assets/VirtualCollection.js","assets/VirtualCollection.css","assets/ContentLoadingOverlay.js","assets/ContentLoadingOverlay.css","assets/ConfiguredView.css","assets/RelatedObjects.css","assets/ProcessRules.js","assets/ProcessRules.css","assets/DuplicateSObject.js","assets/DuplicateSObject.css","assets/IngestFiles.js","assets/IngestFiles.css","assets/ObjectCheckin.js","assets/toggle.ui.js","assets/ObjectCheckin.css","assets/ProjectTemplates.js","assets/ProjectTemplates.css","assets/MilestoneManager.js","assets/MilestoneManager.css","assets/SnapshotCheckout.js","assets/FrameProgress.js","assets/SnapshotCheckout.css","assets/ApiDocumentation.js","assets/AppearanceControls.js","assets/AppearanceControls.css","assets/ApiDocumentation.css","assets/App.js","assets/tree.ui.js","assets/App.css"])))=>i.map(i=>d[i]);
-import { $ as toRaw, A as onMounted, E as nextTick, H as watch, J as markRaw, M as openBlock, N as renderList, O as onBeforeUnmount, S as h, U as watchEffect, X as ref, Y as reactive, Z as shallowReactive, _ as createElementBlock, b as createVNode, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, n as createApp, nt as normalizeStyle, r as render, rt as toDisplayString, tt as normalizeClass, u as Fragment, x as defineAsyncComponent } from "./vue.js";
+import { C as h, D as nextTick, N as openBlock, P as renderList, Q as shallowReactive, S as defineAsyncComponent, U as watch, W as watchEffect, X as reactive, Y as markRaw, Z as ref, _ as createCommentVNode, d as Fragment, et as toRaw, g as createBlock, h as createBaseVNode, i as render, it as toDisplayString, j as onMounted, k as onBeforeUnmount, nt as normalizeClass, p as Teleport, r as createApp, rt as normalizeStyle, tt as unref, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
 import { C as layout, R as BusyIndicator_default, d as initializeAppearance, k as configurationPreview, o as t, t as _sfc_main$1 } from "./AppButton.js";
 //#region \0vite/modulepreload-polyfill.js
 (function polyfill() {
@@ -784,12 +784,13 @@ var _sfc_main = {
 			};
 		}
 		function syncHeaderPadding() {
-			const style = getComputedStyle(props.element);
+			const host = props.header.parentElement === props.element ? props.element : props.header.parentElement?.parentElement === props.element ? props.header.parentElement : null;
+			const style = host ? getComputedStyle(host) : null;
 			for (const side of [
 				"top",
 				"left",
 				"right"
-			]) props.header.style.setProperty("--window-padding-" + side, props.header.parentElement === props.element ? style.getPropertyValue("padding-" + side) : "0px");
+			]) props.header.style.setProperty("--window-padding-" + side, style ? style.getPropertyValue("padding-" + side) : "0px");
 		}
 		function clamp(rect) {
 			return fit(rect, {
@@ -1208,7 +1209,7 @@ function notify(kind, message, detail = "", group = "client", key = "", source =
 	notificationHistory.records = [row, ...notificationHistory.records].slice(0, 200);
 	activeNotifications.records = [...activeNotifications.records, row];
 	limitActive();
-	startTimer(row.notificationId, row.sourceType === "messages" ? 15e3 : row.sourceType === "activity" ? 8e3 : ["error", "warning"].includes(kind) ? 5e3 : 3200);
+	startTimer(row.notificationId, row.sourceType === "messages" ? 15e3 : row.sourceType === "activity" ? 8e3 : ["error", "warning"].includes(kind) ? 5e3 : message === "Server operation completed" ? 1200 : 1600);
 	return row.notificationId;
 }
 function startTimer(id, duration) {
@@ -1690,6 +1691,109 @@ async function post(url, payload, signal, quiet = false) {
 		recordRequest(url, payload, data, failure, started, session, quiet);
 	}
 }
+var READ_CMD_ACTIONS = /* @__PURE__ */ new Set([
+	"read",
+	"list",
+	"get",
+	"load",
+	"search",
+	"plan",
+	"check",
+	"match",
+	"templates",
+	"columns",
+	"preview",
+	"inspect",
+	"resolve",
+	"status",
+	"catalog",
+	"history",
+	"options",
+	"analyse",
+	"analyze"
+]);
+var CMD_LABELS = {
+	TableCellEditCmd: "Table cell updated",
+	TableTaskSaveCmd: "Tasks saved",
+	TaskInspectorCmd: "Task updated",
+	TaskWorkspaceCmd: "Task updated",
+	SObjectTaskStatusElementWdg: "Task status updated",
+	ParallelStatusEditWdg: "Task added",
+	WorkElementWdg: "Task updated",
+	DiscussionAddNoteCmd: "Note saved",
+	DiscussionWdg: "Note saved",
+	BrowserCheckinCmd: "Files checked in",
+	FileIngestCmd: "Files checked in",
+	TableSnapshotAppendCmd: "Files attached",
+	SnapshotCheckoutCmd: "Files checked out",
+	EditCmd: "Record saved",
+	RecordFormCmd: "Record saved",
+	DuplicateSObjectCmd: "Record duplicated",
+	TableConnectionRemoveCmd: "Connection removed",
+	TableConnectionsCmd: "Related links updated",
+	TableParentGroupCmd: "Parent group updated",
+	SchemaEditorCmd: "Project schema updated",
+	DeleteSearchTypeCmd: "Search Type deleted",
+	PipelineEditorCmd: "Workflow saved",
+	SearchTypeManagerCmd: "Search Type updated",
+	AlterSearchTypeCbk: "Search Type updated",
+	NamingEditorCmd: "Naming rules saved",
+	ProcessRulesCmd: "Process rules saved",
+	PageLayoutEditorCmd: "Page layout saved",
+	TableViewsManagerCmd: "Table view saved",
+	ProjectSettingsCmd: "Project settings saved",
+	ProjectTemplateCreatorCmd: "Project template updated",
+	ProjectTemplateInstallCmd: "Project template installed",
+	ProjectTemplateDeleteCmd: "Project template deleted",
+	FileProjectCmd: "Project created",
+	TimesheetCmd: "Work hours saved",
+	MilestoneManagerCmd: "Milestone saved",
+	SetPreferenceCmd: "Preference saved",
+	NotificationTestCmd: "Test notification sent"
+};
+function commandInfo(payload) {
+	const className = String(payload?.args?.[1] || "");
+	const shortName = className.split(".").pop() || "";
+	const cmdArgs = payload?.args?.[2] && typeof payload.args[2] === "object" ? payload.args[2] : payload?.kwargs?.args && typeof payload.kwargs.args === "object" ? payload.kwargs.args : {};
+	return {
+		className,
+		shortName,
+		cmdArgs,
+		action: String(cmdArgs.action || "").trim().toLowerCase()
+	};
+}
+function isReadCommand(payload) {
+	if (payload?.method !== "execute_cmd") return false;
+	const { shortName, cmdArgs, action } = commandInfo(payload);
+	if (action) return READ_CMD_ACTIONS.has(action);
+	return shortName.endsWith("ReadCmd") || shortName === "TableSnapshotFilesCmd" || shortName === "TableParentGroupCmd" && !cmdArgs.parent_key || shortName === "TaskWorkspaceCmd" && Boolean(cmdArgs.scope);
+}
+function operationDetail(url, payload, data) {
+	const desc = typeof data?.result?.description === "string" ? data.result.description.trim() : "";
+	if (desc) return desc;
+	if (payload?.method === "execute_cmd") {
+		const { shortName, cmdArgs } = commandInfo(payload);
+		if (shortName === "TableObjectStatusCmd") return cmdArgs.action === "retire" ? "Record retired" : "Record reactivated";
+		if (CMD_LABELS[shortName]) return CMD_LABELS[shortName];
+		return shortName.replace(/(?:ElementWdg|Cmd|Wdg|Cbk)$/, "").replace(/([a-z])([A-Z])/g, "$1 $2").trim() || "Command executed";
+	}
+	if (payload?.method === "execute_python_script") return String(payload.args?.[1] || "Python script");
+	if (payload?.method === "insert") return "Record created";
+	if (payload?.method === "update") return "Record updated";
+	if (payload?.method === "delete_sobject") return "Record deleted";
+	if (payload?.method === "retire_sobject") return "Record retired";
+	if (payload?.method === "reactivate_sobject") return "Record reactivated";
+	if (url.includes("/columns-editor/")) return "Columns configuration saved";
+	if (url.includes("/search-configuration/")) return "Quick filters saved";
+	if (url.includes("/sidebar/")) return "Sidebar saved";
+	if (url.includes("/workspace-layout/")) return "Workspace layout saved";
+	if (url.includes("/security-groups/")) return "Security groups updated";
+	if (url.includes("/security-rules/")) return "Security rules saved";
+	if (url.includes("/security-users/")) return "User account updated";
+	if (url.includes("/script-editor/") || url.includes("/script-shelf/")) return "Script saved";
+	if (url.includes("/configuration/")) return "Server configuration saved";
+	return payload?.method || url;
+}
 function recordRequest(url, payload, data, failure, started, session, quiet = false) {
 	if (session === debugLog.sessionId) {
 		try {
@@ -1700,7 +1804,7 @@ function recordRequest(url, payload, data, failure, started, session, quiet = fa
 		if (url === "/admin/server-updates" || url.includes("/UploadServer/") || payload.method === "simple_checkin") return;
 		if (quiet && failure && (failure instanceof TypeError || ["TimeoutError", "AbortError"].includes(failure.name) || failure.code === "updates_unavailable")) return;
 		if (failure) notify("error", failure instanceof TypeError ? "Unable to reach the server." : failure.message, "", "server");
-		else if (!quiet && ([
+		else if (!quiet && !isReadCommand(payload) && ([
 			"execute_cmd",
 			"execute_python_script",
 			"insert",
@@ -1708,7 +1812,7 @@ function recordRequest(url, payload, data, failure, started, session, quiet = fa
 			"delete_sobject",
 			"retire_sobject",
 			"reactivate_sobject"
-		].includes(payload.method) || /\/(save|apply|create|delete|commit|activate|run|execute)$/.test(url))) notify("complete", "Server operation completed", payload.method || url, "server");
+		].includes(payload.method) || /\/(save|apply|create|delete|commit|activate|run|execute)$/.test(url))) notify("complete", "Server operation completed", operationDetail(url, payload, data), "server");
 	}
 }
 function sidebarRequest(action, ticket, project, values = {}) {

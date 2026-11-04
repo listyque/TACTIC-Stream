@@ -145,7 +145,7 @@ a.app-button:hover { border-color: var(--primary); background: var(--hover); }
 }
 .task-table-editor input, .task-table-editor select { width: 100%; min-width: 0; }
 .configured-view:has(> .task-draft-actions) { width: max-content; min-width: 100%; }
-.task-draft-actions { position: sticky; top: 0; left: 0; width: 100cqw; z-index: 4; display: flex; align-items: center; flex-wrap: wrap; justify-content: flex-end; gap: var(--space-sm); padding: var(--space-sm); background: var(--surface-high); border-radius: var(--item-radius); }
+.task-draft-actions { position: sticky; bottom: 0; left: 0; width: 100cqw; min-height: 44px; flex-shrink: 0; box-sizing: border-box; z-index: 4; display: flex; align-items: center; flex-wrap: wrap; justify-content: flex-end; gap: var(--space-sm); padding: 5px var(--space-sm); background: var(--surface-high); border-top: 1px solid var(--outline-variant); }
 .task-draft-actions > span { flex: 1; min-width: 6rem; }
 .task-details { border: 1px solid var(--outline); border-radius: var(--section-radius); padding: var(--space-md); margin-block: var(--space-md); background: var(--surface); }
 .task-details > header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-sm); }
@@ -212,6 +212,14 @@ h2 { font-size: var(--text-heading); }
 .login-card h1 { font-size: var(--text-display); }
 .login-card .version { text-align: center; }
 .error, .notice { background: var(--error-container); border: 1px solid var(--error-outline); border-radius: 0; color: var(--error); padding: 12px; line-height: 1.5; overflow-wrap: anywhere; }
+.table-error-banner { display: grid; gap: 6px; padding: 8px 12px; border-radius: var(--item-radius); margin: 6px 8px; }
+.table-error-header { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; min-width: 0; }
+.table-error-icon { flex: none; font-size: 18px; color: var(--error); }
+.table-error-summary { flex: 1 1 220px; min-width: 0; font-weight: 500; }
+.table-error-hint { color: var(--on-surface); font-size: var(--text-caption); }
+.table-error-actions { display: flex; align-items: center; gap: 4px; margin-left: auto; }
+.table-error-details > summary { cursor: pointer; font-size: var(--text-caption); font-weight: 600; user-select: none; width: fit-content; }
+.table-error-trace { margin: 6px 0 0; padding: 10px 12px; max-height: 220px; overflow: auto; border-radius: var(--item-radius); border: 1px solid var(--outline-variant); background: var(--surface); color: var(--on-surface); font-family: monospace; font-size: var(--text-caption); line-height: 1.5; white-space: pre-wrap; overflow-wrap: anywhere; }
 .notice { background: var(--content-selection); border-color: var(--outline-variant); color: var(--on-surface); }
 .workspace { display: grid; height: 100dvh; overflow: hidden; }
 .workspace-rail { grid-area: rail; min-height: 0; }
@@ -333,6 +341,14 @@ h2 { font-size: var(--text-heading); }
 .dock-panel::before { content:''; position:absolute; inset:var(--dock-surface-inset); z-index:-1; border:var(--dock-surface-border) solid var(--outline-variant); border-radius:var(--surface-radius); background:var(--surface); pointer-events:none; }
 .dock-panel.floating { padding:calc(var(--dock-floating-surface-inset) + var(--dock-surface-border)); filter: drop-shadow(0 4px 8px var(--shadow-color)); }
 .dock-panel.floating::before { inset:var(--dock-floating-surface-inset); }
+.dock-panel.slide-over { filter: drop-shadow(0 4px 14px var(--shadow-color)); transition: transform var(--motion-popup) var(--motion-easing-out-cubic), opacity var(--motion-fade) var(--motion-easing-out-cubic); will-change: transform; }
+.dock-panel.slide-over.slide-right:not(.slide-open):not(.dragging) { transform: translateX(calc(100% + 12px)); opacity: 0; pointer-events: none; }
+.dock-panel.slide-over.slide-left:not(.slide-open):not(.dragging) { transform: translateX(calc(-100% - 12px)); opacity: 0; pointer-events: none; }
+.dock-panel.slide-over.slide-open { transform: translateX(0); opacity: 1; }
+.dock-slide-launcher { position: absolute; top: 50%; transform: translateY(-50%); z-index: 18; display: flex; flex-direction: column; gap: 4px; padding: 4px; border: 1px solid var(--outline-variant); border-radius: var(--control-radius); background: var(--surface-high); box-shadow: 0 2px 8px var(--shadow-color); }
+.dock-slide-launcher.left { left: 6px; }
+.dock-slide-launcher.right { right: 6px; }
+.dock-slide-launcher > .dock-slide-tab { width: 28px; height: 28px; min-width: 28px; min-height: 28px; padding: 0; }
 .dock-content { display: flex; flex-direction: column; flex: 1; min-width: 0; min-height: 0; overflow: hidden; border-radius: var(--surface-radius); container-type: size; }
 .dock-content > .content.workspace-browser { margin: 0; flex: 1; border: 0; }
 .dock-titlebar { position:relative; height:var(--dock-title-height); flex:0 0 var(--dock-title-height); padding:0; background:var(--surface); border:0; border-radius:var(--surface-radius) var(--surface-radius) 0 0; }
@@ -1158,6 +1174,7 @@ button { border-radius: var(--button-radius); transition: background-color var(-
 .search-library-shell > footer { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: var(--space-sm); }
 .quick-filter-chips { display: flex; flex-wrap: wrap; gap: var(--space-sm); justify-content: flex-start; }
 .quick-filter-chip.app-button, .account-panel .quick-filter-chip.app-button, .tag-cloud-sizing { display: inline-flex; justify-content: center; align-items: center; height: var(--chip-height, 32px); min-height: 32px; min-width: 0; padding: 0 11px; border: 1px solid var(--outline); border-radius: var(--button-radius); background: transparent; font-size: calc(var(--text-body) + var(--chip-font-growth, 0pt)); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tag-cloud .quick-filter-chip.app-button, .tag-cloud-sizing { border-radius: 999px; }
 .quick-filter-chip.app-button.primary { background-color: var(--chip-accent, var(--primary)); color: var(--on-selected); border-color: var(--chip-accent, var(--primary)); }
 .tag-cloud .account-panel { padding: 0; width: 440px; height: calc(var(--control-height) * 8); min-width: 0; max-width: calc(100vw - 16px); overflow: hidden; display: flex; flex-direction: column; transition: none; }
 .tag-cloud-viewport { position: relative; flex: 1; min-height: 0; padding: var(--space-md); overflow: auto; scrollbar-gutter: stable; overscroll-behavior: contain; }

@@ -35,7 +35,9 @@ class Dashboards(unittest.TestCase):
             from xml.etree import ElementTree as ET
             xml = ET.fromstring(preview['xml'])
             self.assertEqual(xml.find('view').get('name'), 'dashboard.regions')
-            self.assertEqual(json.loads(xml.findtext('.//dashboard')), preview['document'])
+            from tactic_stream.dashboard_plan import dashboard_from_xml
+            self.assertEqual(dashboard_from_xml(preview['xml']).model_dump(mode='json'), preview['document'])
+            self.assertEqual([child.tag for child in xml.find('.//dashboard')], ['text', 'table', 'button'])
             self.assertEqual([row['region'] for row in preview['model']['layoutNodes']], ['header', 'content', 'footer'])
             self.assertEqual(preview['model']['layoutNodes'][1]['editorPath'], [1])
             operation = str(uuid4())

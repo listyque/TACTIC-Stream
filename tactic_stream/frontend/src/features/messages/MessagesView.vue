@@ -298,7 +298,10 @@ const titleFor = (row) =>
   row?.isPersonalNotes
     ? t('Favorites')
     : row?.title || t('Select a conversation');
-const ownIdentity = (login) => users.value.find((row) => row.login === login);
+const usersByLogin = computed(
+  () => new Map(users.value.map((row) => [row.login, row]))
+);
+const ownIdentity = (login) => usersByLogin.value.get(login);
 const request = (action, values = {}) => {
   if (stopped || !props.ticket)
     return Promise.reject(

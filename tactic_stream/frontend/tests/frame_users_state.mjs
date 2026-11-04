@@ -16,6 +16,12 @@ assert.deepEqual(State.transition(result.ui,{...base,uncertain:true},{type:'conf
 assert.equal(UI.profile({login:'new_user',first_name:' Alice ',last_name:'Jones'},null).initials,'AJ')
 assert.equal(UI.translate('Hourly wage must be a non-negative number','ru'),'Почасовая ставка должна быть неотрицательным числом')
 assert.equal(UI.translate('A user with this login already exists','ru'),'Пользователь с таким логином уже существует')
+let pwdState=State.transition(State.initial(),{...base,draft:{...base.draft,password:''}},{type:'generatePassword'}).ui
+assert.equal(pwdState.showPassword,true);assert.equal(pwdState.passwordConfirm.length,16)
+pwdState=State.transition(pwdState,{...base,draft:{...base.draft,password:'secret-1'}},{type:'passwordConfirm',value:'secret-2'}).ui
+assert.deepEqual(State.transition(pwdState,{...base,draft:{...base.draft,password:'secret-1'}},{type:'save'}).commands,[{type:'error',text:'Passwords do not match'}])
+pwdState=State.transition(pwdState,{...base,draft:{...base.draft,password:'secret-1'}},{type:'clearPassword'}).ui
+assert.equal(pwdState.showPassword,false);assert.equal(pwdState.passwordConfirm,'')
 for(const width of [320,360,800,1100])for(const page of ['profile','account','groups']){
  const scene=UI.describe(base,{...State.initial(),page},width,694,'ru')
  const walk=nodes=>{for(const node of nodes){for(const key of ['x','y','width','height'])assert(Number.isFinite(node[key]));assert(node.width>=0&&node.height>=0);walk(node.children)}}

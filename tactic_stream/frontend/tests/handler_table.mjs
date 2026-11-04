@@ -329,8 +329,16 @@ try {
     await page.getByText('Widget unavailable', { exact: true }).count(),
     0
   );
-  assert.equal(await table.evaluate(el => getComputedStyle(el).margin), '0px');
-  assert.equal(await table.locator('.handler-table-header').evaluate(el => getComputedStyle(el).borderRadius), '0px');
+  assert.equal(
+    await table.evaluate((el) => getComputedStyle(el).margin),
+    '0px'
+  );
+  assert.equal(
+    await table
+      .locator('.handler-table-header')
+      .evaluate((el) => getComputedStyle(el).borderRadius),
+    '0px'
+  );
   const header = await table.locator('.handler-table-header').boundingBox(),
     first = await rows.first().boundingBox(),
     preview = await rows.first().locator('.item-preview').first().boundingBox();
@@ -341,7 +349,8 @@ try {
     refRow = sample.items.find((i) => i.name === 'searchResultTableRow'),
     refPreview = sample.items.find((i) => i.name === 'tableCellPreview');
   assert(
-    Math.abs(header.width - await table.evaluate(el => el.clientWidth)) < 0.6,
+    Math.abs(header.width - (await table.evaluate((el) => el.clientWidth))) <
+      0.6,
     JSON.stringify({
       header,
       refHeader,
@@ -354,21 +363,48 @@ try {
     })
   );
   assert.equal(header.height, 37);
-  const grip = await table.locator('.table-resize').first().evaluate(el => {
-    const style = getComputedStyle(el, '::after');
-    return {width:style.width, background:style.backgroundColor, opacity:style.opacity};
-  });
+  const grip = await table
+    .locator('.table-resize')
+    .first()
+    .evaluate((el) => {
+      const style = getComputedStyle(el, '::after');
+      return {
+        width: style.width,
+        background: style.backgroundColor,
+        opacity: style.opacity
+      };
+    });
   assert.equal(grip.width, '1px');
   assert.notEqual(grip.background, 'rgba(0, 0, 0, 0)');
   assert(Number(grip.opacity) > 0);
-  assert.equal(await table.locator('.handler-table-header').evaluate(el => getComputedStyle(el).borderBottomWidth), '1px');
-  assert.equal(await table.evaluate(el => getComputedStyle(el).paddingRight), '0px');
-  assert.equal(await table.evaluate(el => getComputedStyle(el).scrollbarGutter), 'auto');
-  assert.equal(await table.evaluate(el => el.offsetWidth - el.clientWidth), 0);
-  await page.setViewportSize({width: 1496, height: 160});
-  await page.waitForFunction(() => {const el = document.querySelector('.handler-table'); return el.offsetWidth > el.clientWidth;});
-  await page.setViewportSize({width: 1496, height: 660});
-  await page.waitForFunction(() => {const el = document.querySelector('.handler-table'); return el.offsetWidth === el.clientWidth;});
+  assert.equal(
+    await table
+      .locator('.handler-table-header')
+      .evaluate((el) => getComputedStyle(el).borderBottomWidth),
+    '1px'
+  );
+  assert.equal(
+    await table.evaluate((el) => getComputedStyle(el).paddingRight),
+    '0px'
+  );
+  assert.equal(
+    await table.evaluate((el) => getComputedStyle(el).scrollbarGutter),
+    'auto'
+  );
+  assert.equal(
+    await table.evaluate((el) => el.offsetWidth - el.clientWidth),
+    0
+  );
+  await page.setViewportSize({ width: 1496, height: 160 });
+  await page.waitForFunction(() => {
+    const el = document.querySelector('.handler-table');
+    return el.offsetWidth > el.clientWidth;
+  });
+  await page.setViewportSize({ width: 1496, height: 660 });
+  await page.waitForFunction(() => {
+    const el = document.querySelector('.handler-table');
+    return el.offsetWidth === el.clientWidth;
+  });
   assert.equal(first.height, refRow.height);
   assert.equal(preview.width, refPreview.width);
   const card = await rows.first().locator('.task-card').first().boundingBox();
@@ -381,19 +417,30 @@ try {
   }
   await page.evaluate(() => (window.appearance.mode = 'dark'));
   // Context and overflow share the real object menu without a dimmed backdrop.
-  for (const viewport of [{width:1496,height:660}, {width:320,height:660}]) {
+  for (const viewport of [
+    { width: 1496, height: 660 },
+    { width: 320, height: 660 }
+  ]) {
     await page.setViewportSize(viewport);
     for (const method of ['context', 'overflow']) {
-      if (method === 'context') await rows.first().click({button:'right', position:{x:100,y:20}});
+      if (method === 'context')
+        await rows
+          .first()
+          .click({ button: 'right', position: { x: 100, y: 20 } });
       else await rows.first().locator('.handler-table-actions button').click();
       const menu = page.locator('.object-operations > dialog[open]');
       await menu.waitFor();
-      assert.equal(await menu.evaluate(el => getComputedStyle(el, '::backdrop').backgroundColor), 'rgba(0, 0, 0, 0)');
+      assert.equal(
+        await menu.evaluate(
+          (el) => getComputedStyle(el, '::backdrop').backgroundColor
+        ),
+        'rgba(0, 0, 0, 0)'
+      );
       await page.keyboard.press('Escape');
-      await menu.waitFor({state:'hidden'});
+      await menu.waitFor({ state: 'hidden' });
     }
   }
-  await page.setViewportSize({width:1496,height:660});
+  await page.setViewportSize({ width: 1496, height: 660 });
   // Selection preserves bulk edits, but only the hovered cell opens a preview.
   await page.evaluate(
     (keys) => (window.host.selected = keys),
@@ -610,17 +657,33 @@ try {
   );
   await table.getByLabel('Auto Fit columns', { exact: true }).click();
   // Plain clicks focus rows; Shift and checkboxes explicitly select them.
-  await page.evaluate(() => window.host.selected = []);
+  await page.evaluate(() => (window.host.selected = []));
   await rows.first().locator('.handler-table-cell').nth(1).click();
   assert.deepEqual(await page.evaluate(() => window.host.selected), []);
-  assert(await rows.first().evaluate(el => el.classList.contains('active')));
+  assert(await rows.first().evaluate((el) => el.classList.contains('active')));
   assert.equal(await rows.first().getAttribute('aria-selected'), 'true');
-  assert.equal(await rows.first().locator('input[type=checkbox]').isChecked(), false);
+  assert.equal(
+    await rows.first().locator('input[type=checkbox]').isChecked(),
+    false
+  );
   await rows.nth(1).locator('.handler-table-actions button').focus();
-  assert.equal(await rows.nth(1).evaluate(el => getComputedStyle(el).backgroundColor), await rows.first().evaluate(el => getComputedStyle(el).backgroundColor));
-  assert.equal(await rows.nth(1).locator('input[type=checkbox]').isChecked(), false);
-  await rows.nth(1).locator('.handler-table-cell').nth(1).click({modifiers: ['Shift']});
-  assert.deepEqual(await page.evaluate(() => window.host.selected), fixture.records.slice(0, 2).map(r => r.__search_key__));
+  assert.equal(
+    await rows.nth(1).evaluate((el) => getComputedStyle(el).backgroundColor),
+    await rows.first().evaluate((el) => getComputedStyle(el).backgroundColor)
+  );
+  assert.equal(
+    await rows.nth(1).locator('input[type=checkbox]').isChecked(),
+    false
+  );
+  await rows
+    .nth(1)
+    .locator('.handler-table-cell')
+    .nth(1)
+    .click({ modifiers: ['Shift'] });
+  assert.deepEqual(
+    await page.evaluate(() => window.host.selected),
+    fixture.records.slice(0, 2).map((r) => r.__search_key__)
+  );
   await rows.nth(2).locator('.handler-table-cell').nth(1).click();
   assert.equal((await page.evaluate(() => window.host.selected)).length, 2);
   await table.focus();
@@ -659,7 +722,10 @@ try {
     .click();
   const status = taskEditor.locator('.status-select'),
     unsetStatus = status.locator('.status-select-option').first();
-  assert.equal(await unsetStatus.locator('.status-select-label').textContent(), 'No status');
+  assert.equal(
+    await unsetStatus.locator('.status-select-label').textContent(),
+    'No status'
+  );
   assert.equal(await unsetStatus.getAttribute('data-value'), '');
   assert.equal(
     await unsetStatus.evaluate((el) => el.disabled),
@@ -672,7 +738,10 @@ try {
     0
   );
   await page.evaluate(() => (window.appearance.language = 'ru'));
-  assert.equal(await unsetStatus.locator('.status-select-label').textContent(), 'Без статуса');
+  assert.equal(
+    await unsetStatus.locator('.status-select-label').textContent(),
+    'Без статуса'
+  );
   assert.equal(await status.getAttribute('data-value'), '');
   await page.evaluate(() => (window.appearance.language = 'en'));
   await page.keyboard.press('Escape');
@@ -964,47 +1033,118 @@ try {
       2
     )
   );
-  await page.evaluate(() => window.host.page = 'header');
+  await page.evaluate(() => (window.host.page = 'header'));
   const shelf = page.locator('[data-frame="scriptShelfButton"]');
   await shelf.waitFor();
-  assert.equal(await page.locator('[data-frame="searchRefreshButton"]').evaluate(el => parseFloat(el.style.left)), 8);
+  assert.equal(
+    await page
+      .locator('[data-frame="searchRefreshButton"]')
+      .evaluate((el) => parseFloat(el.style.left)),
+    8
+  );
   for (const open of [false, true]) {
-    await page.evaluate(open => window.host.shelfOpen = open, open);
-    const paint = await shelf.evaluate(el => {const s=getComputedStyle(el);return {width:el.offsetWidth,height:el.offsetHeight,background:s.backgroundColor,radius:s.borderTopLeftRadius};});
+    await page.evaluate((open) => (window.host.shelfOpen = open), open);
+    const paint = await shelf.evaluate((el) => {
+      const s = getComputedStyle(el);
+      return {
+        width: el.offsetWidth,
+        height: el.offsetHeight,
+        background: s.backgroundColor,
+        radius: s.borderTopLeftRadius
+      };
+    });
     assert.equal(paint.width, paint.height);
     assert.equal(paint.background, 'rgba(0, 0, 0, 0)');
     assert.equal(parseFloat(paint.radius), 4);
   }
-  await page.evaluate(() => window.host.page = 'empty');
+  await page.evaluate(() => (window.host.page = 'empty'));
   const arrow = page.locator('svg[data-frame="taskWorkspaceEmptyArrow"]');
   await arrow.waitFor();
-  assert.equal(await page.locator('.task-manager-results').evaluate(el => getComputedStyle(el).overflowY), 'visible');
+  assert.equal(
+    await page
+      .locator('.task-manager-results')
+      .evaluate((el) => getComputedStyle(el).overflowY),
+    'visible'
+  );
   const arrowTop = (await arrow.boundingBox()).y;
-  const resultsTop = (await page.locator('.task-manager-results').boundingBox()).y;
-  assert(arrowTop < resultsTop, 'Arrow head extends outside the results into the toolbar');
-  const tip = await arrow.evaluate(svg => {
-    const points = [...svg.querySelector('path').getAttribute('d').matchAll(/M ([^ ]+) ([^ ]+)/g)];
+  const resultsTop = (await page.locator('.task-manager-results').boundingBox())
+    .y;
+  assert(
+    arrowTop < resultsTop,
+    'Arrow head extends outside the results into the toolbar'
+  );
+  const tip = await arrow.evaluate((svg) => {
+    const points = [
+      ...svg
+        .querySelector('path')
+        .getAttribute('d')
+        .matchAll(/M ([^ ]+) ([^ ]+)/g)
+    ];
     const bounds = svg.getBoundingClientRect();
-    return {x:bounds.left + Number(points[1][1]), y:bounds.top + Number(points[1][2])};
+    return {
+      x: bounds.left + Number(points[1][1]),
+      y: bounds.top + Number(points[1][2])
+    };
   });
-  const createButton = await page.locator('[data-frame="taskWorkspaceCreateButton"]').boundingBox();
+  const createButton = await page
+    .locator('[data-frame="taskWorkspaceCreateButton"]')
+    .boundingBox();
   assert(Math.abs(tip.x - createButton.x - createButton.width / 2) < 1);
   assert(Math.abs(tip.y - createButton.y - createButton.height - 4) < 1);
-  await page.locator('.task-manager').screenshot({path:report + '/task-empty-fixed.png'});
-  await page.evaluate(() => {window.appearance.mode='dark'; window.host.page = 'shelf';});
+  await page
+    .locator('.task-manager')
+    .screenshot({ path: report + '/task-empty-fixed.png' });
+  await page.evaluate(() => {
+    window.appearance.mode = 'dark';
+    window.host.page = 'shelf';
+  });
   await page.locator('.script-shelf-bar').waitFor();
   const shelfBar = page.locator('.script-shelf-bar');
-  assert.equal(await shelfBar.evaluate(el => getComputedStyle(el).backgroundColor),
-    await page.evaluate(() => {const el=document.createElement('div');el.style.background='var(--surface)';document.body.append(el);const value=getComputedStyle(el).backgroundColor;el.remove();return value;}));
+  assert.equal(
+    await shelfBar.evaluate((el) => getComputedStyle(el).backgroundColor),
+    await page.evaluate(() => {
+      const el = document.createElement('div');
+      el.style.background = 'var(--surface)';
+      document.body.append(el);
+      const value = getComputedStyle(el).backgroundColor;
+      el.remove();
+      return value;
+    })
+  );
   await shelfBar.locator('[data-frame="scriptShelfMode_personal"]').click();
-  assert.equal(await shelfBar.locator('[data-frame="scriptShelfMode_personal"]').getAttribute('aria-checked'), 'true');
-  await page.evaluate(() => window.host.shelfButtons=[{buttonId:'build',title:'Build',description:'Build fixture',iconName:'code',script:'build',available:true}]);
+  assert.equal(
+    await shelfBar
+      .locator('[data-frame="scriptShelfMode_personal"]')
+      .getAttribute('aria-checked'),
+    'true'
+  );
+  await page.evaluate(
+    () =>
+      (window.host.shelfButtons = [
+        {
+          buttonId: 'build',
+          title: 'Build',
+          description: 'Build fixture',
+          iconName: 'code',
+          script: 'build',
+          available: true
+        }
+      ])
+  );
   await shelfBar.locator('[data-frame="scriptShelfAction_build"]').click();
   await shelfBar.locator('[data-frame="editScriptShelfButton"]').click();
-  assert((await page.evaluate(() => window.host.events)).some(event=>event.kind==='shelf-run' && event.id==='build'));
-  assert((await page.evaluate(() => window.host.events)).some(event=>event.kind==='shelf-edit'));
-  await page.evaluate(() => window.host.shelfButtons=[]);
-  await shelfBar.screenshot({path:report + '/shelf-matched.png'});
+  assert(
+    (await page.evaluate(() => window.host.events)).some(
+      (event) => event.kind === 'shelf-run' && event.id === 'build'
+    )
+  );
+  assert(
+    (await page.evaluate(() => window.host.events)).some(
+      (event) => event.kind === 'shelf-edit'
+    )
+  );
+  await page.evaluate(() => (window.host.shelfButtons = []));
+  await shelfBar.screenshot({ path: report + '/shelf-matched.png' });
   console.log(
     'PASS: Handler Table View and Columns Editor; native dimensions, interactions, editing, virtualization, EN/RU, 320px'
   );

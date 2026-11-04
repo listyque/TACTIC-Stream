@@ -1,9 +1,9 @@
-import { C as inject, E as nextTick, G as withCtx, H as watch, J as markRaw, M as openBlock, N as renderList, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment } from "./vue.js";
+import { D as nextTick, K as withCtx, N as openBlock, P as renderList, U as watch, Y as markRaw, Z as ref, _ as createCommentVNode, d as Fragment, g as createBlock, h as createBaseVNode, it as toDisplayString, k as onBeforeUnmount, m as computed, nt as normalizeClass, p as Teleport, rt as normalizeStyle, tt as unref, u as withModifiers, v as createElementBlock, w as inject, x as createVNode } from "./vue.js";
 import { D as spacing, a as _sfc_main$2, o as t, s as appearance, t as _sfc_main$3, y as cssRoles } from "./AppButton.js";
 import { Lt as randomUuid, dt as notify, j as rpc } from "./index.js";
-import { G as button, H as observeFrameSizes, J as muted, K as label, P as _sfc_main$4, X as rect, Y as node, t as _sfc_main$5, w as translate } from "./FrameView.js";
+import { F as _sfc_main$4, K as button, T as translate, U as observeFrameSizes, X as node, Y as muted, Z as rect, q as label, t as _sfc_main$5 } from "./FrameView.js";
 import { t as _sfc_main$6 } from "./AppDialog.js";
-import { nt as _sfc_main$8, z as _sfc_main$7 } from "./RelatedObjects.js";
+import { B as _sfc_main$7, rt as _sfc_main$8 } from "./RelatedObjects.js";
 import { t as listAction } from "./tree.ui.js";
 import { g as describe$3 } from "./App.js";
 import { n as current, r as status$1, t as controls } from "./executor.ui.js";

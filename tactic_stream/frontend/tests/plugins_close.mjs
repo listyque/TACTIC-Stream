@@ -179,12 +179,10 @@ try {
   await page.keyboard.press('Escape');
   assert.ok(await dialog.isVisible(), 'Unsaved changes keep the window open');
   assert.match(
-    await page
-      .locator('[data-frame=administrationSectionDescription]')
-      .innerText(),
-    /Save or discard/
+    await page.locator('[data-frame=pluginOperationTitle]').innerText(),
+    /Discard changes/
   );
-  await page.locator('[data-frame=pluginDiscard]').click();
+  await page.locator('[data-frame=pluginConfirm]').click();
   await dialog
     .locator('.app-window-controls')
     .getByRole('button', { name: 'Close', exact: true })

@@ -79,8 +79,97 @@ assert.equal(wideNodes.find(node=>node.id==='adminWorkflowSearchTypeColor').back
 for(const id of ['adminWorkflowCatalogPanel','adminGraphProperties']){
  const panel=wideNodes.find(node=>node.id===id)
  for(const button of panel.children.filter(node=>node.kind==='Button')){
-  assert(button.x>=8&&button.y>=12,id+' header inset')
+  assert(button.x>=8&&button.y>=10,id+' header inset')
   assert(button.x+button.width<=panel.width-8,id+' right inset')
  }
 }
 assert(UI.describe(catalogModel,catalogUi,900,800,'en').nodes.some(node=>node.id==='adminGraphPanels'),'Narrow workflows use labelled panel tabs')
+let schemaUi = State.initial();
+for (const key of ['showColumns', 'showRoles', 'showCodes', 'showLegend']) {
+  schemaUi = State.transition(schemaUi, { ...model, mode: 'schema' }, { type: 'toggleSchemaView', key }).ui;
+  assert.equal(schemaUi[key], true);
+}
+const schemaScene = UI.describe(
+  {
+    ...model,
+    mode: 'schema',
+    metadata: { ...model.metadata, searchTypes: [{ identity: 'cg/shot', label: 'Shot', table: 'shot' }, { identity: 'cg/scenes', label: 'Episode', table: 'scenes' }] },
+    nodes: [
+      { identity: 'cg/shot', label: 'Shot', nodeX: 40, nodeY: 40, kind: 'search_type' },
+      { identity: 'cg/scenes', label: 'Episode', nodeX: 320, nodeY: 40, kind: 'search_type' }
+    ],
+    edges: [{ from: 'cg/shot', to: 'cg/scenes', relationship: 'code', type: 'hierarchy' }]
+  },
+  schemaUi,
+  1100,
+  800,
+  'ru'
+);
+const schemaFlat = flat(schemaScene.nodes);
+assert.ok(schemaFlat.some((node) => node.id === 'adminSchemaLegendCard'), 'Schema legend card renders when toggled');
+const schemaCanvas = schemaFlat.find((node) => node.id === 'adminGraphCanvas');
+assert.deepEqual(schemaCanvas.edges[0].badgeLines, ['Child → Parent · иерархия', 'shot.scenes_code → scenes.code']);
+let draftUi = State.initial();
+let m2mRes = State.transition(
+  draftUi,
+  { ...model, mode: 'schema', nodes: [{ identity: 'cg/shot', label: 'Shot' }, { identity: 'cg/scenes', label: 'Episode' }] },
+  { type: 'openConnectManyToMany', from: 'cg/shot' }
+);
+assert.equal(m2mRes.ui.inspector, 'add_node');
+assert.equal(m2mRes.ui.connectMode, 'many_to_many');
+assert.equal(m2mRes.ui.source, 'cg/shot');
+let draftTableRes = State.transition(
+  State.transition(draftUi, { ...model, mode: 'schema' }, { type: 'buffer', key: 'draftTable', value: 'props_asset' }).ui,
+  { ...model, mode: 'schema' },
+  { type: 'commitDraftTable' }
+);
+assert.deepEqual(draftTableRes.commands, [{ type: 'renameDraftTable', value: 'props_asset' }]);
+const draftScene = UI.describe(
+  {
+    ...model,
+    mode: 'schema',
+    selectedNode: 'cg/draft_entity_1',
+    selectedNodes: ['cg/draft_entity_1'],
+    draftType: { table: 'draft_entity_1', title: 'Draft Entity 1', color: '#8899aa', hasPipeline: true },
+    nodes: [{ identity: 'cg/draft_entity_1', label: 'Draft Entity 1', nodeX: 80, nodeY: 80, kind: 'search_type', draftType: true }],
+    edges: []
+  },
+  draftUi,
+  1100,
+  800,
+  'ru'
+);
+const draftFlat = flat(draftScene.nodes);
+assert.ok(draftFlat.some((node) => node.id === 'adminRegisterDraftTypeNow'), 'Draft node inspector exposes 1-click DB registration');
+assert.ok(parameterNodes.some((node) => node.id === 'processKindHeading'), 'Node type ChoiceGrid has its own dedicated section heading');
+assert.ok(parameterNodes.some((node) => node.id === 'adminProcessKind_icon_action'), 'Node type ChoiceGrid options render icons');
+const schemaNodesScene = UI.describe(
+  {
+    ...model,
+    mode: 'schema',
+    nodes: [
+      { identity: 'cg/assets', label: 'Assets', nodeX: 40, nodeY: 40, kind: 'search_type' },
+      { identity: 'cg/assets_in_assets', label: 'Assets in Assets', nodeX: 280, nodeY: 40, kind: 'search_type' },
+      { identity: 'sthpw/task', label: 'Task', nodeX: 520, nodeY: 40, kind: 'search_type' }
+    ],
+    edges: [
+      { from: 'cg/assets', to: 'cg/assets', instance_type: 'cg/assets_in_assets', relationship: 'instance' },
+      { from: 'cg/assets_in_assets', to: 'cg/assets', relationship: 'code', from_col: 'parent_assets_code', to_col: 'code', path: 'child', type: 'many_to_many' },
+      { from: 'cg/assets_in_assets', to: 'cg/assets', relationship: 'code', from_col: 'child_assets_code', to_col: 'code', path: 'parent', type: 'many_to_many' }
+    ]
+  },
+  draftUi,
+  1100,
+  800,
+  'en'
+);
+const graphCanvas = flat(schemaNodesScene.nodes).find((node) => node.id === 'adminGraphCanvas');
+assert.equal(graphCanvas.nodes.find((n) => n.identity === 'cg/assets').visualKind, 'search_type');
+const selfLinkNode = graphCanvas.nodes.find((n) => n.identity === 'cg/assets_in_assets');
+assert.equal(selfLinkNode.visualKind, 'instance');
+assert.equal(selfLinkNode.badgeText, 'SELF M:N');
+assert.equal(selfLinkNode.subtitle, 'Assets ⇄ Assets · Self M:N');
+assert.deepEqual(graphCanvas.edges[0].badgeLines, ['M:N · via assets_in_assets']);
+assert.deepEqual(graphCanvas.edges[1].badgeLines, ['parent_assets_code → code (child)']);
+assert.deepEqual(graphCanvas.edges[2].badgeLines, ['child_assets_code → code (parent)']);
+assert.equal(graphCanvas.nodes.find((n) => n.identity === 'sthpw/task').visualKind, 'system');

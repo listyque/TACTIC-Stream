@@ -13,7 +13,7 @@ from tactic_stream.server.security_groups import query_security_groups
 from tactic_stream.server.widget_configuration import WidgetConfigConflict
 
 FIELDS = ('first_name', 'last_name', 'display_name', 'email', 'phone_number',
-          'address', 'department', 'upn', 'namespace', 's_status', 'project_code', 'license_type', 'hourly_wage')
+          'address', 'department', 'upn', 'namespace', 's_status', 'project_code', 'hourly_wage')
 
 
 def user_revision(user, groups):

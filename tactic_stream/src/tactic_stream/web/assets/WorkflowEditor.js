@@ -1,4 +1,4 @@
-import { E as nextTick, F as resolveComponent, G as withCtx, I as resolveDirective, K as withDirectives, L as resolveDynamicComponent, M as openBlock, _ as createElementBlock, b as createVNode, c as withKeys, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, rt as toDisplayString, s as vShow, tt as normalizeClass, z as useId } from "./vue.js";
+import { B as useId, D as nextTick, I as resolveComponent, K as withCtx, L as resolveDirective, N as openBlock, R as resolveDynamicComponent, _ as createCommentVNode, c as vShow, g as createBlock, h as createBaseVNode, it as toDisplayString, l as withKeys, nt as normalizeClass, p as Teleport, q as withDirectives, rt as normalizeStyle, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
 import { a as _sfc_main$2, o as t, t as _sfc_main$1, z as _plugin_vue_export_helper_default } from "./AppButton.js";
 import { j as rpc } from "./index.js";
 import { t as _sfc_main$3 } from "./FrameView.js";
@@ -220,7 +220,13 @@ var _sfc_main = {
 			}
 		},
 		canLeave() {
-			return !this.busy && !this.$refs.rules?.active && (!(this.dirty || this.uncertain) || window.confirm(t("Discard unsaved changes?")));
+			if (this.busy || this.$refs.rules?.active) return false;
+			if (this.dirty || this.uncertain) {
+				this.error = "";
+				this.dispatch({ type: "discard" });
+				return false;
+			}
+			return true;
 		},
 		async call(action, values = {}) {
 			return (await rpc("execute_cmd", [
@@ -293,9 +299,9 @@ var _sfc_main = {
 			await nextTick();
 			if (!this.inline && !this.$refs.dialog.open) this.$refs.dialog.showModal();
 			try {
-				let result = await this.call(searchType ? "new" : identity ? "load" : "list", { identity: searchType || identity });
+				let result = await this.call(searchType ? "new" : "load", { identity: searchType || identity });
 				if (id !== this.request) return;
-				if (!identity && !searchType && result.catalog.length) result = await this.call("load", { identity: result.catalog[0].identity });
+				if (!identity && !searchType && !result.identity && result.catalog.length) result = await this.call("load", { identity: result.catalog[0].identity });
 				if (id !== this.request) return;
 				this.accept(result);
 				if (searchType) this.startDraft(searchType);
@@ -448,6 +454,13 @@ var _sfc_main = {
 				this.selectNode(name);
 				this.nodeName = "";
 			}
+		},
+		createProcessAt(position) {
+			if (!this.editable || !this.discardBuffers()) return;
+			let index = this.nodes.length + 1, name = "process_" + index;
+			while (this.nodes.some((node) => node.identity === name && !node.referenceOnly)) name = "process_" + ++index;
+			this.nodeName = name;
+			this.addNode(position);
 		},
 		connect(source = this.source, target = this.target) {
 			if (!this.options.some((node) => node.value === source) || !this.options.some((node) => node.value === target) || source === target) {

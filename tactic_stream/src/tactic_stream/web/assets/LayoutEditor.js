@@ -1,11 +1,11 @@
 const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ConfiguredView.js","assets/ObjectFieldFrame.js","assets/vue.js","assets/AppButton.js","assets/locales.js","assets/icons.js","assets/AppButton.css","assets/FrameView.js","assets/FrameView.css","assets/ObjectFieldFrame.css","assets/index.js","assets/index.css","assets/textMetrics.js","assets/sections.ui.js","assets/RecordForm.js","assets/previewImage.js","assets/RecordForm.css","assets/admin.document.js","assets/file_values.js","assets/files.js","assets/files2.js","assets/admin.css","assets/CodeBlock.js","assets/confirmation.ui.js","assets/AppDialog.js","assets/VirtualCollection.js","assets/VirtualCollection.css","assets/Timesheet.js","assets/Timesheet.css","assets/ContentLoadingOverlay.js","assets/ContentLoadingOverlay.css","assets/RelatedObjects.js","assets/RelatedObjects.css","assets/ConfiguredView.css"])))=>i.map(i=>d[i]);
-import { C as inject, F as resolveComponent, K as withDirectives, M as openBlock, _ as createElementBlock, b as createVNode, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, s as vShow, tt as normalizeClass } from "./vue.js";
+import { I as resolveComponent, N as openBlock, _ as createCommentVNode, c as vShow, g as createBlock, h as createBaseVNode, it as toDisplayString, m as computed, nt as normalizeClass, p as Teleport, q as withDirectives, rt as normalizeStyle, tt as unref, v as createElementBlock, w as inject, x as createVNode } from "./vue.js";
 import { o as t, s as appearance, z as _plugin_vue_export_helper_default } from "./AppButton.js";
 import { A as resultItems, Q as widgetConfiguration, Rt as asyncComponent, a as __vitePreload, j as rpc } from "./index.js";
-import { G as button, H as observeFrameSizes, J as muted, K as label, X as rect, Y as node, t as _sfc_main$2, w as translate } from "./FrameView.js";
+import { K as button, T as translate, U as observeFrameSizes, X as node, Y as muted, Z as rect, q as label, t as _sfc_main$2 } from "./FrameView.js";
 import { n as sections } from "./sections.ui.js";
 import { i as sectionSelector, k as workspaceAddress, n as notices, o as toolbar$1, r as policy, t as documentEvent } from "./admin.document.js";
-import { At as variants, Ct as actions, Dt as roles, Et as edit, L as itemScene, Ot as serialize, R as spacingField, St as visible, Tt as describe$1, bt as describe$2, j as _sfc_main$3, jt as widgets, kt as template, wt as binding, xt as supports } from "./RelatedObjects.js";
+import { At as template, Ct as visible, Dt as edit, Et as describe$1, Mt as widgets, Ot as roles, R as itemScene, St as supports, Tt as binding, j as _sfc_main$3, jt as variants, kt as serialize, wt as actions, xt as describe$2, z as spacingField } from "./RelatedObjects.js";
 //#region src/features/interface/layoutXml.js
 function layoutTree(source) {
 	if (!source.trim()) throw Error("Select a SObject layout configuration");
@@ -88,6 +88,8 @@ function initial() {
 		panel: "elements",
 		selected: "",
 		context: "",
+		catalogVisible: true,
+		propertiesVisible: true,
 		catalogWidth: 220,
 		propertiesWidth: 330,
 		newName: "",
@@ -245,7 +247,7 @@ function transition(ui, model, event) {
 		case "openLayout":
 		case "backLayout": {
 			if (model.dirty || model.uncertain || pending(ui)) {
-				next.error = "Save or discard changes before continuing";
+				next.confirmation = "discard";
 				break;
 			}
 			const target = event.type === "openLayout" ? reference(model, ui) : ui.navigation[ui.navigation.length - 1];
@@ -300,6 +302,12 @@ function transition(ui, model, event) {
 			break;
 		case "propertiesSplit":
 			next.propertiesWidth = Math.max(240, Math.min(520, Number(event.value)));
+			break;
+		case "catalogVisible":
+			next.catalogVisible = next.catalogVisible === false;
+			break;
+		case "propertiesVisible":
+			next.propertiesVisible = next.propertiesVisible === false;
 			break;
 		case "newName":
 		case "template":
@@ -1379,7 +1387,7 @@ function describe(model, ui, width, height, language) {
 		}));
 		return { nodes };
 	}
-	const wide = width >= 1e3, left = wide ? Math.min(ui.catalogWidth, width * .24) : width, properties = wide ? Math.min(ui.propertiesWidth, width * .34) : width;
+	const wide = width >= 1e3, catalogVisible = ui.catalogVisible !== false, propertiesVisible = ui.propertiesVisible !== false, left = wide ? catalogVisible ? Math.min(ui.catalogWidth, width * .24) : 56 : width, properties = wide ? propertiesVisible ? Math.min(ui.propertiesWidth, width * .34) : 56 : width;
 	if (!wide) {
 		nodes.push(sectionSelector("layoutPanels", [
 			{
@@ -1399,48 +1407,46 @@ function describe(model, ui, width, height, language) {
 	}
 	const bodyHeight = Math.max(1, height - y);
 	if (wide || ui.panel === "elements") {
-		const w = left, viewsHeight = Math.min(144, Math.max(68, bodyHeight * .24)), elementsTop = 52 + viewsHeight, children = [
-			label("layoutViewsHeading", rect(12, 12, w - 24, 28), tr("Views"), { weight: 600 }),
-			node("List", "layoutViewsList", rect(12, 46, w - 24, viewsHeight), {
-				source: "layoutViews",
-				keyField: "value",
-				rowHeight: 38,
-				scrollbarId: "layoutViewsScrollBar"
-			}),
-			label("layoutElementsHeading", rect(12, elementsTop + 8, w - 24, 28), tr("Elements"), { weight: 600 }),
-			node("Choice", "layoutAddWidget", rect(12, elementsTop + 44, w - 24, 38), {
-				label: tr("Add widget"),
+		const w = left, viewsHeight = Math.min(144, Math.max(68, bodyHeight * .24)), elementsTop = 58 + viewsHeight, children = [];
+		if (!wide || catalogVisible) children.push(label("layoutViewsHeading", rect(12, 10, Math.max(0, w - (wide ? 62 : 24)), 34), tr("Views"), { weight: 600 }), node("List", "layoutViewsList", rect(12, 52, w - 24, viewsHeight), {
+			source: "layoutViews",
+			keyField: "value",
+			rowHeight: 38,
+			scrollbarId: "layoutViewsScrollBar"
+		}), label("layoutElementsHeading", rect(12, elementsTop + 8, w - 24, 28), tr("Elements"), { weight: 600 }), node("Choice", "layoutAddWidget", rect(12, elementsTop + 44, w - 24, 38), {
+			label: tr("Add widget"),
+			value: "",
+			options: [{
 				value: "",
-				options: [{
-					value: "",
-					label: tr("Add widget")
-				}].concat(choices(widgets, language)),
-				enabled: edit && !pending(ui),
-				action: { type: "add" }
-			}),
-			node("List", "layoutElementsList", rect(12, elementsTop + 90, w - 24, Math.max(0, bodyHeight - elementsTop - 146)), {
-				source: "layoutElements",
-				keyField: "name",
-				rowHeight: 50,
-				scrollbarId: "layoutElementsScrollBar"
-			}),
-			button("layoutEarlier", rect(12, bodyHeight - 44, (w - 32) / 2, 36), tr("Move element earlier"), "chevron-up", {
-				type: "change",
-				field: "order",
-				value: -1
-			}, edit && !!selected && !pending(ui), { iconOnly: true }),
-			button("layoutLater", rect((w + 8) / 2, bodyHeight - 44, (w - 32) / 2, 36), tr("Move element later"), "chevron-down", {
-				type: "change",
-				field: "order",
-				value: 1
-			}, edit && !!selected && !pending(ui), { iconOnly: true })
-		];
+				label: tr("Add widget")
+			}].concat(choices(widgets, language)),
+			enabled: edit && !pending(ui),
+			action: { type: "add" }
+		}), node("List", "layoutElementsList", rect(12, elementsTop + 90, w - 24, Math.max(0, bodyHeight - elementsTop - 146)), {
+			source: "layoutElements",
+			keyField: "name",
+			rowHeight: 50,
+			scrollbarId: "layoutElementsScrollBar"
+		}), button("layoutEarlier", rect(12, bodyHeight - 44, (w - 32) / 2, 36), tr("Move element earlier"), "chevron-up", {
+			type: "change",
+			field: "order",
+			value: -1
+		}, edit && !!selected && !pending(ui), { iconOnly: true }), button("layoutLater", rect((w + 8) / 2, bodyHeight - 44, (w - 32) / 2, 36), tr("Move element later"), "chevron-down", {
+			type: "change",
+			field: "order",
+			value: 1
+		}, edit && !!selected && !pending(ui), { iconOnly: true }));
+		if (wide) children.push(button("layoutToggleElements", rect(catalogVisible ? w - 46 : (w - 34) / 2, 10, 34, 34), tr(catalogVisible ? "Hide elements" : "Show elements"), catalogVisible ? "chevron-left" : "chevron-right", { type: "catalogVisible" }, true, {
+			iconOnly: true,
+			iconAction: true,
+			round: false
+		}));
 		nodes.push(node("Box", "layoutElementsPanel", rect(0, y, w, bodyHeight), {
 			background: "surfaceContainerLow",
 			border: "outlineVariant",
 			children
 		}));
-		if (wide) nodes.push(node("Splitter", "layoutElementsSplit", rect(w, y, 10, bodyHeight), {
+		if (wide && catalogVisible) nodes.push(node("Splitter", "layoutElementsSplit", rect(w, y, 10, bodyHeight), {
 			text: tr("Elements panel width"),
 			value: w,
 			min: 180,
@@ -1449,25 +1455,34 @@ function describe(model, ui, width, height, language) {
 		}));
 	}
 	if (wide || ui.panel === "settings") {
-		const w = properties, x = wide ? width - w : 0, fields = propertyFields(model, ui, language, w), body = sections(fields, w - 40, language, edit && !pending(ui));
-		if (selected) {
-			body.nodes.push(button("layoutRemoveElement", rect(0, body.height, w - 40, 38), tr("Remove element"), "delete", { type: "remove" }, edit && !pending(ui)));
-			body.height += 46;
-		} else {
-			body.nodes.push(label("layoutSelectHelp", rect(0, 0, w - 40, 120), tr("Select an element or add a new widget."), Object.assign({ wrap: true }, muted)));
-			body.height = 128;
-		}
-		nodes.push(node("Box", "layoutSettingsPanel", rect(x, y, w, bodyHeight), {
-			background: "surfaceContainerLow",
-			border: "outlineVariant",
-			children: [node("Scroll", "layoutSettingsScroll", rect(12, 12, w - 24, bodyHeight - 24), {
+		const w = properties, x = wide ? width - w : 0, settingsChildren = [];
+		if (!wide || propertiesVisible) {
+			const fields = propertyFields(model, ui, language, w), body = sections(fields, w - 40, language, edit && !pending(ui));
+			if (selected) {
+				body.nodes.push(button("layoutRemoveElement", rect(0, body.height, w - 40, 38), tr("Remove element"), "delete", { type: "remove" }, edit && !pending(ui)));
+				body.height += 46;
+			} else {
+				body.nodes.push(label("layoutSelectHelp", rect(0, 0, w - 40, 120), tr("Select an element or add a new widget."), Object.assign({ wrap: true }, muted)));
+				body.height = 128;
+			}
+			settingsChildren.push(label("layoutSettingsHeading", rect(12, 10, Math.max(0, w - (wide ? 62 : 24)), 34), tr("Element settings"), { weight: 600 }), node("Scroll", "layoutSettingsScroll", rect(12, 52, w - 24, Math.max(0, bodyHeight - 64)), {
 				contentHeight: body.height,
 				resetKey: ui.selected,
 				scrollbarId: "layoutSettingsScrollBar",
 				children: body.nodes
-			})]
+			}));
+		}
+		if (wide) settingsChildren.push(button("layoutToggleSettings", rect(propertiesVisible ? w - 46 : (w - 34) / 2, 10, 34, 34), tr(propertiesVisible ? "Hide element settings" : "Show element settings"), propertiesVisible ? "chevron-right" : "chevron-left", { type: "propertiesVisible" }, true, {
+			iconOnly: true,
+			iconAction: true,
+			round: false
 		}));
-		if (wide) nodes.push(node("Splitter", "layoutSettingsSplit", rect(x - 10, y, 10, bodyHeight), {
+		nodes.push(node("Box", "layoutSettingsPanel", rect(x, y, w, bodyHeight), {
+			background: "surfaceContainerLow",
+			border: "outlineVariant",
+			children: settingsChildren
+		}));
+		if (wide && propertiesVisible) nodes.push(node("Splitter", "layoutSettingsSplit", rect(x - 10, y, 10, bodyHeight), {
 			text: tr("Element settings width"),
 			value: w,
 			min: 240,
@@ -1823,8 +1838,10 @@ var _sfc_main = {
 			}
 		},
 		canLeave() {
-			if (this.dirty || this.busy) {
-				this.error = "Save or discard layout changes before leaving.";
+			if (this.busy) return false;
+			if (this.dirty || this.uncertain) {
+				this.error = "";
+				this.dispatch({ type: "discard" });
 				return false;
 			}
 			return true;

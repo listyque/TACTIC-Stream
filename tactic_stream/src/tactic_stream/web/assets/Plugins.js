@@ -1,8 +1,8 @@
-import { A as onMounted, H as watch, K as withDirectives, M as openBlock, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, m as createBaseVNode, nt as normalizeStyle, p as computed, s as vShow } from "./vue.js";
+import { N as openBlock, U as watch, Z as ref, c as vShow, g as createBlock, h as createBaseVNode, j as onMounted, k as onBeforeUnmount, m as computed, p as Teleport, q as withDirectives, rt as normalizeStyle, v as createElementBlock, x as createVNode } from "./vue.js";
 import { D as spacing, s as appearance } from "./AppButton.js";
 import { Y as uploadFormFile, j as rpc } from "./index.js";
-import { G as button, H as observeFrameSizes, K as label, X as rect, Y as node, q as listRowHeight, t as _sfc_main$1, w as translate$1 } from "./FrameView.js";
-import { bt as describe$2 } from "./RelatedObjects.js";
+import { J as listRowHeight, K as button, T as translate$1, U as observeFrameSizes, X as node, Z as rect, q as label, t as _sfc_main$1 } from "./FrameView.js";
+import { xt as describe$2 } from "./RelatedObjects.js";
 import { t as _sfc_main$2 } from "./PageEditorTools.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/plugins/plugins.resources.mjs
 var russian$1 = {
@@ -352,6 +352,7 @@ var destructive = {
 	activate: "Activate this package in the selected project? Its manifest can create or update project data and run server code.",
 	replace_file: "Replace the selected file with a local upload?",
 	reload_catalog: "Discard unsaved changes and reload the plugin catalogue?",
+	discard_changes: "Discard unsaved changes?",
 	reload: "Reload removes and reinstalls the plugin in this project. Its data may be replaced.",
 	deactivate: "Remove this plugin and its manifest-defined data from the current project?",
 	clean: "Clean all project entries described by this plugin manifest?",
@@ -478,6 +479,7 @@ function transition(ui, model, event) {
 			request("list");
 		}
 	} else if (event.type === "discard" && !model.busy) commands.push(event);
+	else if (event.type === "prompt-discard" && !model.busy && (model.dirty || model.uncertain)) next.operation = "discard_changes";
 	else if (event.type === "save" && !blocked && (!model.metadata?.new || canCreate(model))) commands.push(event);
 	else if (event.type === "new" && clean()) {
 		next.operation = "";
@@ -509,6 +511,9 @@ function transition(ui, model, event) {
 	} else if (event.type === "cancel" && !model.busy) {
 		next.operation = "";
 		if (model.metadata?.new) commands.push({ type: "discard" });
+	} else if (event.type === "confirm" && ui.operation === "discard_changes" && !model.busy) {
+		commands.push({ type: "discard" });
+		next.operation = "";
 	} else if (event.type === "confirm" && ui.operation === "reload_catalog" && !model.busy) {
 		commands.push({ type: "discard" });
 		request("list");
@@ -1011,49 +1016,50 @@ function describe(model, ui, width, height, language) {
 	const tr = (text) => translate(text, language), nodes = [], gap = spacing.content, compact = width < 760, nav = !!!(model.catalog || []).length || metaNew(model) ? 0 : ui.collapsed ? 44 : compact ? 200 : 250, right = nav ? nav + gap : 0, bodyWidth = Math.max(0, width - right), editable = !model.busy && !model.uncertain && model.canWrite, clean = !model.busy && !model.dirty && !model.uncertain, doc = model.document || {}, meta = model.metadata || {}, exists = !!model.identity;
 	const btn = (id, r, text, icon, action, enabled = clean, extra = {}) => button(id, r, tr(text), icon, action, enabled, extra);
 	if (nav) {
-		if (!ui.collapsed) nodes.push(label("pluginCatalogueCaption", rect(0, 0, nav - 42, 34), tr("Plugin catalogue"), { weight: 600 }));
-		nodes.push(btn("pluginCollapse", rect(ui.collapsed ? 0 : nav - 34, 0, 34, 34), "Plugin catalogue", ui.collapsed ? "next" : "previous", { type: "collapse" }, true, {
+		const catalogueChildren = [];
+		if (!ui.collapsed) {
+			catalogueChildren.push(label("pluginCatalogueCaption", rect(12, 10, Math.max(0, nav - 62), 34), tr("Plugin catalogue"), { weight: 600 }), btn("pluginNew", rect(12, 52, nav - 24, 36), "New", "add", { type: "new" }), btn("pluginInstall", rect(12, 96, nav - 24, 36), "Install a package", "upload", { type: "install" }, clean, { iconOnly: false }), node("Field", "pluginSearch", rect(12, 144, nav - 24, 36), {
+				text: ui.query,
+				placeholder: tr("Search plugins"),
+				action: { type: "query" },
+				clearable: true
+			}), node("CheckBox", "pluginActiveOnly", rect(12, 188, nav - 24, 36), {
+				text: tr("Active in this project"),
+				checked: ui.activeOnly,
+				action: { type: "activeOnly" }
+			}), node("List", "pluginCatalogue", rect(12, 232, nav - 24, Math.max(0, height - 244)), {
+				source: "plugins",
+				keyField: "identity",
+				fields: [
+					"identity",
+					"title",
+					"code",
+					"version",
+					"builtin",
+					"active",
+					"path"
+				],
+				rowHeight: 76,
+				rowGap: 0,
+				scrollbarId: "pluginCatalogueScrollBar",
+				scrollbarReserved: 16
+			}));
+			if (!catalog(model, ui).length) catalogueChildren.push(label("pluginNoMatches", rect(16, 240, nav - 32, 80), tr("No matching plugins. Change the search or the project filter."), {
+				wrap: true,
+				color: "secondaryText"
+			}));
+		}
+		catalogueChildren.push(btn("pluginCollapse", rect(ui.collapsed ? (nav - 34) / 2 : nav - 46, 10, 34, 34), "Plugin catalogue", ui.collapsed ? "chevron-right" : "chevron-left", { type: "collapse" }, true, {
 			iconOnly: true,
 			iconAction: true,
 			round: false
 		}));
-	}
-	if (nav && !ui.collapsed) {
-		nodes.push(btn("pluginNew", rect(0, 42, nav, 36), "New", "add", { type: "new" }));
-		nodes.push(btn("pluginInstall", rect(0, 86, nav, 36), "Install a package", "upload", { type: "install" }, clean, { iconOnly: false }));
-		nodes.push(node("Field", "pluginSearch", rect(0, 134, nav, 36), {
-			text: ui.query,
-			placeholder: tr("Search plugins"),
-			action: { type: "query" },
-			clearable: true
-		}));
-		nodes.push(node("CheckBox", "pluginActiveOnly", rect(0, 178, nav, 36), {
-			text: tr("Active in this project"),
-			checked: ui.activeOnly,
-			action: { type: "activeOnly" }
-		}));
-		nodes.push(node("List", "pluginCatalogue", rect(0, 222, nav, Math.max(0, height - 222)), {
-			source: "plugins",
-			keyField: "identity",
-			fields: [
-				"identity",
-				"title",
-				"code",
-				"version",
-				"builtin",
-				"active",
-				"path"
-			],
-			rowHeight: 76,
-			rowGap: 0,
-			scrollbarId: "pluginCatalogueScrollBar",
-			scrollbarReserved: 16
+		nodes.push(node("Box", "pluginCataloguePanel", rect(0, 0, nav, height), {
+			background: "surfaceContainerLow",
+			border: "outlineVariant",
+			children: catalogueChildren
 		}));
 	}
-	if (nav > 44 && !catalog(model, ui).length) nodes.push(label("pluginNoMatches", rect(8, 230, nav - 24, 80), tr("No matching plugins. Change the search or the project filter."), {
-		wrap: true,
-		color: "secondaryText"
-	}));
 	let y = 0;
 	if (model.error || model.uncertain) {
 		const message = model.error || "The operation result is unknown. Reload before continuing.";
@@ -1085,6 +1091,7 @@ function describe(model, ui, width, height, language) {
 			replace_file: "Replace file",
 			delete_file: "Delete",
 			reload_catalog: "Refresh",
+			discard_changes: "Discard changes",
 			new_file: "New file",
 			new_folder: "New folder",
 			rename: "Rename or move",
@@ -1139,7 +1146,7 @@ function describe(model, ui, width, height, language) {
 			"new_file",
 			"new_folder",
 			"rename"
-		].includes(ui.operation) || !!ui.value.trim()) || ui.operation === "reload_catalog" && !model.busy));
+		].includes(ui.operation) || !!ui.value.trim()) || ["reload_catalog", "discard_changes"].includes(ui.operation) && !model.busy));
 		content.push(btn("pluginCancel", rect(ui.operation === "install" ? 0 : Math.min(188, w / 2 + 4), oy, Math.min(150, w / 2 - 4), 40), ui.operation === "install" ? "Back" : "Cancel", "close", { type: "cancel" }, !model.busy));
 		nodes.push(node("Scroll", "pluginOperationScroll", rect(right, y, bodyWidth, height - y), {
 			contentHeight: oy + 84,
@@ -1674,8 +1681,10 @@ var _sfc_main = {
 			}, file);
 		}
 		function canLeave() {
-			if (busy.value || dirty.value || uncertain.value) {
-				error.value = "Apply or discard unsaved changes first";
+			if (busy.value) return false;
+			if (dirty.value || uncertain.value) {
+				error.value = "";
+				dispatch({ type: "prompt-discard" });
 				return false;
 			}
 			return true;

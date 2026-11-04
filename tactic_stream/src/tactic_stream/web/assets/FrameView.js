@@ -1,4 +1,4 @@
-import { A as onMounted, B as useModel, E as nextTick, F as resolveComponent, G as withCtx, H as watch, K as withDirectives, L as resolveDynamicComponent, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, R as useAttrs, T as mergeProps, X as ref, _ as createElementBlock, a as vModelSelect, b as createVNode, c as withKeys, et as unref, g as createCommentVNode, h as createBlock, j as onUpdated, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, o as vModelText, p as computed, q as isRef, rt as toDisplayString, s as vShow, tt as normalizeClass, u as Fragment, w as mergeModels, y as createTextVNode, z as useId } from "./vue.js";
+import { B as useId, D as nextTick, E as mergeProps, F as renderSlot, I as resolveComponent, J as isRef, K as withCtx, M as onUpdated, N as openBlock, P as renderList, R as resolveDynamicComponent, T as mergeModels, U as watch, V as useModel, Z as ref, _ as createCommentVNode, b as createTextVNode, c as vShow, d as Fragment, g as createBlock, h as createBaseVNode, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withKeys, m as computed, nt as normalizeClass, o as vModelSelect, q as withDirectives, rt as normalizeStyle, s as vModelText, tt as unref, u as withModifiers, v as createElementBlock, x as createVNode, z as useAttrs } from "./vue.js";
 import { E as readableText, I as iconSets, O as textStyles, R as BusyIndicator_default, T as metrics, _ as controls, a as _sfc_main$33, g as blend, i as ripple, l as effectiveColorMode, n as tooltipDirective, o as t, r as capturePress, s as appearance, t as _sfc_main$34, u as frameColors, v as cssColor, y as cssRoles, z as _plugin_vue_export_helper_default } from "./AppButton.js";
 import { t as iconMaps } from "./icons.js";
 //#region ../src/tactic_stream/shared_ui/core/frame.mjs
@@ -40,6 +40,34 @@ var controlKinds = Object.freeze([
 	"Empty",
 	"FileField"
 ]);
+var controlKindSet = new Set(controlKinds);
+var BOUNDS_KEYS = [
+	"x",
+	"y",
+	"width",
+	"height"
+];
+var RESERVED_KEYS = [
+	"kind",
+	"id",
+	"x",
+	"y",
+	"width",
+	"height",
+	"fontSize"
+];
+var ACTION_KEYS = [
+	"action",
+	"pressAction",
+	"doubleAction",
+	"contextAction",
+	"activateAction",
+	"commitAction",
+	"cancelAction",
+	"dropAction",
+	"dragStartAction",
+	"acceptAction"
+];
 function rect(x, y, width, height) {
 	return {
 		x,
@@ -54,19 +82,24 @@ function revealListOffset(offset, index, height, count, rowHeight, rowGap = 0, o
 	return Math.max(0, Math.min(desired, Math.max(0, (offsets ? offsets[count] : count * rowHeight) - rowGap - height)));
 }
 function label(id, bounds, text, extra) {
-	return node("Label", id, bounds, Object.assign({ text }, extra || {}));
+	return node("Label", id, bounds, extra ? Object.assign({ text }, extra) : { text });
 }
 var muted = {
 	fontRole: "secondary",
 	color: "secondaryText"
 };
 function button(id, bounds, text, icon, action, enabled, extra) {
-	return node("Button", id, bounds, Object.assign({
+	return node("Button", id, bounds, extra ? Object.assign({
 		text,
 		icon,
 		action,
 		enabled
-	}, extra || {}));
+	}, extra) : {
+		text,
+		icon,
+		action,
+		enabled
+	});
 }
 /**
 * Create a named native control. Only fontRole enters; fontSize is resolved output.
@@ -77,52 +110,45 @@ function button(id, bounds, text, icon, action, enabled, extra) {
 * @returns {FrameNode}
 */
 function node(kind, id, rect, properties) {
-	if (controlKinds.indexOf(kind) < 0) throw Error("Unsupported Tactic Frame control: " + kind);
+	if (!controlKindSet.has(kind)) throw Error("Unsupported Tactic Frame control: " + kind);
 	if (typeof id !== "string" || !id.trim()) throw Error("Missing Frame control id");
-	for (const key of [
-		"x",
-		"y",
-		"width",
-		"height"
-	]) if (typeof rect[key] !== "number" || !isFinite(rect[key])) throw Error("Invalid frame: " + id + ".." + key);
+	if (!rect || typeof rect.x !== "number" || !isFinite(rect.x) || typeof rect.y !== "number" || !isFinite(rect.y) || typeof rect.width !== "number" || !isFinite(rect.width) || typeof rect.height !== "number" || !isFinite(rect.height)) for (let i = 0; i < BOUNDS_KEYS.length; i++) {
+		const key = BOUNDS_KEYS[i];
+		if (!rect || typeof rect[key] !== "number" || !isFinite(rect[key])) throw Error("Invalid frame: " + id + ".." + key);
+	}
 	if (rect.width < 0 || rect.height < 0) throw Error("Negative frame: " + id);
-	const options = Object.assign(kind === "List" ? { fields: [] } : {}, properties || {});
-	for (const key of [
-		"kind",
-		"id",
-		"x",
-		"y",
-		"width",
-		"height",
-		"fontSize"
-	]) if (Object.prototype.hasOwnProperty.call(options, key)) throw Error("Reserved Frame property: " + id + "." + key);
-	if (options.titlebar && options.children) options.children = options.children.map((child) => child.kind === "Button" ? Object.assign({}, child, { round: true }) : child);
+	const options = properties || {};
+	for (let i = 0; i < RESERVED_KEYS.length; i++) {
+		const key = RESERVED_KEYS[i];
+		if (Object.prototype.hasOwnProperty.call(options, key)) throw Error("Reserved Frame property: " + id + "." + key);
+	}
 	const fontRole = options.fontRole === void 0 ? "body" : options.fontRole;
 	if (!Object.prototype.hasOwnProperty.call(textStyles, fontRole)) throw Error("Unknown Frame font role: " + id + "." + fontRole);
-	const button = kind === "Button";
-	const color = options.enabled === false && [
-		"Button",
-		"Field",
-		"Area",
-		"Choice"
-	].indexOf(kind) >= 0 ? "disabledText" : button && options.destructive && !options.highlighted ? "error" : button && (options.highlighted || options.radio && options.selected) ? "selectedText" : button && options.radio ? "secondaryText" : "primaryText";
-	return Object.assign({
+	const isButton = kind === "Button";
+	const result = {
 		kind,
 		id,
 		text: "",
-		color,
+		color: options.enabled === false && (isButton || kind === "Field" || kind === "Area" || kind === "Choice") ? "disabledText" : isButton && options.destructive && !options.highlighted ? "error" : isButton && (options.highlighted || options.radio && options.selected) ? "selectedText" : isButton && options.radio ? "secondaryText" : "primaryText",
 		fontRole,
 		fontSize: textStyles[fontRole],
-		weight: button ? options.radio && !options.selected ? 500 : 600 : 400,
+		weight: isButton ? options.radio && !options.selected ? 500 : 600 : 400,
 		enabled: true,
 		opacity: 1,
 		children: [],
-		action: null
-	}, rect, options, {
-		fontRole,
-		fontSize: textStyles[fontRole],
-		text: options.text == null ? "" : String(options.text)
-	});
+		action: null,
+		x: rect.x,
+		y: rect.y,
+		width: rect.width,
+		height: rect.height
+	};
+	if (kind === "List") result.fields = [];
+	if (properties) Object.assign(result, properties);
+	if (result.titlebar && result.children) result.children = result.children.map((child) => child.kind === "Button" ? Object.assign({}, child, { round: true }) : child);
+	result.fontRole = fontRole;
+	result.fontSize = textStyles[fontRole];
+	result.text = options.text == null ? "" : String(options.text);
+	return result;
 }
 /**
 * Validate one scene boundary. Models are engine-owned arrays or native models.
@@ -135,29 +161,19 @@ function validateScene(scene, models, views) {
 	const ids = /* @__PURE__ */ new Set();
 	for (let index = 0; index < scene.nodes.length; index++) {
 		const value = scene.nodes[index];
-		if (!value || controlKinds.indexOf(value.kind) < 0) throw Error("Unsupported Frame scene control");
+		if (!value || !controlKindSet.has(value.kind)) throw Error("Unsupported Frame scene control");
 		if (!value.id || ids.has(value.id)) throw Error("Duplicate/missing Frame id: " + value.id);
 		ids.add(value.id);
 		if (value.scale !== void 0 && (!Number.isFinite(value.scale) || value.scale <= 0)) throw Error("Invalid Frame scale: " + value.id);
 		if (!Object.prototype.hasOwnProperty.call(textStyles, value.fontRole) || value.fontSize !== textStyles[value.fontRole]) throw Error("Invalid Frame typography: " + value.id);
-		for (const key of [
-			"x",
-			"y",
-			"width",
-			"height"
-		]) if (typeof value[key] !== "number" || !isFinite(value[key]) || (key === "width" || key === "height") && value[key] < 0) throw Error("Invalid Frame bounds: " + value.id + "." + key);
-		for (const key of [
-			"action",
-			"pressAction",
-			"doubleAction",
-			"contextAction",
-			"activateAction",
-			"commitAction",
-			"cancelAction",
-			"dropAction",
-			"dragStartAction",
-			"acceptAction"
-		]) if (value[key] != null && (typeof value[key].type !== "string" || !value[key].type)) throw Error("Invalid Frame action: " + value.id + "." + key);
+		if (typeof value.x !== "number" || !isFinite(value.x) || typeof value.y !== "number" || !isFinite(value.y) || typeof value.width !== "number" || !isFinite(value.width) || value.width < 0 || typeof value.height !== "number" || !isFinite(value.height) || value.height < 0) for (let i = 0; i < BOUNDS_KEYS.length; i++) {
+			const key = BOUNDS_KEYS[i];
+			if (typeof value[key] !== "number" || !isFinite(value[key]) || (key === "width" || key === "height") && value[key] < 0) throw Error("Invalid Frame bounds: " + value.id + "." + key);
+		}
+		for (let i = 0; i < ACTION_KEYS.length; i++) {
+			const key = ACTION_KEYS[i];
+			if (value[key] != null && (typeof value[key].type !== "string" || !value[key].type)) throw Error("Invalid Frame action: " + value.id + "." + key);
+		}
 		if (value.kind === "List" || value.kind === "Grid") {
 			if (typeof value.source !== "string" || !value.source || !models || !Object.prototype.hasOwnProperty.call(models, value.source) || models[value.source] == null) throw Error("Missing Frame source: " + value.id + "." + value.source);
 		}
@@ -2271,6 +2287,7 @@ var russian = {
 	"Choose a configured page filter": "Выберите настроенный фильтр страницы",
 	"Choose a suggestion or enter Field: value": "Выберите подсказку или введите Поле: значение",
 	"Choose a value": "Выберите значение",
+	"Web workers": "Веб-воркеры",
 	"Backend server": "Сервер ТС",
 	"Worker processes and server restart": "Процессы и перезапуск сервера",
 	"Server processes": "Процессы сервера",
@@ -2280,11 +2297,10 @@ var russian = {
 	"TACTIC Stream restarted": "ТС перезапущен",
 	"Save changes before restarting.": "Сохраните изменения перед перезапуском.",
 	"Saved settings are applied only after restarting the server.": "Сохранённые настройки применяются после перезапуска сервера.",
+	"Restart TACTIC Stream? Connections and running operations may be interrupted while saved settings are applied. Unsaved changes will not be applied.": "Перезапустить ТС? Соединения и текущие операции могут прерваться при применении сохранённых настроек. Несохранённые изменения применены не будут.",
 	"This server is not managed by TacticMonitor.": "Этот сервер запущен без TacticMonitor.",
 	"The server monitor is unavailable or outdated.": "Монитор сервера недоступен или требует обновления.",
 	"The server has not returned yet. Reconnect and check its status.": "Сервер ещё не ответил. Подключитесь заново и проверьте его состояние.",
-	"Restart TACTIC Stream? Connections and running operations may be interrupted while saved settings are applied. Unsaved changes will not be applied.": "Перезапустить ТС? Соединения и текущие операции могут прерваться при применении сохранённых настроек. Несохранённые изменения применены не будут.",
-	"Web workers": "Веб-воркеры",
 	"Something went wrong": "Произошла ошибка",
 	"Search suggestions": "Подсказки поиска",
 	Example: "Пример",
@@ -2329,37 +2345,12 @@ var russian = {
 	"Code example": "Пример кода",
 	"Local demo; project data stays unchanged": "Локальный пример без изменений данных проекта",
 	"No matching components": "Компоненты не найдены",
-	"Project chat rules": "Правила чатов проекта",
-	"Shared by all chats in this project. Changes apply on the next send; the current turn keeps its captured rules.": "Общие для всех чатов проекта. Изменения действуют со следующей отправки; текущий ход сохранит прежние правила.",
-	"Describe naming, preview destinations and comment preferences.": "Опишите нейминг, назначение превью и правила комментариев.",
-	"Save project rules": "Сохранить правила",
-	"Project chat rules changed. Reopen the editor before saving.": "Правила чатов проекта изменились. Откройте редактор заново перед сохранением.",
-	"Project chat rules must be text of at most 16000 characters": "Правила чатов проекта должны содержать не более 16000 символов",
-	"Select a user project before editing chat rules": "Выберите пользовательский проект для настройки правил чата",
-	"Reconnect the agent to load project chat rules": "Переподключите агента, чтобы загрузить правила чатов проекта",
 	Plugins: "Плагины",
 	"Packages, versions and project activation": "Пакеты, версии и активация в проекте",
 	"Install plugin ZIP": "Установить ZIP плагина",
 	"Upload plugin file": "Загрузить файл плагина",
 	"ZIP archives (*.zip)": "Архивы ZIP (*.zip)",
 	"All files (*)": "Все файлы (*)",
-	"System Info": "Информация о системе",
-	"Server and client diagnostics": "Сведения о сервере и клиенте",
-	"Node Name": "Имя узла",
-	Release: "Выпуск ОС",
-	Machine: "Архитектура",
-	"CPU Count": "Число процессоров",
-	OS: "Операционная система",
-	"Server time (UTC)": "Время сервера (UTC)",
-	"User Agent": "User Agent",
-	"TACTIC User": "Пользователь TACTIC",
-	"Mail Server": "Почтовый сервер",
-	"Asset Folders": "Каталоги файлов",
-	"Server handoff directory": "Каталог передачи на сервере",
-	"Writable (access check)": "Доступен для записи (проверка прав)",
-	"None configured": "Не настроено",
-	Browser: "Браузер",
-	"Time zone": "Часовой пояс",
 	"Load Balancing": "Балансировка нагрузки",
 	"Performance Test": "Тест производительности",
 	"Sample server requests to identify responding workers and ports.": "Проверка отвечающих серверных процессов и портов по серии запросов.",
@@ -2396,7 +2387,32 @@ var russian = {
 	"Test cancelled": "Проверка отменена",
 	"Please enter a valid script path": "Укажите корректный путь сохранённого скрипта",
 	"Choose sender and recipient emails": "Укажите отправителя и получателей письма",
+	"Reconnect the agent to load project chat rules": "Переподключите агента, чтобы загрузить правила чатов проекта",
+	"Project chat rules": "Правила чатов проекта",
+	"Shared by all chats in this project. Changes apply on the next send; the current turn keeps its captured rules.": "Общие для всех чатов проекта. Изменения действуют со следующей отправки; текущий ход сохранит прежние правила.",
+	"Describe naming, preview destinations and comment preferences.": "Опишите нейминг, назначение превью и правила комментариев.",
+	"Save project rules": "Сохранить правила",
+	"Project chat rules changed. Reopen the editor before saving.": "Правила чатов проекта изменились. Откройте редактор заново перед сохранением.",
+	"Project chat rules must be text of at most 16000 characters": "Правила чатов проекта должны содержать не более 16000 символов",
+	"Select a user project before editing chat rules": "Выберите пользовательский проект для настройки правил чата",
+	OS: "Операционная система",
+	Browser: "Браузер",
 	"System Info requires administrator access": "Информация о системе доступна только администратору",
+	"System Info": "Информация о системе",
+	"Server and client diagnostics": "Сведения о сервере и клиенте",
+	"Node Name": "Имя узла",
+	Release: "Выпуск ОС",
+	Machine: "Архитектура",
+	"CPU Count": "Число процессоров",
+	"Server time (UTC)": "Время сервера (UTC)",
+	"User Agent": "User Agent",
+	"TACTIC User": "Пользователь TACTIC",
+	"Mail Server": "Почтовый сервер",
+	"Asset Folders": "Каталоги файлов",
+	"Server handoff directory": "Каталог передачи на сервере",
+	"Writable (access check)": "Доступен для записи (проверка прав)",
+	"None configured": "Не настроено",
+	"Time zone": "Часовой пояс",
 	"Preparing the local agent environment…": "Подготовка локального окружения агента…",
 	"Choose computer": "Выберите компьютер",
 	"TACTIC server": "Сервер Тактика",
@@ -2455,6 +2471,14 @@ var russian = {
 	"Allowed by this group": "Разрешено этой группой",
 	"Denied by this group": "Запрещено этой группой",
 	"Existing access: {access}": "Сохранённый уровень: {access}",
+	"Rule type": "Тип правила",
+	"Default access level and project restriction for this group. Select any rule below to edit its permissions and targets visually.": "Базовый уровень доступа и проект группы. Выберите любое правило ниже для наглядного редактирования прав и объектов.",
+	"none — No default access": "none — Без базового доступа",
+	"min — Minimal access": "min — Минимальный доступ",
+	"low — Basic artist access": "low — Базовый доступ артиста",
+	"medium — Standard production access": "medium — Стандартный рабочий доступ",
+	"high — Extended project access": "high — Расширенный доступ к проекту",
+	"admin — Full administrator access": "admin — Полный доступ администратора",
 	"Select a user": "Выберите пользователя",
 	"Select a user to inspect saved permissions.": "Выберите пользователя, чтобы посмотреть его действующие права.",
 	"Permission summary": "Сводка разрешений",
@@ -3760,6 +3784,28 @@ var russian = {
 	Latest: "Последняя",
 	Current: "Текущая",
 	"Cell calculation failed": "Ошибка вычисления ячейки",
+	"Columns: from → to": "Колонки: from → to",
+	"Parent / Child & M:N": "Parent / Child и M:N",
+	"Tables & codes": "Таблицы и коды",
+	Legend: "Легенда",
+	"Parent & Child": "Parent и Child",
+	"Child · hierarchy": "Child · иерархия",
+	"Parent · hierarchy": "Parent · иерархия",
+	"Child / source (from)": "Child / источник (from)",
+	"Parent / target (to)": "Parent / цель (to)",
+	"via {table}": "через {table}",
+	"Child → Parent · hierarchy": "Child → Parent · иерархия",
+	"Self M:N · instance": "M:N на себя · instance",
+	"M:N · instance": "M:N · instance",
+	"Link → Target · {rel}": "Таблица связей → Цель · {rel}",
+	"Child → Parent · {rel}": "Child → Parent · {rel}",
+	"Ports & direction: from → to": "Порты и направление: from → to",
+	"● Right port (Output / from): source table with foreign key (from_col) or Child in a hierarchy.\n○ Left port (Input / to): target table with key (to_col) or Parent in a hierarchy.": "● Правый порт (Output / from): таблица-источник с внешним ключом (from_col) или Child в иерархии.\n○ Левый порт (Input / to): целевая таблица с ключом (to_col) или Parent в иерархии.",
+	"• Hierarchy (Child → Parent): child links to parent (e.g. Shot.scenes_code → Episode.code).\n• M:N (instance): connects two types via a Link table (instance_type).": "• Иерархия (Child → Parent): дочерний объект ссылается на родительский (Shot.scenes_code → Episode.code).\n• Связь M:N (instance): соединяет два типа через таблицу связей (Link table).",
+	"Columns & colors": "Колонки и цвета",
+	"• Direct key (code / id): maps source column from_col to target column to_col.\n• Line color matches the source (from) Search Type. Click any badge or line to edit.": "• Прямой ключ (code / id): связывает колонку from_col таблицы-источника с to_col целевой таблицы.\n• Цвет линии соответствует исходному типу (from). Нажмите на плашку для настройки.",
+	"Input (to / parent) — connect here": "Вход (to / parent) — подключить сюда",
+	"Output (from / child) — connect here": "Выход (from / child) — вести связь отсюда",
 	"A connection to the TACTIC server could not be established. Check the server address, network connection, VPN or proxy, and make sure the server is running. Then try again.": "Не удалось установить соединение с сервером TACTIC. Проверьте адрес сервера, подключение к сети, VPN или прокси и убедитесь, что сервер запущен. Затем повторите попытку.",
 	"ACCOUNT SETTINGS": "НАСТРОЙКИ УЧЁТНОЙ ЗАПИСИ",
 	"API transport": "Транспорт API",
@@ -4515,6 +4561,11 @@ var russian = {
 	"Schema relationships: {count}": "Связей в схеме: {count}",
 	"Schema: %1": "Схема: %1",
 	"Schema: {name}": "Схема: {name}",
+	"Key fields": "Ключевые поля",
+	"Relationship in schema": "Связь в схеме",
+	"Link table": "Таблица связи",
+	"Hierarchy · child → parent": "Иерархия · дочерний → родитель",
+	"Schema link": "Связь схемы",
 	Scope: "Область действия",
 	"Script body": "Код скрипта",
 	"Script language": "Язык скрипта",
@@ -4822,6 +4873,9 @@ var russian = {
 	Changes: "Изменения",
 	"Check the people who belong to this group": "Отметьте участников этой группы",
 	"Check-in type": "Тип Check-in",
+	"Auto: Automatically creates a Latest versionless copy on every check-in (strips _v{version} and places versioned files into /versions) without needing a separate Versionless rule.": "Авто (Auto): При каждом check-in автоматически создаёт бесверсионную копию Latest (убирает _v{version}, а версии кладёт в /versions) без создания второго правила Versionless.",
+	"Strict: Uses the exact Directory and File naming paths as written. Versionless copies are created ONLY if a separate rule has Latest or Current versionless enabled.": "Строгий (Strict): Использует пути папки и файла строго по шаблону. Бесверсионные копии создаются ТОЛЬКО при наличии отдельного правила с включённым Latest или Current versionless.",
+	"Unspecified (default): Behaves like Strict (exact paths; requires an explicit Versionless rule for versionless copies), while remaining compatible with both strict and auto check-in calls.": "Не указан (по умолчанию): Работает как Strict (строго по шаблону; бесверсионные копии требуют отдельного правила Versionless), но совместим с любыми вызовами check-in (и strict, и auto).",
 	"Choose image": "Выбрать изображение",
 	"Class name": "Имя класса",
 	"Column names must be unique lowercase SQL identifiers": "Имена полей должны быть уникальными SQL-идентификаторами в нижнем регистре.",
@@ -4868,6 +4922,15 @@ var russian = {
 	Label: "Подпись",
 	"Last name": "Фамилия",
 	"Latest versionless": "Последний versionless",
+	"Regular versioned rules (v001, v002…) keep both versionless switches OFF. Enabling Latest or Current versionless makes this rule apply ONLY to versionless copies — create a separate rule for versioned files.": "Для обычных версионных файлов (v001, v002…) оба переключателя versionless должны быть ВЫКЛЮЧЕНЫ. Включение Latest или Current versionless делает правило отдельным правилом только для бесверсионных копий.",
+	"Rule for the auto-updated copy of the newest version (no _v001 in file name). Can be combined with Current versionless.": "Правило для копии самой свежей версии (без _v001 в имени). Можно включать вместе с Current versionless.",
+	"Rule for the copy of the version marked as Current. Can be combined with Latest versionless.": "Правило для копии версии, отмеченной как текущая (Current). Можно включать вместе с Latest versionless.",
+	"Reads the version number from the uploaded file name (e.g. _v015). Use only on versioned rules (not with versionless).": "Берёт номер версии из имени сдаваемого файла (например, _v015). Только для обычных версионных правил (не с versionless).",
+	"Conflict: Manual version does not apply to versionless rules (versionless snapshots always use version -1). Keep Manual version only on regular versioned rules.": "Конфликт: «Версия вручную» не применяется к правилам versionless (у бесверсионных снимков версия всегда -1). Включайте «Версию вручную» только на обычном версионном правиле.",
+	"Active mode: This rule generates BOTH Latest and Current versionless copies. Regular versioned check-ins (v001, v002…) require a separate rule with versionless OFF.": "Режим правила: создаёт и Latest, и Current бесверсионные копии. Для обычных версионных сдач (v001, v002…) нужно отдельное правило с выключенными versionless.",
+	"Active mode: Versionless-only rule. TACTIC uses this rule only for the versionless copy; regular versioned check-ins (v001, v002…) require a separate rule.": "Режим правила: только для бесверсионной копии (versionless). Для обычных версионных сдач (v001, v002…) нужно отдельное правило.",
+	"Active mode: Versioned rule with manual version numbering parsed from the uploaded file name.": "Режим правила: обычное версионное правило с чтением номера версии из имени загружаемого файла.",
+	"Active mode: Standard versioned rule (TACTIC numbers versions automatically: v001, v002, v003…).": "Режим правила: стандартное версионное правило (TACTIC нумерует версии автоматически: v001, v002, v003…).",
 	"Leave empty to keep the current password": "Оставьте пустым, чтобы сохранить текущий пароль",
 	"License type": "Тип лицензии",
 	Link: "Ссылка",
@@ -6654,7 +6717,173 @@ var russian = {
 	"The agent executor stopped unexpectedly. Connect again.": "Исполнитель агента неожиданно остановился. Подключитесь снова.",
 	"An external agent is already connected to this project": "К этому проекту уже подключён внешний агент",
 	"Agent connection failed": "Не удалось подключить агента",
-	"No available models. Check AI providers.": "Нет доступных моделей. Проверьте настройки ИИ-провайдеров."
+	"No available models. Check AI providers.": "Нет доступных моделей. Проверьте настройки ИИ-провайдеров.",
+	"Widget preview": "Превью виджета",
+	"Show specialized and system widgets": "Показать специализированные и системные виджеты",
+	"Include task, snapshot, timecard, JSON/XML, and administrative table widgets.": "Включить табличные виджеты для задач, снапшотов, табелей, JSON/XML и администрирования.",
+	Automatic: "Автоматически",
+	Format: "Формат",
+	Expression: "Выражение",
+	"Expression value": "Значение выражения",
+	Link: "Ссылка",
+	Thumbnail: "Миниатюра",
+	Notes: "Заметки",
+	Tasks: "Задачи",
+	"Task completion": "Выполнение задач",
+	"Instance links": "Связи объектов",
+	"SObject details": "Сведения об объекте",
+	Explorer: "Проводник",
+	Metadata: "Метаданные",
+	Delete: "Удаление",
+	"Raw value": "Исходное значение",
+	Array: "Массив",
+	Parent: "Родитель",
+	"Snapshot version": "Версия снапшота",
+	"Snapshot lock": "Блокировка снапшота",
+	"Snapshot file": "Файл снапшота",
+	"Milestone completion": "Выполнение этапа",
+	"Task group completion": "Выполнение группы задач",
+	"Days until due": "Дней до срока",
+	Subcontext: "Субконтекст",
+	"Task summary": "Сводка задач",
+	"Row selection": "Выбор строки",
+	"Search Type title": "Название типа объектов",
+	"Table availability": "Доступность таблицы",
+	"Preference description": "Описание настройки",
+	"Project database": "База данных проекта",
+	"Related value": "Связанное значение",
+	"Notification recipients": "Получатели уведомлений",
+	"Object actions": "Действия с объектом",
+	Login: "Логин",
+	Process: "Процесс",
+	"Related tasks": "Связанные задачи",
+	Timecard: "Табель",
+	Week: "Неделя",
+	Dependencies: "Зависимости",
+	Publish: "Публикация",
+	"General publish": "Общая публикация",
+	"Multiline text": "Многострочный текст",
+	"Selected element XML": "XML выбранного элемента",
+	"Apply XML": "Применить XML",
+	"Displays the field value using its schema type, cell icon, alignment, and badge style.": "Показывает значение поля с учётом типа схемы, иконки, выравнивания и стиля плашки.",
+	"Formats text, numbers, currency, dates, timestamps, or checkboxes.": "Форматирует текст, числа, валюту, даты, время или флажки.",
+	"Computes a read-only value or aggregate from a TACTIC expression (@GET, @COUNT, @SUM).": "Вычисляет значение или агрегат по выражению TACTIC (@GET, @COUNT, @SUM).",
+	"Evaluates a TACTIC expression while keeping the column bound to an editable field.": "Вычисляет выражение TACTIC, сохраняя привязку колонки к редактируемому полю.",
+	"Renders the cell value as a clickable hyperlink or external URL.": "Отображает значение ячейки в виде кликабельной ссылки или URL.",
+	"Shows the latest snapshot preview image or an avatar badge for the row.": "Показывает превью последнего снимка или круглый значок строки.",
+	"Opens process notes and discussion comments with a message count badge.": "Открывает заметки и обсуждения по процессам со счётчиком сообщений.",
+	"Displays interactive workflow task cards with process, status, and assignee.": "Показывает интерактивные карточки задач пайплайна с процессом, статусом и исполнителем.",
+	"Renders a progress bar showing overall task completion percentage for the row.": "Отображает полосу прогресса выполнения задач по объекту.",
+	"Shows a schedule timeline bar from task start and end dates.": "Показывает шкалу расписания по датам начала и окончания задач.",
+	"Adds a button with a counter that expands an inline nested table of related records.": "Добавляет кнопку со счётчиком, разворачивающую вложенную таблицу связанных записей.",
+	"Lists linked related records and supports drag-and-drop linking.": "Показывает связанные объекты и позволяет привязывать их перетаскиванием.",
+	"Runs a custom server Python script or client action when clicked.": "Запускает серверный Python-скрипт или действие клиента по нажатию.",
+	"Renders a custom HTML/Mako layout template inside the table cell.": "Рендерит пользовательский шаблон HTML/Mako внутри ячейки таблицы.",
+	"Opens the full record detail inspector for the row.": "Открывает карточку подробной информации о записи.",
+	"Opens the file upload and snapshot check-in dialog for the row.": "Открывает окно загрузки файлов и публикации снимка (Check-in).",
+	"Opens the local sandbox or repository folder for the row.": "Открывает локальную рабочую папку или каталог репозитория записи.",
+	"Lists published snapshot files attached to the record.": "Показывает список опубликованных файлов снимков записи.",
+	"Inspects snapshot and file metadata for the record.": "Открывает метаданные снимков и файлов записи.",
+	"Provides an action button to delete the record from the table.": "Добавляет кнопку удаления записи из таблицы.",
+	"Displays the unformatted raw database column value.": "Показывает неформатированное исходное значение колонки из базы данных.",
+	"Custom or legacy TACTIC table element class.": "Пользовательский или унаследованный класс табличного элемента TACTIC.",
+	"XML options: <column>, <value_icon>, <value_align>, <value_style>, <value_text_style>.": "Параметры XML: <column>, <value_icon>, <value_align>, <value_style>, <value_text_style>.",
+	"XML options: <type>integer|float|currency|percent|date|time|timecode|Checkbox</type>, <format>-1234.12|YYYY-MM-DD</format>, <fps>24</fps>, <total_summary>total|average|count</total_summary>.": "Параметры XML: <type>integer|float|currency|percent|date|time|timecode|Checkbox</type>, <format>-1234.12|YYYY-MM-DD</format>, <fps>24</fps>, <total_summary>total|average|count</total_summary>.",
+	"XML options: <expression>@GET(...)</expression>, <mode>value|boolean|check</mode>, <use_cache>true|false</use_cache>, <order_by>, <bottom>, <group_bottom>.": "Параметры XML: <expression>@GET(...)</expression>, <mode>value|boolean|check</mode>, <use_cache>true|false</use_cache>, <order_by>, <bottom>, <group_bottom>.",
+	"XML options: <expression>@GET(...)</expression>, <mode>value|boolean|check</mode>, <use_cache>true|false</use_cache>.": "Параметры XML: <expression>@GET(...)</expression>, <mode>value|boolean|check</mode>, <use_cache>true|false</use_cache>.",
+	"XML options: <column>, <icon> (reads URL from the column value or expression).": "Параметры XML: <column>, <icon> (читает URL из поля колонки или выражения).",
+	"XML options: <icon_context>icon|publish</icon_context>, <filename>true|false</filename>, <latest_icon>true|false</latest_icon>, <original>true|false</original>.": "Параметры XML: <icon_context>icon|publish</icon_context>, <filename>true|false</filename>, <latest_icon>true|false</latest_icon>, <original>true|false</original>.",
+	"XML options: <process>, <context>, <use_parent>true|false</use_parent>. Legacy HTML popup flags (note_format, dialog_position, show_fullscreen_button, allow_email) are ignored because notes open in the unified inspector.": "Параметры XML: <process>, <context>, <use_parent>true|false</use_parent>. Старые флаги HTML-попапа (note_format, dialog_position, show_fullscreen_button, allow_email) не используются, так как заметки открываются в едином инспекторе.",
+	"XML options: <process>, <context>, <pipeline_code>, <show_current_pipeline_only>true|false</show_current_pipeline_only>, <edit>true|false</edit>.": "Параметры XML: <process>, <context>, <pipeline_code>, <show_current_pipeline_only>true|false</show_current_pipeline_only>, <edit>true|false</edit>.",
+	"XML options: <task_expr> (optional TACTIC expression to filter which tasks are counted).": "Параметры XML: <task_expr> (необязательное выражение TACTIC для фильтрации учитываемых задач).",
+	"XML options: <options>[{\"start_date_col\":\"bid_start_date\",\"end_date_col\":\"bid_end_date\"}]</options>, <range_start_date>, <range_end_date>.": "Параметры XML: <options>[{\"start_date_col\":\"bid_start_date\",\"end_date_col\":\"bid_end_date\"}]</options>, <range_start_date>, <range_end_date>.",
+	"XML options: <search_type>, <view>, <dynamic_class>tactic.ui.panel.FastTableLayoutWdg</dynamic_class>, <value_icon>.": "Параметры XML: <search_type>, <view>, <dynamic_class>tactic.ui.panel.FastTableLayoutWdg</dynamic_class>, <value_icon>.",
+	"XML options: <instance_type>, <accepted_drop_type>, <path>.": "Параметры XML: <instance_type>, <accepted_drop_type>, <path>.",
+	"XML options: <script_path>, <icon>, <hint>, <color>.": "Параметры XML: <script_path>, <icon>, <hint>, <color>.",
+	"XML options: <view> (saved custom layout view name) or inline <html>.": "Параметры XML: <view> (имя сохранённого вида Custom Layout) или встроенный <html>.",
+	"XML options: no extra <display> options required.": "Параметры XML: дополнительные теги внутри <display> не требуются.",
+	"XML options: <process>, <subcontext>, <transfer_mode>upload|copy|move</transfer_mode>, <sobject_mode>self|parent|connect|expression</sobject_mode>.": "Параметры XML: <process>, <subcontext>, <transfer_mode>upload|copy|move</transfer_mode>, <sobject_mode>self|parent|connect|expression</sobject_mode>.",
+	"XML options: <mode>sandbox|repository</mode>.": "Параметры XML: <mode>sandbox|repository</mode>.",
+	"XML options: <expression> (optional snapshot/file query).": "Параметры XML: <expression> (необязательное выражение выборки снимков/файлов).",
+	"XML options: <column> (optional database column override).": "Параметры XML: <column> (необязательное переопределение колонки БД).",
+	"XML options: edit custom <display> parameters directly in Selected element XML below.": "Параметры XML: редактируйте параметры <display> напрямую в поле XML выбранного элемента ниже.",
+	"Columns: from → to": "Колонки: from → to",
+	"Parent / Child & M:N": "Parent / Child и M:N",
+	"Tables & codes": "Таблицы и коды",
+	Legend: "Легенда",
+	"Schema Legend & Relationship Guide": "Легенда схемы и справочник связей",
+	"Arrow direction: Child → Parent (from_col → to_col)": "Направление стрелки: Child → Parent (from_col → to_col)",
+	"The arrow starts at the table storing the foreign key (from_col, e.g. Shot.episode_code) and points to the referenced parent table (to_col, e.g. Episode.code).": "Стрелка начинается в дочерней таблице, где хранится внешний ключ (from_col, например Shot.episode_code), и указывает на родительскую таблицу (to_col, например Episode.code).",
+	"Hierarchy (type=\"hierarchy\"): Child → Parent": "Иерархия (type=\"hierarchy\"): Child → Parent",
+	"Defines primary parent-child hierarchy used by @PARENT / @SOBJECT(parent) and folder/navigation trees.": "Задаёт основную иерархию родитель–потомок, используемую выражениями @PARENT / @SOBJECT(parent) и деревьями навигации.",
+	"Many-to-Many (M:N): Link Table / Instance": "Связь многие-ко-многим (M:N): промежуточная таблица (Link Table / Instance)",
+	"Connects two entities through an intermediate table (e.g. Assets in Episode -> Assets and Episode) storing two foreign keys.": "Связывает две сущности через промежуточную таблицу (например, Assets in Episode -> Assets и Episode), хранящую два внешних ключа.",
+	"Draft (\"skeleton\") · not in DB": "Черновик («рыба») · ещё не в БД",
+	"Link table · M:N": "Связующая таблица · M:N",
+	"Entity · Search Type": "Сущность · Search Type",
+	"Unregistered · reference": "Не зарегистрирован · ссылка",
+	"New draft node (\"skeleton\")": "+ Черновик узла («рыба»)",
+	"Create & register Search Type…": "+ Создать и зарегистрировать Search Type…",
+	"Add existing Search Type…": "Добавить существующий Search Type…",
+	"New Many-to-Many (M:N) relation…": "Создать связь Many-to-Many (M:N)…",
+	"Register Search Type in DB now": "Зарегистрировать Search Type в БД сейчас",
+	"Open full Search Type creator…": "Открыть полный мастер создания Search Type…",
+	"Start connection from this node": "Начать связь от этого узла",
+	"Start connection from here": "Начать связь отсюда",
+	"Connect Many-to-Many (M:N) from here…": "Связать Many-to-Many (M:N) отсюда…",
+	"Connect Many-to-Many (M:N)…": "Связать Many-to-Many (M:N)…",
+	"Convert to Many-to-Many (M:N)": "Преобразовать в Many-to-Many (M:N)",
+	"Set as Hierarchy (Child → Parent)": "Сделать иерархией (Child → Parent)",
+	"Set as Direct key (code)": "Сделать прямой связью по ключу (code)",
+	"Reverse direction (from ↔ to)": "Развернуть направление (from ↔ to)",
+	"Remove connection": "Удалить связь",
+	"+ New process here": "+ Создать процесс здесь",
+	"Connection mode": "Тип создаваемой связи",
+	"Hierarchy connects Child → Parent by code. Many-to-many (M:N) automatically creates an intermediate link table.": "Hierarchy связывает Child → Parent по полю code. Many-to-many (M:N) автоматически создаёт промежуточную связующую таблицу.",
+	"Hierarchy · Child → Parent": "Иерархия · Child → Parent",
+	"Many-to-many · M:N (link table)": "Многие-ко-многим · M:N (связующая таблица)",
+	"Direct key · code": "Прямой ключ · code",
+	"Direct key · id": "Прямой ключ · id",
+	"Hierarchy · Child → Parent (code)": "Иерархия · Child → Parent (code)",
+	"Many-to-many · via existing link table": "Многие-ко-многим · через существующую связующую таблицу",
+	"Many-to-many · create new link table": "Многие-ко-многим · создать новую связующую таблицу",
+	"Connect Many-to-Many (M:N)": "Связать Many-to-Many (M:N)",
+	"Draft Search Type (\"skeleton\")": "Черновик Search Type («рыба»)",
+	"This node exists only in your schema draft. You can rename it, wire connections, and register it in the database now or when saving the schema.": "Этот узел пока существует только в черновике схемы. Вы можете переименовать его, протянуть связи и зарегистрировать таблицу в БД сейчас либо при сохранении схемы.",
+	"Table code (lowercase SQL)": "Код таблицы (SQL в нижнем регистре)",
+	"Apply table code": "Применить код таблицы",
+	"Pipeline support (pipeline_code)": "Поддержка пайплайнов (pipeline_code)",
+	"Creates a pipeline_code column on registration so items can use Workflows.": "Создаёт колонку pipeline_code при регистрации таблицы, чтобы к объектам можно было привязывать Workflow.",
+	"Many-to-many creates a separate instance Search Type with two key connections, or links through an existing intermediate table.": "Many-to-many создаёт отдельный связующий Search Type с двумя ключевыми связями либо связывает таблицы через существующую промежуточную таблицу.",
+	"Link table (instance_type)": "Связующая таблица (instance_type)",
+	"Intermediate Search Type storing foreign keys to both endpoints.": "Промежуточный Search Type, хранящий внешние ключи к обеим связываемым таблицам.",
+	"Manual · Task": "Ручной · Задача (manual)",
+	"Manual": "Ручной",
+	"Standard human task stage (rectangular card). Creates an artist task and advances when its status reaches complete.": "Стандартный пользовательский этап (прямоугольный узел). Создаёт задачу для исполнителя и завершается при переводе её статуса в complete.",
+	"Action · Auto script": "Действие · Автоскрипт (action)",
+	"Action": "Действие",
+	"Automated process (rounded pill). Runs a server script or command class automatically when triggered by upstream stages.": "Автоматический процесс (скруглённая капсула). Запускает серверный скрипт или класс команды автоматически при срабатывании предыдущего этапа.",
+	"Condition · Branching": "Условие · Ветвление (condition)",
+	"Condition": "Условие",
+	"Conditional branch (diamond markers). Evaluates a script condition and routes flow to success or failure output streams.": "Условное ветвление (маркеры ромба). Вычисляет условие в скрипте и направляет поток по ветке успеха или отказа.",
+	"Approval · Sign-off": "Согласование · Приёмка (approval)",
+	"Approval": "Согласование",
+	"Review gate (double-ring stadium). Requires supervisor approval; rejecting sends status back to upstream stages.": "Этап проверки и утверждения (двойной контур). Требует приёмки супервайзером; при отклонении возвращает работу на предыдущие этапы.",
+	"Hierarchy · Sub-workflow": "Иерархия · Подпайплайн (hierarchy)",
+	"Hierarchy": "Иерархия",
+	"Nested sub-pipeline container. Expands into child workflow processes and can create parent and child tasks.": "Контейнер вложенного подпайплайна. Раскрывается в дочерний Workflow и позволяет создавать родительские и дочерние задачи.",
+	"Dependency · External wait": "Зависимость · Ожидание (dependency)",
+	"Dependency": "Зависимость",
+	"Cross-object dependency node. Waits for or triggers a process on a related Search Type (parent, child, or expression).": "Межобъектная зависимость. Ожидает завершения или запускает процесс у связанного Search Type (родителя, потомка или по выражению).",
+	"Progress · Tracker": "Прогресс · Сводка (progress)",
+	"Circular progress aggregator. Tracks completion across related objects in another Search Type and pipeline.": "Круговой индикатор прогресса. Отслеживает процент готовности связанных объектов другого Search Type и пайплайна.",
+	"Status · Task state": "Статус · Состояние (status)",
+	"Task status state (used in sthpw/task status pipelines). Defines a status name, color, and completion flag.": "Состояние статуса задачи (используется в пайплайнах sthpw/task). Задаёт имя статуса, цвет и признак завершения.",
+	"Choose how this stage behaves in the workflow and how it is drawn on the canvas:": "Выберите, как этот этап работает в пайплайне и как он отображается на схеме:",
+	"DRAFT": "РЫБА",
+	"Config table · config": "Таблица конфигурации · config",
+	"System table · sthpw": "Системная таблица · sthpw",
+	"External · {ns}": "Внешний проект · {ns}"
 };
 function translate(text, language, values) {
 	let result = language === "ru" && russian[text] ? russian[text] : String(text || "");
@@ -6753,8 +6982,945 @@ var _sfc_main$16 = {
 	}
 };
 //#endregion
-//#region src/controls/UserGroupSection.vue
+//#region src/controls/clipboard.js
+async function copyText(text) {
+	if (navigator.clipboard?.writeText) try {
+		await navigator.clipboard.writeText(text);
+		return;
+	} catch {}
+	const previous = document.activeElement, input = document.createElement("textarea");
+	input.value = text;
+	input.readOnly = true;
+	input.style.cssText = "position:fixed;inset:0;width:1px;height:1px;opacity:0";
+	(document.querySelector("dialog:modal") || document.body).append(input);
+	try {
+		input.focus();
+		input.select();
+		if (!document.execCommand("copy")) throw new Error("Clipboard access failed");
+	} finally {
+		input.remove();
+		previous?.focus();
+	}
+}
+async function readClipboard() {
+	if (!navigator.clipboard?.readText) throw new Error("Paste with Ctrl+V or the browser menu on HTTP.");
+	return navigator.clipboard.readText();
+}
+async function readClipboardImages() {
+	if (!navigator.clipboard?.read) return null;
+	let items;
+	try {
+		items = await navigator.clipboard.read();
+	} catch (error) {
+		if (["NotAllowedError", "SecurityError"].includes(error.name)) return null;
+		throw error;
+	}
+	const files = [];
+	for (const item of items) {
+		const type = item.types.includes("image/png") ? "image/png" : item.types.find((type) => type.startsWith("image/"));
+		if (!type) continue;
+		const extension = type === "image/jpeg" ? "jpg" : type.split("/")[1].split("+")[0];
+		files.push(new File([await item.getType(type)], "clipboard" + (files.length ? "-" + (files.length + 1) : "") + "." + extension, { type }));
+	}
+	if (!files.length) throw new Error("The clipboard does not contain an image");
+	return files;
+}
+async function copyImage(blob) {
+	if (!navigator.clipboard?.write || !globalThis.ClipboardItem) throw new Error("Copying an image requires HTTPS or localhost and clipboard permission.");
+	let png = blob;
+	if (blob.type !== "image/png") {
+		const image = await createImageBitmap(blob), canvas = document.createElement("canvas");
+		try {
+			canvas.width = image.width;
+			canvas.height = image.height;
+			canvas.getContext("2d").drawImage(image, 0, 0);
+			png = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
+		} finally {
+			image.close();
+		}
+		if (!png) throw new Error("Unable to copy image");
+	}
+	await navigator.clipboard.write([new ClipboardItem({ "image/png": png })]);
+}
+//#endregion
+//#region src/controls/pythonSyntax.js
+var keywords = new Set("False None True and as assert async await break class continue def del elif else except finally for from global if import in is lambda nonlocal not or pass raise return try while with yield".split(" "));
+function detectLanguage(source = "", language = "auto") {
+	const lang = String(language || "auto").toLowerCase();
+	if (lang === "text" || lang === "plain") return "text";
+	if (lang === "naming" || lang === "expression") return "naming";
+	if (lang === "xml" || lang === "html") return "xml";
+	if (lang === "javascript" || lang === "js" || lang === "server_js" || lang === "json") return "javascript";
+	if (lang === "python" || lang === "py") return "python";
+	const text = String(source || "");
+	if (/^\s*</.test(text)) return "xml";
+	if (/\{(?:project|search_type|sobject|parent|snapshot|file|version|ext|basefile|@)/.test(text)) return "naming";
+	if (/^\s*[\[{]/.test(text)) return "javascript";
+	if (/(?:^|\n)\s*(?:function|const|let|var|export|import\s+.*from)\b/.test(text)) return "javascript";
+	return "python";
+}
+var namingObjects = new Set("project search_type sobject parent snapshot file login env".split(" "));
+var namingFields = new Set("code name table_name title context process version ext basefile type pipeline_code s_status id timestamp keywords description relative_dir".split(" "));
+function namingTokens(source) {
+	const tokens = [];
+	let end = 0;
+	for (const match of source.matchAll(/"(?:\\.|[^"\\\n])*"|'(?:\\.|[^'\\\n])*'|@[A-Za-z_]\w*|\b\d+(?:\.\d+)?\b|[{}()[\]/]|==|!=|<=|>=|\b[A-Za-z_]\w*\b/g)) {
+		if (match.index > end) tokens.push({
+			text: source.slice(end, match.index),
+			role: ""
+		});
+		const text = match[0];
+		const role = /^["']/.test(text) ? "string" : text.startsWith("@") ? "decorator" : /^\d/.test(text) ? "number" : /^[{}]$/.test(text) ? "keyword" : text === "/" ? "comment" : /^(?:==|!=|<=|>=)$/.test(text) ? "keyword" : namingObjects.has(text) ? "self" : namingFields.has(text) ? "type" : /^\s*\(/.test(source.slice(match.index + text.length)) ? "function" : "";
+		tokens.push({
+			text,
+			role
+		});
+		end = match.index + text.length;
+	}
+	if (end < source.length) tokens.push({
+		text: source.slice(end),
+		role: ""
+	});
+	return tokens;
+}
+function xmlTokens(source) {
+	const tokens = [];
+	let end = 0;
+	for (const match of source.matchAll(/<!--[\s\S]*?(?:-->|$)|<!\[CDATA\[[\s\S]*?(?:\]\]>|$)|<\/?[\w:.-]+|\/?>|"[^"\n]*"|'[^'\n]*'|[\w:.-]+(?=\s*=)|&(?:#\w+|\w+);/g)) {
+		if (match.index > end) tokens.push({
+			text: source.slice(end, match.index),
+			role: ""
+		});
+		const text = match[0], role = text.startsWith("<!--") ? "comment" : /^["']/.test(text) || text.startsWith("<![CDATA[") ? "string" : text.startsWith("<") || text.endsWith(">") ? "keyword" : text.startsWith("&") ? "number" : "type";
+		tokens.push({
+			text,
+			role
+		});
+		end = match.index + text.length;
+	}
+	if (end < source.length) tokens.push({
+		text: source.slice(end),
+		role: ""
+	});
+	return tokens;
+}
+var builtins = new Set("abs all any bool bytes callable chr dict enumerate filter float format getattr hasattr int isinstance issubclass iter len list map max min next object open ord print property range repr reversed round set setattr slice sorted staticmethod str sum super tuple type zip Exception ValueError TypeError RuntimeError KeyError".split(" "));
+var pattern = /#[^\n]*|(?<!\w)(?:[furb]{1,2})?(?:"""(?:\\[\s\S]|(?!""")[^\\])*?(?:"""|$)|'''(?:\\[\s\S]|(?!''')[^\\])*?(?:'''|$)|"(?:\\[^\n]|[^"\\\n])*(?:"|$)|'(?:\\[^\n]|[^'\\\n])*(?:'|$))|\b(?:0x[\da-f_]+|0b[01_]+|0o[0-7_]+|\d[\d_]*(?:\.[\d_]*)?(?:e[+-]?[\d_]+)?j?)\b|\.[\d_]+(?:e[+-]?[\d_]+)?j?\b|@[A-Za-z_]\w*(?:\.[A-Za-z_]\w*)*|\b[A-Za-z_]\w*\b/gi;
+function pythonTokens(source, moduleNames = []) {
+	const tokens = [];
+	let end = 0;
+	let previous = "";
+	for (const match of source.matchAll(pattern)) {
+		if (match.index > end) tokens.push({
+			text: source.slice(end, match.index),
+			role: ""
+		});
+		const text = match[0];
+		const role = text.startsWith("#") ? "comment" : /^(?:[furb]{0,2})["']/i.test(text) ? "string" : /^[\d.]/.test(text) ? "number" : text.startsWith("@") ? "decorator" : keywords.has(text) ? "keyword" : ["def", "class"].includes(previous) ? "definition" : moduleNames?.includes(text) ? "module" : ["self", "cls"].includes(text) ? "self" : builtins.has(text) ? "type" : /^\s*\(/.test(source.slice(match.index + text.length)) ? "function" : "";
+		tokens.push({
+			text,
+			role
+		});
+		previous = text;
+		end = match.index + text.length;
+	}
+	if (end < source.length) tokens.push({
+		text: source.slice(end),
+		role: ""
+	});
+	return tokens;
+}
+var jsKeywords = new Set("async await break case catch class const continue debugger default delete do else export extends finally for function if import in instanceof let new of return static super switch this throw try typeof var void while with yield true false null undefined".split(" "));
+var jsBuiltins = new Set("Array Boolean Date Error JSON Map Math Number Object Promise RegExp Set String Symbol console document window context project searchType searchKeys rpc refresh spt ServerStub".split(" "));
+function javascriptTokens(source) {
+	const tokens = [];
+	let end = 0, previous = "";
+	for (const match of source.matchAll(/\/\/[^\n]*|\/\*[\s\S]*?(?:\*\/|$)|"(?:\\[\s\S]|[^"\\])*(?:"|$)|'(?:\\[\s\S]|[^'\\])*(?:'|$)|`(?:\\[\s\S]|[^`\\])*(?:`|$)|\b(?:0x[\da-f]+|\d+(?:\.\d+)?(?:e[+-]?\d+)?)\b|\b[$A-Za-z_][$\w]*\b/gi)) {
+		if (match.index > end) tokens.push({
+			text: source.slice(end, match.index),
+			role: ""
+		});
+		const text = match[0], after = source.slice(match.index + text.length);
+		const role = text.startsWith("//") || text.startsWith("/*") ? "comment" : text.startsWith("\"") && /^\s*:/.test(after) ? "type" : /^["'`]/.test(text) ? "string" : /^\d/.test(text) ? "number" : ["this", "super"].includes(text) ? "self" : jsKeywords.has(text) ? "keyword" : ["function", "class"].includes(previous) ? "definition" : jsBuiltins.has(text) ? "type" : /^\s*\(/.test(after) ? "function" : "";
+		tokens.push({
+			text,
+			role
+		});
+		previous = text;
+		end = match.index + text.length;
+	}
+	if (end < source.length) tokens.push({
+		text: source.slice(end),
+		role: ""
+	});
+	return tokens;
+}
+function syntaxTokens(source, language = "auto", moduleNames = []) {
+	const text = String(source || "");
+	const detected = detectLanguage(text, language);
+	if (detected === "text") return [{ text }];
+	if (detected === "naming") return namingTokens(text);
+	if (detected === "xml") return xmlTokens(text);
+	if (detected === "javascript") return javascriptTokens(text);
+	return pythonTokens(text, moduleNames);
+}
+//#endregion
+//#region src/controls/codeEditing.js
+function editCommand(action, text, start, end, language = "python") {
+	const left = text.lastIndexOf("\n", start - 1) + 1, found = text.indexOf("\n", end), right = found < 0 ? text.length : found;
+	const lang = detectLanguage(text, language);
+	const block = text.slice(left, right), lines = block.split("\n"), marker = lang === "javascript" ? "//" : "#";
+	if (action === "duplicate") {
+		const value = start === end ? "\n" + block : text.slice(start, end), position = start === end ? right : end;
+		return {
+			text: text.slice(0, position) + value + text.slice(position),
+			start: position + (start === end ? 1 : 0),
+			end: position + value.length
+		};
+	}
+	if (action === "delete_line") {
+		const a = right === text.length && left > 0 ? left - 1 : left, b = right < text.length ? right + 1 : right;
+		return {
+			text: text.slice(0, a) + text.slice(b),
+			start: a,
+			end: a
+		};
+	}
+	let replacement;
+	if (action === "indent") replacement = lines.map((line) => "    " + line).join("\n");
+	else if (action === "unindent") replacement = lines.map((line) => line.startsWith("    ") ? line.slice(4) : line.startsWith("	") ? line.slice(1) : line.replace(/^ {1,3}/, "")).join("\n");
+	else if (action === "toggle_comment") {
+		if (lang === "xml") {
+			const remove = lines.filter((line) => line.trim()).every((line) => /^\s*<!--[\s\S]*-->\s*$/.test(line));
+			replacement = lines.map((line) => !line.trim() ? line : remove ? line.replace(/^(\s*)<!--\s?([\s\S]*?)\s?-->(\s*)$/, "$1$2$3") : line.replace(/^(\s*)([\s\S]*?)(\s*)$/, "$1<!-- $2 -->$3")).join("\n");
+		} else {
+			const remove = lines.filter((line) => line.trim()).every((line) => line.trimStart().startsWith(marker));
+			replacement = lines.map((line) => !line.trim() ? line : remove ? line.replace(new RegExp("^(\\s*)" + marker + " ?"), "$1") : line.replace(/^(\s*)/, "$1" + marker + " ")).join("\n");
+		}
+	} else return {
+		text,
+		start,
+		end
+	};
+	return {
+		text: text.slice(0, left) + replacement + text.slice(right),
+		start: left,
+		end: left + replacement.length
+	};
+}
+function findMatches(text, query, { regex = false, caseSensitive = false, wholeWord = false } = {}) {
+	if (!query) return [];
+	let pattern = regex ? query : query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+	if (wholeWord) pattern = "\\b(?:" + pattern + ")\\b";
+	try {
+		return [...text.matchAll(new RegExp(pattern, caseSensitive ? "g" : "gi"))].filter((match) => match[0].length).map((match) => ({
+			start: match.index,
+			end: match.index + match[0].length
+		}));
+	} catch {
+		return [];
+	}
+}
+function documentSymbols(text, language) {
+	const lang = detectLanguage(text, language);
+	if (lang === "xml") return [...text.matchAll(/^[ \t]*<([A-Za-z_][\w:.-]*)(?:[^>]*?\b(?:name|title|id|key|view)=["']([^"']+)["'])?/gm)].map((match) => ({
+		name: match[2] ? `${match[1]} (${match[2]})` : match[1],
+		kind: "element",
+		position: match.index + match[0].indexOf(match[1]),
+		line: text.slice(0, match.index).split("\n").length
+	}));
+	const pattern = lang === "javascript" ? /^[ \t]*(?:(?:export|async)[ \t]+)*(function|class)[ \t]+([\w$]+)/gm : /^[ \t]*(?:async[ \t]+)?(def|class)[ \t]+(\w+)/gm;
+	return [...text.matchAll(pattern)].map((match) => ({
+		name: match[2],
+		kind: match[1],
+		position: match.index + match[0].indexOf(match[2]),
+		line: text.slice(0, match.index).split("\n").length
+	}));
+}
+function completions(text, cursor, language, apiMethods = []) {
+	const lang = detectLanguage(text, language);
+	const prefix = /[\w$:-]*$/.exec(text.slice(0, cursor))[0];
+	if (!prefix) return [];
+	const names = lang === "xml" ? "config element display action rule view edit definition name title width class access project key search_type process icon label expr path true false allow deny" : lang === "javascript" ? "async await const let function return if else for while class import export new try catch throw Promise JSON console context project searchType searchKeys rpc refresh spt ServerStub true false null" : "def class return if elif else for while import from as try except finally raise with pass True False None print len range str int dict list set tuple enumerate sorted server Search SearchType";
+	const candidates = lang === "python" && /\bserver\.\w*$/.test(text.slice(0, cursor)) ? apiMethods : [...names.split(" "), ...text.match(/\b[A-Za-z_][\w$:-]*\b/g) || []];
+	return [...new Set(candidates)].filter((name) => name.startsWith(prefix) && name !== prefix).sort().slice(0, 200).map((name) => ({
+		name,
+		label: name,
+		insertText: name,
+		start: cursor - prefix.length,
+		end: cursor
+	}));
+}
+//#endregion
+//#region src/controls/CodeEditor.vue
+var _hoisted_1$14 = {
+	key: 0,
+	class: "code-source-toolbar"
+};
+var _hoisted_2$6 = {
+	key: 1,
+	class: "code-search"
+};
+var _hoisted_3$4 = ["aria-label", "placeholder"];
+var _hoisted_4$3 = ["aria-label", "placeholder"];
+var _hoisted_5$2 = {
+	key: 2,
+	class: "error",
+	role: "alert"
+};
+var _hoisted_6$1 = { class: "code-buffer" };
+var _hoisted_7$1 = {
+	class: "code-line-numbers",
+	"aria-hidden": "true"
+};
+var _hoisted_8$1 = { class: "code-input-area" };
+var _hoisted_9$1 = ["readonly", "aria-label"];
+var _hoisted_10 = ["aria-label"];
+var _hoisted_11 = { key: 0 };
+var _hoisted_12 = { class: "code-completion-kind" };
 var _sfc_main$15 = {
+	__name: "CodeEditor",
+	props: /*@__PURE__*/ mergeModels({
+		bufferKey: String,
+		language: String,
+		readOnly: Boolean,
+		disabled: Boolean,
+		analysis: Object,
+		ariaLabel: String,
+		sourceToolbar: {
+			type: Boolean,
+			default: true
+		}
+	}, {
+		"modelValue": { default: "" },
+		"modelModifiers": {},
+		"fontSize": { default: 9.25 },
+		"fontSizeModifiers": {}
+	}),
+	emits: /*@__PURE__*/ mergeModels([
+		"run",
+		"help",
+		"outline",
+		"analyse",
+		"blur"
+	], ["update:modelValue", "update:fontSize"]),
+	setup(__props, { expose: __expose, emit: __emit }) {
+		const props = __props;
+		const model = useModel(__props, "modelValue");
+		const emit = __emit;
+		const input = ref(null), scroll = ref({
+			x: 0,
+			y: 0
+		}), selection = ref({
+			start: 0,
+			end: 0
+		});
+		const findOpen = ref(false), replaceOpen = ref(false), query = ref(""), replacement = ref(""), caseSensitive = ref(false), wholeWord = ref(false), regex = ref(false);
+		const findInput = ref(null), suggestions = ref([]), suggestionIndex = ref(0), clipboardError = ref("");
+		const completionStyle = ref({});
+		const fontSize = useModel(__props, "fontSize");
+		const buffers = /* @__PURE__ */ new Map(), history = ref({
+			steps: [],
+			index: -1
+		});
+		let completionTimer, analysisRequest = 0, completionSuppressed = false;
+		const options = computed(() => ({
+			caseSensitive: caseSensitive.value,
+			wholeWord: wholeWord.value,
+			regex: regex.value
+		}));
+		const matches = computed(() => findMatches(model.value, query.value, options.value));
+		const selectedText = computed(() => model.value.slice(selection.value.start, selection.value.end));
+		const effectiveLanguage = computed(() => detectLanguage(model.value, props.language));
+		const highlighted = computed(() => {
+			const tokens = syntaxTokens(model.value, props.language, props.analysis?.source === model.value ? props.analysis.moduleNames : []);
+			const word = /^[\w$]+$/.test(selectedText.value) ? selectedText.value : "";
+			const overlays = [...matches.value.map((row) => ({
+				...row,
+				role: "search"
+			})), ...findMatches(model.value, word, {
+				wholeWord: true,
+				caseSensitive: true
+			}).map((row) => ({
+				...row,
+				role: "occurrence"
+			}))];
+			const parts = [];
+			let offset = 0;
+			for (const token of tokens) {
+				const end = offset + token.text.length, cuts = [.../* @__PURE__ */ new Set([
+					offset,
+					end,
+					...overlays.flatMap((row) => [row.start, row.end]).filter((point) => point > offset && point < end)
+				])].sort((a, b) => a - b);
+				for (let i = 1; i < cuts.length; i++) parts.push({
+					text: model.value.slice(cuts[i - 1], cuts[i]),
+					role: token.role,
+					overlay: overlays.find((row) => row.start <= cuts[i - 1] && row.end >= cuts[i])?.role
+				});
+				offset = end;
+			}
+			return parts;
+		});
+		function snapshot() {
+			return {
+				text: model.value,
+				...selection.value
+			};
+		}
+		function record() {
+			if (history.value.steps[history.value.index]?.text === model.value) return;
+			history.value.steps.splice(history.value.index + 1);
+			history.value.steps.push(snapshot());
+			if (history.value.steps.length > 120) history.value.steps.shift();
+			history.value.index = history.value.steps.length - 1;
+		}
+		watch(() => props.bufferKey, async (key) => {
+			suggestions.value = [];
+			selection.value = {
+				start: 0,
+				end: 0
+			};
+			scroll.value = {
+				x: 0,
+				y: 0
+			};
+			if (!buffers.has(key)) buffers.set(key, {
+				steps: [snapshot()],
+				index: 0
+			});
+			history.value = buffers.get(key);
+			await nextTick();
+			if (input.value) {
+				input.value.scrollTop = 0;
+				input.value.scrollLeft = 0;
+			}
+		}, { immediate: true });
+		watch([
+			model,
+			() => props.bufferKey,
+			() => props.language
+		], () => {
+			record();
+			dismissCompletions();
+			completionSuppressed = false;
+			clearTimeout(completionTimer);
+			completionTimer = setTimeout(() => complete(false), 140);
+		});
+		onBeforeUnmount(() => clearTimeout(completionTimer));
+		watch(() => props.analysis, (result) => {
+			if (!result || result.requestId !== analysisRequest || result.bufferKey !== props.bufferKey || result.source !== model.value || result.cursor !== input.value?.selectionEnd) return;
+			suggestions.value = !completionSuppressed && document.activeElement === input.value ? result.completions : [];
+			suggestionIndex.value = 0;
+			nextTick(positionCompletions);
+		});
+		function dismissCompletions() {
+			analysisRequest++;
+			completionSuppressed = true;
+			suggestions.value = [];
+		}
+		function positionCompletions() {
+			if (!suggestions.value.length || !input.value) return;
+			const area = input.value.closest(".code-buffer"), popup = area.querySelector(".code-completions"), style = getComputedStyle(input.value);
+			if (!popup) return;
+			const before = model.value.slice(0, input.value.selectionEnd), line = before.slice(before.lastIndexOf("\n") + 1), canvas = document.createElement("canvas").getContext("2d");
+			canvas.font = style.font;
+			const x = 46 + canvas.measureText(line).width - input.value.scrollLeft, y = 12 + before.split("\n").length * parseFloat(style.lineHeight) - input.value.scrollTop;
+			completionStyle.value = {
+				left: Math.max(4, Math.min(x, area.clientWidth - popup.offsetWidth - 4)) + "px",
+				top: Math.max(4, Math.min(y, area.clientHeight - popup.offsetHeight - 4)) + "px"
+			};
+		}
+		function blur(event) {
+			if (!event.relatedTarget?.closest(".code-completions")) dismissCompletions();
+		}
+		function select(start, end = start) {
+			if (!input.value) return;
+			selection.value = {
+				start,
+				end
+			};
+			input.value.focus();
+			input.value.setSelectionRange(start, end);
+			input.value.scrollTop = Math.max(0, model.value.slice(0, start).split("\n").length - 3) * parseFloat(getComputedStyle(input.value).lineHeight);
+			syncScroll();
+		}
+		async function apply(value) {
+			model.value = value.text;
+			await nextTick();
+			select(value.start, value.end);
+			record();
+		}
+		async function restore(index) {
+			const step = history.value.steps[index];
+			if (!step || props.readOnly) return;
+			history.value.index = index;
+			model.value = step.text;
+			await nextTick();
+			select(step.start, step.end);
+		}
+		function command(action) {
+			if (!props.readOnly) apply(editCommand(action, model.value, selection.value.start, selection.value.end, effectiveLanguage.value));
+		}
+		function syncSelection() {
+			if (!input.value) return;
+			selection.value = {
+				start: input.value.selectionStart,
+				end: input.value.selectionEnd
+			};
+			const step = history.value.steps[history.value.index];
+			if (step?.text === model.value) Object.assign(step, selection.value);
+		}
+		function syncScroll() {
+			if (input.value) scroll.value = {
+				x: input.value.scrollLeft,
+				y: input.value.scrollTop
+			};
+		}
+		function showFind(replace = false) {
+			dismissCompletions();
+			if (findOpen.value && replaceOpen.value === replace) {
+				findOpen.value = false;
+				query.value = "";
+				input.value.focus();
+				return;
+			}
+			findOpen.value = true;
+			replaceOpen.value = replace && !props.readOnly;
+			nextTick(() => {
+				findInput.value?.focus();
+				findInput.value?.select();
+			});
+		}
+		function nextMatch(backwards = false) {
+			const rows = matches.value;
+			if (!rows.length) return;
+			const row = backwards ? [...rows].reverse().find((row) => row.end < selection.value.start) || rows.at(-1) : rows.find((row) => row.start > selection.value.start) || rows[0];
+			select(row.start, row.end);
+		}
+		function replace(all = false) {
+			if (props.readOnly) return;
+			const rows = all ? matches.value : matches.value.filter((row) => row.start === selection.value.start && row.end === selection.value.end);
+			if (!rows.length) return nextMatch();
+			let text = model.value;
+			for (const row of [...rows].reverse()) text = text.slice(0, row.start) + replacement.value + text.slice(row.end);
+			apply({
+				text,
+				start: rows[0].start,
+				end: rows[0].start + replacement.value.length
+			});
+		}
+		async function clipboard(action) {
+			try {
+				clipboardError.value = "";
+				if (action === "paste") {
+					if (props.readOnly) return;
+					const value = await readClipboard();
+					apply({
+						text: model.value.slice(0, selection.value.start) + value + model.value.slice(selection.value.end),
+						start: selection.value.start + value.length,
+						end: selection.value.start + value.length
+					});
+				} else {
+					await copyText(selectedText.value);
+					if (action === "cut" && !props.readOnly) apply({
+						text: model.value.slice(0, selection.value.start) + model.value.slice(selection.value.end),
+						start: selection.value.start,
+						end: selection.value.start
+					});
+				}
+			} catch (error) {
+				clipboardError.value = error.message;
+			}
+		}
+		function complete(manual = true) {
+			clearTimeout(completionTimer);
+			if (manual) completionSuppressed = false;
+			const cursor = input.value?.selectionEnd || 0;
+			emit("analyse", {
+				bufferKey: props.bufferKey,
+				source: model.value,
+				cursor,
+				manual,
+				requestId: ++analysisRequest
+			});
+			if (!props.analysis && !props.readOnly && document.activeElement === input.value) {
+				const prefix = /[\w$:-]*$/.exec(model.value.slice(0, cursor))[0];
+				suggestions.value = !completionSuppressed && (manual || prefix.length >= 2) ? completions(model.value, cursor, effectiveLanguage.value) : [];
+				suggestionIndex.value = 0;
+				nextTick(positionCompletions);
+			}
+		}
+		function acceptSuggestion(row, suffix = "") {
+			dismissCompletions();
+			if (props.readOnly) return;
+			const text = row.insertText || row.name, cursor = row.start + text.length + (row.cursorOffset || 0);
+			const source = model.value.slice(0, row.start) + text + model.value.slice(row.end);
+			apply({
+				text: source.slice(0, cursor) + suffix + source.slice(cursor),
+				start: cursor + suffix.length,
+				end: cursor + suffix.length
+			});
+		}
+		function goToLine(line) {
+			select(model.value.split("\n").slice(0, line - 1).reduce((sum, value) => sum + value.length + 1, 0));
+		}
+		function navigateSymbol(delta) {
+			const symbols = props.analysis?.symbols || documentSymbols(model.value, effectiveLanguage.value), line = model.value.slice(0, selection.value.end).split("\n").length;
+			const row = delta > 0 ? symbols.find((row) => row.line > line) || symbols[0] : [...symbols].reverse().find((row) => row.line < line) || symbols.at(-1);
+			if (row) goToLine(row.line);
+		}
+		function definition() {
+			const cursor = selection.value.end, before = /[\w$]*$/.exec(model.value.slice(0, cursor))[0], after = /^[\w$]*/.exec(model.value.slice(cursor))[0];
+			const row = (props.analysis?.symbols || documentSymbols(model.value, effectiveLanguage.value)).find((row) => row.name === before + after);
+			if (row) goToLine(row.line);
+		}
+		function key(event) {
+			const ctrl = event.ctrlKey || event.metaKey;
+			if (event.key === "Tab" && event.target !== input.value) return;
+			if (event.target.tagName === "INPUT" && !["Escape", "F3"].includes(event.key) && !(ctrl && ["f", "h"].includes(event.key.toLowerCase()))) return;
+			if (ctrl && event.key === "Enter") {
+				event.preventDefault();
+				dismissCompletions();
+				emit("run", selectedText.value || model.value);
+				return;
+			}
+			if (suggestions.value.length && !ctrl && [
+				"ArrowDown",
+				"ArrowUp",
+				"Enter",
+				"Tab",
+				" "
+			].includes(event.key)) {
+				if (event.key === "Enter") {
+					dismissCompletions();
+					return;
+				}
+				event.preventDefault();
+				if (["Tab", " "].includes(event.key)) acceptSuggestion(suggestions.value[suggestionIndex.value], event.key === " " ? " " : "");
+				else {
+					suggestionIndex.value = (suggestionIndex.value + (event.key === "ArrowDown" ? 1 : suggestions.value.length - 1)) % suggestions.value.length;
+					nextTick(() => input.value.parentElement.parentElement.querySelector("[aria-selected=\"true\"]")?.scrollIntoView({ block: "nearest" }));
+				}
+				return;
+			}
+			if (event.key === "Escape" && (suggestions.value.length || findOpen.value)) {
+				event.preventDefault();
+				event.stopPropagation();
+				const searching = !suggestions.value.length;
+				dismissCompletions();
+				if (searching) {
+					findOpen.value = false;
+					query.value = "";
+					input.value.focus();
+				}
+				return;
+			}
+			let handled = true;
+			if (ctrl && event.key.toLowerCase() === "z") restore(history.value.index + (event.shiftKey ? 1 : -1));
+			else if (ctrl && event.key.toLowerCase() === "y") restore(history.value.index + 1);
+			else if (ctrl && ["f", "h"].includes(event.key.toLowerCase())) showFind(event.key.toLowerCase() === "h");
+			else if (event.key === "F3") nextMatch(event.shiftKey);
+			else if (ctrl && event.code === "Space") complete();
+			else if (ctrl && event.shiftKey && event.key.toLowerCase() === "o") emit("outline");
+			else if (event.altKey && ["ArrowUp", "ArrowDown"].includes(event.key)) navigateSymbol(event.key === "ArrowUp" ? -1 : 1);
+			else if (event.key === "F12") definition();
+			else if (ctrl && event.shiftKey && event.key.toLowerCase() === "k") command("delete_line");
+			else if (ctrl && event.key === "/") command("toggle_comment");
+			else if (ctrl && event.key.toLowerCase() === "d") command("duplicate");
+			else if (event.key === "Tab") {
+				if (event.shiftKey || selectedText.value) command(event.shiftKey ? "unindent" : "indent");
+				else if (!props.readOnly) {
+					const cursor = selection.value.end, count = 4 - (cursor - model.value.lastIndexOf("\n", cursor - 1) - 1) % 4;
+					apply({
+						text: model.value.slice(0, cursor) + " ".repeat(count) + model.value.slice(cursor),
+						start: cursor + count,
+						end: cursor + count
+					});
+				}
+			} else handled = false;
+			if (handled) event.preventDefault();
+			else suggestions.value = [];
+		}
+		__expose({
+			select,
+			goToLine,
+			selectedText,
+			showFind,
+			clipboard,
+			historyTo: restore,
+			undo() {
+				return restore(history.value.index - 1);
+			},
+			redo() {
+				return restore(history.value.index + 1);
+			},
+			frameState: computed(() => ({
+				historyCount: history.value.steps.length,
+				historyIndex: history.value.index,
+				canUndo: history.value.index > 0,
+				canRedo: history.value.index < history.value.steps.length - 1,
+				canCopy: !!selectedText.value
+			})),
+			focus() {
+				input.value?.focus();
+			}
+		});
+		return (_ctx, _cache) => {
+			return openBlock(), createElementBlock("section", {
+				class: "code-editor",
+				style: normalizeStyle({ "--code-size": fontSize.value + "pt" }),
+				onKeydown: key
+			}, [
+				__props.sourceToolbar ? (openBlock(), createElementBlock("div", _hoisted_1$14, [
+					createVNode(_sfc_main$33, { name: "MDI_FILE_EDIT" }),
+					createBaseVNode("span", null, toDisplayString(unref(t)("Source")), 1),
+					createVNode(_sfc_main$34, {
+						"icon-only": "",
+						icon: "undo",
+						label: "Undo",
+						disabled: __props.readOnly || history.value.index <= 0,
+						onClick: _cache[0] || (_cache[0] = ($event) => restore(history.value.index - 1))
+					}, null, 8, ["disabled"]),
+					createVNode(_sfc_main$34, {
+						"icon-only": "",
+						icon: "redo",
+						label: "Redo",
+						disabled: __props.readOnly || history.value.index >= history.value.steps.length - 1,
+						onClick: _cache[1] || (_cache[1] = ($event) => restore(history.value.index + 1))
+					}, null, 8, ["disabled"]),
+					createVNode(_sfc_main$26, {
+						overlay: "",
+						label: "Edit history",
+						icon: "history"
+					}, {
+						default: withCtx(() => [(openBlock(true), createElementBlock(Fragment, null, renderList([...history.value.steps].reverse(), (step, index) => {
+							return openBlock(), createBlock(_sfc_main$34, {
+								key: index,
+								label: String(history.value.steps.length - index) + " · " + step.text.split("\n")[0].slice(0, 80),
+								disabled: __props.readOnly,
+								onClick: ($event) => restore(history.value.steps.length - index - 1)
+							}, null, 8, [
+								"label",
+								"disabled",
+								"onClick"
+							]);
+						}), 128))]),
+						_: 1
+					}),
+					renderSlot(_ctx.$slots, "actions"),
+					createVNode(_sfc_main$34, {
+						"icon-only": "",
+						icon: "FAS_CUT",
+						label: "Cut",
+						disabled: __props.readOnly || !selectedText.value,
+						onClick: _cache[2] || (_cache[2] = ($event) => clipboard("cut"))
+					}, null, 8, ["disabled"]),
+					createVNode(_sfc_main$34, {
+						"icon-only": "",
+						icon: "copy",
+						label: "Copy",
+						disabled: !selectedText.value,
+						onClick: _cache[3] || (_cache[3] = ($event) => clipboard("copy"))
+					}, null, 8, ["disabled"]),
+					createVNode(_sfc_main$34, {
+						"icon-only": "",
+						icon: "MDI_CONTENT_PASTE",
+						label: "Paste",
+						disabled: __props.readOnly,
+						onClick: _cache[4] || (_cache[4] = ($event) => clipboard("paste"))
+					}, null, 8, ["disabled"]),
+					createVNode(_sfc_main$26, {
+						overlay: "",
+						label: "Text size",
+						icon: "MDI_FORMAT_SIZE"
+					}, {
+						default: withCtx(() => [(openBlock(), createElementBlock(Fragment, null, renderList([
+							8,
+							9.25,
+							11,
+							13,
+							15
+						], (size, index) => {
+							return createVNode(_sfc_main$34, {
+								key: size,
+								label: [
+									"Small",
+									"Normal",
+									"Medium",
+									"Large",
+									"Extra large"
+								][index],
+								"aria-pressed": size === fontSize.value,
+								onClick: ($event) => fontSize.value = size
+							}, null, 8, [
+								"label",
+								"aria-pressed",
+								"onClick"
+							]);
+						}), 64))]),
+						_: 1
+					}),
+					createVNode(_sfc_main$34, {
+						"icon-only": "",
+						icon: "search",
+						label: "Find",
+						onClick: _cache[5] || (_cache[5] = ($event) => showFind())
+					}),
+					createVNode(_sfc_main$34, {
+						"icon-only": "",
+						icon: "MDI_PLAY_BOX_OUTLINE",
+						label: "Run selection",
+						disabled: __props.readOnly || __props.disabled || !selectedText.value,
+						onClick: _cache[6] || (_cache[6] = ($event) => emit("run", selectedText.value))
+					}, null, 8, ["disabled"]),
+					createVNode(_sfc_main$34, {
+						"icon-only": "",
+						icon: "help",
+						label: "Code editor help",
+						onClick: _cache[7] || (_cache[7] = ($event) => emit("help"))
+					})
+				])) : createCommentVNode("", true),
+				findOpen.value ? (openBlock(), createElementBlock("div", _hoisted_2$6, [
+					withDirectives(createBaseVNode("input", {
+						ref_key: "findInput",
+						ref: findInput,
+						"onUpdate:modelValue": _cache[8] || (_cache[8] = ($event) => query.value = $event),
+						"aria-label": unref(t)("Find in source"),
+						placeholder: unref(t)("Find"),
+						onKeydown: _cache[9] || (_cache[9] = withKeys(withModifiers(($event) => nextMatch($event.shiftKey), ["prevent"]), ["enter"]))
+					}, null, 40, _hoisted_3$4), [[vModelText, query.value]]),
+					createBaseVNode("span", null, toDisplayString(matches.value.length), 1),
+					createVNode(_sfc_main$34, {
+						"icon-only": "",
+						icon: "previous",
+						label: "Previous match",
+						onClick: _cache[10] || (_cache[10] = ($event) => nextMatch(true))
+					}),
+					createVNode(_sfc_main$34, {
+						"icon-only": "",
+						icon: "next",
+						label: "Next match",
+						onClick: _cache[11] || (_cache[11] = ($event) => nextMatch())
+					}),
+					createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Match case")), 1), createVNode(_sfc_main$32, {
+						modelValue: caseSensitive.value,
+						"onUpdate:modelValue": _cache[12] || (_cache[12] = ($event) => caseSensitive.value = $event),
+						label: "Match case"
+					}, null, 8, ["modelValue"])]),
+					createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Whole word")), 1), createVNode(_sfc_main$32, {
+						modelValue: wholeWord.value,
+						"onUpdate:modelValue": _cache[13] || (_cache[13] = ($event) => wholeWord.value = $event),
+						label: "Whole word"
+					}, null, 8, ["modelValue"])]),
+					createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Regular expression")), 1), createVNode(_sfc_main$32, {
+						modelValue: regex.value,
+						"onUpdate:modelValue": _cache[14] || (_cache[14] = ($event) => regex.value = $event),
+						label: "Regular expression"
+					}, null, 8, ["modelValue"])]),
+					!__props.readOnly ? (openBlock(), createBlock(_sfc_main$34, {
+						key: 0,
+						"icon-only": "",
+						icon: "edit",
+						label: "Replace",
+						onClick: _cache[15] || (_cache[15] = ($event) => replaceOpen.value = !replaceOpen.value)
+					})) : createCommentVNode("", true),
+					createVNode(_sfc_main$34, {
+						"icon-only": "",
+						icon: "close",
+						label: "Close search",
+						onClick: _cache[16] || (_cache[16] = ($event) => {
+							findOpen.value = false;
+							query.value = "";
+						})
+					}),
+					replaceOpen.value ? (openBlock(), createElementBlock(Fragment, { key: 1 }, [
+						withDirectives(createBaseVNode("input", {
+							"onUpdate:modelValue": _cache[17] || (_cache[17] = ($event) => replacement.value = $event),
+							"aria-label": unref(t)("Replacement"),
+							placeholder: unref(t)("Replacement")
+						}, null, 8, _hoisted_4$3), [[vModelText, replacement.value]]),
+						createVNode(_sfc_main$34, {
+							label: "Replace",
+							onClick: _cache[18] || (_cache[18] = ($event) => replace())
+						}),
+						createVNode(_sfc_main$34, {
+							label: "Replace all",
+							onClick: _cache[19] || (_cache[19] = ($event) => replace(true))
+						})
+					], 64)) : createCommentVNode("", true)
+				])) : createCommentVNode("", true),
+				clipboardError.value ? (openBlock(), createElementBlock("p", _hoisted_5$2, toDisplayString(unref(t)(clipboardError.value)), 1)) : createCommentVNode("", true),
+				createBaseVNode("div", _hoisted_6$1, [
+					createBaseVNode("div", _hoisted_7$1, [createBaseVNode("pre", { style: normalizeStyle({ transform: `translateY(${-scroll.value.y}px)` }) }, toDisplayString(Array.from({ length: model.value.split("\n").length }, (_, i) => i + 1).join("\n")), 5)]),
+					createBaseVNode("div", _hoisted_8$1, [createBaseVNode("pre", {
+						class: "code-highlight",
+						"aria-hidden": "true",
+						style: normalizeStyle({ transform: `translate(${-scroll.value.x}px, ${-scroll.value.y}px)` })
+					}, [(openBlock(true), createElementBlock(Fragment, null, renderList(highlighted.value, (part, index) => {
+						return openBlock(), createElementBlock("span", {
+							key: index,
+							class: normalizeClass([part.role && "syntax-" + part.role, part.overlay && "syntax-" + part.overlay])
+						}, toDisplayString(part.text), 3);
+					}), 128)), _cache[23] || (_cache[23] = createTextVNode(toDisplayString("\n"), -1))], 4), withDirectives(createBaseVNode("textarea", {
+						ref_key: "input",
+						ref: input,
+						"onUpdate:modelValue": _cache[20] || (_cache[20] = ($event) => model.value = $event),
+						wrap: "off",
+						spellcheck: "false",
+						autocapitalize: "off",
+						autocomplete: "off",
+						readonly: __props.readOnly,
+						"aria-label": __props.ariaLabel || unref(t)("Script source"),
+						onSelect: syncSelection,
+						onKeyup: syncSelection,
+						onClick: syncSelection,
+						onInput: _cache[21] || (_cache[21] = ($event) => {
+							syncSelection();
+							record();
+						}),
+						onScroll: syncScroll,
+						onBlur: _cache[22] || (_cache[22] = ($event) => {
+							blur();
+							emit("blur", model.value);
+						})
+					}, null, 40, _hoisted_9$1), [[vModelText, model.value]])]),
+					suggestions.value.length ? (openBlock(), createElementBlock("div", {
+						key: 0,
+						class: "code-completions",
+						style: normalizeStyle(completionStyle.value),
+						role: "listbox",
+						"aria-label": unref(t)("Code completions")
+					}, [(openBlock(true), createElementBlock(Fragment, null, renderList(suggestions.value, (row, index) => {
+						return openBlock(), createBlock(_sfc_main$34, {
+							key: row.label || row.name,
+							role: "option",
+							"aria-selected": index === suggestionIndex.value,
+							label: row.label || row.name,
+							class: normalizeClass({ detailed: row.detail }),
+							onClick: ($event) => acceptSuggestion(row)
+						}, {
+							default: withCtx(() => [
+								createVNode(_sfc_main$33, { name: row.kind === "class" ? "MDI_FORMAT_SIZE" : row.kind === "module" ? "MDI_API" : "code" }, null, 8, ["name"]),
+								createBaseVNode("span", null, [createBaseVNode("strong", null, toDisplayString(row.label || row.name), 1), row.detail ? (openBlock(), createElementBlock("small", _hoisted_11, toDisplayString(unref(t)(row.detail)), 1)) : createCommentVNode("", true)]),
+								createBaseVNode("small", _hoisted_12, toDisplayString(unref(t)(row.kind || "variable")), 1)
+							]),
+							_: 2
+						}, 1032, [
+							"aria-selected",
+							"label",
+							"class",
+							"onClick"
+						]);
+					}), 128))], 12, _hoisted_10)) : createCommentVNode("", true)
+				])
+			], 36);
+		};
+	}
+};
+//#endregion
+//#region src/controls/UserGroupSection.vue
+var _sfc_main$14 = {
 	__name: "UserGroupSection",
 	props: {
 		title: String,
@@ -6778,11 +7944,11 @@ function matchesUser(user, query) {
 }
 //#endregion
 //#region src/controls/UserComboBox.vue
-var _hoisted_1$14 = { class: "user-combo-label" };
-var _hoisted_2$6 = { class: "user-combo-list" };
-var _hoisted_3$4 = { class: "user-combo-copy" };
-var _hoisted_4$3 = { key: 0 };
-var _sfc_main$14 = {
+var _hoisted_1$13 = { class: "user-combo-label" };
+var _hoisted_2$5 = { class: "user-combo-list" };
+var _hoisted_3$3 = { class: "user-combo-copy" };
+var _hoisted_4$2 = { key: 0 };
+var _sfc_main$13 = {
 	__name: "UserComboBox",
 	props: {
 		value: String,
@@ -6901,7 +8067,7 @@ var _sfc_main$14 = {
 						"fallback-text",
 						"accent"
 					]),
-					createBaseVNode("span", _hoisted_1$14, toDisplayString(__props.placeholder || current.value.displayName), 1),
+					createBaseVNode("span", _hoisted_1$13, toDisplayString(__props.placeholder || current.value.displayName), 1),
 					!__props.actionField ? (openBlock(), createBlock(_sfc_main$33, {
 						key: 0,
 						class: "user-combo-indicator",
@@ -6920,8 +8086,8 @@ var _sfc_main$14 = {
 					"modelValue",
 					"placeholder",
 					"disabled"
-				]), createBaseVNode("div", _hoisted_2$6, [(openBlock(true), createElementBlock(Fragment, null, renderList(groups.value, (group) => {
-					return openBlock(), createElementBlock(Fragment, { key: group.title }, [createVNode(_sfc_main$15, {
+				]), createBaseVNode("div", _hoisted_2$5, [(openBlock(true), createElementBlock(Fragment, null, renderList(groups.value, (group) => {
+					return openBlock(), createElementBlock(Fragment, { key: group.title }, [createVNode(_sfc_main$14, {
 						title: group.title,
 						compact: ""
 					}, null, 8, ["title"]), (openBlock(true), createElementBlock(Fragment, null, renderList(group.users, (user) => {
@@ -6949,7 +8115,7 @@ var _sfc_main$14 = {
 									"fallback-text",
 									"accent"
 								]),
-								createBaseVNode("span", _hoisted_3$4, [createBaseVNode("strong", null, toDisplayString(user.displayName), 1), user.login ? (openBlock(), createElementBlock("small", _hoisted_4$3, toDisplayString(user.login), 1)) : createCommentVNode("", true)]),
+								createBaseVNode("span", _hoisted_3$3, [createBaseVNode("strong", null, toDisplayString(user.displayName), 1), user.login ? (openBlock(), createElementBlock("small", _hoisted_4$2, toDisplayString(user.login), 1)) : createCommentVNode("", true)]),
 								__props.value === user.login ? (openBlock(), createBlock(_sfc_main$33, {
 									key: 0,
 									class: "user-combo-check",
@@ -7001,8 +8167,8 @@ function target(options, value, key) {
 }
 //#endregion
 //#region src/controls/AppSegmentedButton.vue
-var _hoisted_1$13 = ["aria-label"];
-var _sfc_main$13 = {
+var _hoisted_1$12 = ["aria-label"];
+var _sfc_main$12 = {
 	__name: "AppSegmentedButton",
 	props: /*@__PURE__*/ mergeModels({
 		options: {
@@ -7069,14 +8235,14 @@ var _sfc_main$13 = {
 					"disabled",
 					"onClick"
 				]);
-			}), 128))], 46, _hoisted_1$13);
+			}), 128))], 46, _hoisted_1$12);
 		};
 	}
 };
 //#endregion
 //#region src/controls/AppEditableSelect.vue
-var _hoisted_1$12 = ["id", "aria-label"];
-var _sfc_main$12 = {
+var _hoisted_1$11 = ["id", "aria-label"];
+var _sfc_main$11 = {
 	__name: "AppEditableSelect",
 	props: {
 		modelValue: {
@@ -7208,7 +8374,7 @@ var _sfc_main$12 = {
 							"aria-selected",
 							"onClick"
 						]);
-					}), 128))], 8, _hoisted_1$12)]),
+					}), 128))], 8, _hoisted_1$11)]),
 					_: 1
 				}, 8, [
 					"anchor",
@@ -7222,12 +8388,12 @@ var _sfc_main$12 = {
 };
 //#endregion
 //#region src/frame/controls/grid/FrameGrid.vue
-var _hoisted_1$11 = ["data-frame", "aria-label"];
-var _hoisted_2$5 = ["data-frame"];
-var _hoisted_3$3 = ["data-frame"];
-var _hoisted_4$2 = ["data-frame"];
-var _hoisted_5$2 = ["data-frame"];
-var _sfc_main$11 = {
+var _hoisted_1$10 = ["data-frame", "aria-label"];
+var _hoisted_2$4 = ["data-frame"];
+var _hoisted_3$2 = ["data-frame"];
+var _hoisted_4$1 = ["data-frame"];
+var _hoisted_5$1 = ["data-frame"];
+var _sfc_main$10 = {
 	__name: "FrameGrid",
 	props: {
 		node: Object,
@@ -7298,7 +8464,7 @@ var _sfc_main$11 = {
 							width: __props.node.cellWidth + "px",
 							height: __props.node.headerHeight + "px"
 						})
-					}, [typeof __props.node.columnHeaders[column] === "object" ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createBaseVNode("b", { "data-frame": __props.node.id + "_column_" + column + "_title" }, toDisplayString(__props.node.columnHeaders[column].label), 9, _hoisted_3$3), createBaseVNode("small", { "data-frame": __props.node.id + "_column_" + column + "_detail" }, toDisplayString(__props.node.columnHeaders[column].detail), 9, _hoisted_4$2)], 64)) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [createTextVNode(toDisplayString(__props.node.columnHeaders[column]), 1)], 64))], 14, _hoisted_2$5);
+					}, [typeof __props.node.columnHeaders[column] === "object" ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createBaseVNode("b", { "data-frame": __props.node.id + "_column_" + column + "_title" }, toDisplayString(__props.node.columnHeaders[column].label), 9, _hoisted_3$2), createBaseVNode("small", { "data-frame": __props.node.id + "_column_" + column + "_detail" }, toDisplayString(__props.node.columnHeaders[column].detail), 9, _hoisted_4$1)], 64)) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [createTextVNode(toDisplayString(__props.node.columnHeaders[column]), 1)], 64))], 14, _hoisted_2$4);
 				}), 128))], 4),
 				createBaseVNode("div", {
 					class: "frame-grid-row-headings",
@@ -7322,7 +8488,7 @@ var _sfc_main$11 = {
 						key: 0,
 						scene: { nodes: __props.node.rowHeaders[row].children },
 						onEvent: _cache[0] || (_cache[0] = ($event) => emit("event", $event))
-					}, null, 8, ["scene"])) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [createBaseVNode("span", { style: normalizeStyle({ fontWeight: __props.node.rowHeaders[row].all ? 600 : 400 }) }, toDisplayString(__props.node.rowHeaders[row].label), 5), createBaseVNode("small", null, toDisplayString(__props.node.rowHeaders[row].detail), 1)], 64))], 14, _hoisted_5$2);
+					}, null, 8, ["scene"])) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [createBaseVNode("span", { style: normalizeStyle({ fontWeight: __props.node.rowHeaders[row].all ? 600 : 400 }) }, toDisplayString(__props.node.rowHeaders[row].label), 5), createBaseVNode("small", null, toDisplayString(__props.node.rowHeaders[row].detail), 1)], 64))], 14, _hoisted_5$1);
 				}), 128))], 4),
 				createBaseVNode("div", {
 					ref_key: "body",
@@ -7358,7 +8524,7 @@ var _sfc_main$11 = {
 						}, null, 8, ["style", "scene"]);
 					}), 128))], 64);
 				}), 128))], 4)], 36)
-			], 8, _hoisted_1$11);
+			], 8, _hoisted_1$10);
 		};
 	}
 };
@@ -7382,7 +8548,8 @@ function initial() {
 			x: 0,
 			y: 0
 		},
-		touch: null
+		touch: null,
+		menu: null
 	};
 }
 function size(node, style) {
@@ -7470,9 +8637,19 @@ function curves(ui, model) {
 	for (let index = 0; index < (model.edges || []).length; index++) {
 		const edge = model.edges[index], from = nodes.find((row) => row.identity === edge.from), to = nodes.find((row) => row.identity === edge.to);
 		if (!from || !to) continue;
-		const a = bounds(ui, from, model.style), b = bounds(ui, to, model.style);
-		const offset = model.edges.some((row) => row.from === edge.to && row.to === edge.from) ? String(edge.from) < String(edge.to) ? -24 : 24 : 0;
-		rows.push(curve(a.x + a.width, a.y + a.height / 2 + offset, b.x, b.y + b.height / 2 + offset, Object.assign({ index }, edge, { color: edge.color || from.color || "action" })));
+		const a = bounds(ui, from, model.style), b = bounds(ui, to, model.style), selfLoop = edge.from === edge.to, pairEdges = selfLoop ? model.edges.filter((row) => row.from === edge.from && row.to === edge.to) : model.edges.filter((row) => row.from === edge.from && row.to === edge.to || row.from === edge.to && row.to === edge.from), sameDirEdges = selfLoop ? pairEdges : model.edges.filter((row) => row.from === edge.from && row.to === edge.to), pairIndex = Math.max(0, pairEdges.indexOf(edge)), reverse = !selfLoop && model.edges.some((row) => row.from === edge.to && row.to === edge.from);
+		const offset = selfLoop ? 0 : sameDirEdges.length > 1 || pairEdges.length > 2 ? (pairIndex - (pairEdges.length - 1) / 2) * 60 : reverse ? String(edge.from) < String(edge.to) ? -36 : 36 : 0;
+		const backward = !!model.readOnly && !selfLoop && a.x >= b.x + b.width;
+		const x1 = backward ? a.x : a.x + a.width, y1 = a.y + a.height / 2, x2 = backward ? b.x + b.width : b.x, y2 = b.y + b.height / 2, dx = x2 - x1, dy = y2 - y1, tBack = clamp((80 - dx) / 160, 0, 1), backW = backward || selfLoop ? 0 : tBack * tBack * (3 - 2 * tBack), tVert = clamp((Math.abs(dy) - 48) / 48, 0, 1), vertW = tVert * tVert * (3 - 2 * tVert), corrPull = dy * .64 * vertW, archOffset = -88 * (1 - vertW), loopArch = 96 + pairIndex * 40, cy1 = selfLoop ? y1 + loopArch : y1 + backW * (corrPull + archOffset) + offset, cy2 = selfLoop ? y2 + loopArch : y2 + backW * (-corrPull + archOffset) + offset;
+		rows.push(curve(x1, y1, x2, y2, Object.assign({ index }, edge, {
+			color: edge.color || from.color || "action",
+			backward,
+			selfLoop,
+			backW,
+			corridor: backW > .5 && vertW > .5,
+			cy1,
+			cy2
+		})));
 	}
 	if (ui.pending) {
 		const node = nodes.find((row) => row.identity === ui.pending.identity);
@@ -7492,19 +8669,22 @@ function curves(ui, model) {
 	return rows;
 }
 function curve(x1, y1, x2, y2, data) {
+	const forwardSpan = Math.max(70, Math.max(0, x2 - x1) / 2), backSpan = Math.max(96, Math.max(0, x1 - x2) * .55), w = data && data.backW !== void 0 ? data.backW : 0, span = data && data.selfLoop ? 70 : forwardSpan * (1 - w) + backSpan * w;
 	return Object.assign({
 		x1,
 		y1,
 		x2,
 		y2,
-		bend: Math.max(70, Math.abs(x2 - x1) / 2)
+		cy1: y1,
+		cy2: y2,
+		bend: data && data.backward ? -Math.min(span, Math.abs(x2 - x1) / 2) : span
 	}, data);
 }
 function curvePoint(edge, t) {
-	const u = 1 - t;
+	const u = 1 - t, cy1 = edge.cy1 === void 0 ? edge.y1 : edge.cy1, cy2 = edge.cy2 === void 0 ? edge.y2 : edge.cy2;
 	return {
 		x: u * u * u * edge.x1 + 3 * u * u * t * (edge.x1 + edge.bend) + 3 * u * t * t * (edge.x2 - edge.bend) + t * t * t * edge.x2,
-		y: u * u * u * edge.y1 + 3 * u * u * t * edge.y1 + 3 * u * t * t * edge.y2 + t * t * t * edge.y2
+		y: u * u * u * edge.y1 + 3 * u * u * t * cy1 + 3 * u * t * t * cy2 + t * t * t * edge.y2
 	};
 }
 function contains(rect, p) {
@@ -7586,12 +8766,44 @@ function reduce(previous, event, model, viewport) {
 		ui = Object.assign({}, ui, {
 			pointer: null,
 			pending: null,
-			touch: null
+			touch: null,
+			menu: null
 		});
 		return result();
 	}
+	if (event.type === "context") {
+		if (model.readOnly || !model.contextMenu) return result();
+		const start = point(ui, event.x, event.y), rawTarget = hit$1(ui, model, start), target = rawTarget.kind === "selection" ? { kind: "canvas" } : rawTarget;
+		if (target.kind === "node") {
+			const names = (model.selectedNodes || []).indexOf(target.identity) >= 0 ? model.selectedNodes : [target.identity];
+			commands.push(selectedCommand(names, target.identity));
+		} else if (target.kind === "edge") commands.push({
+			type: "selectEdge",
+			index: target.index
+		});
+		ui = Object.assign({}, ui, {
+			pointer: null,
+			pending: null,
+			menu: {
+				x: event.x,
+				y: event.y,
+				worldX: Math.round(start.x),
+				worldY: Math.round(start.y),
+				target
+			}
+		});
+		return result();
+	}
+	if (event.type === "menuCommand") {
+		ui = Object.assign({}, ui, { menu: null });
+		if (event.command) {
+			if (event.command.internal) return reduce(ui, event.command.internal, model, viewport);
+			commands.push(event.command);
+		}
+		return result();
+	}
 	if (event.type === "scroll") {
-		ui = pan(ui, ui.world.x + event.x / ui.zoom, ui.world.y + event.y / ui.zoom, viewport, false);
+		ui = pan(Object.assign({}, ui, { menu: null }), ui.world.x + event.x / ui.zoom, ui.world.y + event.y / ui.zoom, viewport, false);
 		return result();
 	}
 	if (event.type === "reset") {
@@ -7599,7 +8811,7 @@ function reduce(previous, event, model, viewport) {
 		return result();
 	}
 	if (event.type === "zoom") {
-		if (!ui.pointer) ui = zoom(ui, event.value, event.x === void 0 ? viewport.width / 2 : event.x, event.y === void 0 ? viewport.height / 2 : event.y, viewport);
+		if (!ui.pointer) ui = zoom(Object.assign({}, ui, { menu: null }), event.value, event.x === void 0 ? viewport.width / 2 : event.x, event.y === void 0 ? viewport.height / 2 : event.y, viewport);
 		return result();
 	}
 	if (event.type === "reveal") {
@@ -7612,10 +8824,11 @@ function reduce(previous, event, model, viewport) {
 	}
 	if (event.type === "key") {
 		if (event.key === "Escape") {
-			if (ui.pointer || ui.pending || ui.touch) ui = Object.assign({}, ui, {
+			if (ui.pointer || ui.pending || ui.touch || ui.menu) ui = Object.assign({}, ui, {
 				pointer: null,
 				pending: null,
-				touch: null
+				touch: null,
+				menu: null
 			});
 			else if (model.selectionEnabled !== false) commands.push({ type: "clear" });
 		} else if (event.control && event.key.toLowerCase() === "s" && !model.readOnly) {
@@ -7695,6 +8908,7 @@ function reduce(previous, event, model, viewport) {
 		}, model, viewport);
 	}
 	if (event.type === "down") {
+		if (ui.menu) ui = Object.assign({}, ui, { menu: null });
 		if (ui.pointer) return result();
 		const start = point(ui, event.x, event.y), target = event.button === 1 ? { kind: "pan" } : hit$1(ui, model, start);
 		ui = Object.assign({}, ui, {
@@ -7865,45 +9079,230 @@ var tint = (base, accent, amount) => ({ mix: [
 	accent,
 	amount
 ] });
+function overlapArea(a, b) {
+	const w = Math.min(a.x + a.width, b.x + b.width) - Math.max(a.x, b.x), h = Math.min(a.y + a.height, b.y + b.height) - Math.max(a.y, b.y);
+	return w > 0 && h > 0 ? w * h : 0;
+}
 function describe$1(definition, ui, language) {
-	const tr = (text) => translate(text, language), nodes = [], selected = definition.selectedNodes || [];
+	const tr = (text) => translate(text, language), nodes = [], selected = definition.selectedNodes || [], nodeBoxes = (definition.nodes || []).map((record) => {
+		const b = bounds(ui, record, definition.style);
+		return {
+			x: b.x - 6,
+			y: b.y - 6,
+			width: b.width + 12,
+			height: b.height + 12
+		};
+	}), placedBadges = [];
 	for (const edge of curves(ui, definition)) {
 		if (edge.pending) continue;
-		const p = curvePoint(edge, .6), title = (edge.label ? edge.label + " · " : "") + edge.from + " → " + edge.to;
-		nodes.push(node("Action", "graphEdge_" + edge.index, rect(p.x - ui.world.x - 18, p.y - ui.world.y - 18, 36, 36), {
-			text: title,
-			enabled: definition.selectionEnabled !== false,
-			selected: definition.selectedEdge === edge.index,
-			normalColor: "transparent",
-			selectedColor: "transparent",
-			action: {
-				type: "activate",
-				target: {
-					kind: "edge",
-					index: edge.index
+		const badgeLines = Array.isArray(edge.badgeLines) ? edge.badgeLines.filter(Boolean) : [], chosenEdge = definition.selectedEdge === edge.index, title = edge.tooltip || (edge.label ? edge.label + " · " : "") + edge.from + " → " + edge.to;
+		if (badgeLines.length) {
+			const maxLen = Math.max.apply(null, badgeLines.map((line) => String(line).length)), badgeW = Math.max(84, Math.min(290, Math.round(maxLen * 6.8 + 24))), badgeH = badgeLines.length > 1 ? 42 : 24, candidates = edge.selfLoop ? [.5] : [
+				.5,
+				.36,
+				.64,
+				.28,
+				.72
+			];
+			let bestP = curvePoint(edge, candidates[0]), bestScore = Infinity;
+			for (const t of candidates) {
+				const pt = curvePoint(edge, t), box = {
+					x: pt.x - badgeW / 2 - 4,
+					y: pt.y - badgeH / 2 - 4,
+					width: badgeW + 8,
+					height: badgeH + 8
+				};
+				let score = 0;
+				for (const nb of nodeBoxes) score += overlapArea(box, nb) * 4;
+				for (const pb of placedBadges) score += overlapArea(box, pb);
+				if (score < bestScore) {
+					bestScore = score;
+					bestP = pt;
+					if (score === 0) break;
 				}
 			}
-		}));
+			placedBadges.push({
+				x: bestP.x - badgeW / 2,
+				y: bestP.y - badgeH / 2,
+				width: badgeW,
+				height: badgeH
+			});
+			const accent = edge.color || "action", children = [node("Box", "graphEdgeBadge_" + edge.index, rect(0, 0, badgeW, badgeH), {
+				background: tint("surfaceContainerHigh", accent, chosenEdge ? .34 : .16),
+				border: chosenEdge ? "primaryText" : accent,
+				borderWidth: chosenEdge ? 2 : 1,
+				radius: 11
+			}), label("graphEdgeLabelPrimary_" + edge.index, rect(8, 3, badgeW - 16, 18), badgeLines[0], {
+				align: "center",
+				fontRole: "caption",
+				weight: 600,
+				monospace: !!edge.primaryMono
+			})];
+			if (badgeLines.length > 1) children.push(label("graphEdgeLabelSecondary_" + edge.index, rect(8, 21, badgeW - 16, 18), badgeLines[1], {
+				align: "center",
+				fontRole: "caption",
+				monospace: true,
+				color: "secondaryText"
+			}));
+			nodes.push(node("Action", "graphEdge_" + edge.index, rect(bestP.x - ui.world.x - badgeW / 2, bestP.y - ui.world.y - badgeH / 2, badgeW, badgeH), {
+				layer: 2,
+				text: title,
+				enabled: definition.selectionEnabled !== false,
+				selected: chosenEdge,
+				normalColor: "transparent",
+				hoverColor: "transparent",
+				pressedColor: "transparent",
+				selectedColor: "transparent",
+				children,
+				action: {
+					type: "activate",
+					target: {
+						kind: "edge",
+						index: edge.index
+					}
+				}
+			}));
+		} else {
+			const p = curvePoint(edge, .6);
+			nodes.push(node("Action", "graphEdge_" + edge.index, rect(p.x - ui.world.x - 18, p.y - ui.world.y - 18, 36, 36), {
+				text: title,
+				enabled: definition.selectionEnabled !== false,
+				selected: chosenEdge,
+				normalColor: "transparent",
+				hoverColor: "transparent",
+				pressedColor: "transparent",
+				selectedColor: "transparent",
+				action: {
+					type: "activate",
+					target: {
+						kind: "edge",
+						index: edge.index
+					}
+				}
+			}));
+		}
 	}
 	for (const record of definition.nodes || []) {
-		const box = bounds(ui, record, definition.style), accent = record.kind === "missing" ? "error" : record.color || "action", circular = record.kind === "progress", chosen = selected.indexOf(record.identity) >= 0;
+		const box = bounds(ui, record, definition.style), rawKind = record.kind || "", vKind = record.visualKind || (rawKind === "missing" || rawKind === "reference" ? "missing" : record.draftType ? "draft" : record.pendingCreation || rawKind === "instance" || /(^|\/)[a-z0-9_]+_in_[a-z0-9_]+$/i.test(record.identity || "") ? "instance" : /^(sthpw|config)\//i.test(record.identity || "") ? "system" : [
+			"manual",
+			"action",
+			"condition",
+			"approval",
+			"hierarchy",
+			"dependency",
+			"progress",
+			"status",
+			"search_type"
+		].indexOf(rawKind) >= 0 ? rawKind : String(record.identity || "").indexOf("/") >= 0 ? "search_type" : rawKind || "manual"), defaultColor = vKind === "action" ? "#2e9b88" : vKind === "condition" ? "#cf8a2e" : vKind === "approval" ? "#8a5ec4" : vKind === "hierarchy" ? "#3e8eb8" : vKind === "dependency" ? "#c76a3e" : vKind === "progress" ? "#49a065" : vKind === "status" ? "#5b73c7" : vKind === "instance" ? "#488599" : vKind === "draft" ? "#c7923e" : vKind === "system" ? "#9a9248" : vKind === "external" ? "#7a6fa8" : "action", accent = record.kind === "missing" || vKind === "missing" ? "error" : record.color || defaultColor, circular = record.kind === "progress" || vKind === "progress", pill = !circular && (vKind === "action" || vKind === "approval" || vKind === "instance"), nodeRadius = circular ? Math.round(box.width / 2) : pill ? Math.round(box.height / 2) : vKind === "manual" ? 6 : vKind === "condition" ? 16 : vKind === "hierarchy" || vKind === "dependency" ? 14 : vKind === "system" || vKind === "external" || vKind === "search_type" ? 8 : metrics(definition.style).itemRadius, iconName = record.icon || (vKind === "missing" ? "warning" : vKind === "action" ? "bolt" : vKind === "condition" ? "help" : vKind === "approval" ? "approval" : vKind === "hierarchy" ? "hierarchy" : vKind === "dependency" || vKind === "instance" ? "link" : vKind === "progress" ? "progress" : vKind === "status" ? "status" : vKind === "draft" ? "edit" : vKind === "system" ? "dns" : vKind === "external" ? "folder" : vKind === "search_type" ? "table-view" : "person"), badgeText = record.badgeText !== void 0 ? record.badgeText : vKind === "instance" ? "M:N" : vKind === "draft" ? tr("DRAFT") : "", chosen = selected.indexOf(record.identity) >= 0, hasSecondary = !circular && !!record.secondarySubtitle;
 		const content = [node("Box", "graphNodeSurface_" + record.identity, rect(0, 0, box.width, box.height), {
-			background: tint("surfaceContainer", accent, chosen ? .26 : .12),
-			border: chosen ? accent : tint("outlineVariant", accent, .5),
+			background: tint("surfaceContainer", accent, chosen ? .28 : pill ? .18 : .12),
+			border: chosen ? accent : tint("outlineVariant", accent, pill ? .72 : .52),
 			borderWidth: chosen ? 2 : 1,
-			radius: circular ? box.width / 2 : metrics(definition.style).itemRadius
+			radius: nodeRadius,
+			shadow: {
+				y: chosen ? 6 : 3,
+				blur: chosen ? 20 : 12,
+				opacity: chosen ? .38 : .22
+			}
 		})];
-		content.push(label("graphNodeTitle_" + record.identity, rect(circular ? 8 : 22, circular ? (box.height - 28) / 2 : 12 + (box.height - 72) / 2, box.width - (circular ? 16 : 44), 28), record.label || record.identity, {
-			weight: 600,
-			align: circular ? "center" : "left"
+		if (circular || vKind === "approval" || vKind === "instance") content.push(node("Box", "graphNodeInnerRing_" + record.identity, rect(4, 4, box.width - 8, box.height - 8), {
+			background: "transparent",
+			border: tint("outlineVariant", accent, vKind === "approval" ? .65 : .42),
+			borderWidth: 1,
+			radius: Math.max(4, nodeRadius - 4)
 		}));
-		if (!circular) content.push(label("graphNodeKind_" + record.identity, rect(22, 44 + (box.height - 72) / 2, box.width - 44, 18), record.pendingCreation ? tr("New · many-to-many") : record.kind === "instance" ? "many-to-many" : record.kind === "missing" ? tr("Missing process") : record.kind || "", muted));
+		if (vKind === "manual" || vKind === "search_type") content.push(node("Box", "graphNodeLeftBar_" + record.identity, rect(0, 6, 5, Math.max(8, box.height - 12)), {
+			background: accent,
+			radius: 2
+		}));
+		else if (vKind === "condition") content.push(node("Box", "graphNodeDiamondTop_" + record.identity, rect(Math.round(box.width / 2) - 18, 0, 36, 3), {
+			background: accent,
+			radius: 2
+		}), node("Box", "graphNodeDiamondBottom_" + record.identity, rect(Math.round(box.width / 2) - 18, box.height - 3, 36, 3), {
+			background: accent,
+			radius: 2
+		}));
+		else if (vKind === "hierarchy") content.push(node("Box", "graphNodeTopBar_" + record.identity, rect(14, 0, 64, 4), {
+			background: accent,
+			radius: 2
+		}), node("Box", "graphNodeBottomBar_" + record.identity, rect(14, box.height - 4, box.width - 28, 3), {
+			background: tint("outlineVariant", accent, .7),
+			radius: 2
+		}));
+		else if (vKind === "dependency") content.push(node("Box", "graphNodeLeftBar_" + record.identity, rect(3, 10, 4, Math.max(8, box.height - 20)), {
+			background: accent,
+			radius: 2
+		}), node("Box", "graphNodeRightBar_" + record.identity, rect(box.width - 7, 10, 4, Math.max(8, box.height - 20)), {
+			background: accent,
+			radius: 2
+		}));
+		else if (vKind === "status" || vKind === "system" || vKind === "external") content.push(node("Box", "graphNodeTopBar_" + record.identity, rect(10, 0, box.width - 20, 3), {
+			background: accent,
+			radius: 2
+		}));
+		else if (vKind === "draft" || vKind === "missing") for (let seg = 0; seg < 4; seg++) {
+			const sx = 16 + seg * 42;
+			if (sx + 24 <= box.width - 12) content.push(node("Box", "graphNodeDashTop_" + seg + "_" + record.identity, rect(sx, 0, 24, 3), {
+				background: accent,
+				radius: 1
+			}), node("Box", "graphNodeDashBot_" + seg + "_" + record.identity, rect(sx, box.height - 3, 24, 3), {
+				background: accent,
+				radius: 1
+			}));
+		}
+		if (circular) content.push(node("Icon", "graphNodeIcon_" + record.identity, rect(Math.round((box.width - 16) / 2), 10, 16, 16), {
+			icon: iconName,
+			color: accent
+		}), label("graphNodeTitle_" + record.identity, rect(8, Math.round((box.height - 24) / 2), box.width - 16, 24), record.label || record.identity, {
+			weight: 600,
+			align: "center"
+		}), label("graphNodeKind_" + record.identity, rect(10, box.height - 24, box.width - 20, 16), badgeText || "%", {
+			align: "center",
+			fontRole: "caption",
+			weight: 600,
+			color: "secondaryText"
+		}));
+		else {
+			const topY = (hasSecondary ? 6 : 11) + (box.height - 72) / 2, badgeW = badgeText ? Math.max(32, Math.round(String(badgeText).length * 6.5 + 12)) : 0;
+			content.push(node("Box", "graphNodeIconBg_" + record.identity, rect(12, Math.round(topY + 1), 22, 22), {
+				background: tint("surfaceContainerHigh", accent, .28),
+				border: tint("outlineVariant", accent, .65),
+				borderWidth: 1,
+				radius: pill ? 11 : vKind === "condition" ? 6 : 5
+			}), node("Icon", "graphNodeIcon_" + record.identity, rect(16, Math.round(topY + 5), 14, 14), {
+				icon: iconName,
+				color: accent
+			}));
+			if (badgeW) content.push(node("Box", "graphNodeBadgeBg_" + record.identity, rect(box.width - badgeW - 10, Math.round(topY + 3), badgeW, 18), {
+				background: tint("surfaceContainerHigh", accent, .26),
+				border: tint("outlineVariant", accent, .6),
+				borderWidth: 1,
+				radius: 9
+			}), label("graphNodeBadge_" + record.identity, rect(box.width - badgeW - 6, Math.round(topY + 3), badgeW - 8, 18), badgeText, {
+				align: "center",
+				fontRole: "caption",
+				weight: 600,
+				monospace: true
+			}));
+			content.push(label("graphNodeTitle_" + record.identity, rect(40, topY, Math.max(24, box.width - 40 - (badgeW ? badgeW + 16 : 12)), hasSecondary ? 24 : 26), record.label || record.identity, {
+				weight: 600,
+				align: "left"
+			}), label("graphNodeKind_" + record.identity, rect(40, (hasSecondary ? 31 : 42) + (box.height - 72) / 2, box.width - 52, 18), record.subtitle !== void 0 ? record.subtitle : record.pendingCreation ? tr("New · many-to-many") : record.kind === "instance" ? "many-to-many" : record.kind === "missing" ? tr("Missing process") : record.kind || "", muted));
+			if (hasSecondary) content.push(label("graphNodeSubkind_" + record.identity, rect(40, 49 + (box.height - 72) / 2, box.width - 52, 17), record.secondarySubtitle, {
+				fontRole: "caption",
+				monospace: true,
+				color: "secondaryText"
+			}));
+		}
 		nodes.push(node("Action", "graphNode_" + record.identity, rect(box.x - ui.world.x, box.y - ui.world.y, box.width, box.height), {
 			text: record.label || record.identity,
 			role: "option",
+			radius: nodeRadius,
 			selected: chosen,
 			enabled: definition.selectionEnabled !== false,
 			normalColor: "transparent",
+			hoverColor: "transparent",
+			pressedColor: "transparent",
 			selectedColor: "transparent",
 			children: content,
 			action: {
@@ -7923,8 +9322,10 @@ function describe$1(definition, ui, language) {
 				background: active || !input ? accent : "workspace"
 			})];
 			nodes.push(node("Action", (input ? "graphInput_" : "graphOutput_") + record.identity, rect(box.x - ui.world.x + (input ? -18 : box.width - 18), box.y - ui.world.y + 18, 36, 36), {
-				text: tr(input ? "Input — connect here" : "Output — connect here"),
+				text: tr(input ? "Input (to / parent) — connect here" : "Output (from / child) — connect here"),
 				normalColor: "transparent",
+				hoverColor: "transparent",
+				pressedColor: "transparent",
 				selectedColor: "transparent",
 				children,
 				action: {
@@ -7938,6 +9339,223 @@ function describe$1(definition, ui, language) {
 			}));
 		}
 	}
+	if (ui.menu && definition.contextMenu && !definition.readOnly) {
+		const target = ui.menu.target || { kind: "selection" }, wx = Math.round((ui.menu.worldX || 0) - 100), wy = Math.round((ui.menu.worldY || 0) - 36), items = [];
+		if (definition.contextMenu === "schema") {
+			if (target.kind === "node") {
+				const hitNode = (definition.nodes || []).find((row) => row.identity === target.identity);
+				if (hitNode && hitNode.draftType) items.push([
+					"graphMenu_registerDraftNow",
+					tr("Register Search Type in DB now"),
+					"check",
+					{
+						type: "registerDraftType",
+						identity: target.identity
+					}
+				], [
+					"graphMenu_openDraftCreator",
+					tr("Open full Search Type creator…"),
+					"tune",
+					{
+						type: "openDraftCreator",
+						identity: target.identity
+					}
+				]);
+				if (!hitNode || !hitNode.referenceOnly) items.push([
+					"graphMenu_startConnect",
+					tr("Start connection from here"),
+					"arrow-forward",
+					{ internal: {
+						type: "activate",
+						target: {
+							kind: "port",
+							identity: target.identity,
+							input: false
+						}
+					} }
+				], [
+					"graphMenu_connectNodeMany",
+					tr("Connect Many-to-Many (M:N)…"),
+					"link",
+					{
+						type: "openConnectManyToMany",
+						source: target.identity
+					}
+				]);
+				if (hitNode && !hitNode.draftType && !hitNode.pendingCreation && !hitNode.referenceOnly) items.push([
+					"graphMenu_nodeWorkflows",
+					tr("Workflows"),
+					"schema",
+					{ type: "nodeWorkflows" }
+				]);
+				if (!hitNode || !hitNode.referenceOnly) items.push([
+					"graphMenu_removeNode",
+					tr("Remove from canvas"),
+					"delete",
+					{ type: "remove" },
+					true
+				]);
+			} else if (target.kind === "edge") {
+				const hitEdge = (definition.edges || [])[target.index];
+				if (!hitEdge || hitEdge.relationship !== "instance") items.push([
+					"graphMenu_makeManyToMany",
+					tr("Convert to Many-to-Many (M:N)"),
+					"link",
+					{
+						type: "relationship",
+						value: "many_to_many"
+					}
+				]);
+				items.push([
+					"graphMenu_setHierarchy",
+					tr("Set as Hierarchy (Child → Parent)"),
+					"hierarchy",
+					{
+						type: "edgePreset",
+						preset: "hierarchy"
+					}
+				], [
+					"graphMenu_setCode",
+					tr("Set as Direct key (code)"),
+					"code",
+					{
+						type: "edgePreset",
+						preset: "code"
+					}
+				], [
+					"graphMenu_reverseEdge",
+					tr("Reverse direction (from ↔ to)"),
+					"refresh",
+					{ type: "reverse" }
+				], [
+					"graphMenu_removeEdge",
+					tr("Remove connection"),
+					"delete",
+					{ type: "remove" },
+					true
+				]);
+			} else items.push([
+				"graphMenu_draftNode",
+				tr("New draft node (\"skeleton\")"),
+				"add",
+				{
+					type: "createDraftNode",
+					x: wx,
+					y: wy
+				}
+			], [
+				"graphMenu_createType",
+				tr("Create & register Search Type…"),
+				"table",
+				{
+					type: "createType",
+					x: wx,
+					y: wy
+				}
+			], [
+				"graphMenu_addExisting",
+				tr("Add existing Search Type…"),
+				"search",
+				{
+					type: "openAddNodeAt",
+					x: wx,
+					y: wy
+				}
+			], [
+				"graphMenu_connectMany",
+				tr("New Many-to-Many (M:N) relation…"),
+				"link",
+				{ type: "openConnectManyToMany" }
+			], [
+				"graphMenu_arrange",
+				tr("Arrange nodes"),
+				"hierarchy",
+				{ type: "layout" }
+			], [
+				"graphMenu_reset",
+				tr("Reset view"),
+				"refresh",
+				{ internal: { type: "reset" } }
+			]);
+		} else if (definition.contextMenu === "workflow") {
+			if (target.kind === "node") items.push([
+				"graphMenu_startConnect",
+				tr("Start connection from here"),
+				"arrow-forward",
+				{ internal: {
+					type: "activate",
+					target: {
+						kind: "port",
+						identity: target.identity,
+						input: false
+					}
+				} }
+			], [
+				"graphMenu_removeNode",
+				tr("Remove from canvas"),
+				"delete",
+				{ type: "remove" },
+				true
+			]);
+			else if (target.kind === "edge") items.push([
+				"graphMenu_removeEdge",
+				tr("Remove connection"),
+				"delete",
+				{ type: "remove" },
+				true
+			]);
+			else items.push([
+				"graphMenu_addProcess",
+				tr("Add process here"),
+				"add",
+				{
+					type: "createProcessAt",
+					x: wx,
+					y: wy
+				}
+			], [
+				"graphMenu_arrange",
+				tr("Arrange nodes"),
+				"hierarchy",
+				{ type: "layout" }
+			], [
+				"graphMenu_reset",
+				tr("Reset view"),
+				"refresh",
+				{ internal: { type: "reset" } }
+			]);
+		}
+		if (items.length) {
+			const vp = viewport(definition), menuW = 296, menuH = items.length * 40 + 12, mx = Math.max(8, Math.min(Math.max(8, vp.width - menuW - 8), ui.menu.x || 0)), my = Math.max(8, Math.min(Math.max(8, vp.height - menuH - 8), ui.menu.y || 0)), worldX = ui.x + mx / ui.zoom - ui.world.x, worldY = ui.y + my / ui.zoom - ui.world.y;
+			nodes.push(node("Box", "graphContextMenu", rect(worldX, worldY, menuW, menuH), {
+				layer: 30,
+				scale: 1 / ui.zoom,
+				background: "surfaceContainerHigh",
+				border: "outlineVariant",
+				radius: 10,
+				shadow: {
+					y: 8,
+					blur: 24,
+					opacity: .36
+				},
+				children: items.map(([id, text, icon, cmd, destructive], idx) => node("Button", id, rect(6, 6 + idx * 40, 284, 36), {
+					text,
+					icon,
+					enabled: true,
+					round: false,
+					destructive: !!destructive,
+					pressAction: {
+						type: "menuCommand",
+						command: cmd
+					},
+					action: {
+						type: "menuCommand",
+						command: cmd
+					}
+				}))
+			}));
+		}
+	}
 	return { nodes };
 }
 function paint$1(context, definition, ui, viewportSize, color, selection) {
@@ -7946,13 +9564,14 @@ function paint$1(context, definition, ui, viewportSize, color, selection) {
 	context.scale(ui.zoom, ui.zoom);
 	context.translate(-ui.x, -ui.y);
 	for (const edge of curves(ui, definition)) {
+		const cy1 = edge.cy1 === void 0 ? edge.y1 : edge.cy1, cy2 = edge.cy2 === void 0 ? edge.y2 : edge.cy2, arrowT = Array.isArray(edge.badgeLines) && edge.badgeLines.some(Boolean) && !edge.selfLoop ? .78 : .6;
 		context.strokeStyle = color(definition.selectedEdge === edge.index ? "primaryText" : edge.color);
 		context.lineWidth = definition.selectedEdge === edge.index ? 3.5 : 2.5;
 		context.beginPath();
 		context.moveTo(edge.x1, edge.y1);
-		context.bezierCurveTo(edge.x1 + edge.bend, edge.y1, edge.x2 - edge.bend, edge.y2, edge.x2, edge.y2);
+		context.bezierCurveTo(edge.x1 + edge.bend, cy1, edge.x2 - edge.bend, cy2, edge.x2, edge.y2);
 		context.stroke();
-		const p = curvePoint(edge, .6), before = curvePoint(edge, .59), after = curvePoint(edge, .61), angle = Math.atan2(after.y - before.y, after.x - before.x);
+		const p = curvePoint(edge, arrowT), before = curvePoint(edge, arrowT - .01), after = curvePoint(edge, arrowT + .01), angle = Math.atan2(after.y - before.y, after.x - before.x);
 		context.save();
 		context.translate(p.x, p.y);
 		context.rotate(angle);
@@ -7976,8 +9595,8 @@ function paint$1(context, definition, ui, viewportSize, color, selection) {
 }
 //#endregion
 //#region src/frame/controls/graph/FrameGraph.vue
-var _hoisted_1$10 = ["data-frame", "aria-label"];
-var _hoisted_2$4 = ["aria-label"];
+var _hoisted_1$9 = ["data-frame", "aria-label"];
+var _hoisted_2$3 = ["aria-label"];
 var FrameGraph_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 	__name: "FrameGraph",
 	props: { node: {
@@ -8025,12 +9644,22 @@ var FrameGraph_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 			};
 		}
 		function pointer(event, type) {
+			if (type !== "context" && event.target?.closest?.("[data-frame=\"graphContextMenu\"]")) return;
 			if (event.button > 1 && type === "down") return;
 			if (type === "move" && event.pointerType !== "touch" && !ui.value.pointer && !ui.value.pending) return;
 			const bounds = event.currentTarget.getBoundingClientRect(), p = {
 				x: event.clientX - bounds.left,
 				y: event.clientY - bounds.top
 			};
+			if (type === "context") {
+				dispatch({
+					type: "context",
+					...p,
+					...modifier(event)
+				});
+				event.preventDefault();
+				return;
+			}
 			if (event.pointerType === "touch") {
 				if (type === "down" || type === "move") {
 					if (type === "down" || touches.has(event.pointerId)) touches.set(event.pointerId, p);
@@ -8197,11 +9826,12 @@ var FrameGraph_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 				onPointermove: _cache[2] || (_cache[2] = ($event) => pointer($event, "move")),
 				onPointerup: _cache[3] || (_cache[3] = ($event) => pointer($event, "up")),
 				onPointercancel: _cache[4] || (_cache[4] = ($event) => pointer($event, "cancel")),
-				onLostpointercapture: _cache[5] || (_cache[5] = ($event) => ui.value.pointer && cancel()),
+				onContextmenu: _cache[5] || (_cache[5] = withModifiers(($event) => pointer($event, "context"), ["prevent"])),
+				onLostpointercapture: _cache[6] || (_cache[6] = ($event) => ui.value.pointer && cancel()),
 				onWheel: wheel,
 				onKeydown: key,
-				onClickCapture: _cache[6] || (_cache[6] = ($event) => {
-					if ($event.detail) {
+				onClickCapture: _cache[7] || (_cache[7] = ($event) => {
+					if ($event.detail && !$event.target?.closest?.("[data-frame=\"graphContextMenu\"]")) {
 						$event.preventDefault();
 						$event.stopPropagation();
 					}
@@ -8223,10 +9853,10 @@ var FrameGraph_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 					transform: `translate(${-(ui.value.x - ui.value.world.x) * ui.value.zoom}px,${-(ui.value.y - ui.value.world.y) * ui.value.zoom}px) scale(${ui.value.zoom})`
 				}),
 				onEvent: dispatch
-			}, null, 8, ["scene", "style"])], 44, _hoisted_2$4)], 4)], 8, _hoisted_1$10);
+			}, null, 8, ["scene", "style"])], 44, _hoisted_2$3)], 4)], 8, _hoisted_1$9);
 		};
 	}
-}, [["__scopeId", "data-v-6646f71f"]]);
+}, [["__scopeId", "data-v-82cd2dc1"]]);
 //#endregion
 //#region ../src/tactic_stream/shared_ui/controls/charts/chart.ui.mjs
 var palette = [
@@ -8497,12 +10127,12 @@ function paint(c, g, color, hovered = -1) {
 }
 //#endregion
 //#region src/frame/controls/charts/FrameChart.vue
-var _hoisted_1$9 = [
+var _hoisted_1$8 = [
 	"data-frame",
 	"tabindex",
 	"aria-label"
 ];
-var _sfc_main$9 = {
+var _sfc_main$8 = {
 	__name: "FrameChart",
 	props: { node: {
 		type: Object,
@@ -8563,865 +10193,7 @@ var _sfc_main$9 = {
 				"aria-label": __props.node.text,
 				onPointermove: move,
 				onPointerleave: _cache[0] || (_cache[0] = ($event) => hovered.value = -1)
-			}, null, 40, _hoisted_1$9)), [[unref(tooltipDirective), tip.value]]);
-		};
-	}
-};
-//#endregion
-//#region src/controls/clipboard.js
-async function copyText(text) {
-	if (navigator.clipboard?.writeText) try {
-		await navigator.clipboard.writeText(text);
-		return;
-	} catch {}
-	const previous = document.activeElement, input = document.createElement("textarea");
-	input.value = text;
-	input.readOnly = true;
-	input.style.cssText = "position:fixed;inset:0;width:1px;height:1px;opacity:0";
-	(document.querySelector("dialog:modal") || document.body).append(input);
-	try {
-		input.focus();
-		input.select();
-		if (!document.execCommand("copy")) throw new Error("Clipboard access failed");
-	} finally {
-		input.remove();
-		previous?.focus();
-	}
-}
-async function readClipboard() {
-	if (!navigator.clipboard?.readText) throw new Error("Paste with Ctrl+V or the browser menu on HTTP.");
-	return navigator.clipboard.readText();
-}
-async function readClipboardImages() {
-	if (!navigator.clipboard?.read) return null;
-	let items;
-	try {
-		items = await navigator.clipboard.read();
-	} catch (error) {
-		if (["NotAllowedError", "SecurityError"].includes(error.name)) return null;
-		throw error;
-	}
-	const files = [];
-	for (const item of items) {
-		const type = item.types.includes("image/png") ? "image/png" : item.types.find((type) => type.startsWith("image/"));
-		if (!type) continue;
-		const extension = type === "image/jpeg" ? "jpg" : type.split("/")[1].split("+")[0];
-		files.push(new File([await item.getType(type)], "clipboard" + (files.length ? "-" + (files.length + 1) : "") + "." + extension, { type }));
-	}
-	if (!files.length) throw new Error("The clipboard does not contain an image");
-	return files;
-}
-async function copyImage(blob) {
-	if (!navigator.clipboard?.write || !globalThis.ClipboardItem) throw new Error("Copying an image requires HTTPS or localhost and clipboard permission.");
-	let png = blob;
-	if (blob.type !== "image/png") {
-		const image = await createImageBitmap(blob), canvas = document.createElement("canvas");
-		try {
-			canvas.width = image.width;
-			canvas.height = image.height;
-			canvas.getContext("2d").drawImage(image, 0, 0);
-			png = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
-		} finally {
-			image.close();
-		}
-		if (!png) throw new Error("Unable to copy image");
-	}
-	await navigator.clipboard.write([new ClipboardItem({ "image/png": png })]);
-}
-//#endregion
-//#region src/controls/pythonSyntax.js
-var keywords = new Set("False None True and as assert async await break class continue def del elif else except finally for from global if import in is lambda nonlocal not or pass raise return try while with yield".split(" "));
-function xmlTokens(source) {
-	const tokens = [];
-	let end = 0;
-	for (const match of source.matchAll(/<!--[\s\S]*?(?:-->|$)|<!\[CDATA\[[\s\S]*?(?:\]\]>|$)|<\/?[\w:.-]+|\/?>|"[^"\n]*"|'[^'\n]*'|[\w:.-]+(?=\s*=)|&(?:#\w+|\w+);/g)) {
-		if (match.index > end) tokens.push({
-			text: source.slice(end, match.index),
-			role: ""
-		});
-		const text = match[0], role = text.startsWith("<!--") ? "comment" : /^["']/.test(text) || text.startsWith("<![CDATA[") ? "string" : text.startsWith("<") || text.endsWith(">") ? "keyword" : text.startsWith("&") ? "number" : "type";
-		tokens.push({
-			text,
-			role
-		});
-		end = match.index + text.length;
-	}
-	if (end < source.length) tokens.push({
-		text: source.slice(end),
-		role: ""
-	});
-	return tokens;
-}
-var builtins = new Set("abs all any bool bytes callable chr dict enumerate filter float format getattr hasattr int isinstance issubclass iter len list map max min next object open ord print property range repr reversed round set setattr slice sorted staticmethod str sum super tuple type zip Exception ValueError TypeError RuntimeError KeyError".split(" "));
-var pattern = /#[^\n]*|(?<!\w)(?:[furb]{1,2})?(?:"""(?:\\[\s\S]|(?!""")[^\\])*?(?:"""|$)|'''(?:\\[\s\S]|(?!''')[^\\])*?(?:'''|$)|"(?:\\[^\n]|[^"\\\n])*(?:"|$)|'(?:\\[^\n]|[^'\\\n])*(?:'|$))|\b(?:0x[\da-f_]+|0b[01_]+|0o[0-7_]+|\d[\d_]*(?:\.[\d_]*)?(?:e[+-]?[\d_]+)?j?)\b|\.[\d_]+(?:e[+-]?[\d_]+)?j?\b|@[A-Za-z_]\w*(?:\.[A-Za-z_]\w*)*|\b[A-Za-z_]\w*\b/gi;
-function pythonTokens(source, moduleNames = []) {
-	const tokens = [];
-	let end = 0;
-	let previous = "";
-	for (const match of source.matchAll(pattern)) {
-		if (match.index > end) tokens.push({
-			text: source.slice(end, match.index),
-			role: ""
-		});
-		const text = match[0];
-		const role = text.startsWith("#") ? "comment" : /^(?:[furb]{0,2})["']/i.test(text) ? "string" : /^[\d.]/.test(text) ? "number" : text.startsWith("@") ? "decorator" : keywords.has(text) ? "keyword" : ["def", "class"].includes(previous) ? "definition" : moduleNames?.includes(text) ? "module" : ["self", "cls"].includes(text) ? "self" : builtins.has(text) ? "type" : /^\s*\(/.test(source.slice(match.index + text.length)) ? "function" : "";
-		tokens.push({
-			text,
-			role
-		});
-		previous = text;
-		end = match.index + text.length;
-	}
-	if (end < source.length) tokens.push({
-		text: source.slice(end),
-		role: ""
-	});
-	return tokens;
-}
-var jsKeywords = new Set("async await break case catch class const continue debugger default delete do else export extends finally for function if import in instanceof let new of return static super switch this throw try typeof var void while with yield true false null undefined".split(" "));
-function javascriptTokens(source) {
-	const tokens = [];
-	let end = 0, previous = "";
-	for (const match of source.matchAll(/\/\/[^\n]*|\/\*[\s\S]*?(?:\*\/|$)|"(?:\\[\s\S]|[^"\\])*(?:"|$)|'(?:\\[\s\S]|[^'\\])*(?:'|$)|`(?:\\[\s\S]|[^`\\])*(?:`|$)|\b(?:0x[\da-f]+|\d+(?:\.\d+)?(?:e[+-]?\d+)?)\b|\b[$A-Za-z_][$\w]*\b/gi)) {
-		if (match.index > end) tokens.push({
-			text: source.slice(end, match.index),
-			role: ""
-		});
-		const text = match[0], role = text.startsWith("//") || text.startsWith("/*") ? "comment" : /^["'`]/.test(text) ? "string" : /^\d/.test(text) ? "number" : jsKeywords.has(text) ? "keyword" : ["function", "class"].includes(previous) ? "definition" : /^\s*\(/.test(source.slice(match.index + text.length)) ? "function" : "";
-		tokens.push({
-			text,
-			role
-		});
-		previous = text;
-		end = match.index + text.length;
-	}
-	if (end < source.length) tokens.push({
-		text: source.slice(end),
-		role: ""
-	});
-	return tokens;
-}
-//#endregion
-//#region src/controls/codeEditing.js
-function editCommand(action, text, start, end, language = "python") {
-	const left = text.lastIndexOf("\n", start - 1) + 1, found = text.indexOf("\n", end), right = found < 0 ? text.length : found;
-	const block = text.slice(left, right), lines = block.split("\n"), marker = language === "javascript" ? "//" : "#";
-	if (action === "duplicate") {
-		const value = start === end ? "\n" + block : text.slice(start, end), position = start === end ? right : end;
-		return {
-			text: text.slice(0, position) + value + text.slice(position),
-			start: position + (start === end ? 1 : 0),
-			end: position + value.length
-		};
-	}
-	if (action === "delete_line") {
-		const a = right === text.length && left > 0 ? left - 1 : left, b = right < text.length ? right + 1 : right;
-		return {
-			text: text.slice(0, a) + text.slice(b),
-			start: a,
-			end: a
-		};
-	}
-	let replacement;
-	if (action === "indent") replacement = lines.map((line) => "    " + line).join("\n");
-	else if (action === "unindent") replacement = lines.map((line) => line.startsWith("    ") ? line.slice(4) : line.startsWith("	") ? line.slice(1) : line.replace(/^ {1,3}/, "")).join("\n");
-	else if (action === "toggle_comment") {
-		const remove = lines.filter((line) => line.trim()).every((line) => line.trimStart().startsWith(marker));
-		replacement = lines.map((line) => !line.trim() ? line : remove ? line.replace(new RegExp("^(\\s*)" + marker + " ?"), "$1") : line.replace(/^(\s*)/, "$1" + marker + " ")).join("\n");
-	} else return {
-		text,
-		start,
-		end
-	};
-	return {
-		text: text.slice(0, left) + replacement + text.slice(right),
-		start: left,
-		end: left + replacement.length
-	};
-}
-function findMatches(text, query, { regex = false, caseSensitive = false, wholeWord = false } = {}) {
-	if (!query) return [];
-	let pattern = regex ? query : query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-	if (wholeWord) pattern = "\\b(?:" + pattern + ")\\b";
-	try {
-		return [...text.matchAll(new RegExp(pattern, caseSensitive ? "g" : "gi"))].filter((match) => match[0].length).map((match) => ({
-			start: match.index,
-			end: match.index + match[0].length
-		}));
-	} catch {
-		return [];
-	}
-}
-function documentSymbols(text, language) {
-	const pattern = language === "javascript" ? /^[ \t]*(?:(?:export|async)[ \t]+)*(function|class)[ \t]+([\w$]+)/gm : /^[ \t]*(?:async[ \t]+)?(def|class)[ \t]+(\w+)/gm;
-	return [...text.matchAll(pattern)].map((match) => ({
-		name: match[2],
-		kind: match[1],
-		position: match.index + match[0].indexOf(match[2]),
-		line: text.slice(0, match.index).split("\n").length
-	}));
-}
-function completions(text, cursor, language, apiMethods = []) {
-	const prefix = /[\w$]*$/.exec(text.slice(0, cursor))[0];
-	const names = language === "javascript" ? "async await const let function return if else for while class import export new try catch throw Promise console context project searchType searchKeys rpc refresh" : "def class return if elif else for while import from as try except finally raise with pass True False None print len range str int dict list set tuple enumerate sorted server Search SearchType";
-	const candidates = language === "python" && /\bserver\.\w*$/.test(text.slice(0, cursor)) ? apiMethods : [...names.split(" "), ...text.match(/\b[A-Za-z_][\w$]*\b/g) || []];
-	return [...new Set(candidates)].filter((name) => name.startsWith(prefix) && name !== prefix).sort().slice(0, 200).map((name) => ({
-		name,
-		start: cursor - prefix.length,
-		end: cursor
-	}));
-}
-//#endregion
-//#region src/controls/CodeEditor.vue
-var _hoisted_1$8 = {
-	key: 0,
-	class: "code-source-toolbar"
-};
-var _hoisted_2$3 = {
-	key: 1,
-	class: "code-search"
-};
-var _hoisted_3$2 = ["aria-label", "placeholder"];
-var _hoisted_4$1 = ["aria-label", "placeholder"];
-var _hoisted_5$1 = {
-	key: 2,
-	class: "error",
-	role: "alert"
-};
-var _hoisted_6$1 = { class: "code-buffer" };
-var _hoisted_7$1 = {
-	class: "code-line-numbers",
-	"aria-hidden": "true"
-};
-var _hoisted_8$1 = { class: "code-input-area" };
-var _hoisted_9$1 = ["readonly", "aria-label"];
-var _hoisted_10 = ["aria-label"];
-var _hoisted_11 = { key: 0 };
-var _hoisted_12 = { class: "code-completion-kind" };
-var _sfc_main$8 = {
-	__name: "CodeEditor",
-	props: /*@__PURE__*/ mergeModels({
-		bufferKey: String,
-		language: String,
-		readOnly: Boolean,
-		disabled: Boolean,
-		analysis: Object,
-		sourceToolbar: {
-			type: Boolean,
-			default: true
-		}
-	}, {
-		"modelValue": { default: "" },
-		"modelModifiers": {},
-		"fontSize": { default: 9.25 },
-		"fontSizeModifiers": {}
-	}),
-	emits: /*@__PURE__*/ mergeModels([
-		"run",
-		"help",
-		"outline",
-		"analyse"
-	], ["update:modelValue", "update:fontSize"]),
-	setup(__props, { expose: __expose, emit: __emit }) {
-		const props = __props;
-		const model = useModel(__props, "modelValue");
-		const emit = __emit;
-		const input = ref(null), scroll = ref({
-			x: 0,
-			y: 0
-		}), selection = ref({
-			start: 0,
-			end: 0
-		});
-		const findOpen = ref(false), replaceOpen = ref(false), query = ref(""), replacement = ref(""), caseSensitive = ref(false), wholeWord = ref(false), regex = ref(false);
-		const findInput = ref(null), suggestions = ref([]), suggestionIndex = ref(0), clipboardError = ref("");
-		const completionStyle = ref({});
-		const fontSize = useModel(__props, "fontSize");
-		const buffers = /* @__PURE__ */ new Map(), history = ref({
-			steps: [],
-			index: -1
-		});
-		let completionTimer, analysisRequest = 0, completionSuppressed = false;
-		const options = computed(() => ({
-			caseSensitive: caseSensitive.value,
-			wholeWord: wholeWord.value,
-			regex: regex.value
-		}));
-		const matches = computed(() => findMatches(model.value, query.value, options.value));
-		const selectedText = computed(() => model.value.slice(selection.value.start, selection.value.end));
-		const highlighted = computed(() => {
-			const tokens = props.language === "javascript" ? javascriptTokens(model.value) : pythonTokens(model.value, props.analysis?.source === model.value ? props.analysis.moduleNames : []);
-			const word = /^[\w$]+$/.test(selectedText.value) ? selectedText.value : "";
-			const overlays = [...matches.value.map((row) => ({
-				...row,
-				role: "search"
-			})), ...findMatches(model.value, word, {
-				wholeWord: true,
-				caseSensitive: true
-			}).map((row) => ({
-				...row,
-				role: "occurrence"
-			}))];
-			const parts = [];
-			let offset = 0;
-			for (const token of tokens) {
-				const end = offset + token.text.length, cuts = [.../* @__PURE__ */ new Set([
-					offset,
-					end,
-					...overlays.flatMap((row) => [row.start, row.end]).filter((point) => point > offset && point < end)
-				])].sort((a, b) => a - b);
-				for (let i = 1; i < cuts.length; i++) parts.push({
-					text: model.value.slice(cuts[i - 1], cuts[i]),
-					role: token.role,
-					overlay: overlays.find((row) => row.start <= cuts[i - 1] && row.end >= cuts[i])?.role
-				});
-				offset = end;
-			}
-			return parts;
-		});
-		function snapshot() {
-			return {
-				text: model.value,
-				...selection.value
-			};
-		}
-		function record() {
-			if (history.value.steps[history.value.index]?.text === model.value) return;
-			history.value.steps.splice(history.value.index + 1);
-			history.value.steps.push(snapshot());
-			if (history.value.steps.length > 120) history.value.steps.shift();
-			history.value.index = history.value.steps.length - 1;
-		}
-		watch(() => props.bufferKey, async (key) => {
-			suggestions.value = [];
-			selection.value = {
-				start: 0,
-				end: 0
-			};
-			scroll.value = {
-				x: 0,
-				y: 0
-			};
-			if (!buffers.has(key)) buffers.set(key, {
-				steps: [snapshot()],
-				index: 0
-			});
-			history.value = buffers.get(key);
-			await nextTick();
-			if (input.value) {
-				input.value.scrollTop = 0;
-				input.value.scrollLeft = 0;
-			}
-		}, { immediate: true });
-		watch([
-			model,
-			() => props.bufferKey,
-			() => props.language
-		], () => {
-			record();
-			dismissCompletions();
-			completionSuppressed = false;
-			clearTimeout(completionTimer);
-			completionTimer = setTimeout(() => complete(false), 140);
-		});
-		onBeforeUnmount(() => clearTimeout(completionTimer));
-		watch(() => props.analysis, (result) => {
-			if (!result || result.requestId !== analysisRequest || result.bufferKey !== props.bufferKey || result.source !== model.value || result.cursor !== input.value?.selectionEnd) return;
-			suggestions.value = !completionSuppressed && document.activeElement === input.value ? result.completions : [];
-			suggestionIndex.value = 0;
-			nextTick(positionCompletions);
-		});
-		function dismissCompletions() {
-			analysisRequest++;
-			completionSuppressed = true;
-			suggestions.value = [];
-		}
-		function positionCompletions() {
-			if (!suggestions.value.length || !input.value) return;
-			const area = input.value.closest(".code-buffer"), popup = area.querySelector(".code-completions"), style = getComputedStyle(input.value);
-			if (!popup) return;
-			const before = model.value.slice(0, input.value.selectionEnd), line = before.slice(before.lastIndexOf("\n") + 1), canvas = document.createElement("canvas").getContext("2d");
-			canvas.font = style.font;
-			const x = 46 + canvas.measureText(line).width - input.value.scrollLeft, y = 12 + before.split("\n").length * parseFloat(style.lineHeight) - input.value.scrollTop;
-			completionStyle.value = {
-				left: Math.max(4, Math.min(x, area.clientWidth - popup.offsetWidth - 4)) + "px",
-				top: Math.max(4, Math.min(y, area.clientHeight - popup.offsetHeight - 4)) + "px"
-			};
-		}
-		function blur(event) {
-			if (!event.relatedTarget?.closest(".code-completions")) dismissCompletions();
-		}
-		function select(start, end = start) {
-			if (!input.value) return;
-			selection.value = {
-				start,
-				end
-			};
-			input.value.focus();
-			input.value.setSelectionRange(start, end);
-			input.value.scrollTop = Math.max(0, model.value.slice(0, start).split("\n").length - 3) * parseFloat(getComputedStyle(input.value).lineHeight);
-			syncScroll();
-		}
-		async function apply(value) {
-			model.value = value.text;
-			await nextTick();
-			select(value.start, value.end);
-			record();
-		}
-		async function restore(index) {
-			const step = history.value.steps[index];
-			if (!step || props.readOnly) return;
-			history.value.index = index;
-			model.value = step.text;
-			await nextTick();
-			select(step.start, step.end);
-		}
-		function command(action) {
-			if (!props.readOnly) apply(editCommand(action, model.value, selection.value.start, selection.value.end, props.language));
-		}
-		function syncSelection() {
-			if (!input.value) return;
-			selection.value = {
-				start: input.value.selectionStart,
-				end: input.value.selectionEnd
-			};
-			const step = history.value.steps[history.value.index];
-			if (step?.text === model.value) Object.assign(step, selection.value);
-		}
-		function syncScroll() {
-			if (input.value) scroll.value = {
-				x: input.value.scrollLeft,
-				y: input.value.scrollTop
-			};
-		}
-		function showFind(replace = false) {
-			dismissCompletions();
-			if (findOpen.value && replaceOpen.value === replace) {
-				findOpen.value = false;
-				query.value = "";
-				input.value.focus();
-				return;
-			}
-			findOpen.value = true;
-			replaceOpen.value = replace && !props.readOnly;
-			nextTick(() => {
-				findInput.value?.focus();
-				findInput.value?.select();
-			});
-		}
-		function nextMatch(backwards = false) {
-			const rows = matches.value;
-			if (!rows.length) return;
-			const row = backwards ? [...rows].reverse().find((row) => row.end < selection.value.start) || rows.at(-1) : rows.find((row) => row.start > selection.value.start) || rows[0];
-			select(row.start, row.end);
-		}
-		function replace(all = false) {
-			if (props.readOnly) return;
-			const rows = all ? matches.value : matches.value.filter((row) => row.start === selection.value.start && row.end === selection.value.end);
-			if (!rows.length) return nextMatch();
-			let text = model.value;
-			for (const row of [...rows].reverse()) text = text.slice(0, row.start) + replacement.value + text.slice(row.end);
-			apply({
-				text,
-				start: rows[0].start,
-				end: rows[0].start + replacement.value.length
-			});
-		}
-		async function clipboard(action) {
-			try {
-				clipboardError.value = "";
-				if (action === "paste") {
-					if (props.readOnly) return;
-					const value = await readClipboard();
-					apply({
-						text: model.value.slice(0, selection.value.start) + value + model.value.slice(selection.value.end),
-						start: selection.value.start + value.length,
-						end: selection.value.start + value.length
-					});
-				} else {
-					await copyText(selectedText.value);
-					if (action === "cut" && !props.readOnly) apply({
-						text: model.value.slice(0, selection.value.start) + model.value.slice(selection.value.end),
-						start: selection.value.start,
-						end: selection.value.start
-					});
-				}
-			} catch (error) {
-				clipboardError.value = error.message;
-			}
-		}
-		function complete(manual = true) {
-			clearTimeout(completionTimer);
-			if (manual) completionSuppressed = false;
-			emit("analyse", {
-				bufferKey: props.bufferKey,
-				source: model.value,
-				cursor: input.value?.selectionEnd || 0,
-				manual,
-				requestId: ++analysisRequest
-			});
-		}
-		function acceptSuggestion(row, suffix = "") {
-			dismissCompletions();
-			if (props.readOnly) return;
-			const text = row.insertText || row.name, cursor = row.start + text.length + (row.cursorOffset || 0);
-			const source = model.value.slice(0, row.start) + text + model.value.slice(row.end);
-			apply({
-				text: source.slice(0, cursor) + suffix + source.slice(cursor),
-				start: cursor + suffix.length,
-				end: cursor + suffix.length
-			});
-		}
-		function goToLine(line) {
-			select(model.value.split("\n").slice(0, line - 1).reduce((sum, value) => sum + value.length + 1, 0));
-		}
-		function navigateSymbol(delta) {
-			const symbols = props.analysis?.symbols || [], line = model.value.slice(0, selection.value.end).split("\n").length;
-			const row = delta > 0 ? symbols.find((row) => row.line > line) || symbols[0] : [...symbols].reverse().find((row) => row.line < line) || symbols.at(-1);
-			if (row) goToLine(row.line);
-		}
-		function definition() {
-			const cursor = selection.value.end, before = /[\w$]*$/.exec(model.value.slice(0, cursor))[0], after = /^[\w$]*/.exec(model.value.slice(cursor))[0];
-			const row = props.analysis?.symbols.find((row) => row.name === before + after);
-			if (row) goToLine(row.line);
-		}
-		function key(event) {
-			const ctrl = event.ctrlKey || event.metaKey;
-			if (event.key === "Tab" && event.target !== input.value) return;
-			if (event.target.tagName === "INPUT" && !["Escape", "F3"].includes(event.key) && !(ctrl && ["f", "h"].includes(event.key.toLowerCase()))) return;
-			if (ctrl && event.key === "Enter") {
-				event.preventDefault();
-				dismissCompletions();
-				emit("run", selectedText.value || model.value);
-				return;
-			}
-			if (suggestions.value.length && !ctrl && [
-				"ArrowDown",
-				"ArrowUp",
-				"Enter",
-				"Tab",
-				" "
-			].includes(event.key)) {
-				if (event.key === "Enter") {
-					dismissCompletions();
-					return;
-				}
-				event.preventDefault();
-				if (["Tab", " "].includes(event.key)) acceptSuggestion(suggestions.value[suggestionIndex.value], event.key === " " ? " " : "");
-				else {
-					suggestionIndex.value = (suggestionIndex.value + (event.key === "ArrowDown" ? 1 : suggestions.value.length - 1)) % suggestions.value.length;
-					nextTick(() => input.value.parentElement.parentElement.querySelector("[aria-selected=\"true\"]")?.scrollIntoView({ block: "nearest" }));
-				}
-				return;
-			}
-			if (event.key === "Escape" && (suggestions.value.length || findOpen.value)) {
-				event.preventDefault();
-				event.stopPropagation();
-				const searching = !suggestions.value.length;
-				dismissCompletions();
-				if (searching) {
-					findOpen.value = false;
-					query.value = "";
-					input.value.focus();
-				}
-				return;
-			}
-			let handled = true;
-			if (ctrl && event.key.toLowerCase() === "z") restore(history.value.index + (event.shiftKey ? 1 : -1));
-			else if (ctrl && event.key.toLowerCase() === "y") restore(history.value.index + 1);
-			else if (ctrl && ["f", "h"].includes(event.key.toLowerCase())) showFind(event.key.toLowerCase() === "h");
-			else if (event.key === "F3") nextMatch(event.shiftKey);
-			else if (ctrl && event.code === "Space") complete();
-			else if (ctrl && event.shiftKey && event.key.toLowerCase() === "o") emit("outline");
-			else if (event.altKey && ["ArrowUp", "ArrowDown"].includes(event.key)) navigateSymbol(event.key === "ArrowUp" ? -1 : 1);
-			else if (event.key === "F12") definition();
-			else if (ctrl && event.shiftKey && event.key.toLowerCase() === "k") command("delete_line");
-			else if (ctrl && event.key === "/") command("toggle_comment");
-			else if (ctrl && event.key.toLowerCase() === "d") command("duplicate");
-			else if (event.key === "Tab") {
-				if (event.shiftKey || selectedText.value) command(event.shiftKey ? "unindent" : "indent");
-				else if (!props.readOnly) {
-					const cursor = selection.value.end, count = 4 - (cursor - model.value.lastIndexOf("\n", cursor - 1) - 1) % 4;
-					apply({
-						text: model.value.slice(0, cursor) + " ".repeat(count) + model.value.slice(cursor),
-						start: cursor + count,
-						end: cursor + count
-					});
-				}
-			} else handled = false;
-			if (handled) event.preventDefault();
-			else suggestions.value = [];
-		}
-		__expose({
-			select,
-			goToLine,
-			selectedText,
-			showFind,
-			clipboard,
-			historyTo: restore,
-			undo() {
-				return restore(history.value.index - 1);
-			},
-			redo() {
-				return restore(history.value.index + 1);
-			},
-			frameState: computed(() => ({
-				historyCount: history.value.steps.length,
-				historyIndex: history.value.index,
-				canUndo: history.value.index > 0,
-				canRedo: history.value.index < history.value.steps.length - 1,
-				canCopy: !!selectedText.value
-			})),
-			focus() {
-				input.value?.focus();
-			}
-		});
-		return (_ctx, _cache) => {
-			return openBlock(), createElementBlock("section", {
-				class: "code-editor",
-				style: normalizeStyle({ "--code-size": fontSize.value + "pt" }),
-				onKeydown: key
-			}, [
-				__props.sourceToolbar ? (openBlock(), createElementBlock("div", _hoisted_1$8, [
-					createVNode(_sfc_main$33, { name: "MDI_FILE_EDIT" }),
-					createBaseVNode("span", null, toDisplayString(unref(t)("Source")), 1),
-					createVNode(_sfc_main$34, {
-						"icon-only": "",
-						icon: "undo",
-						label: "Undo",
-						disabled: __props.readOnly || history.value.index <= 0,
-						onClick: _cache[0] || (_cache[0] = ($event) => restore(history.value.index - 1))
-					}, null, 8, ["disabled"]),
-					createVNode(_sfc_main$34, {
-						"icon-only": "",
-						icon: "redo",
-						label: "Redo",
-						disabled: __props.readOnly || history.value.index >= history.value.steps.length - 1,
-						onClick: _cache[1] || (_cache[1] = ($event) => restore(history.value.index + 1))
-					}, null, 8, ["disabled"]),
-					createVNode(_sfc_main$26, {
-						overlay: "",
-						label: "Edit history",
-						icon: "history"
-					}, {
-						default: withCtx(() => [(openBlock(true), createElementBlock(Fragment, null, renderList([...history.value.steps].reverse(), (step, index) => {
-							return openBlock(), createBlock(_sfc_main$34, {
-								key: index,
-								label: String(history.value.steps.length - index) + " · " + step.text.split("\n")[0].slice(0, 80),
-								disabled: __props.readOnly,
-								onClick: ($event) => restore(history.value.steps.length - index - 1)
-							}, null, 8, [
-								"label",
-								"disabled",
-								"onClick"
-							]);
-						}), 128))]),
-						_: 1
-					}),
-					renderSlot(_ctx.$slots, "actions"),
-					createVNode(_sfc_main$34, {
-						"icon-only": "",
-						icon: "FAS_CUT",
-						label: "Cut",
-						disabled: __props.readOnly || !selectedText.value,
-						onClick: _cache[2] || (_cache[2] = ($event) => clipboard("cut"))
-					}, null, 8, ["disabled"]),
-					createVNode(_sfc_main$34, {
-						"icon-only": "",
-						icon: "copy",
-						label: "Copy",
-						disabled: !selectedText.value,
-						onClick: _cache[3] || (_cache[3] = ($event) => clipboard("copy"))
-					}, null, 8, ["disabled"]),
-					createVNode(_sfc_main$34, {
-						"icon-only": "",
-						icon: "MDI_CONTENT_PASTE",
-						label: "Paste",
-						disabled: __props.readOnly,
-						onClick: _cache[4] || (_cache[4] = ($event) => clipboard("paste"))
-					}, null, 8, ["disabled"]),
-					createVNode(_sfc_main$26, {
-						overlay: "",
-						label: "Text size",
-						icon: "MDI_FORMAT_SIZE"
-					}, {
-						default: withCtx(() => [(openBlock(), createElementBlock(Fragment, null, renderList([
-							8,
-							9.25,
-							11,
-							13,
-							15
-						], (size, index) => {
-							return createVNode(_sfc_main$34, {
-								key: size,
-								label: [
-									"Small",
-									"Normal",
-									"Medium",
-									"Large",
-									"Extra large"
-								][index],
-								"aria-pressed": size === fontSize.value,
-								onClick: ($event) => fontSize.value = size
-							}, null, 8, [
-								"label",
-								"aria-pressed",
-								"onClick"
-							]);
-						}), 64))]),
-						_: 1
-					}),
-					createVNode(_sfc_main$34, {
-						"icon-only": "",
-						icon: "search",
-						label: "Find",
-						onClick: _cache[5] || (_cache[5] = ($event) => showFind())
-					}),
-					createVNode(_sfc_main$34, {
-						"icon-only": "",
-						icon: "MDI_PLAY_BOX_OUTLINE",
-						label: "Run selection",
-						disabled: __props.readOnly || __props.disabled || !selectedText.value,
-						onClick: _cache[6] || (_cache[6] = ($event) => emit("run", selectedText.value))
-					}, null, 8, ["disabled"]),
-					createVNode(_sfc_main$34, {
-						"icon-only": "",
-						icon: "help",
-						label: "Code editor help",
-						onClick: _cache[7] || (_cache[7] = ($event) => emit("help"))
-					})
-				])) : createCommentVNode("", true),
-				findOpen.value ? (openBlock(), createElementBlock("div", _hoisted_2$3, [
-					withDirectives(createBaseVNode("input", {
-						ref_key: "findInput",
-						ref: findInput,
-						"onUpdate:modelValue": _cache[8] || (_cache[8] = ($event) => query.value = $event),
-						"aria-label": unref(t)("Find in source"),
-						placeholder: unref(t)("Find"),
-						onKeydown: _cache[9] || (_cache[9] = withKeys(withModifiers(($event) => nextMatch($event.shiftKey), ["prevent"]), ["enter"]))
-					}, null, 40, _hoisted_3$2), [[vModelText, query.value]]),
-					createBaseVNode("span", null, toDisplayString(matches.value.length), 1),
-					createVNode(_sfc_main$34, {
-						"icon-only": "",
-						icon: "previous",
-						label: "Previous match",
-						onClick: _cache[10] || (_cache[10] = ($event) => nextMatch(true))
-					}),
-					createVNode(_sfc_main$34, {
-						"icon-only": "",
-						icon: "next",
-						label: "Next match",
-						onClick: _cache[11] || (_cache[11] = ($event) => nextMatch())
-					}),
-					createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Match case")), 1), createVNode(_sfc_main$32, {
-						modelValue: caseSensitive.value,
-						"onUpdate:modelValue": _cache[12] || (_cache[12] = ($event) => caseSensitive.value = $event),
-						label: "Match case"
-					}, null, 8, ["modelValue"])]),
-					createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Whole word")), 1), createVNode(_sfc_main$32, {
-						modelValue: wholeWord.value,
-						"onUpdate:modelValue": _cache[13] || (_cache[13] = ($event) => wholeWord.value = $event),
-						label: "Whole word"
-					}, null, 8, ["modelValue"])]),
-					createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Regular expression")), 1), createVNode(_sfc_main$32, {
-						modelValue: regex.value,
-						"onUpdate:modelValue": _cache[14] || (_cache[14] = ($event) => regex.value = $event),
-						label: "Regular expression"
-					}, null, 8, ["modelValue"])]),
-					!__props.readOnly ? (openBlock(), createBlock(_sfc_main$34, {
-						key: 0,
-						"icon-only": "",
-						icon: "edit",
-						label: "Replace",
-						onClick: _cache[15] || (_cache[15] = ($event) => replaceOpen.value = !replaceOpen.value)
-					})) : createCommentVNode("", true),
-					createVNode(_sfc_main$34, {
-						"icon-only": "",
-						icon: "close",
-						label: "Close search",
-						onClick: _cache[16] || (_cache[16] = ($event) => {
-							findOpen.value = false;
-							query.value = "";
-						})
-					}),
-					replaceOpen.value ? (openBlock(), createElementBlock(Fragment, { key: 1 }, [
-						withDirectives(createBaseVNode("input", {
-							"onUpdate:modelValue": _cache[17] || (_cache[17] = ($event) => replacement.value = $event),
-							"aria-label": unref(t)("Replacement"),
-							placeholder: unref(t)("Replacement")
-						}, null, 8, _hoisted_4$1), [[vModelText, replacement.value]]),
-						createVNode(_sfc_main$34, {
-							label: "Replace",
-							onClick: _cache[18] || (_cache[18] = ($event) => replace())
-						}),
-						createVNode(_sfc_main$34, {
-							label: "Replace all",
-							onClick: _cache[19] || (_cache[19] = ($event) => replace(true))
-						})
-					], 64)) : createCommentVNode("", true)
-				])) : createCommentVNode("", true),
-				clipboardError.value ? (openBlock(), createElementBlock("p", _hoisted_5$1, toDisplayString(unref(t)(clipboardError.value)), 1)) : createCommentVNode("", true),
-				createBaseVNode("div", _hoisted_6$1, [
-					createBaseVNode("div", _hoisted_7$1, [createBaseVNode("pre", { style: normalizeStyle({ transform: `translateY(${-scroll.value.y}px)` }) }, toDisplayString(Array.from({ length: model.value.split("\n").length }, (_, i) => i + 1).join("\n")), 5)]),
-					createBaseVNode("div", _hoisted_8$1, [createBaseVNode("pre", {
-						class: "code-highlight",
-						"aria-hidden": "true",
-						style: normalizeStyle({ transform: `translate(${-scroll.value.x}px, ${-scroll.value.y}px)` })
-					}, [(openBlock(true), createElementBlock(Fragment, null, renderList(highlighted.value, (part, index) => {
-						return openBlock(), createElementBlock("span", {
-							key: index,
-							class: normalizeClass([part.role && "syntax-" + part.role, part.overlay && "syntax-" + part.overlay])
-						}, toDisplayString(part.text), 3);
-					}), 128)), _cache[22] || (_cache[22] = createTextVNode(toDisplayString("\n"), -1))], 4), withDirectives(createBaseVNode("textarea", {
-						ref_key: "input",
-						ref: input,
-						"onUpdate:modelValue": _cache[20] || (_cache[20] = ($event) => model.value = $event),
-						wrap: "off",
-						spellcheck: "false",
-						autocapitalize: "off",
-						autocomplete: "off",
-						readonly: __props.readOnly,
-						"aria-label": unref(t)("Script source"),
-						onSelect: syncSelection,
-						onKeyup: syncSelection,
-						onClick: syncSelection,
-						onInput: _cache[21] || (_cache[21] = ($event) => {
-							syncSelection();
-							record();
-						}),
-						onScroll: syncScroll,
-						onBlur: blur
-					}, null, 40, _hoisted_9$1), [[vModelText, model.value]])]),
-					suggestions.value.length ? (openBlock(), createElementBlock("div", {
-						key: 0,
-						class: "code-completions",
-						style: normalizeStyle(completionStyle.value),
-						role: "listbox",
-						"aria-label": unref(t)("Code completions")
-					}, [(openBlock(true), createElementBlock(Fragment, null, renderList(suggestions.value, (row, index) => {
-						return openBlock(), createBlock(_sfc_main$34, {
-							key: row.label || row.name,
-							role: "option",
-							"aria-selected": index === suggestionIndex.value,
-							label: row.label || row.name,
-							class: normalizeClass({ detailed: row.detail }),
-							onClick: ($event) => acceptSuggestion(row)
-						}, {
-							default: withCtx(() => [
-								createVNode(_sfc_main$33, { name: row.kind === "class" ? "MDI_FORMAT_SIZE" : row.kind === "module" ? "MDI_API" : "code" }, null, 8, ["name"]),
-								createBaseVNode("span", null, [createBaseVNode("strong", null, toDisplayString(row.label || row.name), 1), row.detail ? (openBlock(), createElementBlock("small", _hoisted_11, toDisplayString(unref(t)(row.detail)), 1)) : createCommentVNode("", true)]),
-								createBaseVNode("small", _hoisted_12, toDisplayString(unref(t)(row.kind || "variable")), 1)
-							]),
-							_: 2
-						}, 1032, [
-							"aria-selected",
-							"label",
-							"class",
-							"onClick"
-						]);
-					}), 128))], 12, _hoisted_10)) : createCommentVNode("", true)
-				])
-			], 36);
+			}, null, 40, _hoisted_1$8)), [[unref(tooltipDirective), tip.value]]);
 		};
 	}
 };
@@ -9601,7 +10373,7 @@ var FrameCode_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 				class: "frame-code-toolbar",
 				scene: toolbar$2.value,
 				onEvent: dispatch
-			}, null, 8, ["scene"]), createVNode(_sfc_main$8, {
+			}, null, 8, ["scene"]), createVNode(_sfc_main$15, {
 				ref_key: "source",
 				ref: source,
 				class: "frame-code-source",
@@ -9937,6 +10709,8 @@ var _sfc_main$4 = {
 			default: 1
 		},
 		normalColor: String,
+		hoverColor: String,
+		pressedColor: String,
 		selectedColor: String,
 		railVisible: {
 			type: Boolean,
@@ -9956,6 +10730,8 @@ var _sfc_main$4 = {
 				}]),
 				style: normalizeStyle({
 					"--item-base": (__props.selected ? __props.selectedColor : __props.normalColor) || void 0,
+					"--item-hover": __props.hoverColor || void 0,
+					"--item-pressed": __props.pressedColor || void 0,
 					"--item-accent": __props.accent || "var(--primary)",
 					"--item-corner": typeof __props.cornerRadius === "number" ? __props.cornerRadius + "px" : __props.cornerRadius,
 					"--item-inset": __props.inset + "px"
@@ -10592,6 +11368,8 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 						accent: color(node.accent),
 						"corner-radius": node.radiusRole ? background(node).borderRadius : node.radius === void 0 ? 10 : node.radius,
 						"normal-color": color(node.normalColor) || "transparent",
+						"hover-color": color(node.hoverColor),
+						"pressed-color": color(node.pressedColor),
 						"selected-color": color(node.selectedColor) || "transparent",
 						"rail-visible": !!node.rail,
 						"separator-visible": false,
@@ -10620,6 +11398,8 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 						"accent",
 						"corner-radius",
 						"normal-color",
+						"hover-color",
+						"pressed-color",
 						"selected-color",
 						"rail-visible"
 					])]),
@@ -10648,7 +11428,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"onDragstart",
 					"onDragover",
 					"onDrop"
-				])) : node.kind === "Segmented" ? (openBlock(), createBlock(_sfc_main$13, {
+				])) : node.kind === "Segmented" ? (openBlock(), createBlock(_sfc_main$12, {
 					key: 5,
 					"data-frame": node.id,
 					"data-layout-element": node.layoutElement,
@@ -10692,6 +11472,8 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 						selected: node.checked,
 						"corner-radius": node.radius,
 						"normal-color": color(node.normalColor) || "transparent",
+						"hover-color": color(node.hoverColor),
+						"pressed-color": color(node.pressedColor),
 						"selected-color": color(node.selectedColor) || "transparent",
 						"rail-visible": false,
 						"separator-visible": false,
@@ -10710,6 +11492,8 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 						"selected",
 						"corner-radius",
 						"normal-color",
+						"hover-color",
+						"pressed-color",
 						"selected-color"
 					])]),
 					_: 2
@@ -10791,8 +11575,36 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"onClick",
 					"onBlur",
 					"onUpdate:modelValue"
-				])) : node.kind === "Area" ? (openBlock(), createBlock(_sfc_main$24, {
+				])) : node.kind === "Area" && node.monospace && !node.notice ? (openBlock(), createBlock(_sfc_main$15, {
 					key: 9,
+					"data-frame": node.id,
+					"data-layout-element": node.layoutElement,
+					class: "frame-node frame-area frame-code-area",
+					style: normalizeStyle(style(node)),
+					"buffer-key": node.id,
+					language: node.syntax || "auto",
+					"source-toolbar": !node.readOnly && node.height >= 160,
+					"model-value": node.text,
+					"read-only": Boolean(node.readOnly),
+					disabled: !node.enabled,
+					"aria-label": node.label || void 0,
+					onBlur: ($event) => !node.readOnly && send(node.commitAction, $event),
+					"onUpdate:modelValue": ($event) => !node.readOnly && send(node.action, $event)
+				}, null, 8, [
+					"data-frame",
+					"data-layout-element",
+					"style",
+					"buffer-key",
+					"language",
+					"source-toolbar",
+					"model-value",
+					"read-only",
+					"disabled",
+					"aria-label",
+					"onBlur",
+					"onUpdate:modelValue"
+				])) : node.kind === "Area" ? (openBlock(), createBlock(_sfc_main$24, {
+					key: 10,
 					"data-frame": node.id,
 					"data-layout-element": node.layoutElement,
 					class: normalizeClass(["frame-node frame-area", { "frame-notice": node.notice }]),
@@ -10831,7 +11643,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"onKeydown",
 					"onUpdate:modelValue"
 				])) : node.kind === "Preview" ? (openBlock(), createBlock(ItemPreview_default, {
-					key: 10,
+					key: 11,
 					"data-frame": node.id,
 					"data-layout-element": node.layoutElement,
 					class: "frame-node frame-preview",
@@ -10863,7 +11675,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"loading",
 					"fill-mode"
 				])) : node.kind === "SummaryChip" ? (openBlock(), createBlock(_sfc_main$3, {
-					key: 11,
+					key: 12,
 					"data-frame": node.id,
 					"data-layout-element": node.layoutElement,
 					class: "frame-node frame-summary-chip",
@@ -10893,7 +11705,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"show-dot",
 					"onClick"
 				])) : node.kind === "List" ? (openBlock(), createElementBlock("div", {
-					key: 12,
+					key: 13,
 					"data-frame": node.id,
 					"data-layout-element": node.layoutElement,
 					class: "frame-node frame-list",
@@ -10964,8 +11776,8 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"describe-row",
 					"describe-cell",
 					"interactive"
-				])], 14, _hoisted_7)) : node.kind === "Choice" ? (openBlock(), createBlock(resolveDynamicComponent(node.editable ? _sfc_main$12 : _sfc_main$31), {
-					key: 14,
+				])], 14, _hoisted_7)) : node.kind === "Choice" ? (openBlock(), createBlock(resolveDynamicComponent(node.editable ? _sfc_main$11 : _sfc_main$31), {
+					key: 15,
 					"data-frame": node.id,
 					"data-layout-element": node.layoutElement,
 					class: "frame-node frame-choice",
@@ -10998,7 +11810,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"onAccept",
 					"onUpdate:modelValue"
 				])) : node.kind === "IconChoice" ? (openBlock(), createElementBlock("div", {
-					key: 15,
+					key: 16,
 					"data-frame": node.id,
 					"data-layout-element": node.layoutElement,
 					class: "frame-node frame-icon-choice",
@@ -11015,7 +11827,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"disabled",
 					"onUpdate:modelValue"
 				])], 12, _hoisted_8)) : node.kind === "ColorChoice" ? (openBlock(), createElementBlock("div", {
-					key: 16,
+					key: 17,
 					"data-frame": node.id,
 					"data-layout-element": node.layoutElement,
 					class: "frame-node frame-color-choice",
@@ -11031,7 +11843,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"disabled",
 					"onUpdate:modelValue"
 				])], 12, _hoisted_9)) : node.kind === "Splitter" ? (openBlock(), createBlock(_sfc_main$5, {
-					key: 17,
+					key: 18,
 					"data-frame": node.id,
 					"data-layout-element": node.layoutElement,
 					class: "frame-node frame-splitter",
@@ -11061,7 +11873,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"onCommitted",
 					"onCancelled"
 				])) : node.kind === "StatusChip" ? (openBlock(), createBlock(_sfc_main$1, {
-					key: 18,
+					key: 19,
 					"data-frame": node.id,
 					"data-layout-element": node.layoutElement,
 					class: "frame-node",
@@ -11089,7 +11901,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"disabled",
 					"onClick"
 				])) : node.kind === "DateChoice" ? (openBlock(), createBlock(_sfc_main$25, {
-					key: 19,
+					key: 20,
 					class: "frame-node frame-date-choice",
 					"data-frame": node.id,
 					"data-layout-element": node.layoutElement,
@@ -11116,8 +11928,8 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"disabled",
 					"onUpdate:modelValue",
 					"onChange"
-				])) : node.kind === "UserChoice" ? (openBlock(), createBlock(_sfc_main$14, {
-					key: 20,
+				])) : node.kind === "UserChoice" ? (openBlock(), createBlock(_sfc_main$13, {
+					key: 21,
 					class: "frame-node frame-user-choice",
 					"data-frame": node.id,
 					"data-layout-element": node.layoutElement,
@@ -11141,7 +11953,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"disabled",
 					"onChange"
 				])) : node.kind === "Search" ? (openBlock(), createBlock(AppSearchField_default, {
-					key: 21,
+					key: 22,
 					class: "frame-node",
 					"data-frame": node.id,
 					style: normalizeStyle(style(node)),
@@ -11169,7 +11981,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"onSearch",
 					"onAccept"
 				])) : node.kind === "Identity" ? (openBlock(), createBlock(_sfc_main$19, {
-					key: 22,
+					key: 23,
 					class: "frame-node",
 					"data-frame": node.id,
 					style: normalizeStyle(style(node)),
@@ -11193,7 +12005,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"retired",
 					"emphasized"
 				])) : node.kind === "Progress" ? (openBlock(), createBlock(AppProgress_default, {
-					key: 23,
+					key: 24,
 					class: "frame-node",
 					"data-frame": node.id,
 					style: normalizeStyle(style(node)),
@@ -11209,7 +12021,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"min",
 					"max"
 				])) : node.kind === "Empty" ? (openBlock(), createBlock(_sfc_main$17, {
-					key: 24,
+					key: 25,
 					class: "frame-node",
 					"data-frame": node.id,
 					style: normalizeStyle(style(node)),
@@ -11233,7 +12045,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"action",
 					"onAction"
 				])) : node.kind === "FileField" ? (openBlock(), createBlock(_sfc_main$16, {
-					key: 25,
+					key: 26,
 					class: "frame-node",
 					"data-frame": node.id,
 					style: normalizeStyle(style(node)),
@@ -11248,8 +12060,8 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"label",
 					"disabled",
 					"onChange"
-				])) : node.kind === "Grid" ? (openBlock(), createBlock(_sfc_main$11, {
-					key: 26,
+				])) : node.kind === "Grid" ? (openBlock(), createBlock(_sfc_main$10, {
+					key: 27,
 					ref_for: true,
 					ref_key: "grids",
 					ref: grids,
@@ -11265,7 +12077,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"source",
 					"describe-cell"
 				])) : node.kind === "Graph" ? (openBlock(), createBlock(FrameGraph_default, {
-					key: 27,
+					key: 28,
 					ref_for: true,
 					ref_key: "graphs",
 					ref: graphs,
@@ -11273,19 +12085,19 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					style: normalizeStyle(style(node)),
 					node,
 					onEvent: _cache[8] || (_cache[8] = (action, source) => emit("event", action, source))
-				}, null, 8, ["style", "node"])) : node.kind === "Chart" ? (openBlock(), createBlock(_sfc_main$9, {
-					key: 28,
+				}, null, 8, ["style", "node"])) : node.kind === "Chart" ? (openBlock(), createBlock(_sfc_main$8, {
+					key: 29,
 					class: "frame-node",
 					style: normalizeStyle(style(node)),
 					node
 				}, null, 8, ["style", "node"])) : node.kind === "Code" ? (openBlock(), createBlock(FrameCode_default, {
-					key: 29,
+					key: 30,
 					class: "frame-node",
 					style: normalizeStyle(style(node)),
 					node,
 					onEvent: _cache[9] || (_cache[9] = (action, source) => emit("event", action, source))
 				}, null, 8, ["style", "node"])) : node.kind === "View" ? (openBlock(), createBlock(resolveDynamicComponent(__props.views[node.view]?.component), mergeProps({
-					key: 30,
+					key: 31,
 					ref_for: true,
 					ref: __props.views[node.view]?.captureRef
 				}, { ref_for: true }, __props.views[node.view]?.props, {
@@ -11305,6 +12117,6 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 	}
 });
 //#endregion
-export { _sfc_main$22 as A, _sfc_main$30 as B, _sfc_main$16 as C, _sfc_main$19 as D, AppProgress_default as E, localDate as F, button as G, observeFrameSizes as H, monthLabel as I, muted as J, label as K, parse as L, _sfc_main$24 as M, _sfc_main$25 as N, ItemPreview_default as O, _sfc_main$26 as P, virtualRange as Q, _sfc_main$27 as R, _sfc_main$15 as S, _sfc_main$17 as T, _sfc_main$31 as U, frameContentWidth as V, _sfc_main$32 as W, rect as X, node as Y, revealListOffset as Z, describe as _, _sfc_main$4 as a, _sfc_main$14 as b, _sfc_main$8 as c, javascriptTokens as d, pythonTokens as f, readClipboardImages as g, copyText as h, _sfc_main$3 as i, _sfc_main$23 as j, AppSearchField_default as k, completions as l, copyImage as m, _sfc_main$1 as n, _sfc_main$5 as o, xmlTokens as p, listRowHeight as q, _sfc_main$2 as r, toolbar as s, _sfc_main as t, documentSymbols as u, geometry as v, translate as w, matchesUser as x, _sfc_main$13 as y, _sfc_main$29 as z };
+export { virtualRange as $, AppSearchField_default as A, _sfc_main$29 as B, readClipboardImages as C, AppProgress_default as D, _sfc_main$17 as E, _sfc_main$26 as F, _sfc_main$32 as G, frameContentWidth as H, localDate as I, listRowHeight as J, button as K, monthLabel as L, _sfc_main$23 as M, _sfc_main$24 as N, _sfc_main$19 as O, _sfc_main$25 as P, revealListOffset as Q, parse as R, copyText as S, translate as T, observeFrameSizes as U, _sfc_main$30 as V, _sfc_main$31 as W, node as X, muted as Y, rect as Z, javascriptTokens as _, _sfc_main$4 as a, xmlTokens as b, describe as c, _sfc_main$13 as d, matchesUser as f, documentSymbols as g, completions as h, _sfc_main$3 as i, _sfc_main$22 as j, ItemPreview_default as k, geometry as l, _sfc_main$15 as m, _sfc_main$1 as n, _sfc_main$5 as o, _sfc_main$14 as p, label as q, _sfc_main$2 as r, toolbar as s, _sfc_main as t, _sfc_main$12 as u, pythonTokens as v, _sfc_main$16 as w, copyImage as x, syntaxTokens as y, _sfc_main$27 as z };
 
 //# sourceMappingURL=FrameView.js.map

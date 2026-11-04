@@ -34,12 +34,7 @@ def exercise(store):
         check.assertEqual(user['document']['password'], '')
         check.assertEqual(Login.get_by_login('alice').get_value('upn'), 'alice')
         check.assertNotIn('initial-password', json.dumps(catalog))
-        check.assertFalse(any(key in user['document'] for key in ('failure_count', 'ticket')))
-        if 'license_type' in user['document']:
-            draft = {**user['document'], 'license_type': 'user'}
-            catalog = request('save', dict(identity='alice', document=draft, expected_revision=user['revision']))
-            user = next(row for row in catalog['users'] if row['login'] == 'alice')
-            check.assertEqual(user['document']['license_type'], 'user')
+        check.assertFalse(any(key in user['document'] for key in ('failure_count', 'ticket', 'license_type')))
         with check.assertRaisesRegex(ValueError, 'already exists'):
             request('save', dict(document=document))
         with check.assertRaisesRegex(ValueError, 'no longer exists'):

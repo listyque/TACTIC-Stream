@@ -124,7 +124,7 @@ try {
       .querySelector('[data-frame="pageXmlSource"] textarea')
       ?.value.includes('dashboard.review')
   );
-  assert(await source.evaluate((node) => node.readOnly));
+  assert(!(await source.evaluate((node) => node.readOnly)));
   assert.equal(await control('pageLayersPanel').count(), 0);
   assert.equal(writes.length, 0, 'Editor framing and XML never save');
   await control('pageSourceXml').click();

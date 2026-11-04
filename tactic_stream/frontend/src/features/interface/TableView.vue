@@ -560,8 +560,16 @@ watch(savingView, async (value) => {
   } else saveDialog.value?.close();
 });
 onMounted(() => {
+  width.value = viewport.value.clientWidth;
+  viewportHeight.value = viewport.value.clientHeight || 600;
   observer = new ResizeObserver((entries) => {
     const bounds = entries[0].contentRect;
+    if (!width.value && bounds.width) {
+      width.value = bounds.width;
+      viewportHeight.value = bounds.height;
+      restore();
+      return;
+    }
     cancelAnimationFrame(resizeFrame);
     // Column reflow can change automatic scrollbars; finish this observer batch first.
     resizeFrame = requestAnimationFrame(() => {
@@ -731,7 +739,10 @@ defineExpose({ viewport });
         class="handler-table-row"
         role="row"
         :aria-rowindex="entry.index + 2"
-        :aria-selected="!!entry.record && (focusedKey === entry.key || selectedKeys?.includes(entry.key))"
+        :aria-selected="
+          !!entry.record &&
+          (focusedKey === entry.key || selectedKeys?.includes(entry.key))
+        "
         :class="{
           selected: selectedKeys?.includes(entry.key),
           alternate: !!entry.record && entry.index % 2 === 1,
@@ -760,7 +771,12 @@ defineExpose({ viewport });
           @dblclick.stop
           @contextmenu.stop
         >
-          <slot name="detail" :record="entry.detail" :height="entry.height" />
+          <slot
+            name="detail"
+            :record="entry.detail"
+            :width="width"
+            :height="entry.height"
+          />
         </div>
         <FrameView
           v-else-if="entry.group?.cell"
@@ -1039,6 +1055,8 @@ defineExpose({ viewport });
 }
 .handler-table-body {
   position: relative;
+  animation: tactic-table-appear var(--motion-fade-extended, 104ms)
+    cubic-bezier(0.22, 1, 0.36, 1);
 }
 .handler-table-row {
   position: absolute;
@@ -1050,13 +1068,18 @@ defineExpose({ viewport });
   border-bottom: 1px solid var(--table-divider);
   cursor: pointer;
 }
-.handler-table-row:hover {
+.handler-table-row:not(:has(> .handler-table-detail)) {
+  transition:
+    top var(--motion-click-extended, 104ms) cubic-bezier(0.22, 1, 0.36, 1),
+    background-color var(--motion-hover, 48ms) ease;
+}
+.handler-table-row:not(:has(> .handler-table-detail)):hover {
   background: var(--row-hover, var(--hover));
 }
 .handler-table-row.alternate {
   background: var(--table-alternate-row);
 }
-.handler-table-row.alternate:hover {
+.handler-table-row.alternate:not(:has(> .handler-table-detail)):hover {
   background: var(--row-hover, var(--hover));
 }
 .handler-table-row.selected,
@@ -1176,7 +1199,9 @@ defineExpose({ viewport });
   margin-left: auto;
   margin-right: 4px;
 }
-.handler-table-row:is(:hover, .selected, .active) .handler-table-actions .app-button {
+.handler-table-row:is(:hover, .selected, .active)
+  .handler-table-actions
+  .app-button {
   opacity: 1;
 }
 .handler-table-selection .app-checkbox {
@@ -1245,5 +1270,25 @@ defineExpose({ viewport });
   left: 0;
   padding-inline: 0;
   box-sizing: border-box;
+  animation: tactic-nested-expand var(--motion-click-extended, 104ms)
+    cubic-bezier(0.22, 1, 0.36, 1);
+}
+@keyframes tactic-table-appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes tactic-nested-expand {
+  from {
+    opacity: 0;
+    clip-path: inset(0 0 14px 0);
+  }
+  to {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
 }
 </style>

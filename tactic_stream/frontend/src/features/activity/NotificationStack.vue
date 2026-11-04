@@ -51,11 +51,28 @@ function updateHost(records = []) {
   present();
 }
 async function present() {
+  if (!stopped && panel.value && shown.value.length) {
+    if (!panel.value.matches(':popover-open')) panel.value.showPopover();
+  }
   await nextTick();
   if (stopped || !panel.value) return;
   if (shown.value.length) {
     if (!panel.value.matches(':popover-open')) panel.value.showPopover();
-  } else if (panel.value.matches(':popover-open')) panel.value.hidePopover();
+  } else if (
+    panel.value.matches(':popover-open') &&
+    !panel.value.querySelector('.notification-toast-leave-active')
+  ) {
+    panel.value.hidePopover();
+  }
+}
+function afterLeave() {
+  if (
+    !stopped &&
+    !shown.value.length &&
+    panel.value?.matches(':popover-open')
+  ) {
+    panel.value.hidePopover();
+  }
 }
 watch(shown, present);
 onMounted(() => {
@@ -141,12 +158,14 @@ defineExpose({
       :style="{ '--notification-width': UI.metrics.width + 'px' }"
       :aria-label="t('Notifications')"
     >
-      <NotificationToast
-        v-for="row in shown"
-        :key="row.notificationId"
-        :row="row"
-        @action="(event) => toastAction(row, event)"
-      />
+      <TransitionGroup name="notification-toast" @after-leave="afterLeave">
+        <NotificationToast
+          v-for="row in shown"
+          :key="row.notificationId"
+          :row="row"
+          @action="(event) => toastAction(row, event)"
+        />
+      </TransitionGroup>
     </section>
   </Teleport>
 </template>
@@ -162,13 +181,35 @@ defineExpose({
   border: 0;
   background: transparent;
   color: var(--on-surface);
-  overflow: auto;
-  scrollbar-gutter: stable;
+  overflow: visible;
+  pointer-events: none;
 }
 .notification-stack:popover-open {
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+.notification-stack :deep(.notification-card) {
+  pointer-events: auto;
+}
+.notification-toast-enter-active {
+  transition:
+    transform 160ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 130ms ease-out;
+}
+.notification-toast-leave-active {
+  transition:
+    transform 150ms cubic-bezier(0.4, 0, 1, 1),
+    opacity 130ms ease-in;
+  pointer-events: none !important;
+}
+.notification-toast-move {
+  transition: transform 160ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.notification-toast-enter-from,
+.notification-toast-leave-to {
+  opacity: 0;
+  transform: translateY(calc(100% + 20px));
 }
 @media (max-width: 700px) {
   .notification-stack {

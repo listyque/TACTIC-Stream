@@ -1,12 +1,12 @@
-import { A as onMounted, D as onActivated, E as nextTick, F as resolveComponent, G as withCtx, H as watch, I as resolveDirective, K as withDirectives, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, X as ref, Y as reactive, _ as createElementBlock, b as createVNode, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, k as onDeactivated, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, s as vShow, tt as normalizeClass, u as Fragment, y as createTextVNode } from "./vue.js";
+import { A as onDeactivated, D as nextTick, F as renderSlot, I as resolveComponent, K as withCtx, L as resolveDirective, N as openBlock, O as onActivated, P as renderList, U as watch, X as reactive, Z as ref, _ as createCommentVNode, b as createTextVNode, c as vShow, d as Fragment, g as createBlock, h as createBaseVNode, it as toDisplayString, j as onMounted, k as onBeforeUnmount, m as computed, nt as normalizeClass, p as Teleport, q as withDirectives, rt as normalizeStyle, tt as unref, v as createElementBlock, x as createVNode } from "./vue.js";
 import { A as normalizePreferences, D as spacing, F as accentPresets, I as iconSets, L as themes, M as savePreferencePage, _ as controls, a as _sfc_main$8, c as colorModes, f as languages, h as saveAppearance, j as preferences, k as configurationPreview, l as effectiveColorMode, o as t, s as appearance, t as _sfc_main$9, z as _plugin_vue_export_helper_default } from "./AppButton.js";
 import { B as serverRuntime, Lt as randomUuid, M as saveServerConfiguration, S as projectCatalog, j as rpc, k as restartServer, u as databaseResources, wt as debugSettings, z as serverConfiguration } from "./index.js";
-import { G as button, H as observeFrameSizes, J as muted, K as label, U as _sfc_main$11, X as rect, Y as node, k as AppSearchField_default, t as _sfc_main$10, w as translate } from "./FrameView.js";
+import { A as AppSearchField_default, K as button, T as translate, U as observeFrameSizes, W as _sfc_main$11, X as node, Y as muted, Z as rect, q as label, t as _sfc_main$10 } from "./FrameView.js";
 import { n as _sfc_main$12 } from "./AppearanceControls.js";
 import RecordForm_default, { a as unsupportedField, i as fieldKind, r as ImagePicker_default } from "./RecordForm.js";
 import { _ as timestampFullLabel } from "./admin.document.js";
 import { t as describe$3 } from "./confirmation.ui.js";
-import { et as views } from "./RelatedObjects.js";
+import { tt as views } from "./RelatedObjects.js";
 import { S as pages, _ as editColumn, a as updateModes, b as confirmation, f as lifecycle, g as describe$4, h as contentWidth, i as updateIntervals, m as change, n as networkSettings, p as ProjectCreation_default, r as updateBatchDelays, v as fieldsFor, x as describe$6, y as describe$5 } from "./App.js";
 import _sfc_main$13 from "./AgentProviders.js";
 //#region src/features/configuration/FrameSettings.vue

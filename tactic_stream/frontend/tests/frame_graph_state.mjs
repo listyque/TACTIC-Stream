@@ -127,6 +127,75 @@ assert.ok(
   pendingArea.x + pendingArea.width >= 720 &&
     pendingArea.y + pendingArea.height >= 360
 );
+const selfEdge = State.curves(State.initial(), {
+  ...model,
+  edges: [{ from: 'a', to: 'a', badgeLines: ['M:N · instance', 'via a_links'] }]
+})[0];
+assert.ok(
+  State.curvePoint(selfEdge, 0.5).y > State.curvePoint(selfEdge, 0).y + 40,
+  'Self-loop curves cleanly below the node card'
+);
+const badgedScene = UI.describe(
+  {
+    ...model,
+    edges: [{ from: 'a', to: 'b', badgeLines: ['Child → Parent', 'b_code → code'] }]
+  },
+  State.initial(),
+  'en'
+);
+const edgeAction = badgedScene.nodes.find((n) => n.id === 'graphEdge_0');
+assert.ok(
+  edgeAction.children?.some((c) => c.id === 'graphEdgeBadge_0'),
+  'Edge badge renders when badgeLines are present'
+);
+const ctxRes = State.reduce(
+  State.initial(),
+  { type: 'context', x: 520, y: 260 },
+  { ...model, readOnly: false, contextMenu: 'schema', editable: true },
+  viewport
+);
+assert.equal(ctxRes.ui.menu.target.kind, 'canvas');
+const ctxScene = UI.describe(
+  { ...model, readOnly: false, contextMenu: 'schema', editable: true },
+  ctxRes.ui,
+  'ru'
+);
+assert.ok(
+  ctxScene.nodes.some((n) => n.id === 'graphContextMenu'),
+  'Right-click opens graphContextMenu on canvas'
+);
+const cmdRes = State.reduce(
+  ctxRes.ui,
+  { type: 'menuCommand', command: { type: 'createDraftNode', x: 520, y: 260 } },
+  { ...model, readOnly: false, contextMenu: 'schema', editable: true },
+  viewport
+);
+assert.equal(cmdRes.ui.menu, null);
+assert.deepEqual(cmdRes.commands, [{ type: 'createDraftNode', x: 520, y: 260 }]);
+const corridorEdge = State.curves(State.initial(), {
+  nodes: [
+    { identity: 'voice', label: 'Озвучка', nodeX: 100, nodeY: 200 },
+    { identity: 'anim', label: 'Анимация', nodeX: 100, nodeY: 40 }
+  ],
+  edges: [{ from: 'voice', to: 'anim' }]
+})[0];
+assert.equal(corridorEdge.corridor, true);
+assert.equal(State.curvePoint(corridorEdge, 0.5).y, 156, 'Stacked right-to-left edge routes cleanly through the horizontal corridor between nodes');
+let prevMid = null;
+for (let x = 80; x <= 340; x += 2) {
+  const e = State.curves(State.initial(), {
+    nodes: [
+      { identity: 'src', label: 'A', nodeX: 0, nodeY: 40 },
+      { identity: 'dst', label: 'B', nodeX: x, nodeY: 180 }
+    ],
+    edges: [{ from: 'src', to: 'dst' }]
+  })[0];
+  const mid = State.curvePoint(e, 0.5);
+  if (prevMid) {
+    assert.ok(Math.hypot(mid.x - prevMid.x, mid.y - prevMid.y) < 4, 'Curve midpoint transitions smoothly without snapping across x2 = x1');
+  }
+  prevMid = mid;
+}
 console.log(
   'Frame Graph: shared geometry, selection, release-only moves, ports, camera, keys, read-only, pinch and bounded paint surfaces passed'
 );

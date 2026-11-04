@@ -32,13 +32,17 @@ def process_configuration(pipeline, process):
     return values, workflow
 
 
-def task_processes(parent, pipeline, process):
+def task_processes(parent, pipeline, process, parent_tasks=None):
     processes = []
     for node in pipeline.get_processes() if pipeline else []:
         if node.get_type() not in ('action', 'condition', 'dependency') and TaskElementWdg.can_view_process(node.get_name()):
             processes.append(dict(value=node.get_name(), label=node.get_label() or node.get_name(), type=node.get_type(),color=node.get_attribute('color') or ''))
     names = {item['value'] for item in processes}
-    for name in ['publish', process, *(task.get_value('process') for task in Task.get_by_sobjects([parent]))]:
+    if parent_tasks is None:
+        parent_tasks = getattr(parent, '_inspector_tasks', None)
+        if parent_tasks is None:
+            parent_tasks = Task.get_by_sobjects([parent])
+    for name in ['publish', process, *(task.get_value('process') for task in parent_tasks)]:
         node = pipeline.get_process(name) if pipeline else None
         if node and node.get_type() in ('action', 'condition', 'dependency'):
             continue
@@ -106,10 +110,14 @@ def related_tasks(parent, pipeline, process):
     return result
 
 
-def inspector_processes(parent, pipeline, process):
-    choices = task_processes(parent, pipeline, process)
+def inspector_processes(parent, pipeline, process, parent_tasks=None):
+    if parent_tasks is None:
+        parent_tasks = getattr(parent, '_inspector_tasks', None)
+        if parent_tasks is None:
+            parent_tasks = Task.get_by_sobjects([parent])
+    choices = task_processes(parent, pipeline, process, parent_tasks=parent_tasks)
     notes = Search('sthpw/note')
-    notes.add_relationship_filters([parent, *Task.get_by_sobjects([parent])])
+    notes.add_relationship_filters([parent, *parent_tasks])
     notes = notes.get_sobjects()
     for choice in choices:
         choice['count'] = sum(note.get_process() == choice['value'] for note in notes)
@@ -135,7 +143,9 @@ def task_scope(search_key, process, task_key=''):
     node = pipeline.get_process(process) if pipeline else None
     if node and node.get_type() in ('action', 'condition', 'dependency'):
         raise ValueError('This process has no editable task')
-    tasks = [task for task in Task.get_by_sobjects([parent]) if task.get_value('process') == process]
+    all_tasks = Task.get_by_sobjects([parent])
+    parent._inspector_tasks = all_tasks
+    tasks = [task for task in all_tasks if task.get_value('process') == process]
     # Handler's primary branch: the unsuffixed context, then creation time/code.
     tasks.sort(key=lambda task: (0 if task.get_value('context') in ('', process) else 1,
                                 str(task.get_value('timestamp')), str(task.get_code())))

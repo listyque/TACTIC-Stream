@@ -1,13 +1,11 @@
 """Configured inline forms use native EditCmd and its ordinary transaction journal."""
 
-from xml.etree import ElementTree as ET
-
 from pyasm.biz import Project
 from pyasm.command import Command
 from pyasm.common.errors import SecurityException
 from pyasm.search import Search, SearchType
 from tactic.ui.panel import EditCmd
-from tactic_stream.dashboard_plan import DashboardDocument
+from tactic_stream.dashboard_plan import dashboard_from_xml
 from tactic_stream.server.dashboard_fields import form
 from tactic_stream.server.dashboards import dashboard_layout
 from tactic_stream.server.navigation_links import check_project
@@ -40,9 +38,7 @@ class DashboardFormCmd(Command):
         records = query.get_sobjects()
         if len(records) != 1:
             raise ValueError("Choose a saved page form")
-        document = DashboardDocument.model_validate_json(
-            ET.fromstring(records[0].get_value("config")).findtext(".//dashboard") or ""
-        )
+        document = dashboard_from_xml(records[0].get_value("config"), view[10:])
         children, in_details = document.blocks, False
         for index in path:
             if index >= len(children):
@@ -130,7 +126,7 @@ class DashboardFormCmd(Command):
         Command.execute_cmd(command)
         state = command.info.get("state", "saved")
         model = dashboard_layout(
-            document.model_dump(),
+            document,
             view,
             self.kwargs.get("search_key", ""),
             detail_key=detail_key,

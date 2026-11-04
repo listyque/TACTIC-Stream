@@ -186,14 +186,14 @@ class PluginManagerCmd(Command):
         project = self.kwargs.get('project_code')
         if not project or project != Project.get_project_code():
             raise TacticException('Select a project before managing plugins')
-        if action == 'list':
+        identity = self.kwargs.get('identity') or ''
+        if action == 'list' or (action == 'load' and not identity):
             self.info.update(catalog=_catalog(), metadata={}, canWrite=True)
             return
         if action == 'new':
             self.info.update(identity='', revision='', document=dict(code='', title='', description='', type=''),
                              metadata=dict(new=True, project=project), canWrite=True)
             return
-        identity = self.kwargs.get('identity') or ''
         if action in ('load', 'browse', 'open_file', 'open_resource'):
             self.info.update(_document(identity, self.kwargs.get('folder', ''), self.kwargs.get('file', ''),
                                        self.kwargs.get('resource', '')))

@@ -76,6 +76,11 @@ function modifier(event) {
   };
 }
 function pointer(event, type) {
+  if (
+    type !== 'context' &&
+    event.target?.closest?.('[data-frame="graphContextMenu"]')
+  )
+    return;
   if (event.button > 1 && type === 'down') return;
   if (
     type === 'move' &&
@@ -86,6 +91,11 @@ function pointer(event, type) {
     return;
   const bounds = event.currentTarget.getBoundingClientRect(),
     p = { x: event.clientX - bounds.left, y: event.clientY - bounds.top };
+  if (type === 'context') {
+    dispatch({ type: 'context', ...p, ...modifier(event) });
+    event.preventDefault();
+    return;
+  }
   if (event.pointerType === 'touch') {
     if (type === 'down' || type === 'move') {
       if (type === 'down' || touches.has(event.pointerId))
@@ -271,11 +281,15 @@ defineExpose({ dispatch, insertionPoint, ui });
         @pointermove="pointer($event, 'move')"
         @pointerup="pointer($event, 'up')"
         @pointercancel="pointer($event, 'cancel')"
+        @contextmenu.prevent="pointer($event, 'context')"
         @lostpointercapture="ui.pointer && cancel()"
         @wheel="wheel"
         @keydown="key"
         @click.capture="
-          if ($event.detail) {
+          if (
+            $event.detail &&
+            !$event.target?.closest?.('[data-frame=&quot;graphContextMenu&quot;]')
+          ) {
             $event.preventDefault();
             $event.stopPropagation();
           }
@@ -354,10 +368,44 @@ defineExpose({ dispatch, insertionPoint, ui });
   transform-origin: 0 0;
 }
 .graph-plane :deep(.frame-action) {
-  border-radius: 0;
   overflow: visible;
 }
-.graph-plane :deep(.frame-action > .item-surface) {
-  border-radius: 0;
+.graph-plane :deep([data-frame^='graphNode_'] > .item-surface),
+.graph-plane :deep([data-frame^='graphInput_'] > .item-surface),
+.graph-plane :deep([data-frame^='graphOutput_'] > .item-surface),
+.graph-plane :deep([data-frame^='graphEdge_'] > .item-surface) {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+.graph-plane :deep([data-frame^='graphNodeSurface_']),
+.graph-plane :deep([data-frame^='graphEdgeBadge_']) {
+  transition:
+    box-shadow 160ms cubic-bezier(0.2, 0, 0, 1),
+    filter 160ms ease;
+}
+.graph-plane :deep([data-frame^='graphNode_']:hover [data-frame^='graphNodeSurface_']),
+.graph-plane :deep([data-frame^='graphNode_']:focus-visible [data-frame^='graphNodeSurface_']) {
+  box-shadow:
+    0 10px 28px rgba(0, 0, 0, 0.52),
+    0 0 18px rgba(255, 255, 255, 0.08);
+  filter: brightness(1.14);
+}
+.graph-plane :deep([data-frame^='graphEdge_']:hover [data-frame^='graphEdgeBadge_']),
+.graph-plane :deep([data-frame^='graphEdge_']:focus-visible [data-frame^='graphEdgeBadge_']) {
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.48);
+  filter: brightness(1.15);
+}
+.graph-plane :deep([data-frame^='graphPortSurface_']) {
+  transition:
+    transform 140ms cubic-bezier(0.2, 0, 0, 1),
+    filter 140ms ease;
+  transform-origin: center center;
+}
+.graph-plane :deep([data-frame^='graphInput_']:hover [data-frame^='graphPortSurface_']),
+.graph-plane :deep([data-frame^='graphOutput_']:hover [data-frame^='graphPortSurface_']),
+.graph-plane :deep([data-frame^='graphInput_']:focus-visible [data-frame^='graphPortSurface_']),
+.graph-plane :deep([data-frame^='graphOutput_']:focus-visible [data-frame^='graphPortSurface_']) {
+  transform: scale(1.45);
+  filter: brightness(1.35);
 }
 </style>

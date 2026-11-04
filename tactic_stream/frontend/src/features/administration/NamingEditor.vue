@@ -264,11 +264,13 @@ export default {
       }
     },
     canLeave() {
-      return (
-        !this.busy &&
-        (!(this.dirty || this.uncertain) ||
-          window.confirm(t('Discard unsaved naming changes?')))
-      );
+      if (this.busy) return false;
+      if (this.dirty || this.uncertain) {
+        this.error = '';
+        this.dispatch({ type: 'discard' });
+        return false;
+      }
+      return true;
     },
     title(row) {
       return (

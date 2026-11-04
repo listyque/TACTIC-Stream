@@ -1,8 +1,8 @@
 import { r as __exportAll } from "./ObjectFieldFrame.js";
-import { A as onMounted, E as nextTick, F as resolveComponent, I as resolveDirective, K as withDirectives, M as openBlock, N as renderList, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, u as Fragment } from "./vue.js";
+import { D as nextTick, I as resolveComponent, L as resolveDirective, N as openBlock, P as renderList, Z as ref, _ as createCommentVNode, d as Fragment, g as createBlock, h as createBaseVNode, it as toDisplayString, j as onMounted, k as onBeforeUnmount, m as computed, p as Teleport, q as withDirectives, rt as normalizeStyle, tt as unref, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
 import { D as spacing, T as metrics, o as t, s as appearance, t as _sfc_main$4, z as _plugin_vue_export_helper_default } from "./AppButton.js";
 import { j as rpc } from "./index.js";
-import { G as button, H as observeFrameSizes, I as monthLabel, K as label, L as parse, X as rect, Y as node, t as _sfc_main$5, w as translate } from "./FrameView.js";
+import { K as button, L as monthLabel, R as parse, T as translate, U as observeFrameSizes, X as node, Z as rect, q as label, t as _sfc_main$5 } from "./FrameView.js";
 //#region ../src/tactic_stream/shared_ui/features/tasks/milestones.ui.mjs
 function layout(width, height, controlHeight = 36) {
 	const margin = 12, gap = spacing.content, inner = Math.max(0, width - 24), searchY = 88 + gap, listY = searchY + controlHeight + gap;

@@ -233,8 +233,10 @@ function upload(event) {
     );
 }
 function canLeave() {
-  if (busy.value || dirty.value || uncertain.value) {
-    error.value = 'Apply or discard unsaved changes first';
+  if (busy.value) return false;
+  if (dirty.value || uncertain.value) {
+    error.value = '';
+    dispatch({ type: 'prompt-discard' });
     return false;
   }
   return true;

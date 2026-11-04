@@ -1,8 +1,8 @@
 import { r as __exportAll } from "./ObjectFieldFrame.js";
-import { A as onMounted, E as nextTick, F as resolveComponent, G as withCtx, I as resolveDirective, K as withDirectives, L as resolveDynamicComponent, M as openBlock, N as renderList, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, s as vShow, tt as normalizeClass, u as Fragment } from "./vue.js";
+import { D as nextTick, I as resolveComponent, K as withCtx, L as resolveDirective, N as openBlock, P as renderList, R as resolveDynamicComponent, Z as ref, _ as createCommentVNode, c as vShow, d as Fragment, g as createBlock, h as createBaseVNode, it as toDisplayString, j as onMounted, k as onBeforeUnmount, m as computed, nt as normalizeClass, p as Teleport, q as withDirectives, rt as normalizeStyle, tt as unref, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
 import { D as spacing, o as t, s as appearance, t as _sfc_main$4, z as _plugin_vue_export_helper_default } from "./AppButton.js";
 import { j as rpc } from "./index.js";
-import { G as button, H as observeFrameSizes, K as label, N as _sfc_main$6, U as _sfc_main$7, V as frameContentWidth, X as rect, Y as node, t as _sfc_main$5, w as translate } from "./FrameView.js";
+import { H as frameContentWidth, K as button, P as _sfc_main$6, T as translate, U as observeFrameSizes, W as _sfc_main$7, X as node, Z as rect, q as label, t as _sfc_main$5 } from "./FrameView.js";
 //#region ../src/tactic_stream/shared_ui/features/workhours/reports.ui.mjs
 var titles = {
 	my_hours: "My Work Hours",

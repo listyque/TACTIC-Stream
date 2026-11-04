@@ -1,7 +1,7 @@
-import { A as onMounted, E as nextTick, F as resolveComponent, I as resolveDirective, K as withDirectives, M as openBlock, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, c as withKeys, et as unref, f as Teleport, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, s as vShow } from "./vue.js";
+import { D as nextTick, I as resolveComponent, L as resolveDirective, N as openBlock, Z as ref, c as vShow, g as createBlock, h as createBaseVNode, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withKeys, m as computed, p as Teleport, q as withDirectives, rt as normalizeStyle, tt as unref, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
 import { D as spacing, o as t, s as appearance, t as _sfc_main$2, z as _plugin_vue_export_helper_default } from "./AppButton.js";
 import { T as rawDatabase } from "./index.js";
-import { G as button, H as observeFrameSizes, J as muted, K as label, X as rect, Y as node, t as _sfc_main$3, w as translate } from "./FrameView.js";
+import { K as button, T as translate, U as observeFrameSizes, X as node, Y as muted, Z as rect, q as label, t as _sfc_main$3 } from "./FrameView.js";
 import { n as notices, o as toolbar, r as policy, t as documentEvent } from "./admin.document.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/database/raw.state.mjs
 function initial() {
@@ -674,8 +674,10 @@ var _sfc_main = {
 			}
 		},
 		canLeave() {
-			if (this.dirty || this.busy || this.uncertain) {
-				this.error = "Save or discard raw table changes before leaving.";
+			if (this.busy) return false;
+			if (this.dirty || this.uncertain) {
+				this.error = "";
+				this.dispatch({ type: "discard" });
 				return false;
 			}
 			return true;

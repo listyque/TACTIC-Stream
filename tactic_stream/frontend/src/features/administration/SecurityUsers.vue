@@ -210,8 +210,10 @@ export default {
       }
     },
     canLeave() {
-      if (this.dirty || this.busy || this.uncertain) {
-        this.error = 'Save or discard user changes before leaving.';
+      if (this.busy) return false;
+      if (this.dirty || this.uncertain) {
+        this.error = '';
+        this.dispatch({ type: 'discard' });
         return false;
       }
       return true;
@@ -248,6 +250,8 @@ export default {
         : null;
       this.error = '';
       this.ui.confirmation = '';
+      this.ui.showPassword = false;
+      this.ui.passwordConfirm = '';
       if (previous !== this.identity) this.ui.page = 'profile';
     },
     create() {

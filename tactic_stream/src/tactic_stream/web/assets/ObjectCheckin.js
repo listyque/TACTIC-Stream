@@ -1,7 +1,7 @@
-import { A as onMounted, E as nextTick, F as resolveComponent, G as withCtx, I as resolveDirective, K as withDirectives, M as openBlock, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment, y as createTextVNode } from "./vue.js";
+import { D as nextTick, I as resolveComponent, K as withCtx, L as resolveDirective, N as openBlock, Z as ref, _ as createCommentVNode, b as createTextVNode, d as Fragment, g as createBlock, h as createBaseVNode, it as toDisplayString, j as onMounted, k as onBeforeUnmount, m as computed, nt as normalizeClass, p as Teleport, q as withDirectives, rt as normalizeStyle, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
 import { D as spacing, _ as controls, j as preferences, o as t, s as appearance, t as _sfc_main$3, z as _plugin_vue_export_helper_default } from "./AppButton.js";
 import { A as resultItems, Y as uploadFormFile, bt as mobile, j as rpc, v as navigationLink } from "./index.js";
-import { G as button, H as observeFrameSizes, K as label, X as rect, Y as node, t as _sfc_main$4, w as translate } from "./FrameView.js";
+import { K as button, T as translate, U as observeFrameSizes, X as node, Z as rect, q as label, t as _sfc_main$4 } from "./FrameView.js";
 import { t as captionHeight } from "./sections.ui.js";
 import { i as sourceIcon, r as prettySize } from "./file_values.js";
 import { a as sourcePath } from "./files.js";

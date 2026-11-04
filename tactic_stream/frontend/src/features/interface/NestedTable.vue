@@ -25,7 +25,7 @@ const emit = defineEmits([
   'column'
 ]);
 const host = ref(null),
-  width = ref(1);
+  width = ref(props.frameNode?.width || 1);
 let observer,
   generation = 0;
 const model = computed(
@@ -150,6 +150,9 @@ const views = computed(() => ({
       onColumn: (request) => {
         model.value.loaded = false;
         emit('column', request);
+      },
+      onDirtyTasks: (count) => {
+        model.value.dirtyTaskCount = count;
       },
       onSaved: load
     }
@@ -320,6 +323,12 @@ watch(
   }
 );
 watch(() => model.value.revision, load);
+watch(
+  () => props.frameNode?.width,
+  (value) => {
+    if (value > 0) width.value = value;
+  }
+);
 function definitionSaved({ detail }) {
   const scope = model.value.scope;
   if (
@@ -351,7 +360,10 @@ defineExpose({ reload: load });
   <div
     ref="host"
     class="nested-table"
-    :style="{ height: extent + 'px' }"
+    :style="{
+      height: extent + 'px',
+      background: model.scope?.embedded ? 'transparent' : 'var(--surface)'
+    }"
     @click.stop
     @dblclick.stop
     @contextmenu.stop

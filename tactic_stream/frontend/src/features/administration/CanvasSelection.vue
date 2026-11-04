@@ -278,7 +278,7 @@ function key(e, box, resizeHandle) {
       <span
         class="canvas-size"
         :style="{ fontSize: Math.round(11 / scale) + 'px' }"
-        >{{ Math.round(chosen.width) }} Г— {{ Math.round(chosen.height) }}</span
+        >{{ Math.round(chosen.width) }} × {{ Math.round(chosen.height) }}</span
       >
       <div
         v-for="handle in chosen.canTransform === false || chosen.group

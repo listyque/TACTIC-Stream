@@ -1,11 +1,11 @@
-import { F as resolveComponent, K as withDirectives, M as openBlock, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, m as createBaseVNode, nt as normalizeStyle, s as vShow } from "./vue.js";
+import { I as resolveComponent, N as openBlock, c as vShow, g as createBlock, h as createBaseVNode, p as Teleport, q as withDirectives, rt as normalizeStyle, v as createElementBlock, x as createVNode } from "./vue.js";
 import { s as appearance, z as _plugin_vue_export_helper_default } from "./AppButton.js";
 import { Lt as randomUuid, j as rpc } from "./index.js";
-import { G as button, H as observeFrameSizes, K as label, X as rect, Y as node, t as _sfc_main$1, w as translate } from "./FrameView.js";
+import { K as button, T as translate, U as observeFrameSizes, X as node, Z as rect, q as label, t as _sfc_main$1 } from "./FrameView.js";
 import { n as sections } from "./sections.ui.js";
 import { T as projectPath, i as sectionSelector, n as notices, o as toolbar$1, t as documentEvent } from "./admin.document.js";
-import { A as block, B as remove, C as filter, D as type, E as scope$1, F as geometries, G as spacing, H as reparent, I as geometry$1, L as kinds, M as copy, N as duplicate, O as add, P as fingerprint, R as layers, S as fields$1, T as options, U as siblings, V as reorder, W as sizing, a as zooms, i as controls, j as change, k as appearances, r as _sfc_main$2, w as mode, x as change$1, z as path } from "./ConfiguredView.js";
-import { F as toggle, M as alignment, N as roots, P as selected, R as spacingField, Rt as buttonWidth } from "./RelatedObjects.js";
+import { A as block, B as path, C as filter, D as type, E as scope$1, F as fromXml, G as sizing, H as reorder, I as geometries, K as spacing, L as geometry$1, M as copy, N as duplicate, O as add, P as fingerprint, R as kinds, S as fields$1, T as options, U as reparent, V as remove, W as siblings, a as zooms, i as controls, j as change, k as appearances, q as toXml, r as _sfc_main$2, w as mode, x as change$1, z as layers } from "./ConfiguredView.js";
+import { F as toggle, M as alignment, N as roots, P as selected, z as spacingField, zt as buttonWidth } from "./RelatedObjects.js";
 import { t as listAction } from "./tree.ui.js";
 import { t as _sfc_main$3 } from "./PageEditorTools.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/layouts/page.links.mjs
@@ -485,7 +485,8 @@ function componentFields(fields, item, ui, canEdit, language, field) {
 	if ([
 		"icon",
 		"button",
-		"action"
+		"action",
+		"metric"
 	].includes(item.kind)) fields.push({
 		kind: "IconChoice",
 		id: "pageProperty_icon",
@@ -781,12 +782,16 @@ function treeRow(list, record, model, ui, language, blockTitle) {
 	}, true, { iconOnly: true })] : []) };
 }
 function treePanel(model, ui, bounds, language, enabled, narrow) {
-	const tr = (text) => translate(text, language), width = bounds.width;
-	const children = [button("pageLayersToggle", rect(width - 32, 0, 32, 32), tr("Page blocks"), ui.layersHidden ? "chevron-right" : "chevron-left", {
+	const tr = (text) => translate(text, language), width = bounds.width, collapsed = ui.layersHidden && !narrow;
+	const children = [button("pageLayersToggle", rect(collapsed ? (width - 28) / 2 : width - 46, 10, collapsed ? 28 : 34, 34), tr(ui.layersHidden ? "Show page blocks" : "Hide page blocks"), ui.layersHidden ? "chevron-right" : "chevron-left", {
 		type: "togglePanel",
 		panel: "layers"
-	}, true, { iconOnly: true })];
-	if (!ui.layersHidden || narrow) children.push(label("pageLayersTitle", rect(8, 0, width - 44, 32), tr("Page blocks"), { weight: 600 }), node("Choice", "pageAddWidget", rect(8, 34, width - 16, 32), {
+	}, true, {
+		iconOnly: true,
+		iconAction: true,
+		round: false
+	})];
+	if (!ui.layersHidden || narrow) children.push(label("pageLayersTitle", rect(12, 10, Math.max(0, width - (narrow ? 24 : 62)), 34), tr("Page blocks"), { weight: 600 }), node("Choice", "pageAddWidget", rect(12, 52, width - 24, 36), {
 		label: tr("Add widget"),
 		value: "",
 		enabled,
@@ -800,7 +805,7 @@ function treePanel(model, ui, bounds, language, enabled, narrow) {
 			icon: icons[value]
 		}))),
 		action: { type: "add" }
-	}), node("List", "pageBlocks", rect(4, 72, width - 8, Math.max(0, bounds.height - 76)), {
+	}), node("List", "pageBlocks", rect(8, 96, width - 16, Math.max(0, bounds.height - 104)), {
 		source: "pageBlocks",
 		keyField: "key",
 		rowHeight: 34,
@@ -815,11 +820,15 @@ function treePanel(model, ui, bounds, language, enabled, narrow) {
 	});
 }
 function propertiesHeader(ui, width, language, narrow) {
-	const children = [button("pagePropertiesToggle", rect(0, 0, 32, 32), translate("Properties", language), ui.propertiesHidden ? "chevron-left" : "chevron-right", {
+	const tr = (text) => translate(text, language), collapsed = ui.propertiesHidden && !narrow, children = [button("pagePropertiesToggle", rect(collapsed ? (width - 28) / 2 : width - 46, 10, collapsed ? 28 : 34, 34), tr(ui.propertiesHidden ? "Show properties" : "Hide properties"), ui.propertiesHidden ? "chevron-left" : "chevron-right", {
 		type: "togglePanel",
 		panel: "properties"
-	}, true, { iconOnly: true })];
-	if (!ui.propertiesHidden || narrow) children.push(label("pagePropertiesTitle", rect(narrow ? 8 : 36, 0, width - 44, 32), translate("Properties", language), { weight: 600 }));
+	}, true, {
+		iconOnly: true,
+		iconAction: true,
+		round: false
+	})];
+	if (!ui.propertiesHidden || narrow) children.push(label("pagePropertiesTitle", rect(12, 10, Math.max(0, width - (narrow ? 24 : 62)), 34), tr("Properties"), { weight: 600 }));
 	return narrow ? children.slice(1) : children;
 }
 function splitters(g, y, height, language) {
@@ -1291,7 +1300,7 @@ function describe(model, ui, width, height, language) {
 		if (!ui.preview && !ui.source && (!narrow || ui.panel === "properties")) nodes.push(node("Box", "pagePropertiesPanel", rect(width - right, y, right, h), {
 			background: "surfaceContainerLow",
 			border: "outlineVariant",
-			children: propertiesHeader(ui, right, language, narrow).concat(ui.propertiesHidden && !narrow ? [] : [node("Scroll", "pageProperties", rect(8, 36, right - 16, h - 44), {
+			children: propertiesHeader(ui, right, language, narrow).concat(ui.propertiesHidden && !narrow ? [] : [node("Scroll", "pageProperties", rect(12, 52, right - 24, h - 60), {
 				contentHeight: body.height,
 				scrollbarId: "pagePropertiesBar",
 				children: body.nodes
@@ -1302,13 +1311,14 @@ function describe(model, ui, width, height, language) {
 		background: "workspace",
 		border: "outlineVariant",
 		children: [ui.source ? node("Code", "pageXmlSource", rect(8, 8, canvasWidth - 16, Math.max(1, h - 16)), {
-			text: model.checked ? model.sourceXml || "" : "",
+			text: Object.prototype.hasOwnProperty.call(ui.text, "xml") ? ui.text.xml : ui.xmlDraft || (model.checked && model.sourceXml && !model.sourceXml.includes("<dashboard>{") ? model.sourceXml : toXml(model.document)),
 			syntax: "xml",
 			language,
-			readOnly: true,
+			readOnly: !canEdit,
 			service: "sourceEditor",
 			label: tr("Source XML"),
-			bufferKey: "page:" + model.document.name
+			bufferKey: "page:" + model.document.name,
+			action: { type: "xmlEdit" }
 		}) : node("View", "pageCanvas", rect(8, 8, canvasWidth - 16, Math.max(1, h - 16)), { view: "pagePreview" })]
 	}));
 	return { nodes };
@@ -1345,6 +1355,7 @@ function initial() {
 		propertiesHidden: false,
 		collapsed: [],
 		source: false,
+		xmlDraft: "",
 		canvasSettings: false,
 		error: ""
 	};
@@ -1419,6 +1430,7 @@ function transition(ui, model, event) {
 			selected: "",
 			selection: [],
 			text: {},
+			xmlDraft: "",
 			past: [],
 			future: [],
 			historyDocument: ""
@@ -1456,7 +1468,41 @@ function transition(ui, model, event) {
 		};
 	}
 	if (event.type === "sourceXml" || event.type === "canvasSettings") {
+		if (event.type === "sourceXml" && ui.source && Object.prototype.hasOwnProperty.call(ui.text, "xml")) {
+			next.error = next.error || "Apply or discard the pending text before continuing";
+			return {
+				ui: next,
+				commands
+			};
+		}
 		next[event.type === "sourceXml" ? "source" : "canvasSettings"] = event.type === "sourceXml" ? !ui.source : !ui.canvasSettings;
+		if (event.type === "sourceXml") {
+			next.xmlDraft = "";
+			next.error = "";
+		}
+		return {
+			ui: next,
+			commands
+		};
+	}
+	if (event.type === "xmlEdit") {
+		if (model.busy || ui.confirmation || !model.canWrite || model.uncertain) return {
+			ui: next,
+			commands
+		};
+		const value = String(event.value ?? "");
+		try {
+			const parsed = fromXml(value, model.document.name);
+			const nextText = Object.assign({}, ui.text);
+			delete nextText.xml;
+			next.text = nextText;
+			next.xmlDraft = value;
+			next.error = "";
+			replace(parsed);
+		} catch (e) {
+			next.text = Object.assign({}, ui.text, { xml: value });
+			next.error = e.message;
+		}
 		return {
 			ui: next,
 			commands
@@ -1679,7 +1725,10 @@ function transition(ui, model, event) {
 				}
 				break;
 			case "new":
-				if (model.dirty) throw Error("Save or discard changes before continuing");
+				if (model.dirty) {
+					next.confirmation = "discard";
+					break;
+				}
 				next.creating = true;
 				break;
 			case "cancelNew":
@@ -1690,7 +1739,10 @@ function transition(ui, model, event) {
 				next[event.type] = event.value;
 				break;
 			case "create":
-				if (model.dirty) throw Error("Save or discard changes before continuing");
+				if (model.dirty) {
+					next.confirmation = "discard";
+					break;
+				}
 				if (!/^[a-z][a-z0-9_]{0,47}$/.test(ui.newName) || !ui.newTitle.trim()) throw Error("Enter a page name and title");
 				if (model.catalog.some((row) => row.identity === ui.newName)) throw Error("A view with this name already exists");
 				commands.push({
@@ -2076,8 +2128,10 @@ var _sfc_main = {
 			if (this.ticket) this.reload();
 		},
 		canLeave() {
-			if (this.dirty || this.busy) {
-				this.error = "Save or discard changes before continuing";
+			if (this.busy) return false;
+			if (this.dirty || this.uncertain) {
+				this.error = "";
+				this.dispatch({ type: "discard" });
 				return false;
 			}
 			return true;
@@ -2095,7 +2149,21 @@ var _sfc_main = {
 			this.busy = true;
 			this.error = "";
 			try {
-				const state = await this.call("read", {}, scope);
+				const requested = this.document?.name || this.initialFocus || "";
+				let state;
+				try {
+					state = await this.call("read", {
+						name: requested,
+						default_first: !requested,
+						include_preview: true
+					}, scope);
+				} catch (err) {
+					if (!requested) throw err;
+					state = await this.call("read", {
+						default_first: true,
+						include_preview: true
+					}, scope);
+				}
 				if (generation !== this.generation) return;
 				this.catalog = state.dashboards.map((row) => ({
 					identity: row.view.slice(10),
@@ -2104,16 +2172,15 @@ var _sfc_main = {
 				this.revision = state.revision;
 				this.canWrite = true;
 				this.sourceTypes = state.sourceTypes || [];
-				const name = this.document?.name || this.initialFocus || this.catalog[0]?.identity;
 				this.document = null;
 				this.baseline = "";
 				this.compiled = null;
-				if (name) {
-					const value = await this.call("read", { name }, scope);
-					if (generation !== this.generation) return;
-					this.document = value.document;
-					this.baseline = JSON.stringify(value.document);
-					this.revision = value.revision;
+				if (state.document) {
+					this.document = state.document;
+					this.baseline = JSON.stringify(state.document);
+					this.compiled = state.model || null;
+					this.sourceXml = state.xml || "";
+					this.checkedDocument = state.model ? this.baseline : "";
 					this.ui = initial();
 					this.dataEpoch++;
 				}
@@ -2122,7 +2189,7 @@ var _sfc_main = {
 			} finally {
 				if (generation === this.generation) {
 					this.busy = false;
-					if (this.document) this.schedule();
+					if (this.document && !this.compiled) this.schedule();
 				}
 			}
 		},
@@ -2133,11 +2200,17 @@ var _sfc_main = {
 			this.busy = true;
 			this.error = "";
 			try {
-				const value = await this.call("read", { name });
+				const value = await this.call("read", {
+					name,
+					include_preview: true
+				});
 				if (generation !== this.generation) return;
 				this.document = value.document;
 				this.revision = value.revision;
 				this.baseline = JSON.stringify(value.document);
+				this.compiled = value.model || null;
+				this.sourceXml = value.xml || "";
+				this.checkedDocument = value.model ? this.baseline : "";
 				this.ui = {
 					...initial(),
 					...this.contexts[name]
@@ -2145,13 +2218,12 @@ var _sfc_main = {
 				this.revealSelection();
 				this.sourceTypes = value.sourceTypes || this.sourceTypes;
 				this.dataEpoch++;
-				this.compiled = null;
 			} catch (e) {
 				if (generation === this.generation) this.error = e.message;
 			} finally {
 				if (generation === this.generation) {
 					this.busy = false;
-					this.schedule();
+					if (this.document && !this.compiled) this.schedule();
 				}
 			}
 		},

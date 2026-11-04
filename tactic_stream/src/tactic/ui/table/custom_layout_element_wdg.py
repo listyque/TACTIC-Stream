@@ -77,7 +77,7 @@ def read_custom_layout(
                         layoutView=view, targetSearchKey=search_key, record=record)
         if definition is not None and definition.find('dashboard') is not None:
             from tactic_stream.server.dashboards import dashboard_layout
-            return dashboard_layout(json.loads(definition.findtext('dashboard')), view, search_key, detail_key=detail_key, filter_values=filter_values, filter_query=filter_query)
+            return dashboard_layout(definition, view, search_key, detail_key=detail_key, filter_values=filter_values, filter_query=filter_query)
         if not is_admin:
             raise SecurityException('Administration requires administrator access')
         if definition is None or definition.find('html') is None:

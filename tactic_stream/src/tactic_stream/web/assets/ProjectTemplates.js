@@ -1,8 +1,8 @@
 import { r as __exportAll } from "./ObjectFieldFrame.js";
-import { E as nextTick, F as resolveComponent, I as resolveDirective, K as withDirectives, M as openBlock, _ as createElementBlock, b as createVNode, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, rt as toDisplayString } from "./vue.js";
+import { D as nextTick, I as resolveComponent, L as resolveDirective, N as openBlock, h as createBaseVNode, it as toDisplayString, q as withDirectives, rt as normalizeStyle, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
 import { o as t, s as appearance, z as _plugin_vue_export_helper_default } from "./AppButton.js";
 import { Y as uploadFormFile, j as rpc } from "./index.js";
-import { G as button, H as observeFrameSizes, J as muted, K as label, X as rect, Y as node, t as _sfc_main$1, w as translate } from "./FrameView.js";
+import { K as button, T as translate, U as observeFrameSizes, X as node, Y as muted, Z as rect, q as label, t as _sfc_main$1 } from "./FrameView.js";
 import { t as describe$1 } from "./confirmation.ui.js";
 //#region ../src/tactic_stream/shared_ui/features/projects/templates.ui.mjs
 function describe(model, width, height, language) {

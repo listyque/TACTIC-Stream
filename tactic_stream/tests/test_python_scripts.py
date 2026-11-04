@@ -104,6 +104,7 @@ class PythonScripts(read_tests.ReadParity):
                 self.assertIn("raise ValueError('custom failure')", trace)
                 self.assertIn('tactic://admin/contract/traceback", line 3', trace)
                 self.assertNotIn('memory:', trace)
+                self.assertNotIn('mako/runtime.py', trace.replace('\\', '/'))
                 print(trace[trace.index('  File "tactic://'):])
             else:
                 self.fail('Script must fail')

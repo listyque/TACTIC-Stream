@@ -1,9 +1,9 @@
 const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ObjectCheckin.js","assets/vue.js","assets/AppButton.js","assets/locales.js","assets/icons.js","assets/AppButton.css","assets/index.js","assets/index.css","assets/FrameView.js","assets/FrameView.css","assets/sections.ui.js","assets/file_values.js","assets/files.js","assets/confirmation.ui.js","assets/AppDialog.js","assets/toggle.ui.js","assets/ObjectCheckin.css","assets/IngestFiles.js","assets/VirtualCollection.js","assets/VirtualCollection.css","assets/IngestFiles.css","assets/DuplicateSObject.js","assets/ObjectFieldFrame.js","assets/ObjectFieldFrame.css","assets/ContentLoadingOverlay.js","assets/ContentLoadingOverlay.css","assets/DuplicateSObject.css","assets/TableViewsManager.js","assets/RelatedObjects.js","assets/textMetrics.js","assets/admin.document.js","assets/files2.js","assets/admin.css","assets/RelatedObjects.css","assets/TableViewsManager.css","assets/SnapshotCheckout.js","assets/FrameProgress.js","assets/SnapshotCheckout.css"])))=>i.map(i=>d[i]);
 import { r as __exportAll } from "./ObjectFieldFrame.js";
-import { $ as toRaw, A as onMounted, C as inject, E as nextTick, F as resolveComponent, G as withCtx, H as watch, I as resolveDirective, J as markRaw, K as withDirectives, L as resolveDynamicComponent, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, S as h, T as mergeProps, V as useSlots, X as ref, Y as reactive, _ as createElementBlock, b as createVNode, c as withKeys, d as KeepAlive, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, o as vModelText, p as computed, q as isRef, rt as toDisplayString, s as vShow, t as Transition, tt as normalizeClass, u as Fragment, v as createSlots, y as createTextVNode, z as useId } from "./vue.js";
+import { B as useId, C as h, D as nextTick, E as mergeProps, F as renderSlot, H as useSlots, I as resolveComponent, J as isRef, K as withCtx, L as resolveDirective, N as openBlock, P as renderList, R as resolveDynamicComponent, U as watch, X as reactive, Y as markRaw, Z as ref, _ as createCommentVNode, b as createTextVNode, c as vShow, d as Fragment, et as toRaw, f as KeepAlive, g as createBlock, h as createBaseVNode, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withKeys, m as computed, nt as normalizeClass, p as Teleport, q as withDirectives, rt as normalizeStyle, s as vModelText, t as Transition, tt as unref, u as withModifiers, v as createElementBlock, w as inject, x as createVNode, y as createSlots } from "./vue.js";
 import { D as spacing$1, O as textStyles, R as BusyIndicator_default, S as fontMetricHeight, _ as controls$1, a as _sfc_main$56, b as fontFamily, j as preferences, m as readableText, o as t, s as appearance, t as _sfc_main$55, u as frameColors, y as cssRoles, z as _plugin_vue_export_helper_default } from "./AppButton.js";
 import { A as resultItems, Ct as debugLog, F as searchConfiguration, G as tableDependencies, J as transactionDetails, K as tableDependencyFile, Q as widgetConfiguration, Rt as asyncComponent, W as tableCells, Y as uploadFormFile, a as __vitePreload, b as objectRelations, bt as mobile, c as beginActivity, d as endActivity, dt as notify, g as messageFileRequest, h as linkPreviews, j as rpc, jt as logRequest, o as fileBlob, p as interfaceDefinition, q as tableParentGroup, v as navigationLink } from "./index.js";
-import { A as _sfc_main$58, B as _sfc_main$63, D as _sfc_main$62, G as button, H as observeFrameSizes, K as label, M as _sfc_main$65, N as _sfc_main$68, O as ItemPreview_default, P as _sfc_main$60, Q as virtualRange, U as _sfc_main$66, V as frameContentWidth, X as rect, Y as node, _ as describe$19, b as _sfc_main$64, g as readClipboardImages, h as copyText, k as AppSearchField_default, m as copyImage, n as _sfc_main$59, o as _sfc_main$69, r as _sfc_main$61, t as _sfc_main$57, v as geometry$2, w as translate, z as _sfc_main$67 } from "./FrameView.js";
+import { $ as virtualRange, A as AppSearchField_default, B as _sfc_main$67, C as readClipboardImages, F as _sfc_main$60, H as frameContentWidth, K as button, N as _sfc_main$65, O as _sfc_main$62, P as _sfc_main$68, S as copyText, T as translate, U as observeFrameSizes, V as _sfc_main$63, W as _sfc_main$66, X as node, Z as rect, c as describe$19, d as _sfc_main$64, j as _sfc_main$58, k as ItemPreview_default, l as geometry$2, n as _sfc_main$59, o as _sfc_main$69, q as label, r as _sfc_main$61, t as _sfc_main$57, x as copyImage } from "./FrameView.js";
 import { n as qtLabelTextWidth, t as layoutTextWidth } from "./textMetrics.js";
 import { t as captionHeight } from "./sections.ui.js";
 import RecordForm_default, { a as unsupportedField, i as fieldKind, t as _sfc_main$70 } from "./RecordForm.js";
@@ -16,7 +16,7 @@ import { t as _sfc_main$74 } from "./AppDialog.js";
 import { t as _sfc_main$75 } from "./VirtualCollection.js";
 import { t as Timesheet_default } from "./Timesheet.js";
 import { a as duplicateProfile, t as _sfc_main$76 } from "./ContentLoadingOverlay.js";
-import { A as _sfc_main$83, B as _sfc_main$79, D as insertion, Ft as interrupted, I as decorate, It as settled, L as itemScene, Mt as change$6, Nt as describe$22, O as mentionQuery, Pt as field$1, Rt as buttonWidth, T as emojiCount, U as groupRecords, V as _sfc_main$80, _t as tab, a as tableDefinition, b as _sfc_main$84, bt as describe$21, dt as _sfc_main$77, it as choices, j as _sfc_main$82, n as changeTable, o as ObjectAction_default, s as _sfc_main$85, tt as _sfc_main$78, vt as viewTabWidth, w as composerKey, wt as binding, xt as supports, y as _sfc_main$86, yt as actionAvailable, z as _sfc_main$81 } from "./RelatedObjects.js";
+import { A as _sfc_main$83, B as _sfc_main$81, D as insertion, Ft as field$1, H as _sfc_main$80, I as combineRegions, It as interrupted, L as decorate, Lt as settled, Nt as change$6, O as mentionQuery, Pt as describe$22, R as itemScene, St as supports, T as emojiCount, Tt as binding, V as _sfc_main$79, W as groupRecords, at as choices, b as _sfc_main$84, bt as actionAvailable, ft as _sfc_main$77, i as tableDefinition, j as _sfc_main$82, n as changeTable, nt as _sfc_main$78, o as ObjectAction_default, s as _sfc_main$85, vt as tab, w as composerKey, xt as describe$21, y as _sfc_main$86, yt as viewTabWidth, zt as buttonWidth } from "./RelatedObjects.js";
 //#region ../src/tactic_stream/shared_ui/features/table/cells.ui.mjs
 function presentationOptions(options = {}, attributes = {}) {
 	const result = Object.assign({}, options);
@@ -1425,10 +1425,10 @@ function tableRowHeight(model) {
 }
 function extent(state = {}, width = 0, availableHeight = 320) {
 	const model = Object.assign({}, state.scope, state);
-	if (model.busy && !model.loaded && !model.rows?.length) return 320;
 	const inner = Math.max(0, width);
-	const chrome = toolbarHeight(model) + quickLayout(model, inner).height + 40 + (model.gallery ? 0 : metrics$1.header + (model.selected?.length ? 36 : 0));
-	const content = rows$2(model, inner, availableHeight).reduce((sum, row) => sum + row.extent, 0);
+	const chrome = toolbarHeight(model) + quickLayout(model, inner).height + 40 + (model.gallery ? 0 : metrics$1.header + (model.selected?.length ? 36 : 0) + (model.dirtyTaskCount ? 44 : 0));
+	const expected = !model.loaded && !model.rows?.length ? Math.max(1, Math.min(50, Number(String(model.expectedRows ?? model.text ?? "").match(/\d+/)?.[0]) || 1)) : 0;
+	const content = expected ? expected * (model.gallery ? model.gallery.scale + 64 : tableRowHeight(model)) : rows$2(model, inner, availableHeight).reduce((sum, row) => sum + row.extent, 0);
 	return Math.max(chrome + tableRowHeight(model), Math.min(availableHeight, chrome + content));
 }
 function toolbarHeight(model) {
@@ -2218,6 +2218,625 @@ function sizing(document, key, field, value) {
 	size[field] = value;
 	for (const axis of ["width", "height"]) if (size["max_" + axis] !== null && size["max_" + axis] < size["min_" + axis]) throw Error("Maximum size must not be smaller than minimum size");
 	item.sizing = size;
+	return result;
+}
+var SCALAR_DEFAULTS = [
+	[
+		"region",
+		"content",
+		"str"
+	],
+	[
+		"title",
+		"",
+		"str"
+	],
+	[
+		"text",
+		"",
+		"str"
+	],
+	[
+		"source_key",
+		"",
+		"str"
+	],
+	[
+		"field",
+		"",
+		"str"
+	],
+	[
+		"binding",
+		"auto",
+		"str"
+	],
+	[
+		"search_type",
+		"",
+		"str"
+	],
+	[
+		"view",
+		"table",
+		"str"
+	],
+	[
+		"measure",
+		"",
+		"str"
+	],
+	[
+		"chart_type",
+		"bar",
+		"str"
+	],
+	[
+		"group_limit",
+		50,
+		"int"
+	],
+	[
+		"group_order",
+		"group",
+		"str"
+	],
+	[
+		"href",
+		"",
+		"str"
+	],
+	[
+		"weight",
+		1,
+		"int"
+	],
+	[
+		"width",
+		null,
+		"int"
+	],
+	[
+		"height",
+		null,
+		"int"
+	],
+	[
+		"gap",
+		8,
+		"int"
+	],
+	[
+		"offset_x",
+		0,
+		"int"
+	],
+	[
+		"offset_y",
+		0,
+		"int"
+	],
+	[
+		"columns",
+		3,
+		"int"
+	],
+	[
+		"min_cell_width",
+		200,
+		"int"
+	],
+	[
+		"row_height",
+		120,
+		"int"
+	],
+	[
+		"column_span",
+		1,
+		"int"
+	],
+	[
+		"row_span",
+		1,
+		"int"
+	],
+	[
+		"collapse_width",
+		600,
+		"int"
+	],
+	[
+		"text_role",
+		"auto",
+		"str"
+	],
+	[
+		"text_align",
+		"left",
+		"str"
+	],
+	[
+		"text_color",
+		"auto",
+		"str"
+	],
+	[
+		"text_weight",
+		400,
+		"int"
+	],
+	[
+		"icon",
+		"",
+		"str"
+	],
+	[
+		"icon_size",
+		32,
+		"int"
+	],
+	[
+		"image_fit",
+		"contain",
+		"str"
+	],
+	[
+		"button_style",
+		"normal",
+		"str"
+	],
+	[
+		"edit_view",
+		"edit",
+		"str"
+	],
+	[
+		"format",
+		"plain",
+		"str"
+	],
+	[
+		"suffix",
+		"",
+		"str"
+	],
+	[
+		"native_action",
+		"details",
+		"str"
+	]
+];
+var APPEARANCE_DEFAULTS = [
+	[
+		"fill",
+		"transparent",
+		"str"
+	],
+	[
+		"stroke",
+		"outlineVariant",
+		"str"
+	],
+	[
+		"stroke_width",
+		0,
+		"int"
+	],
+	[
+		"radius",
+		0,
+		"int"
+	],
+	[
+		"shadow",
+		false,
+		"bool"
+	],
+	[
+		"animate",
+		false,
+		"bool"
+	]
+];
+var SIZING_DEFAULTS = [
+	[
+		"width_mode",
+		"auto",
+		"str"
+	],
+	[
+		"height_mode",
+		"auto",
+		"str"
+	],
+	[
+		"min_width",
+		0,
+		"int"
+	],
+	[
+		"max_width",
+		null,
+		"int"
+	],
+	[
+		"min_height",
+		0,
+		"int"
+	],
+	[
+		"max_height",
+		null,
+		"int"
+	]
+];
+var escAttr = (v) => String(v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+var escText = (v) => String(v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+var unesc = (v) => String(v).replace(/&(quot|apos|lt|gt|amp|#\d+|#x[0-9a-fA-F]+);/g, (m, code) => {
+	if (code === "quot") return "\"";
+	if (code === "apos") return "'";
+	if (code === "lt") return "<";
+	if (code === "gt") return ">";
+	if (code === "amp") return "&";
+	if (code[0] === "#") return String.fromCodePoint(code[1] === "x" ? parseInt(code.slice(2), 16) : parseInt(code.slice(1), 10));
+	return m;
+});
+function filterAttrs(item) {
+	const pairs = [["column", item.column]];
+	if ((item.relation || "=") !== "=") pairs.push(["relation", item.relation]);
+	const val = item.value;
+	if (val !== void 0 && val !== null) {
+		if (typeof val === "boolean") pairs.push(["value", val ? "true" : "false"], ["value_type", "bool"]);
+		else if (typeof val === "number") pairs.push(["value", String(val)], ["value_type", Number.isInteger(val) ? "int" : "float"]);
+		else pairs.push(["value", String(val)]);
+	}
+	return pairs;
+}
+function toXml(document) {
+	if (!document || !document.name) return "";
+	const lines = ["<config>", `  <view name="dashboard.${escAttr(document.name)}" title="${escAttr(document.title || document.name)}">`];
+	const pFilters = document.filters || [];
+	const blocks = document.blocks || [];
+	if (!pFilters.length && !blocks.length) {
+		lines.push("    <dashboard></dashboard>", "  </view>", "</config>");
+		return lines.join("\n");
+	}
+	lines.push("    <dashboard>");
+	for (const pf of pFilters) {
+		const pairs = [
+			["name", pf.name],
+			["title", pf.title],
+			["search_type", pf.search_type],
+			...filterAttrs(pf)
+		];
+		if (pf.enabled) pairs.push(["enabled", "true"]);
+		const attrs = pairs.map(([k, v]) => ` ${k}="${escAttr(v)}"`).join("");
+		lines.push(`      <filter${attrs} />`);
+	}
+	function emitBlock(blk, depth) {
+		const pad = "  ".repeat(depth);
+		const pairs = [];
+		let multiline = false;
+		for (const [key, def] of SCALAR_DEFAULTS) {
+			const val = blk[key] !== void 0 ? blk[key] : def;
+			if (val !== def && val !== null) {
+				if (key === "text" && String(val).includes("\n")) {
+					multiline = true;
+					continue;
+				}
+				pairs.push([key, String(val)]);
+			}
+		}
+		for (const key of ["padding", "margin"]) {
+			const val = blk[key];
+			if (Array.isArray(val) && (val[0] !== 0 || val[1] !== 0 || val[2] !== 0 || val[3] !== 0)) pairs.push([key, val.join(",")]);
+		}
+		if (Array.isArray(blk.fields) && blk.fields.length) pairs.push(["fields", blk.fields.join(",")]);
+		if (blk.controls !== void 0 && blk.controls !== null) pairs.push(["controls", blk.controls.join(",")]);
+		const app = blk.appearance || {};
+		for (const [key, def, typ] of APPEARANCE_DEFAULTS) {
+			const val = app[key] !== void 0 ? app[key] : def;
+			if (val !== def) pairs.push([key, typ === "bool" ? val ? "true" : "false" : String(val)]);
+		}
+		const sz = blk.sizing || {};
+		for (const [key, def] of SIZING_DEFAULTS) {
+			const val = sz[key] !== void 0 ? sz[key] : def;
+			if (val !== def && val !== null) pairs.push([key, String(val)]);
+		}
+		const attrs = pairs.map(([k, v]) => ` ${k}="${escAttr(v)}"`).join("");
+		const childLines = [];
+		const cPad = "  ".repeat(depth + 1);
+		if (multiline) childLines.push(`${cPad}<content>${escText(blk.text)}</content>`);
+		for (const flt of blk.filters || []) {
+			const fAttrs = filterAttrs(flt).map(([k, v]) => ` ${k}="${escAttr(v)}"`).join("");
+			childLines.push(`${cPad}<filter${fAttrs} />`);
+		}
+		if (blk.page_filters !== void 0 && blk.page_filters !== null) {
+			const keys = Object.keys(blk.page_filters);
+			if (!keys.length) childLines.push(`${cPad}<page_filters none="true" />`);
+			else for (const k of keys) childLines.push(`${cPad}<page_filter name="${escAttr(k)}" column="${escAttr(blk.page_filters[k])}" />`);
+		}
+		for (const grp of blk.group_by || []) {
+			const gPairs = [["column", grp.column]];
+			if (grp.title) gPairs.push(["title", grp.title]);
+			if (grp.period && grp.period !== "value") gPairs.push(["period", grp.period]);
+			const gAttrs = gPairs.map(([k, v]) => ` ${k}="${escAttr(v)}"`).join("");
+			childLines.push(`${cPad}<group_by${gAttrs} />`);
+		}
+		for (const agg of blk.aggregates || []) {
+			const aPairs = [["name", agg.name], ["title", agg.title]];
+			if (agg.function && agg.function !== "count") aPairs.push(["function", agg.function]);
+			if (agg.column) aPairs.push(["column", agg.column]);
+			const aAttrs = aPairs.map(([k, v]) => ` ${k}="${escAttr(v)}"`).join("");
+			childLines.push(`${cPad}<aggregate${aAttrs} />`);
+		}
+		const nested = blk.children || [];
+		if (!childLines.length && !nested.length) lines.push(`${pad}<${blk.kind}${attrs} />`);
+		else {
+			lines.push(`${pad}<${blk.kind}${attrs}>`);
+			for (const line of childLines) lines.push(line);
+			for (const ch of nested) emitBlock(ch, depth + 1);
+			lines.push(`${pad}</${blk.kind}>`);
+		}
+	}
+	for (const blk of blocks) emitBlock(blk, 3);
+	lines.push("    </dashboard>", "  </view>", "</config>");
+	return lines.join("\n");
+}
+function parseXmlTree(xml) {
+	const s = String(xml).replace(/<\?xml[\s\S]*?\?>/g, "").replace(/<!--[\s\S]*?-->/g, "").trim();
+	if (!s.startsWith("<")) throw Error("Invalid dashboard XML");
+	const stack = [{
+		tag: "#root",
+		children: []
+	}];
+	const tagRe = /<\/?([A-Za-z_][\w.-]*)((?:\s+[A-Za-z_][\w.-]*\s*=\s*(?:"[^"]*"|'[^']*'))*)\s*(\/?)>|([^<]+)/g;
+	const attrRe = /([A-Za-z_][\w.-]*)\s*=\s*(?:"([^"]*)"|'([^']*)')/g;
+	let match, lastIndex = 0;
+	while ((match = tagRe.exec(s)) !== null) {
+		if (match.index !== lastIndex) throw Error("Invalid dashboard XML");
+		lastIndex = tagRe.lastIndex;
+		if (match[4] !== void 0) {
+			const top = stack[stack.length - 1];
+			top.text = (top.text || "") + unesc(match[4]);
+			continue;
+		}
+		const full = match[0], tag = match[1], attrStr = match[2] || "", selfClosing = match[3] === "/";
+		if (full.startsWith("</")) {
+			if (selfClosing || attrStr.trim() || stack.length < 2) throw Error("Invalid dashboard XML");
+			if (stack.pop().tag !== tag) throw Error(`Mismatched closing tag </${tag}>`);
+			continue;
+		}
+		const attrib = {};
+		if (attrStr.replace(attrRe, (_, k, v1, v2) => {
+			if (Object.prototype.hasOwnProperty.call(attrib, k)) throw Error(`Duplicate attribute "${k}"`);
+			attrib[k] = unesc(v1 !== void 0 ? v1 : v2);
+			return "";
+		}).trim()) throw Error(`Invalid attributes on <${tag}>`);
+		const node = {
+			tag,
+			attrib,
+			text: "",
+			children: []
+		};
+		stack[stack.length - 1].children.push(node);
+		if (!selfClosing) stack.push(node);
+	}
+	if (lastIndex !== s.length || stack.length !== 1 || stack[0].children.length !== 1) throw Error("Invalid dashboard XML");
+	return stack[0].children[0];
+}
+function readFilterValue(attrib) {
+	if (!Object.prototype.hasOwnProperty.call(attrib, "value")) return null;
+	const raw = attrib.value, vtype = attrib.value_type || "str";
+	if (vtype === "bool") {
+		if (raw !== "true" && raw !== "false") throw Error("Filter boolean value must be true or false");
+		return raw === "true";
+	}
+	if (vtype === "int") {
+		if (!/^-?\d+$/.test(raw)) throw Error("Filter integer value is invalid");
+		return Number(raw);
+	}
+	if (vtype === "float") {
+		const n = Number(raw);
+		if (!Number.isFinite(n)) throw Error("Filter number value is invalid");
+		return n;
+	}
+	if (vtype === "null") return null;
+	return raw;
+}
+function parseTyped(raw, typ, name) {
+	if (typ === "bool") {
+		if (raw !== "true" && raw !== "false") throw Error(`Attribute ${name} must be true or false`);
+		return raw === "true";
+	}
+	if (typ === "int") {
+		if (!/^-?\d+$/.test(String(raw))) throw Error(`Attribute ${name} must be a whole number`);
+		return Number(raw);
+	}
+	return String(raw);
+}
+function fromXml(source, fallbackName = "") {
+	const trimmed = String(source || "").trim();
+	if (!trimmed) throw Error("Invalid dashboard XML");
+	if (trimmed.startsWith("{")) {
+		const parsed = JSON.parse(trimmed);
+		checkStructure(parsed);
+		return parsed;
+	}
+	const root = parseXmlTree(trimmed);
+	let viewName = "", viewTitle = "", dash = null;
+	if (root.tag === "dashboard") dash = root;
+	else if (root.children.some((c) => c.tag === "dashboard")) {
+		viewName = root.attrib.name || (root.tag !== "view" ? root.tag : "");
+		viewTitle = root.attrib.title || "";
+		dash = root.children.find((c) => c.tag === "dashboard");
+	} else {
+		const vNode = root.children.find((c) => c.tag === "view") || root.children.find((c) => c.children.some((gc) => gc.tag === "dashboard"));
+		if (vNode) {
+			viewName = vNode.attrib.name || (vNode.tag !== "view" ? vNode.tag : "");
+			viewTitle = vNode.attrib.title || "";
+			dash = vNode.children.find((c) => c.tag === "dashboard");
+		}
+	}
+	if (!dash) throw Error("Choose an existing dashboard");
+	if (!dash.children.length && (dash.text || "").trim().startsWith("{")) {
+		const parsed = JSON.parse(dash.text.trim());
+		checkStructure(parsed);
+		return parsed;
+	}
+	if ((dash.text || "").trim()) throw Error("Unexpected text inside <dashboard>");
+	const name = dash.attrib.name || (viewName.startsWith("dashboard.") ? viewName.slice(10) : viewName) || fallbackName;
+	if (!/^[a-z][a-z0-9_]{0,47}$/.test(name)) throw Error("Invalid dashboard name");
+	const title = (dash.attrib.title || viewTitle || name).trim();
+	if (!title || title.length > 256) throw Error("Enter a page title");
+	const scalarMap = {};
+	for (const [k, d, t] of SCALAR_DEFAULTS) scalarMap[k] = [d, t];
+	const appMap = {};
+	for (const [k, d, t] of APPEARANCE_DEFAULTS) appMap[k] = [d, t];
+	const szMap = {};
+	for (const [k, d, t] of SIZING_DEFAULTS) szMap[k] = [d, t];
+	function parseBlockNode(node) {
+		if (!kinds.includes(node.tag)) throw Error(`Unsupported page widget <${node.tag}>`);
+		if ((node.text || "").trim()) throw Error(`Use text attribute or <content> inside <${node.tag}>`);
+		const app = {};
+		for (const [k, d] of APPEARANCE_DEFAULTS) app[k] = d;
+		const sz = {};
+		for (const [k, d] of SIZING_DEFAULTS) sz[k] = d;
+		const raw = { kind: node.tag };
+		for (const [attr, val] of Object.entries(node.attrib)) if (scalarMap[attr]) raw[attr] = parseTyped(val, scalarMap[attr][1], attr);
+		else if (attr === "padding" || attr === "margin") {
+			const parts = val.split(",").map((p) => p.trim());
+			if (parts.length !== 4) throw Error(`Attribute ${attr} requires four comma-separated numbers`);
+			raw[attr] = parts.map((p) => parseTyped(p, "int", attr));
+		} else if (attr === "fields") raw.fields = val.split(",").map((p) => p.trim()).filter(Boolean);
+		else if (attr === "controls") raw.controls = val.split(",").map((p) => p.trim()).filter(Boolean);
+		else if (appMap[attr]) app[attr] = parseTyped(val, appMap[attr][1], attr);
+		else if (szMap[attr]) sz[attr] = parseTyped(val, szMap[attr][1], attr);
+		else throw Error(`Unsupported attribute "${attr}" on <${node.tag}>`);
+		const bFilters = [], bGroupBy = [], bAggregates = [], bChildren = [];
+		let bPageFilters = null;
+		for (const ch of node.children) if (ch.tag === "content") raw.text = ch.text || "";
+		else if (ch.tag === "filter") {
+			if (!ch.attrib.column) throw Error("Invalid <filter> attributes");
+			bFilters.push({
+				column: ch.attrib.column,
+				relation: ch.attrib.relation || "=",
+				value: readFilterValue(ch.attrib)
+			});
+		} else if (ch.tag === "page_filters") {
+			if (ch.attrib.none === "true" && bPageFilters === null) bPageFilters = {};
+		} else if (ch.tag === "page_filter") {
+			if (!ch.attrib.name || !ch.attrib.column) throw Error("Invalid <page_filter> attributes");
+			if (bPageFilters === null) bPageFilters = {};
+			bPageFilters[ch.attrib.name] = ch.attrib.column;
+		} else if (ch.tag === "group_by") {
+			if (!ch.attrib.column) throw Error("Invalid <group_by> attributes");
+			bGroupBy.push({
+				column: ch.attrib.column,
+				title: ch.attrib.title || "",
+				period: ch.attrib.period || "value"
+			});
+		} else if (ch.tag === "aggregate") {
+			if (!ch.attrib.name || !ch.attrib.title) throw Error("Invalid <aggregate> attributes");
+			bAggregates.push({
+				name: ch.attrib.name,
+				title: ch.attrib.title,
+				function: ch.attrib.function || "count",
+				column: ch.attrib.column || ""
+			});
+		} else if (ch.tag === "appearance") for (const [k, v] of Object.entries(ch.attrib)) {
+			if (!appMap[k]) throw Error(`Unsupported appearance attribute "${k}"`);
+			app[k] = parseTyped(v, appMap[k][1], k);
+		}
+		else if (ch.tag === "sizing") for (const [k, v] of Object.entries(ch.attrib)) {
+			if (!szMap[k]) throw Error(`Unsupported sizing attribute "${k}"`);
+			sz[k] = parseTyped(v, szMap[k][1], k);
+		}
+		else if (kinds.includes(ch.tag)) bChildren.push(parseBlockNode(ch));
+		else throw Error(`Unsupported element <${ch.tag}> inside <${node.tag}>`);
+		return {
+			region: raw.region ?? "content",
+			kind: node.tag,
+			title: raw.title ?? "",
+			text: raw.text ?? "",
+			source_key: raw.source_key ?? "",
+			field: raw.field ?? "",
+			binding: raw.binding ?? "auto",
+			search_type: raw.search_type ?? "",
+			view: raw.view ?? "table",
+			filters: bFilters,
+			page_filters: bPageFilters,
+			group_by: bGroupBy,
+			aggregates: bAggregates,
+			measure: raw.measure ?? "",
+			chart_type: raw.chart_type ?? "bar",
+			group_limit: raw.group_limit ?? 50,
+			group_order: raw.group_order ?? "group",
+			href: raw.href ?? "",
+			weight: raw.weight ?? 1,
+			width: raw.width ?? null,
+			height: raw.height ?? null,
+			padding: raw.padding ?? [
+				0,
+				0,
+				0,
+				0
+			],
+			margin: raw.margin ?? [
+				0,
+				0,
+				0,
+				0
+			],
+			gap: raw.gap ?? 8,
+			offset_x: raw.offset_x ?? 0,
+			offset_y: raw.offset_y ?? 0,
+			appearance: app,
+			sizing: sz,
+			columns: raw.columns ?? 3,
+			min_cell_width: raw.min_cell_width ?? 200,
+			row_height: raw.row_height ?? 120,
+			column_span: raw.column_span ?? 1,
+			row_span: raw.row_span ?? 1,
+			collapse_width: raw.collapse_width ?? 600,
+			text_role: raw.text_role ?? "auto",
+			text_align: raw.text_align ?? "left",
+			text_color: raw.text_color ?? "auto",
+			text_weight: raw.text_weight ?? 400,
+			icon: raw.icon ?? "",
+			icon_size: raw.icon_size ?? 32,
+			image_fit: raw.image_fit ?? "contain",
+			button_style: raw.button_style ?? "normal",
+			fields: raw.fields ?? [],
+			edit_view: raw.edit_view ?? "edit",
+			format: raw.format ?? "plain",
+			suffix: raw.suffix ?? "",
+			native_action: raw.native_action ?? "details",
+			controls: raw.controls ?? null,
+			children: bChildren
+		};
+	}
+	const filters = [], blocks = [];
+	for (const ch of dash.children) if (ch.tag === "filter") {
+		if (!ch.attrib.name || !ch.attrib.title || !ch.attrib.search_type || !ch.attrib.column) throw Error("Invalid page <filter> attributes");
+		filters.push({
+			column: ch.attrib.column,
+			relation: ch.attrib.relation || "=",
+			value: readFilterValue(ch.attrib),
+			name: ch.attrib.name,
+			title: ch.attrib.title,
+			search_type: ch.attrib.search_type,
+			enabled: parseTyped(ch.attrib.enabled || "false", "bool", "enabled")
+		});
+	} else blocks.push(parseBlockNode(ch));
+	const result = {
+		name,
+		title,
+		filters,
+		blocks
+	};
+	checkStructure(result);
 	return result;
 }
 //#endregion
@@ -3335,9 +3954,9 @@ function describe$12(cell, width$1, height$2, language, editable = true, server 
 	let footerExtent = drawRegion("footer", Math.max(0, width$1 - spacing$1.content * 2), foot);
 	footerHeight = foot.length ? Math.min(footerExtent + spacing$1.content * 2, viewportHeight * .3) : 0;
 	headerHeight = Math.min(head.height, Math.max(0, viewportHeight - footerHeight - Math.min(180, viewportHeight * .45)));
-	if (head.height > headerHeight) head = header(Math.max(0, width$1 - controls$1.scrollBar.extent - 4));
+	if (head.height > headerHeight && !cell.layoutEditing) head = header(Math.max(0, width$1 - controls$1.scrollBar.extent - 4));
 	headerNodes = head.nodes;
-	if (footerExtent + spacing$1.content * 2 > footerHeight && footerHeight) {
+	if (footerExtent + spacing$1.content * 2 > footerHeight && footerHeight && !cell.layoutEditing) {
 		foot = [];
 		footerExtent = drawRegion("footer", Math.max(0, width$1 - spacing$1.content * 2 - controls$1.scrollBar.extent - 4), foot);
 	}
@@ -3358,7 +3977,7 @@ function describe$12(cell, width$1, height$2, language, editable = true, server 
 		return children.length ? Math.max(flowExtent + spacing$1.content * 2, visualBottom(children) + spacing$1.content) : 0;
 	}
 	let contentWidth = Math.max(0, width$1), extent = render(contentWidth);
-	if (extent + (cell.layoutError ? 80 : 0) > bodyHeight) {
+	if (extent + (cell.layoutError ? 80 : 0) > bodyHeight && !cell.layoutEditing) {
 		contentWidth = Math.max(0, width$1 - controls$1.scrollBar.extent - 4);
 		extent = render(contentWidth);
 	}
@@ -4006,27 +4625,29 @@ function describe$8(cell$2, width, height, language, editable = true, expanded =
 				enabled,
 				role: "button",
 				expanded: nestedOpen,
+				selected: nestedOpen,
 				description: action.translateLabel === false ? action.label : translate(action.label, language),
-				normalColor: "surfaceContainerHigh",
+				normalColor: nestedOpen ? "action" : "surfaceContainerHigh",
+				selectedColor: "action",
 				radius: 4,
 				action: command,
 				children: [
 					node("Box", "tableServiceBorder", rect(0, 0, w, size), {
-						border: "outlineVariant",
+						border: nestedOpen ? "action" : "outlineVariant",
 						radius: 4
 					}),
 					label("tableServiceValue", rect(left, 0, Math.max(0, w - left - 36), size), text, {
 						fontRole: font.role,
 						weight: font.weight || 600,
-						color: enabled ? "primaryText" : "disabledText"
+						color: enabled ? nestedOpen ? "selectedText" : "primaryText" : "disabledText"
 					}),
 					...leadingIcon ? [node("Icon", "tableServiceLeadingIcon", rect(12, (size - 16) / 2, 16, 16), {
 						icon: leadingIcon,
-						color: enabled ? "action" : "disabledText"
+						color: enabled ? nestedOpen ? "selectedText" : "action" : "disabledText"
 					})] : [],
 					node("Icon", "tableServiceDisclosure", rect(Math.max(0, w - 28), (size - 16) / 2, 16, 16), {
 						icon,
-						color: enabled ? action.iconColor || "action" : "disabledText"
+						color: enabled ? nestedOpen ? "selectedText" : action.iconColor || "action" : "disabledText"
 					})
 				]
 			}));
@@ -4039,6 +4660,7 @@ function describe$8(cell$2, width, height, language, editable = true, expanded =
 		const top = cell$2.text ? 0 : Math.floor(index / capacity) * (size + gap);
 		children.push(button("tableServiceAction_" + index, rect(Math.max(0, left), top, size, size), action.translateLabel === false ? action.label : translate(action.label, language), icon, command, enabled, {
 			iconOnly: true,
+			highlighted: action.name === "nested-table" && nestedOpen,
 			destructive: !!action.destructive,
 			iconSize: action.iconSize,
 			iconColor: action.iconColor || void 0,
@@ -4066,7 +4688,8 @@ function summary(cell, width, height, language) {
 			action: entry.nestedTable ? {
 				type: "service",
 				name: "nested-table",
-				nestedTable: entry.nestedTable
+				nestedTable: entry.nestedTable,
+				text: String(entry.value ?? "")
 			} : null
 		}));
 	});
@@ -4133,6 +4756,7 @@ var _sfc_main$44 = {
 						emit("action", action.name, {
 							...props.cell,
 							nestedTable: action.nestedTable || props.cell.nestedTable,
+							text: action.text ?? props.cell.text,
 							href: action.href,
 							displayOptions: {
 								...props.cell.displayOptions,
@@ -4177,7 +4801,7 @@ var _sfc_main$44 = {
 					])], 512);
 				};
 			}
-		}, [["__scopeId", "data-v-74b3fe24"]]),
+		}, [["__scopeId", "data-v-3b73cd0b"]]),
 		StatusChip: _sfc_main$59
 	},
 	props: {
@@ -5121,8 +5745,16 @@ var _sfc_main$43 = {
 			} else saveDialog.value?.close();
 		});
 		onMounted(() => {
+			width.value = viewport.value.clientWidth;
+			viewportHeight.value = viewport.value.clientHeight || 600;
 			observer = new ResizeObserver((entries) => {
 				const bounds = entries[0].contentRect;
+				if (!width.value && bounds.width) {
+					width.value = bounds.width;
+					viewportHeight.value = bounds.height;
+					restore();
+					return;
+				}
 				cancelAnimationFrame(resizeFrame);
 				resizeFrame = requestAnimationFrame(() => {
 					const wasHidden = !width.value || !viewportHeight.value;
@@ -5310,6 +5942,7 @@ var _sfc_main$43 = {
 							onContextmenu: _cache[5] || (_cache[5] = withModifiers(() => {}, ["stop"]))
 						}, [renderSlot(_ctx.$slots, "detail", {
 							record: entry.detail,
+							width: width.value,
 							height: entry.height
 						})], 36)) : entry.group?.cell ? (openBlock(), createBlock(_sfc_main$57, {
 							key: 1,
@@ -5943,7 +6576,7 @@ var NestedTable_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 	setup(__props, { expose: __expose, emit: __emit }) {
 		const props = __props;
 		const emit = __emit;
-		const host = ref(null), width = ref(1);
+		const host = ref(null), width = ref(props.frameNode?.width || 1);
 		let observer, generation = 0;
 		const model = computed(() => props.state || props.parentState.children[props.frameNode.key]);
 		const tableRecords = computed(() => (model.value.rows || []).map((row) => row.record));
@@ -6053,6 +6686,9 @@ var NestedTable_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 					onColumn: (request) => {
 						model.value.loaded = false;
 						emit("column", request);
+					},
+					onDirtyTasks: (count) => {
+						model.value.dirtyTaskCount = count;
 					},
 					onSaved: load
 				}
@@ -6193,6 +6829,9 @@ var NestedTable_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 			if (!model.value.loaded) load();
 		});
 		watch(() => model.value.revision, load);
+		watch(() => props.frameNode?.width, (value) => {
+			if (value > 0) width.value = value;
+		});
 		function definitionSaved({ detail }) {
 			const scope = model.value.scope;
 			if (detail.project === (scope.projectCode || props.project) && [scope.searchType.split("?")[0], "ALL"].includes(detail.searchType) && [scope.view || "table", "definition"].includes(detail.view)) load();
@@ -6216,7 +6855,10 @@ var NestedTable_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 				ref_key: "host",
 				ref: host,
 				class: "nested-table",
-				style: normalizeStyle({ height: extent$1.value + "px" }),
+				style: normalizeStyle({
+					height: extent$1.value + "px",
+					background: model.value.scope?.embedded ? "transparent" : "var(--surface)"
+				}),
 				onClick: _cache[0] || (_cache[0] = withModifiers(() => {}, ["stop"])),
 				onDblclick: _cache[1] || (_cache[1] = withModifiers(() => {}, ["stop"])),
 				onContextmenu: _cache[2] || (_cache[2] = withModifiers(() => {}, ["stop"]))
@@ -6233,7 +6875,7 @@ var NestedTable_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 			])], 36);
 		};
 	}
-}, [["__scopeId", "data-v-678793fb"]]);
+}, [["__scopeId", "data-v-a62b895a"]]);
 //#endregion
 //#region src/features/interface/LayoutDocument.vue
 var _sfc_main$39 = {
@@ -11096,8 +11738,13 @@ var _sfc_main$20 = {
 			const measure = () => {
 				const parent = host.value?.parentElement;
 				const nextWidth = parent ? parent.clientWidth : 0;
-				const nextBodyHeight = body.value ? Math.round(body.value.getBoundingClientRect().height) : 0;
-				if (nextWidth > 0 && nextWidth !== width.value) width.value = nextWidth;
+				if (nextWidth > 0 && nextWidth !== width.value) {
+					width.value = nextWidth;
+					nextTick(measure);
+					return;
+				}
+				const bodyRect = body.value ? body.value.getBoundingClientRect() : null;
+				const nextBodyHeight = bodyRect && bodyRect.width >= 20 ? Math.round(bodyRect.height) : 0;
 				if (nextBodyHeight > 0 && Math.abs(nextBodyHeight - bodyHeight.value) > 1) bodyHeight.value = nextBodyHeight;
 			};
 			measure();
@@ -11206,15 +11853,19 @@ var _sfc_main$19 = {
 				const element = ref(null);
 				let resize;
 				onMounted(() => {
-					resize = observeFrameSizes(() => {
+					const updateHeight = () => {
 						const part = port.frameNode.view;
-						if (!element.value) return;
-						const height = Math.round(element.value.getBoundingClientRect().height);
+						if (!element.value || port.frameNode.width < 20) return;
+						const rect = element.value.getBoundingClientRect();
+						if (rect.width < 20) return;
+						const height = Math.round(rect.height);
 						if (height > 0 && Math.abs((heights.value[part] || 0) - height) > 1) heights.value = {
 							...heights.value,
 							[part]: height
 						};
-					});
+					};
+					updateHeight();
+					resize = observeFrameSizes(updateHeight);
 					resize.observe(element.value);
 				});
 				onBeforeUnmount(() => resize?.disconnect());
@@ -11304,7 +11955,8 @@ var _sfc_main$19 = {
 		};
 		onMounted(() => {
 			const measure = () => {
-				width.value = host.value.clientWidth;
+				const nextWidth = host.value.clientWidth || geometry({ status: props.note.entry_type === "status" }, host.value.closest(".notes-timeline")?.clientWidth || 0).contentWidth;
+				if (nextWidth > 0 && nextWidth !== width.value) width.value = nextWidth;
 			};
 			measure();
 			observer = observeFrameSizes(measure);
@@ -11571,6 +12223,9 @@ var _sfc_main$17 = {
 			append(0, 0);
 			if (this.taskMode) return [...records, ...this.history].sort((a, b) => String(a.timestamp).localeCompare(String(b.timestamp)) || a.id - b.id);
 			return records;
+		},
+		identitiesByLogin() {
+			return new Map(this.identities.map((user) => [user.login, user]));
 		}
 	},
 	watch: {
@@ -11696,7 +12351,7 @@ var _sfc_main$17 = {
 			if (keys.length > 24) delete this.timelinePositions[keys[0]];
 		},
 		identity(login) {
-			return this.identities.find((user) => user.login === login) || {
+			return this.identitiesByLogin.get(login) || {
 				login,
 				displayName: login || t("Removed user"),
 				initials: (login || "?").slice(0, 2).toUpperCase()
@@ -16269,7 +16924,7 @@ var _sfc_main$8 = {
 var client_api_default = "// -----------------------------------------------------------------------------\r\n//\r\n//  Copyright (c) 2008, Southpaw Technology Inc., All Rights Reserved\r\n//\r\n//  PROPRIETARY INFORMATION.  This software is proprietary to\r\n//  Southpaw Technology Inc., and is not to be reproduced, transmitted,\r\n//  or disclosed in any way without written permission.\r\n//\r\n// -----------------------------------------------------------------------------\r\n//\r\n//\r\n\r\n\r\nTacticServerStub = function() {\r\n    this.url = null;\r\n    this.transaction_ticket = null;\r\n    this.login_ticket = null;\r\n    this.server_name = null;\r\n    this.site = null;\r\n    this.project = null;\r\n\r\n    this.get_promise = function() {\r\n        promise = new Promise( function(resolve, reject) {\r\n           resolve();\r\n        })\r\n        return promise;\r\n    }\r\n\r\n    this.set_transaction_ticket = function(ticket) {\r\n        this.transaction_ticket = ticket;\r\n    }\r\n\r\n\r\n    this.set_ticket = function(login_ticket) {\r\n        this.login_ticket = login_ticket;\r\n    }\r\n\r\n    this.get_login_ticket = function() {\r\n        return this.login_ticket;\r\n    }\r\n\r\n\r\n    this.set_url = function(url) {\r\n        this.url = url;\r\n    }\r\n\r\n    this.get_url = function() {\r\n        return this.url;\r\n    }\r\n\r\n\r\n\r\n    this.set_site = function(site) {\r\n        if (site) {\r\n            this.site = site;\r\n        }\r\n    }\r\n    this.get_site = function() {\r\n        return this.site;\r\n    }\r\n\r\n    this.set_api_key = function(api_key) {\r\n        if (api_key) {\r\n            this.api_key = api_key;\r\n        }\r\n    }\r\n    this.get_api_key = function() {\r\n        return this.api_key\r\n    }\r\n    this.clear_api_key = function() {\r\n        this.api_key = null\r\n    }\r\n\r\n\r\n    this.set_project = function(project) {\r\n        this.project = project;\r\n        //this.set_project_state(project);\r\n    }\r\n    this.get_project = function() {\r\n        return this.project;\r\n    }\r\n\r\n\r\n    this.set_palette = function(palette) {\r\n        var env = spt.Environment.get();\r\n        env.set_palette(palette);\r\n    }\r\n    this.get_palette = function() {\r\n        var env = spt.Environment.get();\r\n        return env.get_palette();\r\n    }\r\n\r\n\r\n\r\n    this.set_server = function(server_name) {\r\n        this.server_name = server_name;\r\n        var env = spt.Environment.get();\r\n        this.url = env.get_api_url(this.server_name);\r\n    }\r\n\r\n\r\n    this.get_server = function() {\r\n        return this.server_name;\r\n    }\r\n\r\n\r\n\r\n\r\n    this.get_transaction_ticket = function() {\r\n        return this.transaction_ticket;\r\n    }\r\n\r\n\r\n    // a key is an encoded\r\n    this.set_key = function(key) {\r\n\r\n        var str = '';\r\n        if (key.indexOf(\"http\") == 0) {\r\n            str = key;\r\n        }\r\n        else {\r\n            var hex = key.toString();\r\n            for (var i = 0; i < hex.length; i += 2)\r\n                str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));\r\n        }\r\n\r\n        \r\n        // The format of key is as follows\r\n        // https://portal.southpawtech.com/tegna/tank/key/ABCDEFG\r\n        var parts = str.split(\"/\");\r\n        if (parts.length == 7) {\r\n            var login_ticket = parts[6];\r\n            var hash = parts[5];\r\n            var project = parts[4];\r\n            var site = parts[3];\r\n        }\r\n        else {\r\n            var login_ticket = parts[5];\r\n            var hash = parts[4];\r\n            var project = parts[3];\r\n        }\r\n\r\n        if (hash != \"ticket\" && hash != \"login_ticket\") {\r\n            throw(\"Malformed key [http<s>://<server>/<site>/<project>/ticket/<ticket>]\");\r\n        }\r\n\r\n        var server = parts[0] + \"/\" + parts[1] + \"/\" + parts[2];\r\n\r\n        var env = spt.Environment.get();\r\n        var url = env.get_api_url(server);\r\n\r\n\r\n        console.log(str);\r\n        console.log(\"server: \" + server);\r\n        console.log(\"site: \" + site);\r\n        console.log(\"project: \" + project);\r\n        console.log(\"ticket: \" + login_ticket);\r\n\r\n        /*\r\n        env.set_server_url(server);\r\n        env.set_site(site)\r\n        env.set_project(project);\r\n        env.set_ticket(login_ticket);\r\n        */\r\n\r\n        this.set_url(url);\r\n        this.set_ticket(login_ticket);\r\n        if (site)\r\n            this.set_site(site);\r\n        this.set_project(project);\r\n\r\n    }\r\n\r\n    this.get_key = function(key) {\r\n\r\n        var env = spt.Environment.get();\r\n\r\n        var server = env.get_server_url();\r\n        var site = this.get_site();\r\n        var project = this.get_project();\r\n        var ticket = this.get_login_ticket();\r\n        var api_key = this.get_api_key();\r\n\r\n        var str = [];\r\n        str.push(server);\r\n        if (site)\r\n            str.push(site)\r\n        str.push(project)\r\n        str.push(ticket)\r\n        str.push(api_key)\r\n\r\n        str = str.join(\"/\");\r\n\r\n        var hex = '';\r\n        for(var i=0;i<str.length;i++) {\r\n            hex += ''+str.charCodeAt(i).toString(16);\r\n        }\r\n\r\n        return hex;\r\n    }\r\n\r\n\r\n    this.build_search_key = function(search_type, code, project_code, column) {\r\n        if (project_code == null) {\r\n            project_code = this.project;\r\n        }\r\n        if (column == null) {\r\n            column = 'code';\r\n        }\r\n        var temps = search_type.split(\"?project=\");\r\n        search_type = temps[0];\r\n        var search_key;\r\n        if (search_type.test(/^sthpw\\//))\r\n            search_key = search_type +\"?\"+ column +\"=\"+ code;\r\n        else\r\n            search_key = search_type +\"?project=\"+ project_code +\"&\"+ column +\"=\"+ code;\r\n        return search_key;\r\n    }\r\n\r\n    this.split_search_key = function(search_key) {\r\n        \r\n        var list = [];\r\n        if (!search_key)\r\n            return search_key;\r\n\r\n        if (search_key.test(/&/))\r\n            var tmps = search_key.split('&');\r\n        else\r\n            var tmps = search_key.split('?');\r\n        var codes = tmps[1].split('=')\r\n        //assert len(codes) == 2;\r\n        list.push(tmps[0]);\r\n        list.push(codes[1]);\r\n        return list;\r\n    }\r\n\r\n\r\n    this.generate_ticket = function() {\r\n        return this._delegate(\"generate_ticket\");\r\n    }\r\n\r\n\r\n    this.get_ticket = function(login, password, kwargs, on_complete, on_error) {\r\n\r\n        [on_complete, on_error] = this._handle_callbacks(kwargs, on_complete, on_error);\r\n\r\n        let func_name = \"get_ticket\";\r\n        let client = new AjaxService( this.url, '' );\r\n\r\n        let args = [login, password];\r\n        if (kwargs && kwargs.site)\r\n            args.push(kwargs.site);\r\n\r\n    \r\n        // handle asynchronous mode\r\n        if (typeof(on_complete) != 'undefined' && on_complete != null) {\r\n            let self = this;\r\n            client.set_callback( function(request) {\r\n                self.async_callback(client, request, on_error);\r\n            } );\r\n            client.invoke( func_name, args );\r\n\r\n            // Store on the client\r\n            client.func_name = func_name;\r\n            client.ret_type = \"string\";\r\n            client.callback = on_complete;\r\n            return;\r\n        }\r\n\r\n        // just do it synchronously\r\n        else {\r\n     \r\n            let ret_val = client.invoke( func_name, args );\r\n            ret_val = this._handle_ret_val(func_name, ret_val, 'string');\r\n            let ticket = ret_val.replace(/(\\r\\n|\\n|\\r)/gm, '');\r\n\r\n            this.set_ticket(ticket);\r\n\r\n            return ticket;\r\n        }\r\n\r\n    }\r\n\r\n\r\n    this.p_get_ticket = function(login, password, kwargs) {\r\n        return new Promise( function(resolve, reject) {\r\n            if (!kwargs) kwargs = {}\r\n            kwargs.on_complete = function(x) { resolve(x); }\r\n            kwargs.on_error = function(x) { reject(x); }\r\n            this.get_ticket(login, password, kwargs);\r\n        }.bind(this) )\r\n    }\r\n\r\n\r\n\r\n\r\n\r\n\r\n    this.get_server_version = function(project) {\r\n        var kwargs = null;\r\n        return this._delegate(\"get_server_version\", arguments, kwargs);\r\n    }\r\n\r\n    this.get_server_api_version = function(project) {\r\n        var kwargs = null;\r\n        return this._delegate(\"get_server_api_version\", arguments, kwargs);\r\n    }\r\n\r\n\r\n    /*\r\n     * Transaction methods\r\n     */\r\n    this.set_project_state = function(project) {\r\n        var kwargs = null;\r\n        return this._delegate(\"set_project\", arguments, kwargs);\r\n    }\r\n\r\n\r\n\r\n    this.start = function(kwargs) {\r\n        if (this.project == null) {\r\n            alert(\"Project is null on start()\");\r\n            throw(\"Project is null on start()\");\r\n        }\r\n\r\n\r\n\r\n        var client = new AjaxService( this.url, '' );\r\n        var args = [];\r\n        var ticket = {\r\n            'ticket': this.login_ticket,\r\n            'site': this.site,\r\n            'project': this.project,\r\n            'palette': this.get_palette(),\r\n            'language': 'javascript',\r\n            'api_key': this.get_api_key()\r\n        };\r\n        //args.push(this.login_ticket);\r\n        args.push(ticket);\r\n        args.push(this.project);\r\n        args.push(kwargs);\r\n        var ret_val = client.invoke( \"start\", args );\r\n        this.transaction_ticket = this._parse_result(ret_val, \"start\");\r\n\r\n        // put this transaction on the undo queue\r\n        //var server_cmd = new TacticServerCmd(this);\r\n        //Command.add_to_undo(server_cmd);\r\n\r\n        return this.transaction_ticket;\r\n    }\r\n\r\n    this.finish = function(kwargs) {\r\n        var ret_val = this._delegate(\"finish\", arguments, kwargs);\r\n        this.transaction_ticket = null;\r\n        return ret_val;\r\n    }\r\n\r\n    this.abort = function() {\r\n        return this._delegate(\"abort\", arguments);\r\n    }\r\n\r\n    this.undo = function(kwargs) {\r\n        return this._delegate(\"undo\", arguments, kwargs);\r\n    }\r\n\r\n    this.redo = function(kwargs) {\r\n        return this._delegate(\"redo\", arguments, kwargs);\r\n    }\r\n\r\n    /*\r\n     * Simple Ping Test\r\n     */\r\n    this.ping = function() {\r\n        return this._delegate(\"ping\");\r\n    }\r\n\r\n    this.async_ping = function(kwargs) {\r\n\r\n        if (!kwargs) {\r\n            kwargs = {};\r\n        }\r\n    \r\n        var callback = kwargs['cbjs_action'];\r\n        if (!callback) {\r\n            callback = kwargs['callback'];\r\n        }\r\n        var on_error = function(e) {\r\n            callback(e);\r\n        };\r\n\r\n        this._delegate(\"ping\", arguments, kwargs, null, callback, on_error);\r\n        return;\r\n    }\r\n\r\n\r\n\r\n\r\n    this.get_connection_info = function() {\r\n        return this._delegate(\"get_connection_info\");\r\n    }\r\n\r\n\r\n\r\n    /*\r\n     * Preferences\r\n     */\r\n    this.get_preference = function(key) {\r\n        return this._delegate(\"get_preference\", arguments);\r\n    }\r\n\r\n\r\n\r\n    this.set_preference = function(key, value) {\r\n        return this._delegate(\"set_preference\", arguments);\r\n    }\r\n\r\n\r\n\r\n    /*\r\n     * Logging facilities\r\n     */\r\n    this.log = function(level, message, kwargs) {\r\n        return this._delegate(\"log\", arguments);\r\n    }\r\n\r\n\r\n    /*\r\n     * Messaging facilities\r\n     */\r\n\r\n    this.get_message = function(key, kwargs, on_complete, on_error) {\r\n        //return this._delegate(\"get_message\", arguments);\r\n        [on_complete, on_error] = this._handle_callbacks(kwargs, on_complete, on_error);\r\n        passed_args = [key, kwargs];\r\n        var ret_val = this._delegate(\"get_message\", passed_args, kwargs, null, on_complete, on_error);\r\n        // asynchronous\r\n        if (on_complete) {\r\n            return;\r\n        }\r\n        // synchronous\r\n        if (ret_val && ret_val.status == \"ERROR\") {\r\n            throw ret_val;\r\n        }\r\n        return ret_val;\r\n    }\r\n\r\n\r\n\r\n\r\n    this.p_get_message = function(key, kwargs) {\r\n        return new Promise( function(resolve, reject) {\r\n            if (!kwargs) kwargs = {}\r\n            kwargs.on_complete = function(x) { resolve(x); }\r\n            kwargs.on_error = function(x) { reject(x); }\r\n            this.get_message(key, kwargs);\r\n        }.bind(this) )\r\n    }\r\n\r\n\r\n\r\n\r\n    this.get_messages = function(keys, kwargs) {\r\n        return this._delegate(\"get_messages\", arguments);\r\n    }\r\n\r\n\r\n    this.log_message = function(key, message, kwargs) {\r\n        return this._delegate(\"log_message\", arguments, kwargs);\r\n    }\r\n\r\n    this.subscribe = function(key, kwargs) {\r\n        return this._delegate(\"subscribe\", arguments, kwargs);\r\n    }\r\n\r\n    this.unsubscribe = function(key, kwargs) {\r\n        return this._delegate(\"unsubscribe\", arguments, kwargs);\r\n    }\r\n\r\n    /*\r\n     * interaction logging\r\n     */\r\n    this.add_interaction = function(key, data, kwargs) {\r\n        callback = function() {console.log(\"done\")};\r\n        return this._delegate(\"add_interaction\", arguments, kwargs, null, callback);\r\n    }\r\n\r\n    this.get_interaction_count = function(key, kwargs) {\r\n        return this._delegate(\"get_interaction_count\", arguments, kwargs);\r\n    }\r\n\r\n    /*\r\n     * Checkin/checkout methods\r\n     */\r\n    this.upload_file = function(file_path, ticket, subdir) {\r\n        if (typeof(ticket) == 'undefined') {\r\n            ticket = this.login_ticket;\r\n        }\r\n        var applet = spt.Applet.get();\r\n        applet.upload_file(file_path, ticket, subdir);\r\n    }\r\n\r\n\r\n    this.upload_directory = function(dir_path, ticket) {\r\n        if (typeof(ticket) == 'undefined') {\r\n            ticket = this.login_ticket;\r\n        }\r\n        var applet = spt.Applet.get();\r\n        return applet.upload_directory(dir_path, ticket);\r\n    }\r\n\r\n\r\n\r\n    this.get_upload_file_size = function(file_path) {\r\n        return this._delegate(\"get_upload_file_size\", arguments);\r\n    }\r\n\r\n\r\n\r\n   \r\n    this.create_snapshot = function(search_key, context, kwargs) {\r\n        return this._delegate(\"create_snapshot\", arguments, kwargs);\r\n    }\r\n\r\n\r\n    this._find_source_path = function(path) {\r\n        var applet = spt.Applet.get();\r\n\r\n        var sandbox_root = null;\r\n        var parts = path.split(\"/\");\r\n        for (var i = parts.length-1; i > 0; i--) {\r\n            var dir = parts.slice(0, i);\r\n            dir = dir.join(\"/\");\r\n            root_dir = dir + \"/.tactic/sandbox_root\";\r\n            if (applet.exists(root_dir) ) {\r\n                sandbox_root = dir;\r\n                break;\r\n            }\r\n        }\r\n\r\n        if (sandbox_root == null) {\r\n            return path;\r\n        }\r\n\r\n        var pattern = sandbox_root + \"/\";\r\n        path = path.replace(pattern, \"\")\r\n        return path;\r\n    }\r\n\r\n\r\n\r\n\r\n    this.simple_checkin = function(search_key, context, file_path, kwargs, on_complete, on_error) {\r\n\r\n        if (typeof(kwargs) == \"undefined\") {\r\n            kwargs = {__empty__:true};\r\n        }\r\n\r\n\r\n        [on_complete, on_error] = this._handle_callbacks(kwargs, on_complete, on_error);\r\n        passed_args = [search_key, context, file_path, kwargs];\r\n\r\n        var mode_options = ['upload','uploaded', 'copy', 'move', 'inplace','local'];\r\n\r\n        // mode is no uploaded by default\r\n        var mode = kwargs['mode'];\r\n        if (mode == undefined) mode = \"uploaded\";\r\n        if (typeof(file_path) != 'string') {\r\n            spt.alert(\"file_path should be a string instead of an array.\");\r\n            return;\r\n        }\r\n\r\n\r\n        // already uploaded\r\n        if (mode == 'uploaded') {\r\n            kwargs.use_handoff_dir = false;\r\n            //file_path = spt.path.get_filesystem_path(file_path); \r\n        }\r\n\r\n\r\n\r\n        // NOTE: the modes upload, copy, move and local require local access\r\n        // either by a java applet or some other applet like pyApplet.\r\n        // Otherwise, these modes should not be used\r\n        else {\r\n            var applet = spt.Applet.get();\r\n            if (!applet) {\r\n                spt.alert(\"Mode [\"+mode+\"] requires a valid applet (either Java or Python or equivalent).  None found\")\r\n            }\r\n\r\n\r\n            if (mode == 'upload') {\r\n                var ticket = this.transaction_ticket;\r\n                \r\n                this.upload_file(file_path, ticket);\r\n                kwargs.use_handoff_dir = false;\r\n            }\r\n\r\n            else if (['copy', 'move'].contains(mode)) {\r\n                var handoff_dir = this.get_handoff_dir();\r\n                kwargs.use_handoff_dir = true;\r\n                applet.makedirs(handoff_dir);\r\n                applet.exec(\"chmod 777 \" + handoff_dir);\r\n                var basename = spt.path.get_basename(file_path);\r\n\r\n                if (mode == 'move') {\r\n                    applet.move_file(file_path, handoff_dir + '/' +  basename);\r\n                }\r\n                else if (mode == 'copy') {\r\n                    applet.copy_file(file_path, handoff_dir + '/' +  basename);\r\n                    // it moves from handoff to repo during check-in\r\n                }\r\n                mode = 'create';\r\n            }\r\n\r\n        }\r\n\r\n\r\n\r\n        // do the checkin\r\n        var snapshot = this._delegate(\"simple_checkin\", passed_args, kwargs, null, on_complete, on_error);\r\n        // asynchronous\r\n        if (on_complete) {\r\n            return;\r\n        }\r\n\r\n\r\n        var files = snapshot['__file_sobjects__'];\r\n\r\n        if (mode == 'local') {\r\n            var applet = spt.Applet.get();\r\n            var files = this.eval(\"@SOBJECT(sthpw/file)\", {search_keys:snapshot});\r\n            var base_dirs = this.get_base_dirs();\r\n            var client_repo_dir = base_dirs.win32_local_repo_dir;\r\n            if (typeof(client_repo_dir) == 'undefined' || client_repo_dir == '')\r\n            {\r\n                client_repo_dir = base_dirs.win32_local_base_dir + \"/repo\";\r\n            }\r\n\r\n\r\n            // move the files directly to the local repo\r\n            for (var i = 0; i < files.length; i++) {\r\n                var file = files[i];\r\n                var rel_path = file.relative_dir + \"/\" + file.file_name;\r\n                var repo_path = client_repo_dir + \"/\" + rel_path;\r\n                var tmp_path = repo_path + \".temp\";\r\n                applet.copy_file(file_path, tmp_path);\r\n                applet.move_file(tmp_path, repo_path);\r\n                var md5 = applet.get_md5(repo_path);\r\n                this.update(file, {md5: md5});\r\n\r\n            }\r\n        }\r\n\r\n        return snapshot;\r\n\r\n    }\r\n\r\n\r\n\r\n\r\n    this.p_simple_checkin = function(search_key, context, file_path, kwargs) {\r\n        return new Promise( function(resolve, reject) {\r\n            if (!kwargs) kwargs = {};\r\n            kwargs.on_complete = function(x) { resolve(x); }\r\n            kwargs.on_error = function(x) { reject(x); }\r\n            return this.simple_checkin(search_key, context, file_path, kwargs);\r\n        }.bind(this) )\r\n    }\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n    this.group_checkin = function(search_key, context, file_path, file_range, kwargs)\r\n    {\r\n        if (typeof(kwargs) == 'undefined') {\r\n            kwargs = {__empty__:true};\r\n        }\r\n\r\n        var mode = kwargs.mode;\r\n        // default is \"uploaded\"??\r\n        //if (typeof(mode) == 'undefined') mode = 'copy';\r\n\r\n        var mode_options = ['upload', 'copy', 'move'];\r\n        if (typeof(mode) != \"undefined\") {\r\n            //if mode not in mode_options:\r\n            //    raise TacticApiException('Mode must be in %s' % mode_options);\r\n\r\n            // brute force method\r\n            //dir = os.path.dirname(file_path)\r\n            var handoff_dir = this.get_handoff_dir();\r\n\r\n            var expanded_paths;\r\n            if (typeof(file_path) == 'object') {\r\n                expanded_paths = file_path;\r\n            }\r\n            else {\r\n                expanded_paths = spt.file.expand_paths(file_path, file_range);\r\n            }\r\n\r\n            if (mode == 'move') {\r\n                for (var i = 0; i < expanded_paths.length; i++) {\r\n                    var path = expanded_paths[i];\r\n                    var parts = path.split(\"/\");\r\n                    var basename = parts[parts.length-1];\r\n                    applet = spt.Applet.get();\r\n                    applet.move_file(path, handoff_dir+'/'+basename);\r\n                }\r\n                use_handoff_dir = true;\r\n                mode = 'create';\r\n            }\r\n            else if (mode == 'copy') {\r\n                for (var i = 0; i < expanded_paths.length; i++) {\r\n                    var path = expanded_paths[i];\r\n                    var parts = path.split(/[\\/\\\\]/);\r\n                    var basename = parts[parts.length-1];\r\n                    applet = spt.Applet.get();\r\n                    applet.copy_file(path, handoff_dir+'/'+basename);\r\n                }\r\n                use_handoff_dir = true;\r\n                mode = 'create';\r\n            }\r\n            // use a custom protocol\r\n            else if (mode == 'custom') {\r\n\r\n                var command = kwargs.command;\r\n                if (typeof(command) == 'undefined') {\r\n                    return \"No command defined\";\r\n                }\r\n                for (var i = 0; i < expanded_paths.length; i++) {\r\n                    var path = expanded_paths[i];\r\n                    var parts = path.split(/[\\/\\\\]/);\r\n                    var basename = parts[parts.length-1];\r\n                    applet = spt.Applet.get();\r\n                    actual = command;\r\n                    actual = actual.replace(\"%s\", path);\r\n                    actual = actual.replace(\"%s\", handoff_dir+'/'+basename);\r\n                    // convert all of the paths back to windows paths??\r\n                    actual = actual.replace(/\\//g, \"\\\\\");\r\n                    applet.makedirs(handoff_dir);\r\n                    applet.exec(actual);\r\n                }\r\n                use_handoff_dir = true;\r\n\r\n                \r\n            }\r\n            else if (mode == 'upload') {\r\n                applet = spt.Applet.get();\r\n                for (var i = 0; i < expanded_paths.length; i++) {\r\n                    var path = expanded_paths[i];\r\n                    applet.upload_file(path);\r\n                }\r\n                use_handoff_dir = false;\r\n            }\r\n        }\r\n\r\n        delete(kwargs.command);\r\n        return this._delegate(\"group_checkin\", arguments, kwargs);\r\n\r\n    }\r\n\r\n\r\n    this.directory_checkin = function(search_key, context, dir, kwargs)\r\n    {\r\n        if (typeof(kwargs) == 'undefined') {\r\n            kwargs = {__empty__:true};\r\n        }\r\n\r\n        //if mode not in ['copy', 'move', 'inplace']:\r\n        //    raise TacticApiException('mode must be either [move] or [copy]')\r\n\r\n        if (!kwargs.mode) {\r\n            kwargs.mode = 'copy';\r\n        }\r\n        var mode = kwargs.mode;\r\n\r\n        // make sure that handoff dir is empty\r\n        var applet = spt.Applet.get();\r\n\r\n        if (!applet.is_dir(dir)){\r\n            alert('[' + dir + '] is not a directory. Exiting...');\r\n            return;\r\n        }\r\n\r\n        // remove trailing / or \\\r\n        dir = dir.replace(/[\\/\\\\]+$/, '');\r\n        // replace all slashes\r\n        dir = dir.replace(/\\\\/g, \"/\");\r\n\r\n        if (mode == 'move' || mode == 'copy') {\r\n            var handoff_dir = this.get_handoff_dir();\r\n            applet.rmtree(handoff_dir);\r\n            applet.makedirs(handoff_dir);\r\n            applet.exec(\"chmod 777 \" + handoff_dir);\r\n            \r\n            // copy or move the tree\r\n            var parts = dir.split(/[\\/\\\\]/);\r\n            var dirname = parts.splice(0, parts.length-1).join(\"/\");\r\n            var basename = parts[parts.length-1];\r\n\r\n            if (mode == 'move') {\r\n                applet.move(dir, handoff_dir + \"/\" + basename);\r\n                kwargs.use_handoff_dir = true;\r\n            }\r\n            else if (mode == 'copy') {\r\n                applet.copytree(dir, handoff_dir + \"/\" + basename);\r\n                kwargs.use_handoff_dir = true;\r\n            }\r\n            mode = 'create';\r\n        }\r\n        else if (mode == 'upload') {\r\n            var files = applet.upload_directory(dir);\r\n            kwargs.use_handoff_dir = false;\r\n\r\n        }\r\n        else if (mode == 'uploaded') {\r\n            kwargs.use_handoff_dir = false;\r\n        }\r\n            \r\n\r\n        return this._delegate(\"simple_checkin\", arguments, kwargs);\r\n\r\n    }\r\n\r\n\r\n\r\n    this.add_dependency = function(snapshot_code, file_path, kwargs) {\r\n        return this._delegate(\"add_dependency\", arguments, kwargs);\r\n    }\r\n\r\n\r\n    this.add_dependency_by_code = function(to_snapshot_code, from_snapshot_code, kwargs) {\r\n        return this._delegate(\"add_dependency_by_code\", arguments, kwargs);\r\n    }\r\n\r\n    this.add_directory = function(snapshot_code, dir, kwargs) {\r\n        if (!kwargs) {\r\n            kwargs = {__empty__:true};\r\n        }\r\n        if (!kwargs.mode) {\r\n            kwargs.mode = 'copy';\r\n        }\r\n\r\n        var mode = kwargs.mode;\r\n        if ( !(mode in {'copy':'', 'move':'', 'preallocate':'', 'manual':''}) ) {\r\n            throw(\"Mode must be in [copy, move, preallocate, manual]\");\r\n        }\r\n\r\n        var use_handoff_dir;\r\n        var handoff_dir;\r\n\r\n        if (mode in {'copy':'', 'move':''}) {\r\n            var applet = spt.Applet.get();\r\n\r\n            handoff_dir = this.get_handoff_dir()\r\n\r\n            // make sure that handoff dir is empty\r\n            applet.rmtree(handoff_dir);\r\n            applet.makedirs(handoff_dir);\r\n\r\n            // remove trailing / or \\\r\n            dir = dir.replace(/[\\/\\\\]+$/, '');\r\n\r\n            // copy or move the tree\r\n            var parts = dir.split(/[\\/\\\\]/);\r\n            var basename = parts[parts.length-1];\r\n\r\n            if (mode == 'move') {\r\n                applet.move(dir, handoff_dir + \"/\" + basename);\r\n            }\r\n            else if (mode == 'copy') {\r\n                applet.copytree(dir, handoff_dir + \"/\" + basename);\r\n            }\r\n            use_handoff_dir = true;\r\n            mode = 'create';\r\n        }\r\n        else if (mode in {'manual':''}) {\r\n            // files are already in handoff\r\n            use_handoff_dir = true;\r\n        }\r\n        else {\r\n            use_handoff_dir = false;\r\n        }\r\n\r\n        kwargs.use_handoff_dir = use_handoff_dir;\r\n        return this._delegate(\"add_file\", arguments, kwargs )\r\n    }\r\n\r\n\r\n    this.add_file = function(snapshot_code, file, kwargs) {\r\n        // If no mode is specified, set the default mode to 'copy'.\r\n        if (!kwargs) {\r\n            kwargs = {__empty__:true};\r\n        }\r\n        if (!kwargs.mode) {\r\n            kwargs.mode = 'preallocate';\r\n        }\r\n        var mode = kwargs.mode;\r\n        if ( !(mode in {'copy':'', 'move':'', 'preallocate':'', 'manual': '', 'upload': '', 'uploaded': ''}) ) {\r\n            throw(\"Mode '\" + mode + \"' must be in [copy, move, preallocate, manual, upload, uploaded]\");\r\n        }\r\n        \r\n        //file = spt.path.get_filesystem_path(file); \r\n        var use_handoff_dir;\r\n        var handoff_dir;\r\n\r\n        if (mode in {'copy':'', 'move':''}) {\r\n            var applet = spt.Applet.get();\r\n\r\n            handoff_dir = this.get_handoff_dir()\r\n\r\n            // make sure that handoff dir is empty\r\n            applet.rmtree(handoff_dir);\r\n            applet.makedirs(handoff_dir);\r\n\r\n            // copy or move the file\r\n            var basename = spt.path.get_basename(file);\r\n             \r\n            if (mode == 'move') {\r\n                applet.move(file, handoff_dir + \"/\" + basename);\r\n            }\r\n            else if (mode == 'copy') {\r\n                applet.copy_file(file, handoff_dir + \"/\" + basename);\r\n            }\r\n            use_handoff_dir = true;\r\n            mode = 'create';\r\n        }\r\n        else if (mode in {'manual':''}) {\r\n            // files are already in handoff\r\n            use_handoff_dir = true;\r\n        }\r\n        else if (mode == 'upload') {\r\n            var ticket = this.transaction_ticket;\r\n            this.upload_file(file, ticket);\r\n            use_handoff_dir = false;\r\n        }\r\n        else {\r\n            use_handoff_dir = false;\r\n        }\r\n\r\n        kwargs.use_handoff_dir = use_handoff_dir;\r\n        return this._delegate(\"add_file\", arguments, kwargs )\r\n    }\r\n\r\n\r\n    this.add_sequence = function(snapshot_code, file, file_type, file_range, kwargs) {\r\n        return this.add_group(snapshot_code, file, file_type, file_range, kwargs);\r\n    }\r\n\r\n    this.add_group = function(snapshot_code, file_pattern, file_type, file_range, kwargs) {\r\n        // If no mode is specified, set the default mode to 'copy'.\r\n        if (!kwargs) {\r\n            kwargs = {__empty__:true};\r\n        }\r\n        if (!kwargs.mode) {\r\n            kwargs.mode = 'preallocate';\r\n        }\r\n        var mode = kwargs.mode;\r\n        if ( !(mode in {'copy':'', 'move':'', 'preallocate':'', 'manual': '', 'upload': '', 'uploaded': ''}) ) {\r\n            throw(\"Mode '\" + mode + \"' must be in [copy, move, preallocate, manual, upload, uploaded]\");\r\n        }\r\n        \r\n        //file = spt.path.get_filesystem_path(file); \r\n        var use_handoff_dir;\r\n        var handoff_dir;\r\n\r\n        if (mode in {'copy':'', 'move':''}) {\r\n            /* This is an attempt to move the files to the handoff\r\n             * folder, however, it never worked as it was just copied\r\n             * from add_file.\r\n             * Keeping this around in case the applet is ever useful\r\n             * again.\r\n             */\r\n            throw(\"Mode 'copy' and 'move' not supported in add_group\");\r\n            /*\r\n            var applet = spt.Applet.get();\r\n\r\n            handoff_dir = this.get_handoff_dir()\r\n\r\n            // make sure that handoff dir is empty\r\n            applet.rmtree(handoff_dir);\r\n            applet.makedirs(handoff_dir);\r\n\r\n            // copy or move the file\r\n            var basename = spt.path.get_basename(file);\r\n            if (mode == 'move') {\r\n                applet.move(file, handoff_dir + \"/\" + basename);\r\n            }\r\n            else if (mode == 'copy') {\r\n                applet.copy_file(file, handoff_dir + \"/\" + basename);\r\n            }\r\n\r\n            use_handoff_dir = true;\r\n            mode = 'create';\r\n            */\r\n        }\r\n        else if (mode in {'manual':''}) {\r\n            // files are already in handoff\r\n            use_handoff_dir = true;\r\n        }\r\n        else if (mode == 'upload') {\r\n            var ticket = this.transaction_ticket;\r\n            this.upload_file(file, ticket);\r\n            use_handoff_dir = false;\r\n        }\r\n        else { // preallocate\r\n            use_handoff_dir = false;\r\n        }\r\n\r\n\r\n\r\n        kwargs.use_handoff_dir = use_handoff_dir;\r\n        return this._delegate(\"add_group\", arguments, kwargs )\r\n    }\r\n\r\n\r\n\r\n\r\n    this.checkout_snapshot = function(search_key, sandbox_dir, kwargs) {\r\n        // get the files for this snapshot\r\n        if (!kwargs) {\r\n            kwargs = {};\r\n        }\r\n        if (! kwargs.mode ) {\r\n            transfer_mode = spt.Environment.get().get_transfer_mode();\r\n            kwargs.mode = transfer_mode;\r\n        }\r\n        if (! kwargs.mode ) {\r\n            kwargs.mode = 'web';\r\n        }\r\n\r\n\r\n        if (kwargs.mode in {'client_repo':'', 'web':'', 'browser':''} == false) {\r\n            throw(\"Mode '\" + kwargs.mode + \"' must be in [client_repo, web, browser]\");\r\n        }\r\n\r\n        var file_types;\r\n        if (! kwargs.file_types ) {\r\n            file_types = [];\r\n        }\r\n        else {\r\n            file_types = kwargs.file_types;\r\n        }\r\n\r\n        var expand_paths;\r\n        if (! kwargs.expand_paths ) {\r\n            expand_paths = true;\r\n        }\r\n        else {\r\n            expand_paths = kwargs.expand_paths;\r\n        }\r\n\r\n        // get the server paths and the client paths to copy\r\n        var paths = this.get_all_paths_from_snapshot(search_key, {'mode': kwargs.mode, file_types:file_types, expand_paths: expand_paths});\r\n        var sand_paths = this.get_all_paths_from_snapshot(search_key, {'mode':'sandbox', filename_mode: kwargs.filename_mode, file_types:file_types, expand_paths: expand_paths});\r\n\r\n        var applet;\r\n        var dst_paths = [];\r\n        if (kwargs.mode in {'client_repo':''}) {\r\n            applet = spt.Applet.get();\r\n        } \r\n        var env = spt.Environment.get();\r\n        var server_root = env.get_server_url();\r\n\r\n        var filename_mode;\r\n        if (!kwargs.filename_mode) {\r\n            filename_mode = 'repo';\r\n        }\r\n        else {\r\n            filename_mode = kwargs.filename_mode;\r\n        }\r\n\r\n        try {\r\n        for (var i = 0; i < paths.length; i++ ) {\r\n            var path = paths[i];\r\n            var dst = sand_paths[i];\r\n            var basename;\r\n            if (filename_mode == 'repo') {\r\n                basename = spt.path.get_basename(dst);\r\n            }\r\n            else if (filename_mode == 'versionless') {\r\n               \r\n                basename = spt.path.get_basename(dst);\r\n                var dir_name = spt.path.get_dirname(dst);\r\n                basename = basename.replace(/_v\\d+/i, '');\r\n                dst = dir_name + '/' + basename;\r\n             \r\n            }\r\n            else if (filename_mode == 'source') {\r\n                basename = spt.path.get_basename(dst);\r\n            }\r\n\r\n\r\n            // FIXME: this doesn't work for directory checkins.  It flattens\r\n            // the directories\r\n            // remap sandbox paths if one is explicitly supplied\r\n            if (sandbox_dir){\r\n                dst = sandbox_dir + \"/\" + basename;\r\n            }\r\n\r\n            dst_paths.push(dst);\r\n\r\n            if (kwargs.mode == 'client_repo'){\r\n                applet.copytree(path, dst);\r\n            }\r\n            else if (kwargs.mode =='webX'){\r\n                // NOTE: this is no long supported due to lack of Java support on\r\n                // the browser.  Web mode is now the same as browser mode.\r\n                var url = server_root + path;\r\n                if (spt.url.exists(url)){\r\n                    applet.download_file(url, dst);\r\n                }\r\n                else {\r\n                    alert(url + ' does not exist on the server. It may have been backed up.');\r\n                }\r\n            }\r\n            else if (kwargs.mode == 'browser' || kwargs.mode == 'web'){\r\n                var download_el = document.createElement(\"a\");\r\n                download_el.setAttribute(\"href\",path);\r\n                download_el.setAttribute(\"download\",basename);\r\n                document.body.appendChild(download_el);\r\n                download_el.click();\r\n                document.body.removeChild(download_el);\r\n            }\r\n        }\r\n        }\r\n        catch(e){\r\n           alert(spt.exception.handler(e));\r\n        }\r\n        return dst_paths;\r\n    }\r\n\r\n\r\n\r\n    this.set_current_snapshot = function(snapshot_code) {\r\n        return this._delegate(\"set_current_snapshot\", arguments, null);\r\n    }\r\n\r\n    this.query_snapshots = function(kwargs) {\r\n        return this._delegate(\"query_snapshots\", arguments, kwargs);\r\n    }\r\n\r\n    this.get_snapshot = function(search_key, kwargs) {\r\n        return this._delegate(\"get_snapshot\", arguments, kwargs);\r\n    }\r\n\r\n\r\n    this.get_snapshots_by_relative_dir = function(relative_dir, kwargs) {\r\n        return this._delegate(\"get_snapshots_by_relative_dir\", arguments, kwargs);\r\n    }\r\n\r\n    this.get_sobjects_by_relative_dir = function(relative_dir, kwargs) {\r\n        return this._delegate(\"get_sobjects_by_relative_dir\", arguments, kwargs);\r\n    }\r\n\r\n\r\n\r\n    this.get_client_dir = function(snapshot_code, kwargs) {\r\n        return this._delegate(\"get_client_dir\", arguments, kwargs);\r\n    }\r\n\r\n\r\n\r\n    this.get_preallocated_path = function(snapshot_code, kwargs) {\r\n        return this._delegate(\"get_preallocated_path\", arguments, kwargs);\r\n    }\r\n\r\n    this.get_virtual_snapshot_path = function(search_key, context, kwargs) {\r\n        return this._delegate(\"get_virtual_snapshot_path\", arguments, kwargs);\r\n    }\r\n    \r\n    this.get_all_dependencies = function(snapshot_code, kwargs) {\r\n        return this._delegate(\"get_all_dependencies\", arguments, kwargs);\r\n    }\r\n\r\n\r\n\r\n    /* \r\n     * Task methods\r\n     */ \r\n    this.create_task = function(search_key, kwargs) {\r\n        return this._delegate(\"create_task\", arguments, kwargs);\r\n    } \r\n\r\n    this.get_tasks = function(search_key, kwargs) {\r\n        return this._delegate(\"get_tasks\", arguments, kwargs);\r\n    }\r\n\r\n    this.get_task_status_colors = function() {\r\n        return this._delegate(\"get_task_status_colors\", arguments);\r\n    }\r\n\r\n\r\n    this.add_initial_tasks = function(search_key, kwargs) {\r\n        return this._delegate(\"add_initial_tasks\", arguments, kwargs);\r\n    }\r\n\r\n\r\n    this.get_input_tasks = function(search_key, kwargs) {\r\n        return this._delegate(\"get_input_tasks\", arguments, kwargs);\r\n    }\r\n\r\n    this.get_output_tasks = function(search_key, kwargs) {\r\n        return this._delegate(\"get_output_tasks\", arguments, kwargs);\r\n    }\r\n\r\n\r\n    \r\n    /*\r\n     * Low Level Database methods\r\n     */\r\n    this.get_related_types = function(search_type) {\r\n        return this._delegate(\"get_related_types\", arguments);\r\n    }\r\n\r\n\r\n\r\n    this.query = function(search_type, kwargs, on_complete, on_error) {\r\n        var newArgs = Array.prototype.slice.call(arguments).slice(0,2);\r\n        if(on_complete){\r\n          if(!on_error){\r\n            on_error = function(err){\r\n                console.log(err);\r\n            };\r\n          }\r\n          return this._delegate(\"query\", newArgs, kwargs, \"string\", on_complete, on_error);\r\n        }\r\n\r\n        var value = this._delegate(\"query\", newArgs, kwargs, \"string\");\r\n        //return this._delegate(\"query\", arguments, kwargs);\r\n        value = JSON.parse(value);\r\n        return value\r\n    }\r\n\r\n\r\n\r\n    /* TEST Promises */\r\n    this.query2 = function(search_type, kwargs, on_complete, on_error) {\r\n\r\n        [on_complete, on_error] = this._handle_callbacks(kwargs, on_complete, on_error);\r\n        on_complete2 = function(value) {\r\n            value = JSON.parse(value);\r\n            on_complete(value);\r\n        }\r\n       \r\n        passed_args = [search_type, kwargs];\r\n        var value = this._delegate(\"query\", passed_args, kwargs, \"string\", on_complete2, on_error);\r\n        // asynchronous\r\n        if (on_complete) {\r\n            return;\r\n        }\r\n        value = JSON.parse(value);\r\n        return value\r\n    }\r\n\r\n\r\n    this.p_query = function(search_type, kwargs) {\r\n        return new Promise( function(resolve, reject) {\r\n            if (!kwargs) kwargs = {};\r\n            kwargs.on_complete = function(x) { resolve(x); }\r\n            kwargs.on_error = function(x) { reject(x); }\r\n            return this.query2(search_type, kwargs);\r\n        }.bind(this) )\r\n    }\r\n\r\n\r\n\r\n\r\n    this.get_by_search_key = function(search_key, kwargs, on_complete, on_error) {\r\n        [on_complete, on_error] = this._handle_callbacks(kwargs, on_complete, on_error);\r\n        passed_args = [search_key, kwargs];\r\n        var value = this._delegate(\"get_by_search_key\", passed_args, kwargs, null, on_complete, on_error);\r\n        // asynchronous\r\n        if (on_complete) {\r\n            return;\r\n        }\r\n        return value\r\n\r\n    }\r\n\r\n    this.p_get_by_search_key = function(search_key, kwargs) {\r\n        return new Promise( function(resolve, reject) {\r\n            if (!kwargs) kwargs = {}\r\n            kwargs.on_complete = function(x) { resolve(x); }\r\n            kwargs.on_error = function(x) { reject(x); }\r\n            return this.get_by_search_key(search_key, kwargs);\r\n        }.bind(this) )\r\n    }\r\n\r\n\r\n\r\n\r\n    this.get_by_code = function(search_type, code, kwargs, on_complete, on_error) {\r\n        [on_complete, on_error] = this._handle_callbacks(kwargs, on_complete, on_error);\r\n\r\n        passed_args = [search_type, code, kwargs];\r\n        return this._delegate(\"get_by_code\", passed_args, kwargs, null, on_complete, on_error);\r\n    }\r\n\r\n    this.p_get_by_code = function(search_type, code, kwargs) {\r\n        return new Promise( function(resolve, reject) {\r\n            if (!kwargs) kwargs = {}\r\n            kwargs.on_complete = function(x) { resolve(x); }\r\n            kwargs.on_error = function(x) { reject(x); }\r\n            this.get_by_code(search_type, code);\r\n        }.bind(this) )\r\n    }\r\n\r\n\r\n\r\n\r\n\r\n\r\n    this.insert = function(search_type, data, kwargs) {\r\n        // server.insert(search_type, data, kwargs);\r\n        return this._delegate(\"insert\", arguments, kwargs);\r\n        \r\n    }\r\n\r\n    this.insert_multiple = function(search_type, data, kwargs) {\r\n        // server.insert(search_type, data, kwargs);\r\n        return this._delegate(\"insert_multiple\", arguments, kwargs);\r\n        \r\n    }\r\n\r\n\r\n\r\n    this.update = function(search_key, data, kwargs, on_complete, on_error) {\r\n\r\n        [on_complete, on_error] = this._handle_callbacks(kwargs, on_complete, on_error);\r\n\r\n        passed_args = [search_key, data, kwargs];\r\n        var ret_val = this._delegate(\"update\", passed_args, kwargs, null, on_complete, on_error);\r\n        if (on_complete) {\r\n            return;\r\n        }\r\n        if (ret_val && ret_val.status == \"ERROR\") {\r\n            throw ret_val;\r\n        }\r\n        return ret_val;\r\n    }\r\n\r\n\r\n\r\n    /*\r\n    this.update = function(search_key, data, kwargs, on_complete, on_error) {\r\n        var newArgs = Array.prototype.slice.call(arguments).slice(0,3);\r\n        if(on_complete){\r\n          if(!on_error){\r\n            on_error = function(err){\r\n              console.log(err);\r\n            };\r\n          }\r\n          return this._delegate(\"update\", newArgs, kwargs, undefined, on_complete, on_error);\r\n        }\r\n\r\n        return this._delegate(\"update\", newArgs, kwargs);\r\n    }\r\n    */\r\n\r\n\r\n\r\n\r\n\r\n    this.p_update = function(search_type, data, kwargs) {\r\n        return new Promise( function(resolve, reject) {\r\n            if (!kwargs) kwargs = {};\r\n            kwargs.on_complete = function(x) { resolve(x); }\r\n            kwargs.on_error = function(x) { reject(x); }\r\n            return this.update(search_type, data, kwargs);\r\n        }.bind(this) )\r\n    }\r\n\r\n\r\n\r\n\r\n\r\n    this.update_multiple = function(data, kwargs, on_complete, on_error) {\r\n        var newArgs = Array.prototype.slice.call(arguments).slice(0,2);\r\n        data = JSON.stringify(data);\r\n        if(on_complete){\r\n          if(!on_error){\r\n            on_error = function(err){\r\n              console.log(err);\r\n            };\r\n          }\r\n          return this._delegate(\"update_multiple\", arguments, kwargs, undefined, on_complete, on_error);\r\n        }\r\n\r\n        return this._delegate(\"update_multiple\", arguments, kwargs);\r\n    }\r\n\r\n\r\n\r\n    //\r\n    // Expression methods\r\n    //\r\n    this.eval = function(expression, kwargs, on_complete, on_error) {\r\n\r\n        [on_complete, on_error] = this._handle_callbacks(kwargs, on_complete, on_error);\r\n       \r\n        passed_args = [expression, kwargs];\r\n        var ret_val = this._delegate(\"eval\", passed_args, kwargs, null, on_complete, on_error);\r\n        // asynchronous\r\n        if (on_complete) {\r\n            return;\r\n        }\r\n        // synchronous\r\n        if (ret_val && ret_val.status == \"ERROR\") {\r\n            throw ret_val;\r\n        }\r\n        return ret_val;\r\n    }\r\n\r\n\r\n    /* Test promises */\r\n    this.p_eval = function(expression, kwargs) {\r\n        return new Promise( function(resolve, reject) {\r\n            if (!kwargs) kwargs = {}\r\n            kwargs.on_complete = function(x) { resolve(x); }\r\n            kwargs.on_error = function(x) { reject(x); }\r\n            this.eval(expression, kwargs);\r\n        }.bind(this) )\r\n    }\r\n\r\n\r\n\r\n    //\r\n    // SObject methods\r\n    //\r\n\r\n    this.create_search_type = function(search_key, search_type, title, kwargs) {\r\n        return this._delegate(\"create_search_type\", arguments, kwargs);\r\n    }\r\n\r\n    this.add_column_to_search_type = function(search_type, column_name, column_type) {\r\n        return this._delegate(\"add_column_to_search_type\", arguments);\r\n    }\r\n\r\n    this.insert_update = function(search_key, data, kwargs) {\r\n        return this._delegate(\"insert_update\", arguments);\r\n    }\r\n\r\n\r\n    this.get_unique_sobject = function(search_type, data) {\r\n        return this._delegate(\"get_unique_sobject\", arguments);\r\n    }\r\n\r\n\r\n    this.retire_sobject = function(search_key) {\r\n        return this._delegate(\"retire_sobject\", arguments);\r\n    }\r\n\r\n    this.reactivate_sobject = function(search_key) {\r\n        return this._delegate(\"reactivate_sobject\", arguments);\r\n    }\r\n\r\n    this.delete_sobject = function(search_key, kwargs) {\r\n        return this._delegate(\"delete_sobject\", arguments, kwargs);\r\n    }\r\n\r\n    this.clone_sobject = function(search_key, data) {\r\n        return this._delegate(\"clone_sobject\", arguments);\r\n    }\r\n\r\n    this.set_widget_setting = function(key, value) {\r\n        return this._delegate(\"set_widget_setting\", arguments);\r\n    }\r\n\r\n    this.get_widget_setting = function(key) {\r\n        return this._delegate(\"get_widget_setting\", arguments);\r\n    }\r\n\r\n    /*\r\n     * sType Hierarchy Functions\r\n     */\r\n\r\n    this.get_parent = function(search_key, kwargs) {\r\n        return this._delegate(\"get_parent\", arguments)\r\n    }\r\n\r\n\r\n    this.get_all_children = function(search_key, child_type, kwargs) {\r\n        return this._delegate(\"get_all_children\", arguments)\r\n    }\r\n\r\n\r\n    this.get_parent_type = function(search_key) {\r\n        return this._delegate(\"get_parent_type\", arguments);\r\n    }\r\n\r\n\r\n    this.get_child_types = function(search_type) {\r\n        return this._delegate(\"get_child_types\", arguments);\r\n    }\r\n\r\n\r\n    this.connect_sobjects = function(src_sobject, dst_sobject, kwargs) {\r\n        return this._delegate(\"connect_sobjects\", arguments, kwargs);\r\n    }\r\n\r\n\r\n    this.get_connected_sobjects = function(src_sobject, kwargs) {\r\n        return this._delegate(\"get_connected_sobjects\", arguments, kwargs);\r\n    }\r\n\r\n    this.get_connected_sobject = function(src_sobject, kwargs) {\r\n        return this._delegate(\"get_connected_sobject\", arguments, kwargs);\r\n    }\r\n\r\n\r\n    /*\r\n     * Instance methods\r\n     */\r\n    this.add_instance = function(search_key1, search_key2) {\r\n        return this._delegate(\"add_instance\", arguments);\r\n    }\r\n \r\n    this.get_instances = function(search_key, search_type) {\r\n        return this._delegate(\"get_instances\", arguments);\r\n    }\r\n \r\n    this.remove_instance = function(search_key1, search_key2) {\r\n        return this._delegate(\"remove_instance\", arguments);\r\n    }\r\n\r\n\r\n\r\n    /* \r\n     * Note methods\r\n     */ \r\n    this.create_note = function(search_key, note, kwargs) {\r\n        return this._delegate(\"create_note\", arguments, kwargs);\r\n    }\r\n\r\n    /*\r\n     * Pipeline methods\r\n     */\r\n\r\n    this.create_pipeline = function(name, search_type, kwargs) {\r\n        return this._delegate(\"create_pipeline\", arguments, kwargs);\r\n    }\r\n\r\n    this.get_pipeline_xml = function(search_key, kwargs) {\r\n        return this._delegate(\"get_pipeline_xml\", arguments, kwargs);\r\n    }\r\n\r\n    this.get_pipeline_processes = function(search_key, kwargs) {\r\n        return this._delegate(\"get_pipeline_processes\", arguments, kwargs);\r\n    }\r\n\r\n    this.get_pipeline_xml_info = function(search_key, kwargs) {\r\n        return this._delegate(\"get_pipeline_xml_info\", arguments, kwargs);\r\n    }\r\n\r\n    this.get_pipeline_processes_info = function(search_key, kwargs) {\r\n        return this._delegate(\"get_pipeline_processes_info\", arguments, kwargs);\r\n    }\r\n\r\n    /*\r\n     * Widget methods\r\n     */\r\n    this.get_widget = function(class_name, kwargs, on_complete, on_error) {\r\n        var libraries = spt.Environment.get().get_libraries();\r\n        kwargs.libraries = libraries;\r\n\r\n        [on_complete, on_error] = this._handle_callbacks(kwargs, on_complete, on_error);\r\n\r\n        passed_args = [class_name, kwargs];\r\n        try {\r\n            var ret_val = this._delegate(\"get_widget\", passed_args, kwargs, \"string\", on_complete, on_error);\r\n            return ret_val;\r\n        }\r\n        catch(e) {\r\n            var e_msg = spt.exception.handler(e);\r\n            if (/Cannot login with key/.test(e_msg)) \r\n                this._redirect_login();\r\n            else\r\n                alert(e_msg);\r\n            return;\r\n        }\r\n    }\r\n\r\n\r\n\r\n    // Test load view\r\n    this.load_view = function(el, view, kwargs, on_complete, on_error) {\r\n\r\n        if (!kwargs) kwargs = {};\r\n        kwargs['view'] = view;\r\n\r\n        var class_name = 'tactic.ui.panel.CustomLayoutWdg';\r\n        var wdg_kwargs = {\r\n            args: kwargs,\r\n            cbjs_action: function(widget) {\r\n                var node = document.createElement(\"div\");\r\n\r\n                node.innerHTML = widget;\r\n\r\n                el.appendChild(node);\r\n\r\n                var scripts = node.getElementsByTagName(\"script\");\r\n                for (var i = 0; i < scripts.length; i++) {\r\n                    var func = function() {\r\n                        eval(scripts[i].innerHTML);\r\n\r\n                    };\r\n                    func();\r\n                    scripts[i].remove();\r\n                }\r\n\r\n                if (on_complete)\r\n                    on_complete(node);\r\n            }\r\n\r\n\r\n        };\r\n        this.async_get_widget(class_name, wdg_kwargs);\r\n    }\r\n\r\n\r\n\r\n\r\n\r\n\r\n    this.class_exists = function(class_path) {\r\n        return this._delegate(\"class_exists\", arguments);\r\n    }\r\n\r\n\r\n    this.execute_cmd = function(class_name, args, values, kwargs, on_complete, on_error) {\r\n\r\n        if (typeof(values) == 'undefined') {\r\n            values = {};\r\n        }\r\n        if (typeof(kwargs) == 'undefined') {\r\n            kwargs = {};\r\n        }\r\n\r\n        [on_complete, on_error] = this._handle_callbacks(kwargs, on_complete, on_error);\r\n        passed_args = [class_name, args, values, kwargs];\r\n        var ret_val = this._delegate(\"execute_cmd\", passed_args, kwargs, null, on_complete, on_error);\r\n        if (on_complete) {\r\n            return;\r\n        }\r\n        if (ret_val && ret_val.status == \"ERROR\") {\r\n            throw ret_val;\r\n        }\r\n        return ret_val;\r\n    }\r\n\r\n\r\n    this.p_execute_cmd = function(class_name, args, kwargs) {\r\n        return new Promise( function(resolve, reject) {\r\n            if (!kwargs) kwargs = {}\r\n            kwargs.on_complete = function(x) { resolve(x); }\r\n            kwargs.on_error = function(x) { reject(x); }\r\n            this.execute_cmd(class_name, args, {}, kwargs);\r\n        }.bind(this) )\r\n    }\r\n\r\n\r\n\r\n\r\n\r\n    this.execute_class_method = function(class_name, method, kwargs) {\r\n        return this._delegate(\"execute_class_method\", arguments);\r\n    }\r\n\r\n\r\n    \r\n    this.execute_transaction = function(transaction_xml, kwargs) {\r\n        return this._delegate(\"execute_transaction\", arguments, kwargs);\r\n    }\r\n\r\n\r\n\r\n\r\n    this.execute_python_script = function(script_path, script_kwargs, kwargs) {\r\n        if (kwargs) callback = kwargs.on_complete;\r\n        else callback = null;\r\n        return this._delegate(\"execute_python_script\", arguments, kwargs, null, callback);\r\n    }\r\n\r\n\r\n    this.execute_js_script = function(script_path, script_kwargs, kwargs) {\r\n        if (kwargs) callback = kwargs.on_complete;\r\n        else callback = null;\r\n        return this._delegate(\"execute_js_script\", arguments, kwargs, null, callback);\r\n    }\r\n\r\n\r\n    this.execute_cbk = function(bvr, callback, args, kwargs) {\r\n        var cbk = \"tactic.ui.panel.CustomLayoutCbk\";\r\n        var top = bvr.src_el.getParent(\".spt_custom_top\");\r\n        var view = top.getAttribute(\"spt_view\");\r\n\r\n        var cbk_kwargs = {\r\n            view: view,\r\n            callback: callback,\r\n            kwargs: args,\r\n        }\r\n\r\n        return this.execute_cmd(cbk, cbk_kwargs)\r\n    }\r\n\r\n\r\n    this.p_execute_cbk = function(bvr, callback, args, kwargs) {\r\n        var cbk = \"tactic.ui.panel.CustomLayoutCbk\";\r\n        var top = bvr.src_el.getParent(\".spt_custom_top\");\r\n        var view = top.getAttribute(\"spt_view\");\r\n\r\n        var cbk_kwargs = {\r\n            view: view,\r\n            callback: callback,\r\n            kwargs: args\r\n        }\r\n\r\n        return this.p_execute_cmd(cbk, cbk_kwargs)\r\n    }\r\n \r\n\r\n\r\n    \r\n\r\n    this.execute = function(code) {\r\n        return this._delegate(\"execute\", arguments, null);\r\n    }\r\n\r\n\r\n\r\n    this.check_access = function(access_group, key, access, kwargs) {\r\n        return this._delegate(\"check_access\", arguments, kwargs);\r\n    }\r\n\r\n\r\n    //\r\n    // Queue Manager\r\n    //\r\n    this.add_queue_item = function(class_name, args, kwargs) {\r\n        return this._delegate(\"add_queue_item\", arguments, kwargs);\r\n    }\r\n\r\n\r\n\r\n    this.get_column_names = function(search_type) {\r\n        return this._delegate(\"get_column_names\", arguments, null);\r\n    }\r\n\r\n    this.get_column_info = function(search_type) {\r\n        return this._delegate(\"get_column_info\", arguments, null);\r\n    }\r\n\r\n    this.get_column_widgets = function() {\r\n        var value = ''\r\n        try {\r\n            value = this._delegate(\"get_column_widgets\", arguments, null, \"string\");\r\n            value = JSON.parse(value);\r\n        }\r\n        catch (e) {\r\n            alert(\"Error adding the column: \" + spt.exception.handler(e));\r\n        }\r\n        return value;\r\n    }\r\n\r\n\r\n    this.update_config = function(search_type, view, element_names, kwargs) {\r\n        return this._delegate(\"update_config\", arguments, kwargs);\r\n    }\r\n\r\n\r\n    this.get_config_definition = function(search_type, view, element_name, kwargs) {\r\n        return this._delegate(\"get_config_definition\", arguments, kwargs);\r\n    }\r\n\r\n    this.set_config_definition = function(search_type, element_name, kwargs) {\r\n        return this._delegate(\"set_config_definition\", arguments, kwargs);\r\n    }\r\n\r\n    this.add_config_element = function(search_type, view, name, kwargs) {\r\n        return this._delegate(\"add_config_element\", arguments, kwargs);\r\n    }\r\n\r\n    this.set_application_state = function() {\r\n        return this._delegate(\"set_application_state\", arguments, null, null, function() {});\r\n    }\r\n\r\n\r\n    //\r\n    // Trigger methods\r\n    //\r\n    this.call_trigger = function(search_key, event, kwargs, on_complete, on_error) {\r\n        [on_complete, on_error] = this._handle_callbacks(kwargs, on_complete, on_error);\r\n        passed_args = [search_key, event, kwargs];\r\n        var ret_val = this._delegate(\"call_trigger\", passed_args, kwargs, null, on_complete, on_error);\r\n        return ret_val\r\n    }\r\n\r\n    this.p_call_trigger = function(search_key, event, kwargs) {\r\n        return new Promise( function(resolve, reject) {\r\n            if (!kwargs) kwargs = {}\r\n            kwargs.on_complete = function(x) { resolve(x); }\r\n            kwargs.on_error = function(x) { reject(x); }\r\n            this.call_trigger(search_key, event, kwargs);\r\n        }.bind(this) )\r\n    }\r\n\r\n\r\n    this.call_pipeline_event = function(search_key, process, event, data) {\r\n        return this._delegate(\"call_pipeline_event\", arguments)\r\n    }\r\n\r\n    this.get_pipeline_status = function(search_key, process) {\r\n        return this._delegate(\"get_pipeline_status\", argumnets);\r\n    }\r\n\r\n\r\n\r\n\r\n    //\r\n    // Directory methods\r\n    //\r\n    this.get_paths = function(search_key, kwargs) {\r\n        return this._delegate(\"get_paths\", arguments, kwargs);\r\n    }\r\n\r\n\r\n    this.get_base_dirs = function() {\r\n        return this._delegate(\"get_base_dirs\", arguments);\r\n    }\r\n    \r\n    this.get_handoff_dir = function() {\r\n        return this._delegate(\"get_handoff_dir\", arguments);\r\n    }\r\n\r\n    this.get_plugin_dir = function() {\r\n        return this._delegate(\"get_plugin_dir\", arguments);\r\n    }\r\n\r\n    this.clear_upload_dir = function() {\r\n        return this._delegate(\"clear_upload_dir\", arguments);\r\n    }\r\n\r\n\r\n\r\n    // Doc methods\r\n    this.get_doc_link = function(alias) {\r\n        return this._delegate(\"get_doc_link\", arguments, null);\r\n    }\r\n\r\n\r\n    // Access to some useful external functions\r\n    this.send_rest_request = function(method, url, kwargs) {\r\n        return this._delegate(\"send_rest_request\", arguments, null);\r\n    }\r\n\r\n\r\n\r\n    // Misc\r\n    this.get_path_from_snapshot = function(snapshot_code, kwargs) {\r\n        return this._delegate(\"get_path_from_snapshot\", arguments, kwargs);\r\n    }\r\n\r\n\r\n    this.get_all_paths_from_snapshot = function(snapshot_code, kwargs) {\r\n        return this._delegate(\"get_all_paths_from_snapshot\", arguments, kwargs);\r\n    }\r\n\r\n\r\n    // async functions\r\n\r\n    this.async_get_widget = function(class_name, kwargs, on_complete, on_error) {\r\n\r\n        var api = this;\r\n        var api_kwargs = {};\r\n        Object.assign(api_kwargs, kwargs);\r\n\r\n        var libraries = spt.Environment.get().get_libraries();\r\n        kwargs.libraries = libraries;\r\n        \r\n        var callback = kwargs['cbjs_action'];\r\n        if (!callback) {\r\n            callback = kwargs['callback'];\r\n        }\r\n        if (!callback) {\r\n            callback = kwargs['on_complete'];\r\n        }\r\n        if (!callback) {\r\n            callback = on_complete;\r\n        }\r\n\r\n\r\n        var err_callback = function(e) {\r\n            if (e == 0) {\r\n                e = 'Received an error (Error 0)';\r\n                var error = new Error();\r\n                console.log(error.stack);\r\n            }\r\n            else if (e == 502)\r\n                e = 'Timeout Error (Error 502)';\r\n            else if (e == 503)\r\n                e = 'Service is unavailable (Error 503)';\r\n            else if (e == 504)\r\n                e = 'Gateway Timeout error (Error 504)';\r\n\r\n            if (!on_error) {\r\n                on_error = kwargs['on_error'];\r\n            }\r\n\r\n            if (on_error) {\r\n                on_error(e);\r\n            }\r\n            else {\r\n                console.log(e);\r\n                spt.alert(\"async_get_widget: \" + e, { stack: e.stack });\r\n            }\r\n        };\r\n        passed_args = [class_name, kwargs];\r\n        this._delegate(\"get_widget\", passed_args, kwargs, \"string\", callback, err_callback);\r\n        return;\r\n    }\r\n\r\n    //DEPRECATED use eval\r\n    this.async_eval = function(class_name, kwargs) {\r\n        alert(\"Client API function async_eval is deprecated. Use eval\")\r\n        var callback = kwargs['cbjs_action'];\r\n        if (!callback) {\r\n            callback = kwargs['callback'];\r\n        }\r\n        this._delegate(\"eval\", arguments, kwargs, null, callback);\r\n        return;\r\n    }\r\n\r\n\r\n    // methed that handles asynchronous callbacks.\r\n    // It allows for on_complete to be called in the kwargs as well.\r\n    // It also handles a flag \"promise\" which can be used with promises which\r\n    // defines an oncomplete that is passed to the \"then\" function of the\r\n    // promise\r\n    //\r\n    this._handle_callbacks = function(kwargs, on_complete, on_error) {\r\n        if (typeof(kwargs) != 'undefined' && kwargs != null) {\r\n\r\n            if (!on_complete) {\r\n                on_complete = kwargs.on_complete;\r\n            }\r\n            if (!on_error) {\r\n                on_error = kwargs.on_error;\r\n            }\r\n\r\n            delete kwargs.on_error;\r\n            delete kwargs.on_complete;\r\n        }\r\n        else {\r\n            on_complete = null;\r\n            on_error = null;\r\n        }\r\n\r\n        if (on_complete) {\r\n            if (!on_error) {\r\n                on_error = function(err){\r\n                    throw(err);\r\n                };\r\n            }\r\n        }\r\n\r\n        return [on_complete, on_error];\r\n            \r\n    }\r\n\r\n\r\n    // method that delegates which function in xmlrpc to call\r\n    //\r\n    // @params:\r\n    //   func_name: the name of the function to execute\r\n    //   passed_args: the required arguments passed into the function\r\n    //   kwargs: the optional arguments passed into the function\r\n    //   ret_type: the type of value returned by the function.  Functions that\r\n    //      return lots of data will often return strings back\r\n    //   callback: a function that is run after the data has been returned.\r\n    //   on_error: A function that is run when a request throws an error.\r\n    //      This is used be get_async_widget() and others\r\n    this._delegate = function(func_name, passed_args, kwargs, ret_type, callback, on_error) {\r\n\r\n        \r\n        if (spt._delegate) {\r\n            return spt._delegate(func_name, passed_args, kwargs, ret_type);\r\n        }\r\n\r\n\r\n        var client = new AjaxService( this.url, '' );\r\n\r\n        var args = [];\r\n\r\n        // build the transaction bundle\r\n        if (this.transaction_ticket == null) {\r\n            this.transaction_ticket = this.login_ticket;\r\n        }\r\n\r\n\r\n        if (! this.transaction_ticket ) {\r\n            alert(\"Login or transaction ticket is empty. Cannot proceed\");\r\n            return;\r\n        }\r\n\r\n\r\n        var ticket = {\r\n            'ticket': this.transaction_ticket,\r\n            'site': this.site,\r\n            'project': this.project,\r\n            'palette': this.get_palette(),\r\n            'api_key': this.get_api_key() || \"\",\r\n            'language': 'javascript'\r\n        };\r\n        args.push(ticket);\r\n\r\n        // Trims off undefined kwargs\r\n        if (typeof(passed_args) == \"undefined\") {\r\n            passed_args = [];\r\n        } else {\r\n            if (typeof(passed_args) == \"arguments\") {\r\n                passed_args = Array.from(passed_args);\r\n            } \r\n            if (passed_args.length > 0) {\r\n                if (passed_args[passed_args.length-1] == undefined) {\r\n                    passed_args = passed_args.splice(0, passed_args.length-1);\r\n                }\r\n            }\r\n        }\r\n\r\n        // determine if there was a kwargs passed in\r\n        var num_args;\r\n        var has_kwargs;\r\n\r\n        if (typeof(kwargs) == undefined || kwargs == null) {\r\n            num_args = passed_args.length;\r\n            has_kwargs = false;\r\n        }\r\n        else if (kwargs.__empty__) {\r\n            num_args = passed_args.length;\r\n            has_kwargs = true;\r\n        } else {\r\n            num_args = passed_args.length - 1;\r\n            has_kwargs = true;\r\n        }\r\n       \r\n        if (passed_args != undefined) {\r\n            for (var i=0; i < num_args; i++) {\r\n                args.push(passed_args[i]);\r\n            }\r\n        }\r\n\r\n        // Always pass in a kwargs as the last argument.  If kwargs is not\r\n        // present, we send an empty one through\r\n        if (!has_kwargs) {\r\n            args.push({});\r\n        }\r\n        else {\r\n            delete kwargs.__empty__;\r\n            args.push(kwargs);\r\n        }\r\n\r\n\r\n        // handle asynchronous mode\r\n        if (typeof(callback) != 'undefined' && callback != null) {\r\n            var self = this;\r\n            client.set_callback( function(request) {\r\n                self.async_callback(client, request, on_error);\r\n            } );\r\n            client.invoke( func_name, args );\r\n\r\n            // Store on the client\r\n            client.func_name = func_name;\r\n            client.ret_type = ret_type;\r\n            client.callback = callback;\r\n            return;\r\n        }\r\n\r\n        // just do it synchronously\r\n        else {\r\n            ret_val = client.invoke( func_name, args );\r\n            return this._handle_ret_val(func_name, ret_val, ret_type);\r\n        }\r\n\r\n    }\r\n\r\n    this._show_login = function() {\r\n        \r\n        var spinners = document.id(document.body).getElements('.spt_spin');\r\n        spinners.each(function(x) {spt.hide(x)});\r\n        var login_scr = document.getElement('.spt_login_screen');\r\n        login_scr.setStyle('z-index','1100');\r\n        var custom_content = login_scr.getParent('.spt_custom_content');\r\n        if (custom_content) {\r\n            custom_content.setStyle('position','absolute');\r\n            custom_content.setStyle('top','30%');\r\n            custom_content.setStyle('left','50%');\r\n        }\r\n        spt.popup.show_background();\r\n        spt.show(login_scr);\r\n\r\n    }\r\n    this._redirect_login = function() {\r\n       \r\n        var ok = function() {\r\n            window.location.reload();\r\n        };\r\n        spt.info('Your session has expired.', {'click': ok});\r\n    }\r\n    this.async_callback = function(client, request, on_error) {\r\n        if (request.readyState == 4) {\r\n            if (request.status == 200) {\r\n                try {\r\n                    var data = this._handle_ret_val(client.func_name, request, client.ret_type);\r\n                    client.callback(data);\r\n                } catch(e) {\r\n                    var e_msg = spt.exception.handler(e);\r\n                    if (/Cannot login with key/.test(e_msg)) {\r\n                        this._redirect_login();\r\n                    }\r\n                    else if (on_error)\r\n                        on_error(e);\r\n                    else\r\n                        spt.alert(\"async_callback: \" + e_msg);\r\n                }\r\n            } else {\r\n                \r\n                if (on_error)\r\n                    on_error(request.status);\r\n                else\r\n                    throw(\"status is \" + request.status);\r\n            }\r\n        }\r\n    }\r\n\r\n\r\n        \r\n    this._handle_ret_val = function(func_name, ret_val, ret_type) {\r\n        if (ret_val.status != 200) {\r\n            throw(ret_val.status);\r\n        }\r\n\r\n        if (ret_type == \"raw\") {\r\n            return ret_val.responseText;\r\n        }\r\n        if (ret_type == \"string\") {\r\n            // manually extract the value returned\r\n           \r\n            var value = ret_val.responseText;\r\n            value = value.replace(/^<\\?xml version='1.0'\\?>\\n<methodResponse>\\n<params>\\n<param>\\n<value><string>/, '');\r\n            value = value.replace(/<\\/string><\\/value>\\n<\\/param>\\n<\\/params>\\n<\\/methodResponse>/, '');\r\n\r\n            value = value.replace(/&amp;/g, \"&\");\r\n            value = value.replace(/&lt;/g, \"<\");\r\n            value = value.replace(/&gt;/g, \">\");\r\n\r\n            // fix inline < > that are not part of the html structure\r\n            value = value.replace(/&spt_lt;/g, \"&lt;\");\r\n            value = value.replace(/&spt_gt;/g, \"&gt;\");\r\n\r\n            if (value.match(\"<name>faultCode</name>\")) {\r\n                var el = document.createElement(\"div\");\r\n                el.innerHTML = value;\r\n                el = el.getElementsByTagName(\"value\")[2];\r\n                el = el.childNodes[0];\r\n                value = el.innerHTML;\r\n                throw(\"Server Error: \" + value);\r\n            }\r\n\r\n            return value;\r\n        }\r\n        else {\r\n            var value = this._parse_result(ret_val, func_name);\r\n            return value;\r\n        }\r\n    }\r\n\r\n\r\n    // parse the return value from XMLRPC request.  This is assumed to be\r\n    // a single return value in JSON format which can be parsed.  However,\r\n    // if this produces an exception, then return a string\r\n    //\r\n    this._parse_result = function(ret_val, func_name) {\r\n\r\n        var result = ret_val.responseXML;\r\n        if (result == null) {\r\n            ret_val = ret_val.responseText;\r\n            spt.exception.handle_fault_response( ret_val );\r\n            return \"\"\r\n        }\r\n        // join, normalize the data if the browser supports it, mostly for FF\r\n        if (ret_val.responseXML.normalize)\r\n            ret_val.responseXML.normalize();\r\n\r\n        var nodeList = result.getElementsByTagName(\"string\");\r\n        if (nodeList.length == 0) {\r\n            // in IE a fault response has a non-null result, but also has no string nodes, and so goes into this\r\n            // block of code ... so handle it here the same as fault response above\r\n            ret_val = ret_val.responseText;\r\n            var patt = /faultCode/g;\r\n            if (patt.test(ret_val)) {\r\n                spt.exception.handle_fault_response( ret_val );\r\n            }\r\n            return \"\";\r\n        }\r\n\r\n        var child = nodeList[0].firstChild;\r\n        if (child == null) {\r\n            alert(\"Return format not a string or JSON text\");\r\n            alert(ret_val.responseText);\r\n            return {};\r\n        }\r\n\r\n        var jsontext;\r\n        // FIXME: you can just use child.nodeValue (it is supported by all browsers) instead of .text or .textContent\r\n        if (spt.browser.is_IE()) {\r\n            jsontext = child.text;\r\n        }\r\n        else {\r\n            jsontext = child.textContent;\r\n        }\r\n\r\n        if (jsontext == \"OK\") {\r\n            return ret_val;\r\n        }\r\n                \r\n        var value;\r\n        try {\r\n            value = JSON.parse(jsontext);\r\n        } catch(e) {\r\n            // assume it is just a string\r\n            value = jsontext;\r\n            if (func_name != 'start') {\r\n\r\n                ret_val = ret_val.responseText;\r\n                var patt = /faultCode/g;\r\n                if(patt.test(ret_val)) {\r\n                    spt.exception.handle_fault_response( ret_val );\r\n                }\r\n                else{\r\n                    alert(\"Error parsing [\" + value + \"]\");\r\n                }\r\n                return {};\r\n            }\r\n        }\r\n\r\n        if (typeof(value) == \"undefined\") {\r\n            alert(\"Value returned from server is undefined\");\r\n            return {};\r\n        }\r\n        if (value && value.status == \"ERROR\") {\r\n            throw value;\r\n        }\r\n\r\n        return value;\r\n    }\r\n\r\n} \r\n\r\n/*\r\n * Treats the server stub as a singleton and allows you to retrieve the\r\n * same reference from various parts of the code.\r\n */\r\nTacticServerStub.server = null;\r\nTacticServerStub.servers = {};\r\nTacticServerStub.get = function(name) {\r\n    if (!name) {\r\n        name = \"default\";\r\n    }\r\n    this.server = this.servers[name];\r\n\r\n    if (this.server == null) {\r\n        this.server = new TacticServerStub();\r\n        this.servers[name] = this.server;\r\n\r\n        let env = spt.Environment.get();\r\n        let login_ticket = env.get_ticket();\r\n        let url = env.get_api_url();\r\n        let site = env.get_site();\r\n        let project_code = env.get_project();\r\n\r\n        let location = document.location;\r\n        let server = location.protocol + \"//\" + location.host;\r\n        this.server.set_server(server)\r\n\r\n        this.server.set_ticket(login_ticket);\r\n        this.server.set_site(site);\r\n        this.server.set_project(project_code);\r\n    }\r\n    return this.server;\r\n}\r\n\r\nTacticServerStub.get_master = function(name) {\r\n    var env = spt.Environment.get();\r\n    var master_slave_setup = env.get_master_enabled();\r\n\r\n    if (!name) {\r\n        name = \"default\";\r\n    }\r\n\r\n    if (['true', true].indexOf(master_slave_setup) > -1) {\r\n        this.server = new TacticServerStub();\r\n        this.servers[name] = this.server;\r\n\r\n        var master_slave_setup = env.get_master_enabled();\r\n        var url = env.get_master_url();\r\n        var login_ticket = env.get_master_login_ticket();\r\n        var site = env.get_master_site();\r\n        var project_code = env.get_master_project_code();\r\n\r\n        this.server.set_url(url);\r\n        this.server.set_ticket(login_ticket);\r\n        this.server.set_site(site);\r\n        this.server.set_project(project_code);\r\n        this.server.set_transaction_ticket(login_ticket);\r\n    } else {\r\n        this.server = this.get(name); \r\n    }\r\n    return this.server;\r\n}\r\n\r\n\r\nTACTIC = TacticServerStub;\r\n\r\n\r\n\r\n";
 //#endregion
 //#region ../src/tactic_stream/compatibility/table_action_runtime.js?raw
-var table_action_runtime_default = "// A logical table context for the original client API. No DOM or HTML engine.\r\nfunction runTableAction(execute, context, call, feedback) {\r\n    // The original SDK's split_search_key uses this MooTools String helper.\r\n    if (typeof String.prototype.test !== 'function')\r\n        Object.defineProperty(String.prototype, 'test', {\r\n            value: function (regex, params) {\r\n                return (\r\n                    Object.prototype.toString.call(regex) === '[object RegExp]'\r\n                        ? regex\r\n                        : new RegExp(String(regex), params)\r\n                ).test(String(this));\r\n            },\r\n            configurable: true,\r\n            writable: true\r\n        });\r\n    context = Object.assign({}, context);\r\n    context.searchKeys =\r\n        (context.searchKeys || []).indexOf(context.searchKey) >= 0\r\n            ? context.searchKeys.slice()\r\n            : [context.searchKey];\r\n    var commands = [],\r\n        callbacks = [],\r\n        calls = 0,\r\n        confirmationUsed = false;\r\n    var waiting = null;\r\n    function emit(command) {\r\n        commands.push(command);\r\n    }\r\n    function message(text) {\r\n        emit({ type: 'message', text: String(text) });\r\n    }\r\n    function confirmAction(text) {\r\n        text = String(text);\r\n        if (\r\n            context.confirmation &&\r\n            !confirmationUsed &&\r\n            context.confirmation.message === text\r\n        ) {\r\n            confirmationUsed = true;\r\n            return !!context.confirmation.accepted;\r\n        }\r\n        // Re-execution is safe only before the first API request. Never replay writes.\r\n        if (calls || confirmationUsed)\r\n            throw new Error(\r\n                'Confirm before making server calls. Only one confirmation per table action is supported.'\r\n            );\r\n        waiting = text;\r\n        throw new Error('Table confirmation required');\r\n    }\r\n    var selectors = [\r\n        '.spt_table_row',\r\n        '.spt_layout',\r\n        '.spt_table_top',\r\n        '.spt_table',\r\n        '.spt_tab_top',\r\n        '.spt_table_tbody',\r\n        '.spt_panel_user_top',\r\n        'td'\r\n    ];\r\n    function logicalRow(searchKey) {\r\n        var attributes = {\r\n            search_key: searchKey,\r\n            spt_search_key: searchKey,\r\n            spt_search_key_v2: searchKey,\r\n            spt_search_type: context.searchType,\r\n            spt_element_name: context.column,\r\n            spt_view: context.view,\r\n            spt_version: '2'\r\n        };\r\n        var item = {\r\n            getParent: function (selector) {\r\n                if (selectors.indexOf(selector) < 0)\r\n                    throw new Error('Unsupported table selector: ' + selector);\r\n                return item;\r\n            },\r\n            getAttribute: function (name) {\r\n                if (!Object.prototype.hasOwnProperty.call(attributes, name))\r\n                    throw new Error('Unsupported table attribute: ' + name);\r\n                return attributes[name];\r\n            },\r\n            hasClass: function (name) {\r\n                return selectors.indexOf('.' + name) >= 0;\r\n            },\r\n            toJSON: function () {\r\n                return attributes;\r\n            }\r\n        };\r\n        return item;\r\n    }\r\n    var row = logicalRow(context.searchKey);\r\n    var layout = context.layoutState\r\n        ? JSON.parse(JSON.stringify(context.layoutState))\r\n        : null;\r\n    var logicalDocument = {};\r\n    function option(text, value) {\r\n        this.text = String(text);\r\n        this.value = String(value);\r\n    }\r\n    if (layout) {\r\n        layout.controls = layout.controls || [];\r\n        layout.root = layout.root || {};\r\n        function control(item) {\r\n            var value = Object.assign({}, item);\r\n            value.getParent = function (selector) {\r\n                if (selector !== '.spt_top')\r\n                    throw new Error('Unsupported layout selector: ' + selector);\r\n                return top;\r\n            };\r\n            value.getElement = function (selector) {\r\n                var found = controls.filter(function (entry) {\r\n                    return '.' + entry.selector === selector;\r\n                })[0];\r\n                if (!found)\r\n                    throw new Error(\r\n                        'Layout control is unavailable: ' + selector\r\n                    );\r\n                return found;\r\n            };\r\n            return value;\r\n        }\r\n        var top = control(layout.root),\r\n            controls = layout.controls.map(control);\r\n        top.getParent = function (selector) {\r\n            if (selector !== '.spt_top')\r\n                throw new Error('Unsupported layout selector: ' + selector);\r\n            return top;\r\n        };\r\n        Object.defineProperty(top, 'innerHTML', {\r\n            get: function () {\r\n                return '__native_layout__';\r\n            }\r\n        });\r\n        controls.forEach(function (item) {\r\n            if (item.kind === 'choice') {\r\n                item.options = item.options || [];\r\n                Object.defineProperty(item, 'value', {\r\n                    get: function () {\r\n                        return (\r\n                            item.selectedValue ||\r\n                            (item.options[0] || {}).value ||\r\n                            ''\r\n                        );\r\n                    },\r\n                    set: function (value) {\r\n                        item.selectedValue = String(value);\r\n                    }\r\n                });\r\n                if (layout.form) {\r\n                    logicalDocument[layout.form] =\r\n                        logicalDocument[layout.form] || {};\r\n                    logicalDocument[layout.form][item.name] = item;\r\n                }\r\n            }\r\n        });\r\n        row =\r\n            controls.filter(function (item) {\r\n                return item.selector === context.layoutTrigger;\r\n            })[0] || top;\r\n    }\r\n    function busy(title, detail) {\r\n        if (feedback) feedback(String(title || ''), String(detail || ''));\r\n    }\r\n    function open(title, className, options, geometry) {\r\n        var command = {\r\n            type: 'open',\r\n            title: String(title || ''),\r\n            className: String(className || ''),\r\n            options: options || {},\r\n            geometry: geometry || {}\r\n        };\r\n        emit(command);\r\n        var popup = {};\r\n        Object.defineProperty(popup, 'on_save_cbk', {\r\n            set: function (callback) {\r\n                var source = String(callback).replace(/\\s+/g, '');\r\n                if (\r\n                    !/^function\\(\\)\\{spt\\.tab\\.set_tab_top\\([\\w$]+\\);spt\\.tab\\.reload_selected\\(\\);?\\}$/.test(\r\n                        source\r\n                    )\r\n                ) {\r\n                    throw new Error(\r\n                        'Only a table refresh is supported for a legacy popup save callback'\r\n                    );\r\n                }\r\n                command.refreshOnSave = true;\r\n            }\r\n        });\r\n        return popup;\r\n    }\r\n    var spt = {\r\n        panel: {\r\n            load_popup: open,\r\n            refresh: function () {\r\n                emit({ type: 'refresh' });\r\n            }\r\n        },\r\n        table: {\r\n            get_selected_search_keys: function () {\r\n                return context.searchKeys.slice();\r\n            },\r\n            get_selected_codes: function () {\r\n                return context.searchKeys.map(function (key) {\r\n                    var record =\r\n                        (context.records || {})[key] ||\r\n                        (key === context.searchKey ? context.record : null);\r\n                    if (!record || !record.code)\r\n                        throw new Error('The selected record has no code');\r\n                    return record.code;\r\n                });\r\n            },\r\n            get_selected_rows: function () {\r\n                return context.searchKeys.map(logicalRow);\r\n            },\r\n            // The adapter already captures this table/tab; these select the same logical scope.\r\n            set_layout: function () {},\r\n            get_layout: function () {\r\n                return row;\r\n            }\r\n        },\r\n        dg_table: {\r\n            get_element_value: function (element, name) {\r\n                return context.record[name];\r\n            }\r\n        },\r\n        tab: {\r\n            set_tab_top: function () {},\r\n            set_main_body_tab: function () {},\r\n            set_main_body_top: function () {},\r\n            reload_selected: function () {\r\n                emit({ type: 'refresh' });\r\n            },\r\n            add_new: function (key, title, className, options) {\r\n                open(title, className, options);\r\n                commands[commands.length - 1].tabKey = String(key);\r\n            }\r\n        },\r\n        api: {\r\n            app_busy_show: busy,\r\n            app_busy_hide: function () {\r\n                busy('');\r\n            }\r\n        },\r\n        app_busy: {\r\n            show: busy,\r\n            hide: function () {\r\n                busy('');\r\n            }\r\n        },\r\n        alert: message,\r\n        notify: { show_message: message },\r\n        exception: {\r\n            handler: function (error) {\r\n                return String((error && error.message) || error);\r\n            }\r\n        },\r\n        get_event_target: function () {\r\n            return row;\r\n        },\r\n        Environment: {\r\n            get: function () {\r\n                return {\r\n                    get_user: function () {\r\n                        if (!context.layoutUser)\r\n                            throw new Error(\r\n                                'The current layout user is unavailable'\r\n                            );\r\n                        return context.layoutUser;\r\n                    }\r\n                };\r\n            }\r\n        },\r\n        popup: {\r\n            get_popup: function () {\r\n                if (!layout) throw new Error('No layout popup');\r\n                return top;\r\n            },\r\n            close: function (value) {\r\n                if (value !== top) throw new Error('Unknown layout popup');\r\n                emit({ type: 'close-layout' });\r\n            }\r\n        }\r\n    };\r\n    var server = new TacticServerStub();\r\n    server.set_project(context.project);\r\n    server._delegate = function (\r\n        method,\r\n        passedArgs,\r\n        kwargs,\r\n        returnType,\r\n        callback,\r\n        failed\r\n    ) {\r\n        if (waiting !== null) throw new Error('Table confirmation required');\r\n        if (\r\n            method.charAt(0) === '_' ||\r\n            ['get_ticket', 'get_ticket_data'].indexOf(method) >= 0\r\n        )\r\n            throw new Error(\r\n                'Authentication methods are unavailable in table actions'\r\n            );\r\n        var args = Array.prototype.slice.call(passedArgs || []);\r\n        if (\r\n            args.length &&\r\n            (args[args.length - 1] === undefined ||\r\n                (kwargs && args[args.length - 1] === kwargs))\r\n        )\r\n            args.pop();\r\n        calls++;\r\n        try {\r\n            var result = call(method, args, kwargs || {}, server.get_project());\r\n            if (callback) {\r\n                callbacks.push(function () {\r\n                    callback(result);\r\n                });\r\n                return;\r\n            }\r\n            return returnType === 'string' && typeof result !== 'string'\r\n                ? JSON.stringify(result)\r\n                : result;\r\n        } catch (error) {\r\n            if (!failed) throw error;\r\n            callbacks.push(function () {\r\n                failed(error);\r\n            });\r\n        }\r\n    };\r\n    var api = {\r\n        get: function () {\r\n            return server;\r\n        }\r\n    };\r\n    var bvr = {\r\n        search_key: context.searchKey,\r\n        kwargs: { search_key: context.searchKey, view: context.view },\r\n        src_el: row\r\n    };\r\n    var output;\r\n    try {\r\n        output = execute(\r\n            bvr,\r\n            { target: row },\r\n            spt,\r\n            api,\r\n            message,\r\n            {\r\n                log: function () {\r\n                    emit({\r\n                        type: 'log',\r\n                        text: Array.prototype.map\r\n                            .call(arguments, String)\r\n                            .join(' ')\r\n                    });\r\n                }\r\n            },\r\n            {\r\n                open: function (url) {\r\n                    var command = { type: 'url', url: String(url) },\r\n                        report = false;\r\n                    emit(command);\r\n                    return {\r\n                        document: {\r\n                            writeln: function (value) {\r\n                                if (!layout || value !== '__native_layout__')\r\n                                    throw new Error(\r\n                                        'Only the native layout can be printed'\r\n                                    );\r\n                                commands.splice(commands.indexOf(command), 1);\r\n                                report = true;\r\n                            },\r\n                            close: function () {}\r\n                        },\r\n                        focus: function () {},\r\n                        close: function () {},\r\n                        print: function () {\r\n                            if (!report)\r\n                                throw new Error('No native report to print');\r\n                            emit({ type: 'print-layout' });\r\n                        }\r\n                    };\r\n                }\r\n            },\r\n            confirmAction,\r\n            logicalDocument,\r\n            option\r\n        );\r\n        if (output && typeof output.then === 'function')\r\n            throw new Error(\r\n                'Promise results are not supported by legacy table actions'\r\n            );\r\n        while (callbacks.length) callbacks.shift()();\r\n    } catch (error) {\r\n        if (waiting !== null)\r\n            return { confirmation: waiting, commands: [], calls: calls };\r\n        throw error;\r\n    }\r\n    if (waiting !== null)\r\n        return { confirmation: waiting, commands: [], calls: calls };\r\n    if (layout) {\r\n        var serial = function (item) {\r\n            var result = {};\r\n            Object.keys(item).forEach(function (key) {\r\n                if (typeof item[key] !== 'function') result[key] = item[key];\r\n            });\r\n            return result;\r\n        };\r\n        emit({\r\n            type: 'layout-state',\r\n            state: {\r\n                form: layout.form,\r\n                root: serial(top),\r\n                controls: controls.map(serial)\r\n            }\r\n        });\r\n    }\r\n    return JSON.parse(\r\n        JSON.stringify(\r\n            {\r\n                commands: commands,\r\n                output: output === undefined ? null : output,\r\n                calls: calls\r\n            },\r\n            function (key, value) {\r\n                if (\r\n                    typeof value === 'function' ||\r\n                    (typeof value === 'number' && !isFinite(value))\r\n                )\r\n                    throw new Error(\r\n                        'Table action output must contain JSON values'\r\n                    );\r\n                return value;\r\n            }\r\n        )\r\n    );\r\n}\r\n";
+var table_action_runtime_default = "// A logical table context for the original client API. No DOM or HTML engine.\nfunction runTableAction(execute, context, call, feedback) {\n    // The original SDK's split_search_key uses this MooTools String helper.\n    if (typeof String.prototype.test !== 'function')\n        Object.defineProperty(String.prototype, 'test', {\n            value: function (regex, params) {\n                return (\n                    Object.prototype.toString.call(regex) === '[object RegExp]'\n                        ? regex\n                        : new RegExp(String(regex), params)\n                ).test(String(this));\n            },\n            configurable: true,\n            writable: true\n        });\n    context = Object.assign({}, context);\n    context.searchKeys =\n        (context.searchKeys || []).indexOf(context.searchKey) >= 0\n            ? context.searchKeys.slice()\n            : [context.searchKey];\n    var commands = [],\n        callbacks = [],\n        calls = 0,\n        confirmationUsed = false;\n    var waiting = null;\n    function emit(command) {\n        commands.push(command);\n    }\n    function message(text) {\n        emit({ type: 'message', text: String(text) });\n    }\n    function confirmAction(text) {\n        text = String(text);\n        if (\n            context.confirmation &&\n            !confirmationUsed &&\n            context.confirmation.message === text\n        ) {\n            confirmationUsed = true;\n            return !!context.confirmation.accepted;\n        }\n        // Re-execution is safe only before the first API request. Never replay writes.\n        if (calls || confirmationUsed)\n            throw new Error(\n                'Confirm before making server calls. Only one confirmation per table action is supported.'\n            );\n        waiting = text;\n        throw new Error('Table confirmation required');\n    }\n    var selectors = [\n        '.spt_table_row',\n        '.spt_layout',\n        '.spt_table_top',\n        '.spt_table',\n        '.spt_tab_top',\n        '.spt_table_tbody',\n        '.spt_panel_user_top',\n        'td'\n    ];\n    function logicalRow(searchKey) {\n        var attributes = {\n            search_key: searchKey,\n            spt_search_key: searchKey,\n            spt_search_key_v2: searchKey,\n            spt_search_type: context.searchType,\n            spt_element_name: context.column,\n            spt_view: context.view,\n            spt_version: '2'\n        };\n        var item = {\n            getParent: function (selector) {\n                if (selectors.indexOf(selector) < 0)\n                    throw new Error('Unsupported table selector: ' + selector);\n                return item;\n            },\n            getAttribute: function (name) {\n                if (!Object.prototype.hasOwnProperty.call(attributes, name))\n                    throw new Error('Unsupported table attribute: ' + name);\n                return attributes[name];\n            },\n            hasClass: function (name) {\n                return selectors.indexOf('.' + name) >= 0;\n            },\n            toJSON: function () {\n                return attributes;\n            }\n        };\n        return item;\n    }\n    var row = logicalRow(context.searchKey);\n    var layout = context.layoutState\n        ? JSON.parse(JSON.stringify(context.layoutState))\n        : null;\n    var logicalDocument = {};\n    function option(text, value) {\n        this.text = String(text);\n        this.value = String(value);\n    }\n    if (layout) {\n        layout.controls = layout.controls || [];\n        layout.root = layout.root || {};\n        function control(item) {\n            var value = Object.assign({}, item);\n            value.getParent = function (selector) {\n                if (selector !== '.spt_top')\n                    throw new Error('Unsupported layout selector: ' + selector);\n                return top;\n            };\n            value.getElement = function (selector) {\n                var found = controls.filter(function (entry) {\n                    return '.' + entry.selector === selector;\n                })[0];\n                if (!found)\n                    throw new Error(\n                        'Layout control is unavailable: ' + selector\n                    );\n                return found;\n            };\n            return value;\n        }\n        var top = control(layout.root),\n            controls = layout.controls.map(control);\n        top.getParent = function (selector) {\n            if (selector !== '.spt_top')\n                throw new Error('Unsupported layout selector: ' + selector);\n            return top;\n        };\n        Object.defineProperty(top, 'innerHTML', {\n            get: function () {\n                return '__native_layout__';\n            }\n        });\n        controls.forEach(function (item) {\n            if (item.kind === 'choice') {\n                item.options = item.options || [];\n                Object.defineProperty(item, 'value', {\n                    get: function () {\n                        return (\n                            item.selectedValue ||\n                            (item.options[0] || {}).value ||\n                            ''\n                        );\n                    },\n                    set: function (value) {\n                        item.selectedValue = String(value);\n                    }\n                });\n                if (layout.form) {\n                    logicalDocument[layout.form] =\n                        logicalDocument[layout.form] || {};\n                    logicalDocument[layout.form][item.name] = item;\n                }\n            }\n        });\n        row =\n            controls.filter(function (item) {\n                return item.selector === context.layoutTrigger;\n            })[0] || top;\n    }\n    function busy(title, detail) {\n        if (feedback) feedback(String(title || ''), String(detail || ''));\n    }\n    function open(title, className, options, geometry) {\n        var command = {\n            type: 'open',\n            title: String(title || ''),\n            className: String(className || ''),\n            options: options || {},\n            geometry: geometry || {}\n        };\n        emit(command);\n        var popup = {};\n        Object.defineProperty(popup, 'on_save_cbk', {\n            set: function (callback) {\n                var source = String(callback).replace(/\\s+/g, '');\n                if (\n                    !/^function\\(\\)\\{spt\\.tab\\.set_tab_top\\([\\w$]+\\);spt\\.tab\\.reload_selected\\(\\);?\\}$/.test(\n                        source\n                    )\n                ) {\n                    throw new Error(\n                        'Only a table refresh is supported for a legacy popup save callback'\n                    );\n                }\n                command.refreshOnSave = true;\n            }\n        });\n        return popup;\n    }\n    var spt = {\n        panel: {\n            load_popup: open,\n            refresh: function () {\n                emit({ type: 'refresh' });\n            }\n        },\n        table: {\n            get_selected_search_keys: function () {\n                return context.searchKeys.slice();\n            },\n            get_selected_codes: function () {\n                return context.searchKeys.map(function (key) {\n                    var record =\n                        (context.records || {})[key] ||\n                        (key === context.searchKey ? context.record : null);\n                    if (!record || !record.code)\n                        throw new Error('The selected record has no code');\n                    return record.code;\n                });\n            },\n            get_selected_rows: function () {\n                return context.searchKeys.map(logicalRow);\n            },\n            // The adapter already captures this table/tab; these select the same logical scope.\n            set_layout: function () {},\n            get_layout: function () {\n                return row;\n            }\n        },\n        dg_table: {\n            get_element_value: function (element, name) {\n                return context.record[name];\n            }\n        },\n        tab: {\n            set_tab_top: function () {},\n            set_main_body_tab: function () {},\n            set_main_body_top: function () {},\n            reload_selected: function () {\n                emit({ type: 'refresh' });\n            },\n            add_new: function (key, title, className, options) {\n                open(title, className, options);\n                commands[commands.length - 1].tabKey = String(key);\n            }\n        },\n        api: {\n            app_busy_show: busy,\n            app_busy_hide: function () {\n                busy('');\n            }\n        },\n        app_busy: {\n            show: busy,\n            hide: function () {\n                busy('');\n            }\n        },\n        alert: message,\n        notify: { show_message: message },\n        exception: {\n            handler: function (error) {\n                return String((error && error.message) || error);\n            }\n        },\n        get_event_target: function () {\n            return row;\n        },\n        Environment: {\n            get: function () {\n                return {\n                    get_user: function () {\n                        if (!context.layoutUser)\n                            throw new Error(\n                                'The current layout user is unavailable'\n                            );\n                        return context.layoutUser;\n                    }\n                };\n            }\n        },\n        popup: {\n            get_popup: function () {\n                if (!layout) throw new Error('No layout popup');\n                return top;\n            },\n            close: function (value) {\n                if (value !== top) throw new Error('Unknown layout popup');\n                emit({ type: 'close-layout' });\n            }\n        }\n    };\n    var server = new TacticServerStub();\n    server.set_project(context.project);\n    server._delegate = function (\n        method,\n        passedArgs,\n        kwargs,\n        returnType,\n        callback,\n        failed\n    ) {\n        if (waiting !== null) throw new Error('Table confirmation required');\n        if (\n            method.charAt(0) === '_' ||\n            ['get_ticket', 'get_ticket_data'].indexOf(method) >= 0\n        )\n            throw new Error(\n                'Authentication methods are unavailable in table actions'\n            );\n        var args = Array.prototype.slice.call(passedArgs || []);\n        if (\n            args.length &&\n            (args[args.length - 1] === undefined ||\n                (kwargs && args[args.length - 1] === kwargs))\n        )\n            args.pop();\n        calls++;\n        try {\n            var result = call(method, args, kwargs || {}, server.get_project());\n            if (callback) {\n                callbacks.push(function () {\n                    callback(result);\n                });\n                return;\n            }\n            return returnType === 'string' && typeof result !== 'string'\n                ? JSON.stringify(result)\n                : result;\n        } catch (error) {\n            if (!failed) throw error;\n            callbacks.push(function () {\n                failed(error);\n            });\n        }\n    };\n    var api = {\n        get: function () {\n            return server;\n        }\n    };\n    var bvr = {\n        search_key: context.searchKey,\n        kwargs: { search_key: context.searchKey, view: context.view },\n        src_el: row\n    };\n    var output;\n    try {\n        output = execute(\n            bvr,\n            { target: row },\n            spt,\n            api,\n            message,\n            {\n                log: function () {\n                    emit({\n                        type: 'log',\n                        text: Array.prototype.map\n                            .call(arguments, String)\n                            .join(' ')\n                    });\n                }\n            },\n            {\n                open: function (url) {\n                    var command = { type: 'url', url: String(url) },\n                        report = false;\n                    emit(command);\n                    return {\n                        document: {\n                            writeln: function (value) {\n                                if (!layout || value !== '__native_layout__')\n                                    throw new Error(\n                                        'Only the native layout can be printed'\n                                    );\n                                commands.splice(commands.indexOf(command), 1);\n                                report = true;\n                            },\n                            close: function () {}\n                        },\n                        focus: function () {},\n                        close: function () {},\n                        print: function () {\n                            if (!report)\n                                throw new Error('No native report to print');\n                            emit({ type: 'print-layout' });\n                        }\n                    };\n                }\n            },\n            confirmAction,\n            logicalDocument,\n            option\n        );\n        if (output && typeof output.then === 'function')\n            throw new Error(\n                'Promise results are not supported by legacy table actions'\n            );\n        while (callbacks.length) callbacks.shift()();\n    } catch (error) {\n        if (waiting !== null)\n            return { confirmation: waiting, commands: [], calls: calls };\n        throw error;\n    }\n    if (waiting !== null)\n        return { confirmation: waiting, commands: [], calls: calls };\n    if (layout) {\n        var serial = function (item) {\n            var result = {};\n            Object.keys(item).forEach(function (key) {\n                if (typeof item[key] !== 'function') result[key] = item[key];\n            });\n            return result;\n        };\n        emit({\n            type: 'layout-state',\n            state: {\n                form: layout.form,\n                root: serial(top),\n                controls: controls.map(serial)\n            }\n        });\n    }\n    return JSON.parse(\n        JSON.stringify(\n            {\n                commands: commands,\n                output: output === undefined ? null : output,\n                calls: calls\n            },\n            function (key, value) {\n                if (\n                    typeof value === 'function' ||\n                    (typeof value === 'number' && !isFinite(value))\n                )\n                    throw new Error(\n                        'Table action output must contain JSON values'\n                    );\n                return value;\n            }\n        )\n    );\n}\n";
 //#endregion
 //#region src/features/interface/tableScript.js
 async function runTableScript(source, context, { ticket, signal, confirm, progress }) {
@@ -16334,7 +16989,11 @@ ${source}
 				}
 			} else if (message.type === "progress") progress?.(message.title, message.detail);
 			else if (message.type === "result") finish(null, message.result);
-			else if (message.type === "error") finish(/* @__PURE__ */ new Error(message.error + "\n" + message.stack));
+			else if (message.type === "error") {
+				const error = new Error(message.error);
+				if (message.stack) error.stack = message.stack;
+				finish(error);
+			}
 		};
 		worker.onerror = (event) => {
 			event.preventDefault();
@@ -16450,15 +17109,16 @@ function step(settings, width, direction) {
 	return direction > 0 ? zooms.find((value) => value > percent + .01) || 200 : zooms.slice().reverse().find((value) => value < percent - .01) || 25;
 }
 function describe$3(scene, settings, width, height) {
+	const merged = combineRegions(scene);
 	const size = dimensions(settings, width, height);
-	const scroll = scene.nodes.find((item) => item.id === "customLayoutScroll");
-	const sourceChildren = scroll ? scroll.children : scene.nodes;
+	const scroll = merged.nodes.find((item) => item.id === "customLayoutScroll");
+	const sourceChildren = scroll ? scroll.children : merged.nodes;
 	const pageHeight = Math.max(size.height, (scroll?.contentHeight || 0) + 24);
 	const children = sourceChildren.map((child) => child.id === "canvasOverlay" ? Object.assign({}, child, {
 		width: size.width - 24,
 		height: pageHeight - 24
 	}) : child);
-	return Object.assign({}, scene, { nodes: [node("Scroll", "pageViewportScroll", rect(0, 0, width, height), {
+	return Object.assign({}, merged, { nodes: [node("Scroll", "pageViewportScroll", rect(0, 0, width, height), {
 		contentWidth: Math.max(width, size.width * size.scale + 32),
 		contentHeight: Math.max(height, pageHeight * size.scale + 32),
 		scrollbarId: "pageViewportBar",
@@ -18124,6 +18784,7 @@ var _sfc_main = {
 		ObjectOperations: ObjectOperations_default,
 		ObjectAction: ObjectAction_default,
 		AppButton: _sfc_main$55,
+		AppIcon: _sfc_main$56,
 		AppMenu: _sfc_main$60,
 		AppSelect: _sfc_main$66,
 		AppSearchField: AppSearchField_default,
@@ -18210,7 +18871,8 @@ var _sfc_main = {
 		"result-scroll",
 		"saved",
 		"organization",
-		"filter-apply"
+		"filter-apply",
+		"dirty-tasks"
 	],
 	setup() {
 		return { tabId: useId() };
@@ -18476,6 +19138,12 @@ var _sfc_main = {
 		}
 	},
 	watch: {
+		dirtyTaskCount: {
+			immediate: true,
+			handler(value) {
+				this.$emit("dirty-tasks", value);
+			}
+		},
 		active(value) {
 			if (!value) {
 				++this.actionRequest;
@@ -18581,6 +19249,18 @@ var _sfc_main = {
 			return true;
 		},
 		t,
+		splitError(raw) {
+			const text = String(raw || "").trim();
+			const lines = text.split(/\r?\n/).filter((line) => line.trim());
+			if (lines.length <= 1) return {
+				summary: this.t(text),
+				detail: ""
+			};
+			return {
+				summary: text.includes("Traceback (most recent call last):") ? lines.at(-1).trim() : lines[0].trim(),
+				detail: text
+			};
+		},
 		invalidateContext() {
 			this.expandedTables = {};
 			this.nestedEditor = null;
@@ -19170,6 +19850,7 @@ var _sfc_main = {
 					else this.expandedTables[key] = {
 						scope: cell.nestedTable,
 						column: cell.columnName,
+						text: cell.text,
 						open: true,
 						selected: [],
 						offset: 0,
@@ -19678,58 +20359,65 @@ var _hoisted_9 = {
 };
 var _hoisted_10 = {
 	key: 2,
+	class: "error table-error-banner",
+	role: "alert"
+};
+var _hoisted_11 = { class: "table-error-header" };
+var _hoisted_12 = { class: "table-error-summary" };
+var _hoisted_13 = {
+	key: 0,
+	class: "table-error-hint"
+};
+var _hoisted_14 = { class: "table-error-actions" };
+var _hoisted_15 = {
+	key: 0,
+	class: "table-error-details"
+};
+var _hoisted_16 = { class: "table-error-trace" };
+var _hoisted_17 = {
+	key: 3,
 	class: "error",
 	role: "alert"
 };
-var _hoisted_11 = {
-	key: 3,
-	class: "notice"
-};
-var _hoisted_12 = { key: 0 };
-var _hoisted_13 = {
+var _hoisted_18 = {
 	key: 4,
 	class: "error",
 	role: "alert"
 };
-var _hoisted_14 = {
+var _hoisted_19 = {
 	key: 5,
-	class: "error",
-	role: "alert"
-};
-var _hoisted_15 = {
-	key: 6,
 	class: "notice"
 };
-var _hoisted_16 = ["aria-label"];
-var _hoisted_17 = { role: "status" };
-var _hoisted_18 = {
-	key: 8,
+var _hoisted_20 = {
+	key: 6,
 	class: "table-message",
 	role: "status"
 };
-var _hoisted_19 = {
-	key: 9,
-	class: "table-message"
-};
-var _hoisted_20 = ["aria-label"];
 var _hoisted_21 = {
-	key: 1,
-	class: "notice"
+	key: 7,
+	class: "table-message"
 };
 var _hoisted_22 = {
-	key: 2,
-	class: "table-message"
+	key: 0,
+	class: "notice"
 };
 var _hoisted_23 = {
-	key: 4,
+	key: 1,
 	class: "table-message"
 };
 var _hoisted_24 = {
-	key: 5,
+	key: 3,
 	class: "table-message"
 };
-var _hoisted_25 = ["aria-label"];
-var _hoisted_26 = {
+var _hoisted_25 = {
+	key: 4,
+	class: "table-message"
+};
+var _hoisted_26 = ["aria-label"];
+var _hoisted_27 = ["aria-label"];
+var _hoisted_28 = { role: "status" };
+var _hoisted_29 = ["aria-label"];
+var _hoisted_30 = {
 	key: 6,
 	class: "notice",
 	role: "status"
@@ -19740,6 +20428,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 	const _component_AppSearchField = resolveComponent("AppSearchField");
 	const _component_AppButton = resolveComponent("AppButton");
 	const _component_AppSelect = resolveComponent("AppSelect");
+	const _component_AppIcon = resolveComponent("AppIcon");
 	const _component_ResultPresentation = resolveComponent("ResultPresentation");
 	const _component_NestedTable = resolveComponent("NestedTable");
 	const _component_TableCell = resolveComponent("TableCell");
@@ -19924,54 +20613,36 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 				}, 8, ["overlay"]))
 			], 40, _hoisted_7)) : createCommentVNode("", true),
 			$data.error ? (openBlock(), createElementBlock("p", _hoisted_9, toDisplayString($options.t($data.error)), 1)) : createCommentVNode("", true),
-			$data.columnError ? (openBlock(), createElementBlock("p", _hoisted_10, toDisplayString($options.t($data.columnError)), 1)) : createCommentVNode("", true),
-			$data.columnError ? (openBlock(), createElementBlock("p", _hoisted_11, [$data.columnUncertain ? (openBlock(), createElementBlock("span", _hoisted_12, toDisplayString($options.t("Check the server result before saving again.")), 1)) : createCommentVNode("", true), createVNode(_component_AppButton, {
-				label: "Reload from server",
-				icon: "refresh",
-				onClick: _cache[19] || (_cache[19] = ($event) => {
-					$data.columnUncertain = false;
-					$data.tableConfig = null;
-					$options.selectTableView($options.table.view || "table");
-				})
-			})])) : createCommentVNode("", true),
-			$data.cellError ? (openBlock(), createElementBlock("p", _hoisted_13, toDisplayString($options.t($data.cellError)), 1)) : createCommentVNode("", true),
-			$data.taskError ? (openBlock(), createElementBlock("p", _hoisted_14, toDisplayString($options.t($data.taskError)), 1)) : createCommentVNode("", true),
-			$data.taskUncertain ? (openBlock(), createElementBlock("p", _hoisted_15, toDisplayString($options.t("Check the server result before saving again.")), 1)) : createCommentVNode("", true),
-			$options.dirtyTaskCount ? (openBlock(), createElementBlock("div", {
-				key: 7,
-				class: "task-draft-actions",
-				role: "region",
-				"aria-label": $options.t("Pending task changes")
-			}, [
-				createBaseVNode("span", _hoisted_17, toDisplayString($options.t("{count} unsaved tasks", { count: $options.dirtyTaskCount })), 1),
-				createVNode(_component_AppButton, {
-					label: "Discard task changes",
-					icon: "undo",
-					"icon-only": "",
-					disabled: $data.taskBusy,
-					onClick: $options.discardTasks
-				}, null, 8, ["disabled", "onClick"]),
-				$data.taskUncertain ? (openBlock(), createBlock(_component_AppButton, {
-					key: 0,
-					label: "Check saved task changes",
+			$data.columnError ? (openBlock(), createElementBlock("div", _hoisted_10, [createBaseVNode("div", _hoisted_11, [
+				createVNode(_component_AppIcon, {
+					name: "error",
+					class: "table-error-icon"
+				}),
+				createBaseVNode("span", _hoisted_12, toDisplayString($options.splitError($data.columnError).summary), 1),
+				$data.columnUncertain ? (openBlock(), createElementBlock("span", _hoisted_13, toDisplayString($options.t("Check the server result before saving again.")), 1)) : createCommentVNode("", true),
+				createBaseVNode("div", _hoisted_14, [createVNode(_component_AppButton, {
+					label: "Reload from server",
 					icon: "refresh",
+					onClick: _cache[19] || (_cache[19] = ($event) => {
+						$data.columnUncertain = false;
+						$data.columnError = "";
+						$data.tableConfig = null;
+						$options.selectTableView($options.table.view || "table");
+					})
+				}), createVNode(_component_AppButton, {
+					label: "Dismiss",
+					icon: "close",
 					"icon-only": "",
-					disabled: $data.taskBusy,
-					onClick: _cache[20] || (_cache[20] = ($event) => $options.saveTasks(true))
-				}, null, 8, ["disabled"])) : createCommentVNode("", true),
-				createVNode(_component_AppButton, {
-					label: "Save task changes",
-					icon: "save",
-					"icon-only": "",
-					highlighted: "",
-					disabled: $data.taskBusy || $data.taskUncertain,
-					onClick: _cache[21] || (_cache[21] = ($event) => $options.saveTasks())
-				}, null, 8, ["disabled"])
-			], 8, _hoisted_16)) : createCommentVNode("", true),
-			$data.busy ? (openBlock(), createElementBlock("div", _hoisted_18, toDisplayString($options.t("Loading data…")), 1)) : !$options.supportedLayout ? (openBlock(), createElementBlock("div", _hoisted_19, toDisplayString($options.t("This layout is not available yet.")), 1)) : createCommentVNode("", true),
+					onClick: _cache[20] || (_cache[20] = ($event) => $data.columnError = "")
+				})])
+			]), $options.splitError($data.columnError).detail ? (openBlock(), createElementBlock("details", _hoisted_15, [createBaseVNode("summary", null, toDisplayString($options.t("Show stacktrace")), 1), createBaseVNode("pre", _hoisted_16, toDisplayString($options.splitError($data.columnError).detail), 1)])) : createCommentVNode("", true)])) : createCommentVNode("", true),
+			$data.cellError ? (openBlock(), createElementBlock("p", _hoisted_17, toDisplayString($options.t($data.cellError)), 1)) : createCommentVNode("", true),
+			$data.taskError ? (openBlock(), createElementBlock("p", _hoisted_18, toDisplayString($options.t($data.taskError)), 1)) : createCommentVNode("", true),
+			$data.taskUncertain ? (openBlock(), createElementBlock("p", _hoisted_19, toDisplayString($options.t("Check the server result before saving again.")), 1)) : createCommentVNode("", true),
+			$data.busy ? (openBlock(), createElementBlock("div", _hoisted_20, toDisplayString($options.t("Loading data…")), 1)) : !$options.supportedLayout ? (openBlock(), createElementBlock("div", _hoisted_21, toDisplayString($options.t("This layout is not available yet.")), 1)) : createCommentVNode("", true),
 			(!$props.embedded || $options.displayedMode !== "table") && ($props.rows !== null || $options.table.item_layout) && !$options.tabs ? withDirectives((openBlock(), createBlock(_component_ResultPresentation, {
-				key: 10,
-				onOrganization: _cache[22] || (_cache[22] = ($event) => _ctx.$emit("organization", $event)),
+				key: 8,
+				onOrganization: _cache[21] || (_cache[21] = ($event) => _ctx.$emit("organization", $event)),
 				ref: "presentation",
 				active: $options.displayedMode !== "table",
 				"item-layout": $options.itemLayout,
@@ -19982,15 +20653,15 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 				"search-type": $props.definition.search_type,
 				mode: $options.displayedMode,
 				"workspace-id": $props.workspaceId,
-				onRootScroll: _cache[23] || (_cache[23] = ($event) => _ctx.$emit("result-scroll", $event)),
-				onFocus: _cache[24] || (_cache[24] = ($event) => _ctx.$emit("focus", $event)),
+				onRootScroll: _cache[22] || (_cache[22] = ($event) => _ctx.$emit("result-scroll", $event)),
+				onFocus: _cache[23] || (_cache[23] = ($event) => _ctx.$emit("focus", $event)),
 				"group-mode": $props.groupMode,
 				state: $props.resultState,
-				onState: _cache[25] || (_cache[25] = ($event) => _ctx.$emit("result-state", $event)),
+				onState: _cache[24] || (_cache[24] = ($event) => _ctx.$emit("result-state", $event)),
 				"selected-keys": $props.selectedKeys,
-				onInspect: _cache[26] || (_cache[26] = ($event) => _ctx.$emit("inspect", $event)),
-				onSelect: _cache[27] || (_cache[27] = (rows, selected) => _ctx.$emit("select", rows, selected)),
-				onOperate: _cache[28] || (_cache[28] = (record, event, node) => _ctx.$emit("operate", record, event, node))
+				onInspect: _cache[25] || (_cache[25] = ($event) => _ctx.$emit("inspect", $event)),
+				onSelect: _cache[26] || (_cache[26] = (rows, selected) => _ctx.$emit("select", rows, selected)),
+				onOperate: _cache[27] || (_cache[27] = (record, event, node) => _ctx.$emit("operate", record, event, node))
 			}, null, 8, [
 				"active",
 				"item-layout",
@@ -20005,20 +20676,10 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 				"state",
 				"selected-keys"
 			])), [[vShow, $options.displayedMode !== "table"]]) : createCommentVNode("", true),
-			!$data.busy && $options.supportedLayout && $options.displayedMode === "table" ? (openBlock(), createElementBlock(Fragment, { key: 11 }, [
-				$props.embedded && $options.tableSelection.length ? (openBlock(), createElementBlock("div", {
-					key: 0,
-					class: "selection-actions",
-					role: "group",
-					"aria-label": $options.t("Selected record actions")
-				}, [createVNode(_component_AppButton, {
-					label: $options.t($options.tableSelection.length === 1 ? "Deselect {count} item" : "Deselect {count} items", { count: $options.tableSelection.length }),
-					"translate-label": false,
-					onClick: _cache[29] || (_cache[29] = ($event) => _ctx.$emit("select", [], false))
-				}, null, 8, ["label"])], 8, _hoisted_20)) : createCommentVNode("", true),
-				$options.elements.some((item) => !item.supported) ? (openBlock(), createElementBlock("p", _hoisted_21, toDisplayString($options.t("Some widgets in this view are not available yet.")), 1)) : createCommentVNode("", true),
-				!$options.elements.length ? (openBlock(), createElementBlock("div", _hoisted_22, toDisplayString($options.t("This view has no elements.")), 1)) : (openBlock(), createBlock(_component_TableView, {
-					key: 3,
+			!$data.busy && $options.supportedLayout && $options.displayedMode === "table" ? (openBlock(), createElementBlock(Fragment, { key: 9 }, [
+				$options.elements.some((item) => !item.supported) ? (openBlock(), createElementBlock("p", _hoisted_22, toDisplayString($options.t("Some widgets in this view are not available yet.")), 1)) : createCommentVNode("", true),
+				!$options.elements.length ? (openBlock(), createElementBlock("div", _hoisted_23, toDisplayString($options.t("This view has no elements.")), 1)) : (openBlock(), createBlock(_component_TableView, {
+					key: 2,
 					ref: "tableView",
 					columns: $options.elements,
 					groups: $options.rowGroups,
@@ -20039,45 +20700,48 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 					"group-mode": $options.tableState.table?.groupMode || $props.groupMode,
 					onState: $options.tableStateChanged,
 					onSelect: $options.tableSelect,
-					onFocus: _cache[32] || (_cache[32] = (record) => _ctx.$emit("focus", {
+					onFocus: _cache[30] || (_cache[30] = (record) => _ctx.$emit("focus", {
 						kind: "object",
 						record
 					})),
-					onInspect: _cache[33] || (_cache[33] = ($event) => _ctx.$emit("inspect", $event)),
+					onInspect: _cache[31] || (_cache[31] = ($event) => _ctx.$emit("inspect", $event)),
 					onOperate: $options.operate,
-					onScroll: _cache[34] || (_cache[34] = ($event) => _ctx.$emit("result-scroll", $event)),
+					onScroll: _cache[32] || (_cache[32] = ($event) => _ctx.$emit("result-scroll", $event)),
 					onColumn: $options.tableColumn,
 					onSort: $options.sortBy,
-					onGroup: _cache[35] || (_cache[35] = ($event) => $options.tableStateChanged({
+					onGroup: _cache[33] || (_cache[33] = ($event) => $options.tableStateChanged({
 						...$options.tableState,
 						table: {
 							...$options.tableState.table,
 							groupMode: $event
 						}
 					})),
-					onWidth: _cache[36] || (_cache[36] = (name, width) => $options.changeColumns("width", name, width)),
-					onMove: _cache[37] || (_cache[37] = (name, target) => $options.changeColumns("move", name, target)),
-					onHide: _cache[38] || (_cache[38] = ($event) => $options.changeColumns("hide", $event)),
+					onWidth: _cache[34] || (_cache[34] = (name, width) => $options.changeColumns("width", name, width)),
+					onMove: _cache[35] || (_cache[35] = (name, target) => $options.changeColumns("move", name, target)),
+					onHide: _cache[36] || (_cache[36] = ($event) => $options.changeColumns("hide", $event)),
 					onView: $options.selectTableView,
 					onSaveView: $options.saveTableView,
 					onManageViews: $options.openTableViews,
-					onToggleGroup: _cache[39] || (_cache[39] = ($event) => $data.closedGroups[$event] = !$data.closedGroups[$event]),
+					onToggleGroup: _cache[37] || (_cache[37] = ($event) => $data.closedGroups[$event] = !$data.closedGroups[$event]),
 					onEdit: $options.openCellEditor,
 					onHeaderAction: $options.tableHeaderAction,
 					onCreateChild: $options.createParentChild
 				}, {
-					detail: withCtx(({ record, height }) => [createVNode(_component_NestedTable, {
+					detail: withCtx(({ record, width, height }) => [createVNode(_component_NestedTable, {
 						ticket: $props.ticket,
 						project: $props.project,
 						state: $data.expandedTables[record.__search_key__],
-						"frame-node": { height },
+						"frame-node": {
+							width,
+							height
+						},
 						ancestors: $props.nestedAncestors,
 						onClose: ($event) => $data.expandedTables[record.__search_key__].open = false,
 						onEdit: $options.openNestedEditor,
-						onInspect: _cache[30] || (_cache[30] = ($event) => _ctx.$emit("inspect", $event)),
+						onInspect: _cache[28] || (_cache[28] = ($event) => _ctx.$emit("inspect", $event)),
 						onAction: $options.tableAction,
 						onCellEvent: $options.nestedCellEvent,
-						onColumn: _cache[31] || (_cache[31] = ($event) => _ctx.$emit("column", $event))
+						onColumn: _cache[29] || (_cache[29] = ($event) => _ctx.$emit("column", $event))
 					}, null, 8, [
 						"ticket",
 						"project",
@@ -20161,10 +20825,51 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 					"onHeaderAction",
 					"onCreateChild"
 				])),
-				!$options.records.length && !$data.error && $options.ownQuery && !$data.started ? (openBlock(), createElementBlock("div", _hoisted_23, toDisplayString($options.t("Run a search to load records.")), 1)) : !$options.records.length && !$data.error ? (openBlock(), createElementBlock("div", _hoisted_24, [createBaseVNode("strong", null, toDisplayString($options.t("No records yet")), 1), createBaseVNode("span", null, toDisplayString($options.t("Choose another type or change the filter.")), 1)])) : createCommentVNode("", true)
+				!$options.records.length && !$data.error && $options.ownQuery && !$data.started ? (openBlock(), createElementBlock("div", _hoisted_24, toDisplayString($options.t("Run a search to load records.")), 1)) : !$options.records.length && !$data.error ? (openBlock(), createElementBlock("div", _hoisted_25, [createBaseVNode("strong", null, toDisplayString($options.t("No records yet")), 1), createBaseVNode("span", null, toDisplayString($options.t("Choose another type or change the filter.")), 1)])) : createCommentVNode("", true),
+				$props.embedded && $options.tableSelection.length ? (openBlock(), createElementBlock("div", {
+					key: 5,
+					class: "selection-actions",
+					role: "group",
+					"aria-label": $options.t("Selected record actions")
+				}, [createVNode(_component_AppButton, {
+					label: $options.t($options.tableSelection.length === 1 ? "Deselect {count} item" : "Deselect {count} items", { count: $options.tableSelection.length }),
+					"translate-label": false,
+					onClick: _cache[38] || (_cache[38] = ($event) => _ctx.$emit("select", [], false))
+				}, null, 8, ["label"])], 8, _hoisted_26)) : createCommentVNode("", true)
 			], 64)) : createCommentVNode("", true),
+			$options.dirtyTaskCount ? (openBlock(), createElementBlock("div", {
+				key: 10,
+				class: "task-draft-actions",
+				role: "region",
+				"aria-label": $options.t("Pending task changes")
+			}, [
+				createBaseVNode("span", _hoisted_28, toDisplayString($options.t("{count} unsaved tasks", { count: $options.dirtyTaskCount })), 1),
+				createVNode(_component_AppButton, {
+					label: "Discard task changes",
+					icon: "undo",
+					"icon-only": "",
+					disabled: $data.taskBusy,
+					onClick: $options.discardTasks
+				}, null, 8, ["disabled", "onClick"]),
+				$data.taskUncertain ? (openBlock(), createBlock(_component_AppButton, {
+					key: 0,
+					label: "Check saved task changes",
+					icon: "refresh",
+					"icon-only": "",
+					disabled: $data.taskBusy,
+					onClick: _cache[39] || (_cache[39] = ($event) => $options.saveTasks(true))
+				}, null, 8, ["disabled"])) : createCommentVNode("", true),
+				createVNode(_component_AppButton, {
+					label: "Save task changes",
+					icon: "save",
+					"icon-only": "",
+					highlighted: "",
+					disabled: $data.taskBusy || $data.taskUncertain,
+					onClick: _cache[40] || (_cache[40] = ($event) => $options.saveTasks())
+				}, null, 8, ["disabled"])
+			], 8, _hoisted_27)) : createCommentVNode("", true),
 			$options.ownQuery && $props.definition.panel?.show_search_limit !== false ? (openBlock(), createElementBlock("footer", {
-				key: 12,
+				key: 11,
 				class: "pagination panel-pagination",
 				"aria-label": $options.t("View pages")
 			}, [createBaseVNode("span", null, toDisplayString($options.rowRange), 1), createBaseVNode("div", null, [createVNode(_component_AppButton, {
@@ -20172,14 +20877,14 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 				icon: "MDI_CHEVRON_LEFT",
 				"icon-only": $options.mobile,
 				disabled: $data.busy || $data.page === 0,
-				onClick: _cache[40] || (_cache[40] = ($event) => $options.changePage(-1))
+				onClick: _cache[41] || (_cache[41] = ($event) => $options.changePage(-1))
 			}, null, 8, ["icon-only", "disabled"]), createVNode(_component_AppButton, {
 				label: "Next →",
 				icon: "MDI_CHEVRON_RIGHT",
 				"icon-only": $options.mobile,
 				disabled: $data.busy || !$data.hasNext,
-				onClick: _cache[41] || (_cache[41] = ($event) => $options.changePage(1))
-			}, null, 8, ["icon-only", "disabled"])])], 8, _hoisted_25)) : createCommentVNode("", true)
+				onClick: _cache[42] || (_cache[42] = ($event) => $options.changePage(1))
+			}, null, 8, ["icon-only", "disabled"])])], 8, _hoisted_29)) : createCommentVNode("", true)
 		], 64)),
 		createVNode(_component_FilePreview, {
 			ref: "preview",
@@ -20236,15 +20941,15 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 			"search-type": $data.targetRecord.__search_key__.split("?")[0],
 			operations: $data.targetOperations,
 			selection: $options.records.filter((record) => $options.tableSelection.includes(record.__search_key__)),
-			onInspect: _cache[42] || (_cache[42] = ($event) => _ctx.$emit("inspect", $event)),
+			onInspect: _cache[43] || (_cache[43] = ($event) => _ctx.$emit("inspect", $event)),
 			onEdit: $options.openTableRecordForm,
 			onEditSelected: $options.openTableRecordForm,
-			onCreate: _cache[43] || (_cache[43] = ($event) => $options.openTableRecordForm(null)),
-			onDuplicate: _cache[44] || (_cache[44] = ($event) => $options.openTableRecordForm(null, $event.__search_key__)),
+			onCreate: _cache[44] || (_cache[44] = ($event) => $options.openTableRecordForm(null)),
+			onDuplicate: _cache[45] || (_cache[45] = ($event) => $options.openTableRecordForm(null, $event.__search_key__)),
 			onRelated: $options.openTableRelations,
-			onRetire: _cache[45] || (_cache[45] = ($event) => _ctx.$refs.tableDelete.open($event, "retire")),
-			onReactivate: _cache[46] || (_cache[46] = ($event) => _ctx.$refs.tableDelete.open($event, "reactivate")),
-			onDelete: _cache[47] || (_cache[47] = ($event) => _ctx.$refs.tableDelete.open($event, "delete")),
+			onRetire: _cache[46] || (_cache[46] = ($event) => _ctx.$refs.tableDelete.open($event, "retire")),
+			onReactivate: _cache[47] || (_cache[47] = ($event) => _ctx.$refs.tableDelete.open($event, "reactivate")),
+			onDelete: _cache[48] || (_cache[48] = ($event) => _ctx.$refs.tableDelete.open($event, "delete")),
 			onDuplicated: $options.tableSaved,
 			onFilesAttached: $options.tableSaved
 		}, null, 8, [
@@ -20274,7 +20979,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 			"view",
 			"onSaved"
 		])) : createCommentVNode("", true),
-		$data.serviceMessage ? (openBlock(), createElementBlock("p", _hoisted_26, toDisplayString($data.serviceMessage), 1)) : createCommentVNode("", true),
+		$data.serviceMessage ? (openBlock(), createElementBlock("p", _hoisted_30, toDisplayString($data.serviceMessage), 1)) : createCommentVNode("", true),
 		$data.targetRecord ? (openBlock(), createBlock(_component_RecordForm, {
 			key: 7,
 			ref: "tableForm",
@@ -20329,14 +21034,14 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 			project: $props.project,
 			onTableAction: $options.tableAction,
 			onEdit: $options.openNestedEditor,
-			onInspect: _cache[48] || (_cache[48] = ($event) => _ctx.$emit("inspect", $event)),
+			onInspect: _cache[49] || (_cache[49] = ($event) => _ctx.$emit("inspect", $event)),
 			onCellEvent: $options.nestedCellEvent,
-			onColumn: _cache[49] || (_cache[49] = ($event) => _ctx.$emit("column", $event)),
+			onColumn: _cache[50] || (_cache[50] = ($event) => _ctx.$emit("column", $event)),
 			onSaved: $options.tableSaved,
-			onNotice: _cache[50] || (_cache[50] = ($event) => $data.serviceMessage = $event),
+			onNotice: _cache[51] || (_cache[51] = ($event) => $data.serviceMessage = $event),
 			onFile: $options.openDependencyFile,
-			onClosed: _cache[51] || (_cache[51] = ($event) => $data.documentRequest++),
-			onAction: _cache[52] || (_cache[52] = (action) => $options.tableAction($data.serviceDocument.record, action.name, {
+			onClosed: _cache[52] || (_cache[52] = ($event) => $data.documentRequest++),
+			onAction: _cache[53] || (_cache[53] = (action) => $options.tableAction($data.serviceDocument.record, action.name, {
 				...$data.serviceDocument,
 				href: action.href,
 				displayOptions: { cbjs_action: action.javascript }
@@ -20369,7 +21074,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 			editor: $data.taskEditor,
 			busy: $data.taskBusy,
 			onChange: $options.stageTask,
-			onClosed: _cache[53] || (_cache[53] = ($event) => $data.taskEditor = null)
+			onClosed: _cache[54] || (_cache[54] = ($event) => $data.taskEditor = null)
 		}, null, 8, [
 			"editor",
 			"busy",
@@ -20382,7 +21087,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 			error: $data.editError,
 			uncertain: $data.editUncertain,
 			onSave: $options.saveCellEditor,
-			onCheck: _cache[54] || (_cache[54] = ($event) => $options.saveCellEditor($event, true)),
+			onCheck: _cache[55] || (_cache[55] = ($event) => $options.saveCellEditor($event, true)),
 			onCancel: $options.cancelCellEditor
 		}, null, 8, [
 			"editor",
@@ -20415,6 +21120,6 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 }
 var ConfiguredView_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main, [["render", _sfc_render]]);
 //#endregion
-export { block as A, remove$1 as B, filter as C, type as D, scope as E, geometries as F, spacing as G, reparent as H, geometry$1 as I, _sfc_main$54 as K, kinds as L, copy as M, duplicate as N, add as O, fingerprint as P, layers as R, fields as S, options as T, siblings as U, reorder as V, sizing as W, heading as _, zooms as a, WorkspaceSearch_default as b, ObjectOperations_default as c, _sfc_main$24 as d, _sfc_main$25 as f, gallery as g, forwarding as h, controls as i, change$5 as j, appearances as k, NotesPanel_default as l, forward as m, _sfc_main$2 as n, ResultPresentation_exports as o, _sfc_main$27 as p, _sfc_main$7 as r, RelatedObjects_default as s, ConfiguredView_default as t, skeyPlaceholder as u, revision as v, mode as w, change$4 as x, _sfc_main$30 as y, path as z };
+export { block as A, path as B, filter as C, type as D, scope as E, fromXml as F, sizing as G, reorder as H, geometries as I, _sfc_main$54 as J, spacing as K, geometry$1 as L, copy as M, duplicate as N, add as O, fingerprint as P, kinds as R, fields as S, options as T, reparent as U, remove$1 as V, siblings as W, heading as _, zooms as a, WorkspaceSearch_default as b, ObjectOperations_default as c, _sfc_main$24 as d, _sfc_main$25 as f, gallery as g, forwarding as h, controls as i, change$5 as j, appearances as k, NotesPanel_default as l, forward as m, _sfc_main$2 as n, ResultPresentation_exports as o, _sfc_main$27 as p, toXml as q, _sfc_main$7 as r, RelatedObjects_default as s, ConfiguredView_default as t, skeyPlaceholder as u, revision as v, mode as w, change$4 as x, _sfc_main$30 as y, layers as z };
 
 //# sourceMappingURL=ConfiguredView.js.map

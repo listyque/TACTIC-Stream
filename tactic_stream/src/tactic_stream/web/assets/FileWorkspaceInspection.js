@@ -1,13 +1,13 @@
-import { A as onMounted, E as nextTick, F as resolveComponent, G as withCtx, H as watch, J as markRaw, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, Q as shallowRef, X as ref, _ as createElementBlock, b as createVNode, c as withKeys, et as unref, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment } from "./vue.js";
+import { $ as shallowRef, D as nextTick, F as renderSlot, I as resolveComponent, K as withCtx, N as openBlock, P as renderList, U as watch, Y as markRaw, Z as ref, _ as createCommentVNode, d as Fragment, g as createBlock, h as createBaseVNode, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withKeys, m as computed, nt as normalizeClass, rt as normalizeStyle, tt as unref, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
 import { T as metrics, o as t, s as appearance, t as _sfc_main$16, u as frameColors, y as cssRoles, z as _plugin_vue_export_helper_default } from "./AppButton.js";
 import { At as logEvent, Mt as redact } from "./index.js";
-import { G as button, H as observeFrameSizes, K as label, P as _sfc_main$18, U as _sfc_main$19, X as rect, Y as node, h as copyText, o as _sfc_main$21, t as _sfc_main$17, w as translate, z as _sfc_main$20 } from "./FrameView.js";
+import { B as _sfc_main$20, F as _sfc_main$18, K as button, S as copyText, T as translate, U as observeFrameSizes, W as _sfc_main$19, X as node, Z as rect, o as _sfc_main$21, q as label, t as _sfc_main$17 } from "./FrameView.js";
 import { t as captionHeight } from "./sections.ui.js";
 import { r as prettySize } from "./file_values.js";
 import "./files.js";
 import { t as describe$7 } from "./confirmation.ui.js";
 import { t as _sfc_main$22 } from "./AppDialog.js";
-import { Lt as actionLayout, z as _sfc_main$23 } from "./RelatedObjects.js";
+import { B as _sfc_main$23, Rt as actionLayout } from "./RelatedObjects.js";
 import { C as _sfc_main$24 } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/files/workspace/toolbar.ui.mjs
 function views$1(model, width, height, language) {

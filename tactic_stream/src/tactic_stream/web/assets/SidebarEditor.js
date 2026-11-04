@@ -1,7 +1,7 @@
-import { E as nextTick, F as resolveComponent, K as withDirectives, M as openBlock, T as mergeProps, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, m as createBaseVNode, nt as normalizeStyle, s as vShow } from "./vue.js";
+import { D as nextTick, E as mergeProps, I as resolveComponent, N as openBlock, c as vShow, g as createBlock, h as createBaseVNode, p as Teleport, q as withDirectives, rt as normalizeStyle, v as createElementBlock, x as createVNode } from "./vue.js";
 import { o as t, s as appearance, z as _plugin_vue_export_helper_default } from "./AppButton.js";
 import { U as sidebarRequest } from "./index.js";
-import { G as button, H as observeFrameSizes, J as muted, K as label, X as rect, Y as node, t as _sfc_main$1, w as translate } from "./FrameView.js";
+import { K as button, T as translate, U as observeFrameSizes, X as node, Y as muted, Z as rect, q as label, t as _sfc_main$1 } from "./FrameView.js";
 import { n as sections } from "./sections.ui.js";
 import { a as tabs, n as notices, o as toolbar, r as policy, t as documentEvent } from "./admin.document.js";
 import { i as row$1, n as navigate } from "./tree.ui.js";
@@ -60,11 +60,11 @@ function describe(model, ui, width, height, language) {
 		nodes.push(label("sidebarEmpty", rect(12, y, width - 24, 70), tr(model.busy ? "Working on the server…" : "Select a project"), { wrap: true }));
 		return { nodes };
 	}
-	const split = width >= 850, treeWidth = split ? Math.min(Math.max(280, ui.treeWidth), width * .48) : width;
+	const split = width >= 850, treeVisible = ui.treeVisible !== false, treeWidth = split ? treeVisible ? Math.min(Math.max(280, ui.treeWidth), width * .48) : 56 : width;
 	const contentHeight = Math.max(split ? 270 : 320, height - y - (compact ? 0 : 38));
 	const children = [];
-	if (split || !ui.editing) tree(children, model, ui, rect(0, 0, treeWidth, contentHeight), language, edit);
-	if (split) children.push(node("Splitter", "sidebarSplitter", rect(treeWidth, 0, 10, contentHeight), {
+	if (split || !ui.editing) tree(children, model, ui, rect(0, 0, treeWidth, contentHeight), language, edit, split);
+	if (split && treeVisible) children.push(node("Splitter", "sidebarSplitter", rect(treeWidth, 0, 10, contentHeight), {
 		text: tr("Sidebar preview width"),
 		value: treeWidth,
 		min: 280,
@@ -81,49 +81,59 @@ function describe(model, ui, width, height, language) {
 	if (!compact) nodes.push(label("sidebarStatus", rect(0, height - 30, width, 30), tr(model.dirty ? "Sidebar has unsaved changes" : "Sidebar is up to date"), muted));
 	return { nodes };
 }
-function tree(nodes, model, ui, bounds, language, edit) {
-	const tr = (text) => translate(text, language), width = bounds.width, children = [];
-	children.push(label("sidebarTreeTitle", rect(12, 8, width - 24, 28), tr(model.source === "handler" ? "TH sidebar" : "TACTIC sidebar"), { weight: 600 }));
-	let y = 44;
-	if (model.source === "handler") {
-		children.push(node("Choice", "sidebarGroupPreview", rect(12, y, width - 24, 38), {
-			label: tr("Preview group"),
-			options: model.previewOptions.map((option) => ({
-				value: option.value,
-				label: option.label
-			})),
-			value: model.previewGroup,
-			enabled: edit,
-			action: { type: "preview" }
-		}));
+function tree(nodes, model, ui, bounds, language, edit, split = false) {
+	const tr = (text) => translate(text, language), width = bounds.width, treeVisible = !split || ui.treeVisible !== false, children = [];
+	if (treeVisible) {
+		children.push(label("sidebarTreeTitle", rect(12, 10, Math.max(0, width - (split ? 62 : 24)), 34), tr(model.source === "handler" ? "TH sidebar" : "TACTIC sidebar"), { weight: 600 }));
+		let y = 52;
+		if (model.source === "handler") {
+			children.push(node("Choice", "sidebarGroupPreview", rect(12, y, width - 24, 38), {
+				label: tr("Preview group"),
+				options: model.previewOptions.map((option) => ({
+					value: option.value,
+					label: option.label
+				})),
+				value: model.previewGroup,
+				enabled: edit,
+				action: { type: "preview" }
+			}));
+			y += 46;
+		}
+		children.push(label("sidebarAddLabel", rect(12, y, width - 158, 38), tr("Add"), muted));
+		[
+			[
+				"link",
+				"Add link",
+				"add"
+			],
+			[
+				"section",
+				"Add section",
+				"folder"
+			],
+			[
+				"separator",
+				"Add separator",
+				"sidebar-separator"
+			]
+		].forEach(([value, text, icon], index) => children.push(button("sidebarAdd_" + value, rect(width - 138 + index * 42, y, 38, 38), tr(text), icon, {
+			type: "add",
+			value
+		}, edit, {
+			iconOnly: true,
+			round: false
+		})));
 		y += 46;
+		children.push(list("sidebarEditorEntries", rect(8, y, width - 16, bounds.height - y - 8), "entries", 64));
+		if (!model.entries.length) children.push(label("sidebarTreeEmpty", rect(20, y + 12, width - 40, 70), tr(model.previewGroup ? "This group has no sidebar items" : "This sidebar has no items"), {
+			wrap: true,
+			color: "secondaryText"
+		}));
 	}
-	children.push(label("sidebarAddLabel", rect(12, y, width - 158, 38), tr("Add"), muted));
-	[
-		[
-			"link",
-			"Add link",
-			"add"
-		],
-		[
-			"section",
-			"Add section",
-			"folder"
-		],
-		[
-			"separator",
-			"Add separator",
-			"sidebar-separator"
-		]
-	].forEach(([value, text, icon], index) => children.push(button("sidebarAdd_" + value, rect(width - 138 + index * 42, y, 38, 38), tr(text), icon, {
-		type: "add",
-		value
-	}, edit, { iconOnly: true })));
-	y += 46;
-	children.push(list("sidebarEditorEntries", rect(8, y, width - 16, bounds.height - y - 8), "entries", 64));
-	if (!model.entries.length) children.push(label("sidebarTreeEmpty", rect(20, y + 12, width - 40, 70), tr(model.previewGroup ? "This group has no sidebar items" : "This sidebar has no items"), {
-		wrap: true,
-		color: "secondaryText"
+	if (split) children.push(button("sidebarToggleTree", rect(treeVisible ? width - 46 : (width - 34) / 2, 10, 34, 34), tr(treeVisible ? "Hide sidebar tree" : "Show sidebar tree"), treeVisible ? "chevron-left" : "chevron-right", { type: "treeVisible" }, true, {
+		iconOnly: true,
+		iconAction: true,
+		round: false
 	}));
 	nodes.push(node("Box", "sidebarTreePanel", bounds, {
 		background: "surfaceContainerLow",
@@ -401,6 +411,7 @@ var initial = () => ({
 	page: "item",
 	mode: "simple",
 	editing: false,
+	treeVisible: true,
 	treeWidth: 350,
 	confirmation: "",
 	text: {},
@@ -409,7 +420,10 @@ var initial = () => ({
 var pending = (ui) => Object.keys(ui.text).length > 0 || ui.xml !== null;
 function completed(ui, command) {
 	if (command.type === "help") return Object.assign({}, ui);
-	if (["reload", "discard"].indexOf(command.type) >= 0) return Object.assign(initial(), { treeWidth: ui.treeWidth });
+	if (["reload", "discard"].indexOf(command.type) >= 0) return Object.assign(initial(), {
+		treeVisible: ui.treeVisible !== false,
+		treeWidth: ui.treeWidth
+	});
 	const next = Object.assign({}, ui, {
 		text: {},
 		xml: null
@@ -458,7 +472,10 @@ function transition(ui, model, event) {
 		};
 	}
 	if (event.type === "reset") return {
-		ui: Object.assign(initial(), { treeWidth: ui.treeWidth }),
+		ui: Object.assign(initial(), {
+			treeVisible: ui.treeVisible !== false,
+			treeWidth: ui.treeWidth
+		}),
 		commands
 	};
 	if (model.busy || model.uncertain || next.confirmation) return {
@@ -468,6 +485,9 @@ function transition(ui, model, event) {
 	switch (event.type) {
 		case "split":
 			next.treeWidth = Math.max(280, event.value);
+			break;
+		case "treeVisible":
+			next.treeVisible = next.treeVisible === false;
 			break;
 		case "text":
 			if (allow.editable) {
@@ -901,8 +921,10 @@ var _sfc_main = {
 			}
 		},
 		canLeave() {
-			if (this.dirty || this.busy || this.uncertain) {
-				this.error = "Save or discard sidebar changes before leaving.";
+			if (this.busy) return false;
+			if (this.dirty || this.uncertain) {
+				this.error = "";
+				this.dispatch({ type: "discard" });
 				return false;
 			}
 			return true;

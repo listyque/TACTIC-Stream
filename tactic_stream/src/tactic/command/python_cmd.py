@@ -48,7 +48,7 @@ def format_script_traceback(error):
                     number = record[5] - offset
                     if 1 <= number <= len(lines):
                         frames.append((label, number, record[2], lines[number - 1]))
-                else:
+                elif frames and not str(record[0]).replace("\\", "/").endswith(("mako/template.py", "mako/runtime.py", "tactic/command/python_cmd.py", "pyasm/command/command.py", "tactic_stream/server/api.py", "tactic_stream/server/app.py")):
                     frames.append(record[:4])
             if isinstance(current, (exceptions.CompileException, exceptions.SyntaxException)):
                 label, lines, offset = sources.get(None, next(iter(sources.values())))

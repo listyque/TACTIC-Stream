@@ -1,5 +1,5 @@
 import { D as spacing } from "./AppButton.js";
-import { G as button, K as label, X as rect, Y as node, w as translate } from "./FrameView.js";
+import { K as button, T as translate, X as node, Z as rect, q as label } from "./FrameView.js";
 //#region ../src/tactic_stream/shared_ui/features/objects/snapshot.ui.mjs
 var metrics = {
 	toolbar: 46,

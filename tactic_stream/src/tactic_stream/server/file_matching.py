@@ -181,7 +181,7 @@ class FileObject(object):
             files_list = self.get_all_files_list()
         for fl in files_list:
             size = get_st_size(fl)
-            if size:
+            if size is not None:
                 sizes_list.append(size)
 
         if sizes_list:

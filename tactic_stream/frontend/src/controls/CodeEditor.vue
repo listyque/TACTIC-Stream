@@ -7,8 +7,8 @@ import AppMenu from './AppMenu.vue';
 import AppSwitch from './AppSwitch.vue';
 import { copyText as writeClipboard, readClipboard } from './clipboard.js';
 import { t } from '../i18n.js';
-import { pythonTokens, javascriptTokens } from './pythonSyntax.js';
-import { editCommand, findMatches } from './codeEditing.js';
+import { syntaxTokens, detectLanguage } from './pythonSyntax.js';
+import { editCommand, findMatches, documentSymbols, completions } from './codeEditing.js';
 import './codeEditor.css';
 
 const props = defineProps({
@@ -17,10 +17,11 @@ const props = defineProps({
   readOnly: Boolean,
   disabled: Boolean,
   analysis: Object,
+  ariaLabel: String,
   sourceToolbar: { type: Boolean, default: true }
 });
 const model = defineModel({ default: '' });
-const emit = defineEmits(['run', 'help', 'outline', 'analyse']);
+const emit = defineEmits(['run', 'help', 'outline', 'analyse', 'blur']);
 const input = ref(null),
   scroll = ref({ x: 0, y: 0 }),
   selection = ref({ start: 0, end: 0 });
@@ -53,16 +54,15 @@ const matches = computed(() =>
 const selectedText = computed(() =>
   model.value.slice(selection.value.start, selection.value.end)
 );
+const effectiveLanguage = computed(() =>
+  detectLanguage(model.value, props.language)
+);
 const highlighted = computed(() => {
-  const tokens =
-    props.language === 'javascript'
-      ? javascriptTokens(model.value)
-      : pythonTokens(
-          model.value,
-          props.analysis?.source === model.value
-            ? props.analysis.moduleNames
-            : []
-        );
+  const tokens = syntaxTokens(
+    model.value,
+    props.language,
+    props.analysis?.source === model.value ? props.analysis.moduleNames : []
+  );
   const word = /^[\w$]+$/.test(selectedText.value) ? selectedText.value : '';
   const overlays = [
     ...matches.value.map((row) => ({ ...row, role: 'search' })),
@@ -212,7 +212,7 @@ function command(action) {
         model.value,
         selection.value.start,
         selection.value.end,
-        props.language
+        effectiveLanguage.value
       )
     );
 }
@@ -303,13 +303,23 @@ async function clipboard(action) {
 function complete(manual = true) {
   clearTimeout(completionTimer);
   if (manual) completionSuppressed = false;
+  const cursor = input.value?.selectionEnd || 0;
   emit('analyse', {
     bufferKey: props.bufferKey,
     source: model.value,
-    cursor: input.value?.selectionEnd || 0,
+    cursor,
     manual,
     requestId: ++analysisRequest
   });
+  if (!props.analysis && !props.readOnly && document.activeElement === input.value) {
+    const prefix = /[\w$:-]*$/.exec(model.value.slice(0, cursor))[0];
+    suggestions.value =
+      !completionSuppressed && (manual || prefix.length >= 2)
+        ? completions(model.value, cursor, effectiveLanguage.value)
+        : [];
+    suggestionIndex.value = 0;
+    nextTick(positionCompletions);
+  }
 }
 function acceptSuggestion(row, suffix = '') {
   dismissCompletions();
@@ -332,7 +342,9 @@ function goToLine(line) {
   select(position);
 }
 function navigateSymbol(delta) {
-  const symbols = props.analysis?.symbols || [],
+  const symbols =
+      props.analysis?.symbols ||
+      documentSymbols(model.value, effectiveLanguage.value),
     line = model.value.slice(0, selection.value.end).split('\n').length;
   const row =
     delta > 0
@@ -344,9 +356,10 @@ function definition() {
   const cursor = selection.value.end,
     before = /[\w$]*$/.exec(model.value.slice(0, cursor))[0],
     after = /^[\w$]*/.exec(model.value.slice(cursor))[0];
-  const row = props.analysis?.symbols.find(
-    (row) => row.name === before + after
-  );
+  const symbols =
+    props.analysis?.symbols ||
+    documentSymbols(model.value, effectiveLanguage.value);
+  const row = symbols.find((row) => row.name === before + after);
   if (row) goToLine(row.line);
 }
 function key(event) {
@@ -628,7 +641,7 @@ defineExpose({
           autocapitalize="off"
           autocomplete="off"
           :readonly="readOnly"
-          :aria-label="t('Script source')"
+          :aria-label="ariaLabel || t('Script source')"
           @select="syncSelection"
           @keyup="syncSelection"
           @click="syncSelection"
@@ -637,7 +650,10 @@ defineExpose({
             record();
           "
           @scroll="syncScroll"
-          @blur="blur"
+          @blur="
+            blur();
+            emit('blur', model);
+          "
         />
       </div>
       <div

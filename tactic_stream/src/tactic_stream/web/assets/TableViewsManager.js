@@ -1,9 +1,9 @@
-import { G as withCtx, H as watch, M as openBlock, O as onBeforeUnmount, X as ref, b as createVNode, et as unref, h as createBlock, m as createBaseVNode, p as computed, q as isRef } from "./vue.js";
+import { J as isRef, K as withCtx, N as openBlock, U as watch, Z as ref, g as createBlock, h as createBaseVNode, k as onBeforeUnmount, m as computed, tt as unref, x as createVNode } from "./vue.js";
 import { s as appearance } from "./AppButton.js";
 import { j as rpc } from "./index.js";
-import { H as observeFrameSizes, t as _sfc_main$1 } from "./FrameView.js";
+import { U as observeFrameSizes, t as _sfc_main$1 } from "./FrameView.js";
 import { t as _sfc_main$2 } from "./AppDialog.js";
-import { at as describe, ct as row, lt as rows, ot as initial, st as loaded, ut as transition } from "./RelatedObjects.js";
+import { ct as loaded, dt as transition, lt as row, ot as describe, st as initial, ut as rows } from "./RelatedObjects.js";
 //#region src/features/interface/TableViewsManager.vue
 var _sfc_main = {
 	__name: "TableViewsManager",
