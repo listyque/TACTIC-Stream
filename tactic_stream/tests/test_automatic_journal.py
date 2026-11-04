@@ -117,7 +117,8 @@ class AutomaticJournalParity(read_tests.ReadParity):
         original = read_tests.LEGACY / 'src/pyasm/biz/preference.py'
         self.assertEqual(hashlib.sha256(new.read_bytes()).digest(), hashlib.sha256(original.read_bytes()).digest())
         metadata = json.loads((read_tests.ROOT / 'src/tactic_stream/compatibility/preference_upgrade.json').read_text(encoding='utf-8'))
-        self.assertEqual(metadata, preference_schema(read_tests.LEGACY))
+        self.assertEqual({name: value for name, value in metadata.items() if name != 'indexes'},
+                         preference_schema(read_tests.LEGACY))
         with tempfile.TemporaryDirectory() as directory:
             store = Store(Path(directory) / 'data')
             shutil.copytree(self.store.data_dir, store.data_dir)

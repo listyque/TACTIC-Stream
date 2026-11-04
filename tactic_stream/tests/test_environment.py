@@ -101,6 +101,109 @@ class DataDirectories(unittest.TestCase):
                 self.assertTrue((data / 'repo').is_dir())
                 self.assertTrue((data / 'extensions').is_dir())
 
+    def test_startup_to_transaction_audit_fixes(self):
+        import asyncio
+        from pyasm.security.authenticator import Authenticator, hash_password
+        from pyasm.search.transaction import Transaction
+        from pyasm.search.sql import DbResource
+        from pyasm.search.search import SObject
+        from tactic_stream.server.server_events import ServerEvents
+        with tempfile.TemporaryDirectory() as temporary:
+            data = Path(temporary)
+            store = Store(data)
+            db_path = store.database_path('sthpw')
+            db_path.parent.mkdir(parents=True, exist_ok=True)
+            db_path.write_bytes(b'')
+            self.assertFalse(store.is_initialized())
+            db_path.unlink()
+            store.initialize(hash_password('audit-pass'))
+            self.assertTrue(store.is_initialized())
+            with patch.dict(os.environ, {'TACTIC_DATA_DIR': str(data), 'TACTIC_CONFIG_PATH': '', 'TACTIC_TMP_CONFIG_PATH': ''}),                  patch.object(sys, 'argv', ['tactic_stream', '--data-dir', str(data), 'init', '--if-needed']):
+                from tactic_stream.__main__ import main
+                self.assertFalse((data / 'config/tactic-conf.xml').exists())
+                main()
+                self.assertTrue((data / 'config/tactic-conf.xml').exists())
+            auth = Authenticator(store)
+            ticket = auth.get_ticket('admin', 'audit-pass')
+            with request_context(RequestContext(store, 'admin', 'admin')):
+                Config.set_value('security', 'case_insensitive_login', 'true')
+                self.assertEqual(auth.validate(ticket), 'admin')
+                tx = Transaction.get(create=True)
+                with store.connection(write=False):
+                    pass
+                with store.connection('sthpw', write=False) as db:
+                    pass
+                res = DbResource.get_default('sthpw')
+                self.assertTrue(tx.can_write_resource(res))
+                tx.verified_resources.add('custom_key')
+                SObject._clear_config_cache('sthpw/project')
+                self.assertNotIn('custom_key', tx.verified_resources)
+                tx.rollback()
+            events = ServerEvents(data, interval=0.01)
+            events.subscribers.append({'project': 'admin', 'subscription': {'channels': [], 'search_types': []}, 'since': 0, 'event': asyncio.Event(), 'changes': set(), 'client': {}})
+            calls = []
+            def flaky_read():
+                calls.append(1)
+                if len(calls) == 1:
+                    raise PermissionError('transient windows lock')
+                events.subscribers.clear()
+                raise OSError('stop after retry')
+            events.read_changes = flaky_read
+            asyncio.run(events.watch())
+            self.assertEqual(len(calls), 2)
+
+    def test_performance_file_and_cache_audit_fixes(self):
+        from pyasm.biz.file_catalog import FileCatalog
+        from pyasm.biz.schema import Schema
+        from pyasm.common import Container
+        from pyasm.search import Search, SObject
+        from pyasm.security import Sudo
+        from test_project_writes import install_writer, set_rules, PASSWORD
+        from tools.checkin_benchmark import prepare
+        with tempfile.TemporaryDirectory() as temporary:
+            store = Store(temporary)
+            api, _ = prepare(store)
+            install_writer(store)
+            rules = '<rules><rule group="project" code="one" access="allow"/><rule group="project" key="one" access="allow"/><rule group="search_type" code="cg/shot" project="one" access="allow"/></rules>'
+            set_rules(store, rules)
+            ticket = api.get_ticket('project_writer', PASSWORD)
+            with request_context(RequestContext(store, 'project_writer', 'one')):
+                api.auth.bind_security('project_writer', ticket)
+                self.assertIsNotNone(Schema.get_predefined_schema('admin'))
+                self.assertIsNotNone(Schema._PREDEFINED_DEFINITIONS)
+                shot = Search.get_by_code('cg/shot', 'SH001')
+                self.assertIsNotNone(shot)
+                with patch.object(Search, 'get_count', side_effect=AssertionError('get_count should not run on verified cache hit')),                      patch.object(Search, 'get_sobject', side_effect=AssertionError('get_sobject should not run on verified cache hit')):
+                    cached_shot = Search.get_by_code('cg/shot', 'SH001')
+                    self.assertIs(cached_shot, shot)
+                from pyasm.security.security import _clear_account_cache
+                set_rules(store, rules.replace('code="cg/shot" project="one" access="allow"', 'code="cg/shot" project="one" access="deny"'))
+                _clear_account_cache()
+                self.assertIsNone(Search.get_by_code('cg/shot', 'SH001'))
+                SObject.get_cache_dict(search_type='cg/shot').clear()
+                sudo = Sudo()
+                try:
+                    sudo_shot = Search.get_by_code('cg/shot', 'SH001')
+                    self.assertIsNotNone(sudo_shot)
+                finally:
+                    sudo.exit()
+                self.assertIsNone(Search.get_by_code('cg/shot', 'SH001'))
+            saved_pages = {}
+            loads = []
+            def load_page(code):
+                loads.append(code)
+                return saved_pages[code]
+            def save_page(node):
+                code = f'page_{len(saved_pages)}'
+                saved_pages[code] = node
+                return code
+            catalog = FileCatalog(load_page, save_page)
+            self.assertEqual(catalog.CACHE_SIZE, 512)
+            meta = catalog.store({'leaf': True, 'items': [{'path': 'a.txt', 'size': 4}]})
+            self.assertIn(meta['code'], catalog.cache)
+            self.assertEqual(catalog.node(meta['code'])['items'][0]['path'], 'a.txt')
+            self.assertEqual(loads, [])
+
 
 if __name__ == '__main__':
     unittest.main()

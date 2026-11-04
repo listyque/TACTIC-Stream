@@ -25,7 +25,8 @@ def publish_changes(data_dir, changes):
         login = audience[0] if audience else ''
         name = sha256(('\0'.join((project, search_type, login))).encode()).hexdigest()
         temporary = directory / (name + '.' + uuid4().hex + '.pending')
-        write_text(temporary, json.dumps([project, search_type, uuid4().hex, login, time.time_ns()]))
+        now = time.time_ns()
+        write_text(temporary, json.dumps([project, search_type, uuid4().hex, login, now]), fsync=False)
         try:
             target = directory / (name + '.json')
             with byte_lock(target):
@@ -33,7 +34,7 @@ def publish_changes(data_dir, changes):
                     existing_ts = json.loads(read_text(target))[-1] if target.exists() else -1
                 except (ValueError, TypeError, IndexError):
                     existing_ts = -1
-                if existing_ts > json.loads(read_text(temporary))[-1]:
+                if existing_ts > now:
                     temporary.unlink()
                 else:
                     replace(temporary, target)

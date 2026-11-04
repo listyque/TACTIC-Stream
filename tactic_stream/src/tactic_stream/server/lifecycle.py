@@ -50,8 +50,11 @@ def request_restart(revision, instance_id, request_id):
             raise ConfigConflict('Server or configuration changed; reload before restarting')
         path = monitor_directory() / 'restart.monitor'
         if path.exists():
-            pending = json.loads(path.read_text(encoding='utf-8'))
-            if pending['request_id'] == request_id:
+            try:
+                pending = json.loads(path.read_text(encoding='utf-8'))
+            except (OSError, ValueError):
+                pending = {}
+            if isinstance(pending, dict) and pending.get('request_id') == request_id:
                 return dict(runtime, state='restarting', restart_id=request_id)
             raise ConfigConflict('Another restart is already pending')
         save_config_file(path, json.dumps(dict(revision=revision, instance_id=instance_id,

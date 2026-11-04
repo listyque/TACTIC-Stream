@@ -39,14 +39,15 @@ def replace(source, destination):
             time.sleep(.01 * (attempt + 1))
 
 
-def write_text(path, value):
+def write_text(path, value, *, fsync=True):
     path = Path(path)
     temporary = path.with_name(path.name + '.' + uuid4().hex + '.tmp')
     try:
         with temporary.open('w', encoding='utf-8') as stream:
             stream.write(value)
             stream.flush()
-            os.fsync(stream.fileno())
+            if fsync:
+                os.fsync(stream.fileno())
         replace(temporary, path)
     finally:
         temporary.unlink(missing_ok=True)

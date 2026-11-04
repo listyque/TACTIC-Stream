@@ -5,7 +5,7 @@ from collections import OrderedDict
 
 class FileCatalog:
     PAGE_SIZE = 256
-    CACHE_SIZE = 64
+    CACHE_SIZE = 512
 
     def __init__(self, load, save):
         self.load, self.save = load, save
@@ -23,6 +23,10 @@ class FileCatalog:
 
     def store(self, node):
         code = self.save(node)
+        self.cache[code] = node
+        self.cache.move_to_end(code)
+        if len(self.cache) > self.CACHE_SIZE:
+            self.cache.popitem(last=False)
         actions=self.action_stats_node(node)
         return {'code': code, 'max': node['items'][-1]['path'] if node['leaf'] else node['items'][-1]['max'],
                 'count': sum(not item.get('deleted') for item in node['items']) if node['leaf'] else sum(item['count'] for item in node['items']),

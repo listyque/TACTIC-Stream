@@ -522,7 +522,7 @@ class Snapshot(SObject):
             return ''
 
         file_code = xml.get_attribute(node, "file_code")
-        file_object = Search.get_by_code("sthpw/file", file_code)
+        file_object = (self.files_dict or {}).get(file_code) or Search.get_by_code("sthpw/file", file_code)
 
         web_dir = self.get_web_dir(file_object=file_object)
         file_name = self._get_file_name(node)
@@ -558,7 +558,7 @@ class Snapshot(SObject):
             return ''
 
         file_code = xml.get_attribute(node, "file_code")
-        file_object = Search.get_by_code("sthpw/file", file_code)
+        file_object = (self.files_dict or {}).get(file_code) or Search.get_by_code("sthpw/file", file_code)
         lib_dir = self.get_lib_dir(file_type=type, file_object=file_object)
 
         file_name = self._get_file_name(node)
@@ -633,7 +633,7 @@ class Snapshot(SObject):
             file_code = xml.get_attribute(node, "file_code")
             context = self.get_value("context")
 
-            file_object = Search.get_by_code("sthpw/file", file_code)
+            file_object = (self.files_dict or {}).get(file_code) or Search.get_by_code("sthpw/file", file_code)
             #file_name = os.path.basename(file_object.get_value("source_path"))
 
             basename = os.path.basename(file_object.get_value("source_path"))
@@ -669,7 +669,7 @@ class Snapshot(SObject):
             file_code = xml.get_attribute(node, "file_code")
             context = self.get_value("context")
 
-            file_object = Search.get_by_code("sthpw/file", file_code)
+            file_object = (self.files_dict or {}).get(file_code) or Search.get_by_code("sthpw/file", file_code)
 
             basename = os.path.basename(file_object.get_value("source_path"))
             context = self.get_value("context")
@@ -688,7 +688,8 @@ class Snapshot(SObject):
 
         if expand_paths:
             repo_file_path = "%s/%s" % (repo_dirname, repo_file_name)
-            file_object = Search.get_by_code('sthpw/file', Xml.get_attribute(node, 'file_code'))
+            file_code = Xml.get_attribute(node, 'file_code')
+            file_object = (self.files_dict or {}).get(file_code) or Search.get_by_code('sthpw/file', file_code)
             if file_object and file_object.get_file_range():
                 file_paths = FileGroup.expand_paths("%s/%s" % (dirname, file_name), FileRange.get(file_object.get_file_range()))
             elif os.path.isdir(repo_file_path):

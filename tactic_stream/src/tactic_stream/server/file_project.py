@@ -20,22 +20,25 @@ _ATTACHMENT_SUFFIXES = {
 
 
 class FileProjectStaticFiles(StaticFiles):
-    def __init__(self, *args, private_jobs=None, api=None, **kwargs):
+    def __init__(self, *args, private_jobs=None, api=None, alias=None, **kwargs):
         super().__init__(*args, **kwargs)
         self.private_jobs=Path(private_jobs).resolve() if private_jobs else None
         self.api = api
+        self.alias = alias
 
     async def get_response(self, path, scope):
-        absolute = (Path(self.directory) / path).resolve()
-        if self.private_jobs and absolute.is_relative_to(self.private_jobs):
-            raise HTTPException(404)
-        if any(part.casefold() == 'file-projects' or part.casefold().endswith('.file-projects') for part in absolute.parts):
-            raise HTTPException(404)
         if self.api is not None:
             def check_auth():
-                from pyasm.common import Config
+                from pyasm.common import Config, Environment
                 from pyasm.search.search import RequestContext, request_context
                 with request_context(RequestContext(self.api.store, 'admin')):
+                    if self.alias:
+                        roots = Environment.get_asset_dirs()
+                        roots.setdefault('default', Environment.get_asset_dir())
+                        current_dir = roots.get(self.alias)
+                        if current_dir and str(current_dir) != str(self.directory):
+                            self.directory = current_dir
+                            self.all_directories = self.get_directories(current_dir, None)
                     if Config.get_value('security', 'require_asset_auth') != 'true':
                         return True
                 request = Request(scope)
@@ -58,6 +61,11 @@ class FileProjectStaticFiles(StaticFiles):
                     return False
             if not await run_in_threadpool(check_auth):
                 raise HTTPException(403)
+        absolute = (Path(self.directory) / path).resolve()
+        if self.private_jobs and absolute.is_relative_to(self.private_jobs):
+            raise HTTPException(404)
+        if any(part.casefold() == 'file-projects' or part.casefold().endswith('.file-projects') for part in absolute.parts):
+            raise HTTPException(404)
         response = await super().get_response(path, scope)
         response.headers.setdefault('X-Content-Type-Options', 'nosniff')
         response.headers.setdefault(

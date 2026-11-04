@@ -70,13 +70,12 @@ def get_virtual_snapshot_extended(server, search_key, context, files_dict, snaps
         search = Search('sthpw/snapshot')
         search.add_sobject_filter(sobject)
         search.add_filter('context', context)
+        search.add_column('version')
+        search.add_order_by('version desc')
+        search.set_limit(1)
         snaps = search.get_sobjects()
-        versions = []
-        for sn in snaps:
-            versions.append(sn.get_attr_value('version'))
-
-        if versions:
-            return max(versions)
+        if snaps:
+            return snaps[0].get_attr_value('version')
 
     if not version:
         ver = get_max_version(context=context, search_key=search_key)
@@ -271,13 +270,12 @@ def create_snapshot_extended(server, search_key, context, project_code=None, sna
         search = Search('sthpw/snapshot')
         search.add_sobject_filter(sobject)
         search.add_filter('context', context)
+        search.add_column('version')
+        search.add_order_by('version desc')
+        search.set_limit(1)
         snaps = search.get_sobjects()
-        versions = []
-        for sn in snaps:
-            versions.append(sn.get_attr_value('version'))
-
-        if versions:
-            return max(versions)
+        if snaps:
+            return snaps[0].get_attr_value('version')
 
     if not version:
         ver = get_max_version(context=context, search_key=search_key)

@@ -22,7 +22,7 @@ DEFAULT_TEMPLATES = ['$FILENAME', '$FILENAME.$EXT', '$FILENAME.$FRAME.$EXT', '$F
                      '$FILENAME_$UV.$EXT', '$FILENAME.$FRAME_$UDIM.$EXT', '$FILENAME.$FRAME_$UV.$EXT', '$FILENAME_$UV.$FRAME.$EXT']
 
 
-def _check_existing_file(path, root, replaceable):
+def _check_existing_file(path, root, replaceable, dir_cache=None):
     target = Path(path)
     if not os.path.lexists(target):
         return
@@ -30,15 +30,20 @@ def _check_existing_file(path, root, replaceable):
         raise UserException('Repository path is a directory: %s' % target)
     if target.absolute() in replaceable:
         return
-    files = Search('sthpw/file')
     relative = target.parent.relative_to(root).as_posix()
-    files.add_op('begin')
-    files.add_filters('relative_dir', [relative, target.parent.as_posix()])
-    if relative == '.':
-        files.add_empty_filter('relative_dir')
-    files.add_op('or')
-    if any(target.absolute() == member.absolute()
-           for file in files.get_sobjects() for member in metadata_paths(file)):
+    if dir_cache is not None and relative in dir_cache:
+        existing_paths = dir_cache[relative]
+    else:
+        files = Search('sthpw/file')
+        files.add_op('begin')
+        files.add_filters('relative_dir', [relative, target.parent.as_posix()])
+        if relative == '.':
+            files.add_empty_filter('relative_dir')
+        files.add_op('or')
+        existing_paths = {member.absolute() for file in files.get_sobjects() for member in metadata_paths(file)}
+        if dir_cache is not None:
+            dir_cache[relative] = existing_paths
+    if target.absolute() in existing_paths:
         raise UserException('Repository path already exists in a saved snapshot: %s' % target)
 
 
@@ -230,10 +235,11 @@ class BrowserCheckinCmd(Command):
         planned = [path for row in projections for dest in destinations for path in row[dest]]
         if len(set(os.path.normcase(path) for path in planned)) != len(planned):
             raise UserException('Naming creates duplicate file paths')
+        existing_dir_cache = {}
         for row in projections:
             for dest in destinations:
                 for path in row[dest]:
-                    _check_existing_file(path, root, replaceable[dest])
+                    _check_existing_file(path, root, replaceable[dest], dir_cache=existing_dir_cache)
         versionless_mode = ProjectSetting.get_value_by_key('versionless_mode') or Config.get_value('checkin','versionless_mode') or ('symlink' if os.name == 'posix' else 'copy')
         if 'versionless_mode' in self.kwargs:
             versionless_mode = self.kwargs['versionless_mode']
@@ -278,7 +284,7 @@ class BrowserCheckinCmd(Command):
                     if not target.resolve().is_relative_to(root) or target.as_posix() in planned:
                         raise UserException('Repository path already exists: %s' % target)
                     if dest in destinations:
-                        _check_existing_file(target, root, replaceable[dest])
+                        _check_existing_file(target, root, replaceable[dest], dir_cache=existing_dir_cache)
                         FileUndo.mkdir(str(target.parent))
                         if dest == 'versionless' and 'versioned' in destinations and versionless_mode != 'copy':
                             original = root / derivative['versioned']['paths'][0] / ''.join(derivative['versioned']['names'][0])

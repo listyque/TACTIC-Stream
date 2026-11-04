@@ -110,10 +110,15 @@ class Authenticator:
                 if not name:
                     raise AuthenticationError('Invalid or expired ticket')
                 if Config.get_value('security', 'case_insensitive_login') == 'true':
-                    name = name.lower()
-                    login = next((row for row in db.execute('SELECT login,upn,s_status FROM login')
-                                  if (row['login'] or '').lower() == name or
-                                  (name != 'admin' and (row['upn'] or '').lower() == name)), None)
+                    login = (db.execute('SELECT login,s_status FROM login WHERE login=' + marker, (name,)).fetchone()
+                             if name == 'admin' else
+                             db.execute('SELECT login,s_status FROM login WHERE login=' + marker +
+                                        ' OR upn=' + marker + ' LIMIT 1', (name, name)).fetchone())
+                    if not login:
+                        lowered = name.lower()
+                        login = next((row for row in db.execute('SELECT login,upn,s_status FROM login')
+                                      if (row['login'] or '').lower() == lowered or
+                                      (lowered != 'admin' and (row['upn'] or '').lower() == lowered)), None)
                 elif name == 'admin':
                     login = db.execute('SELECT login,s_status FROM login WHERE login=' + marker, (name,)).fetchone()
                 else:

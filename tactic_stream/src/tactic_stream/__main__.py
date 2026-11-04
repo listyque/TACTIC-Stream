@@ -43,6 +43,7 @@ def main():
         check_database_config(bootstrap=True)
     if args.command == "init":
         if args.if_needed and Store(args.data_dir).is_initialized():
+            FirstRunInit().execute()
             print('Configured system database is already initialized')
             return
         password = getpass.getpass("New administrator password: ")

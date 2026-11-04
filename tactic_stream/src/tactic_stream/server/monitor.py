@@ -213,23 +213,27 @@ class TacticMonitor:
             request_path = self.log_dir / 'restart.monitor'
             if request_path.exists():
                 from pyasm.common import Config
-                request = json.loads(request_path.read_text(encoding='utf-8'))
-                if request.get('instance_id') == self.instance_id:
-                    self.restart_id = request['request_id']
-                    self.restart_error = ''
-                    try:
-                        Config.reload_config()
-                        if Config.get_revision() != request['revision']:
-                            raise ValueError('Configuration changed; reload before restarting')
-                        read_server_config(Path(os.environ.get('TACTIC_DATA_DIR', 'data')), self.host, self.port)
-                    except Exception as error:
-                        self.restart_error = str(error)
-                    else:
-                        self._restart_requested = True
-                    self._write_status('restarting' if self._restart_requested else 'running')
-                request_path.unlink()
-                if self._restart_requested:
-                    break
+                try:
+                    request = json.loads(request_path.read_text(encoding='utf-8'))
+                except (OSError, ValueError):
+                    request = None
+                if isinstance(request, dict):
+                    if request.get('instance_id') == self.instance_id:
+                        self.restart_id = request.get('request_id', '')
+                        self.restart_error = ''
+                        try:
+                            Config.reload_config()
+                            if Config.get_revision() != request.get('revision'):
+                                raise ValueError('Configuration changed; reload before restarting')
+                            read_server_config(Path(os.environ.get('TACTIC_DATA_DIR', 'data')), self.host, self.port)
+                        except Exception as error:
+                            self.restart_error = str(error)
+                        else:
+                            self._restart_requested = True
+                        self._write_status('restarting' if self._restart_requested else 'running')
+                    request_path.unlink(missing_ok=True)
+                    if self._restart_requested:
+                        break
             now = time.monotonic()
             ready = True
             for index, worker in enumerate(self.workers):

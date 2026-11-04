@@ -62,7 +62,7 @@ class ServerEvents:
 
     def write_clients(self, rows):
         self.clients_file.parent.mkdir(parents=True, exist_ok=True)
-        write_text(self.clients_file, json.dumps(dict(updated=time.time(), clients=rows)))
+        write_text(self.clients_file, json.dumps(dict(updated=time.time(), clients=rows)), fsync=False)
 
     async def watch(self):
         while True:
@@ -81,6 +81,8 @@ class ServerEvents:
                     continue
                 async with self.start_lock:
                     changes = await asyncio.to_thread(self.read_changes)
+            except PermissionError:
+                continue
             except (OSError, ValueError):
                 logging.getLogger(__name__).exception('Server event watcher stopped; clients must resynchronise')
                 for subscriber in self.subscribers:

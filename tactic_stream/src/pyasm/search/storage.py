@@ -51,7 +51,16 @@ class Store:
     def is_initialized(self):
         resource = self.get_db_resource()
         if resource.get_vendor() == 'Sqlite':
-            return self.database_path('sthpw').is_file()
+            path = self.database_path('sthpw')
+            if not path.is_file() or path.stat().st_size == 0:
+                return False
+            from contextlib import closing
+            try:
+                with closing(sqlite3.connect(path.as_uri() + '?mode=ro', uri=True, timeout=5)) as db:
+                    return all(db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?", (table,)).fetchone()
+                               for table in ('search_object', 'login', 'project', 'ticket'))
+            except sqlite3.Error:
+                return False
         import psycopg
         try:
             with resource.get_database_impl()._connect(resource) as db:
@@ -160,7 +169,7 @@ class Store:
             changed = resource.get_database_impl().upgrade(resource)
         else:
             with self.connection(write=True) as db:
-                db.execute("BEGIN")
+                db.execute("BEGIN IMMEDIATE")
                 changed = self._upgrade_schema(db)
         from pyasm.search.search import RequestContext, Search, request_context
         with request_context(RequestContext(self, 'admin')):

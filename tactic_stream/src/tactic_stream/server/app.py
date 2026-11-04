@@ -146,8 +146,11 @@ def create_app(data_dir: Path, thread_count=None, *, event_collector=True) -> Fa
                     from pyasm.search.file_recovery import recover_files
                     try:
                         recover_files(api.store)
-                    except Exception:
-                        LOG.exception('File recovery unresolved; repository writes remain blocked until recovery succeeds')
+                    except Exception as exc:
+                        if 'Another worker is recovering' in str(exc):
+                            LOG.info('File recovery is already running in another worker')
+                        else:
+                            LOG.exception('File recovery unresolved; repository writes remain blocked until recovery succeeds')
             await run_in_threadpool(initialize_core)
         process = stop = file_process = file_stop = None
         from tactic_stream.server.startup import read_server_config
@@ -212,7 +215,7 @@ def create_app(data_dir: Path, thread_count=None, *, event_collector=True) -> Fa
     from tactic_stream.server.file_project import FileProjectStaticFiles
     for path, alias in repository_web_paths(roots, web_dirs):
         app.mount(path, FileProjectStaticFiles(directory=roots[alias], check_dir=False,
-            private_jobs=api.store.data_dir / 'temp/file-jobs', api=api), name='repository-' + alias)
+            private_jobs=api.store.data_dir / 'temp/file-jobs', api=api, alias=alias), name='repository-' + alias)
 
     @app.get("/", include_in_schema=False)
     @app.get("/projects/{project}/", include_in_schema=False)

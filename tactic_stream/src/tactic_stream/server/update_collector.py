@@ -57,7 +57,7 @@ class UpdateCollector:
         self.dirty = changed
         if changed:
             try:
-                write_text(self.feed, json.dumps([(*key, *value) for key, value in sorted(self.revisions.items())]))
+                write_text(self.feed, json.dumps([(*key, *value) for key, value in sorted(self.revisions.items())]), fsync=False)
                 self.dirty = False
             except PermissionError:
                 logging.getLogger(__name__).exception('Update feed replacement deferred')

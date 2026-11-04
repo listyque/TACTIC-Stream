@@ -86,15 +86,22 @@ def install_routes(app, api):
                     with path.open('w+b' if batch or not path.exists() else 'r+b') as output:
                         output.truncate(offset)
                         output.seek(offset)
+                        buf = bytearray()
                         async for block in request.stream():
                             received += len(block)
                             if received > size:
                                 raise ValueError('Upload exceeded declared block size')
                             digest.update(block)
-                            await run_in_threadpool(output.write, block)
+                            buf.extend(block)
+                            if len(buf) >= 1024 * 1024:
+                                await run_in_threadpool(output.write, bytes(buf))
+                                buf.clear()
                             if monotonic() - touched > 10:
                                 await run_in_threadpool(call, request, 'transfer_write_touch', **args, token=lease['token'])
                                 touched = monotonic()
+                        if buf:
+                            await run_in_threadpool(output.write, bytes(buf))
+                            buf.clear()
                         if received != size:
                             raise ValueError('Truncated upload block')
                         if request.headers.get('X-Chunk-SHA256') and digest.hexdigest() != request.headers['X-Chunk-SHA256']:

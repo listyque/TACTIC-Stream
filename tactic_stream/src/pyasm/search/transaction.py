@@ -49,6 +49,7 @@ class Transaction(Base):
         self.file_journal = None
         self.file_identity = None
         self.write_resource = None
+        self.verified_resources = set()
         self.commit_started = False
         self.description = ""
         self.xml = Xml()
@@ -134,7 +135,7 @@ class Transaction(Base):
             self.check_write_resource(resource)
             return True  # Ownership was checked at binding; row/column ACL still runs per SObject.
         context = _context.get()
-        if key == context.store.get_db_resource()._get_connection_key() or key in self.created_databases:
+        if key == context.store.get_db_resource()._get_connection_key() or key in self.created_databases or key in self.verified_resources:
             return True
         # An existing project must actually own the configured resource. A name
         # supplied to Sql alone does not authorize writes to another database.
@@ -142,8 +143,11 @@ class Transaction(Base):
         with context.store.connection() as db:
             owners = db.execute('SELECT db_resource FROM project WHERE COALESCE(NULLIF("database",\'\'),code)=' + parameter +
                                 ' AND (s_status IS NULL OR s_status<>\'retired\')', (resource.get_database(),)).fetchall()
-        return any((DbResource.get_by_code(owner['db_resource'], resource.get_database()) if owner['db_resource'] else
-                    DbResource.get_default(resource.get_database()))._get_connection_key() == key for owner in owners)
+        allowed = any((DbResource.get_by_code(owner['db_resource'], resource.get_database()) if owner['db_resource'] else
+                       DbResource.get_default(resource.get_database()))._get_connection_key() == key for owner in owners)
+        if allowed:
+            self.verified_resources.add(key)
+        return allowed
 
     def _has_multiple_writers(self):
         return sum(bool(getattr(sql, '_has_writes', False)) for sql in self.databases.values()) > 1
@@ -1013,17 +1017,20 @@ class FileUndo:
     def reclaim(paths):
         """Restore inplace sources removed by this same Command, with replayable moves."""
         removed = Transaction.get().get_xml().get_nodes('transaction/file')
+        by_src = {}
+        for node in reversed(removed):
+            if Xml.get_attribute(node, 'type') != 'remove' or Xml.get_attribute(node, 'state') != 'done':
+                continue
+            original = FileUndo._resolve_path(Xml.get_attribute(node, 'src'))
+            norm_src = os.path.normcase(os.path.abspath(original))
+            if norm_src not in by_src:
+                by_src[norm_src] = FileUndo._resolve_path(Xml.get_attribute(node, 'dst'))
         for path in paths:
             if os.path.lexists(path):
                 continue
-            for node in reversed(removed):
-                if Xml.get_attribute(node, 'type') != 'remove' or Xml.get_attribute(node, 'state') != 'done':
-                    continue
-                original = FileUndo._resolve_path(Xml.get_attribute(node, 'src'))
-                backup = FileUndo._resolve_path(Xml.get_attribute(node, 'dst'))
-                if os.path.normcase(os.path.abspath(original)) == os.path.normcase(os.path.abspath(path)) and os.path.lexists(backup):
-                    FileUndo.move(backup, path)
-                    break
+            backup = by_src.get(os.path.normcase(os.path.abspath(path)))
+            if backup and os.path.lexists(backup):
+                FileUndo.move(backup, path)
 
     def symlink(src,dst,mode='symlink'):
         """Create a versionless link or copy, retaining replaced paths for rollback."""

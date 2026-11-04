@@ -1213,8 +1213,12 @@ class SObject:
             check_project(context.project)
             return
         if base in ('sthpw/snapshot', 'sthpw/file') and Container.get('Checkin:writing'):
-            with context.store.connection() as db:
-                admin = Authenticator._admin(db, context.login, system.get_database_impl().get_parameter())
+            admin_key = ('Checkin:admin', context.login, Container.get('FileUndo:identity-revision'))
+            admin = Container.get(admin_key)
+            if admin is None:
+                with context.store.connection() as db:
+                    admin = bool(Authenticator._admin(db, context.login, system.get_database_impl().get_parameter()))
+                Container.put(admin_key, admin)
             if not admin:
                 self._check_repository_write(access)
                 return
@@ -1932,6 +1936,11 @@ class SObject:
 
     @staticmethod
     def _clear_config_cache(base):
+        if base in ('sthpw/project', 'sthpw/db_resource'):
+            from pyasm.search.transaction import Transaction
+            tx = Transaction.get()
+            if tx is not None:
+                tx.verified_resources.clear()
         if base == 'sthpw/wdg_settings':
             for key in list(Container.get_instance().get_data()):
                 if isinstance(key, str) and key.startswith('sthpw/wdg_settings:'):
@@ -2013,17 +2022,25 @@ class SObject:
     @classmethod
     def get_by_search(cls, search, key, is_multi=False):
         from pyasm.common.environment import Environment
+        from pyasm.security import Sudo
         security = Environment.get_security()
-        # A Sudo-loaded object must not bypass the caller's current ACL via
-        # the identity cache. Keep pending state only after verifying access.
-        if security is not None and not security.is_admin() and search.get_count() == 0:
-            return [] if is_multi else None
         search_type = search.get_base_search_type() if cls.__name__ == 'SObject' else None
+        base_type = search_type or SearchKey.extract_base_search_type(cls.SEARCH_TYPE)
+        acl_key = ('SObject:acl_verified', _context.get().login, Container.get('FileUndo:identity-revision'), base_type, key)
         cached = cls.get_cached_obj(key, search_type=search_type)
         if cached:
+            # A Sudo-loaded object must not bypass the caller's current ACL via
+            # the identity cache. Keep pending state only after verifying access.
+            if security is not None and not security.is_admin() and not Sudo.is_sudo() and not Container.get(acl_key):
+                if search.get_count() == 0:
+                    return [] if is_multi else None
+                Container.put(acl_key, True)
             return ([] if is_multi else None) if cached == '__NONE__' else cached
         result = search.get_sobjects() if is_multi else search.get_sobject()
-        cls.cache_sobject(key, result, search_type=search_type)
+        if result or security is None or security.is_admin() or Sudo.is_sudo():
+            cls.cache_sobject(key, result, search_type=search_type)
+        if result and security is not None and not security.is_admin() and not Sudo.is_sudo():
+            Container.put(acl_key, True)
         return result
 
     @classmethod

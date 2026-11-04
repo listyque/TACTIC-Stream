@@ -26,12 +26,13 @@ class FileJournal:
         self.completed = set()
         self.append({'asset_dir': Environment.get_asset_dir()})
 
-    def append(self, value):
+    def append(self, value, fsync=False):
         if self.stream.closed:
             self.stream = self.path.open('a', encoding='utf-8')
         self.stream.write(json.dumps(value, ensure_ascii=False) + '\n')
         self.stream.flush()
-        os.fsync(self.stream.fileno())
+        if fsync:
+            os.fsync(self.stream.fileno())
 
     def claim(self):
         if self.lock is None:
@@ -70,7 +71,7 @@ class FileJournal:
         self.resources = [dict(database=sql.get_database_name(), schema=sql.get_db_resource().get_schema(),
                                key=sql.get_db_resource().get_key()) for sql in databases]
         self.databases = databases
-        self.append({'databases': self.resources})
+        self.append({'databases': self.resources}, fsync=True)
         for sql in databases:
             sql._record_file_commit(self.token)
 

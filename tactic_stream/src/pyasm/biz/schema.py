@@ -296,6 +296,8 @@ class Schema(SObject):
         to_col = attrs.get("to_col") or "id"
         return (to_col, from_col) if attrs["from"] == search_type else (from_col, to_col)
 
+    _PREDEFINED_DEFINITIONS = None
+
     @classmethod
     def get_predefined_schema(cls, code):
         if not code:
@@ -303,8 +305,9 @@ class Schema(SObject):
         cache = _context.get().schemas
         key = ("predefined", code)
         if key not in cache:
-            definitions = json.loads((files("tactic_stream") / "compatibility/predefined_schemas.json").read_text(encoding="utf-8"))
-            cache[key] = cls(cls.SEARCH_TYPE, {"code": code, "schema": definitions.get(code) or "<schema/>"}, dependencies=False)
+            if cls._PREDEFINED_DEFINITIONS is None:
+                cls._PREDEFINED_DEFINITIONS = json.loads((files("tactic_stream") / "compatibility/predefined_schemas.json").read_text(encoding="utf-8"))
+            cache[key] = cls(cls.SEARCH_TYPE, {"code": code, "schema": cls._PREDEFINED_DEFINITIONS.get(code) or "<schema/>"}, dependencies=False)
         return cache[key]
 
     @classmethod

@@ -154,8 +154,9 @@ class SubmitCheckinChunkCmd(Command):
         if not isinstance(operations, list) or len(operations) > MAX_OPERATIONS or not isinstance(pieces, list) or not 1 <= len(pieces) <= 50 or len(pieces) != len(uploads):
             raise ValueError('A check-in chunk requires at most 50 file parts')
         digest = hashlib.sha256(json.dumps([operations, pieces], sort_keys=True, ensure_ascii=False).encode())
-        for _name, content in uploads:
-            digest.update(hashlib.sha256(content).digest())
+        part_hashes = [hashlib.sha256(content) for _name, content in uploads]
+        for part_hash in part_hashes:
+            digest.update(part_hash.digest())
         digest = digest.hexdigest()
         from pyasm.search import Transaction
         from uuid import uuid4
@@ -164,14 +165,14 @@ class SubmitCheckinChunkCmd(Command):
         prepared_parts = []
         root_dir = staging_root(code)
         try:
-            for piece, (_name, content) in zip(pieces, uploads):
+            for piece, (_name, content), part_hash in zip(pieces, uploads, part_hashes):
                 if not isinstance(piece, dict) or set(piece) != {'operation_id', 'file_index', 'offset'}:
                     raise ValueError('Invalid check-in file part')
-                sha = hashlib.sha256(content).hexdigest()
+                sha = part_hash.hexdigest()
                 root_dir.mkdir(parents=True, exist_ok=True)
                 temporary = root_dir / ('.upload_' + uuid4().hex + '.part')
                 with temporary.open('wb') as stream:
-                    stream.write(content); stream.flush(); os.fsync(stream.fileno())
+                    stream.write(content); stream.flush()
                 prepared_parts.append((piece, content, sha, temporary))
             with queue_lock():
                 search = Search('sthpw/queue'); search.add_filter('code', code)
@@ -300,9 +301,11 @@ class CheckinQueueJobCmd(Command):
             if destination.is_symlink():
                 raise SecurityException('Check-in staging links are not supported')
             position = 0
-            checksum = hashlib.sha256()
+            parts_for_file = sorted(value['parts'][str(index)].items(), key=lambda item:int(item[0]))
+            single_part = len(parts_for_file) == 1
+            checksum = None if single_part else hashlib.sha256()
             with destination.open('wb') as target:
-                for start, part in sorted(value['parts'][str(index)].items(), key=lambda item:int(item[0])):
+                for start, part in parts_for_file:
                     if int(start) != position:
                         raise UserException('Check-in file has a missing part')
                     path = root / str(index) / (start + '_' + part['sha256'])
@@ -311,12 +314,16 @@ class CheckinQueueJobCmd(Command):
                     sha = hashlib.sha256()
                     with path.open('rb') as source:
                         while content := source.read(4 * 1024 * 1024):
-                            target.write(content); sha.update(content); checksum.update(content); position += len(content)
+                            target.write(content); sha.update(content); position += len(content)
+                            if checksum is not None:
+                                checksum.update(content)
                     if sha.hexdigest() != part['sha256']:
                         raise UserException('Check-in file part changed after upload')
+                    if single_part:
+                        checksum = sha
             if position != record['size']:
                 raise UserException('Check-in file size does not match its manifest')
-            if record.get('sha256') and checksum.hexdigest() != record['sha256']:
+            if record.get('sha256') and (checksum or hashlib.sha256()).hexdigest() != record['sha256']:
                 raise UserException('Check-in source changed while its parts were uploaded')
             names.append(name)
         command = BrowserCheckinCmd(**dict(value['options'], action='checkin', files=names))

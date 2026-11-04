@@ -147,6 +147,7 @@ class _ClaimJobCmd(Command):
                 save_queue(job)
             else:
                 job.commit()
+                SObject.get_cache_dict(search_type='sthpw/queue').clear()
             job_updated(job)
         return job
 
@@ -171,6 +172,7 @@ class _FinishJobsCmd(Command):
                 save_queue(job)
             else:
                 job.commit()
+                SObject.get_cache_dict(search_type='sthpw/queue').clear()
             job_updated(job, error=error)
 
 
@@ -364,6 +366,7 @@ class JobTask(SchedulerTask):
                     return
             if not completed:
                 Command.execute_cmd(_FinishJobsCmd(host=self.get_process_key(), job_id=job.get_id(), state='error', error=failure))
+            SObject.get_cache_dict(search_type='sthpw/queue').clear()
             from .checkin_queue_cmd import cleanup_job
             saved = Search.get_by_id('sthpw/queue', job.get_id())
             try:
@@ -373,6 +376,8 @@ class JobTask(SchedulerTask):
             self.jobs_completed += 1
             log.info('Job %s: %s', job.get_code(), 'complete' if completed else 'error or cancelled')
         finally:
+            from pyasm.common import Container
+            Container.remove('Trigger:prev_called_triggers')
             self.jobs.remove(job)
             self.job = None
         return True
