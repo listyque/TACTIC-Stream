@@ -32,6 +32,9 @@ The running server imports neither the `legacy` directory nor Handler. Native `p
 
 ## Ordinary account permissions
 
+When `security/api_method_restricted` is enabled, configured `api_method` denies
+apply to read methods as well as writes, through JSON and XML-RPC dispatch.
+
 Object methods do not require an administrator merely because of their names. Current project, object and column ACLs decide access. A reader cannot create or modify an object/snapshot; denying `s_status` blocks retirement. Accounts, system settings, arbitrary commands and script execution have separate protections.
 
 Check-in write authority is tied to a visible parent. Remote XML-RPC and the local SDK inside PythonCmd use the same check. Nested calls restore previous authority. Snapshot authors come from authentication; changing the parent/project cannot bypass access rules.

@@ -31,6 +31,13 @@ there is no parallel application-specific Asset/Task model. Database differences
 belong to Sql/DbResource/DatabaseImpl and vendor implementations. Commands own
 permissions, transactions, hooks and effects; direct SQL is not a substitute.
 
+Result cards count snapshot contexts through native grouped Search queries for
+code/id and typed search_code/search_id relationships. They retain project, row
+permission and retirement filters without loading version histories. Specialized
+graph relationships keep the native related-object path. Static emoji font data
+is served without gzip: its embedded PNG glyphs already compress well; other
+eligible text and font assets retain negotiated compression.
+
 Use the [core model](../frontend/public/help/core_model.en.md),
 [agent model](admin_agent/MODEL.md) and
 [current schema references](admin_agent/SOURCES.md#ts-server-structures).

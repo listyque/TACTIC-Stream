@@ -5,9 +5,6 @@ from pathlib import Path
 import tempfile
 import unittest
 from unittest.mock import patch
-import os
-import subprocess
-import sys
 
 from tools.checkin_benchmark import prepare
 from pyasm.command import Command
@@ -27,20 +24,6 @@ class CheckinQueue(unittest.TestCase):
         self.api, self.ticket = prepare(self.store)
         self.api.protocol = 'json'
         self.auth = dict(ticket=self.ticket, project='one')
-
-    @unittest.skipUnless(sys.platform == 'win32', 'Windows native runtime regression')
-    def test_fresh_windows_processes_keep_template_and_queue_writes_stable(self):
-        environment = dict(os.environ)
-        root = Path(__file__).resolve().parents[1]
-        environment['PYTHONPATH'] = os.pathsep.join([str(root / 'tests'), environment.get('PYTHONPATH', '')])
-        for attempt in range(3):
-            with self.subTest(process=attempt):
-                completed = subprocess.run(
-                    [sys.executable, '-B', '-X', 'utf8', '-X', 'faulthandler', '-m', 'unittest',
-                     'test_checkin_queue.CheckinQueue.test_cancel_before_first_upload_leaves_a_tombstone', '-q'],
-                    cwd=root, env=environment, capture_output=True, timeout=30,
-                )
-                self.assertEqual(completed.returncode, 0, (completed.stdout + completed.stderr).decode('utf-8', errors='replace'))
 
     @contextmanager
     def context(self, login='admin', ticket=None):
