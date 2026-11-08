@@ -109,7 +109,7 @@ export default {
       const address = customPageLink(link, location.origin)
       return address ? this.openBrowserLocation(null, address, false) : this.openRichLink(link, false, project)
     },
-    openTaskManager: (record, process, filters, taskKey) => this.canAdminister ? this.windowPage ? this.openWindowTaskManager(null, record, process, filters, taskKey) : this.$refs.taskManager.openForObjects(record, process, filters, taskKey) : this.showWorkspaceNotice('Access denied'),
+    openTaskManager: (record, process, filters, taskKey) => this.windowPage ? this.openWindowTaskManager(null, record, process, filters, taskKey) : this.$refs.taskManager.openForObjects(record, process, filters, taskKey),
     openTaskInspector: (record, cell, process, taskKey, source) => this.openTaskInspector(record, cell, process, taskKey, source),
     openTableCheckin: (record,cell,project) => this.openTableCheckin(record,cell,project,true),
     openTableSecurity: code => this.openTableSecurity(code),
@@ -608,8 +608,9 @@ export default {
     async openTablePort(command,record) {
       const options = command.options || {}, kind = command.type
       const session=this.session, project=this.workspaceProject
-      const current=()=>{if(this.session!==session || this.workspaceProject!==project || !this.canAdminister) throw new Error('Connection context changed. Close this form and reopen it before saving.')}
-      if (!this.canAdminister) throw new Error('Access denied')
+      const taskAction = ['schedule','task-details','add-task','table-schedule'].includes(kind)
+      const current=()=>{if(this.session!==session || this.workspaceProject!==project || !this.canAdminister && !taskAction) throw new Error('Connection context changed. Close this form and reopen it before saving.')}
+      if (!this.canAdminister && !taskAction) throw new Error('Access denied')
       if (kind === 'schedule') { await this.$refs.taskManager.openForUser({login:options.login}); return }
       if (kind === 'script') { await this.openScriptEditor(options.script_path); return }
       if (kind === 'work-hours') {
@@ -1093,8 +1094,8 @@ export default {
       if (id === 'description') this.descriptionMounted = true
       if (id === 'knowledge') { this.knowledgeMounted = true; nextTick(() => { this.knowledgeActive = !!this.$refs.docks?.presented('knowledge') }) }
       if (id === 'snapshot') { this.snapshotMounted = true; nextTick(() => { this.snapshotActive = !!this.$refs.docks?.presented('snapshot') }) }
-      if (id === 'tasks' && this.canAdminister) this.$refs.taskManager.open(false, '', {}, false, null, !restoring)
-      if (id === 'task_calendar' && this.canAdminister) { this.updatesTasksOpen = true; this.$refs.taskManager.open(false, '', {}, true) }
+      if (id === 'tasks') this.$refs.taskManager.open(false, '', {}, false, null, !restoring)
+      if (id === 'task_calendar') { this.updatesTasksOpen = true; this.$refs.taskManager.open(false, '', {}, true) }
       if (id === 'commit_queue' && !this.fileProject && !restoring) this.openCommitQueue()
     },
     async openWorkHours(mode = 'week', task = null, project = this.workspaceView.project, day = '') {
@@ -2410,7 +2411,7 @@ export default {
       <div v-if="selectedRecords.length && (resultMode !== 'continious' || selectedRecords.length > 1 || mobile)" class="selection-actions" role="group" :aria-label="t('Selected record actions')" @toggle.capture="menuToggled">
         <AppButton :label="t(selectedRecords.length === 1 ? 'Deselect {count} item' : 'Deselect {count} items', { count: selectedRecords.length })" :translate-label="false" @click="selectedKeys = []" />
         <AppMenu ref="selectionMenu" label="Selected record actions">
-            <AppButton v-if="canAdminister" label="Tasks for selected objects" icon="MDI_CLIPBOARD_TEXT_OUTLINE" @click="$refs.taskManager.open(true)" />
+            <AppButton label="Tasks for selected objects" icon="MDI_CLIPBOARD_TEXT_OUTLINE" @click="$refs.taskManager.open(true)" />
             <AppButton v-if="interfaceConfig?.operations?.edit" label="Edit selected" icon="edit" @click="$refs.recordForm.open(selectedKeys)" />
             <AppButton v-if="interfaceConfig?.operations?.retire && selectedRecords.some(record => record[interfaceConfig.operations.retire_column] !== 'retired')" label="Retire selected" icon="archive" @click="$refs.objectAction.open(selectedRecords, 'retire')" />
             <AppButton v-if="interfaceConfig?.operations?.retire && selectedRecords.some(record => record[interfaceConfig.operations.retire_column] === 'retired')" label="Reactivate selected" icon="refresh" @click="$refs.objectAction.open(selectedRecords, 'reactivate')" />
@@ -2462,7 +2463,7 @@ export default {
     <Timesheet v-if="!windowPage" ref="timesheet" dock-target="#dock-timesheet" dock-mode="week" :ticket="session.ticket" :project="workHoursProjects.week || workspaceView.project" :current-user="session.login" @opened="$refs.docks?.show('timesheet')" @closed="$refs.docks?.hide('timesheet')" @open-dock="openWorkHours($event,$refs.timesheet.task,workHoursProjects.week)" @saved="reloadWorkspace" />
     <Timesheet v-if="!windowPage" ref="workReports" dock-target="#dock-work_reports" dock-mode="report" :ticket="session.ticket" :project="workHoursProjects.report || workspaceView.project" :current-user="session.login" @opened="$refs.docks?.show('work_reports')" @closed="$refs.docks?.hide('work_reports')" @open-dock="openWorkHours($event,$refs.workReports.task,workHoursProjects.report)" @saved="reloadWorkspace" />
     <Timesheet v-if="!windowPage" ref="costReports" dock-target="#dock-cost_reports" dock-mode="report" dock-report="labor_cost" :ticket="session.ticket" :project="workHoursProjects.cost || workspaceView.project" :current-user="session.login" @opened="$refs.docks?.show('cost_reports')" @closed="$refs.docks?.hide('cost_reports')" @open-dock="openWorkHours($event,$refs.costReports.task,workHoursProjects.cost)" @saved="reloadWorkspace" />
-    <TaskManager v-if="!windowPage || windowPage.kind==='task_manager'" ref="taskManager" :docked="!windowPage" :calendar-target="windowPage ? undefined : '#dock-task_calendar'" :calendar-active="taskCalendarActive" @calendar="$refs.docks?.show('task_calendar'); openDock('task_calendar')" :ticket="session.ticket" :project="workspaceView.project" :current-user="session.login" :search-type="workspaceView.type" :search-type-title="(workspaceView.types || types).find(item => item.search_type === workspaceView.type)?.title || ''" @opened="updatesTasksOpen = true; $refs.docks?.show('tasks')" @closed="updatesTasksOpen = taskCalendarActive; $refs.docks?.hide('tasks')"
+    <TaskManager v-if="!windowPage || windowPage.kind==='task_manager'" ref="taskManager" :can-administer="canAdminister" :docked="!windowPage" :calendar-target="windowPage ? undefined : '#dock-task_calendar'" :calendar-active="taskCalendarActive" @calendar="$refs.docks?.show('task_calendar'); openDock('task_calendar')" :ticket="session.ticket" :project="workspaceView.project" :current-user="session.login" :search-type="workspaceView.type" :search-type-title="(workspaceView.types || types).find(item => item.search_type === workspaceView.type)?.title || ''" @opened="updatesTasksOpen = true; $refs.docks?.show('tasks')" @closed="updatesTasksOpen = taskCalendarActive; $refs.docks?.hide('tasks')"
       @snapshot-context="snapshotTarget = $event" @task-context="followInspector($event.parent, $event.process, $event.__search_key__)" :parents="(workspaceView.rows || []).filter(record => (workspaceView.selectedKeys || []).includes(record.__search_key__))" @saved="reloadWorkspace({ restore: true })" @object="inspect" />
     <ProjectCreation ref="projectCreation" :ticket="session.ticket" :open-project="openCreatedProject" />
   </div>

@@ -3,8 +3,10 @@ import { computed } from 'vue';
 import AppButton from '../../controls/AppButton.vue';
 import TaskCellDisplay from './TaskCellDisplay.vue';
 import { t } from '../../i18n.js';
+import { fieldEditable } from '../../../../src/tactic_stream/shared_ui/features/tasks/cells.ui.mjs';
 const props = defineProps({ task: Object, column: Object, blocked: Boolean });
 const emit = defineEmits(['edit']);
+const editable = computed(() => fieldEditable(props.task, props.column.key));
 const source = computed(() => props.column.sourceKey);
 const model = computed(() => {
   const task = props.task,
@@ -56,7 +58,7 @@ const painted = computed(
     <AppButton
       class="task-cell-value"
       :class="{ 'task-cell-input': !painted }"
-      :disabled="blocked || task.deleting"
+      :disabled="blocked || task.deleting || !editable"
       :aria-label="
         t('Edit {column}', { column: t(column.label) }) + ': ' + task.title
       "
@@ -67,7 +69,7 @@ const painted = computed(
         :user="task[source + 'User']"
         :model="{
           ...model,
-          enabled: !blocked && !task.deleting,
+          enabled: !blocked && !task.deleting && editable,
           actionField: model.actionField !== false
         }"
       />

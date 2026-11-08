@@ -826,6 +826,11 @@ class ApiXMLRPC:
             'tactic.command.checkin_queue_cmd.SubmitCheckinChunkCmd', 'tactic.command.checkin_queue_cmd.CancelCheckinBatchCmd',
             'tactic.command.file_project_cmd.FileProjectCmd')
         table_call = method == 'execute_cmd' and command in (
+            'tactic.ui.table.task_workspace.TaskWorkspaceCmd',
+            'tactic.ui.table.task_workspace_edits.TaskWorkspaceEditCmd',
+            'tactic.ui.table.task_inspector.TaskInspectorCmd',
+            'tactic.ui.table.task_inspector.TaskTableEditCmd',
+            'tactic.ui.table.task_schedule.TaskScheduleCmd',
             'tactic.ui.panel.custom_url_cmd.CustomUrlCmd',
             'tactic.ui.table.CustomLayoutReadCmd',
             'tactic.ui.panel.dashboard_form_cmd.DashboardFormCmd',

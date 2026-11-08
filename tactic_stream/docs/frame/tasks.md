@@ -6,6 +6,13 @@ Use [the shared contract](contract.md) and [the feature index](index.md).
 
 ## Scope and existing owners
 
+Task Manager and Task Calendar use native task and project access. Typed task
+commands apply visible parent rows and process rules before paging and facets.
+Every write checks native insert, edit or delete permissions and field rules
+again. Administrative milestone definitions keep their own access policy.
+Run `test_staff_task_workspace` for the permission matrix and set
+`RUN_STAFF_BROWSER=1` for the actual browser entry and inline cell checks.
+
 | Surface | Handler owner | Stream owner | Migration |
 | --- | --- | --- | --- |
 | Workspace, scope, filters, sorting, grouping, columns and paging | TasksController / TaskWorkspaceStore / TasksWorkspaceView | TaskManager / TaskWorkspaceCmd | Verified shared composition and actual workflows |

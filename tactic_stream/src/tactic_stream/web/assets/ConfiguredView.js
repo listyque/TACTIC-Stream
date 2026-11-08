@@ -380,6 +380,22 @@ var cardMetrics = {
 	avatar: 16,
 	gap: 8
 };
+function fieldEditable(record, name) {
+	const source = record.editableFields ?? record.__editable_fields__;
+	if (source == null) return true;
+	const fields = Array.from(source);
+	if (name === "progress") return fields.includes("progress") || fields.includes("completion");
+	return ({
+		assignee: ["assigned"],
+		dates: ["bid_start_date", "bid_end_date"],
+		hours: ["bid_duration"],
+		plannedHours: ["bid_duration"],
+		milestone: ["milestone_code"],
+		milestoneCode: ["milestone_code"],
+		start: ["bid_start_date"],
+		end: ["bid_end_date"]
+	}[name] || [name]).every((column) => fields.includes(column));
+}
 function initials(label) {
 	const words = String(label || "").trim().split(/\s+/).filter(Boolean);
 	return words.length ? (words[0][0] + (words[1]?.[0] || "")).toUpperCase() : "?";
@@ -21120,6 +21136,6 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 }
 var ConfiguredView_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main, [["render", _sfc_render]]);
 //#endregion
-export { block as A, path as B, filter as C, type as D, scope as E, fromXml as F, sizing as G, reorder as H, geometries as I, _sfc_main$54 as J, spacing as K, geometry$1 as L, copy as M, duplicate as N, add as O, fingerprint as P, kinds as R, fields as S, options as T, reparent as U, remove$1 as V, siblings as W, heading as _, zooms as a, WorkspaceSearch_default as b, ObjectOperations_default as c, _sfc_main$24 as d, _sfc_main$25 as f, gallery as g, forwarding as h, controls as i, change$5 as j, appearances as k, NotesPanel_default as l, forward as m, _sfc_main$2 as n, ResultPresentation_exports as o, _sfc_main$27 as p, toXml as q, _sfc_main$7 as r, RelatedObjects_default as s, ConfiguredView_default as t, skeyPlaceholder as u, revision as v, mode as w, change$4 as x, _sfc_main$30 as y, layers as z };
+export { block as A, path as B, filter as C, type as D, scope as E, fromXml as F, sizing as G, reorder as H, geometries as I, _sfc_main$54 as J, spacing as K, geometry$1 as L, copy as M, duplicate as N, add as O, fingerprint as P, kinds as R, fields as S, options as T, reparent as U, remove$1 as V, siblings as W, fieldEditable as Y, heading as _, zooms as a, WorkspaceSearch_default as b, ObjectOperations_default as c, _sfc_main$24 as d, _sfc_main$25 as f, gallery as g, forwarding as h, controls as i, change$5 as j, appearances as k, NotesPanel_default as l, forward as m, _sfc_main$2 as n, ResultPresentation_exports as o, _sfc_main$27 as p, toXml as q, _sfc_main$7 as r, RelatedObjects_default as s, ConfiguredView_default as t, skeyPlaceholder as u, revision as v, mode as w, change$4 as x, _sfc_main$30 as y, layers as z };
 
 //# sourceMappingURL=ConfiguredView.js.map

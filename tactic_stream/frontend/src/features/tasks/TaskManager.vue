@@ -129,6 +129,7 @@ export default {
     ticket: String,
     project: String,
     currentUser: String,
+    canAdminister: Boolean,
     searchType: String,
     searchTypeTitle: String,
     parents: Array,
@@ -1325,7 +1326,7 @@ export default {
       if (!this.docked) this.$refs.dialog.show();
       if (!calendarOnly && reveal) this.$emit('opened');
       await this.load();
-      await this.$refs.milestones.ensureLoaded();
+      if (this.canAdminister) await this.$refs.milestones.ensureLoaded();
     },
     async refreshMilestoneCatalog() {
       const context = this.context;
@@ -1473,6 +1474,8 @@ export default {
         }
         this.result = result;
         this.catalog = catalog;
+        if (!this.canAdminister)
+          this.milestoneRecords = catalog.milestoneChoices || [];
         this.rememberParents(result.parents);
         this.loadedLiveVersion = liveVersion;
         if (this.mobileTaskKey && !this.mobileTask) {
@@ -2249,7 +2252,7 @@ export default {
       }
       if (saved) {
         await this.load();
-        await this.$refs.milestones.ensureLoaded();
+        if (this.canAdminister) await this.$refs.milestones.ensureLoaded();
       }
     },
     async showMenu(task, bounds) {
@@ -2772,7 +2775,7 @@ export default {
           blocked,
           busy,
           loading,
-          canCreate: !blocked,
+          canCreate: !blocked && catalog?.permissions?.create !== false,
           canRefresh: !busy,
           filtersActive,
           sort,

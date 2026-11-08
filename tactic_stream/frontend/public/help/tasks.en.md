@@ -6,6 +6,10 @@ order: 16
 ---
 # Tasks and planning
 
+Project staff can open Task Manager and Task Calendar from the main menu.
+The workspace shows accessible tasks and objects. Cells remain read-only when
+your role cannot edit them. Creating and deleting tasks require separate grants.
+
 > Task tools provide object-level task editing and project-wide table, Gantt, calendar, timesheet, and
 > reporting views.
 

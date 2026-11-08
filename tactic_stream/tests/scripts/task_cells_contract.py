@@ -418,7 +418,7 @@ def exercise_workspace(record, api, auth):
     with patch.object(TaskElementWdg, 'can_view_process', return_value=False):
         blocked = page(scope='project')
         assert blocked['tasks'] == [] and blocked['total'] == 0 and blocked['facets'] == {}
-    with patch('tactic.ui.table.task_workspace._require_admin', side_effect=SecurityException('denied')):
+    with patch('tactic.ui.table.task_workspace.require_task_access', side_effect=SecurityException('denied')):
         try:
             TaskWorkspaceCmd(scope='project').execute()
         except SecurityException:

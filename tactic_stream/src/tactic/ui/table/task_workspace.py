@@ -7,10 +7,65 @@ from pyasm.biz import Project
 from pyasm.command import Command
 from pyasm.common import Environment
 from pyasm.search import Search, SearchType
-from pyasm.security.security import _require_admin
+from .task_inspector import require_task_access
 from tactic_stream.server.api import Api
 from tactic.ui.widget.discussion_wdg import discussion_target
 from .task_element_wdg import TaskElementWdg
+
+
+def visible_task_parent_filters(filters):
+    """Apply parent visibility before task paging, facets and counts."""
+    from tactic_stream.server.navigation_links import check_type
+    from pyasm.common import SecurityException
+
+    if Environment.get_security().is_admin():
+        return filters
+    source = Search('sthpw/task')
+    source.add_op_filters(filters)
+    source.add_column('search_type', distinct=True)
+    visible = []
+    for row in source.get_sobjects():
+        parent_type = row.get_value('search_type')
+        if not parent_type:
+            continue
+        if SearchType.breakup_search_type(parent_type).get('project') not in (None, '', Project.get_project_code()):
+            continue
+        try:
+            check_type(parent_type, Project.get_project_code())
+        except SecurityException:
+            continue
+        parents = Search(parent_type)
+        if parents.get_base_search_type() == 'sthpw/project':
+            parents.add_filter('code', Project.get_project_code())
+        codes = parents.get_sobject_codes()
+        ids = parents.get_sobject_ids()
+        if not codes and not ids:
+            continue
+        visible.extend(['begin', ('search_type', parent_type), 'begin',
+                        ('search_code', 'in', codes), 'begin', ('search_code', 'is', 'NULL'),
+                        ('search_id', 'in', ids), 'and', 'or', 'and'])
+    return [*filters, 'begin', *visible, 'or'] if visible else [*filters, ('id', 'in', [])]
+
+
+def visible_task_records(records):
+    security = Environment.get_security()
+    if security.is_admin():
+        return records
+    allowed = {}
+    result = []
+    for record in records:
+        base = record.get('__search_type__', 'sthpw/task').split('?', 1)[0]
+        row = {}
+        for name, value in record.items():
+            key = base, name
+            source = {'__status__': 'status', '__process__': 'process', '__hours__': 'bid_duration'}.get(name)
+            if key not in allowed:
+                allowed[key] = name.startswith('__') and source is None or security.check_access('sobject_column',
+                    dict(search_type=base, column=source or name, project=Project.get_project_code()), 'view')
+            if allowed[key]:
+                row[name] = value
+        result.append(row)
+    return result
 
 
 def task_workspace_filters(scope, identity='', search_keys=None, process=''):
@@ -74,11 +129,48 @@ def task_workspace_filters(scope, identity='', search_keys=None, process=''):
 class TaskWorkspaceCmd(Command):
     """Read a bounded task page, its parents and scope-wide filter counts."""
     def check_security(self):
-        _require_admin()
+        require_task_access()
         return True
 
     def execute(self):
-        _require_admin()
+        require_task_access()
+        if self.kwargs.get('action') == 'page':
+            project = Project.get_project_code()
+            filters, _parents, available = task_workspace_filters('project')
+            supplied = self.kwargs.get('filters', [])
+            order_bys = self.kwargs.get('order_bys', [])
+            limit, offset = self.kwargs.get('limit', 500), self.kwargs.get('offset', 0)
+            if (self.kwargs.get('project_code') != project or not isinstance(supplied, list) or len(supplied) > 1000
+                    or not isinstance(order_bys, list) or len(order_bys) > 8
+                    or any(value not in ('bid_end_date', 'timestamp desc') for value in order_bys)
+                    or type(limit) is not int or not 1 <= limit <= 500 or type(offset) is not int or offset < 0):
+                raise ValueError('Invalid task page request')
+            depth = 0
+            for item in supplied:
+                if item == 'begin':
+                    depth += 1
+                elif item in ('and', 'or'):
+                    depth -= 1
+                    if depth < 0:
+                        raise ValueError('Task filters require balanced groups')
+                elif (not isinstance(item, (tuple, list)) or len(item) not in (2, 3)
+                        or item[0] not in ('project_code', 'process', 'search_type', 'search_code', 'assigned')
+                        or not isinstance(item[-1], str) or len(item[-1]) > 16384
+                        or item[-1].startswith(('@', '{'))
+                        or len(item) == 3 and (item[0] != 'assigned' or item[1] != 'in')):
+                    raise ValueError('Unsupported task page filter')
+            if depth:
+                raise ValueError('Task filters require balanced groups')
+            query = self.kwargs.get('query') or {}
+            if not isinstance(query, dict):
+                raise ValueError('Invalid task page query')
+            query = dict(query, currentLogin=Environment.get_user_name())
+            filters.extend(['begin', *supplied, 'and'])
+            if not available:
+                filters.append(('id', 'in', []))
+            result = query_task_workspace_page(filters, order_bys, project, limit, offset, query)
+            task_table_metadata(result)
+            return result
         if self.kwargs.get('action') == 'catalog':
             from .task_workspace_edits import task_field_catalog
             return task_field_catalog(self.kwargs.get('search_key', ''))
@@ -121,7 +213,7 @@ class TaskWorkspaceCmd(Command):
 def task_table_metadata(result):
     """Handler table roles, from native pipelines, previews and WorkHour totals."""
     from pyasm.biz import Pipeline, WorkHour
-    from .task_inspector import inspector_object
+    from .task_inspector import inspector_object, task_permissions, task_fields
     if not result['tasks']:
         return
     tasks = Search('sthpw/task')
@@ -135,16 +227,23 @@ def task_table_metadata(result):
     for entry in hours.get_sobjects():
         entries.setdefault(entry.get_value('task_code'), []).append(entry)
     parents = {}
+    parent_objects = {}
     for row in result['parents']:
         parent = discussion_target(row['__search_key__'])
         row['__preview__'] = inspector_object(parent)['preview']
         pipeline = Pipeline.get_by_code(parent.get_value('pipeline_code', no_exception=True))
         parents[(parent.get_base_search_type(), parent.get_code())] = pipeline
+        parent_objects[(parent.get_base_search_type(), parent.get_code())] = parent
     for row in result['tasks']:
         task = tasks.get(row['code'])
         if not task:
             continue
-        pipeline = parents.get((str(row.get('search_type') or '').split('?', 1)[0], row.get('search_code')))
+        identity = (str(row.get('search_type') or '').split('?', 1)[0], row.get('search_code'))
+        parent = parent_objects.get(identity)
+        row['__permissions__'] = task_permissions(parent) if parent else dict(create=False, edit=False, delete=False)
+        row['__editable_fields__'] = [field['name'] for field in task_fields(
+            ('process', 'context', 'priority', 'milestone_code'), writable=row['__permissions__']['edit']) if field['editable']]
+        pipeline = parents.get(identity)
         process = pipeline.get_process(row.get('process') or '') if pipeline else None
         row['__process__'] = dict(label=process.get_label() or row['process'], color=process.get_color() or '#607d8b') if process else dict(label=row.get('process') or 'Task', color='#607d8b')
         pipeline = task.get_pipeline()
@@ -177,7 +276,7 @@ def task_process_workspace(search_key):
             request = dict(operation='update' if task else 'create', search_key=search_key,
                            process=process, task_key=task.get_search_key() if task else '',
                            draft_id='process:'+hashlib.sha256((search_key+':'+process).encode()).hexdigest())
-            _parent, _selected, editable, plan = workspace_edit_plan(request, catalogs)
+            _parent, _selected, editable, plan = workspace_edit_plan(request, catalogs, read_only=True)
             # Handler shows workflow defaults, not Task.create's automatic first status.
             if task is None:
                 for name in ('status', 'assigned'):
@@ -213,6 +312,7 @@ def query_task_workspace_page(filters, order_bys, project_code,
 
     if project_code != Project.get_project_code():
         raise ValueError('Task page belongs to another project')
+    filters = visible_task_parent_filters(filters or [])
     task_search = Search('sthpw/task')
     facets = {}
     if filters:
@@ -278,7 +378,7 @@ def query_task_workspace_page(filters, order_bys, project_code,
                 if query.get('currentLogin'):
                     exact('assigned', [str(query['currentLogin'])], search)
                 else:
-                    search.add_where('1 = 0')
+                    search.add_filters('id', [])
             elif preset == 'unassigned':
                 search.add_empty_filter('assigned')
             elif preset in ('overdue', 'today'):
@@ -305,24 +405,24 @@ def query_task_workspace_page(filters, order_bys, project_code,
         # grouped values/counts cross the RPC boundary, not the task inventory.
         facets = {}
         for name, column in columns.items():
+            if not Environment.get_security().check_access('sobject_column',
+                    dict(search_type='sthpw/task', column=column, project=project_code), 'view'):
+                if panel.get(name) or quick.get(name):
+                    from pyasm.common import SecurityException
+                    raise SecurityException('Task filter field is not accessible')
+                facets[name] = []
+                continue
             facet_search = Search('sthpw/task')
             facet_search.order_by = False  # TACTIC adds sort columns to GROUP BY.
             facet_search.add_op_filters(filters or [])
-            facet_search.add_column(column)
-            # TACTIC 4.9 quotes expressions as identifiers unless this Select
-            # uses raw mode. All projection/table names here are fixed above.
-            facet_search.get_select().set_quoted_mode('none')
-            facet_search.add_column('count(*)', as_column='task_count')
-            facet_search.add_group_by(column)
             label_map = {str(item['value']): item for item in labels.get(name, [])}
             options = []
-            for item in facet_search.get_sobjects():
-                raw_value = item.get_value(column)
+            for raw_value, count in facet_search.get_group_counts([column]):
                 value = str(raw_value if raw_value is not None else '')
                 label = label_map.get(value) or {}
                 options.append({
                     'key': value, 'title': str(label.get('label') or value),
-                    'count': int(item.get_value('task_count') or 0),
+                    'count': count,
                     'accent': str(label.get('color') or ''),
                 })
             facets[name] = sorted(options, key=lambda item: item['title'].casefold())
@@ -365,7 +465,9 @@ def query_task_workspace_page(filters, order_bys, project_code,
             if text:
                 task_search.add_op('begin')
                 for column in ('description', 'process', 'context', 'status', 'assigned', 'supervisor', 'search_code'):
-                    task_search.add_regex_filter(column, re.escape(text))
+                    if Environment.get_security().check_access('sobject_column',
+                            dict(search_type='sthpw/task', column=column, project=project_code), 'view'):
+                        task_search.add_regex_filter(column, re.escape(text))
                 for name, column in columns.items():
                     matches = [str(item['value']) for item in labels.get(name, [])
                                if text.casefold() in str(item.get('label') or item['value']).casefold()]
@@ -405,13 +507,19 @@ def query_task_workspace_page(filters, order_bys, project_code,
             task = '"%s"' % table.replace('"', '""')
             task_type = "split_part(%s.search_type, '?', 1)" % task
             primary_order = "(CASE WHEN {a}.context IS NULL OR {a}.context = '' OR {a}.context = COALESCE(NULLIF({a}.process, ''), 'publish') THEN 0 ELSE 1 END, COALESCE(CAST({a}.timestamp AS TEXT), ''), {a}.code)"
-            primary = "NOT EXISTS (SELECT 1 FROM {table} sibling WHERE sibling.project_code = {task}.project_code AND split_part(sibling.search_type, '?', 1) = split_part({task}.search_type, '?', 1) AND sibling.search_code = {task}.search_code AND COALESCE(NULLIF(sibling.process, ''), 'publish') = COALESCE(NULLIF({task}.process, ''), 'publish') AND {left} < {right})".format(
-                table=task, task=task, left=primary_order.format(a='sibling'), right=primary_order.format(a=task))
-            task_search.add_where("""EXISTS (SELECT 1 FROM note n WHERE n.project_code = {task}.project_code AND (
+            siblings = Search('sthpw/task'); siblings.add_filter('project_code', project_code)
+            sibling_sql, sibling_values = siblings._statement(default_order=False)
+            notes = Search('sthpw/note'); notes.add_filter('project_code', project_code)
+            note_sql, note_values = notes._statement(default_order=False)
+            primary = "NOT EXISTS (SELECT 1 FROM ({visible}) sibling WHERE sibling.project_code = {task}.project_code AND split_part(sibling.search_type, '?', 1) = split_part({task}.search_type, '?', 1) AND sibling.search_code = {task}.search_code AND COALESCE(NULLIF(sibling.process, ''), 'publish') = COALESCE(NULLIF({task}.process, ''), 'publish') AND {left} < {right})".format(
+                visible=sibling_sql, task=task, left=primary_order.format(a='sibling'), right=primary_order.format(a=task))
+            # Correlate fixed native predicates with ACL-filtered subqueries, not caller SQL.
+            task_search.filters.append("""EXISTS (SELECT 1 FROM ({visible}) n WHERE n.project_code = {task}.project_code AND (
                 (n.search_code = {task}.search_code AND COALESCE(NULLIF(n.process, ''), 'publish') = COALESCE(NULLIF({task}.process, ''), 'publish')
                  AND (n.search_type IS NULL OR n.search_type = '' OR split_part(n.search_type, '?', 1) = {parent_type}) AND {primary})
                 OR (n.search_code = {task}.code AND (n.search_type IS NULL OR n.search_type = '' OR split_part(n.search_type, '?', 1) = 'sthpw/task') AND NOT ({primary}))
-            ))""".format(task=task, parent_type=task_type, primary=primary))
+            ))""".format(visible=note_sql, task=task, parent_type=task_type, primary=primary))
+            task_search.parameters.extend([*note_values, *sibling_values, *sibling_values])
 
         def label_order(mode, descending=False):
             # Select preserves its native "( CASE ... END )" orders verbatim;
@@ -430,7 +538,7 @@ def query_task_workspace_page(filters, order_bys, project_code,
             elif mode in ('due', 'recent'):
                 expression = '"%s"' % column
                 if mode == 'due':
-                    task_search.get_select().add_order_by('( CASE WHEN "bid_end_date" IS NULL THEN 1 ELSE 0 END )')
+                    task_search.order_bys.append('( CASE WHEN "bid_end_date" IS NULL THEN 1 ELSE 0 END )')
                 else:
                     direction = 'ASC' if descending else 'DESC'
             else:
@@ -442,7 +550,8 @@ def query_task_workspace_page(filters, order_bys, project_code,
                     expression = '( CASE CAST("%s" AS TEXT) %s ELSE %s END )' % (column, ' '.join(branches), expression)
                 else:
                     expression = '( CASE WHEN "%s" IS NOT NULL THEN %s END )' % (column, expression)
-            task_search.get_select().add_order_by(expression, direction=direction)
+            # Fixed native expressions quote every label; no client SQL enters this path.
+            task_search.order_bys.append(expression + ' ' + direction)
 
         if group_mode != 'none':
             label_order(group_mode, bool(query.get('descending')) and group_mode == sort_mode)
@@ -603,8 +712,8 @@ def query_task_workspace_page(filters, order_bys, project_code,
             Api._get_sobjects_dict(parent_search.get_sobjects())
         )
     return {
-        'tasks': tasks,
-        'parents': parents,
+        'tasks': visible_task_records(tasks),
+        'parents': visible_task_records(parents),
         'total': total,
         'facets': facets,
         'offset': int(offset or 0),

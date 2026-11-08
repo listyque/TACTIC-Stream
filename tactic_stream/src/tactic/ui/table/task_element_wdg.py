@@ -984,8 +984,8 @@ class TaskElementWdg(BaseTableElementWdg):
     def can_view_process(process):
         project = Project.get_project_code()
         return Environment.get_security().check_access('process', [
-            {'process': process}, {'process': '*'},
-            {'process': process, 'project': project}, {'process': '*', 'project': project}
+            {'process': process, 'project': project}, {'process': process},
+            {'process': '*', 'project': project}, {'process': '*'}
         ], 'allow', default='deny')
 
     def get_cell_value(self):

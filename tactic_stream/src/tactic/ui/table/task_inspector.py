@@ -9,9 +9,15 @@ from pyasm.biz import Pipeline, Project, Schema, Task
 from pyasm.command import Command
 from pyasm.common import Environment, SecurityException, UserException
 from pyasm.search import Search, SearchKey, SearchType
-from pyasm.security.security import _require_admin
+from tactic_stream.server.interface import _require_table_access
 from tactic.ui.widget.discussion_wdg import discussion_target, DiscussionReadCmd, same_note_target
 from .task_element_wdg import TaskElementWdg, TaskElementCbk
+
+
+def require_task_access() -> None:
+    _require_table_access('sthpw/task')
+    if Project.get_project_code() in ('admin', 'sthpw') and not Environment.get_security().is_admin():
+        raise SecurityException('System task access requires administrator access')
 
 
 def process_configuration(pipeline, process):
@@ -186,12 +192,34 @@ def task_scope(search_key, process, task_key=''):
     return parent, process, tasks, selected, defaults, revision, pipeline
 
 
-def task_fields(additional=()):
+def task_permissions(parent=None) -> dict[str, bool]:
+    """Expose the native write policy without granting permission to a caller."""
+    security = Environment.get_security()
+    project = Project.get_project_code()
+    if security.is_admin():
+        return dict(create=True, edit=True, delete=True)
+
+    def allowed(search_type, access):
+        keys = [dict(code=search_type, project=project), dict(code=search_type),
+                dict(code='*', project=project), dict(code='*')]
+        return security.check_access('search_type', keys, access, default='deny')
+
+    parent_editable = parent is None or (
+        parent.get_base_search_type() == 'sthpw/project' and parent.get_code() == project
+    ) or (not parent.get_base_search_type().startswith(('sthpw/', 'config/'))
+          and allowed(parent.get_base_search_type(), 'edit'))
+    return {name: bool(parent_editable and allowed('sthpw/task', access))
+            for name, access in (('create', 'insert'), ('edit', 'edit'), ('delete', 'delete'))}
+
+
+def task_fields(additional=(), writable=None):
     columns = SearchType.get_columns('sthpw/task')
     names = ['status', 'assigned', 'supervisor', 'bid_start_date', 'bid_end_date', 'bid_duration',
              'progress' if 'progress' in columns else 'completion', 'description', *additional]
     fields = []
     security = Environment.get_security()
+    if writable is None:
+        writable = any(task_permissions().values())
     for name in names:
         if name not in columns:
             continue
@@ -199,7 +227,7 @@ def task_fields(additional=()):
                 dict(search_type='sthpw/task', project=Project.get_project_code())]
         column = dict(search_type='sthpw/task', column=name, project=Project.get_project_code())
         if security.check_access('element', keys, 'view', default='edit') and security.check_access('sobject_column', column, 'view'):
-            fields.append(dict(name=name, editable=security.check_access('element', keys, 'edit', default='edit')
+            fields.append(dict(name=name, editable=writable and security.check_access('element', keys, 'edit', default='edit')
                                and security.check_access('sobject_column', column, 'edit')))
     return fields
 
@@ -232,7 +260,7 @@ def task_edit_options(parent, selected, defaults, additional=()):
         for name, value in defaults.items():
             if value is not None:
                 task.set_value(name, value)
-    fields = task_fields(additional) if additional else task_fields()
+    fields = task_fields(additional, writable=task_permissions(parent)['edit' if selected else 'create'])
     pipeline = task.get_pipeline()
     security = Environment.get_security()
     statuses = task_status_names(task)
@@ -285,11 +313,11 @@ def prepare_task_data(task, selected, defaults, fields, statuses, users, data):
 
 class TaskInspectorCmd(Command):
     def check_security(self):
-        _require_admin()
+        require_task_access()
         return True
 
     def execute(self):
-        _require_admin()
+        require_task_access()
         action = self.kwargs.get('action', 'read')
         if action not in ('read', 'save', 'copy', 'delete'):
             raise ValueError('Unsupported task operation')
@@ -300,6 +328,9 @@ class TaskInspectorCmd(Command):
             sql.get_database_impl().lock_collection_table(sql, SearchType.get('sthpw/task').get_table())
         parent, process, tasks, selected, defaults, revision, pipeline = task_scope(
             self.kwargs.get('search_key'), self.kwargs.get('process'), self.kwargs.get('task_key', ''))
+        operation = 'delete' if action == 'delete' else 'create' if action == 'copy' or not selected else 'edit'
+        if action != 'read' and not task_permissions(parent)[operation]:
+            raise SecurityException('Task write access denied')
         node = pipeline.get_process(process) if pipeline else None
         if node and node.get_type() == 'progress':
             if action != 'read':
@@ -349,8 +380,9 @@ class TaskInspectorCmd(Command):
             result = cmd.execute()
             for note in result['notes']:
                 notes.append(dict(note, target_key=target.get_search_key(), entry_type='note'))
+        visible = {field['name'] for field in task_fields(('context',))}
         history = []
-        if selected:
+        if selected and 'status' in visible:
             search = Search('sthpw/status_log'); search.add_relationship_filters([selected]); search.add_order_by('timestamp')
             history = [dict(id=log.get_id(), timestamp=str(log.get_value('timestamp')),
                 login=log.get_value('login'), before=log.get_value('from_status'), after=log.get_value('to_status'),
@@ -358,7 +390,7 @@ class TaskInspectorCmd(Command):
         processes, process_notes = inspector_processes(parent, pipeline, process)
         from tactic_stream.server.security_groups import user_identities
         logins = {item['login'] for item in [*notes, *history] if item['login']}
-        logins.update(task.get_value(name) for task in tasks for name in ('assigned', 'supervisor') if task.get_value(name))
+        logins.update(task.get_value(name) for task in tasks for name in ('assigned', 'supervisor') if name in visible and task.get_value(name))
         identity_fields = ('login', 'displayName', 'retired', 'initials', 'avatarColor', 'avatarUrl')
         identities = [{name: user[name] for name in identity_fields} for user in users if user['login'] in logins]
         missing = logins - {user['login'] for user in identities}
@@ -368,15 +400,17 @@ class TaskInspectorCmd(Command):
         from .work_hours import task_hours
         return dict(search_key=parent.get_search_key(), process=process, process_type=node.get_type() if node else 'manual', selected_task=selected.get_search_key() if selected else '',
             object=inspector_object(parent), work_hours=task_hours(selected) if selected else None,
-            process_available=bool(node), task_context=task.get_value('context'),
+            process_available=bool(node), task_context=task.get_value('context') if 'context' in visible else '',
             status_choices=[dict(value=name,label=name,color=(task.get_pipeline().get_process(name).get_attribute('color') or '')) for name in statuses],
-            task_choices=[dict(value=item.get_search_key(), label=' · '.join(str(item.get_value(name) or '') for name in ('context', 'assigned')),
-                primary=index == 0, status=item.get_value('status'),
+            task_choices=[dict(value=item.get_search_key(), label=' · '.join(str(item.get_value(name) or '') for name in ('context', 'assigned') if name in visible),
+                primary=index == 0, status=item.get_value('status') if 'status' in visible else '',
                 count=sum(note.get_process() == process and (same_note_target(note, item) or
                     index == 0 and same_note_target(note, parent)) for note in process_notes),
-                identity=next((identity for identity in identities if identity['login'] == item.get_value('assigned')),None)) for index,item in enumerate(tasks)],
+                identity=next((identity for identity in identities if 'assigned' in visible and identity['login'] == item.get_value('assigned')),None)) for index,item in enumerate(tasks)],
             task={field['name']: task.get_value(field['name'], no_exception=True) for field in fields},
-            fields=fields, statuses=statuses, users=users, identities=identities, defaults=defaults, revision=revision, processes=processes, notes=notes, history=history,
+            fields=fields, statuses=statuses, users=users, identities=identities,
+            defaults={name: value for name, value in defaults.items() if name in visible},
+            revision=revision, processes=processes, notes=notes, history=history,
             note_target=note_target.get_search_key(), current_user=Environment.get_user_name())
 
 
@@ -385,7 +419,7 @@ class TaskTableEditCmd(Command):
     FIELDS = {'status', 'assigned', 'bid_start_date', 'bid_end_date'}
 
     def check_security(self):
-        _require_admin()
+        require_task_access()
         return True
 
     @staticmethod
@@ -409,7 +443,7 @@ class TaskTableEditCmd(Command):
         return parent, selected, defaults, revision
 
     def execute(self):
-        _require_admin()
+        require_task_access()
         action = self.kwargs.get('action', 'prepare')
         if action == 'prepare':
             source = self.kwargs.get('source')
@@ -435,7 +469,8 @@ class TaskTableEditCmd(Command):
                 status_pipeline = virtual.get_pipeline()
                 plans.append(dict(search_key=canonical, process=source['process'], context=context,
                     task_key=task.get_search_key() if task else '', expected_revision=revision,
-                    task={name: virtual.get_value(name, no_exception=True) for name in self.FIELDS},
+                    task={name: virtual.get_value(name, no_exception=True) for name in self.FIELDS
+                          if name in {field['name'] for field in fields}},
                     fields=[field for field in fields if field['name'] in self.FIELDS], statuses=statuses, users=users,
                     colors={name: status_pipeline.get_process(name).get_color() for name in statuses}))
             return dict(plans=plans)

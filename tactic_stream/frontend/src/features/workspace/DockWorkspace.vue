@@ -104,18 +104,13 @@ const compact = computed(
   () => props.mobile || width.value < 640 || height.value < 440
 );
 const phonePanels = computed(() =>
-  dockPanels.filter(
-    (panel) =>
-      panel.id !== 'drop_plate' &&
-      (!['tasks', 'task_calendar'].includes(panel.id) || props.canAdminister)
-  )
+  dockPanels.filter((panel) => panel.id !== 'drop_plate')
 );
 const visible = computed(() =>
   (props.mobile ? phonePanels.value : dockPanels).filter(
     (panel) =>
-      (state.value.panels[panel.id].visible ||
-        (props.mobile && compactActive.value === panel.id)) &&
-      (!['tasks', 'task_calendar'].includes(panel.id) || props.canAdminister)
+      state.value.panels[panel.id].visible ||
+      (props.mobile && compactActive.value === panel.id)
   )
 );
 watch(visible, (panels) => {
@@ -465,7 +460,11 @@ function show(id) {
   maximized.value = '';
   if (panel.slide) slideOpen.value = id;
   else if (id === 'results') slideOpen.value = '';
-  if (!panel.floating && !panel.slide && !ids(state.value.layout).includes(id)) {
+  if (
+    !panel.floating &&
+    !panel.slide &&
+    !ids(state.value.layout).includes(id)
+  ) {
     const target = defaultStackTargets[id];
     if (
       target &&
@@ -1067,14 +1066,6 @@ watch(
   },
   { immediate: true }
 );
-watch(
-  () => props.canAdminister,
-  (value) => {
-    if (value)
-      for (const id of ['tasks', 'task_calendar'])
-        if (state.value.panels[id].visible) emit('open', id, true);
-  }
-);
 onMounted(async () => {
   window.addEventListener('keydown', escapeGesture, true);
   window.addEventListener('blur', cancelGesture);
@@ -1593,7 +1584,6 @@ defineExpose({
             ><AppIcon name="chevron-right"
           /></template>
           <AppMenuItem
-            v-if="canAdminister"
             label="Task Manager"
             icon="task-alt"
             :checked="state.panels.tasks.visible"
@@ -1606,7 +1596,6 @@ defineExpose({
             @click="toggle('notes')"
           />
           <AppMenuItem
-            v-if="canAdminister"
             label="Task Calendar"
             icon="calendar-month"
             :checked="state.panels.task_calendar.visible"

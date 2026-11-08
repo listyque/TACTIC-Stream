@@ -12,7 +12,7 @@ import { A as activateRichLink, C as customUrlLocation, D as savedSearchLink, M 
 import { i as sourceIcon, n as fileName, r as prettySize, t as extension } from "./file_values.js";
 import { a as sourcePath, i as repositories, n as droppedFiles, r as prepareFiles, t as descriptors } from "./files.js";
 import { t as downloadBlob } from "./files2.js";
-import { J as _sfc_main$124, _ as heading$1, b as WorkspaceSearch_default, c as ObjectOperations_default, d as _sfc_main$125, f as _sfc_main$123, g as gallery, h as forwarding, l as NotesPanel_default, m as forward, n as _sfc_main$127, p as _sfc_main$128, s as RelatedObjects_default, t as ConfiguredView_default, u as skeyPlaceholder, v as revision, y as _sfc_main$126 } from "./ConfiguredView.js";
+import { J as _sfc_main$124, Y as fieldEditable, _ as heading$1, b as WorkspaceSearch_default, c as ObjectOperations_default, d as _sfc_main$125, f as _sfc_main$123, g as gallery, h as forwarding, l as NotesPanel_default, m as forward, n as _sfc_main$127, p as _sfc_main$128, s as RelatedObjects_default, t as ConfiguredView_default, u as skeyPlaceholder, v as revision, y as _sfc_main$126 } from "./ConfiguredView.js";
 import { t as _sfc_main$129 } from "./CodeBlock.js";
 import { t as describe$41 } from "./confirmation.ui.js";
 import { t as _sfc_main$130 } from "./AppDialog.js";
@@ -1971,8 +1971,7 @@ var main_menus_default = {
 			"title": "Task Manager",
 			"icon": "tasks",
 			"command": "show_tasks",
-			"platform": "stream",
-			"admin": true
+			"platform": "stream"
 		},
 		{
 			"title": "Create project",
@@ -6256,6 +6255,7 @@ var _sfc_main$85 = {
 	setup(__props, { emit: __emit }) {
 		const props = __props;
 		const emit = __emit;
+		const editable = computed(() => fieldEditable(props.task, props.column.key));
 		const source = computed(() => props.column.sourceKey);
 		const model = computed(() => {
 			const task = props.task, key = source.value;
@@ -6296,7 +6296,7 @@ var _sfc_main$85 = {
 				"data-task-cell": source.value
 			}, [createVNode(_sfc_main$103, {
 				class: normalizeClass(["task-cell-value", { "task-cell-input": !painted.value }]),
-				disabled: __props.blocked || __props.task.deleting,
+				disabled: __props.blocked || __props.task.deleting || !editable.value,
 				"aria-label": unref(t)("Edit {column}", { column: unref(t)(__props.column.label) }) + ": " + __props.task.title,
 				onClick: _cache[0] || (_cache[0] = ($event) => emit("edit", $event))
 			}, {
@@ -6305,7 +6305,7 @@ var _sfc_main$85 = {
 					user: __props.task[source.value + "User"],
 					model: {
 						...model.value,
-						enabled: !__props.blocked && !__props.task.deleting,
+						enabled: !__props.blocked && !__props.task.deleting && editable.value,
 						actionField: model.value.actionField !== false
 					}
 				}, null, 8, ["user", "model"])) : createCommentVNode("", true)]),
@@ -9446,6 +9446,7 @@ var _sfc_main$66 = {
 		ticket: String,
 		project: String,
 		currentUser: String,
+		canAdminister: Boolean,
 		searchType: String,
 		searchTypeTitle: String,
 		parents: Array,
@@ -10375,7 +10376,7 @@ var _sfc_main$66 = {
 			if (!this.docked) this.$refs.dialog.show();
 			if (!calendarOnly && reveal) this.$emit("opened");
 			await this.load();
-			await this.$refs.milestones.ensureLoaded();
+			if (this.canAdminister) await this.$refs.milestones.ensureLoaded();
 		},
 		async refreshMilestoneCatalog() {
 			const context = this.context;
@@ -10462,6 +10463,7 @@ var _sfc_main$66 = {
 				}
 				this.result = result;
 				this.catalog = catalog;
+				if (!this.canAdminister) this.milestoneRecords = catalog.milestoneChoices || [];
 				this.rememberParents(result.parents);
 				this.loadedLiveVersion = liveVersion;
 				if (this.mobileTaskKey && !this.mobileTask) {
@@ -11034,7 +11036,7 @@ var _sfc_main$66 = {
 			}
 			if (saved) {
 				await this.load();
-				await this.$refs.milestones.ensureLoaded();
+				if (this.canAdminister) await this.$refs.milestones.ensureLoaded();
 			}
 		},
 		async showMenu(task, bounds) {
@@ -11494,7 +11496,7 @@ function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
 						blocked: $options.blocked,
 						busy: $data.busy,
 						loading: $data.loading,
-						canCreate: !$options.blocked,
+						canCreate: !$options.blocked && $data.catalog?.permissions?.create !== false,
 						canRefresh: !$data.busy,
 						filtersActive: $options.filtersActive,
 						sort: $data.sort,
@@ -21448,8 +21450,8 @@ var _sfc_main$43 = {
 		let observer, gesture = null, applying = false;
 		let phoneSelection = props.mobile;
 		const compact = computed(() => props.mobile || width.value < 640 || height.value < 440);
-		const phonePanels = computed(() => dockPanels.filter((panel) => panel.id !== "drop_plate" && (!["tasks", "task_calendar"].includes(panel.id) || props.canAdminister)));
-		const visible = computed(() => (props.mobile ? phonePanels.value : dockPanels).filter((panel) => (state.value.panels[panel.id].visible || props.mobile && compactActive.value === panel.id) && (!["tasks", "task_calendar"].includes(panel.id) || props.canAdminister)));
+		const phonePanels = computed(() => dockPanels.filter((panel) => panel.id !== "drop_plate"));
+		const visible = computed(() => (props.mobile ? phonePanels.value : dockPanels).filter((panel) => state.value.panels[panel.id].visible || props.mobile && compactActive.value === panel.id));
 		watch(visible, (panels) => {
 			if (!props.mobile && maximized.value && !panels.some((panel) => panel.id === maximized.value)) maximized.value = "";
 		});
@@ -22108,11 +22110,6 @@ var _sfc_main$43 = {
 			deleteDialog.value?.close();
 			refreshLayouts();
 		}, { immediate: true });
-		watch(() => props.canAdminister, (value) => {
-			if (value) {
-				for (const id of ["tasks", "task_calendar"]) if (state.value.panels[id].visible) emit("open", id, true);
-			}
-		});
 		onMounted(async () => {
 			window.addEventListener("keydown", escapeGesture, true);
 			window.addEventListener("blur", cancelGesture);
@@ -22556,26 +22553,24 @@ var _sfc_main$43 = {
 								createVNode(_sfc_main$104, { name: "chevron-right" })
 							]),
 							default: withCtx(() => [
-								__props.canAdminister ? (openBlock(), createBlock(_sfc_main$133, {
-									key: 0,
+								createVNode(_sfc_main$133, {
 									label: "Task Manager",
 									icon: "task-alt",
 									checked: state.value.panels.tasks.visible,
 									onClick: _cache[10] || (_cache[10] = ($event) => toggle("tasks"))
-								}, null, 8, ["checked"])) : createCommentVNode("", true),
+								}, null, 8, ["checked"]),
 								createVNode(_sfc_main$133, {
 									label: "Task Inspector",
 									icon: "comment",
 									checked: state.value.panels.notes.visible,
 									onClick: _cache[11] || (_cache[11] = ($event) => toggle("notes"))
 								}, null, 8, ["checked"]),
-								__props.canAdminister ? (openBlock(), createBlock(_sfc_main$133, {
-									key: 1,
+								createVNode(_sfc_main$133, {
 									label: "Task Calendar",
 									icon: "calendar-month",
 									checked: state.value.panels.task_calendar.visible,
 									onClick: _cache[12] || (_cache[12] = ($event) => toggle("task_calendar"))
-								}, null, 8, ["checked"])) : createCommentVNode("", true)
+								}, null, 8, ["checked"])
 							]),
 							_: 1
 						}, 8, ["boundary"]),
@@ -33111,7 +33106,7 @@ var _sfc_main = {
 				const address = customPageLink(link, location.origin);
 				return address ? this.openBrowserLocation(null, address, false) : this.openRichLink(link, false, project);
 			},
-			openTaskManager: (record, process, filters, taskKey) => this.canAdminister ? this.windowPage ? this.openWindowTaskManager(null, record, process, filters, taskKey) : this.$refs.taskManager.openForObjects(record, process, filters, taskKey) : this.showWorkspaceNotice("Access denied"),
+			openTaskManager: (record, process, filters, taskKey) => this.windowPage ? this.openWindowTaskManager(null, record, process, filters, taskKey) : this.$refs.taskManager.openForObjects(record, process, filters, taskKey),
 			openTaskInspector: (record, cell, process, taskKey, source) => this.openTaskInspector(record, cell, process, taskKey, source),
 			openTableCheckin: (record, cell, project) => this.openTableCheckin(record, cell, project, true),
 			openTableSecurity: (code) => this.openTableSecurity(code),
@@ -34007,10 +34002,16 @@ var _sfc_main = {
 		async openTablePort(command, record) {
 			const options = command.options || {}, kind = command.type;
 			const session = this.session, project = this.workspaceProject;
+			const taskAction = [
+				"schedule",
+				"task-details",
+				"add-task",
+				"table-schedule"
+			].includes(kind);
 			const current = () => {
-				if (this.session !== session || this.workspaceProject !== project || !this.canAdminister) throw new Error("Connection context changed. Close this form and reopen it before saving.");
+				if (this.session !== session || this.workspaceProject !== project || !this.canAdminister && !taskAction) throw new Error("Connection context changed. Close this form and reopen it before saving.");
 			};
-			if (!this.canAdminister) throw new Error("Access denied");
+			if (!this.canAdminister && !taskAction) throw new Error("Access denied");
 			if (kind === "schedule") {
 				await this.$refs.taskManager.openForUser({ login: options.login });
 				return;
@@ -34741,8 +34742,8 @@ var _sfc_main = {
 					this.snapshotActive = !!this.$refs.docks?.presented("snapshot");
 				});
 			}
-			if (id === "tasks" && this.canAdminister) this.$refs.taskManager.open(false, "", {}, false, null, !restoring);
-			if (id === "task_calendar" && this.canAdminister) {
+			if (id === "tasks") this.$refs.taskManager.open(false, "", {}, false, null, !restoring);
+			if (id === "task_calendar") {
 				this.updatesTasksOpen = true;
 				this.$refs.taskManager.open(false, "", {}, true);
 			}
@@ -38203,32 +38204,31 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 							label: "Selected record actions"
 						}, {
 							default: withCtx(() => [
-								$data.canAdminister ? (openBlock(), createBlock(_component_AppButton, {
-									key: 0,
+								createVNode(_component_AppButton, {
 									label: "Tasks for selected objects",
 									icon: "MDI_CLIPBOARD_TEXT_OUTLINE",
 									onClick: _cache[127] || (_cache[127] = ($event) => _ctx.$refs.taskManager.open(true))
-								})) : createCommentVNode("", true),
+								}),
 								$data.interfaceConfig?.operations?.edit ? (openBlock(), createBlock(_component_AppButton, {
-									key: 1,
+									key: 0,
 									label: "Edit selected",
 									icon: "edit",
 									onClick: _cache[128] || (_cache[128] = ($event) => _ctx.$refs.recordForm.open($data.selectedKeys))
 								})) : createCommentVNode("", true),
 								$data.interfaceConfig?.operations?.retire && $options.selectedRecords.some((record) => record[$data.interfaceConfig.operations.retire_column] !== "retired") ? (openBlock(), createBlock(_component_AppButton, {
-									key: 2,
+									key: 1,
 									label: "Retire selected",
 									icon: "archive",
 									onClick: _cache[129] || (_cache[129] = ($event) => _ctx.$refs.objectAction.open($options.selectedRecords, "retire"))
 								})) : createCommentVNode("", true),
 								$data.interfaceConfig?.operations?.retire && $options.selectedRecords.some((record) => record[$data.interfaceConfig.operations.retire_column] === "retired") ? (openBlock(), createBlock(_component_AppButton, {
-									key: 3,
+									key: 2,
 									label: "Reactivate selected",
 									icon: "refresh",
 									onClick: _cache[130] || (_cache[130] = ($event) => _ctx.$refs.objectAction.open($options.selectedRecords, "reactivate"))
 								})) : createCommentVNode("", true),
 								$data.interfaceConfig?.operations?.delete ? (openBlock(), createBlock(_component_AppButton, {
-									key: 4,
+									key: 3,
 									label: "Delete selected",
 									icon: "delete",
 									destructive: "",
@@ -38672,6 +38672,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 			!$data.windowPage || $data.windowPage.kind === "task_manager" ? (openBlock(), createBlock(_component_TaskManager, {
 				key: 15,
 				ref: "taskManager",
+				"can-administer": $data.canAdminister,
 				docked: !$data.windowPage,
 				"calendar-target": $data.windowPage ? void 0 : "#dock-task_calendar",
 				"calendar-active": $data.taskCalendarActive,
@@ -38698,6 +38699,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 				onSaved: _cache[174] || (_cache[174] = ($event) => $options.reloadWorkspace({ restore: true })),
 				onObject: $options.inspect
 			}, null, 8, [
+				"can-administer",
 				"docked",
 				"calendar-target",
 				"calendar-active",

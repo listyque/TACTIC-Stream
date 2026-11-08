@@ -7,11 +7,10 @@ import json
 
 from pyasm.biz import Pipeline, Project, ProjectSetting
 from pyasm.command import Command
-from pyasm.common import UserException
+from pyasm.common import UserException, SecurityException
 from pyasm.search import Search, SearchType
-from pyasm.security.security import _require_admin
 from tactic.ui.widget.discussion_wdg import discussion_target
-from .task_inspector import task_fields, task_scope, task_processes, task_edit_options, prepare_task_data
+from .task_inspector import task_fields, task_scope, task_processes, task_edit_options, prepare_task_data, task_permissions, task_status_names, require_task_access
 
 
 ADDITIONAL_FIELDS = ('process', 'context', 'priority', 'milestone_code')
@@ -19,9 +18,10 @@ ADDITIONAL_FIELDS = ('process', 'context', 'priority', 'milestone_code')
 
 def task_field_catalog(parent_key=''):
     """Resolve priority from the native XML input and project milestones."""
-    _require_admin()
+    require_task_access()
     parent = discussion_target(parent_key) if parent_key else Project.get()
-    fields = task_fields(ADDITIONAL_FIELDS)
+    permissions = task_permissions(parent)
+    fields = task_fields(ADDITIONAL_FIELDS, writable=permissions['edit'] or permissions['create'])
     visible = {field['name'] for field in fields}
     priorities, milestones, sources = [], [], []
     if 'priority' in visible:
@@ -60,13 +60,16 @@ def task_field_catalog(parent_key=''):
         sources.extend(row.get_data() for row in rows)
     processes = []
     if parent.get_base_search_type() == 'sthpw/project':
-        processes = [dict(value='task', label='task', type='manual', color='')]
+        from .task_element_wdg import TaskElementWdg
+        if TaskElementWdg.can_view_process('task'):
+            processes = [dict(value='task', label='task', type='manual', color='')]
     elif parent and 'process' in visible:
         pipeline = Pipeline.get_by_code(parent.get_value('pipeline_code', no_exception=True))
         processes = [choice for choice in task_processes(parent, pipeline, '') if choice['type'] != 'progress']
-    result = dict(priorityChoices=priorities, milestoneChoices=milestones, fields=fields, processes=processes,
+    result = dict(priorityChoices=priorities, milestoneChoices=milestones, fields=fields, processes=processes, permissions=permissions,
                   bidDurationUnit=ProjectSetting.get_value_by_key('bid_duration_unit') or 'hour',
                   project=Project.get_project_code(), parent_key=parent.get_search_key() if parent else '')
+    result['statusChoices'] = [dict(value=name, label=name, color='') for name in task_status_names(SearchType.create('sthpw/task'))]
     users = Search('sthpw/login'); users.add_order_by('display_name'); users.add_order_by('login')
     from tactic_stream.server.security_groups import user_directory
     result['users'] = [dict(**user, value=user['login'], label=user['displayName'])
@@ -84,7 +87,7 @@ def task_field_catalog(parent_key=''):
     return result
 
 
-def workspace_edit_plan(item, catalogs):
+def workspace_edit_plan(item, catalogs, read_only=False):
     if not isinstance(item, dict) or any(not isinstance(item.get(name, ''), str)
             for name in ('search_key', 'task_key', 'process', 'context', 'draft_id')):
         raise ValueError('Invalid task draft')
@@ -95,6 +98,8 @@ def workspace_edit_plan(item, catalogs):
         raise ValueError('A task draft identity is required')
     parent, process, tasks, selected, defaults, revision, pipeline = task_scope(
         item.get('search_key'), item.get('process'), item.get('task_key', ''))
+    if not read_only and operation in ('create', 'delete') and not task_permissions(parent)[operation]:
+        raise SecurityException('Task write access denied')
     node = pipeline.get_process(process) if pipeline else None
     if node and node.get_type() == 'progress':
         raise ValueError('This process has no editable task')
@@ -115,7 +120,8 @@ def workspace_edit_plan(item, catalogs):
     catalog = catalogs[key]
     plan = dict(operation=operation, draft_id=item.get('draft_id', ''), search_key=key,
         task_key=selected.get_search_key() if selected else '', process=process, context=task.get_value('context') or process,
-        expected_revision=revision, catalog_revision=catalog['revision'], defaults=defaults,
+        expected_revision=revision, catalog_revision=catalog['revision'],
+        defaults={field['name']: defaults[field['name']] for field in fields if field['name'] in defaults},
         task={field['name']: task.get_value(field['name'], no_exception=True) for field in fields},
         fields=fields, statuses=statuses, users=users, catalog=catalog,
         statusChoices=[dict(value=name, label=task.get_pipeline().get_process(name).get_label() or name,
@@ -136,11 +142,11 @@ def task_deletion(task):
 class TaskWorkspaceEditCmd(Command):
     """Prepare or atomically save Task Manager inserts, edits and dependency deletion."""
     def check_security(self):
-        _require_admin()
+        require_task_access()
         return True
 
     def execute(self):
-        _require_admin()
+        require_task_access()
         action = self.kwargs.get('action', 'prepare')
         if action not in ('prepare', 'save'):
             raise ValueError('Unsupported task workspace edit operation')
@@ -158,6 +164,8 @@ class TaskWorkspaceEditCmd(Command):
         seen, prepared, plans, catalogs = set(), [], [], {}
         for item in items:
             parent, selected, task, plan = workspace_edit_plan(item, catalogs)
+            if action == 'save' and not task_permissions(parent)['edit' if plan['operation'] == 'update' else plan['operation']]:
+                raise SecurityException('Task write access denied')
             identity = ('create', plan['draft_id']) if not selected else ('update', selected.get_id())
             if identity in seen:
                 raise ValueError('Duplicate task drafts')

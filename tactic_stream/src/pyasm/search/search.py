@@ -1287,13 +1287,16 @@ class SObject:
                             raise UnsupportedContract('Changing task/note ownership requires dependency propagation')
             if parent_write:
                 parent = self.get_parent()
-                if (parent is None or parent.get_base_search_type().startswith(('sthpw/', 'config/')) or
-                        parent.get_project_code() != project):
+                project_task = (base == 'sthpw/task' and parent is not None
+                                and parent.get_base_search_type() == 'sthpw/project' and parent.get_code() == project)
+                if parent is None or not project_task and (
+                        parent.get_base_search_type().startswith(('sthpw/', 'config/')) or parent.get_project_code() != project):
                     raise SecurityException('Task/note requires a visible parent in its own project')
                 for name, expected in (('search_code', parent.get_code()), ('search_id', parent.get_id())):
                     if str(self.get_value(name, no_exception=True) or '') not in ('', str(expected)):
                         raise SecurityException('Task/note parent identities do not match')
-                parent._check_business_write('edit')
+                if not project_task:
+                    parent._check_business_write('edit')
                 if base == 'sthpw/note':
                     if self.get_value('login') != context.login:
                         raise SecurityException('Note writes require their authenticated author')

@@ -9,7 +9,7 @@ import calendar
 from datetime import date, datetime, timedelta
 
 from pyasm.command import Command
-from pyasm.security.security import _require_admin
+from .task_inspector import require_task_access
 
 def parse_datetime(value):
     text = str(value or "").strip()
@@ -674,11 +674,11 @@ class TaskScheduleCmd(Command):
     prepares native tasks, checks field rights/revisions and runs Task.commit.
     """
     def check_security(self):
-        _require_admin()
+        require_task_access()
         return True
 
     def execute(self):
-        _require_admin()
+        require_task_access()
         records = checked_records(self.kwargs.get('records', []))
         action = self.kwargs.get('action', 'projection')
         if action == 'projection':
