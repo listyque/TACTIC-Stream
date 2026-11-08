@@ -17,6 +17,7 @@ import * as Note from '../../src/tactic_stream/shared_ui/features/objects/note.u
 import DescriptionSurface from '../../frontend/src/features/objects/DescriptionSurface.vue';
 import SnapshotSummary from '../../frontend/src/features/objects/SnapshotSummary.vue';
 import SnapshotToolbar from '../../frontend/src/features/objects/SnapshotToolbar.vue';
+import SnapshotBrowser from '../../frontend/src/features/objects/SnapshotBrowser.vue';
 import ObjectFieldFrame from '../../frontend/src/features/objects/ObjectFieldFrame.vue';
 import ObjectReportSurface from '../../frontend/src/features/objects/ObjectReportSurface.vue';
 import ObjectDeleteSurface from '../../frontend/src/features/objects/ObjectDeleteSurface.vue';
@@ -85,7 +86,19 @@ window.objectsFixture = {
     id="objects-fixture"
     :style="{ width: fixture.width + 'px', height: fixture.height + 'px' }"
   >
-    <div v-if="fixture.screen === 'duplicate'" class="duplicate-fixture">
+    <div
+      v-if="fixture.screen === 'snapshot-browser'"
+      id="dock-snapshot"
+      style="height: 100%"
+    >
+      <SnapshotBrowser
+        ticket="fixture"
+        project="one"
+        :target="model.target"
+        active
+      />
+    </div>
+    <div v-else-if="fixture.screen === 'duplicate'" class="duplicate-fixture">
       <ObjectDuplicateSurface
         :model="model"
         part="header"

@@ -5,7 +5,7 @@ import { M as rpc, S as objectStatus, _t as serverTimestamp, a as __vitePreload,
 import { $ as virtualRange, F as _sfc_main$19, K as button, Q as revealListOffset, T as translate, U as observeFrameSizes, X as node, Y as muted, Z as rect, _ as javascriptTokens, a as _sfc_main$20, b as xmlTokens, k as ItemPreview_default, q as label, t as _sfc_main$18, v as pythonTokens } from "./FrameView.js";
 import { n as qtLabelTextWidth } from "./textMetrics.js";
 import { j as escapeHtml$1, u as _sfc_main$21, v as timestampLabel, x as browserLink } from "./admin.document.js";
-import { f as summary } from "./file_values.js";
+import { g as summary } from "./file_values.js";
 import { s as RelatedObjects_default } from "./ConfiguredView.js";
 import { t as _sfc_main$22 } from "./VirtualCollection.js";
 import { t as _sfc_main$23 } from "./ContentLoadingOverlay.js";

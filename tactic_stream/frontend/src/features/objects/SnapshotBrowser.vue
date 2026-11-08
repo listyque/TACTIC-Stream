@@ -16,6 +16,7 @@ import AppSlider from '../../controls/AppSlider.vue';
 import MiddleElide from '../../controls/MiddleElide.vue';
 import ItemPreview from '../../controls/ItemPreview.vue';
 import FilePreview from './FilePreview.vue';
+import SnapshotComparison from './SnapshotComparison.vue';
 import { fileBlob as blob } from './previewFiles.js';
 import RecordForm from './RecordForm.vue';
 import ObjectAction from './ObjectAction.vue';
@@ -119,6 +120,28 @@ const vertical = computed(
   () => !mobile.value && options.value.orientation === 'vertical'
 );
 const current = computed(() => previews.value[index.value]);
+const comparing = ref(false);
+const compareChoices = computed(() => {
+  const versions = new Map(
+    snapshots.value.map((row) => [row.__search_key__, row])
+  );
+  return SnapshotUI.comparisonChoices(
+    previews.value.map((row) => {
+      const snapshotId = row.file?.snapshotKey,
+        version = versions.get(snapshotId);
+      return {
+        ...row,
+        snapshotId,
+        token: row.file?.token,
+        version: version?.version,
+        context: version?.context
+      };
+    })
+  );
+});
+const canCompare = computed(
+  () => !!SnapshotUI.comparisonPair(compareChoices.value)[1]
+);
 const phoneFile = computed(() =>
   rows.value.find((row) => row.token && row.token === selectedFile.value)
 );
@@ -172,6 +195,7 @@ function clamp(value) {
 const toolbarModel = computed(() => ({
   ...options.value,
   phone: mobile.value,
+  canCompare: canCompare.value,
   canRefresh: !loading.value && !!props.target?.key
 }));
 function toolbarAction(event) {
@@ -179,6 +203,10 @@ function toolbarAction(event) {
   else if (event.type === 'image') setOption('imageMode', event.value);
 }
 function optionAction(command) {
+  if (command === 'compare') {
+    comparing.value = canCompare.value;
+    return;
+  }
   const change = SnapshotUI.optionChange(options.value, command);
   setOption(change.key, change.value);
 }
@@ -225,6 +253,7 @@ function reset() {
   request++;
   rows.value = [];
   previews.value = [];
+  comparing.value = false;
   snapshots.value = [];
   owner.value = null;
   loading.value = false;
@@ -555,6 +584,7 @@ onBeforeUnmount(() => {
       </p>
       <div
         ref="area"
+        v-show="!comparing || !canCompare"
         class="snapshot-area"
         :class="{
           vertical,
@@ -805,6 +835,12 @@ onBeforeUnmount(() => {
           @keydown="splitterKey"
         ></div>
       </div>
+      <SnapshotComparison
+        v-if="comparing && canCompare"
+        :choices="compareChoices"
+        :image-mode="options.imageMode"
+        @close="comparing = false"
+      />
       <AppMenu
         ref="fileMenu"
         class="snapshot-file-menu"

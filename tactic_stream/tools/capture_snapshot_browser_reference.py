@@ -53,7 +53,11 @@ def main():
                   fileType=row.get('fileType',''),path=row.get('path',''),repository=row.get('repository',''),
                   baseType=row.get('baseType',''),exists=row.get('exists',True),checking=False,matchesRemote=True,
                   snapshotNodeId=row['snapshotKey'],version='') for row in data['rows']]
-    pictures = [dict(token=row['file']['token'],url=row['localUrl'],title=row['title'],qualityUrl='',qualityRequested=True) for row in data['previews']]
+    snapshots = {row['__search_key__']: row for row in data['snapshots']}
+    pictures = [dict(token=row['file']['token'], url=row['localUrl'], title=row['title'],
+        qualityUrl='', qualityRequested=True, snapshotId=row['file']['snapshotKey'],
+        version=snapshots[row['file']['snapshotKey']]['version'],
+        context=snapshots[row['file']['snapshotKey']]['context']) for row in data['previews']]
     file_model = RecordListModel(tuple(files[0]))
     picture_model = RecordListModel(tuple(pictures[0]))
     for name,value in dict(appController=controller,snapshotPreviewModel=picture_model,snapshotFileModel=file_model).items():
@@ -66,13 +70,13 @@ import "%s" as Handler
 ApplicationWindow {
     width:440; height:500; visible:true
     Handler.Theme { id:theme; dark:true }
-    Handler.SnapshotBrowser { anchors.fill:parent; theme:theme }
+    Handler.SnapshotBrowser { objectName:"snapshotBrowser"; anchors.fill:parent; theme:theme }
 }''' % (HANDLER/'thlib/ui/qml').as_uri()
     component.setData(qml.encode(),QUrl.fromLocalFile(str(ROOT/'tools/snapshot-browser-reference.qml')))
     window = None
     try:
         for width,height in ((440,500),(880,650)):
-            for name in ('empty','both','all','more','vertical','files','preview'):
+            for name in ('empty','both','all','more','vertical','files','preview','compare-side','compare-divider'):
                 controller.show_all = name in ('all','more','vertical','files','preview')
                 controller.show_more = name in ('more','vertical','files','preview')
                 controller.orientation = 'vertical' if name in ('vertical','files','preview') else 'horizontal'
@@ -83,12 +87,24 @@ ApplicationWindow {
                 window = component.create()
                 if window is None: raise RuntimeError('\n'.join(error.toString() for error in component.errors()))
                 window.resize(width,height)
+                if name.startswith('compare-'):
+                    browser = window.findChild(QObject, 'snapshotBrowser')
+                    browser.refreshComparisonChoices()
+                    browser.setProperty('comparing', True)
+                    QTest.qWait(20)
+                    comparison = window.findChild(QObject, 'snapshotComparison')
+                    if comparison is None:
+                        raise RuntimeError('Native comparison did not mount')
+                    comparison.setProperty('rightToken', pictures[-1]['token'])
+                    comparison.setProperty('mode', name.removeprefix('compare-'))
+                    comparison.setProperty('position', 51)
                 QTest.qWait(220)
                 if not window.grabWindow().save(str(OUTPUT/f'handler-{name}-{width}.png')): raise RuntimeError('Native screenshot failed')
                 print(f'Handler Snapshot Browser {name} {width}',flush=True)
                 window.close(); window.deleteLater(); app.processEvents(); window = None
         sources=['thlib/ui/qml/SnapshotBrowser.qml','thlib/ui/qml/SnapshotBrowserToolbar.qml','thlib/ui/qml/SnapshotBrowserOptionsMenu.qml',
-                 'thlib/ui/qml/SnapshotPreviewLayers.qml','thlib/ui/controllers/snapshot_details.py','thlib/ui/controllers/snapshot_actions.py',
+                 'thlib/ui/qml/SnapshotPreviewLayers.qml','thlib/ui/qml/features/objects/SnapshotComparison.qml',
+                 'thlib/ui/controllers/snapshot_details.py','thlib/ui/controllers/snapshot_actions.py',
                  'thlib/ui/controllers/search_tabs.py','thlib/ui/workspace_models/state_snapshot_state.py']
         (OUTPUT/'native-source.json').write_text(json.dumps({path:hashlib.sha256((HANDLER/path).read_bytes()).hexdigest() for path in sources},indent=2)+'\n',encoding='utf-8')
     finally:

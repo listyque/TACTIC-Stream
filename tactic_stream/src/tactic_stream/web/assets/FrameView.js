@@ -2201,6 +2201,10 @@ var _sfc_main$17 = {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/core/strings.mjs
 var russian = {
+	"Compare snapshots": "Сравнить снапшоты",
+	"Side by side": "Рядом",
+	"Image divider": "Разделитель",
+	"Close comparison": "Закрыть сравнение",
 	"Custom scripts": "Кастомные скрипты",
 	"Clear a checkbox to deny a custom script to a group. Any group denial wins. Unconfigured scripts stay available; administrators are exempt.": "Снимите галочку, чтобы запретить кастомный скрипт группе. Запрет в любой группе имеет приоритет. Без настроенного запрета доступ сохраняется; администратор имеет доступ всегда.",
 	Runners: "Раннеры",

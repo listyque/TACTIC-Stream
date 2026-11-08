@@ -114,6 +114,42 @@ try {
     3
   );
   await capture('both');
+  await options().click();
+  await page
+    .getByRole('button', { name: 'Compare snapshots', exact: true })
+    .click();
+  const comparison = content.getByRole('region', {
+    name: 'Compare snapshots',
+    exact: true
+  });
+  const chooser = comparison.getByRole('combobox', {
+    name: 'Snapshot B',
+    exact: true
+  });
+  await chooser.selectOption({
+    label: await chooser.locator('option').last().textContent()
+  });
+  assert.match(
+    await chooser.locator('option:checked').textContent(),
+    /v1 · publish/
+  );
+  await comparison.locator('[data-comparison="A"] img').waitFor();
+  await comparison.locator('[data-comparison="B"] img').waitFor();
+  await capture('compare-side');
+  await comparison
+    .getByRole('radio', { name: 'Image divider', exact: true })
+    .click();
+  const divider = comparison.getByRole('slider', {
+    name: 'Image divider',
+    exact: true
+  });
+  await divider.press('ArrowRight');
+  assert.equal(await divider.inputValue(), '51');
+  await capture('compare-divider');
+  await comparison
+    .getByRole('button', { name: 'Close comparison', exact: true })
+    .click();
+  await comparison.waitFor({ state: 'hidden' });
   await panel
     .getByRole('button', { name: 'Next preview', exact: true })
     .click();

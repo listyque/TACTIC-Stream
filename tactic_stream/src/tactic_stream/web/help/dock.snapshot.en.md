@@ -6,6 +6,12 @@ order: 27
 ---
 # Snapshot Browser dock
 
+Choose **Compare snapshots** in the options menu when two snapshots have image
+previews. Select A and B by version, context and filename. **Side by side** shows
+both images at once. **Image divider** aligns them in one viewport. Use the
+slider or its arrow keys to reveal either side. Load older snapshots in the file
+list to bring their image previews into the choices.
+
 > Open Workspace panels → Browsing → Snapshot Browser to inspect files and previews of the selected object, process or snapshot.
 
 ## Selection and versions

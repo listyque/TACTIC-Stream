@@ -77,6 +77,12 @@ function toolbar(model, width, language) {
 }
 function optionActions(model) {
 	return [
+		...model.canCompare !== void 0 ? [{
+			title: "Compare snapshots",
+			icon: "image",
+			command: "compare",
+			enabled: model.canCompare
+		}, { separator: true }] : [],
 		{
 			title: "Preview and Files",
 			icon: "grid-view",
@@ -130,6 +136,64 @@ function optionActions(model) {
 		command: "vertical",
 		checked: model.orientation === "vertical"
 	}]);
+}
+function comparisonChoices(records) {
+	return Array.from(records).filter((record) => record.url && record.snapshotId && /\.(png|jpe?g|webp|gif|bmp|tiff?)$/i.test(record.title)).map((record) => Object.assign({}, record, {
+		value: record.token,
+		label: [
+			"v" + record.version,
+			record.context,
+			record.title
+		].filter(Boolean).join(" · ")
+	}));
+}
+function comparisonPair(choices, left, right) {
+	const a = choices.find((row) => row.value === left) || choices.find((row) => Number(row.version) > 0) || choices[0];
+	return [a, choices.find((row) => row.value === right && row.snapshotId !== a?.snapshotId) || choices.find((row) => Number(row.version) > 0 && row.snapshotId !== a?.snapshotId) || choices.find((row) => row.snapshotId !== a?.snapshotId)];
+}
+function comparisonLayout(width, height, mode, position) {
+	const margin = metrics.bodyMargin, gap = metrics.splitter;
+	const w = Math.max(0, width - 2 * margin), half = Math.max(0, (w - gap) / 2);
+	const top = 88, divider = mode === "divider";
+	const h = Math.max(0, height - top - margin - (divider ? 30 : 0));
+	const split = Math.max(0, Math.min(1, position / 100)) * w;
+	return {
+		pickers: [rect(margin, 44, half, 36), rect(margin + half + gap, 44, half, 36)],
+		a: rect(margin, top, divider ? w : half, h),
+		b: rect(margin + (divider ? split : half + gap), top, divider ? w - split : half, h),
+		bOffset: divider ? -split : 0,
+		bWidth: divider ? w : half,
+		line: rect(margin + split, top, 1, h),
+		slider: rect(margin, top + h + 2, w, 26)
+	};
+}
+function comparisonToolbar(mode, width, language) {
+	const margin = metrics.bodyMargin, gap = metrics.splitter;
+	const size = Math.min(140, Math.max(0, (width - 2 * margin - 36 - 2 * gap) / 2));
+	const tr = (text) => translate(text, language);
+	return {
+		nodes: [
+			button("snapshotCompareSide", rect(margin, 5, size, 34), tr("Side by side"), "", {
+				type: "mode",
+				value: "side"
+			}, true, {
+				radio: true,
+				selected: mode === "side"
+			}),
+			button("snapshotCompareDivider", rect(margin + size + gap, 5, size, 34), tr("Image divider"), "", {
+				type: "mode",
+				value: "divider"
+			}, true, {
+				radio: true,
+				selected: mode === "divider"
+			}),
+			button("snapshotCompareClose", rect(Math.max(0, width - margin - 36), 5, 36, 34), tr("Close comparison"), "close", { type: "close" }, true, {
+				iconOnly: true,
+				round: false
+			})
+		],
+		height: 44
+	};
 }
 function optionChange(model, command) {
 	if (command.startsWith("content_")) return {
@@ -288,6 +352,6 @@ function prettySize(value) {
 	}
 }
 //#endregion
-export { clampRatio as a, layout as c, optionChange as d, summary as f, sourceIcon as i, metrics as l, fileName as n, fileColumns as o, toolbar as p, prettySize as r, fileIcon as s, extension as t, optionActions as u };
+export { toolbar as _, clampRatio as a, comparisonPair as c, fileIcon as d, layout as f, summary as g, optionChange as h, sourceIcon as i, comparisonToolbar as l, optionActions as m, fileName as n, comparisonChoices as o, metrics as p, prettySize as r, comparisonLayout as s, extension as t, fileColumns as u };
 
 //# sourceMappingURL=file_values.js.map

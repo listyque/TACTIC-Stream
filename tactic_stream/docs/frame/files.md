@@ -89,6 +89,12 @@ feature-specific replacements for base controls.
 
 ## Ownership and lifecycle requirements
 
+- Snapshot comparison uses the loaded image preview records. A and B must have
+  distinct snapshot identities. Numbered versions take priority over versionless
+  copies when choosing defaults. Both engines use the same choice and divider
+  geometry. Run `frontend/tests/snapshot_comparison.mjs` and
+  `tools/capture_snapshot_browser_reference.py` against the same isolated projection.
+
 - Browser queue validation, clipboard and capture retain their session,
   operation and source identity. Disposal/account changes invalidate callbacks;
   abandoned screen capture releases its tracks. Same-user renewal preserves
