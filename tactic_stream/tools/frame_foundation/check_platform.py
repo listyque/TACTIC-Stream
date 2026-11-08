@@ -1445,7 +1445,12 @@ def main():
             if args.jobs > 1:
                 # Timing-sensitive Qt/server stages can fail only under parallel load;
                 # rerun those alone once and keep their names visible in the report.
-                retry = [i for i, item in enumerate(results) if isinstance(item, Exception)]
+                # The automatic Windows retry of object-report-files triggered a bugcheck.
+                retry = [
+                    i for i, item in enumerate(results)
+                    if isinstance(item, Exception)
+                    and not (os.name == "nt" and steps[i][0] == "object-report-files")
+                ]
                 report["retried"] = [steps[i][0] for i in retry]
                 for i in retry:
                     print("serial retry:", steps[i][0], flush=True)

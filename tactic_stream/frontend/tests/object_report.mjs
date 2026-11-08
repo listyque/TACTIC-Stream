@@ -64,7 +64,7 @@ try {
   assert.equal(chrome.height, chrome.expectedHeight);
   assert.deepEqual(
     chrome.buttons.map((button) => button.label),
-    ['Edit record', 'Maximize window', 'Close details']
+    ['Edit record', 'Open in separate page', 'Maximize window', 'Close details']
   );
   for (const button of chrome.buttons) {
     assert.equal(button.width, 34);
