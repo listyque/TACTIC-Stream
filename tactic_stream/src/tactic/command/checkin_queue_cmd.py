@@ -16,6 +16,7 @@ from pyasm.search import Search, SearchType, DbContainer
 QUEUE = 'checkin'
 BATCH_QUEUE = 'checkin-batch'
 JOB_COMMAND = 'tactic.command.checkin_queue_cmd.CheckinQueueJobCmd'
+INGEST_COMMAND = 'tactic.command.related_ingest_cmd.RelatedIngestCmd'
 MAX_FILES = 10000
 MAX_OPERATIONS = 2000
 
@@ -124,7 +125,7 @@ def record_update(data, job, *, error='', snapshot=None):
     data['updates'][operation_id] = event
 
 
-def job_updated(job, *, error=''):
+def job_updated(job, *, error='', uncertain=False):
     """Completion and its update join the same native transaction as the snapshot."""
     if job.get_value('command') != JOB_COMMAND:
         return
@@ -136,6 +137,13 @@ def job_updated(job, *, error=''):
         data = batch.get_json_value('data')
         result = job.get_json_value('data').get('result') or {}
         record_update(data, job, error=error, snapshot=result.get('snapshot'))
+        event = data['updates'][job.get_json_value('data')['operation_id']]
+        if result.get('search_key'):
+            event['search_key'] = result['search_key']
+        if result.get('skipped'):
+            event.update(skipped=True, reason=result['reason'])
+        if uncertain:
+            event['uncertain'] = True
         batch.set_json_value('data', data)
         save_queue(batch)
 
@@ -195,10 +203,19 @@ class SubmitCheckinChunkCmd(Command):
                         raise ValueError('Invalid queued check-in')
                     op_id = identity(operation['operation_id'])
                     options = operation['options']
-                    if not isinstance(options, dict) or set(options) - {'search_key', 'context', 'process', 'description', 'source_files', 'templates', 'padding', 'repository_alias', 'keep_file_name', 'is_revision', 'version', 'explicit_filename', 'update_versionless', 'only_versionless', 'create_icon', 'versionless_mode', 'application_info'}:
+                    if not isinstance(options, dict) or set(options) - {'search_key', 'context', 'process', 'description', 'source_files', 'templates', 'padding', 'repository_alias', 'keep_file_name', 'is_revision', 'version', 'explicit_filename', 'update_versionless', 'only_versionless', 'create_icon', 'versionless_mode', 'application_info', 'kind', 'ingest'}:
                         raise ValueError('Invalid queued check-in options')
                     records = options.get('source_files')
                     matched_files(records, options.get('templates'), options.get('padding', 3), max_files=MAX_FILES)
+                    kind = options.get('kind', 'snapshot')
+                    if kind not in ('snapshot', 'preview', 'ingest') or kind != 'snapshot' and len(records) != 1:
+                        raise ValueError('Invalid queued publication kind')
+                    if kind == 'ingest':
+                        from pyasm.security.security import _require_admin
+                        _require_admin()
+                        ingest = options.get('ingest')
+                        if not isinstance(ingest, dict) or set(ingest) - {'parent_key', 'search_type', 'path', 'options', 'decision', 'search_key'} or ingest.get('parent_key') != options.get('search_key'):
+                            raise ValueError('Invalid queued related ingest')
                     if any(record.get('sha256') is not None and not re.fullmatch(r'[a-f0-9]{64}', str(record['sha256'])) for record in records):
                         raise ValueError('Invalid check-in source checksum')
                     parent = SearchKey.get_by_search_key(options.get('search_key'))
@@ -295,8 +312,9 @@ class CheckinQueueJobCmd(Command):
             raise SecurityException('Check-in assembly points outside staging')
         directory.mkdir(parents=True, exist_ok=True)
         names = []
+        kind = value['options'].get('kind', 'snapshot')
         for index, record in enumerate(value['options']['source_files']):
-            name = str(index) + Path(record['path']).suffix
+            name = str(index) + Path(record['path']).suffix if kind == 'snapshot' else Path(record['path']).name
             destination = directory / name
             if destination.is_symlink():
                 raise SecurityException('Check-in staging links are not supported')
@@ -326,14 +344,40 @@ class CheckinQueueJobCmd(Command):
             if record.get('sha256') and (checksum or hashlib.sha256()).hexdigest() != record['sha256']:
                 raise UserException('Check-in source changed while its parts were uploaded')
             names.append(name)
-        command = BrowserCheckinCmd(**dict(value['options'], action='checkin', files=names))
-        command.upload_directory = directory.as_posix()
-        command.max_files = MAX_FILES
         from pyasm.common import Xml
         from pyasm.search import Transaction
         Xml.set_attribute(Transaction.get().get_transaction_log().get_root_node(), 'checkin_file_replay', 'complete')
-        Command.execute_cmd(command)
-        value['result'] = dict(snapshot=command.get_info()['snapshot'])
+        options = value['options']
+        if kind == 'snapshot':
+            command = BrowserCheckinCmd(**dict(options, action='checkin', files=names))
+            command.upload_directory = directory.as_posix()
+            command.max_files = MAX_FILES
+            Command.execute_cmd(command)
+            value['result'] = dict(snapshot=command.get_info()['snapshot'])
+        else:
+            from tactic_stream.server.api import Api
+            from pyasm.common import Config
+            previous = Container.get('CheckinQueue:upload_directory')
+            Container.put('CheckinQueue:upload_directory', directory.as_posix())
+            try:
+                if kind == 'ingest':
+                    from .related_ingest_cmd import RelatedIngestCmd
+                    Api.check_method_access('execute_cmd', command=INGEST_COMMAND)
+                    if Config.get_value('security', 'api_cmd_restricted') == 'true' and not Environment.get_security().check_access('api_cmd', INGEST_COMMAND, 'allow', default='allow'):
+                        raise SecurityException('Related ingest command access denied')
+                    command = RelatedIngestCmd(**dict(options['ingest'], action='checkin', filenames=names))
+                    Command.execute_cmd(command)
+                    value['result'] = command.get_info()
+                else:
+                    from tactic_client_lib import TacticServerStub
+                    server = TacticServerStub(protocol='local')
+                    server.set_project(Project.get_project_code())
+                    snapshot = server.simple_checkin(options['search_key'], 'icon', names[0],
+                        mode='uploaded', process='icon', description=options.get('description') or 'Search Type preview',
+                        create_icon=options.get('create_icon', True))
+                    value['result'] = dict(snapshot=snapshot)
+            finally:
+                Container.put('CheckinQueue:upload_directory', previous)
         job.set_json_value('data', value)
         save_queue(job)
         return value['result']

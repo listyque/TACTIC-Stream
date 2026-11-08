@@ -211,6 +211,7 @@
   "Browser settings could not be saved.": "Browser settings could not be saved.",
   "No web path is configured for this file.": "No web path is configured for this file.",
   "File Offline": "File Offline",
+  "Text preview truncated. Download the file to read the rest.": "Text preview truncated. Download the file to read the rest.",
   "Path copied": "Path copied",
   "Web link copied": "Web link copied",
   "Image copied": "Image copied",

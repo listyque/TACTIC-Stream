@@ -151,7 +151,7 @@ export async function uploadFormFile(ticket, project, file, { signal, filename, 
   finally { endActivity(activity); recordRequest(url, { ticket, project, file: { name: file.name, type: file.type, size: file.size } }, data, failure, started, session) }
 }
 
-export async function messageFileRequest(ticket, project, values, file, channel = 'messages') {
+export async function messageFileRequest(ticket, project, values, file, channel = 'messages', { signal, preview = false } = {}) {
   const upload = !!file, url = '/admin/' + channel + '/' + (upload ? 'upload' : 'file')
   const payload = { ticket, project, ...values }, started = performance.now(), session = debugLog.sessionId
   const activity = beginActivity(ticket, upload ? 'Uploading' : 'Downloading')
@@ -159,11 +159,12 @@ export async function messageFileRequest(ticket, project, values, file, channel 
   try {
     const body = upload ? new FormData() : JSON.stringify(payload)
     if (upload) { for (const [key, value] of Object.entries(payload)) body.append(key, value); body.append('file', file) }
-    const response = await fetch(url, { method: 'POST', body, headers: upload ? undefined : { 'Content-Type': 'application/json' }, cache: 'no-store' })
+    const response = await fetch(url, { method: 'POST', body, headers: upload ? undefined : { 'Content-Type': 'application/json' }, cache: 'no-store', signal })
     if (!response.ok) {
       data = await response.json(); const error = new Error(data.error || 'File request failed.'); error.code = data.error_code; error.status = response.status; throw error
     }
     if (upload) { data = await response.json(); return data.result }
+    if (preview) return response
     const blob = await response.blob(); data = { size: blob.size, type: blob.type }; return blob
   } catch (error) { failure = error; throw error }
   finally { endActivity(activity); recordRequest(url, { ...payload, ...(upload ? { file: { name: file.name, size: file.size } } : {}) }, data, failure, started, session, true) }

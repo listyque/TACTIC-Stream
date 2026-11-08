@@ -156,6 +156,9 @@ class Environment(Base):
 
     @classmethod
     def get_upload_dir(cls, ticket=None):
+        staged = Container.get('CheckinQueue:upload_directory')
+        if staged and ticket is None:
+            return staged
         return cls._ticket_directory(Path(cls.get_tmp_dir()) / 'upload', ticket or cls.get_ticket())
 
     @classmethod

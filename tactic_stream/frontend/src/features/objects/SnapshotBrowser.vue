@@ -16,6 +16,7 @@ import AppSlider from '../../controls/AppSlider.vue';
 import MiddleElide from '../../controls/MiddleElide.vue';
 import ItemPreview from '../../controls/ItemPreview.vue';
 import FilePreview from './FilePreview.vue';
+import { fileBlob as blob } from './previewFiles.js';
 import RecordForm from './RecordForm.vue';
 import ObjectAction from './ObjectAction.vue';
 
@@ -424,13 +425,6 @@ async function openMenu(file, event, editing = false) {
   await nextTick();
   fileMenu.value.openAt(event);
 }
-async function blob(file) {
-  if (!file.href)
-    throw new Error(t('No web path is configured for this file.'));
-  const response = await fetch(file.href);
-  if (!response.ok) throw new Error(t('File Offline'));
-  return response.blob();
-}
 function openFile(file) {
   if (file)
     preview.value.open(file.record, {
@@ -438,7 +432,7 @@ function openFile(file) {
       context: snapshots.value.find(
         (row) => row.__search_key__ === file.snapshotKey
       )?.context,
-      loadFile: () => blob(file)
+      loadFile: blob
     });
 }
 async function fileAction(command) {

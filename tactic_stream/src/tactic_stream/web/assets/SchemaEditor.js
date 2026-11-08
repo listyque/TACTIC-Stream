@@ -1,6 +1,6 @@
 import { B as useId, D as nextTick, I as resolveComponent, L as resolveDirective, N as openBlock, _ as createCommentVNode, c as vShow, d as Fragment, g as createBlock, h as createBaseVNode, it as toDisplayString, l as withKeys, p as Teleport, q as withDirectives, rt as normalizeStyle, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
 import { a as _sfc_main$3, o as t, s as appearance, t as _sfc_main$2, z as _plugin_vue_export_helper_default } from "./AppButton.js";
-import { j as rpc } from "./index.js";
+import { M as rpc } from "./index.js";
 import { T as translate, U as observeFrameSizes, X as node, Z as rect, q as label, t as _sfc_main$4 } from "./FrameView.js";
 import "./admin.document.js";
 import SearchTypes_default from "./SearchTypes.js";

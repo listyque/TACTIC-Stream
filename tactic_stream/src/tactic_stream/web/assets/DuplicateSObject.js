@@ -1,7 +1,7 @@
 import { r as __exportAll, t as _sfc_main$2 } from "./ObjectFieldFrame.js";
 import { D as nextTick, I as resolveComponent, K as withCtx, L as resolveDirective, N as openBlock, P as renderList, Z as ref, _ as createCommentVNode, c as vShow, d as Fragment, g as createBlock, h as createBaseVNode, it as toDisplayString, j as onMounted, k as onBeforeUnmount, m as computed, p as Teleport, q as withDirectives, rt as normalizeStyle, tt as unref, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
 import { _ as controls, o as t, s as appearance, t as _sfc_main$3, z as _plugin_vue_export_helper_default } from "./AppButton.js";
-import { dt as notify, j as rpc } from "./index.js";
+import { M as rpc, ft as notify } from "./index.js";
 import { B as _sfc_main$9, K as button, N as _sfc_main$5, P as _sfc_main$6, T as translate, U as observeFrameSizes, W as _sfc_main$8, X as node, Z as rect, j as _sfc_main$7, q as label, t as _sfc_main$4, z as _sfc_main$10 } from "./FrameView.js";
 import { t as captionHeight } from "./sections.ui.js";
 import { a as duplicateProfile, i as contentChoices, n as applyDuplicateProfile, o as saveDuplicateProfile, r as changeContent, t as _sfc_main$11 } from "./ContentLoadingOverlay.js";

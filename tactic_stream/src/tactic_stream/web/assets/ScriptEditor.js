@@ -1,6 +1,6 @@
 import { D as nextTick, E as mergeProps, F as renderSlot, K as withCtx, L as resolveDirective, N as openBlock, P as renderList, T as mergeModels, U as watch, V as useModel, Z as ref, _ as createCommentVNode, c as vShow, d as Fragment, g as createBlock, h as createBaseVNode, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withKeys, m as computed, nt as normalizeClass, p as Teleport, q as withDirectives, rt as normalizeStyle, tt as unref, u as withModifiers, v as createElementBlock, w as inject, x as createVNode } from "./vue.js";
 import { _ as controls, a as _sfc_main$4, o as t, s as appearance, t as _sfc_main$5 } from "./AppButton.js";
-import { Lt as randomUuid, N as scriptEditor, c as beginActivity, d as endActivity, j as rpc } from "./index.js";
+import { M as rpc, P as scriptEditor, Rt as randomUuid, f as endActivity, l as beginActivity } from "./index.js";
 import { A as AppSearchField_default, F as _sfc_main$9, H as frameContentWidth, K as button, S as copyText, T as translate, U as observeFrameSizes, X as node, Y as muted, Z as rect, g as documentSymbols, h as completions, m as _sfc_main$7, o as _sfc_main$8, q as label, s as toolbar$1, t as _sfc_main$6 } from "./FrameView.js";
 import { C as _sfc_main$10, O as _sfc_main$11, c as runBrowserScript, l as scriptTree, s as buttonId } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/scripts/source.ui.mjs

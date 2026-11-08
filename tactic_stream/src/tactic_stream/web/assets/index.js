@@ -1594,7 +1594,7 @@ async function uploadFormFile(ticket, project, file, { signal, filename, subdir 
 		}, data, failure, started, session);
 	}
 }
-async function messageFileRequest(ticket, project, values, file, channel = "messages") {
+async function messageFileRequest(ticket, project, values, file, channel = "messages", { signal, preview = false } = {}) {
 	const upload = !!file, url = "/admin/" + channel + "/" + (upload ? "upload" : "file");
 	const payload = {
 		ticket,
@@ -1613,7 +1613,8 @@ async function messageFileRequest(ticket, project, values, file, channel = "mess
 			method: "POST",
 			body,
 			headers: upload ? void 0 : { "Content-Type": "application/json" },
-			cache: "no-store"
+			cache: "no-store",
+			signal
 		});
 		if (!response.ok) {
 			data = await response.json();
@@ -1626,6 +1627,7 @@ async function messageFileRequest(ticket, project, values, file, channel = "mess
 			data = await response.json();
 			return data.result;
 		}
+		if (preview) return response;
 		const blob = await response.blob();
 		data = {
 			size: blob.size,
@@ -1944,11 +1946,71 @@ async function userAvatar(ticket, project, login, revision, token, file) {
 }
 //#endregion
 //#region src/features/objects/previewFiles.js
-async function fileBlob(file, { signal } = {}) {
-	if (!file?.href) throw new Error(t("No web path is configured for this file."));
+async function fileBlob(file, { signal, preview = false } = {}) {
+	if (!file?.href) throw new Error("No web path is configured for this file.");
 	const response = await fetch(file.href, { signal });
-	if (!response.ok) throw new Error(t("File Offline"));
-	return response.blob();
+	if (!response.ok) throw new Error("File Offline");
+	return preview ? response : response.blob();
+}
+var textLimit = 1e5;
+var mediaTypes = {
+	mp4: "video/mp4",
+	webm: "video/webm",
+	ogv: "video/ogg",
+	mp3: "audio/mpeg",
+	m4a: "audio/mp4",
+	wav: "audio/wav",
+	ogg: "audio/ogg",
+	flac: "audio/flac"
+};
+async function previewFile(file, loadFile, signal) {
+	const media = mediaTypes[file.filename?.split(".").at(-1)?.toLowerCase()];
+	if (file.href && media) {
+		const url = new URL(file.href, location.href);
+		if (["http:", "https:"].includes(url.protocol) && document.createElement(media.split("/")[0]).canPlayType(media)) return {
+			type: media,
+			url: url.href
+		};
+	}
+	const source = await loadFile(file, {
+		signal,
+		preview: true
+	});
+	const response = source instanceof Blob ? new Response(source) : source;
+	const type = (response.headers.get("content-type") || "").split(";")[0].toLowerCase();
+	if (type.startsWith("text/") || ["application/json", "application/xml"].includes(type)) {
+		const reader = response.body?.getReader();
+		const decoder = new TextDecoder();
+		let remaining = textLimit, text = "";
+		if (reader) try {
+			while (true) {
+				const { done, value } = await reader.read();
+				if (done) break;
+				text += decoder.decode(value.subarray(0, remaining), { stream: true });
+				if (value.length > remaining) {
+					await reader.cancel();
+					return {
+						type: "text/plain",
+						text,
+						truncated: true
+					};
+				}
+				remaining -= value.length;
+			}
+		} finally {
+			reader.releaseLock();
+		}
+		return {
+			type: "text/plain",
+			text: text + decoder.decode()
+		};
+	}
+	if (type.startsWith("image/") && type !== "image/svg+xml" || type.startsWith("audio/") || type.startsWith("video/") || type === "application/pdf") return {
+		type,
+		blob: await response.blob()
+	};
+	await response.body?.cancel();
+	return { type };
 }
 //#endregion
 //#region \0vite/preload-helper.js
@@ -2570,6 +2632,6 @@ if (documentation) watchEffect(() => {
 var screen = asyncComponent(documentation ? () => __vitePreload(() => import("./ApiDocumentation.js"), __vite__mapDeps([48,2,3,4,5,6,7,8,49,50,23,51])) : () => __vitePreload(() => import("./App.js").then((n) => n.t), __vite__mapDeps([52,1,2,3,4,5,6,7,8,9,49,50,12,19,20,21,22,13,14,15,16,17,18,23,24,25,26,27,0,10,28,29,11,31,30,53,46,39,43,44,41,42,54])));
 createApp({ render: () => h(screen) }).directive("window", windowDirective).mount("#app");
 //#endregion
-export { workspaceLayouts as $, resultItems as A, logEvent as At, serverRuntime as B, projectCreationCatalog as C, debugLog as Ct, resetRequestActivity as D, formatEvent as Dt, requestActivity as E, forgetSessions as Et, searchConfiguration as F, setServerDebugContext as Ft, tableDependencies as G, sessionAction as H, securityGroups as I, randomId as It, transactionDetails as J, tableDependencyFile as K, securityRules as L, randomUuid as Lt, saveServerConfiguration as M, redact as Mt, scriptEditor as N, savedSessions as Nt, resolveCustomUrl as O, importSession as Ot, scriptShelf as P, sessionRecords as Pt, widgetConfiguration as Q, securityUsers as R, asyncComponent as Rt, projectCatalog as S, clearLive as St, rawDatabase as T, exportSession as Tt, sidebarRequest as U, serverUpdates as V, tableCells as W, userAvatar as X, uploadFormFile as Y, userProfile as Z, messagesRequest as _, dockMinimumHeight as _t, __vitePreload as a, cancelNotificationReply as at, objectRelations as b, mobile as bt, beginActivity as c, editNotificationReply as ct, endActivity as d, notify as dt, setUpdatesAvailable as et, formDefinition as f, resetNotifications as ft, messageFileRequest as g, serverTimestamp as gt, linkPreviews as h, serverClock as ht, readWindowPage as i, beginNotificationReply as it, rpc as j, logRequest as jt, restartServer as k, levels as kt, columnsEditor as l, failNotificationReply as lt, knowledgeRequest as m, submitNotificationReply as mt, bootstrapWindowPage as n, updatesAvailable as nt, fileBlob as o, clearNotificationHistory as ot, interfaceDefinition as p, setNotificationProgress as pt, tableParentGroup as q, installWindowPages as r, activeNotifications as rt, activityFeed as s, dismissNotification as st, windowDirective as t, updateDelay as tt, databaseResources as u, notificationHistory as ut, navigationLink as v, dockMinimumWidth as vt, projectNavigation as w, debugSettings as wt, objectStatus as x, mobileLayout as xt, objectDeletion as y, fit as yt, serverConfiguration as z };
+export { widgetConfiguration as $, restartServer as A, levels as At, serverConfiguration as B, projectCatalog as C, clearLive as Ct, requestActivity as D, forgetSessions as Dt, rawDatabase as E, exportSession as Et, scriptShelf as F, sessionRecords as Ft, tableCells as G, serverUpdates as H, searchConfiguration as I, setServerDebugContext as It, tableParentGroup as J, tableDependencies as K, securityGroups as L, randomId as Lt, rpc as M, logRequest as Mt, saveServerConfiguration as N, redact as Nt, resetRequestActivity as O, formatEvent as Ot, scriptEditor as P, savedSessions as Pt, userProfile as Q, securityRules as R, randomUuid as Rt, objectStatus as S, mobileLayout as St, projectNavigation as T, debugSettings as Tt, sessionAction as U, serverRuntime as V, sidebarRequest as W, uploadFormFile as X, transactionDetails as Y, userAvatar as Z, messageFileRequest as _, serverTimestamp as _t, __vitePreload as a, beginNotificationReply as at, objectDeletion as b, fit as bt, activityFeed as c, dismissNotification as ct, databaseResources as d, notificationHistory as dt, workspaceLayouts as et, endActivity as f, notify as ft, linkPreviews as g, serverClock as gt, knowledgeRequest as h, submitNotificationReply as ht, readWindowPage as i, activeNotifications as it, resultItems as j, logEvent as jt, resolveCustomUrl as k, importSession as kt, beginActivity as l, editNotificationReply as lt, interfaceDefinition as m, setNotificationProgress as mt, bootstrapWindowPage as n, updateDelay as nt, fileBlob as o, cancelNotificationReply as ot, formDefinition as p, resetNotifications as pt, tableDependencyFile as q, installWindowPages as r, updatesAvailable as rt, previewFile as s, clearNotificationHistory as st, windowDirective as t, setUpdatesAvailable as tt, columnsEditor as u, failNotificationReply as ut, messagesRequest as v, dockMinimumHeight as vt, projectCreationCatalog as w, debugLog as wt, objectRelations as x, mobile as xt, navigationLink as y, dockMinimumWidth as yt, securityUsers as z, asyncComponent as zt };
 
 //# sourceMappingURL=index.js.map

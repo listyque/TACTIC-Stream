@@ -1,6 +1,6 @@
 import { D as nextTick, K as withCtx, N as openBlock, P as renderList, U as watch, Y as markRaw, Z as ref, _ as createCommentVNode, d as Fragment, g as createBlock, h as createBaseVNode, it as toDisplayString, k as onBeforeUnmount, m as computed, nt as normalizeClass, p as Teleport, rt as normalizeStyle, tt as unref, u as withModifiers, v as createElementBlock, w as inject, x as createVNode } from "./vue.js";
 import { D as spacing, a as _sfc_main$2, o as t, s as appearance, t as _sfc_main$3, y as cssRoles } from "./AppButton.js";
-import { Lt as randomUuid, dt as notify, j as rpc } from "./index.js";
+import { M as rpc, Rt as randomUuid, ft as notify } from "./index.js";
 import { F as _sfc_main$4, K as button, T as translate, U as observeFrameSizes, X as node, Y as muted, Z as rect, q as label, t as _sfc_main$5 } from "./FrameView.js";
 import { t as _sfc_main$6 } from "./AppDialog.js";
 import { B as _sfc_main$7, rt as _sfc_main$8 } from "./RelatedObjects.js";

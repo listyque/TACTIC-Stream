@@ -1,6 +1,6 @@
 import { A as onDeactivated, K as withCtx, N as openBlock, O as onActivated, R as resolveDynamicComponent, U as watch, Z as ref, g as createBlock, h as createBaseVNode, j as onMounted, k as onBeforeUnmount, m as computed, nt as normalizeClass, x as createVNode } from "./vue.js";
 import { s as appearance } from "./AppButton.js";
-import { j as rpc } from "./index.js";
+import { M as rpc } from "./index.js";
 import { K as button, T as translate, U as observeFrameSizes, X as node, Y as muted, Z as rect, q as label, t as _sfc_main$1 } from "./FrameView.js";
 import { t as _sfc_main$2 } from "./AppDialog.js";
 import { g as describe$1 } from "./App.js";

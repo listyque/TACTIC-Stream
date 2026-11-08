@@ -1,7 +1,7 @@
 import { n as arrange, r as __exportAll, t as _sfc_main$5 } from "./ObjectFieldFrame.js";
 import { B as useId, C as h, D as nextTick, F as renderSlot, I as resolveComponent, K as withCtx, L as resolveDirective, M as onUpdated, N as openBlock, P as renderList, U as watch, Z as ref, _ as createCommentVNode, a as vModelCheckbox, b as createTextVNode, c as vShow, d as Fragment, g as createBlock, h as createBaseVNode, it as toDisplayString, j as onMounted, k as onBeforeUnmount, m as computed, nt as normalizeClass, o as vModelSelect, q as withDirectives, rt as normalizeStyle, s as vModelText, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
 import { D as spacing, O as textStyles, _ as controls, o as t, s as appearance, t as _sfc_main$6, z as _plugin_vue_export_helper_default } from "./AppButton.js";
-import { Y as uploadFormFile, bt as mobile, f as formDefinition, j as rpc } from "./index.js";
+import { M as rpc, X as uploadFormFile, p as formDefinition, xt as mobile } from "./index.js";
 import { B as _sfc_main$7, G as _sfc_main$10, K as button, N as _sfc_main$12, P as _sfc_main$9, T as translate, U as observeFrameSizes, W as _sfc_main$13, X as node, Z as rect, k as ItemPreview_default, q as label, t as _sfc_main$8, w as _sfc_main$14, z as _sfc_main$11 } from "./FrameView.js";
 import { t as readPreviewImage } from "./previewImage.js";
 import { n as qtLabelTextWidth } from "./textMetrics.js";

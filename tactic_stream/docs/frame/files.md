@@ -92,13 +92,20 @@ feature-specific replacements for base controls.
 - Browser queue validation, clipboard and capture retain their session,
   operation and source identity. Disposal/account changes invalidate callbacks;
   abandoned screen capture releases its tracks. Same-user renewal preserves
-  editable files and marks a pending write unknown. A late validation cannot
+  editable files and the submitted batch identity. A late validation cannot
   save another user's queue into the next account's recovery journal.
 - Drop Plate clear/context/session/disposal invalidates asynchronous clipboard
   and directory intake, including stale context-menu selection.
-- A committed upload whose reply is lost becomes `Result unknown`; automatic
-  re-publication is disabled and inspection is offered. The connected journey
-  verifies exactly one snapshot/version remains on the server.
+- Browser operations use separate recovery records per login and operation.
+  Tabs merge those records and retain their own selected file handles. Submission
+  saves its batch identity before uploading. A resumed chunk uses the same ID
+  and the server checks the manifest and bytes before accepting a duplicate.
+  A lost reply is reconciled from the native queue result. Uncertain worker
+  outcomes require inspection. `checkin_recovery_browser.mjs` exercises two
+  pages and an interrupted reply. The connected journey checks snapshot count.
+- File preview aborts obsolete requests and reads at most 100,000 bytes of
+  displayed text. Repository media uses the native browser player where the
+  format is supported. Private attachment requests keep their existing auth.
 - Native Sync presets update the actual server-returned search key instead of
   constructing a nonexistent `wdg_settings.code`. Real id-based preset
   create/update/delete runs through QML and XML-RPC.

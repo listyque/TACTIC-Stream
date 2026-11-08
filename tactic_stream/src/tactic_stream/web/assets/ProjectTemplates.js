@@ -1,7 +1,7 @@
 import { r as __exportAll } from "./ObjectFieldFrame.js";
 import { D as nextTick, I as resolveComponent, L as resolveDirective, N as openBlock, h as createBaseVNode, it as toDisplayString, q as withDirectives, rt as normalizeStyle, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
 import { o as t, s as appearance, z as _plugin_vue_export_helper_default } from "./AppButton.js";
-import { Y as uploadFormFile, j as rpc } from "./index.js";
+import { M as rpc, X as uploadFormFile } from "./index.js";
 import { K as button, T as translate, U as observeFrameSizes, X as node, Y as muted, Z as rect, q as label, t as _sfc_main$1 } from "./FrameView.js";
 import { t as describe$1 } from "./confirmation.ui.js";
 //#region ../src/tactic_stream/shared_ui/features/projects/templates.ui.mjs

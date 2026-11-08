@@ -2847,6 +2847,7 @@
   "Dismiss error": "Закрыть ошибку",
   "Unable to send message": "Не удалось отправить сообщение",
   "Loading file…": "Загружаем файл…",
+  "Text preview truncated. Download the file to read the rest.": "Превью текста сокращено. Скачайте файл, чтобы прочитать остальное.",
   "Choose files": "Выбрать файлы",
   "Choose conversation preview": "Выбрать картинку разговора",
   "Attachments": "Вложения",

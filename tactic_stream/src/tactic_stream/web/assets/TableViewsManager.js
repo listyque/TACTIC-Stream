@@ -1,6 +1,6 @@
 import { J as isRef, K as withCtx, N as openBlock, U as watch, Z as ref, g as createBlock, h as createBaseVNode, k as onBeforeUnmount, m as computed, tt as unref, x as createVNode } from "./vue.js";
 import { s as appearance } from "./AppButton.js";
-import { j as rpc } from "./index.js";
+import { M as rpc } from "./index.js";
 import { U as observeFrameSizes, t as _sfc_main$1 } from "./FrameView.js";
 import { t as _sfc_main$2 } from "./AppDialog.js";
 import { ct as loaded, dt as transition, lt as row, ot as describe, st as initial, ut as rows } from "./RelatedObjects.js";

@@ -1,6 +1,6 @@
-import { C as h, D as nextTick, G as watchPostEffect, I as resolveComponent, K as withCtx, L as resolveDirective, N as openBlock, P as renderList, R as resolveDynamicComponent, U as watch, Z as ref, _ as createCommentVNode, b as createTextVNode, d as Fragment, g as createBlock, h as createBaseVNode, it as toDisplayString, j as onMounted, k as onBeforeUnmount, m as computed, nt as normalizeClass, p as Teleport, q as withDirectives, rt as normalizeStyle, tt as unref, u as withModifiers, v as createElementBlock, w as inject, x as createVNode } from "./vue.js";
+import { C as h, D as nextTick, G as watchPostEffect, I as resolveComponent, K as withCtx, L as resolveDirective, N as openBlock, P as renderList, R as resolveDynamicComponent, U as watch, Y as markRaw, Z as ref, _ as createCommentVNode, b as createTextVNode, d as Fragment, g as createBlock, h as createBaseVNode, it as toDisplayString, j as onMounted, k as onBeforeUnmount, m as computed, nt as normalizeClass, p as Teleport, q as withDirectives, rt as normalizeStyle, tt as unref, u as withModifiers, v as createElementBlock, w as inject, x as createVNode } from "./vue.js";
 import { T as metrics, a as _sfc_main$8, o as t, s as appearance, t as _sfc_main$7, z as _plugin_vue_export_helper_default } from "./AppButton.js";
-import { A as resultItems, bt as mobile, gt as serverTimestamp, ht as serverClock, o as fileBlob } from "./index.js";
+import { _t as serverTimestamp, gt as serverClock, j as resultItems, o as fileBlob, s as previewFile, xt as mobile } from "./index.js";
 import { F as _sfc_main$10, K as button, T as translate, U as observeFrameSizes, X as node, Y as muted, Z as rect, k as ItemPreview_default, q as label, t as _sfc_main$9 } from "./FrameView.js";
 import { n as qtLabelTextWidth } from "./textMetrics.js";
 import { r as prettySize } from "./file_values.js";
@@ -1642,8 +1642,10 @@ var _sfc_main$2 = {
 			mediaUrl: "",
 			mediaType: "",
 			text: "",
+			truncated: false,
 			selectedFile: null,
-			request: 0
+			request: 0,
+			controller: null
 		};
 	},
 	computed: { mobile() {
@@ -1672,9 +1674,11 @@ var _sfc_main$2 = {
 		},
 		reset() {
 			this.request++;
-			if (this.mediaUrl) URL.revokeObjectURL(this.mediaUrl);
+			this.controller?.abort();
+			this.controller = null;
+			if (this.mediaUrl.startsWith("blob:")) URL.revokeObjectURL(this.mediaUrl);
 			this.mediaUrl = this.mediaType = this.text = this.error = "";
-			this.loading = false;
+			this.truncated = this.loading = false;
 			this.selectedFile = null;
 		},
 		async selectFile(file) {
@@ -1683,15 +1687,14 @@ var _sfc_main$2 = {
 			this.$emit("selected", file);
 			this.loading = true;
 			const id = this.request;
+			this.controller = markRaw(new AbortController());
 			try {
-				const blob = await this.cell.loadFile(file);
+				const preview = await previewFile(file, this.cell.loadFile, this.controller.signal);
 				if (id !== this.request) return;
-				this.mediaUrl = URL.createObjectURL(blob);
-				this.mediaType = blob.type;
-				if (blob.type.startsWith("text/")) {
-					const text = await blob.slice(0, 1e5).text();
-					if (id === this.request) this.text = text;
-				}
+				this.mediaUrl = preview.url || (preview.blob ? URL.createObjectURL(preview.blob) : "");
+				this.mediaType = preview.type;
+				this.text = preview.text || "";
+				this.truncated = !!preview.truncated;
 			} catch (error) {
 				if (id === this.request) {
 					this.error = error.message;
@@ -1737,47 +1740,49 @@ var _hoisted_8 = ["src"];
 var _hoisted_9 = ["src"];
 var _hoisted_10 = ["src", "title"];
 var _hoisted_11 = {
-	key: 4,
-	class: "file-preview-text"
+	key: 0,
+	class: "muted",
+	role: "status"
 };
-var _hoisted_12 = {
+var _hoisted_12 = { class: "file-preview-text" };
+var _hoisted_13 = {
 	key: 5,
 	class: "muted"
 };
-var _hoisted_13 = {
+var _hoisted_14 = {
 	key: 6,
 	class: "muted"
 };
-var _hoisted_14 = {
+var _hoisted_15 = {
 	key: 7,
 	class: "file-preview-description"
 };
-var _hoisted_15 = { class: "file-preview-actions" };
-var _hoisted_16 = {
+var _hoisted_16 = { class: "file-preview-actions" };
+var _hoisted_17 = {
 	key: 0,
 	class: "configuration-actions file-preview-download"
 };
-var _hoisted_17 = { key: 0 };
-var _hoisted_18 = {
+var _hoisted_18 = { key: 0 };
+var _hoisted_19 = {
 	key: 1,
 	class: "file-preview-metadata"
 };
-var _hoisted_19 = { class: "file-preview-metadata" };
-var _hoisted_20 = {
+var _hoisted_20 = { class: "file-preview-metadata" };
+var _hoisted_21 = {
 	key: 2,
 	class: "file-preview-files"
 };
-var _hoisted_21 = { class: "muted" };
 var _hoisted_22 = { class: "muted" };
-var _hoisted_23 = {
+var _hoisted_23 = { class: "muted" };
+var _hoisted_24 = {
 	key: 0,
 	class: "configuration-actions"
 };
-var _hoisted_24 = {
+var _hoisted_25 = {
 	key: 1,
 	class: "configuration-actions"
 };
-var _hoisted_25 = {
+var _hoisted_26 = {
 	key: 3,
 	class: "muted"
 };
@@ -1849,24 +1854,26 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
 				key: 1,
 				src: $data.mediaUrl,
 				controls: "",
-				preload: "metadata"
-			}, null, 8, _hoisted_8)) : $data.mediaType.startsWith("audio/") ? (openBlock(), createElementBlock("audio", {
+				preload: "metadata",
+				onError: _cache[1] || (_cache[1] = ($event) => $data.error = "File Offline")
+			}, null, 40, _hoisted_8)) : $data.mediaType.startsWith("audio/") ? (openBlock(), createElementBlock("audio", {
 				key: 2,
 				src: $data.mediaUrl,
 				controls: "",
-				preload: "metadata"
-			}, null, 8, _hoisted_9)) : $data.mediaType === "application/pdf" ? (openBlock(), createElementBlock("iframe", {
+				preload: "metadata",
+				onError: _cache[2] || (_cache[2] = ($event) => $data.error = "File Offline")
+			}, null, 40, _hoisted_9)) : $data.mediaType === "application/pdf" ? (openBlock(), createElementBlock("iframe", {
 				key: 3,
 				src: $data.mediaUrl,
 				title: $data.selectedFile?.filename
-			}, null, 8, _hoisted_10)) : $data.mediaType.startsWith("text/") ? (openBlock(), createElementBlock("pre", _hoisted_11, toDisplayString($data.text), 1)) : !$data.loading ? (openBlock(), createElementBlock("p", _hoisted_12, toDisplayString($options.t("No preview available")), 1)) : createCommentVNode("", true),
-			!$props.cell.loadFile && !$props.cell.image ? (openBlock(), createElementBlock("p", _hoisted_13, toDisplayString($options.t("No preview available")), 1)) : createCommentVNode("", true),
-			$props.description || $props.record?.description ? (openBlock(), createElementBlock("p", _hoisted_14, toDisplayString($props.description || $props.record.description), 1)) : createCommentVNode("", true)
+			}, null, 8, _hoisted_10)) : $data.mediaType.startsWith("text/") ? (openBlock(), createElementBlock(Fragment, { key: 4 }, [$data.truncated ? (openBlock(), createElementBlock("p", _hoisted_11, toDisplayString($options.t("Text preview truncated. Download the file to read the rest.")), 1)) : createCommentVNode("", true), createBaseVNode("pre", _hoisted_12, toDisplayString($data.text), 1)], 64)) : !$data.loading ? (openBlock(), createElementBlock("p", _hoisted_13, toDisplayString($options.t("No preview available")), 1)) : createCommentVNode("", true),
+			!$props.cell.loadFile && !$props.cell.image ? (openBlock(), createElementBlock("p", _hoisted_14, toDisplayString($options.t("No preview available")), 1)) : createCommentVNode("", true),
+			$props.description || $props.record?.description ? (openBlock(), createElementBlock("p", _hoisted_15, toDisplayString($props.description || $props.record.description), 1)) : createCommentVNode("", true)
 		]),
 		(openBlock(), createBlock(Teleport, {
 			to: $props.actionsTarget || "body",
 			disabled: !$options.mobile || !$props.actionsTarget
-		}, [createBaseVNode("nav", _hoisted_15, [($props.embedded || $options.mobile) && $data.selectedFile ? (openBlock(), createElementBlock("div", _hoisted_16, [$data.selectedFile.href ? (openBlock(), createBlock(_component_AppButton, {
+		}, [createBaseVNode("nav", _hoisted_16, [($props.embedded || $options.mobile) && $data.selectedFile ? (openBlock(), createElementBlock("div", _hoisted_17, [$data.selectedFile.href ? (openBlock(), createBlock(_component_AppButton, {
 			key: 0,
 			href: $data.selectedFile.href,
 			label: "Download",
@@ -1876,15 +1883,15 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
 			key: 1,
 			label: "Download",
 			icon: "download",
-			onClick: _cache[1] || (_cache[1] = ($event) => $options.download($data.selectedFile))
+			onClick: _cache[3] || (_cache[3] = ($event) => $options.download($data.selectedFile))
 		}))])) : createCommentVNode("", true), (openBlock(), createBlock(resolveDynamicComponent($options.mobile ? "AppMenu" : "div"), {
 			class: "file-preview-details",
 			label: "File details",
 			overlay: $options.mobile
 		}, {
 			default: withCtx(() => [
-				$options.mobile ? (openBlock(), createElementBlock("small", _hoisted_17, toDisplayString($props.record?.__search_key__), 1)) : createCommentVNode("", true),
-				$props.cell.object ? (openBlock(), createElementBlock("dl", _hoisted_18, [
+				$options.mobile ? (openBlock(), createElementBlock("small", _hoisted_18, toDisplayString($props.record?.__search_key__), 1)) : createCommentVNode("", true),
+				$props.cell.object ? (openBlock(), createElementBlock("dl", _hoisted_19, [
 					createBaseVNode("dt", null, toDisplayString($options.t("Search Type")), 1),
 					createBaseVNode("dd", null, toDisplayString($props.cell.object.search_type), 1),
 					(openBlock(), createElementBlock(Fragment, null, renderList([
@@ -1899,18 +1906,18 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
 						}[name])), 1), createBaseVNode("dd", null, toDisplayString($props.record?.[name] || "—"), 1)], 64);
 					}), 64))
 				])) : createCommentVNode("", true),
-				createBaseVNode("dl", _hoisted_19, [
+				createBaseVNode("dl", _hoisted_20, [
 					createBaseVNode("dt", null, toDisplayString($options.t("Context")), 1),
 					createBaseVNode("dd", null, toDisplayString($props.cell.context || "—"), 1),
 					createBaseVNode("dt", null, toDisplayString($options.t("Version")), 1),
 					createBaseVNode("dd", null, toDisplayString($props.cell.version ?? "—"), 1)
 				]),
-				$props.cell.files?.length ? (openBlock(), createElementBlock("ul", _hoisted_20, [(openBlock(true), createElementBlock(Fragment, null, renderList($props.cell.files, (file, index) => {
+				$props.cell.files?.length ? (openBlock(), createElementBlock("ul", _hoisted_21, [(openBlock(true), createElementBlock(Fragment, null, renderList($props.cell.files, (file, index) => {
 					return openBlock(), createElementBlock("li", { key: index }, [createBaseVNode("div", null, [
 						createBaseVNode("strong", null, toDisplayString(file.filename), 1),
-						createBaseVNode("small", _hoisted_21, toDisplayString(file.type) + " · " + toDisplayString(file.size ?? "—") + " " + toDisplayString($options.t("bytes")), 1),
-						createBaseVNode("small", _hoisted_22, toDisplayString(file.path), 1)
-					]), file.href ? (openBlock(), createElementBlock("div", _hoisted_23, [createVNode(_component_AppButton, {
+						createBaseVNode("small", _hoisted_22, toDisplayString(file.type) + " · " + toDisplayString(file.size ?? "—") + " " + toDisplayString($options.t("bytes")), 1),
+						createBaseVNode("small", _hoisted_23, toDisplayString(file.path), 1)
+					]), file.href ? (openBlock(), createElementBlock("div", _hoisted_24, [createVNode(_component_AppButton, {
 						href: file.href,
 						label: "Open file",
 						icon: "link",
@@ -1921,7 +1928,7 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
 						label: "Download",
 						icon: "download",
 						download: file.filename
-					}, null, 8, ["href", "download"])])) : $props.cell.loadFile ? (openBlock(), createElementBlock("div", _hoisted_24, [createVNode(_component_AppButton, {
+					}, null, 8, ["href", "download"])])) : $props.cell.loadFile ? (openBlock(), createElementBlock("div", _hoisted_25, [createVNode(_component_AppButton, {
 						label: "Open file",
 						icon: "link",
 						disabled: $data.loading,
@@ -1931,7 +1938,7 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
 						icon: "download",
 						onClick: ($event) => $options.download(file)
 					}, null, 8, ["onClick"])])) : createCommentVNode("", true)]);
-				}), 128))])) : (openBlock(), createElementBlock("p", _hoisted_25, toDisplayString($options.t("No files")), 1))
+				}), 128))])) : (openBlock(), createElementBlock("p", _hoisted_26, toDisplayString($options.t("No files")), 1))
 			]),
 			_: 1
 		}, 8, ["overlay"]))])], 8, ["to", "disabled"]))

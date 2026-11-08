@@ -38,8 +38,12 @@ window.filesFixture = {
     fixture.value = null;
     await nextTick();
     session.value = { login: 'fixture', ticket: 'fixture' };
-    if (value.screen.startsWith('queue'))
+    if (value.screen.startsWith('queue') && !value.restoreQueue) {
       localStorage.removeItem('tactic_stream.commit_queue.fixture');
+      for (const key of Object.keys(localStorage))
+        if (key.startsWith('tactic_stream.commit_queue_jobs.fixture.'))
+          localStorage.removeItem(key);
+    }
     Object.assign(appearance, {
       theme: value.style,
       mode: value.dark ? 'dark' : 'light',

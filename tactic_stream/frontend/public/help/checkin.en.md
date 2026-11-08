@@ -20,6 +20,10 @@ follow the project's existing native naming expressions, so versionless and phys
 can differ. Existing filenames are rejected; after an unknown RPC outcome, refresh before retrying.
 See [Mobile application](help://mobile) for the direct file preview and version navigation.
 
+Large text files show the beginning and a notice when the preview is shortened.
+Download the file for its full contents. Supported audio and video play directly
+from the web repository.
+
 Drop Plate accepts files and matches them to objects. Naming Editor controls templates.
 
 Commit Queue reviews prepared operations, options, dependencies, progress, errors, retry,

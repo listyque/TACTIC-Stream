@@ -1,7 +1,7 @@
 <script>
 // Handler CommitQueueView.qml / commit_queue.py: one application-owned preparation queue.
 import { nextTick, markRaw } from 'vue';
-import { rpc, uploadFormFile } from '../../api.js';
+import { rpc } from '../../api.js';
 import { t } from '../../i18n.js';
 import AppButton from '../../controls/AppButton.vue';
 import QueueWorkspace from './queue/QueueWorkspace.vue';
@@ -10,7 +10,8 @@ import * as Presentation from './queue/state.js';
 import { editable } from './queue/state.js';
 import QueueActions from './queue/actions.js';
 import QueueFiles from './queue/files.js';
-import QueueRecovery from './queue/recovery.js';
+import QueueRecovery, { queueId } from './queue/recovery.js';
+import { publicationRequest, stagePublication } from './queue/publication.js';
 import { asyncComponent } from '../../controls/asyncComponent.js';
 import { mobile } from '../../mobile.js';
 import { notify } from '../activity/notifications.js';
@@ -45,7 +46,10 @@ export default {
       selectedId: '',
       running: false,
       modal: false,
+      persisted: markRaw(new Map()),
       sequence: 0,
+      publicationTimer: null,
+      pollingPublication: false,
       applyChecked: false,
       advanced: false,
       mobileDetails: false,
@@ -114,11 +118,19 @@ export default {
       return this.jobs.some((job) => job.file);
     },
     canEdit() {
-      return !this.running && editable(this.selected) && !!this.selected?.file;
+      return (
+        !this.running &&
+        editable(this.selected) &&
+        !!this.selected?.file &&
+        !this.selected.submission
+      );
     }
   },
   mounted() {
     this.restore();
+    this.reconcilePublications();
+    this.publicationTimer = setInterval(this.reconcilePublications, 2000);
+    window.addEventListener('storage', this.queueStorage);
     window.addEventListener('beforeunload', this.beforeUnload);
   },
   beforeUnmount() {
@@ -126,6 +138,8 @@ export default {
     this.sessionEpoch++;
     this.validation++;
     this.aborter?.abort();
+    clearInterval(this.publicationTimer);
+    window.removeEventListener('storage', this.queueStorage);
     window.removeEventListener('beforeunload', this.beforeUnload);
   },
   watch: {
@@ -147,13 +161,16 @@ export default {
       this.duplicates = [];
       if (JSON.parse(previous)[0] !== this.login) {
         this.jobs = [];
+        this.persisted.clear();
         this.restore();
       } else {
         for (const job of this.jobs) {
           job.request++;
           job.validating = false;
           job.ticket = this.ticket;
-          if (job.status === 'Checking in') {
+          if (job.submission && job.status === 'Uploading') {
+            job.status = 'Checking in';
+          } else if (!job.submission && job.status === 'Checking in') {
             job.status = 'Result unknown';
             job.error =
               'The session changed during check-in. Inspect Snapshot Browser before repeating it.';
@@ -256,6 +273,11 @@ export default {
         previews: [],
         ...values,
         id: ++this.sequence,
+        recoveryId: queueId(),
+        queueOrder: Math.max(
+          Date.now(),
+          (this.jobs.at(-1)?.queueOrder || 0) + 1
+        ),
         file: files[0],
         files: [...files],
         preview: !values.context,
@@ -285,13 +307,17 @@ export default {
       if (
         decision === 'replace' &&
         old &&
+        !old.submission &&
         !['Uploading', 'Checking in', 'Result unknown'].includes(old.status)
       ) {
         const index = this.jobs.indexOf(old);
         old.request++;
         this.enqueue(pending.values, true);
         const replacement = this.jobs.pop();
+        this.forgetJob(replacement);
         replacement.id = old.id;
+        replacement.recoveryId = old.recoveryId;
+        replacement.queueOrder = old.queueOrder;
         replacement.checked = old.checked;
         this.jobs.splice(index, 1, replacement);
         this.selectedId = old.id;
@@ -362,7 +388,7 @@ export default {
     async validate(job) {
       const epoch = this.sessionEpoch;
       if (!this.ownsJob(job, epoch)) return;
-      if (job.ingest || job.preview) {
+      if (job.submission || job.ingest || job.preview) {
         job.planError = '';
         return;
       }
@@ -413,6 +439,7 @@ export default {
       for (const job of this.jobs.filter(
         (job) =>
           editable(job) &&
+          !job.submission &&
           !job.ingest &&
           (!job.preview || field === 'description') &&
           (job.id === this.selectedId || (this.applyChecked && job.checked))
@@ -431,8 +458,14 @@ export default {
       if (field !== 'description') this.validateAll();
     },
     remove(job) {
+      if (
+        job.submission &&
+        !['Complete', 'Skipped', 'Result unknown'].includes(job.status)
+      )
+        return;
       if (['Uploading', 'Checking in'].includes(job.status)) return;
       job.request++;
+      this.forgetJob(job);
       this.jobs = this.jobs.filter((item) => item !== job);
       if (!this.selected) this.selectedId = this.jobs[0]?.id || '';
       this.changed();
@@ -448,6 +481,11 @@ export default {
         target = index + offset;
       if (this.running || index < 0 || target < 0 || target >= this.jobs.length)
         return;
+      const other = this.jobs[target];
+      [this.selected.queueOrder, other.queueOrder] = [
+        other.queueOrder,
+        this.selected.queueOrder
+      ];
       const [job] = this.jobs.splice(index, 1);
       this.jobs.splice(target, 0, job);
       this.changed();
@@ -490,15 +528,41 @@ export default {
       this.update('context', process + (branch ? '/' + branch : ''));
     },
     ...QueueFiles,
-    cancel(job = this.selected) {
-      if (!job) return;
-      if (['Uploading', 'Checking in'].includes(job.status)) {
+    async cancel(job = this.selected) {
+      if (
+        !job ||
+        ['Complete', 'Skipped', 'Result unknown'].includes(job.status)
+      )
+        return;
+      if (!job.submission) {
+        if (editable(job)) {
+          job.status = 'Cancelled';
+          job.request++;
+          this.changed();
+        }
+        return;
+      }
+      const epoch = this.sessionEpoch;
+      if (job.status === 'Uploading') {
         this.cancelRequested = true;
-        if (job.status === 'Uploading') this.aborter?.abort();
-      } else if (editable(job)) {
-        job.status = 'Cancelled';
-        job.request++;
-        this.changed();
+        this.aborter?.abort();
+      }
+      try {
+        const batch = job.submission.batch;
+        const result = await publicationRequest(job, 'cancel', {
+          batch_id: batch
+        });
+        if (!this.ownsJob(job, epoch) || job.submission?.batch !== batch)
+          return;
+        if (!result.states.publish || result.states.publish === 'terminated') {
+          job.status = 'Cancelled';
+          job.error = '';
+          job.submission = null;
+          job.attempt = (job.attempt || 0) + 1;
+          this.changed();
+        }
+      } catch (error) {
+        if (this.ownsJob(job, epoch)) this.error = error.message;
       }
     },
     retry(job = this.selected) {
@@ -511,6 +575,86 @@ export default {
         this.run([job]);
       }
     },
+    async reconcilePublications() {
+      if (!this.ticket || this.disposed || this.pollingPublication) return;
+      const jobs = this.jobs.filter(
+        (job) =>
+          job.submission &&
+          ['Checking in', 'Missing files', 'Failed'].includes(job.status)
+      );
+      if (!jobs.length) return;
+      const epoch = this.sessionEpoch;
+      this.pollingPublication = true;
+      try {
+        for (const job of jobs) {
+          const batch = job.submission?.batch;
+          if (!this.ownsJob(job, epoch) || !batch) continue;
+          try {
+            const result = await publicationRequest(job, 'updates', {
+              batches: [{ batch_id: batch, project: job.project }]
+            });
+            if (
+              !this.ownsJob(job, epoch) ||
+              job.submission?.batch !== batch ||
+              job.status === 'Uploading'
+            )
+              continue;
+            const event = result.checkins.find(
+              (row) => row.operation_id === 'publish'
+            );
+            if (event?.state === 'complete') {
+              const completedFiles = job.files;
+              job.status = event.skipped ? 'Skipped' : 'Complete';
+              job.error = event.reason || '';
+              job.snapshot = event.snapshot || null;
+              job.searchKey = event.search_key || job.searchKey;
+              job.progress = 1;
+              job.file = null;
+              job.files = [];
+              job.previews = [];
+              if (!event.skipped) {
+                notify('complete', 'Check-in completed', job.name, 'checkin');
+                this.$emit('completed', { ...job, completedFiles });
+              }
+              this.changed();
+              if (preferences.checkin.commitQueueAutoClean && !event.skipped)
+                this.remove(job);
+            } else if (
+              event?.state === 'error' ||
+              event?.state === 'terminated'
+            ) {
+              job.status = event.uncertain
+                ? 'Result unknown'
+                : event.state === 'terminated'
+                  ? 'Cancelled'
+                  : 'Failed';
+              job.error = event.error || '';
+              if (!event.uncertain) {
+                job.submission = null;
+                job.attempt = (job.attempt || 0) + 1;
+              }
+              this.changed();
+            } else {
+              const status =
+                !event || event.state === 'staging'
+                  ? job.file
+                    ? 'Failed'
+                    : 'Missing files'
+                  : 'Checking in';
+              if (status !== job.status) {
+                job.status = status;
+                if (status === 'Checking in') job.error = '';
+                this.changed();
+              }
+            }
+          } catch (error) {
+            if (this.ownsJob(job, epoch)) job.error = error.message;
+          }
+        }
+      } finally {
+        this.pollingPublication = false;
+      }
+    },
     async run(requested = this.jobs.filter((job) => job.checked)) {
       if (this.running || this.disposed || !this.ticket) return;
       const epoch = this.sessionEpoch;
@@ -519,122 +663,62 @@ export default {
       try {
         for (const job of [...requested]) {
           if (this.cancelRequested) break;
-          if (!editable(job) || !job.file || job.status === 'Cancelled')
+          if (
+            !this.ownsJob(job, epoch) ||
+            !editable(job) ||
+            !job.file ||
+            job.status === 'Cancelled'
+          )
             continue;
           await this.validate(job);
           if (!this.ownsJob(job, epoch)) return;
           if (
             job.planError ||
             this.cancelRequested ||
-            job.status === 'Cancelled' ||
-            !this.jobs.includes(job)
+            job.status === 'Cancelled'
           )
             continue;
+          const { action, ...options } = this.options(job, 'checkin');
+          if (!job.submission) {
+            if (job.preview || job.ingest) {
+              options.kind = job.ingest ? 'ingest' : 'preview';
+              options.source_files = options.source_files.slice(0, 1);
+              if (job.ingest) {
+                options.search_key = job.ingest.parent_key;
+                options.ingest = job.ingest;
+              }
+            }
+            job.submission = {
+              batch: job.recoveryId + '-' + (job.attempt || 0),
+              options
+            };
+          }
+          const batch = job.submission.batch;
           job.error = '';
           job.status = 'Uploading';
           job.progress = 0;
+          if (!this.changed()) {
+            job.status = 'Failed';
+            job.error = this.error;
+            break;
+          }
           try {
-            const names = [],
-              files = [...job.files, ...job.previews];
             this.aborter = markRaw(new AbortController());
-            for (const [index, file] of files.entries()) {
-              const suffix = file.name.includes('.')
-                ? file.name.slice(file.name.lastIndexOf('.'))
-                : '';
-              names.push(
-                await uploadFormFile(job.ticket, job.project, file, {
-                  signal: this.aborter.signal,
-                  filename:
-                    job.ingest || job.preview
-                      ? file.name
-                      : 'queue-' +
-                        job.id +
-                        '-' +
-                        index +
-                        '-' +
-                        Date.now() +
-                        suffix
-                })
-              );
-              if (!this.ownsJob(job, epoch)) return;
-              job.progress = ((index + 1) / files.length) * 0.85;
-            }
-            if (this.cancelRequested) {
-              job.status = 'Cancelled';
-              continue;
-            }
-            job.status = 'Checking in';
-            this.changed();
-            const auth = {
-              ticket: job.ticket,
-              project: job.project,
-              language: 'python'
-            };
-            if (job.ingest) {
-              const result = (
-                await rpc('execute_cmd', [
-                  auth,
-                  'tactic.command.related_ingest_cmd.RelatedIngestCmd',
-                  { ...job.ingest, action: 'checkin', filenames: names }
-                ])
-              ).info;
-              if (!this.ownsJob(job, epoch)) return;
-              if (result.skipped) {
-                job.status = 'Skipped';
-                job.error = result.reason;
-                job.file = null;
-                job.files = [];
-                this.changed();
-                continue;
-              }
-              job.snapshot = result.snapshot;
-              job.searchKey = result.search_key;
-            } else if (job.preview)
-              job.snapshot = await rpc(
-                'simple_checkin',
-                [auth, job.searchKey, 'icon', names[0]],
-                {
-                  mode: 'uploaded',
-                  description: job.description || 'Search Type preview',
-                  process: 'icon',
-                  create_icon: job.generatePreviews !== false
-                }
-              );
-            else
-              job.snapshot = (
-                await rpc('execute_cmd', [
-                  auth,
-                  'tactic.command.browser_checkin_cmd.BrowserCheckinCmd',
-                  { ...this.options(job, 'checkin'), files: names }
-                ])
-              ).info.snapshot;
-            if (!this.ownsJob(job, epoch)) return;
-            const completedFiles = job.files;
-            job.status = 'Complete';
-            job.progress = 1;
-            job.file = null;
-            job.files = [];
-            job.previews = [];
-            notify('complete', 'Check-in completed', job.name, 'checkin');
-            this.changed();
-            this.$emit('completed', { ...job, completedFiles });
-            if (preferences.checkin.commitQueueAutoClean) this.remove(job);
+            await stagePublication(job, this.aborter.signal, (progress) => {
+              if (this.ownsJob(job, epoch)) job.progress = progress * 0.85;
+            });
           } catch (error) {
-            if (!this.ownsJob(job, epoch)) return;
-            job.status =
-              job.status === 'Uploading' && error.name === 'AbortError'
-                ? 'Cancelled'
-                : job.status === 'Checking in' &&
-                    (!error.status || error.status >= 500)
-                  ? 'Result unknown'
-                  : 'Failed';
-            job.error = error.message;
-            this.changed();
-            if (job.status !== 'Cancelled')
-              notify('error', job.error, job.name, 'checkin');
+            if (!this.ownsJob(job, epoch) || job.submission?.batch !== batch)
+              return;
+            if (!this.cancelRequested) job.error = error.message;
           } finally {
             if (epoch === this.sessionEpoch) this.aborter = null;
           }
+          if (!this.ownsJob(job, epoch) || job.submission?.batch !== batch)
+            return;
+          job.status = 'Checking in';
+          this.changed();
+          await this.reconcilePublications();
         }
       } finally {
         if (epoch === this.sessionEpoch && !this.disposed) {

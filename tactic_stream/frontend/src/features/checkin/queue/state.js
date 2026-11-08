@@ -17,7 +17,8 @@ export const editable = (job) =>
 
 export function record(job, owner) {
   if (!job) return {};
-  const canEdit = !owner.running && editable(job) && !!job.file,
+  const canEdit =
+      !owner.running && editable(job) && !!job.file && !job.submission,
     canOptions = canEdit && !job.ingest && !job.preview,
     status =
       job.status === 'Complete'
@@ -72,6 +73,13 @@ export function record(job, owner) {
       !!owner.canAdminister && !owner.running && !job.ingest && !job.preview,
     canCommit,
     canRetry: !!job.file && ['Failed', 'Cancelled'].includes(job.status),
+    canCancel:
+      canEdit ||
+      (!!job.submission &&
+        !['Complete', 'Skipped', 'Result unknown'].includes(job.status)),
+    canRemove:
+      !job.submission ||
+      ['Complete', 'Skipped', 'Result unknown'].includes(job.status),
     canInspect: !!job.snapshot || job.status === 'Result unknown',
     needsFiles: job.status === 'Missing files',
     previewCount: job.previews.length,
@@ -178,8 +186,11 @@ export function model(owner, rows, files) {
     sourceTargets: files.some((file) => !!file.target),
     repositories: owner.repositoryOptions,
     duplicate: !!owner.duplicate,
-    canReplace: !['Uploading', 'Checking in', 'Result unknown'].includes(
-      owner.jobs.find((job) => job.id === owner.duplicate?.oldId)?.status
+    canReplace: !owner.jobs.some(
+      (job) =>
+        job.id === owner.duplicate?.oldId &&
+        (job.submission ||
+          ['Uploading', 'Checking in', 'Result unknown'].includes(job.status))
     ),
     error: t(owner.error)
   };

@@ -15,7 +15,12 @@ try {
   const errors = [];
   page.on('request', (request) => {
     requests.add(request);
-    if (request.url().includes('/admin/') && request.method() === 'POST') {
+    if (request.url().endsWith('/admin/checkin-queue/submit')) {
+      publications.push(request);
+    } else if (
+      request.url().endsWith('/admin/rpc') &&
+      request.method() === 'POST'
+    ) {
       const data = request.postDataJSON();
       if (data?.args?.[2]?.action === 'checkin') publications.push(data);
     }
@@ -625,23 +630,15 @@ try {
     0
   );
   let lostWrites = 0;
-  await page.route('**/admin/rpc', async (route) => {
-    const payload = route.request().postDataJSON();
-    if (
-      payload.method === 'execute_cmd' &&
-      payload.args[2]?.action === 'checkin' &&
-      payload.args[2]?.context === 'publish/unknown'
-    ) {
-      const response = await route.fetch();
-      assert.ok(
-        response.ok(),
-        'The server committed before the response was lost'
-      );
-      const result = await response.json();
-      assert.ok(result.result?.info?.snapshot, result);
-      lostWrites++;
-      await route.abort('failed');
-    } else await route.continue();
+  await page.route('**/admin/checkin-queue/submit', async (route) => {
+    const response = await route.fetch();
+    assert.ok(
+      response.ok(),
+      'The server accepted the upload before the response was lost'
+    );
+    assert.ok((await response.json()).result?.accepted);
+    lostWrites++;
+    await route.abort('failed');
   });
   if (!(await plate.isVisible()))
     await page.getByRole('tab', { name: 'Drop Plate', exact: true }).click();
@@ -664,7 +661,7 @@ try {
   await queuePane(false);
   await queue
     .locator('[data-frame^=commitQueueState_]')
-    .filter({ hasText: 'Result unknown' })
+    .filter({ hasText: 'Completed' })
     .waitFor();
   assert.equal(
     lostWrites,

@@ -163,8 +163,10 @@ class _FinishJobsCmd(Command):
             state = 'terminated' if job.get_value('state') == 'cancel' else self.kwargs['state']
             from .checkin_queue_cmd import JOB_COMMAND, save_queue, job_updated
             error = self.kwargs.get('error', '')
+            uncertain = self.kwargs.get('uncertain', False)
             if state == 'pending' and job.get_value('command') == JOB_COMMAND:
                 state, error = 'error', 'The queue worker stopped. Inspect the snapshot and external trigger effects before retrying.'
+                uncertain = True
             job.set_value('state', state)
             if state == 'pending':
                 job.set_value('host', '')
@@ -173,7 +175,7 @@ class _FinishJobsCmd(Command):
             else:
                 job.commit()
                 SObject.get_cache_dict(search_type='sthpw/queue').clear()
-            job_updated(job, error=error)
+            job_updated(job, error=error, uncertain=uncertain)
 
 
 class _RunJobCmd(Command):
@@ -322,6 +324,7 @@ class JobTask(SchedulerTask):
         log.info('Running job %s: %s', job.get_code(), job.get_value('command'))
         completed = False
         failure = ''
+        uncertain = False
         try:
             for attempt in range(3):
                 if self._stop.is_set():
@@ -348,6 +351,7 @@ class JobTask(SchedulerTask):
                     break
                 except (TacticException, UnsupportedContract, PartialCommitException) as exc:
                     failure = str(exc)
+                    uncertain = isinstance(exc, PartialCommitException)
                     # Repeating a partially committed command can duplicate effects.
                     log.exception('Job %s failed without retry', job.get_code())
                     break
@@ -365,7 +369,7 @@ class JobTask(SchedulerTask):
                 if attempt < 2 and self._wait(5):
                     return
             if not completed:
-                Command.execute_cmd(_FinishJobsCmd(host=self.get_process_key(), job_id=job.get_id(), state='error', error=failure))
+                Command.execute_cmd(_FinishJobsCmd(host=self.get_process_key(), job_id=job.get_id(), state='error', error=failure, uncertain=uncertain))
             SObject.get_cache_dict(search_type='sthpw/queue').clear()
             from .checkin_queue_cmd import cleanup_job
             saved = Search.get_by_id('sthpw/queue', job.get_id())

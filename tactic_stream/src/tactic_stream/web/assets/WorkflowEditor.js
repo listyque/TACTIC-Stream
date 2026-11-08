@@ -1,6 +1,6 @@
 import { B as useId, D as nextTick, I as resolveComponent, K as withCtx, L as resolveDirective, N as openBlock, R as resolveDynamicComponent, _ as createCommentVNode, c as vShow, g as createBlock, h as createBaseVNode, it as toDisplayString, l as withKeys, nt as normalizeClass, p as Teleport, q as withDirectives, rt as normalizeStyle, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
 import { a as _sfc_main$2, o as t, t as _sfc_main$1, z as _plugin_vue_export_helper_default } from "./AppButton.js";
-import { j as rpc } from "./index.js";
+import { M as rpc } from "./index.js";
 import { t as _sfc_main$3 } from "./FrameView.js";
 import ProcessRules_default from "./ProcessRules.js";
 import { n as pending, t as graphFrame_default } from "./graphFrame.js";

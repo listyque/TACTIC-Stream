@@ -2,7 +2,7 @@ const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/NamingEditor.js
 import { r as __exportAll } from "./ObjectFieldFrame.js";
 import { $ as shallowRef, B as useId, C as h, D as nextTick, E as mergeProps, F as renderSlot, H as useSlots, I as resolveComponent, J as isRef, K as withCtx, L as resolveDirective, N as openBlock, P as renderList, Q as shallowReactive, R as resolveDynamicComponent, T as mergeModels, U as watch, V as useModel, X as reactive, Y as markRaw, Z as ref, _ as createCommentVNode, b as createTextVNode, c as vShow, d as Fragment, et as toRaw, f as KeepAlive, g as createBlock, h as createBaseVNode, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withKeys, m as computed, n as TransitionGroup, nt as normalizeClass, p as Teleport, q as withDirectives, rt as normalizeStyle, s as vModelText, t as Transition, tt as unref, u as withModifiers, v as createElementBlock, w as inject, x as createVNode, y as createSlots } from "./vue.js";
 import { C as layout$6, D as spacing$1, E as readableText, M as savePreferencePage, N as normalizeColumns, O as textStyles, P as taskColumns, R as BusyIndicator_default, S as fontMetricHeight, T as metrics$9, _ as controls$1, a as _sfc_main$104, b as fontFamily, g as blend, h as saveAppearance, j as preferences, k as configurationPreview, o as t, p as projectPalette, s as appearance, t as _sfc_main$103, u as frameColors, w as lineHeights, x as fontLineHeight, z as _plugin_vue_export_helper_default } from "./AppButton.js";
-import { $ as workspaceLayouts, A as resultItems, C as projectCreationCatalog, Ct as debugLog, D as resetRequestActivity, Dt as formatEvent, E as requestActivity, Et as forgetSessions, F as searchConfiguration, Ft as setServerDebugContext, H as sessionAction, It as randomId, Nt as savedSessions, O as resolveCustomUrl, Ot as importSession, P as scriptShelf, Pt as sessionRecords, Q as widgetConfiguration, Rt as asyncComponent, S as projectCatalog, St as clearLive, Tt as exportSession, V as serverUpdates, X as userAvatar, Y as uploadFormFile, Z as userProfile, _ as messagesRequest, _t as dockMinimumHeight, a as __vitePreload, at as cancelNotificationReply, bt as mobile, c as beginActivity, ct as editNotificationReply, d as endActivity, dt as notify, et as setUpdatesAvailable, ft as resetNotifications, g as messageFileRequest, gt as serverTimestamp, h as linkPreviews, ht as serverClock, i as readWindowPage, it as beginNotificationReply, j as rpc, kt as levels, lt as failNotificationReply, mt as submitNotificationReply, n as bootstrapWindowPage, nt as updatesAvailable, ot as clearNotificationHistory, p as interfaceDefinition, pt as setNotificationProgress, r as installWindowPages, rt as activeNotifications, s as activityFeed, st as dismissNotification, tt as updateDelay, ut as notificationHistory, v as navigationLink, vt as dockMinimumWidth, w as projectNavigation, wt as debugSettings, xt as mobileLayout } from "./index.js";
+import { $ as widgetConfiguration, At as levels, C as projectCatalog, Ct as clearLive, D as requestActivity, Dt as forgetSessions, Et as exportSession, F as scriptShelf, Ft as sessionRecords, H as serverUpdates, I as searchConfiguration, It as setServerDebugContext, Lt as randomId, M as rpc, O as resetRequestActivity, Ot as formatEvent, Pt as savedSessions, Q as userProfile, St as mobileLayout, T as projectNavigation, Tt as debugSettings, U as sessionAction, X as uploadFormFile, Z as userAvatar, _ as messageFileRequest, _t as serverTimestamp, a as __vitePreload, at as beginNotificationReply, c as activityFeed, ct as dismissNotification, dt as notificationHistory, et as workspaceLayouts, f as endActivity, ft as notify, g as linkPreviews, gt as serverClock, ht as submitNotificationReply, i as readWindowPage, it as activeNotifications, j as resultItems, k as resolveCustomUrl, kt as importSession, l as beginActivity, lt as editNotificationReply, m as interfaceDefinition, mt as setNotificationProgress, n as bootstrapWindowPage, nt as updateDelay, ot as cancelNotificationReply, pt as resetNotifications, r as installWindowPages, rt as updatesAvailable, st as clearNotificationHistory, tt as setUpdatesAvailable, ut as failNotificationReply, v as messagesRequest, vt as dockMinimumHeight, w as projectCreationCatalog, wt as debugLog, xt as mobile, y as navigationLink, yt as dockMinimumWidth, zt as asyncComponent } from "./index.js";
 import { A as AppSearchField_default, B as _sfc_main$109, C as readClipboardImages, D as AppProgress_default, F as _sfc_main$107, G as _sfc_main$115, H as frameContentWidth, I as localDate, K as button, L as monthLabel, N as _sfc_main$108, P as _sfc_main$112, Q as revealListOffset, R as parse, S as copyText, T as translate, U as observeFrameSizes, V as _sfc_main$111, W as _sfc_main$106, X as node, Y as muted, Z as rect$1, d as _sfc_main$110, f as matchesUser$1, j as _sfc_main$113, k as ItemPreview_default, o as _sfc_main$117, p as _sfc_main$116, q as label, t as _sfc_main$105, u as _sfc_main$114, x as copyImage } from "./FrameView.js";
 import { t as _sfc_main$118 } from "./AppearanceControls.js";
 import { n as qtLabelTextWidth, t as layoutTextWidth } from "./textMetrics.js";
@@ -2612,13 +2612,13 @@ function operation(model, record) {
 		title: "Cancel",
 		command: "cancelOperation",
 		icon: "close",
-		enabled: !model.busy && !!record.canEdit
+		enabled: !model.busy && !!(record.canCancel ?? record.canEdit)
 	});
 	result.push({
 		title: "Remove operation",
 		command: "remove",
 		icon: "delete",
-		enabled: !model.busy && record.status !== "Running"
+		enabled: !model.busy && record.status !== "Running" && record.canRemove !== false
 	});
 	return result;
 }
@@ -3840,9 +3840,9 @@ var editable = (job) => !!job && ![
 	"Skipped",
 	"Result unknown"
 ].includes(job.status);
-function record(job, owner) {
+function record$1(job, owner) {
 	if (!job) return {};
-	const canEdit = !owner.running && editable(job) && !!job.file, canOptions = canEdit && !job.ingest && !job.preview, status = job.status === "Complete" ? "Completed" : ["Uploading", "Checking in"].includes(job.status) ? "Running" : job.status === "Queued" ? job.validating ? "Validating" : job.planError ? "Invalid" : "Prepared" : job.status, canCommit = !owner.running && editable(job) && !!job.file && !job.validating && !job.planError && job.status !== "Cancelled";
+	const canEdit = !owner.running && editable(job) && !!job.file && !job.submission, canOptions = canEdit && !job.ingest && !job.preview, status = job.status === "Complete" ? "Completed" : ["Uploading", "Checking in"].includes(job.status) ? "Running" : job.status === "Queued" ? job.validating ? "Validating" : job.planError ? "Invalid" : "Prepared" : job.status, canCommit = !owner.running && editable(job) && !!job.file && !job.validating && !job.planError && job.status !== "Cancelled";
 	return {
 		operationId: String(job.id),
 		title: job.name,
@@ -3876,6 +3876,16 @@ function record(job, owner) {
 		canNaming: !!owner.canAdminister && !owner.running && !job.ingest && !job.preview,
 		canCommit,
 		canRetry: !!job.file && ["Failed", "Cancelled"].includes(job.status),
+		canCancel: canEdit || !!job.submission && ![
+			"Complete",
+			"Skipped",
+			"Result unknown"
+		].includes(job.status),
+		canRemove: !job.submission || [
+			"Complete",
+			"Skipped",
+			"Result unknown"
+		].includes(job.status),
 		canInspect: !!job.snapshot || job.status === "Result unknown",
 		needsFiles: job.status === "Missing files",
 		previewCount: job.previews.length,
@@ -3961,11 +3971,11 @@ function model(owner, rows, files) {
 		sourceTargets: files.some((file) => !!file.target),
 		repositories: owner.repositoryOptions,
 		duplicate: !!owner.duplicate,
-		canReplace: ![
+		canReplace: !owner.jobs.some((job) => job.id === owner.duplicate?.oldId && (job.submission || [
 			"Uploading",
 			"Checking in",
 			"Result unknown"
-		].includes(owner.jobs.find((job) => job.id === owner.duplicate?.oldId)?.status),
+		].includes(job.status))),
 		error: t(owner.error)
 	};
 }
@@ -4201,45 +4211,182 @@ var files_default = {
 };
 //#endregion
 //#region src/features/checkin/queue/recovery.js
+function queueId() {
+	return Array.from(crypto.getRandomValues(/* @__PURE__ */ new Uint8Array(16)), (byte) => byte.toString(16).padStart(2, "0")).join("");
+}
+var storageKey = (login) => "tactic_stream.commit_queue." + login;
+var prefix = (login) => "tactic_stream.commit_queue_jobs." + encodeURIComponent(login) + ".";
+var recoveryError = "Queue recovery could not be saved. Keep this page open until pending work is complete.";
+function record({ ticket, id, files, file, previews, validating, plan, request, ...job }) {
+	return {
+		...job,
+		sourceFiles: files?.length ? descriptors(files) : job.sourceFiles || [],
+		previewFiles: previews?.length ? descriptors(previews) : job.previewFiles || []
+	};
+}
+function restoreJob(job, ticket) {
+	const active = ["Uploading", "Checking in"].includes(job.status);
+	const terminal = [
+		"Complete",
+		"Skipped",
+		"Result unknown"
+	].includes(job.status);
+	return {
+		...job,
+		ticket,
+		files: [],
+		previews: [],
+		file: null,
+		plan: null,
+		validating: false,
+		request: 0,
+		status: terminal ? job.status : job.submission ? "Checking in" : job.status === "Checking in" ? "Result unknown" : "Missing files",
+		error: active && !job.submission ? "The page closed during check-in. Inspect Snapshot Browser before repeating it." : job.error || ""
+	};
+}
 var recovery_default = {
 	changed() {
 		this.$emit("changed", this.jobs);
+		if (!this.login) return false;
 		try {
-			localStorage.setItem("tactic_stream.commit_queue." + this.login, JSON.stringify(this.jobs.map(({ ticket, files, file, previews, validating, plan, ...job }) => ({
-				...job,
-				sourceFiles: files?.length ? descriptors(files) : job.sourceFiles || [],
-				previewFiles: previews?.length ? descriptors(previews) : job.previewFiles || []
-			}))));
+			for (const job of this.jobs) {
+				const key = prefix(this.login) + job.recoveryId;
+				const saved = JSON.stringify(record(job));
+				if (this.persisted.get(key) !== saved) {
+					localStorage.setItem(key, saved);
+					this.persisted.set(key, saved);
+				}
+			}
+			return true;
 		} catch {
-			this.error = "Queue recovery could not be saved. Keep this page open until pending work is complete.";
+			this.error = recoveryError;
+			return false;
+		}
+	},
+	forgetJob(job) {
+		const key = prefix(this.login) + job.recoveryId;
+		try {
+			localStorage.removeItem(key);
+			this.persisted.delete(key);
+		} catch {
+			this.error = recoveryError;
 		}
 	},
 	restore() {
-		if (this.pending || this.running) return;
-		let saved = [];
+		if (!this.login || !this.ticket) return;
+		const oldKey = storageKey(this.login);
+		const base = prefix(this.login);
 		try {
-			saved = JSON.parse(localStorage.getItem("tactic_stream.commit_queue." + this.login) || "[]");
-		} catch {}
-		this.jobs = Array.isArray(saved) ? saved.filter((job) => job && typeof job.searchKey === "string" && typeof job.project === "string").map((job) => ({
-			...job,
-			id: ++this.sequence,
-			ticket: this.ticket,
-			files: [],
-			previews: [],
-			file: null,
-			plan: null,
-			validating: false,
-			status: job.status === "Checking in" ? "Result unknown" : [
-				"Complete",
-				"Skipped",
-				"Result unknown"
-			].includes(job.status) ? job.status : "Missing files",
-			error: ["Uploading", "Checking in"].includes(job.status) ? "The page closed during check-in. Inspect Snapshot Browser before repeating it." : job.error || ""
-		})) : [];
-		this.selectedId = this.jobs[0]?.id || "";
+			const legacy = JSON.parse(localStorage.getItem(oldKey) || "[]");
+			if (Array.isArray(legacy) && legacy.length) {
+				legacy.forEach((job, index) => {
+					if (!job || typeof job.searchKey !== "string") return;
+					const id = "legacy-" + index;
+					if (localStorage.getItem(base + id) == null) localStorage.setItem(base + id, JSON.stringify({
+						...job,
+						recoveryId: id,
+						queueOrder: index
+					}));
+				});
+				localStorage.removeItem(oldKey);
+			}
+			for (const key of Object.keys(localStorage)) if (key.startsWith(base)) this.queueStorage({
+				key,
+				newValue: localStorage.getItem(key)
+			});
+		} catch {
+			this.error = recoveryError;
+		}
+		this.selectedId ||= this.jobs[0]?.id || "";
+		this.$emit("changed", this.jobs);
+	},
+	queueStorage({ key, newValue }) {
+		const base = prefix(this.login);
+		if (!this.login || !this.ticket || !key?.startsWith(base) || this.persisted.get(key) === newValue) return;
+		const id = key.slice(base.length);
+		const index = this.jobs.findIndex((job) => job.recoveryId === id);
+		const previous = this.jobs[index];
+		if (this.running && previous && ["Uploading", "Checking in"].includes(previous.status)) return;
+		if (!newValue) {
+			this.persisted.delete(key);
+			if (index >= 0) this.jobs.splice(index, 1);
+		} else {
+			let saved;
+			try {
+				saved = JSON.parse(newValue);
+			} catch {
+				return;
+			}
+			if (!saved || saved.recoveryId !== id || typeof saved.searchKey !== "string" || typeof saved.project !== "string") return;
+			const job = restoreJob(saved, this.ticket);
+			job.id = previous?.id ?? ++this.sequence;
+			if (previous?.file && !["Complete", "Skipped"].includes(job.status) && JSON.stringify(descriptors(previous.files)) === JSON.stringify(saved.sourceFiles) && JSON.stringify(descriptors(previous.previews)) === JSON.stringify(saved.previewFiles)) {
+				Object.assign(job, {
+					files: previous.files,
+					previews: previous.previews,
+					file: previous.file
+				});
+				if (job.status === "Missing files") job.status = saved.status;
+			}
+			this.persisted.set(key, JSON.stringify(record(job)));
+			if (index >= 0) this.jobs.splice(index, 1, job);
+			else this.jobs.push(job);
+			this.jobs.sort((left, right) => (left.queueOrder || 0) - (right.queueOrder || 0) || left.recoveryId.localeCompare(right.recoveryId));
+		}
+		if (!this.selected) this.selectedId = this.jobs[0]?.id || "";
 		this.$emit("changed", this.jobs);
 	}
 };
+//#endregion
+//#region src/features/checkin/queue/publication.js
+var partSize = 16777216;
+async function publicationRequest(job, action, values, part, signal) {
+	const payload = {
+		ticket: job.ticket,
+		project: job.project,
+		...values
+	};
+	let body = JSON.stringify(payload);
+	if (part) {
+		body = new FormData();
+		for (const [key, value] of Object.entries(payload)) body.append(key, typeof value === "string" ? value : JSON.stringify(value));
+		body.append("file", part, "part");
+	}
+	const response = await fetch("/admin/checkin-queue/" + action, {
+		method: "POST",
+		body,
+		signal,
+		cache: "no-store",
+		headers: part ? void 0 : { "Content-Type": "application/json" }
+	});
+	const data = await response.json().catch(() => null);
+	if (!response.ok || !data?.result) {
+		const error = new Error(data?.error || "Check-in queue request failed.");
+		error.status = response.status;
+		throw error;
+	}
+	return data.result;
+}
+async function stagePublication(job, signal, progress) {
+	const { batch, options } = job.submission;
+	const files = [...job.files, ...job.previews].slice(0, options.source_files.length);
+	for (const [index, file] of files.entries()) for (let offset = 0; offset < file.size || offset === 0; offset += partSize) {
+		await publicationRequest(job, "submit", {
+			batch_id: batch,
+			chunk_id: `file-${index}-${offset}`,
+			operations: index === 0 && offset === 0 ? [{
+				operation_id: "publish",
+				options
+			}] : [],
+			pieces: [{
+				operation_id: "publish",
+				file_index: index,
+				offset
+			}]
+		}, file.slice(offset, offset + partSize), signal);
+		progress((index + (file.size ? Math.min(1, (offset + partSize) / file.size) : 1)) / files.length);
+	}
+}
 //#endregion
 //#region src/features/checkin/CommitQueue.vue
 var NamingEditor = asyncComponent(() => __vitePreload(() => import("./NamingEditor.js").then((n) => n.n), __vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18])));
@@ -4275,7 +4422,10 @@ var _sfc_main$89 = {
 			selectedId: "",
 			running: false,
 			modal: false,
+			persisted: markRaw(/* @__PURE__ */ new Map()),
 			sequence: 0,
+			publicationTimer: null,
+			pollingPublication: false,
 			applyChecked: false,
 			advanced: false,
 			mobileDetails: false,
@@ -4312,7 +4462,7 @@ var _sfc_main$89 = {
 			return JSON.stringify([this.login, this.ticket]);
 		},
 		frameOperations() {
-			return this.jobs.map((job) => record(job, this));
+			return this.jobs.map((job) => record$1(job, this));
 		},
 		frameFiles() {
 			return sourceFiles(this.selected, this.canEdit);
@@ -4347,11 +4497,14 @@ var _sfc_main$89 = {
 			return this.jobs.some((job) => job.file);
 		},
 		canEdit() {
-			return !this.running && editable(this.selected) && !!this.selected?.file;
+			return !this.running && editable(this.selected) && !!this.selected?.file && !this.selected.submission;
 		}
 	},
 	mounted() {
 		this.restore();
+		this.reconcilePublications();
+		this.publicationTimer = setInterval(this.reconcilePublications, 2e3);
+		window.addEventListener("storage", this.queueStorage);
 		window.addEventListener("beforeunload", this.beforeUnload);
 	},
 	beforeUnmount() {
@@ -4359,6 +4512,8 @@ var _sfc_main$89 = {
 		this.sessionEpoch++;
 		this.validation++;
 		this.aborter?.abort();
+		clearInterval(this.publicationTimer);
+		window.removeEventListener("storage", this.queueStorage);
 		window.removeEventListener("beforeunload", this.beforeUnload);
 	},
 	watch: {
@@ -4380,13 +4535,15 @@ var _sfc_main$89 = {
 			this.duplicates = [];
 			if (JSON.parse(previous)[0] !== this.login) {
 				this.jobs = [];
+				this.persisted.clear();
 				this.restore();
 			} else {
 				for (const job of this.jobs) {
 					job.request++;
 					job.validating = false;
 					job.ticket = this.ticket;
-					if (job.status === "Checking in") {
+					if (job.submission && job.status === "Uploading") job.status = "Checking in";
+					else if (!job.submission && job.status === "Checking in") {
 						job.status = "Result unknown";
 						job.error = "The session changed during check-in. Inspect Snapshot Browser before repeating it.";
 					} else if (job.status === "Uploading") job.status = "Cancelled";
@@ -4469,6 +4626,8 @@ var _sfc_main$89 = {
 				previews: [],
 				...values,
 				id: ++this.sequence,
+				recoveryId: queueId(),
+				queueOrder: Math.max(Date.now(), (this.jobs.at(-1)?.queueOrder || 0) + 1),
 				file: files[0],
 				files: [...files],
 				preview: !values.context,
@@ -4495,7 +4654,7 @@ var _sfc_main$89 = {
 		resolveDuplicate(decision) {
 			const pending = this.duplicate;
 			const old = this.jobs.find((job) => job.id === pending.oldId);
-			if (decision === "replace" && old && ![
+			if (decision === "replace" && old && !old.submission && ![
 				"Uploading",
 				"Checking in",
 				"Result unknown"
@@ -4504,7 +4663,10 @@ var _sfc_main$89 = {
 				old.request++;
 				this.enqueue(pending.values, true);
 				const replacement = this.jobs.pop();
+				this.forgetJob(replacement);
 				replacement.id = old.id;
+				replacement.recoveryId = old.recoveryId;
+				replacement.queueOrder = old.queueOrder;
 				replacement.checked = old.checked;
 				this.jobs.splice(index, 1, replacement);
 				this.selectedId = old.id;
@@ -4566,7 +4728,7 @@ var _sfc_main$89 = {
 		async validate(job) {
 			const epoch = this.sessionEpoch;
 			if (!this.ownsJob(job, epoch)) return;
-			if (job.ingest || job.preview) {
+			if (job.submission || job.ingest || job.preview) {
 				job.planError = "";
 				return;
 			}
@@ -4601,7 +4763,7 @@ var _sfc_main$89 = {
 		},
 		update(field, value) {
 			if (!this.canEdit) return;
-			for (const job of this.jobs.filter((job) => editable(job) && !job.ingest && (!job.preview || field === "description") && (job.id === this.selectedId || this.applyChecked && job.checked))) {
+			for (const job of this.jobs.filter((job) => editable(job) && !job.submission && !job.ingest && (!job.preview || field === "description") && (job.id === this.selectedId || this.applyChecked && job.checked))) {
 				job[field] = value;
 				if (field === "process") job.context = value;
 				if (field === "keepFileName" && value) job.updateVersionless = false;
@@ -4612,8 +4774,14 @@ var _sfc_main$89 = {
 			if (field !== "description") this.validateAll();
 		},
 		remove(job) {
+			if (job.submission && ![
+				"Complete",
+				"Skipped",
+				"Result unknown"
+			].includes(job.status)) return;
 			if (["Uploading", "Checking in"].includes(job.status)) return;
 			job.request++;
+			this.forgetJob(job);
 			this.jobs = this.jobs.filter((item) => item !== job);
 			if (!this.selected) this.selectedId = this.jobs[0]?.id || "";
 			this.changed();
@@ -4626,6 +4794,8 @@ var _sfc_main$89 = {
 		move(offset) {
 			const index = this.jobs.indexOf(this.selected), target = index + offset;
 			if (this.running || index < 0 || target < 0 || target >= this.jobs.length) return;
+			const other = this.jobs[target];
+			[this.selected.queueOrder, other.queueOrder] = [other.queueOrder, this.selected.queueOrder];
 			const [job] = this.jobs.splice(index, 1);
 			this.jobs.splice(target, 0, job);
 			this.changed();
@@ -4656,21 +4826,108 @@ var _sfc_main$89 = {
 			this.update("context", process + (branch ? "/" + branch : ""));
 		},
 		...files_default,
-		cancel(job = this.selected) {
-			if (!job) return;
-			if (["Uploading", "Checking in"].includes(job.status)) {
+		async cancel(job = this.selected) {
+			if (!job || [
+				"Complete",
+				"Skipped",
+				"Result unknown"
+			].includes(job.status)) return;
+			if (!job.submission) {
+				if (editable(job)) {
+					job.status = "Cancelled";
+					job.request++;
+					this.changed();
+				}
+				return;
+			}
+			const epoch = this.sessionEpoch;
+			if (job.status === "Uploading") {
 				this.cancelRequested = true;
-				if (job.status === "Uploading") this.aborter?.abort();
-			} else if (editable(job)) {
-				job.status = "Cancelled";
-				job.request++;
-				this.changed();
+				this.aborter?.abort();
+			}
+			try {
+				const batch = job.submission.batch;
+				const result = await publicationRequest(job, "cancel", { batch_id: batch });
+				if (!this.ownsJob(job, epoch) || job.submission?.batch !== batch) return;
+				if (!result.states.publish || result.states.publish === "terminated") {
+					job.status = "Cancelled";
+					job.error = "";
+					job.submission = null;
+					job.attempt = (job.attempt || 0) + 1;
+					this.changed();
+				}
+			} catch (error) {
+				if (this.ownsJob(job, epoch)) this.error = error.message;
 			}
 		},
 		retry(job = this.selected) {
 			if (!this.running && ["Failed", "Cancelled"].includes(job?.status) && job.file) {
 				job.status = "Queued";
 				this.run([job]);
+			}
+		},
+		async reconcilePublications() {
+			if (!this.ticket || this.disposed || this.pollingPublication) return;
+			const jobs = this.jobs.filter((job) => job.submission && [
+				"Checking in",
+				"Missing files",
+				"Failed"
+			].includes(job.status));
+			if (!jobs.length) return;
+			const epoch = this.sessionEpoch;
+			this.pollingPublication = true;
+			try {
+				for (const job of jobs) {
+					const batch = job.submission?.batch;
+					if (!this.ownsJob(job, epoch) || !batch) continue;
+					try {
+						const result = await publicationRequest(job, "updates", { batches: [{
+							batch_id: batch,
+							project: job.project
+						}] });
+						if (!this.ownsJob(job, epoch) || job.submission?.batch !== batch || job.status === "Uploading") continue;
+						const event = result.checkins.find((row) => row.operation_id === "publish");
+						if (event?.state === "complete") {
+							const completedFiles = job.files;
+							job.status = event.skipped ? "Skipped" : "Complete";
+							job.error = event.reason || "";
+							job.snapshot = event.snapshot || null;
+							job.searchKey = event.search_key || job.searchKey;
+							job.progress = 1;
+							job.file = null;
+							job.files = [];
+							job.previews = [];
+							if (!event.skipped) {
+								notify("complete", "Check-in completed", job.name, "checkin");
+								this.$emit("completed", {
+									...job,
+									completedFiles
+								});
+							}
+							this.changed();
+							if (preferences.checkin.commitQueueAutoClean && !event.skipped) this.remove(job);
+						} else if (event?.state === "error" || event?.state === "terminated") {
+							job.status = event.uncertain ? "Result unknown" : event.state === "terminated" ? "Cancelled" : "Failed";
+							job.error = event.error || "";
+							if (!event.uncertain) {
+								job.submission = null;
+								job.attempt = (job.attempt || 0) + 1;
+							}
+							this.changed();
+						} else {
+							const status = !event || event.state === "staging" ? job.file ? "Failed" : "Missing files" : "Checking in";
+							if (status !== job.status) {
+								job.status = status;
+								if (status === "Checking in") job.error = "";
+								this.changed();
+							}
+						}
+					} catch (error) {
+						if (this.ownsJob(job, epoch)) job.error = error.message;
+					}
+				}
+			} finally {
+				this.pollingPublication = false;
 			}
 		},
 		async run(requested = this.jobs.filter((job) => job.checked)) {
@@ -4681,99 +4938,49 @@ var _sfc_main$89 = {
 			try {
 				for (const job of [...requested]) {
 					if (this.cancelRequested) break;
-					if (!editable(job) || !job.file || job.status === "Cancelled") continue;
+					if (!this.ownsJob(job, epoch) || !editable(job) || !job.file || job.status === "Cancelled") continue;
 					await this.validate(job);
 					if (!this.ownsJob(job, epoch)) return;
-					if (job.planError || this.cancelRequested || job.status === "Cancelled" || !this.jobs.includes(job)) continue;
+					if (job.planError || this.cancelRequested || job.status === "Cancelled") continue;
+					const { action, ...options } = this.options(job, "checkin");
+					if (!job.submission) {
+						if (job.preview || job.ingest) {
+							options.kind = job.ingest ? "ingest" : "preview";
+							options.source_files = options.source_files.slice(0, 1);
+							if (job.ingest) {
+								options.search_key = job.ingest.parent_key;
+								options.ingest = job.ingest;
+							}
+						}
+						job.submission = {
+							batch: job.recoveryId + "-" + (job.attempt || 0),
+							options
+						};
+					}
+					const batch = job.submission.batch;
 					job.error = "";
 					job.status = "Uploading";
 					job.progress = 0;
+					if (!this.changed()) {
+						job.status = "Failed";
+						job.error = this.error;
+						break;
+					}
 					try {
-						const names = [], files = [...job.files, ...job.previews];
 						this.aborter = markRaw(new AbortController());
-						for (const [index, file] of files.entries()) {
-							const suffix = file.name.includes(".") ? file.name.slice(file.name.lastIndexOf(".")) : "";
-							names.push(await uploadFormFile(job.ticket, job.project, file, {
-								signal: this.aborter.signal,
-								filename: job.ingest || job.preview ? file.name : "queue-" + job.id + "-" + index + "-" + Date.now() + suffix
-							}));
-							if (!this.ownsJob(job, epoch)) return;
-							job.progress = (index + 1) / files.length * .85;
-						}
-						if (this.cancelRequested) {
-							job.status = "Cancelled";
-							continue;
-						}
-						job.status = "Checking in";
-						this.changed();
-						const auth = {
-							ticket: job.ticket,
-							project: job.project,
-							language: "python"
-						};
-						if (job.ingest) {
-							const result = (await rpc("execute_cmd", [
-								auth,
-								"tactic.command.related_ingest_cmd.RelatedIngestCmd",
-								{
-									...job.ingest,
-									action: "checkin",
-									filenames: names
-								}
-							])).info;
-							if (!this.ownsJob(job, epoch)) return;
-							if (result.skipped) {
-								job.status = "Skipped";
-								job.error = result.reason;
-								job.file = null;
-								job.files = [];
-								this.changed();
-								continue;
-							}
-							job.snapshot = result.snapshot;
-							job.searchKey = result.search_key;
-						} else if (job.preview) job.snapshot = await rpc("simple_checkin", [
-							auth,
-							job.searchKey,
-							"icon",
-							names[0]
-						], {
-							mode: "uploaded",
-							description: job.description || "Search Type preview",
-							process: "icon",
-							create_icon: job.generatePreviews !== false
+						await stagePublication(job, this.aborter.signal, (progress) => {
+							if (this.ownsJob(job, epoch)) job.progress = progress * .85;
 						});
-						else job.snapshot = (await rpc("execute_cmd", [
-							auth,
-							"tactic.command.browser_checkin_cmd.BrowserCheckinCmd",
-							{
-								...this.options(job, "checkin"),
-								files: names
-							}
-						])).info.snapshot;
-						if (!this.ownsJob(job, epoch)) return;
-						const completedFiles = job.files;
-						job.status = "Complete";
-						job.progress = 1;
-						job.file = null;
-						job.files = [];
-						job.previews = [];
-						notify("complete", "Check-in completed", job.name, "checkin");
-						this.changed();
-						this.$emit("completed", {
-							...job,
-							completedFiles
-						});
-						if (preferences.checkin.commitQueueAutoClean) this.remove(job);
 					} catch (error) {
-						if (!this.ownsJob(job, epoch)) return;
-						job.status = job.status === "Uploading" && error.name === "AbortError" ? "Cancelled" : job.status === "Checking in" && (!error.status || error.status >= 500) ? "Result unknown" : "Failed";
-						job.error = error.message;
-						this.changed();
-						if (job.status !== "Cancelled") notify("error", job.error, job.name, "checkin");
+						if (!this.ownsJob(job, epoch) || job.submission?.batch !== batch) return;
+						if (!this.cancelRequested) job.error = error.message;
 					} finally {
 						if (epoch === this.sessionEpoch) this.aborter = null;
 					}
+					if (!this.ownsJob(job, epoch) || job.submission?.batch !== batch) return;
+					job.status = "Checking in";
+					this.changed();
+					await this.reconcilePublications();
 				}
 			} finally {
 				if (epoch === this.sessionEpoch && !this.disposed) {
@@ -30141,11 +30348,11 @@ var _sfc_main$10 = {
 				if (generation === epoch && chat === current.value && visible.value) error.value = failure.message;
 			}
 		}
-		const fileBlob = (snapshot, file, chat = current.value) => messageFileRequest(props.ticket, props.project, {
+		const fileBlob = (snapshot, file, chat = current.value, options) => messageFileRequest(props.ticket, props.project, {
 			message_code: chat,
 			snapshot_code: snapshot.code,
 			file_code: file.code
-		});
+		}, void 0, "messages", options);
 		async function loadConversationPreviews() {
 			const generation = epoch;
 			for (const row of conversations.value) {
@@ -30198,7 +30405,7 @@ var _sfc_main$10 = {
 					filename: ["web", "icon"].includes(file.type) ? file.file_name : attachmentName(snapshot),
 					size: file.st_size
 				})),
-				loadFile: (file) => fileBlob(snapshot, file, chat)
+				loadFile: (file, options) => fileBlob(snapshot, file, chat, options)
 			});
 			emit("attachment-location", {
 				chat,

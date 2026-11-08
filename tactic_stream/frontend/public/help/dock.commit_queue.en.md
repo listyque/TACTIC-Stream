@@ -27,8 +27,8 @@ Only **Upload** is available as browser transfer. Server staging uses native inp
 
 ## Errors and recovery
 
-Upload cancellation stops pending work; an already submitted server transaction is allowed to finish. Failed/cancelled rows retain files for Retry. If the reply is lost after submission, **Result unknown** prevents automatic repetition: inspect Snapshot Browser first. Invalid destinations and foreign path collisions fail without silently overwriting data. Successful rows can be removed automatically by the remembered **Auto-clean** switch; failures remain.
+Cancel stops an upload or a waiting server job. A transaction that has started can finish. Failed or cancelled rows retain files for Retry. The browser recovers lost replies from the server queue. If the worker reports **Result unknown**, inspect Snapshot Browser before preparing a new operation. Successful rows can be removed automatically by **Auto-clean**.
 
-Closing the dock keeps the queue alive. Reload recovery stores operation metadata per login, never a ticket or file contents. Unsent operations return as **Missing files**; reselect matching relative paths and sizes, using Directory when basenames collide. A page closed during server execution returns as **Result unknown**. Logout warns before discarding file handles. Completed rows open their exact result in Snapshot Browser.
+Closing the dock keeps the queue alive. Tabs share operation metadata for the same account. A reload checks submitted work on the server. Unsent or partially uploaded operations return as **Missing files**. Reselect matching relative paths and sizes, using Directory when basenames collide. Completed rows open their exact result in Snapshot Browser. The Stream queue service runs submitted operations.
 
 See [Commit Queue](commit_queue.en.md) for controls and preview actions, and [Internal object model](core_model.en.md) for the native transaction path.

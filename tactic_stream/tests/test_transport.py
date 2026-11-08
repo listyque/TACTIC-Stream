@@ -5398,8 +5398,25 @@ with patch.object(PublishTableElement, 'get_cell_value', None), patch.object(Gen
             api.dispatch('insert',(auth,'config/naming',dict(search_type=kind,snapshot_type='file',context='publish/*',latest_versionless=versionless,dir_naming=directory,file_naming='{basefile}.{ext}')))
         output = ROOT / '.screenshots/checkin-current'; output.mkdir(exist_ok=True)
         environment = dict(os.environ,PLAYWRIGHT_BROWSERS_PATH=str(ROOT / '.browser-cache'))
-        result = subprocess.run([shutil.which('node'),str(ROOT / 'frontend/tests/checkin.mjs'),self.url,str(output),owner['__search_key__']],
-                                cwd=ROOT / 'frontend',env=environment,capture_output=True,text=True,encoding='utf8',errors='replace',timeout=180)
+        from pyasm.search.search import RequestContext, request_context
+        from tactic.command.queue import JobTask
+        stop = threading.Event()
+        def consume():
+            with request_context(RequestContext(self.store, 'admin', 'one')):
+                api.auth.bind_security('admin', auth['ticket'])
+                task = JobTask(queue='checkin')
+                while not stop.is_set():
+                    if not task.check_new_job('checkin'):
+                        stop.wait(.05)
+        worker = threading.Thread(target=consume, daemon=True)
+        worker.start()
+        try:
+            result = subprocess.run([shutil.which('node'),str(ROOT / 'frontend/tests/checkin.mjs'),self.url,str(output),owner['__search_key__']],
+                                    cwd=ROOT / 'frontend',env=environment,capture_output=True,text=True,encoding='utf8',errors='replace',timeout=180)
+        finally:
+            stop.set()
+            worker.join(10)
+            self.assertFalse(worker.is_alive())
         self.assertEqual(result.returncode,0,result.stdout + result.stderr)
         snapshots = api.dispatch('query',(auth,'sthpw/snapshot'),dict(filters=[('search_type',kind + '?project=one'),('search_code','QUEUE001'),('version','>=',1)]))
         self.assertGreaterEqual(len(snapshots),2)
@@ -5646,6 +5663,23 @@ with patch.object(PublishTableElement, 'get_cell_value', None), patch.object(Gen
         scan = call('scan', filenames=['NativeIngest.txt', 'Ignored.tmp'], options=dict(ignore='.tmp'))['files']
         self.assertEqual(scan[0]['name'], 'NativeIngest')
         self.assertFalse(scan[1]['accepted'])
+        from tactic.command.checkin_queue_cmd import SubmitCheckinChunkCmd, updates
+        from tactic.command.queue import JobTask
+        from pyasm.search.search import RequestContext, request_context
+        from pyasm.command import Command
+        with request_context(RequestContext(self.store, 'admin', 'one')):
+            api.auth.bind_security('admin', auth['ticket'])
+            operation = dict(operation_id='ingest', options=dict(kind='ingest', search_key=parent,
+                source_files=[dict(path='QueuedIngest.txt', size=5)],
+                ingest=dict(parent_key=parent, search_type='contract/collection')))
+            command_instance = SubmitCheckinChunkCmd(batch_id='related', chunk_id='one', operations=[operation],
+                pieces=[dict(operation_id='ingest', file_index=0, offset=0)], uploads=[('part', b'queue')])
+            command_instance.get_transaction().set_sync(False)
+            Command.execute_cmd(command_instance)
+            self.assertTrue(JobTask(queue='checkin').check_new_job('checkin'))
+            event = updates([dict(batch_id='related', project='one')])['checkins'][0]
+            self.assertEqual(event['state'], 'complete', event)
+            self.assertTrue(event['search_key'].startswith('contract/collection?'))
         upload('NativeIngest.txt')
         result = call('checkin', filenames=['NativeIngest.txt'])
         child = result['search_key']

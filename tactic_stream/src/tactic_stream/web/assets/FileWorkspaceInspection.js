@@ -1,6 +1,6 @@
 import { $ as shallowRef, D as nextTick, F as renderSlot, I as resolveComponent, K as withCtx, N as openBlock, P as renderList, U as watch, Y as markRaw, Z as ref, _ as createCommentVNode, d as Fragment, g as createBlock, h as createBaseVNode, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withKeys, m as computed, nt as normalizeClass, rt as normalizeStyle, tt as unref, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
 import { T as metrics, o as t, s as appearance, t as _sfc_main$16, u as frameColors, y as cssRoles, z as _plugin_vue_export_helper_default } from "./AppButton.js";
-import { At as logEvent, Mt as redact } from "./index.js";
+import { Nt as redact, jt as logEvent } from "./index.js";
 import { B as _sfc_main$20, F as _sfc_main$18, K as button, S as copyText, T as translate, U as observeFrameSizes, W as _sfc_main$19, X as node, Z as rect, o as _sfc_main$21, q as label, t as _sfc_main$17 } from "./FrameView.js";
 import { t as captionHeight } from "./sections.ui.js";
 import { r as prettySize } from "./file_values.js";

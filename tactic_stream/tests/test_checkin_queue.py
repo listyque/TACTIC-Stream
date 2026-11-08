@@ -54,6 +54,15 @@ class CheckinQueue(unittest.TestCase):
     def snapshots(self):
         return self.api.dispatch('query', (self.auth, 'sthpw/snapshot'), dict(filters=[('context','publish/queue')]))
 
+    def test_queued_preview_uses_native_icon_context(self):
+        operation = dict(operation_id='preview', options=self.options(kind='preview'))
+        self.submit([operation], [dict(operation_id='preview', file_index=0, offset=0)], [b'icon'])
+        self.assertTrue(self.run_one())
+        event = self.poll()['checkins'][0]
+        self.assertEqual(event['state'], 'complete', event)
+        self.assertEqual(event['snapshot']['context'], 'icon')
+        self.assertEqual(event['snapshot']['process'], 'icon')
+
     def test_partial_out_of_order_duplicate_and_durable_result(self):
         operation = dict(operation_id='one', options=self.options())
         piece = dict(operation_id='one', file_index=0, offset=2)

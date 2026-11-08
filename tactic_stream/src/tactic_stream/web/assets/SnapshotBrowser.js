@@ -1,6 +1,6 @@
 import { C as h, D as nextTick, H as useSlots, K as withCtx, N as openBlock, P as renderList, R as resolveDynamicComponent, U as watch, Z as ref, _ as createCommentVNode, b as createTextVNode, d as Fragment, g as createBlock, h as createBaseVNode, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withKeys, m as computed, nt as normalizeClass, p as Teleport, rt as normalizeStyle, tt as unref, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
 import { a as _sfc_main$3, o as t, s as appearance, t as _sfc_main$2, z as _plugin_vue_export_helper_default } from "./AppButton.js";
-import { A as resultItems, bt as mobile, dt as notify } from "./index.js";
+import { ft as notify, j as resultItems, o as fileBlob, xt as mobile } from "./index.js";
 import { F as _sfc_main$5, S as copyText, U as observeFrameSizes, V as _sfc_main$7, k as ItemPreview_default, r as _sfc_main$6, t as _sfc_main$4, x as copyImage } from "./FrameView.js";
 import RecordForm_default from "./RecordForm.js";
 import { c as FilePreview_default } from "./admin.document.js";
@@ -387,12 +387,6 @@ var SnapshotBrowser_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 			await nextTick();
 			fileMenu.value.openAt(event);
 		}
-		async function blob(file) {
-			if (!file.href) throw new Error(t("No web path is configured for this file."));
-			const response = await fetch(file.href);
-			if (!response.ok) throw new Error(t("File Offline"));
-			return response.blob();
-		}
 		function openFile(file) {
 			if (file) preview.value.open(file.record, {
 				files: [{
@@ -401,7 +395,7 @@ var SnapshotBrowser_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 					type: file.fileType
 				}],
 				context: snapshots.value.find((row) => row.__search_key__ === file.snapshotKey)?.context,
-				loadFile: () => blob(file)
+				loadFile: fileBlob
 			});
 		}
 		async function fileAction(command) {
@@ -418,7 +412,7 @@ var SnapshotBrowser_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 					await copyText(new URL(file.href, location.href).href);
 					notify("info", "Web link copied");
 				} else if (command === "copy_image") {
-					const value = await blob(file);
+					const value = await fileBlob(file);
 					if (id === request) {
 						await copyImage(value);
 						notify("info", "Image copied");
@@ -817,7 +811,7 @@ var SnapshotBrowser_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 			], 64);
 		};
 	}
-}, [["__scopeId", "data-v-846ff390"]]);
+}, [["__scopeId", "data-v-8c45d76d"]]);
 //#endregion
 export { SnapshotBrowser_default as default };
 

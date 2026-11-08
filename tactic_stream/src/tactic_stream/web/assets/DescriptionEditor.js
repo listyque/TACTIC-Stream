@@ -1,6 +1,6 @@
 import { D as nextTick, N as openBlock, U as watch, X as reactive, Z as ref, g as createBlock, h as createBaseVNode, j as onMounted, k as onBeforeUnmount, l as withKeys, m as computed, p as Teleport, tt as unref, w as inject, x as createVNode } from "./vue.js";
 import { o as t, z as _plugin_vue_export_helper_default } from "./AppButton.js";
-import { j as rpc } from "./index.js";
+import { M as rpc } from "./index.js";
 import { N as linkifyPlainText, x as browserLink } from "./admin.document.js";
 import { D as _sfc_main$1 } from "./App.js";
 //#region src/features/objects/DescriptionEditor.vue

@@ -303,7 +303,7 @@ export default {
         if (request === this.request && target.preview)
           this.$refs.preview.open(record, {
             ...target.preview,
-            loadFile: (file) => this.fileBlob(file)
+            loadFile: fileBlob
           });
       } catch (error) {
         if (request === this.request) notify('error', error.message);
@@ -338,7 +338,7 @@ export default {
           notify('info', 'Image copied');
         }
       } catch (error) {
-        if (request === this.request) notify('error', error.message);
+        if (request === this.request) notify('error', t(error.message));
       }
     }
   }

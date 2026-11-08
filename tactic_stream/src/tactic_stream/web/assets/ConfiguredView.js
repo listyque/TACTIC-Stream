@@ -2,7 +2,7 @@ const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ObjectCheckin.j
 import { r as __exportAll } from "./ObjectFieldFrame.js";
 import { B as useId, C as h, D as nextTick, E as mergeProps, F as renderSlot, H as useSlots, I as resolveComponent, J as isRef, K as withCtx, L as resolveDirective, N as openBlock, P as renderList, R as resolveDynamicComponent, U as watch, X as reactive, Y as markRaw, Z as ref, _ as createCommentVNode, b as createTextVNode, c as vShow, d as Fragment, et as toRaw, f as KeepAlive, g as createBlock, h as createBaseVNode, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withKeys, m as computed, nt as normalizeClass, p as Teleport, q as withDirectives, rt as normalizeStyle, s as vModelText, t as Transition, tt as unref, u as withModifiers, v as createElementBlock, w as inject, x as createVNode, y as createSlots } from "./vue.js";
 import { D as spacing$1, O as textStyles, R as BusyIndicator_default, S as fontMetricHeight, _ as controls$1, a as _sfc_main$56, b as fontFamily, j as preferences, m as readableText, o as t, s as appearance, t as _sfc_main$55, u as frameColors, y as cssRoles, z as _plugin_vue_export_helper_default } from "./AppButton.js";
-import { A as resultItems, Ct as debugLog, F as searchConfiguration, G as tableDependencies, J as transactionDetails, K as tableDependencyFile, Q as widgetConfiguration, Rt as asyncComponent, W as tableCells, Y as uploadFormFile, a as __vitePreload, b as objectRelations, bt as mobile, c as beginActivity, d as endActivity, dt as notify, g as messageFileRequest, h as linkPreviews, j as rpc, jt as logRequest, o as fileBlob, p as interfaceDefinition, q as tableParentGroup, v as navigationLink } from "./index.js";
+import { $ as widgetConfiguration, G as tableCells, I as searchConfiguration, J as tableParentGroup, K as tableDependencies, M as rpc, Mt as logRequest, X as uploadFormFile, Y as transactionDetails, _ as messageFileRequest, a as __vitePreload, f as endActivity, ft as notify, g as linkPreviews, j as resultItems, l as beginActivity, m as interfaceDefinition, o as fileBlob, q as tableDependencyFile, wt as debugLog, x as objectRelations, xt as mobile, y as navigationLink, zt as asyncComponent } from "./index.js";
 import { $ as virtualRange, A as AppSearchField_default, B as _sfc_main$67, C as readClipboardImages, F as _sfc_main$60, H as frameContentWidth, K as button, N as _sfc_main$65, O as _sfc_main$62, P as _sfc_main$68, S as copyText, T as translate, U as observeFrameSizes, V as _sfc_main$63, W as _sfc_main$66, X as node, Z as rect, c as describe$19, d as _sfc_main$64, j as _sfc_main$58, k as ItemPreview_default, l as geometry$2, n as _sfc_main$59, o as _sfc_main$69, q as label, r as _sfc_main$61, t as _sfc_main$57, x as copyImage } from "./FrameView.js";
 import { n as qtLabelTextWidth, t as layoutTextWidth } from "./textMetrics.js";
 import { t as captionHeight } from "./sections.ui.js";
@@ -13621,7 +13621,7 @@ var _sfc_main$16 = {
 				const target = await navigationLink(this.ticket, this.project, "skey://" + snapshot.__search_key__);
 				if (request === this.request && target.preview) this.$refs.preview.open(record, {
 					...target.preview,
-					loadFile: (file) => this.fileBlob(file)
+					loadFile: fileBlob
 				});
 			} catch (error) {
 				if (request === this.request) notify("error", error.message);
@@ -13651,7 +13651,7 @@ var _sfc_main$16 = {
 					notify("info", "Image copied");
 				}
 			} catch (error) {
-				if (request === this.request) notify("error", error.message);
+				if (request === this.request) notify("error", t(error.message));
 			}
 		}
 	}

@@ -1179,12 +1179,19 @@ async function pasteFiles() {
       error.value = failure.message;
   }
 }
-const fileBlob = (snapshot, file, chat = current.value) =>
-  messageFileRequest(props.ticket, props.project, {
-    message_code: chat,
-    snapshot_code: snapshot.code,
-    file_code: file.code
-  });
+const fileBlob = (snapshot, file, chat = current.value, options) =>
+  messageFileRequest(
+    props.ticket,
+    props.project,
+    {
+      message_code: chat,
+      snapshot_code: snapshot.code,
+      file_code: file.code
+    },
+    undefined,
+    'messages',
+    options
+  );
 async function loadConversationPreviews() {
   const generation = epoch;
   for (const row of conversations.value) {
@@ -1245,7 +1252,7 @@ function openAttachment(snapshot, chat = current.value, fileCode = '') {
           : attachmentName(snapshot),
         size: file.st_size
       })),
-      loadFile: (file) => fileBlob(snapshot, file, chat)
+      loadFile: (file, options) => fileBlob(snapshot, file, chat, options)
     }
   );
   emit('attachment-location', {
