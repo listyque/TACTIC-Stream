@@ -58,6 +58,10 @@ host file permissions; see the [Docker secret contract](https://docs.docker.com/
 Webmin uses its own certificate; the `check` command verifies that certificate,
 login/logout, Apache routes, current assets, workers, and PostgreSQL transactions.
 
+From 0.112.424, API request logs omit session tickets. Treat worker logs and log
+exports from older versions as credential-bearing data. If such logs were shared
+outside their intended audience, revoke any exposed sessions that are still active.
+
 ## Update an existing package installation
 
 Back up the database, repository, configuration, and `.local` secrets first. Keep

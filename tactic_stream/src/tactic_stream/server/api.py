@@ -651,7 +651,7 @@ class ApiXMLRPC:
         started = time.perf_counter()
         log_enabled = LOG.isEnabledFor(logging.INFO)
         timestamp = datetime.now() if log_enabled else None
-        record = dict(user='anonymous', project='', ticket='', arguments=[], method=method,
+        record = dict(user='anonymous', project='', arguments=[], method=method,
                       log_enabled=log_enabled, environ=environ or {})
         status = 'OK'
         request_id = '%s - #%07d' % (threading.get_ident(), next(REQUEST_COUNT))
@@ -666,7 +666,7 @@ class ApiXMLRPC:
                 global LAST_RSS
                 with LOG_LOCK, StringIO() as output:
                     print_primary_info(request_id, timestamp, record['user'], record['method'],
-                                       record['ticket'], record['arguments'], output)
+                                       record['arguments'], output)
                     if status != 'OK':
                         print('error: %s' % status, file=output)
                     duration = time.perf_counter() - record.get('method_started', started)
@@ -707,10 +707,6 @@ class ApiXMLRPC:
             ticket = {"ticket": token if token else project, "project": project if token else None}
         if not isinstance(ticket, dict):
             raise AuthenticationError("Invalid or expired ticket")
-        if record['log_enabled']:
-            token = ticket.get('ticket')
-            if isinstance(token, str):
-                record['ticket'] = token.replace('\r', '\\r').replace('\n', '\\n')
         if ticket.get("site") or ticket.get("language", "python") != "python":
             raise UnsupportedContract("Only the single-site Python ticket contract is migrated")
         login, state_xml = self.auth.validate(ticket.get("ticket"), return_state=True)

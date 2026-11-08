@@ -2408,14 +2408,17 @@ return {'single': single.get_input().get_value(), 'name': single.get_input().get
         proxy.delete_sobject(ticket, task['__search_key__'])
         self.assertEqual(proxy.get_by_code(ticket, 'sthpw/task', task['code']), {})
 
-    def test_api_logs_legacy_blocks_and_faults_without_passwords(self):
+    def test_api_logs_legacy_blocks_and_faults_without_credentials(self):
         proxy = self.proxy()
+        invalid_ticket = 'private-invalid-session-token-' + 'x' * 120
         with self.assertLogs('tactic_stream.server.api', level='INFO') as captured:
             ticket = self.ticket(proxy)
             proxy.query(ticket, 'contract/entity', [['code', 'A']])
             proxy.query(ticket, 'sthpw/login', [['password', 'private-filter-secret']])
             with self.assertRaises(Fault):
                 proxy.get_ticket('admin', 'private-wrong-password')
+            with self.assertRaises(Fault):
+                proxy.query('one:' + invalid_ticket, 'contract/entity')
             with self.assertRaises(Fault):
                 proxy.not_migrated(ticket)
         output = '\n'.join(captured.output)
@@ -2427,7 +2430,9 @@ return {'single': single.get_input().get_value(), 'name': single.get_input().get
         self.assertIn('AuthenticationError', output)
         self.assertIn('UnsupportedContract', output)
         self.assertIn('user: admin', output)
-        self.assertIn('ticket: ' + ticket['ticket'], output)
+        self.assertNotIn(ticket['ticket'], output)
+        self.assertNotIn(invalid_ticket[:100], output)
+        self.assertNotRegex(output, r'(?m)^ticket:')
         self.assertRegex(output, r'request_id: \d+ - #\d{7}')
         self.assertRegex(output, r'timestamp: \d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}')
         self.assertIn('simple method: <function ApiXMLRPC.query at 0x', output)
@@ -2480,7 +2485,8 @@ return {'single': single.get_input().get_value(), 'name': single.get_input().get
                     self.assertRegex(block, r'Duration: \d+\.\d{3} seconds \(request_id: ' + re.escape(request_id) + r'\)')
                     for field in ('Memory:', 'Increment:', 'Total Duration:'):
                         self.assertIn(field, block)
-                    for secret in ('private-test-password', 'private-wrong-password', 'private-filter-secret'):
+                    for secret in ('private-test-password', 'private-wrong-password', 'private-filter-secret',
+                                   ticket['ticket']):
                         self.assertNotIn(secret, block)
                     if error:
                         self.assertIn('error: ' + error, block)

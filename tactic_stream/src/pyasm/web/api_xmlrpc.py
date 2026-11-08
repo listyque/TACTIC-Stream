@@ -6,15 +6,11 @@ import json
 
 # From get_simple_cmd in the original module. Native workers write each block
 # atomically through logging; only the print destination/context are adapted.
-def print_primary_info(request_id, now, user, meth, ticket, args, output):
+def print_primary_info(request_id, now, user, meth, args, output):
     print("request_id: %s" % request_id, file=output)
     print("timestamp: %s" % now.strftime("%Y-%m-%d %H:%M:%S"), file=output)
     print("user: %s" % user, file=output)
     print("simple method: %s" % meth, file=output)
-    if len(ticket) > 100:
-        print("ticket: %s ... (%s)" % (ticket[:100], len(ticket)), file=output)
-    else:
-        print("ticket: %s" % ticket, file=output)
     # This is the original Common.pretty_print body, with the same destination.
     print(json.dumps(args, indent=2), file=output)
     print(file=output)
