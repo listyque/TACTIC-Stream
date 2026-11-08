@@ -37,6 +37,7 @@ import './inspector.css';
 
 export default {
   inject: {
+    canUseNoteAttachments: { default: () => () => true },
     openHelp: {},
     openUserProfile: { default: null },
     openObjectTab: { default: null },
@@ -94,6 +95,7 @@ export default {
       request: 0,
       identities: [],
       currentUser: '',
+      canPost: false,
       refreshError: '',
       timelinePositions: {},
       timelineContext: '',
@@ -862,6 +864,7 @@ export default {
             );
         if (id === this.request && this.validContext) {
           this.currentUser = result.current_user;
+          this.canPost = result.can_post !== false;
           if (this.taskMode) {
             this.editor = result;
             this.target.__search_key__ = result.search_key;
@@ -948,6 +951,7 @@ export default {
       } else this.$refs.dialog?.close();
     },
     attach(files) {
+      if (!this.canUseNoteAttachments()) return;
       if (this.saving || this.loading || this.uncertain) return;
       for (const file of files)
         this.draft.files.push({ file, name: file.name, uploaded: '' });
@@ -972,6 +976,7 @@ export default {
       this.$refs.body.focus();
     },
     async send() {
+      if (!this.canPost) return;
       if (
         this.loading ||
         this.saving ||
@@ -1373,7 +1378,10 @@ export default {
           @save="change(editing.note, 'edit')"
           @delete="change(deleting, 'delete')"
         />
-        <form class="note-composer" @submit.prevent="send">
+        <p v-if="!canPost && !loading" class="muted" role="status">
+          {{ t('You do not have permission to add notes.') }}
+        </p>
+        <form v-else class="note-composer" @submit.prevent="send">
           <p v-if="draft.reply">
             {{ t('Reply to') }} {{ draft.reply.login }}: {{ draft.reply.body }}
             <AppButton
@@ -1406,13 +1414,14 @@ export default {
               hidden
               @change="attach($event.target.files)"
             /><AppButton
+              v-if="canUseNoteAttachments()"
               icon-only
               label="Attach files"
               icon="MDI_PAPERCLIP"
               :disabled="saving || loading || uncertain"
               @click="$refs.files.click()"
             /><AppButton
-              v-if="!mobile"
+              v-if="!mobile && canUseNoteAttachments()"
               icon-only
               label="Attach image from clipboard"
               icon="MDI_CONTENT_PASTE"

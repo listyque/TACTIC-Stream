@@ -467,7 +467,10 @@ export default {
       return row
         ? TaskMenus.row({
             inspector: true,
-            timesheet: true,
+            timesheet: this.canAdminister,
+            canEdit: row.__permissions__?.edit !== false,
+            canDelete: row.__permissions__?.delete !== false,
+            canDeleteChecked: this.canDeleteSelected,
             hasTask: !!row.__search_key__,
             hasParent: !!row.parent,
             busy: this.blocked,
@@ -478,6 +481,13 @@ export default {
             checked: this.selected.length
           })
         : [];
+    },
+    canDeleteSelected() {
+      const selected = new Set(this.selected);
+      return !this.tasks.some(
+        (task) =>
+          selected.has(task.key) && task.__permissions__?.delete === false
+      );
     },
     columnActions() {
       return TaskMenus.column({
@@ -821,7 +831,7 @@ export default {
         }
       } else if (action.type === 'create') this.edit([], true, '', 'inline');
       else if (action.type === 'refresh') this.load();
-      else if (action.type === 'milestones') this.$refs.milestones.open();
+      else if (action.type === 'milestones') this.openMilestones();
       else if (action.type === 'clear-filters') this.clearFilters();
       else if (action.type === 'surface') this.changeSurface(action.value);
       else if (action.type === 'scope-choice') {
@@ -2133,9 +2143,16 @@ export default {
           this.preferredTasks[plan.process] = plan.task_key || plan.draft_id;
       this.cancelEdit(true);
     },
+    openMilestones(code = '') {
+      if (this.canAdminister) this.$refs.milestones.open(code);
+    },
     async remove(tasks) {
       this.$refs.menu?.hidePopover();
-      if (this.blocked) return;
+      if (
+        this.blocked ||
+        tasks.some((task) => task.__permissions__?.delete === false)
+      )
+        return;
       if (tasks.some((task) => this.drafts[task.key])) {
         this.error = t('Save or discard task edits before deleting.');
         return;
@@ -2776,6 +2793,7 @@ export default {
           busy,
           loading,
           canCreate: !blocked && catalog?.permissions?.create !== false,
+          canManageMilestones: canAdminister,
           canRefresh: !busy,
           filtersActive,
           sort,
@@ -2866,6 +2884,7 @@ export default {
               busy,
               blocked,
               filtersActive,
+              canManageMilestones: canAdminister,
               allSelected,
               surface
             }"
@@ -3004,7 +3023,7 @@ export default {
           @inspect="inspect"
           @operate="showMenu"
           @object="openObject"
-          @milestones="$refs.milestones.open()"
+          @milestones="openMilestones()"
           @more="load(false, true)"
         />
         <TaskWorkspaceTable
@@ -3025,7 +3044,7 @@ export default {
           @expand="expand"
           @change="stageRow"
           @edit-cell="editCell"
-          @milestones="$refs.milestones.open()"
+          @milestones="openMilestones()"
           @size-column="sizeColumn"
           @columns="openColumns"
           @column-context="columnContext"
@@ -3069,7 +3088,7 @@ export default {
             @delete="
               remove(tasks.filter((task) => selected.includes(task.key)))
             "
-            @milestone="$refs.milestones.open($event)"
+            @milestone="openMilestones($event)"
             @working-days="workingDays = $event"
             @resource-mode="resourceMode"
             @undo="history(true)"
@@ -3128,6 +3147,7 @@ export default {
         v-if="surface === 'workspace' && selected.length"
         :form="bulkForm"
         :count="selected.length"
+        :can-delete="canDeleteSelected"
         :busy="busy || bulkPreparing"
         :blocked="blocked || dirty"
         @change="changeBulkValue"
@@ -3185,7 +3205,7 @@ export default {
         @change="changeInline"
         @milestones="
           closeInline();
-          $refs.milestones.open();
+          openMilestones();
         "
         @closed="inline = null"
       />
@@ -3250,7 +3270,7 @@ export default {
       <TaskWorkspaceEditor
         :editor="editor"
         :busy="busy"
-        @milestones="$refs.milestones.open()"
+        @milestones="openMilestones()"
         @change="(name, value) => (editor.values[name] = value)"
         @enable="
           (name, checked) =>
@@ -3432,7 +3452,7 @@ export default {
       @today="calendarToday"
       @day="selectDay"
       @inspect="(key) => inspect(tasks.find((task) => task.key === key))"
-      @milestone="$refs.milestones.open($event)"
+      @milestone="openMilestones($event)"
       @load-more="load(false, true)"
       @tasks="$emit('opened')"
     />

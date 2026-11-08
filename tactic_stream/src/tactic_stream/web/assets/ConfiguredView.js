@@ -638,7 +638,7 @@ var _sfc_main$53 = {
 //#endregion
 //#region src/features/interface/TaskCell.vue
 var _hoisted_1$28 = ["aria-label"];
-var _hoisted_2$20 = { class: "task-preview-content" };
+var _hoisted_2$21 = { class: "task-preview-content" };
 var _hoisted_3$16 = { class: "task-preview-footer" };
 var _sfc_main$52 = {
 	__name: "TaskCell",
@@ -838,7 +838,7 @@ var _sfc_main$52 = {
 				onPointerleave: popupLeave,
 				onPointerdown: activate,
 				onFocusin: activate
-			}, [createBaseVNode("div", _hoisted_2$20, [createVNode(_sfc_main$53, {
+			}, [createBaseVNode("div", _hoisted_2$21, [createVNode(_sfc_main$53, {
 				tasks: tasks.value,
 				height: __props.height || 58,
 				expanded: "",
@@ -938,7 +938,7 @@ var _hoisted_1$27 = [
 	"aria-valuenow",
 	"aria-valuetext"
 ];
-var _hoisted_2$19 = { class: "table-completion-label" };
+var _hoisted_2$20 = { class: "table-completion-label" };
 var CompletionCell_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 	__name: "CompletionCell",
 	props: {
@@ -960,7 +960,7 @@ var CompletionCell_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 			}, [createBaseVNode("span", {
 				class: "table-completion-fill",
 				style: normalizeStyle({ width: percent.value + "%" })
-			}, null, 4), createBaseVNode("span", _hoisted_2$19, toDisplayString(__props.text || percent.value.toFixed(1) + "%"), 1)], 8, _hoisted_1$27);
+			}, null, 4), createBaseVNode("span", _hoisted_2$20, toDisplayString(__props.text || percent.value.toFixed(1) + "%"), 1)], 8, _hoisted_1$27);
 		};
 	}
 }, [["__scopeId", "data-v-9cb6efea"]]);
@@ -4902,7 +4902,7 @@ var _sfc_main$44 = {
 	methods: { t }
 };
 var _hoisted_1$25 = ["title"];
-var _hoisted_2$18 = ["title"];
+var _hoisted_2$19 = ["title"];
 var _hoisted_3$15 = {
 	key: 2,
 	class: "table-cell-text muted"
@@ -4941,7 +4941,7 @@ function _sfc_render$6(_ctx, _cache, $props, $setup, $data, $options) {
 		class: "table-cell-text error-text",
 		title: $props.cell.error,
 		role: "status"
-	}, toDisplayString($options.t("Cell calculation failed")) + ": " + toDisplayString($props.cell.error), 9, _hoisted_2$18)) : $props.loading && $props.element.cell?.server && !$props.cell ? (openBlock(), createElementBlock("span", _hoisted_3$15, toDisplayString($options.t("Loading data…")), 1)) : $props.element.cell?.kind === "journal-details" ? (openBlock(), createBlock(_component_AppButton, {
+	}, toDisplayString($options.t("Cell calculation failed")) + ": " + toDisplayString($props.cell.error), 9, _hoisted_2$19)) : $props.loading && $props.element.cell?.server && !$props.cell ? (openBlock(), createElementBlock("span", _hoisted_3$15, toDisplayString($options.t("Loading data…")), 1)) : $props.element.cell?.kind === "journal-details" ? (openBlock(), createBlock(_component_AppButton, {
 		key: 3,
 		label: $props.expanded ? "Hide transaction details" : "Show transaction details",
 		icon: $props.expanded ? "MDI_CHEVRON_DOWN" : "MDI_CHEVRON_RIGHT",
@@ -5323,7 +5323,7 @@ var _hoisted_1$24 = [
 	"aria-rowcount",
 	"aria-colcount"
 ];
-var _hoisted_2$17 = {
+var _hoisted_2$18 = {
 	class: "handler-table-selection",
 	role: "columnheader"
 };
@@ -5368,7 +5368,7 @@ var _hoisted_13$5 = {
 	class: "handler-table-actions",
 	role: "gridcell"
 };
-var _hoisted_14$4 = ["aria-label"];
+var _hoisted_14$5 = ["aria-label"];
 var _hoisted_15$4 = ["aria-label", "placeholder"];
 var _sfc_main$43 = {
 	__name: "TableView",
@@ -5832,7 +5832,7 @@ var _sfc_main$43 = {
 						role: "row",
 						style: normalizeStyle({ width: tableWidth.value + "px" })
 					}, [
-						createBaseVNode("div", _hoisted_2$17, [__props.selectable ? (openBlock(), createBlock(_sfc_main$58, {
+						createBaseVNode("div", _hoisted_2$18, [__props.selectable ? (openBlock(), createBlock(_sfc_main$58, {
 							key: 0,
 							label: "Select all rows",
 							"model-value": !!allSelected.value,
@@ -6087,7 +6087,7 @@ var _sfc_main$43 = {
 				}, null, 8, ["disabled"]), createVNode(_sfc_main$55, {
 					label: "Cancel",
 					onClick: _cache[8] || (_cache[8] = ($event) => savingView.value = false)
-				})])], 32)], 40, _hoisted_14$4)), [[_directive_window, { type: "dialog" }]])
+				})])], 32)], 40, _hoisted_14$5)), [[_directive_window, { type: "dialog" }]])
 			], 64);
 		};
 	}
@@ -7139,7 +7139,7 @@ var _hoisted_1$23 = {
 	key: 0,
 	class: "result-mobile-body"
 };
-var _hoisted_2$16 = {
+var _hoisted_2$17 = {
 	key: 0,
 	class: "result-description"
 };
@@ -7161,7 +7161,7 @@ var _sfc_main$38 = {
 		].map((name) => [name, { component: () => h("div", { class: "result-body-slot" }, slots[name]?.()) }]));
 		const scene = computed(() => body$1(props.model, props.width, props.height));
 		return (_ctx, _cache) => {
-			return __props.model.mobile ? (openBlock(), createElementBlock("div", _hoisted_1$23, [renderSlot(_ctx.$slots, "title"), __props.model.kind === "object" ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [__props.model.subtitle ? (openBlock(), createElementBlock("span", _hoisted_2$16, toDisplayString(__props.model.subtitle), 1)) : createCommentVNode("", true), __props.model.hasMetadata ? renderSlot(_ctx.$slots, "metadata", {}, void 0, void 0, 1) : createCommentVNode("", true)], 64)) : renderSlot(_ctx.$slots, "technical", {}, void 0, void 0, 1)])) : (openBlock(), createBlock(_sfc_main$57, {
+			return __props.model.mobile ? (openBlock(), createElementBlock("div", _hoisted_1$23, [renderSlot(_ctx.$slots, "title"), __props.model.kind === "object" ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [__props.model.subtitle ? (openBlock(), createElementBlock("span", _hoisted_2$17, toDisplayString(__props.model.subtitle), 1)) : createCommentVNode("", true), __props.model.hasMetadata ? renderSlot(_ctx.$slots, "metadata", {}, void 0, void 0, 1) : createCommentVNode("", true)], 64)) : renderSlot(_ctx.$slots, "technical", {}, void 0, void 0, 1)])) : (openBlock(), createBlock(_sfc_main$57, {
 				key: 1,
 				scene: scene.value,
 				views: unref(views)
@@ -7284,7 +7284,7 @@ var _hoisted_1$22 = [
 	"data-node-id",
 	"aria-label"
 ];
-var _hoisted_2$15 = {
+var _hoisted_2$16 = {
 	key: 2,
 	class: "result-file-offline"
 };
@@ -7320,7 +7320,7 @@ var _hoisted_12$4 = {
 	class: "result-branch-summary muted"
 };
 var _hoisted_13$4 = { class: "result-snapshot-description" };
-var _hoisted_14$3 = { key: 0 };
+var _hoisted_14$4 = { key: 0 };
 var _hoisted_15$3 = ["title"];
 var _hoisted_16$3 = {
 	key: 0,
@@ -7712,7 +7712,7 @@ var _sfc_main$36 = {
 							"icon-only": "",
 							onClick: _cache[7] || (_cache[7] = ($event) => _ctx.$emit("quickaction", __props.node, "open"))
 						})) : createCommentVNode("", true)], 2)) : createCommentVNode("", true),
-						__props.tree && __props.node.kind === "snapshot" && title.value && !__props.node.snapshot_display?.exists ? (openBlock(), createElementBlock("span", _hoisted_2$15, "(" + toDisplayString(unref(t)("File Offline")) + ")", 1)) : createCommentVNode("", true)
+						__props.tree && __props.node.kind === "snapshot" && title.value && !__props.node.snapshot_display?.exists ? (openBlock(), createElementBlock("span", _hoisted_2$16, "(" + toDisplayString(unref(t)("File Offline")) + ")", 1)) : createCommentVNode("", true)
 					], 32)]),
 					metadata: withCtx(() => [__props.node.kind === "object" ? (openBlock(), createElementBlock("div", _hoisted_3$13, [
 						(openBlock(true), createElementBlock(Fragment, null, renderList(__props.compact ? __props.node.progress_items?.slice(0, 1) : __props.node.progress_items, (item) => {
@@ -7763,7 +7763,7 @@ var _sfc_main$36 = {
 						process.value && !__props.node.branch.count && __props.node.hasChildren ? (openBlock(), createElementBlock(Fragment, { key: 1 }, [createTextVNode(" · " + toDisplayString(unref(t)("Versionless")), 1)], 64)) : createCommentVNode("", true)
 					])) : createCommentVNode("", true)], 64))]),
 					description: withCtx(() => [createBaseVNode("div", _hoisted_13$4, [
-						__props.node.snapshot_display?.author ? (openBlock(), createElementBlock("em", _hoisted_14$3, toDisplayString(__props.node.snapshot_display.author) + toDisplayString(subtitle.value ? ":" : ""), 1)) : createCommentVNode("", true),
+						__props.node.snapshot_display?.author ? (openBlock(), createElementBlock("em", _hoisted_14$4, toDisplayString(__props.node.snapshot_display.author) + toDisplayString(subtitle.value ? ":" : ""), 1)) : createCommentVNode("", true),
 						createBaseVNode("span", null, toDisplayString(subtitle.value), 1),
 						createBaseVNode("small", null, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.node.snapshot_display?.infoChips, (chip, index) => {
 							return openBlock(), createElementBlock(Fragment, { key: chip.label }, [index ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createTextVNode(" | ")], 64)) : createCommentVNode("", true), createBaseVNode("span", { title: chip.label + ": " + chip.value }, toDisplayString(chip.value), 9, _hoisted_15$3)], 64);
@@ -8178,7 +8178,7 @@ function branchVisible(branch, record, ignore) {
 //#endregion
 //#region src/features/workspace/ProcessVisibility.vue
 var _hoisted_1$21 = ["aria-label"];
-var _hoisted_2$14 = ["aria-busy"];
+var _hoisted_2$15 = ["aria-busy"];
 var _hoisted_3$12 = {
 	key: 0,
 	role: "status"
@@ -8387,7 +8387,7 @@ var _sfc_main$35 = {
 					}),
 					onEvent: command
 				}, null, 8, ["scene", "style"])
-			], 8, _hoisted_2$14)], 40, _hoisted_1$21)), [[_directive_window, { kind: "process_filter_editor" }]]);
+			], 8, _hoisted_2$15)], 40, _hoisted_1$21)), [[_directive_window, { kind: "process_filter_editor" }]]);
 		};
 	}
 };
@@ -8499,7 +8499,7 @@ var _sfc_main$34 = {
 //#endregion
 //#region src/features/interface/ItemLayout.vue
 var _hoisted_1$20 = { key: 2 };
-var _hoisted_2$13 = {
+var _hoisted_2$14 = {
 	key: 5,
 	class: "item-layout-title"
 };
@@ -8524,7 +8524,7 @@ var _hoisted_10$3 = ["title"];
 var _hoisted_11$3 = { class: "result-snapshot-technical" };
 var _hoisted_12$3 = { class: "result-snapshot-version" };
 var _hoisted_13$3 = { key: 0 };
-var _hoisted_14$2 = {
+var _hoisted_14$3 = {
 	key: 2,
 	class: "result-snapshot-latest"
 };
@@ -8803,7 +8803,7 @@ var _sfc_main$33 = {
 						]))], 64)) : item.kind === "title" && nativeFlow.value && item.tag === "strong" ? (openBlock(), createElementBlock(Fragment, { key: 4 }, [__props.presentation.tree && __props.node.kind === "snapshot" ? (openBlock(), createBlock(_sfc_main$61, {
 							key: 0,
 							text: title.value
-						}, null, 8, ["text"])) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [createTextVNode(toDisplayString(__props.node.branch?.kind === "versions" ? unref(t)(title.value) : title.value), 1)], 64))], 64)) : item.kind === "title" ? (openBlock(), createElementBlock("strong", _hoisted_2$13, [__props.node.kind === "snapshot" ? (openBlock(), createBlock(_sfc_main$61, {
+						}, null, 8, ["text"])) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [createTextVNode(toDisplayString(__props.node.branch?.kind === "versions" ? unref(t)(title.value) : title.value), 1)], 64))], 64)) : item.kind === "title" ? (openBlock(), createElementBlock("strong", _hoisted_2$14, [__props.node.kind === "snapshot" ? (openBlock(), createBlock(_sfc_main$61, {
 							key: 0,
 							text: value(item) || title.value
 						}, null, 8, ["text"])) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [createTextVNode(toDisplayString(value(item) || title.value), 1)], 64)), __props.node.kind === "snapshot" && !snapshot.value.exists ? (openBlock(), createElementBlock("small", _hoisted_3$11, " (" + toDisplayString(unref(t)("File Offline")) + ")", 1)) : createCommentVNode("", true)])) : item.kind === "text" || item.kind === "description" ? (openBlock(), createElementBlock("span", _hoisted_4$10, toDisplayString(item.role === "description" ? subtitle.value : value(item)), 1)) : item.kind === "link" && href(item) ? (openBlock(), createElementBlock("a", {
@@ -8885,7 +8885,7 @@ var _sfc_main$33 = {
 								key: 1,
 								style: normalizeStyle({ color: snapshot.value.repositoryColor })
 							}, toDisplayString(snapshot.value.repository || __props.node.record?.repo), 5)) : createCommentVNode("", true),
-							snapshot.value.latest ? (openBlock(), createElementBlock("small", _hoisted_14$2, toDisplayString(unref(t)("Latest")), 1)) : createCommentVNode("", true),
+							snapshot.value.latest ? (openBlock(), createElementBlock("small", _hoisted_14$3, toDisplayString(unref(t)("Latest")), 1)) : createCommentVNode("", true),
 							createBaseVNode("time", {
 								class: "result-snapshot-date",
 								datetime: __props.node.record?.timestamp,
@@ -9076,7 +9076,7 @@ var _hoisted_1$19 = [
 	"aria-label",
 	"onKeydown"
 ];
-var _hoisted_2$12 = {
+var _hoisted_2$13 = {
 	key: 3,
 	class: "result-expand-spacer"
 };
@@ -9251,7 +9251,7 @@ var _sfc_main$32 = {
 					"icon-size",
 					"indicator-size"
 				])) : createCommentVNode("", true),
-				!unref(mobile) && !__props.node.hasChildren ? (openBlock(), createElementBlock("span", _hoisted_2$12)) : createCommentVNode("", true),
+				!unref(mobile) && !__props.node.hasChildren ? (openBlock(), createElementBlock("span", _hoisted_2$13)) : createCommentVNode("", true),
 				!native.value && unref(mobile) && __props.selectable && !__props.readOnly ? (openBlock(), createBlock(_sfc_main$58, {
 					key: 4,
 					label: "Select record",
@@ -9287,7 +9287,7 @@ var _sfc_main$32 = {
 //#endregion
 //#region src/features/interface/ItemLayoutTable.vue
 var _hoisted_1$18 = { class: "item-layout-table-scroll" };
-var _hoisted_2$11 = { class: "item-layout-table" };
+var _hoisted_2$12 = { class: "item-layout-table" };
 var _hoisted_3$10 = { key: 0 };
 var _hoisted_4$9 = ["onClick", "onContextmenu"];
 var _hoisted_5$7 = { key: 0 };
@@ -9312,7 +9312,7 @@ var _sfc_main$31 = {
 		const emit = __emit;
 		const columns = computed(() => props.layout.elements.filter((item) => !item.parent && !item.hidden && ["all", "main"].includes(item.variant)));
 		return (_ctx, _cache) => {
-			return openBlock(), createElementBlock("div", _hoisted_1$18, [createBaseVNode("table", _hoisted_2$11, [createBaseVNode("thead", null, [createBaseVNode("tr", null, [(openBlock(true), createElementBlock(Fragment, null, renderList(columns.value, (column) => {
+			return openBlock(), createElementBlock("div", _hoisted_1$18, [createBaseVNode("table", _hoisted_2$12, [createBaseVNode("thead", null, [createBaseVNode("tr", null, [(openBlock(true), createElementBlock(Fragment, null, renderList(columns.value, (column) => {
 				return openBlock(), createElementBlock("th", { key: column.name }, [__props.editing ? (openBlock(), createBlock(_sfc_main$55, {
 					key: 0,
 					label: column.title,
@@ -9356,7 +9356,7 @@ var _sfc_main$31 = {
 //#endregion
 //#region src/controls/MobilePage.vue
 var _hoisted_1$17 = ["data-chrome-hidden"];
-var _hoisted_2$10 = {
+var _hoisted_2$11 = {
 	key: 0,
 	class: "mobile-result-header"
 };
@@ -9500,7 +9500,7 @@ var _sfc_main$30 = {
 				onPointercancel: _cache[1] || (_cache[1] = ($event) => stop($event, true)),
 				onClickCapture: click
 			}, [
-				__props.back ? (openBlock(), createElementBlock("header", _hoisted_2$10, [renderSlot(_ctx.$slots, "header")])) : createCommentVNode("", true),
+				__props.back ? (openBlock(), createElementBlock("header", _hoisted_2$11, [renderSlot(_ctx.$slots, "header")])) : createCommentVNode("", true),
 				createBaseVNode("div", _hoisted_3$9, [createVNode(Transition, {
 					name: "mobile-result-" + __props.direction,
 					onBeforeLeave: remember,
@@ -9532,7 +9532,7 @@ var _sfc_main$30 = {
 //#endregion
 //#region src/features/workspace/MobileResults.vue
 var _hoisted_1$16 = { class: "mobile-snapshot-view file-preview" };
-var _hoisted_2$9 = {
+var _hoisted_2$10 = {
 	key: 0,
 	role: "status"
 };
@@ -9647,7 +9647,7 @@ var _sfc_main$29 = {
 				default: withCtx(() => [
 					snapshot.value ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
 						createBaseVNode("div", _hoisted_1$16, [
-							__props.parent.previewBusy ? (openBlock(), createElementBlock("p", _hoisted_2$9, toDisplayString(unref(t)("Loading file…")), 1)) : createCommentVNode("", true),
+							__props.parent.previewBusy ? (openBlock(), createElementBlock("p", _hoisted_2$10, toDisplayString(unref(t)("Loading file…")), 1)) : createCommentVNode("", true),
 							__props.parent.previewError ? (openBlock(), createElementBlock("p", _hoisted_3$8, [createTextVNode(toDisplayString(unref(t)(__props.parent.previewError)) + " ", 1), createVNode(_sfc_main$55, {
 								label: "Retry",
 								onClick: _cache[10] || (_cache[10] = ($event) => emit("preview-retry", __props.parent))
@@ -10154,7 +10154,7 @@ function workHours(model, width, language) {
 //#endregion
 //#region src/features/objects/TaskInspectorHeader.vue
 var _hoisted_1$15 = { class: "inspector-menu-heading" };
-var _hoisted_2$8 = { class: "inspector-choice-copy" };
+var _hoisted_2$9 = { class: "inspector-choice-copy" };
 var _hoisted_3$7 = { class: "inspector-menu-heading" };
 var _hoisted_4$6 = { class: "inspector-choice-copy" };
 var _sfc_main$28 = {
@@ -10268,7 +10268,7 @@ var _sfc_main$28 = {
 									class: "inspector-process-dot",
 									style: normalizeStyle({ background: row.color || "var(--primary)" })
 								}, null, 4),
-								createBaseVNode("span", _hoisted_2$8, [createBaseVNode("strong", null, toDisplayString(row.label), 1), createBaseVNode("small", null, toDisplayString(row.type === "progress" ? unref(t)("Related tasks") : row.type === "built-in" ? unref(t)("Built-in") : row.type) + " · " + toDisplayString(row.type === "progress" ? (row.approved || 0) + " / " + (row.total || 0) : unref(t)("{count} notes", { count: row.count || 0 })), 1)]),
+								createBaseVNode("span", _hoisted_2$9, [createBaseVNode("strong", null, toDisplayString(row.label), 1), createBaseVNode("small", null, toDisplayString(row.type === "progress" ? unref(t)("Related tasks") : row.type === "built-in" ? unref(t)("Built-in") : row.type) + " · " + toDisplayString(row.type === "progress" ? (row.approved || 0) + " / " + (row.total || 0) : unref(t)("{count} notes", { count: row.count || 0 })), 1)]),
 								row.value === __props.process ? (openBlock(), createBlock(_sfc_main$56, {
 									key: 0,
 									name: "check-circle"
@@ -10629,7 +10629,7 @@ var _hoisted_1$14 = [
 	"aria-controls",
 	"aria-activedescendant"
 ];
-var _hoisted_2$7 = ["id", "aria-label"];
+var _hoisted_2$8 = ["id", "aria-label"];
 var _sfc_main$27 = {
 	__name: "MessageComposer",
 	props: {
@@ -10823,7 +10823,7 @@ var _sfc_main$27 = {
 						}, Math.max(0, Math.min(296, geometry.value.field.width) - 30)),
 						onEvent: _cache[2] || (_cache[2] = (event) => insert("@" + event.login + " ", mention$1.value.length + 1))
 					}, null, 8, ["scene"]);
-				}), 128))], 12, _hoisted_2$7)) : createCommentVNode("", true),
+				}), 128))], 12, _hoisted_2$8)) : createCommentVNode("", true),
 				createVNode(_sfc_main$55, {
 					"data-frame": "messageComposerSendButton",
 					class: "message-send",
@@ -10927,7 +10927,7 @@ var _hoisted_1$13 = {
 	key: 6,
 	class: "task-hours-field"
 };
-var _hoisted_2$6 = { class: "muted" };
+var _hoisted_2$7 = { class: "muted" };
 var _hoisted_3$6 = {
 	key: 7,
 	class: "task-progress-field"
@@ -11063,7 +11063,7 @@ var _sfc_main$25 = {
 					"label",
 					"disabled"
 				]),
-				createBaseVNode("span", _hoisted_2$6, toDisplayString(unref(t)("h")), 1)
+				createBaseVNode("span", _hoisted_2$7, toDisplayString(unref(t)("h")), 1)
 			])) : ["progress", "completion"].includes(__props.field.name) ? (openBlock(), createElementBlock("div", _hoisted_3$6, [createVNode(_sfc_main$63, {
 				"model-value": Number(__props.value || 0),
 				label: "Progress",
@@ -11198,6 +11198,7 @@ var _sfc_main$24 = {
 	],
 	setup(__props, { emit: __emit }) {
 		const props = __props;
+		const canManageMilestones = inject("canManageTaskMilestones", () => true);
 		const emit = __emit;
 		const host = ref(null), width = ref(0);
 		const scene = computed(() => !props.editor ? {
@@ -11235,7 +11236,7 @@ var _sfc_main$24 = {
 						catalog: props.editor.catalog,
 						busy: !p.frameNode.enabled,
 						onChange: (value) => emit(p.frameNode.field.name === "process" && props.editor.creating ? "process" : "change", ...p.frameNode.field.name === "process" && props.editor.creating ? [value] : [p.frameNode.field.name, value])
-					}), ...p.frameNode.field.name === "milestone_code" ? [h(_sfc_main$55, {
+					}), ...p.frameNode.field.name === "milestone_code" && canManageMilestones() ? [h(_sfc_main$55, {
 						label: "Project milestones",
 						icon: "milestone",
 						iconOnly: true,
@@ -11277,7 +11278,7 @@ var _sfc_main$24 = {
 //#endregion
 //#region src/features/objects/TaskDetails.vue
 var _hoisted_1$12 = ["data-has-task"];
-var _hoisted_2$5 = { key: 1 };
+var _hoisted_2$6 = { key: 1 };
 var _hoisted_3$5 = { class: "inspector-task-caption" };
 var _hoisted_4$5 = { class: "configuration-actions" };
 var _hoisted_5$5 = {
@@ -11381,7 +11382,7 @@ var _sfc_main$23 = {
 					key: 0,
 					model: quickModel.value,
 					onEvent: event
-				}, null, 8, ["model"])) : (openBlock(), createElementBlock("header", _hoisted_2$5, [createBaseVNode("div", _hoisted_3$5, [createBaseVNode("strong", null, toDisplayString(taskTitle.value), 1), createBaseVNode("small", null, toDisplayString(assigned.value || unref(t)("Not assigned")), 1)]), createBaseVNode("div", _hoisted_4$5, [
+				}, null, 8, ["model"])) : (openBlock(), createElementBlock("header", _hoisted_2$6, [createBaseVNode("div", _hoisted_3$5, [createBaseVNode("strong", null, toDisplayString(taskTitle.value), 1), createBaseVNode("small", null, toDisplayString(assigned.value || unref(t)("Not assigned")), 1)]), createBaseVNode("div", _hoisted_4$5, [
 					__props.editor.selected_task && !__props.editing ? (openBlock(), createBlock(_sfc_main$55, {
 						key: 0,
 						label: "Edit task",
@@ -11999,6 +12000,7 @@ var _hoisted_1$9 = ["aria-label", "aria-busy"];
 //#region src/features/objects/NotesPanel.vue
 var _sfc_main$17 = {
 	inject: {
+		canUseNoteAttachments: { default: () => () => true },
 		openHelp: {},
 		openUserProfile: { default: null },
 		openObjectTab: { default: null },
@@ -12135,6 +12137,7 @@ var _sfc_main$17 = {
 			request: 0,
 			identities: [],
 			currentUser: "",
+			canPost: false,
 			refreshError: "",
 			timelinePositions: {},
 			timelineContext: "",
@@ -12689,6 +12692,7 @@ var _sfc_main$17 = {
 				const result = this.taskMode ? await this.taskCommand({ action: "read" }, quiet) : await this.command("DiscussionReadCmd", { context: this.contexts }, quiet);
 				if (id === this.request && this.validContext) {
 					this.currentUser = result.current_user;
+					this.canPost = result.can_post !== false;
 					if (this.taskMode) {
 						this.editor = result;
 						this.target.__search_key__ = result.search_key;
@@ -12757,6 +12761,7 @@ var _sfc_main$17 = {
 			} else this.$refs.dialog?.close();
 		},
 		attach(files) {
+			if (!this.canUseNoteAttachments()) return;
 			if (this.saving || this.loading || this.uncertain) return;
 			for (const file of files) this.draft.files.push({
 				file,
@@ -12783,6 +12788,7 @@ var _sfc_main$17 = {
 			this.$refs.body.focus();
 		},
 		async send() {
+			if (!this.canPost) return;
 			if (this.loading || this.saving || this.uncertain || this.taskMode && !this.editor || !this.draft.body.trim() && !this.draft.files.length) return;
 			this.saving = true;
 			this.error = "";
@@ -12914,7 +12920,7 @@ var _hoisted_1$8 = {
 	key: 0,
 	class: "inspector-window-header"
 };
-var _hoisted_2$4 = {
+var _hoisted_2$5 = {
 	key: 1,
 	class: "muted notes-empty"
 };
@@ -12947,8 +12953,13 @@ var _hoisted_9$3 = {
 };
 var _hoisted_10$2 = { key: 0 };
 var _hoisted_11$2 = { class: "note-body" };
-var _hoisted_12$2 = { key: 0 };
-var _hoisted_13$2 = {
+var _hoisted_12$2 = {
+	key: 10,
+	class: "muted",
+	role: "status"
+};
+var _hoisted_13$2 = { key: 0 };
+var _hoisted_14$2 = {
 	key: 3,
 	class: "inspector-mobile-navigation"
 };
@@ -13006,7 +13017,7 @@ function _sfc_render$4(_ctx, _cache, $props, $setup, $data, $options) {
 					onClick: $options.close
 				}, null, 8, ["disabled", "onClick"])
 			])) : createCommentVNode("", true),
-			!$data.target ? (openBlock(), createElementBlock("p", _hoisted_2$4, toDisplayString($options.t("Select an sObject")), 1)) : (openBlock(), createElementBlock(Fragment, { key: 2 }, [
+			!$data.target ? (openBlock(), createElementBlock("p", _hoisted_2$5, toDisplayString($options.t("Select an sObject")), 1)) : (openBlock(), createElementBlock(Fragment, { key: 2 }, [
 				$data.error ? (openBlock(), createElementBlock("p", _hoisted_3$4, [createTextVNode(toDisplayString($options.t($data.error)) + " ", 1), $data.taskMode && !$data.editor && !$data.loading ? (openBlock(), createBlock(_component_AppButton, {
 					key: 0,
 					label: "Retry",
@@ -13246,11 +13257,12 @@ function _sfc_render$4(_ctx, _cache, $props, $setup, $data, $options) {
 					"uncertain",
 					"error"
 				]),
-				createBaseVNode("form", {
+				!$data.canPost && !$data.loading ? (openBlock(), createElementBlock("p", _hoisted_12$2, toDisplayString($options.t("You do not have permission to add notes.")), 1)) : (openBlock(), createElementBlock("form", {
+					key: 11,
 					class: "note-composer",
 					onSubmit: _cache[21] || (_cache[21] = withModifiers((...args) => $options.send && $options.send(...args), ["prevent"]))
 				}, [
-					$options.draft.reply ? (openBlock(), createElementBlock("p", _hoisted_12$2, [createTextVNode(toDisplayString($options.t("Reply to")) + " " + toDisplayString($options.draft.reply.login) + ": " + toDisplayString($options.draft.reply.body) + " ", 1), createVNode(_component_AppButton, {
+					$options.draft.reply ? (openBlock(), createElementBlock("p", _hoisted_13$2, [createTextVNode(toDisplayString($options.t("Reply to")) + " " + toDisplayString($options.draft.reply.login) + ": " + toDisplayString($options.draft.reply.body) + " ", 1), createVNode(_component_AppButton, {
 						label: "Cancel reply",
 						icon: "close",
 						"icon-only": "",
@@ -13277,15 +13289,16 @@ function _sfc_render$4(_ctx, _cache, $props, $setup, $data, $options) {
 							hidden: "",
 							onChange: _cache[18] || (_cache[18] = ($event) => $options.attach($event.target.files))
 						}, null, 544),
-						createVNode(_component_AppButton, {
+						$options.canUseNoteAttachments() ? (openBlock(), createBlock(_component_AppButton, {
+							key: 0,
 							"icon-only": "",
 							label: "Attach files",
 							icon: "MDI_PAPERCLIP",
 							disabled: $data.saving || $data.loading || $data.uncertain,
 							onClick: _cache[19] || (_cache[19] = ($event) => _ctx.$refs.files.click())
-						}, null, 8, ["disabled"]),
-						!$options.mobile ? (openBlock(), createBlock(_component_AppButton, {
-							key: 0,
+						}, null, 8, ["disabled"])) : createCommentVNode("", true),
+						!$options.mobile && $options.canUseNoteAttachments() ? (openBlock(), createBlock(_component_AppButton, {
+							key: 1,
 							"icon-only": "",
 							label: "Attach image from clipboard",
 							icon: "MDI_CONTENT_PASTE",
@@ -13313,9 +13326,9 @@ function _sfc_render$4(_ctx, _cache, $props, $setup, $data, $options) {
 							"onFiles"
 						])
 					])
-				], 32)
+				], 32))
 			], 64)),
-			$options.mobile && (!$data.taskMode || !$data.editor?.object) ? (openBlock(), createElementBlock("footer", _hoisted_13$2, [
+			$options.mobile && (!$data.taskMode || !$data.editor?.object) ? (openBlock(), createElementBlock("footer", _hoisted_14$2, [
 				createVNode(_component_AppButton, {
 					label: "Back",
 					icon: "MDI_ARROW_LEFT",
@@ -13462,6 +13475,16 @@ var _sfc_main$16 = {
 		},
 		canCheckin() {
 			return !!this.record && !!this.operations?.checkin && this.kind !== "file" && this.kind !== "relation";
+		},
+		canCreateRelated() {
+			const relation = this.node?.branch?.relationship;
+			return !!this.operations?.create && (relation === "instance" ? this.operations.link : [
+				"code",
+				"id",
+				"search_type",
+				"search_code",
+				"search_id"
+			].includes(relation));
 		}
 	},
 	watch: {
@@ -13656,7 +13679,11 @@ var _sfc_main$16 = {
 		}
 	}
 };
-var _hoisted_1$7 = { key: 2 };
+var _hoisted_1$7 = {
+	key: 3,
+	class: "muted"
+};
+var _hoisted_2$4 = { key: 2 };
 function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
 	const _component_AppButton = resolveComponent("AppButton");
 	const _component_AppMenu = resolveComponent("AppMenu");
@@ -13730,24 +13757,25 @@ function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
 						onClick: _cache[5] || (_cache[5] = ($event) => $options.fileAction("copy_image"))
 					})
 				], 64)) : (openBlock(), createElementBlock(Fragment, { key: 2 }, [$options.kind === "relation" ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
-					$props.operations?.create && $props.operations?.checkin ? (openBlock(), createBlock(_component_AppButton, {
+					$props.operations?.ingest && $options.canCreateRelated ? (openBlock(), createBlock(_component_AppButton, {
 						key: 0,
 						label: "Add files",
 						icon: "upload",
 						onClick: $options.ingest
 					}, null, 8, ["onClick"])) : createCommentVNode("", true),
-					$props.operations?.create ? (openBlock(), createBlock(_component_AppButton, {
+					$options.canCreateRelated ? (openBlock(), createBlock(_component_AppButton, {
 						key: 1,
 						label: "Add new Related sObject",
 						icon: "add",
 						onClick: _cache[6] || (_cache[6] = ($event) => $options.run("create-related"))
 					})) : createCommentVNode("", true),
-					$data.node.branch.relationship === "instance" ? (openBlock(), createBlock(_component_AppButton, {
+					$props.operations?.link && $data.node.branch.relationship === "instance" ? (openBlock(), createBlock(_component_AppButton, {
 						key: 2,
 						label: "Link sObjects Interface",
 						icon: "link",
 						onClick: _cache[7] || (_cache[7] = ($event) => $options.run("link-related"))
-					})) : createCommentVNode("", true)
+					})) : createCommentVNode("", true),
+					!$options.canCreateRelated && !$props.operations?.link ? (openBlock(), createElementBlock("p", _hoisted_1$7, toDisplayString($options.t("This relationship is read-only.")), 1)) : createCommentVNode("", true)
 				], 64)) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [
 					$options.hasSnapshot || $options.kind === "file" ? (openBlock(), createBlock(_component_AppButton, {
 						key: 0,
@@ -13762,7 +13790,7 @@ function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
 						icon: "save",
 						onClick: _cache[8] || (_cache[8] = ($event) => $options.checkin())
 					})) : createCommentVNode("", true),
-					$options.canCheckin ? (openBlock(), createElementBlock("hr", _hoisted_1$7)) : createCommentVNode("", true),
+					$options.canCheckin ? (openBlock(), createElementBlock("hr", _hoisted_2$4)) : createCommentVNode("", true),
 					$options.kind === "object" && $data.advanced && $props.operations?.create ? (openBlock(), createElementBlock(Fragment, { key: 3 }, [
 						createVNode(_component_AppButton, {
 							label: "Duplicate…",
@@ -14470,7 +14498,7 @@ var _sfc_main$12 = {
 				saving: this.saving,
 				error: this.error,
 				uncertain: this.uncertain,
-				valid: this.linkValid
+				valid: this.linkValid && !!this.definition && (!!this.linkBranch?.tableDrop || !!this.definition.operations?.link)
 			};
 		},
 		availableLinkRows() {
@@ -14485,6 +14513,13 @@ var _sfc_main$12 = {
 		},
 		relation() {
 			return this.relations.find((item) => item.search_type === this.selectedType);
+		},
+		relationNotice() {
+			if (this.error || this.busy || this.linking) return "";
+			if (!this.relations.length) return "No configured relationships.";
+			if (!this.definition && !this.relation?.available) return "This relationship is not available in this browser yet.";
+			if (!this.relatedModel.canCreate) return "This relationship is read-only.";
+			return "";
 		},
 		dirty() {
 			return this.linking && JSON.stringify([...this.selectedKeys].sort()) !== JSON.stringify([...this.originalKeys].sort());
@@ -14729,6 +14764,7 @@ var _sfc_main$12 = {
 				if (this.readBranch || this.linking || this.relation?.available || this.relation?.relationship === "instance") {
 					const definition = await interfaceDefinition(this.ticket, this.project, this.selectedType);
 					if (id !== this.request) return;
+					if (this.linking && !this.linkBranch?.tableDrop && !definition.operations?.link) throw new Error("You do not have permission to link these objects.");
 					if (this.readBranch) {
 						this.relationRows = [];
 						let next = true;
@@ -14772,7 +14808,7 @@ var _sfc_main$12 = {
 					if (this.linking) await this.loadAvailable(false);
 				}
 			} catch (error) {
-				if (id === this.request) this.error = error.message;
+				if (id === this.request) this.error = error.code === "access_denied" ? "You do not have access to this relationship." : error.message;
 			} finally {
 				if (id === this.request) this.busy = false;
 			}
@@ -14803,7 +14839,7 @@ var _sfc_main$12 = {
 			this.selectedKeys = selected ? [.../* @__PURE__ */ new Set([...this.selectedKeys, ...keys])] : this.selectedKeys.filter((key) => !keys.includes(key));
 		},
 		async saveLinks() {
-			if (this.saving || !this.dirty || this.uncertain || !this.linkValid) return;
+			if (this.saving || !this.dirty || this.uncertain || !this.linkModel.valid) return;
 			this.saving = true;
 			this.error = "";
 			const id = ++this.request;
@@ -14838,6 +14874,7 @@ var _sfc_main$12 = {
 			}
 		},
 		create(source = null) {
+			if (!this.relatedModel.canCreate) return;
 			this.$refs.form.open(null, source?.__search_key__ || null, { parent_key: this.parent.__search_key__ });
 		},
 		refresh() {
@@ -14871,7 +14908,8 @@ var _hoisted_4$3 = {
 };
 var _hoisted_5$3 = {
 	key: 4,
-	class: "notice"
+	class: "notice",
+	role: "status"
 };
 var _hoisted_6$2 = {
 	key: 5,
@@ -14951,7 +14989,7 @@ function _sfc_render$2(_ctx, _cache, $props, $setup, $data, $options) {
 				"onSelect",
 				"onDrop"
 			])) : createCommentVNode("", true),
-			$data.busy && !$data.linking ? (openBlock(), createElementBlock("p", _hoisted_4$3, toDisplayString($options.t("Loading data…")), 1)) : !$data.linking && $options.relation && !$options.relation.available && !$data.definition ? (openBlock(), createElementBlock("p", _hoisted_5$3, toDisplayString($options.t("This relationship is not available in this browser yet.")), 1)) : createCommentVNode("", true),
+			$data.busy && !$data.linking ? (openBlock(), createElementBlock("p", _hoisted_4$3, toDisplayString($options.t("Loading data…")), 1)) : $options.relationNotice ? (openBlock(), createElementBlock("p", _hoisted_5$3, toDisplayString($options.t($options.relationNotice)), 1)) : createCommentVNode("", true),
 			$data.definition && !$data.linking ? (openBlock(), createElementBlock("div", _hoisted_6$2, [createVNode(_component_ConfiguredView, {
 				ref: "table",
 				definition: $data.definition,
@@ -16002,7 +16040,7 @@ var _sfc_main$10 = {
 				const definition = await interfaceDefinition(this.ticket, this.project, this.formType);
 				if (request !== this.operationRequest) return;
 				this.operations = definition.operations;
-				if (!definition.operations?.create) throw new Error("This operation or object type is not available yet.");
+				if (!definition.operations?.create || node.branch.relationship === "instance" && !definition.operations?.link) throw new Error("This operation or object type is not available yet.");
 				this.$nextTick(() => this.$refs.form.open(null, null, node.branch.relationship === "instance" ? { instance: {
 					parent_key: node.ownerKey,
 					path: node.branch.path
@@ -18494,6 +18532,7 @@ var _sfc_main$2 = {
 		const single = computed(() => props.editor?.fields.length === 1);
 		const fieldLabel = (field) => t(titles[field.name] || field.name);
 		const emit = __emit;
+		const canManageMilestones = inject("canManageTaskMilestones", () => true);
 		const popup = ref(null);
 		let anchor;
 		async function open(bounds) {
@@ -18589,7 +18628,7 @@ var _sfc_main$2 = {
 							"busy",
 							"onChange"
 						]),
-						field.name === "milestone_code" ? (openBlock(), createBlock(_sfc_main$55, {
+						field.name === "milestone_code" && unref(canManageMilestones)() ? (openBlock(), createBlock(_sfc_main$55, {
 							key: 1,
 							class: "task-table-milestones",
 							label: "Project milestones",

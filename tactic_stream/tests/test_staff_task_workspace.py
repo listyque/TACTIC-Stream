@@ -15,6 +15,57 @@ EDIT = 'task_workspace_edits.TaskWorkspaceEditCmd'
 class StaffTaskWorkspace(unittest.TestCase):
     setUp = fixture.TableServices.setUp
 
+    def test_staff_task_note_publish_and_compare_two_versions(self):
+        from io import BytesIO
+        from PIL import Image
+        from pyasm.search.search import RequestContext, request_context
+        from tactic.command.queue import JobTask
+        from tactic_stream.server.checkin_queue import checkin_queue_request
+        from tactic_stream.server.result_items import read_result_items
+
+        grants = ''.join('<rule group="search_type" code="sthpw/%s" project="one" access="insert"/>' % kind
+                         for kind in ('note', 'snapshot', 'file'))
+        self.prepare_staff(extra=grants)
+        page = self.command(scope='user', identity='project_writer')
+        row = next(row for row in page['tasks'] if row['code'] == self.tasks[0]['code'])
+        self.assertEqual(row['assigned'], 'project_writer')
+        detail = self.command('task_inspector.TaskInspectorCmd', **self.draft())
+        self.assertTrue(detail['can_post'])
+        key = detail['note_target']
+        note = self.api.dispatch('execute_cmd', (self.staff, 'tactic.ui.widget.discussion_wdg.DiscussionAddNoteCmd',
+            dict(search_key=key, process='publish', note='Staff review ready.')))['info']['note']
+        self.assertEqual(note['login'], 'project_writer')
+        detail = self.command('task_inspector.TaskInspectorCmd', **self.draft())
+        self.assertIn('Staff review ready.', [item['body'] for item in detail['notes']])
+        with self.assertRaises(SecurityException):
+            self.api.dispatch('execute_cmd', (self.staff, 'tactic.ui.widget.discussion_wdg.DiscussionAddNoteCmd',
+                dict(search_key=key, process='publish', note='Forbidden attachment', files=['local.png'])))
+
+        for version, color in ((1, 'blue'), (2, 'green')):
+            data = BytesIO()
+            Image.new('RGB', (32, 24), color).save(data, format='PNG')
+            data = data.getvalue()
+            batch = f'staff-{version}'
+            payload = dict(batch_id=batch, chunk_id='one', operations=[dict(operation_id='publish', options=dict(
+                search_key=key, process='publish', context='publish/review', create_icon=False, update_versionless=False,
+                source_files=[dict(path='review.png', size=len(data))]))],
+                pieces=[dict(operation_id='publish', file_index=0, offset=0)])
+            with request_context(RequestContext(self.store, 'project_writer', 'one')):
+                self.api.auth.bind_security('project_writer', self.staff['ticket'])
+                self.assertTrue(checkin_queue_request('submit', payload, [('part', data)])['accepted'])
+            self.assertTrue(JobTask(queue='checkin').check_new_job('checkin'))
+            with request_context(RequestContext(self.store, 'project_writer', 'one')):
+                self.api.auth.bind_security('project_writer', self.staff['ticket'])
+                self.assertTrue(checkin_queue_request('submit', payload, [('part', data)])['duplicate'])
+                event = checkin_queue_request('updates', dict(batches=[dict(batch_id=batch, project='one')]))['checkins'][0]
+                self.assertEqual(event['state'], 'complete', event)
+                self.assertEqual(event['snapshot']['version'], version)
+        with request_context(RequestContext(self.store, 'project_writer', 'one')):
+            self.api.auth.bind_security('project_writer', self.staff['ticket'])
+            snapshots = read_result_items('contract/entity', [key], dict(kind='snapshot_browser'))
+            self.assertEqual([record['version'] for record in snapshots['snapshots']], [2, 1])
+            self.assertEqual(len(snapshots['previews']), 2)
+
     @unittest.skipUnless(os.environ.get('RUN_STAFF_BROWSER'), 'Explicit browser integration run')
     def test_staff_browser(self):
         from pathlib import Path
@@ -29,7 +80,8 @@ class StaffTaskWorkspace(unittest.TestCase):
         with FileTransferTest.http(self) as url:
             for access in ('view', 'edit'):
                 with self.subTest(access=access):
-                    self.policy(access, access)
+                    note_grant = '<rule group="search_type" code="sthpw/note" project="one" access="insert"/>' if access == 'edit' else ''
+                    self.policy(access, access, note_grant)
                     result = subprocess.run([shutil.which('node'), 'tests/task_staff.mjs', url, access],
                         cwd=root / 'frontend', env=dict(os.environ, STAFF_PASSWORD=PASSWORD,
                             PLAYWRIGHT_BROWSERS_PATH=str(root / '.browser-cache')),
@@ -115,6 +167,28 @@ class StaffTaskWorkspace(unittest.TestCase):
         self.assertNotIn('description', plan['task'])
         with self.assertRaises(Exception):
             self.command(EDIT, action='save', plans=[dict(plan, data=dict(description='Forbidden'))])
+
+    def test_object_toolbar_flags_distinguish_edit_insert_delete_and_publish(self):
+        from pyasm.search.search import RequestContext, request_context
+        from tactic_stream.server.interface import read_interface
+        self.prepare_staff(extra=''.join(
+            '<rule group="search_type" code="sthpw/%s" project="one" access="deny"/>' % kind
+            for kind in ('snapshot', 'file')))
+        def operations():
+            with request_context(RequestContext(self.store, 'project_writer', 'one')):
+                self.api.auth.bind_security('project_writer', self.staff['ticket'])
+                return read_interface('contract/entity')['operations']
+        editor = operations()
+        self.assertTrue(editor['edit'])
+        for name in ('create', 'delete', 'checkin', 'link', 'ingest'):
+            self.assertFalse(editor[name], name)
+        self.policy(parent_access='insert', extra=''.join(
+            '<rule group="search_type" code="sthpw/%s" project="one" access="insert"/>' % kind
+            for kind in ('snapshot', 'file')))
+        publisher = operations()
+        self.assertTrue(publisher['create'])
+        self.assertTrue(publisher['checkin'])
+        self.assertFalse(publisher['delete'])
 
     def test_inspector_does_not_disclose_denied_assignee(self):
         self.prepare_staff(extra='<rule group="sobject_column" search_type="sthpw/task" column="assigned" project="one" access="deny"/>')

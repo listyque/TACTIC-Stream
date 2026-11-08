@@ -32,6 +32,19 @@ def _require_table_access(search_type=None, access='view'):
             raise SecurityException(f'Modify access denied for {base}')
 
 
+def type_write_access(base: str, access: str) -> bool:
+    security = Environment.get_security()
+    if security is None:
+        return False
+    if security.is_admin():
+        return True
+    project = Project.get_project_code()
+    keys = [dict(code=base), dict(code=base, project=project), dict(code='*'), dict(code='*', project=project)]
+    return bool(security.is_logged_in() and security.check_access('project',
+        [dict(code='*'), dict(code=project)], 'allow', default='deny')
+        and security.check_access('search_type', keys, access, default='deny'))
+
+
 def read_form(search_type, view='edit', search_key=None, default=None, source_key=None, search_keys=None, parent_key=None, connect_key=None, element_names=None, ignore=None):
     inserting = not (search_key or search_keys)
     _require_table_access(search_type, 'insert' if inserting else 'edit')
@@ -388,12 +401,7 @@ def read_interface(search_type, view='table'):
         columns = journal_columns()
     security = Environment.get_security()
     is_admin = bool(security and security.is_admin())
-    type_keys = [{'code': base, 'project': project.get_code()}, {'code': base}, {'code': '*', 'project': project.get_code()}, {'code': '*'}]
-    can_edit_type = is_admin or bool(
-        security
-        and not security.check_access('search_type', type_keys, 'view', is_match=True)
-        and security.check_access('search_type', type_keys, 'edit', default='edit')
-    )
+    can_edit_type = type_write_access(base, 'edit')
     if not is_admin and security and isinstance(description.get('elements'), list):
         visible = []
         for element in description['elements']:
@@ -412,14 +420,18 @@ def read_interface(search_type, view='table'):
                 element['cell']['editable'] = False
             visible.append(element)
         description['elements'] = visible
-    writable = can_edit_type and (base in SObject.SECURITY_TYPES + SObject.BUSINESS_TYPES or not base.startswith(('sthpw/', 'config/'))) and not SearchType.get(search_type).get_record_read_options().get('readonly')
+    writable = (base in SObject.BUSINESS_TYPES or is_admin and base in SObject.SECURITY_TYPES
+                or not base.startswith(('sthpw/', 'config/'))) and not SearchType.get(search_type).get_record_read_options().get('readonly')
     attributes = description['attributes']
-    operations = {name: writable and attributes.get(flag) not in (False, 'false')
+    operations = {name: writable and type_write_access(base, flag) and attributes.get(flag) not in (False, 'false')
                   for name, flag in (('create', 'insert'), ('edit', 'edit'), ('retire', 'retire'), ('delete', 'delete'))}
     operations['retire_column'] = SearchType.get(search_type).get_retire_col()
     operations['retire'] = operations['retire'] and operations['retire_column'] in columns
     # DeleteCmd routes File rows through their owner Snapshot and FileUndo.
-    operations['checkin'] = operations['edit'] and base != 'sthpw/file'
+    operations['checkin'] = operations['edit'] and base != 'sthpw/file' and all(
+        type_write_access(kind, 'insert') for kind in ('sthpw/snapshot', 'sthpw/file'))
+    operations['link'] = is_admin
+    operations['ingest'] = is_admin and operations['create'] and operations['checkin']
     views = Search('config/widget_config')
     views.add_filters('search_type', [base, 'ALL'])
     views.add_order_by('view')

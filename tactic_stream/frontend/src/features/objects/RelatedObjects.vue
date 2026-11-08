@@ -124,7 +124,10 @@ export default {
         saving: this.saving,
         error: this.error,
         uncertain: this.uncertain,
-        valid: this.linkValid
+        valid:
+          this.linkValid &&
+          !!this.definition &&
+          (!!this.linkBranch?.tableDrop || !!this.definition.operations?.link)
       };
     },
     availableLinkRows() {
@@ -153,6 +156,15 @@ export default {
       return this.relations.find(
         (item) => item.search_type === this.selectedType
       );
+    },
+    relationNotice() {
+      if (this.error || this.busy || this.linking) return '';
+      if (!this.relations.length) return 'No configured relationships.';
+      if (!this.definition && !this.relation?.available)
+        return 'This relationship is not available in this browser yet.';
+      if (!this.relatedModel.canCreate)
+        return 'This relationship is read-only.';
+      return '';
     },
     dirty() {
       return (
@@ -519,6 +531,14 @@ export default {
             this.selectedType
           );
           if (id !== this.request) return;
+          if (
+            this.linking &&
+            !this.linkBranch?.tableDrop &&
+            !definition.operations?.link
+          )
+            throw new Error(
+              'You do not have permission to link these objects.'
+            );
           if (this.readBranch) {
             this.relationRows = [];
             let next = true;
@@ -585,7 +605,11 @@ export default {
           if (this.linking) await this.loadAvailable(false);
         }
       } catch (error) {
-        if (id === this.request) this.error = error.message;
+        if (id === this.request)
+          this.error =
+            error.code === 'access_denied'
+              ? 'You do not have access to this relationship.'
+              : error.message;
       } finally {
         if (id === this.request) this.busy = false;
       }
@@ -622,7 +646,7 @@ export default {
         : this.selectedKeys.filter((key) => !keys.includes(key));
     },
     async saveLinks() {
-      if (this.saving || !this.dirty || this.uncertain || !this.linkValid)
+      if (this.saving || !this.dirty || this.uncertain || !this.linkModel.valid)
         return;
       this.saving = true;
       this.error = '';
@@ -668,6 +692,7 @@ export default {
       }
     },
     create(source = null) {
+      if (!this.relatedModel.canCreate) return;
       this.$refs.form.open(null, source?.__search_key__ || null, {
         parent_key: this.parent.__search_key__
       });
@@ -746,11 +771,8 @@ export default {
       @more="loadAvailable(true)"
     />
     <p v-if="busy && !linking" role="status">{{ t('Loading data…') }}</p>
-    <p
-      v-else-if="!linking && relation && !relation.available && !definition"
-      class="notice"
-    >
-      {{ t('This relationship is not available in this browser yet.') }}
+    <p v-else-if="relationNotice" class="notice" role="status">
+      {{ t(relationNotice) }}
     </p>
     <div v-if="definition && !linking" class="table-container">
       <ConfiguredView

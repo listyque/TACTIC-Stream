@@ -6,6 +6,11 @@ order: 30
 ---
 # Task Inspector dock
 
+Project staff can post text notes on editable project objects when their role
+allows inserting notes. If posting is unavailable, the inspector explains why
+and keeps the discussion visible. Attachment and note edit controls follow
+their own permissions.
+
 > Task Inspector combines the exact selected process or task with its editable details, notes,
 > attachments and linked objects.
 

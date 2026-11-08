@@ -831,6 +831,8 @@ class ApiXMLRPC:
             'tactic.ui.table.task_inspector.TaskInspectorCmd',
             'tactic.ui.table.task_inspector.TaskTableEditCmd',
             'tactic.ui.table.task_schedule.TaskScheduleCmd',
+            'tactic.ui.widget.discussion_wdg.DiscussionReadCmd',
+            'tactic.ui.widget.discussion_wdg.DiscussionAddNoteCmd',
             'tactic.ui.panel.custom_url_cmd.CustomUrlCmd',
             'tactic.ui.table.CustomLayoutReadCmd',
             'tactic.ui.panel.dashboard_form_cmd.DashboardFormCmd',

@@ -5,6 +5,10 @@ order: 95
 ---
 # Related objects
 
+The window distinguishes missing relationships, read-only relationships and
+denied access. **Create related object** requires insert permission on the
+related type. Import and instance linking appear when your role supports them.
+
 Open the relationship button on an object row or card. The menu shows related types and **Related objects**. Choose a type directly, or open the window and choose **Related type**. The selected object's identity stays attached to the query: filtering and paging do not search the whole project.
 
 The window uses the standard title bar, shadow, resize and maximize/restore controls. Closing it preserves the main search. Changing project or connection invalidates the old context.

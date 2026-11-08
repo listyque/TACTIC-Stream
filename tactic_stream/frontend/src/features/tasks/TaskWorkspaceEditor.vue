@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, markRaw, h, watch, onBeforeUnmount } from 'vue';
+import { computed, ref, markRaw, h, inject, watch, onBeforeUnmount } from 'vue';
 import FrameView from '../../frame/FrameView.vue';
 import TaskField from '../objects/TaskField.vue';
 import AppButton from '../../controls/AppButton.vue';
@@ -16,6 +16,7 @@ const props = defineProps({
   staging: Boolean,
   immediate: Boolean
 });
+const canManageMilestones = inject('canManageTaskMilestones', () => true);
 const emit = defineEmits([
   'change',
   'enable',
@@ -81,7 +82,8 @@ const port = markRaw({
                   : [p.frameNode.field.name, value])
               )
           }),
-          ...(p.frameNode.field.name === 'milestone_code'
+          ...(p.frameNode.field.name === 'milestone_code' &&
+          canManageMilestones()
             ? [
                 h(AppButton, {
                   label: 'Project milestones',

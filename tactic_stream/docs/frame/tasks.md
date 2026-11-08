@@ -13,6 +13,12 @@ again. Administrative milestone definitions keep their own access policy.
 Run `test_staff_task_workspace` for the permission matrix and set
 `RUN_STAFF_BROWSER=1` for the actual browser entry and inline cell checks.
 
+The staff journey test reads an assigned task, posts a text note on its parent,
+publishes two numbered image versions through the durable queue and reads the
+two previews back with the same login. The browser test uses the actual note
+composer. Note attachments and historical note editing still require the
+administrator paths. The queue worker revalidates the submitter's grants.
+
 | Surface | Handler owner | Stream owner | Migration |
 | --- | --- | --- | --- |
 | Workspace, scope, filters, sorting, grouping, columns and paging | TasksController / TaskWorkspaceStore / TasksWorkspaceView | TaskManager / TaskWorkspaceCmd | Verified shared composition and actual workflows |

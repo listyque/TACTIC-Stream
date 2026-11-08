@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tactic-stream"
-version = "0.112.422"
+version = "0.112.423"
 description = "TACTIC Stream: a TACTIC kernel with a Vue admin and a tracked legacy API contract"
 readme = "README.md"
 requires-python = ">=3.14"

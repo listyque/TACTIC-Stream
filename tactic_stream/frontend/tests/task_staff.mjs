@@ -63,6 +63,35 @@ try {
   await page.screenshot({
     path: `../.screenshots/product-staff/${process.argv[3]}-narrow.png`
   });
+  assert.equal(
+    await manager
+      .getByRole('button', { name: 'Project milestones', exact: true })
+      .count(),
+    0
+  );
+  if (process.argv[3] === 'edit') {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await manager
+      .locator('tr[data-task-key]')
+      .first()
+      .getByRole('button', { name: 'Task actions', exact: true })
+      .tap();
+    await manager
+      .getByRole('button', { name: 'Task Inspector', exact: true })
+      .tap();
+    const notes = page.locator('.notes-panel:visible');
+    await notes
+      .getByLabel('Note text', { exact: true })
+      .fill('Browser staff note');
+    assert.equal(
+      await notes
+        .getByRole('button', { name: 'Attach files', exact: true })
+        .count(),
+      0
+    );
+    await notes.getByRole('button', { name: 'Send note', exact: true }).tap();
+    await notes.getByText('Browser staff note', { exact: true }).waitFor();
+  }
   assert.deepEqual(errors, []);
 } finally {
   await browser.close();

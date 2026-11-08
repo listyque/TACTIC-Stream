@@ -125,6 +125,8 @@ export default {
     currentLogin: () => this.session?.login || '',
     openExternalAgent: (records, project) => this.openAgentRequest(records, project),
     canUseAgent: () => this.canAdminister,
+    canManageTaskMilestones: () => this.canAdminister,
+    canUseNoteAttachments: () => this.canAdminister,
   } },
   data() {
     return {

@@ -1165,7 +1165,7 @@ export default {
         );
         if (request !== this.operationRequest) return;
         this.operations = definition.operations;
-        if (!definition.operations?.create)
+        if (!definition.operations?.create || node.branch.relationship === 'instance' && !definition.operations?.link)
           throw new Error(
             'This operation or object type is not available yet.'
           );

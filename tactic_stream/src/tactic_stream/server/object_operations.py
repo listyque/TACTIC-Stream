@@ -2,7 +2,7 @@
 from pyasm.command import Command
 from pyasm.search import Search, SearchKey, SearchType
 from tactic.ui.tools import DeleteCmd
-from tactic_stream.server.interface import _require_table_access, read_interface
+from tactic_stream.server.interface import _require_table_access, read_interface, type_write_access
 
 
 def selected_objects(search_type, search_keys):
@@ -43,9 +43,10 @@ def read_relations(search_type, search_key):
         available = bool(attrs) and not attrs.get('disabled') and child_type != base and not attrs.get('prefix')
         available = available and attrs.get('from') == child_type and attrs.get('to') in (base, '*')
         available = available and relationship in ('code', 'id', 'search_type', 'search_code', 'search_id')
+        supports_create = available and child_type not in ('sthpw/file', 'sthpw/snapshot') and not child.get_record_read_options().get('readonly')
         relations.append(dict(search_type=child_type, title=child.get_value('title') or child_type,
                               relationship=relationship, available=available,
-                              can_create=available and child_type not in ('sthpw/file', 'sthpw/snapshot')))
+                              supports_create=supports_create, can_create=supports_create and type_write_access(child_type, 'insert')))
     return dict(search_key=parent.get_search_key(use_id=True), relations=relations)
 
 

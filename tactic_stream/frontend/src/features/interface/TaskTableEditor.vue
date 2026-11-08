@@ -1,6 +1,13 @@
 <script setup>
 // The table owner keeps plans and staged changes.
-import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue';
+import {
+  computed,
+  inject,
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  ref
+} from 'vue';
 import AppButton from '../../controls/AppButton.vue';
 import TaskField from '../objects/TaskField.vue';
 import { t } from '../../i18n.js';
@@ -22,6 +29,7 @@ const compact = computed(
 const single = computed(() => props.editor?.fields.length === 1);
 const fieldLabel = (field) => t(titles[field.name] || field.name);
 const emit = defineEmits(['change', 'closed', 'milestones']);
+const canManageMilestones = inject('canManageTaskMilestones', () => true);
 const popup = ref(null);
 let anchor;
 async function open(bounds) {
@@ -130,7 +138,7 @@ defineExpose({ open, close });
             @change="emit('change', field.name, $event)"
           />
           <AppButton
-            v-if="field.name === 'milestone_code'"
+            v-if="field.name === 'milestone_code' && canManageMilestones()"
             class="task-table-milestones"
             label="Project milestones"
             icon="milestone"

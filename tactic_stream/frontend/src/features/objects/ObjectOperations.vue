@@ -99,6 +99,17 @@ export default {
         this.kind !== 'file' &&
         this.kind !== 'relation'
       );
+    },
+    canCreateRelated() {
+      const relation = this.node?.branch?.relationship;
+      return (
+        !!this.operations?.create &&
+        (relation === 'instance'
+          ? this.operations.link
+          : ['code', 'id', 'search_type', 'search_code', 'search_id'].includes(
+              relation
+            ))
+      );
     }
   },
   watch: {
@@ -413,23 +424,26 @@ export default {
     <template v-else>
       <template v-if="kind === 'relation'">
         <AppButton
-          v-if="operations?.create && operations?.checkin"
+          v-if="operations?.ingest && canCreateRelated"
           label="Add files"
           icon="upload"
           @click="ingest"
         />
         <AppButton
-          v-if="operations?.create"
+          v-if="canCreateRelated"
           label="Add new Related sObject"
           icon="add"
           @click="run('create-related')"
         />
         <AppButton
-          v-if="node.branch.relationship === 'instance'"
+          v-if="operations?.link && node.branch.relationship === 'instance'"
           label="Link sObjects Interface"
           icon="link"
           @click="run('link-related')"
         />
+        <p v-if="!canCreateRelated && !operations?.link" class="muted">
+          {{ t('This relationship is read-only.') }}
+        </p>
       </template>
       <template v-else>
         <AppButton

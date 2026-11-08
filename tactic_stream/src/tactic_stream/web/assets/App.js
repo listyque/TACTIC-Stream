@@ -6062,7 +6062,7 @@ function row$10(model) {
 		title: model.recordEditor ? "Edit sObject" : "Edit task",
 		icon: "edit",
 		command: "edit",
-		enabled: !model.busy && !model.deleting
+		enabled: !model.busy && !model.deleting && model.canEdit !== false
 	}];
 	if (model.inspector) actions.push({
 		title: "Task Inspector",
@@ -6107,13 +6107,13 @@ function row$10(model) {
 		title: "Delete task",
 		icon: "delete",
 		command: "delete",
-		enabled: !model.busy && !model.pending && !model.creating
+		enabled: !model.busy && !model.pending && !model.creating && model.canDelete !== false
 	});
 	if (model.checked) actions.push({
 		title: "Delete selected tasks",
 		icon: "delete-sweep",
 		command: "delete-checked",
-		enabled: !model.busy && !model.pending
+		enabled: !model.busy && !model.pending && model.canDeleteChecked !== false
 	});
 	return actions;
 }
@@ -7647,7 +7647,7 @@ function toolbar$1(model, width, language) {
 		action("compactScopeButton", x, "Choose task scope", model.scopeIcon || "inventory-2", "scope", !model.blocked, { pressAction: { type: "scope-press" } });
 		x += size + gap;
 	}
-	if (!phone && !compact) {
+	if (!phone && !compact && model.canManageMilestones !== false) {
 		action("taskMilestoneManagerButton", x, "Project milestones", "milestone", "milestones", !model.busy, { iconColor: "action" });
 		x += size + gap;
 	}
@@ -7965,6 +7965,7 @@ function options(model, width, language) {
 		]
 	]) {
 		if (type === "columns" && model.phone) continue;
+		if (type === "milestones" && model.canManageMilestones === false) continue;
 		nodes.push(button("taskOptions_" + type, rect$1(0, y, width, 32), tr(title), icon, { type }, enabled, { align: "left" }));
 		y += 36;
 	}
@@ -8058,7 +8059,7 @@ function bar(model, width, language) {
 		right -= 6;
 	};
 	icon("taskBulkCancel", "Cancel bulk edit and clear selection", "close", "cancel", !model.busy);
-	icon("taskBulkDeleteButton", "Delete selected tasks", "delete", "delete", !model.blocked && !model.busy, {
+	icon("taskBulkDeleteButton", "Delete selected tasks", "delete", "delete", !model.blocked && !model.busy && model.canDelete !== false, {
 		destructive: true,
 		iconColor: "error"
 	});
@@ -8166,6 +8167,10 @@ var _sfc_main$80 = {
 	props: {
 		form: Object,
 		count: Number,
+		canDelete: {
+			type: Boolean,
+			default: true
+		},
 		busy: Boolean,
 		blocked: Boolean
 	},
@@ -8184,6 +8189,7 @@ var _sfc_main$80 = {
 		const summary = computed(() => preview$1(props.form));
 		const scene = computed(() => bar({
 			count: props.count,
+			canDelete: props.canDelete,
 			busy: props.busy || !props.form,
 			blocked: props.blocked,
 			enabled: props.form?.enabled || [],
@@ -9943,7 +9949,10 @@ var _sfc_main$66 = {
 			const row = this.rowMenu;
 			return row ? row$10({
 				inspector: true,
-				timesheet: true,
+				timesheet: this.canAdminister,
+				canEdit: row.__permissions__?.edit !== false,
+				canDelete: row.__permissions__?.delete !== false,
+				canDeleteChecked: this.canDeleteSelected,
 				hasTask: !!row.__search_key__,
 				hasParent: !!row.parent,
 				busy: this.blocked,
@@ -9953,6 +9962,10 @@ var _sfc_main$66 = {
 				creating: !!this.drafts[row.key]?.creating,
 				checked: this.selected.length
 			}) : [];
+		},
+		canDeleteSelected() {
+			const selected = new Set(this.selected);
+			return !this.tasks.some((task) => selected.has(task.key) && task.__permissions__?.delete === false);
 		},
 		columnActions() {
 			return column$1({
@@ -10220,7 +10233,7 @@ var _sfc_main$66 = {
 				}
 			} else if (action.type === "create") this.edit([], true, "", "inline");
 			else if (action.type === "refresh") this.load();
-			else if (action.type === "milestones") this.$refs.milestones.open();
+			else if (action.type === "milestones") this.openMilestones();
 			else if (action.type === "clear-filters") this.clearFilters();
 			else if (action.type === "surface") this.changeSurface(action.value);
 			else if (action.type === "scope-choice") {
@@ -11140,9 +11153,12 @@ var _sfc_main$66 = {
 			if (this.surface !== "workspace") for (const plan of this.editor.plans) this.preferredTasks[plan.process] = plan.task_key || plan.draft_id;
 			this.cancelEdit(true);
 		},
+		openMilestones(code = "") {
+			if (this.canAdminister) this.$refs.milestones.open(code);
+		},
 		async remove(tasks) {
 			this.$refs.menu?.hidePopover();
-			if (this.blocked) return;
+			if (this.blocked || tasks.some((task) => task.__permissions__?.delete === false)) return;
 			if (tasks.some((task) => this.drafts[task.key])) {
 				this.error = t("Save or discard task edits before deleting.");
 				return;
@@ -11704,6 +11720,7 @@ function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
 						busy: $data.busy,
 						loading: $data.loading,
 						canCreate: !$options.blocked && $data.catalog?.permissions?.create !== false,
+						canManageMilestones: $props.canAdminister,
 						canRefresh: !$data.busy,
 						filtersActive: $options.filtersActive,
 						sort: $data.sort,
@@ -11811,6 +11828,7 @@ function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
 								busy: $data.busy,
 								blocked: $options.blocked,
 								filtersActive: $options.filtersActive,
+								canManageMilestones: $props.canAdminister,
 								allSelected: $options.allSelected,
 								surface: $data.surface
 							},
@@ -11905,7 +11923,7 @@ function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
 						onInspect: $options.inspect,
 						onOperate: $options.showMenu,
 						onObject: $options.openObject,
-						onMilestones: _cache[15] || (_cache[15] = ($event) => _ctx.$refs.milestones.open()),
+						onMilestones: _cache[15] || (_cache[15] = ($event) => $options.openMilestones()),
 						onMore: _cache[16] || (_cache[16] = ($event) => $options.load(false, true))
 					}, null, 8, [
 						"groups",
@@ -11947,7 +11965,7 @@ function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
 						onExpand: $options.expand,
 						onChange: $options.stageRow,
 						onEditCell: $options.editCell,
-						onMilestones: _cache[17] || (_cache[17] = ($event) => _ctx.$refs.milestones.open()),
+						onMilestones: _cache[17] || (_cache[17] = ($event) => $options.openMilestones()),
 						onSizeColumn: $options.sizeColumn,
 						onColumns: $options.openColumns,
 						onColumnContext: $options.columnContext,
@@ -12009,7 +12027,7 @@ function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
 						onObject: _cache[22] || (_cache[22] = (key) => $options.openObject($options.tasks.find((task) => task.key === key))),
 						onProgress: $options.stageProgress,
 						onDelete: _cache[23] || (_cache[23] = ($event) => $options.remove($options.tasks.filter((task) => $data.selected.includes(task.key)))),
-						onMilestone: _cache[24] || (_cache[24] = ($event) => _ctx.$refs.milestones.open($event)),
+						onMilestone: _cache[24] || (_cache[24] = ($event) => $options.openMilestones($event)),
 						onWorkingDays: _cache[25] || (_cache[25] = ($event) => $data.workingDays = $event),
 						onResourceMode: $options.resourceMode,
 						onUndo: _cache[26] || (_cache[26] = ($event) => $options.history(true)),
@@ -12088,6 +12106,7 @@ function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
 					ref: "bulkBar",
 					form: $data.bulkForm,
 					count: $data.selected.length,
+					"can-delete": $options.canDeleteSelected,
 					busy: $data.busy || $data.bulkPreparing,
 					blocked: $options.blocked || $options.dirty,
 					onChange: $options.changeBulkValue,
@@ -12099,6 +12118,7 @@ function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
 				}, null, 8, [
 					"form",
 					"count",
+					"can-delete",
 					"busy",
 					"blocked",
 					"onChange",
@@ -12142,7 +12162,7 @@ function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
 					onChange: $options.changeInline,
 					onMilestones: _cache[36] || (_cache[36] = ($event) => {
 						$options.closeInline();
-						_ctx.$refs.milestones.open();
+						$options.openMilestones();
 					}),
 					onClosed: _cache[37] || (_cache[37] = ($event) => $data.inline = null)
 				}, null, 8, [
@@ -12217,7 +12237,7 @@ function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
 			}, null, 8, ["disabled", "onClick"])]), createVNode(_component_TaskWorkspaceEditor, {
 				editor: $data.editor,
 				busy: $data.busy,
-				onMilestones: _cache[42] || (_cache[42] = ($event) => _ctx.$refs.milestones.open()),
+				onMilestones: _cache[42] || (_cache[42] = ($event) => $options.openMilestones()),
 				onChange: _cache[43] || (_cache[43] = (name, value) => $data.editor.values[name] = value),
 				onEnable: _cache[44] || (_cache[44] = (name, checked) => $data.editor.enabled = checked ? [...$data.editor.enabled, name] : $data.editor.enabled.filter((item) => item !== name)),
 				onProcess: _cache[45] || (_cache[45] = ($event) => $options.edit([], true, $event)),
@@ -12376,7 +12396,7 @@ function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
 			onToday: $options.calendarToday,
 			onDay: $options.selectDay,
 			onInspect: _cache[57] || (_cache[57] = (key) => $options.inspect($options.tasks.find((task) => task.key === key))),
-			onMilestone: _cache[58] || (_cache[58] = ($event) => _ctx.$refs.milestones.open($event)),
+			onMilestone: _cache[58] || (_cache[58] = ($event) => $options.openMilestones($event)),
 			onLoadMore: _cache[59] || (_cache[59] = ($event) => $options.load(false, true)),
 			onTasks: _cache[60] || (_cache[60] = ($event) => _ctx.$emit("opened"))
 		}, null, 8, [
@@ -33333,7 +33353,9 @@ var _sfc_main = {
 			openWorkHours: (mode, task, project) => this.openWorkHours(mode, task, project),
 			currentLogin: () => this.session?.login || "",
 			openExternalAgent: (records, project) => this.openAgentRequest(records, project),
-			canUseAgent: () => this.canAdminister
+			canUseAgent: () => this.canAdminister,
+			canManageTaskMilestones: () => this.canAdminister,
+			canUseNoteAttachments: () => this.canAdminister
 		};
 	},
 	data() {

@@ -9,7 +9,7 @@ from pyasm.biz import Pipeline, Project, Schema, Task
 from pyasm.command import Command
 from pyasm.common import Environment, SecurityException, UserException
 from pyasm.search import Search, SearchKey, SearchType
-from tactic_stream.server.interface import _require_table_access
+from tactic_stream.server.interface import _require_table_access, type_write_access
 from tactic.ui.widget.discussion_wdg import discussion_target, DiscussionReadCmd, same_note_target
 from .task_element_wdg import TaskElementWdg, TaskElementCbk
 
@@ -199,16 +199,11 @@ def task_permissions(parent=None) -> dict[str, bool]:
     if security.is_admin():
         return dict(create=True, edit=True, delete=True)
 
-    def allowed(search_type, access):
-        keys = [dict(code=search_type, project=project), dict(code=search_type),
-                dict(code='*', project=project), dict(code='*')]
-        return security.check_access('search_type', keys, access, default='deny')
-
     parent_editable = parent is None or (
         parent.get_base_search_type() == 'sthpw/project' and parent.get_code() == project
     ) or (not parent.get_base_search_type().startswith(('sthpw/', 'config/'))
-          and allowed(parent.get_base_search_type(), 'edit'))
-    return {name: bool(parent_editable and allowed('sthpw/task', access))
+          and type_write_access(parent.get_base_search_type(), 'edit'))
+    return {name: bool(parent_editable and type_write_access('sthpw/task', access))
             for name, access in (('create', 'insert'), ('edit', 'edit'), ('delete', 'delete'))}
 
 
@@ -348,6 +343,7 @@ class TaskInspectorCmd(Command):
                 selected_task='', task_choices=[], task={}, fields=[], statuses=[], users=[], defaults={}, revision=revision,
                 notes=[dict(note, target_key=parent.get_search_key(), entry_type='note') for note in notes], history=[],
                 identities=discussion['identities'],
+                can_post=discussion['can_post'],
                 note_target=parent.get_search_key(), current_user=Environment.get_user_name())
         if action != 'read' and self.kwargs.get('expected_revision') != revision:
             raise UserException('Tasks changed. Reload before saving.')
@@ -375,9 +371,12 @@ class TaskInspectorCmd(Command):
         primary = not selected or selected is tasks[0] or len(tasks) == 1
         note_target = parent if primary else selected
         notes = []
+        can_post = False
         for target in ([parent, selected] if primary and selected and len(tasks) == 1 else [note_target]):
             cmd = DiscussionReadCmd(search_key=target.get_search_key(), process=process, include_identities=False)
             result = cmd.execute()
+            if target is note_target:
+                can_post = result['can_post']
             for note in result['notes']:
                 notes.append(dict(note, target_key=target.get_search_key(), entry_type='note'))
         visible = {field['name'] for field in task_fields(('context',))}
@@ -411,7 +410,7 @@ class TaskInspectorCmd(Command):
             fields=fields, statuses=statuses, users=users, identities=identities,
             defaults={name: value for name, value in defaults.items() if name in visible},
             revision=revision, processes=processes, notes=notes, history=history,
-            note_target=note_target.get_search_key(), current_user=Environment.get_user_name())
+            note_target=note_target.get_search_key(), current_user=Environment.get_user_name(), can_post=can_post)
 
 
 class TaskTableEditCmd(Command):

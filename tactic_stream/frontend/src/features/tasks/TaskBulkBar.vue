@@ -13,6 +13,7 @@ import { watch, onBeforeUnmount } from 'vue';
 const props = defineProps({
   form: Object,
   count: Number,
+  canDelete: { type: Boolean, default: true },
   busy: Boolean,
   blocked: Boolean
 });
@@ -33,6 +34,7 @@ const scene = computed(() =>
   UI.bar(
     {
       count: props.count,
+      canDelete: props.canDelete,
       busy: props.busy || !props.form,
       blocked: props.blocked,
       enabled: props.form?.enabled || [],

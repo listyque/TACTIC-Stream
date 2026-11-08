@@ -40,6 +40,41 @@ def discussion_target(search_key):
     return target
 
 
+def project_discussion_target(search_key, *, writing=False):
+    from tactic_stream.server.interface import _require_table_access
+    from tactic_stream.server.navigation_links import check_type
+
+    _require_table_access('sthpw/note')
+    target = discussion_target(search_key)
+    if Environment.get_security().is_admin():
+        return target
+    project = Project.get_project_code()
+    base = target.get_base_search_type()
+    owner = target.get_parent() if base == 'sthpw/task' else target
+    if not owner or project in ('admin', 'sthpw'):
+        raise SecurityException('Discussion is not available in this project')
+    owner_type = owner.get_base_search_type()
+    if owner_type == 'sthpw/project':
+        if owner.get_code() != project:
+            raise SecurityException('Discussion belongs to another project')
+    elif owner_type.startswith(('sthpw/', 'config/')) or owner.get_project_code() != project:
+        raise SecurityException('Discussion requires a visible project object')
+    check_type(base, project)
+    if owner is not target:
+        check_type(owner_type, project)
+    if writing and not can_post_note(target):
+        raise SecurityException('Note creation is not allowed for this object')
+    return target
+
+
+def can_post_note(target) -> bool:
+    from tactic_stream.server.interface import type_write_access
+    if Environment.get_security().is_admin():
+        return True
+    base = target.get_base_search_type()
+    return not base.startswith(('sthpw/', 'config/')) and type_write_access(base, 'edit') and type_write_access('sthpw/note', 'insert')
+
+
 def same_note_target(note, target):
     return note.get_value('search_type') == target.get_search_type() and (
         note.get_value('search_code') == target.get_code() if note.get_value('search_code')
@@ -372,15 +407,10 @@ class DiscussionElementWdg(BaseTableElementWdg):
 
 
 class DiscussionAddNoteCmd(Command):
-    def check_security(self):
-        from pyasm.security.security import _require_admin
-        _require_admin()
-        return True
-
     def validate_inputs(self):
         if self.kwargs.get('mail_cc') or self.kwargs.get('mail_bcc'):
             raise UnsupportedContract('Discussion email delivery is not migrated')
-        target = discussion_target(self.kwargs.get('search_key'))
+        target = project_discussion_target(self.kwargs.get('search_key'), writing=True)
         value = self.kwargs.get('note')
         if not isinstance(value, str) or (not value.strip() and not self.kwargs.get('files')) or len(value.encode()) > 1024 * 1024:
             raise ValueError('A note cannot be empty or larger than 1 MiB')
@@ -391,6 +421,8 @@ class DiscussionAddNoteCmd(Command):
         if self.kwargs.get('ticket') not in (None, '', Environment.get_ticket()):
             raise SecurityException('Attachments belong to another ticket')
         files = self.kwargs.get('files') or []
+        if files and not Environment.get_security().is_admin():
+            raise SecurityException('Adding note attachments requires administrator access')
         if not isinstance(files, list) or len(files) > 100 or any(not isinstance(path, str) or not path for path in files):
             raise ValueError('Choose at most 100 uploaded files')
         upload_dir = Path(Environment.get_upload_dir()).resolve()
@@ -411,14 +443,17 @@ class DiscussionAddNoteCmd(Command):
             self.kwargs['process'] = reply.get_process()
             self.kwargs['context'] = reply.get_value('context')
             self.reply = reply
+        if not Environment.get_security().is_admin():
+            from tactic.ui.table.task_element_wdg import TaskElementWdg
+            if not TaskElementWdg.can_view_process(self.kwargs.get('process') or 'publish'):
+                raise SecurityException('Note process is not accessible')
+        return target
 
     def get_title(self):
         return 'Added a note'
 
     def execute(self):
-        self.validate_inputs()
-        search_key = self.kwargs.get('search_key')
-        sobject = Search.get_by_search_key(search_key)
+        sobject = self.validate_inputs()
         ticket = self.kwargs.get('ticket')
         note = self.kwargs.get('note')
         process = self.kwargs.get('process')
@@ -501,22 +536,22 @@ class DiscussionAddNoteCmd(Command):
 
 class DiscussionReadCmd(Command):
     """Typed discussion records for renderers, using the original note selector."""
-    def check_security(self):
-        from pyasm.security.security import _require_admin
-        _require_admin()
-        return True
-
     def execute(self):
-        target = discussion_target(self.kwargs.get('search_key'))
+        target = project_discussion_target(self.kwargs.get('search_key'))
         widget = DiscussionWdg(process=self.kwargs.get('process'), context=self.kwargs.get('context'))
         widget.set_sobject(target)
         notes = widget.get_notes()
+        security = Environment.get_security()
+        admin = security.is_admin()
+        if not admin:
+            from tactic.ui.table.task_element_wdg import TaskElementWdg
+            notes = [note for note in notes if TaskElementWdg.can_view_process(note.get_process())]
         from pyasm.biz import SObjectConnection
         from pyasm.widget import ThumbWdg
         from tactic_stream.server.table_cells import safe_link
-        connections, snapshots = SObjectConnection.get_connected_sobjects(notes, direction='dst', context='attachment', filters=[('search_type', target.get_search_type())])
+        connections, snapshots = SObjectConnection.get_connected_sobjects(notes, direction='dst', context='attachment', filters=[('search_type', target.get_search_type())]) if admin else ([], [])
         snapshots = [snapshot for snapshot in snapshots if isinstance(snapshot, Snapshot)]
-        direct_snapshots = Snapshot.get_by_sobjects(notes) if notes else []
+        direct_snapshots = Snapshot.get_by_sobjects(notes) if admin and notes else []
         snapshots = list({snapshot.get_id(): snapshot for snapshot in [*snapshots, *direct_snapshots]}.values())
         file_objects = {file.get_code(): file for file in File.get_by_snapshots(snapshots)} if snapshots else {}
         snapshot_files = {}
@@ -537,19 +572,25 @@ class DiscussionReadCmd(Command):
             if files and connection.get_value('src_search_type') == 'sthpw/snapshot':
                 attachments.setdefault(connection.get_value('dst_search_id'), []).extend(files)
         records = []
+        def visible(column):
+            return admin or security.check_access('sobject_column', dict(search_type='sthpw/note',
+                column=column, project=Project.get_project_code()), 'view')
+        columns = {name: visible(name) for name in ('note', 'login', 'timestamp', 'process', 'context', 'parent_id', 'metadata')}
         for note in notes:
-            records.append(dict(id=note.get_id(), search_key=note.get_search_key(), body=note.get_value('note'),
-                login=note.get_login(), timestamp=note.get_value('timestamp'), process=note.get_process(),
-                context=note.get_value('context'), parent_id=note.get_parent_id() or 0,
-                revision=note_revision(note), can_change=can_change_note(note),
-                attachments=attachments.get(note.get_id(), []), metadata=note.get_metadata_dict()))
+            records.append(dict(id=note.get_id(), search_key=note.get_search_key(), body=note.get_value('note') if columns['note'] else '',
+                login=note.get_login() if columns['login'] else '', timestamp=note.get_value('timestamp') if columns['timestamp'] else '',
+                process=note.get_process() if columns['process'] else '', context=note.get_value('context') if columns['context'] else '',
+                parent_id=(note.get_parent_id() or 0) if columns['parent_id'] else 0,
+                revision=note_revision(note) if admin else '', can_change=admin and can_change_note(note),
+                attachments=attachments.get(note.get_id(), []), metadata=note.get_metadata_dict() if columns['metadata'] and columns['note'] else {}))
         logins = {record['login'] for record in records if record['login']}
         users = []
         if logins and self.kwargs.get('include_identities', True):
             from tactic_stream.server.security_groups import user_identities
             search = Search('sthpw/login'); search.set_show_retired(True); search.add_filters('login', list(logins))
             users = user_identities(search.get_sobjects())
-        return dict(search_key=target.get_search_key(), notes=records, identities=users,current_user=Environment.get_user_name())
+        return dict(search_key=target.get_search_key(), notes=records, identities=users,
+                    current_user=Environment.get_user_name(), can_post=can_post_note(target))
 
 
 class DiscussionChangeNoteCmd(Command):
