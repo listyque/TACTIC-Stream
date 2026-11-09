@@ -638,8 +638,7 @@ export default {
         ...this.nodes.map((row) => row.identity),
         ...(this.metadata.searchTypes || []).map((row) => row.identity)
       ]);
-      let index =
-          Object.keys(this.document.draftTypes || {}).length + 1,
+      let index = Object.keys(this.document.draftTypes || {}).length + 1,
         table = 'draft_entity_' + index,
         name = this.context.project + '/' + table;
       while (existing.has(name)) {
@@ -649,8 +648,11 @@ export default {
       }
       const title = 'Draft Entity ' + index;
       const nodeIndex = this.nodes.length;
-      const xpos = Math.round((position?.x ?? 40 + (nodeIndex % 3) * 240) * 10) / 10;
-      const ypos = Math.round((position?.y ?? 40 + Math.floor(nodeIndex / 3) * 130) * 10) / 10;
+      const xpos =
+        Math.round((position?.x ?? 40 + (nodeIndex % 3) * 240) * 10) / 10;
+      const ypos =
+        Math.round((position?.y ?? 40 + Math.floor(nodeIndex / 3) * 130) * 10) /
+        10;
       (this.document.draftTypes ||= {})[name] = {
         table,
         title,
@@ -681,7 +683,9 @@ export default {
     },
     renameDraftTable(rawTable) {
       if (!this.editable || !this.draftType || !this.node) return;
-      const table = String(rawTable || '').trim().toLowerCase();
+      const table = String(rawTable || '')
+        .trim()
+        .toLowerCase();
       if (!/^[a-z][a-z0-9_]*$/.test(table)) {
         this.error =
           'Use a lowercase table name with letters, digits and underscores';
@@ -858,15 +862,13 @@ export default {
           node.setAttribute('type', 'hierarchy');
           if (!node.getAttribute('from_col'))
             node.setAttribute('from_col', targetTable + '_code');
-          if (!node.getAttribute('to_col'))
-            node.setAttribute('to_col', 'code');
+          if (!node.getAttribute('to_col')) node.setAttribute('to_col', 'code');
         } else if (preset === 'code') {
           node.setAttribute('relationship', 'code');
           node.setAttribute('type', 'default');
           if (!node.getAttribute('from_col'))
             node.setAttribute('from_col', targetTable + '_code');
-          if (!node.getAttribute('to_col'))
-            node.setAttribute('to_col', 'code');
+          if (!node.getAttribute('to_col')) node.setAttribute('to_col', 'code');
         } else if (preset === 'id') {
           node.setAttribute('relationship', 'id');
           node.setAttribute('type', 'default');

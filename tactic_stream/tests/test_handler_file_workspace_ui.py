@@ -187,7 +187,7 @@ class HandlerFileWorkspaceUiTest(FileProjectFixture, unittest.TestCase):
                 print('DEPOT_POINTER_MS',','.join(f'{value:.2f}' for value in elapsed))
                 self.assertFalse(controller.busy)
                 self.assertEqual(controller.log_model.count(),0)
-                self.assertTrue('tab_states' not in view.property('state'),'Private tab snapshots must not cross the Qt state boundary')
+                self.assertTrue('tab_states' not in view.property('workspaceState'),'Private tab snapshots must not cross the Qt state boundary')
                 QTest.keyClick(window,Qt.Key_Down)
                 self.assertEqual(controller.data['tree_selection'],'path/main/folder1/')
                 blocked=view.findChild(QObject,'workspaceDropBlocked')

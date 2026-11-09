@@ -573,8 +573,7 @@ export default {
     },
     addRule(scope = this.scope) {
       if (this.pendingText()) return;
-      const targetScope =
-        scope === 'tasks' ? 'process' : scope || this.scope;
+      const targetScope = scope === 'tasks' ? 'process' : scope || this.scope;
       const defaults = {
         project: { code: '*' },
         search_type: { code: '*' },

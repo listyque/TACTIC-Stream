@@ -734,7 +734,8 @@ export function changeDefinition(
   } else if (field === 'editable') {
     if (flag(value)) node.setAttribute('edit', 'true');
     else node.setAttribute('edit', 'false');
-  } else if (field === 'width') node.setAttribute('width', String(width(value)));
+  } else if (field === 'width')
+    node.setAttribute('width', String(width(value)));
   else if (field === 'valueIcon' || field === 'valueStyle') {
     const text = String(value || '').trim();
     if (field === 'valueStyle' && !['', 'text', 'badge'].includes(text))
@@ -814,7 +815,9 @@ export function changeDefinition(
     const optKey = (eq >= 0 ? raw.slice(0, eq) : raw).trim();
     const optVal = eq >= 0 ? raw.slice(eq + 1).trim() : 'true';
     if (!optKey || !/^[A-Za-z_][\w.-]*$/.test(optKey))
-      throw new Error('Option name must be a valid XML tag (e.g. my_option=value)');
+      throw new Error(
+        'Option name must be a valid XML tag (e.g. my_option=value)'
+      );
     return changeDefinition(
       source,
       path,
@@ -826,7 +829,9 @@ export function changeDefinition(
     const isEditConfig =
       parent && ['edit', 'edit_definition'].includes(parent.tagName);
     const tagName = isEditConfig ? 'display' : 'edit';
-    let editNode = [...node.children].find((child) => child.tagName === tagName);
+    let editNode = [...node.children].find(
+      (child) => child.tagName === tagName
+    );
     if (!editNode) {
       editNode = document.createElement(tagName);
       node.appendChild(editNode);
@@ -836,9 +841,7 @@ export function changeDefinition(
     const widget = String(value || '').trim();
     if (widget)
       editNode.setAttribute(
-        field === 'editClass' ||
-          widget.includes('.') ||
-          widget.endsWith('Wdg')
+        field === 'editClass' || widget.includes('.') || widget.endsWith('Wdg')
           ? 'class'
           : 'widget',
         widget
@@ -850,7 +853,9 @@ export function changeDefinition(
     const isEditConfig =
       parent && ['edit', 'edit_definition'].includes(parent.tagName);
     const tagName = isEditConfig ? 'display' : 'edit';
-    let editNode = [...node.children].find((child) => child.tagName === tagName);
+    let editNode = [...node.children].find(
+      (child) => child.tagName === tagName
+    );
     if (!editNode) {
       editNode = document.createElement(tagName);
       if (fallbackElement?.editWidget) {

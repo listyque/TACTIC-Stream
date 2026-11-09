@@ -469,7 +469,9 @@ export default {
               <QuickFilterChip
                 icon="user"
                 :text="t('MY TASKS')"
-                :checked="(selected.assigned || []).includes('__current_login__')"
+                :checked="
+                  (selected.assigned || []).includes('__current_login__')
+                "
                 :accent="group.accent"
                 subtle
                 :disabled="busy || uncertain"

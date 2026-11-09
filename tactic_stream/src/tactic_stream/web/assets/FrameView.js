@@ -6865,29 +6865,29 @@ var russian = {
 	"Link table (instance_type)": "Связующая таблица (instance_type)",
 	"Intermediate Search Type storing foreign keys to both endpoints.": "Промежуточный Search Type, хранящий внешние ключи к обеим связываемым таблицам.",
 	"Manual · Task": "Ручной · Задача (manual)",
-	"Manual": "Ручной",
+	Manual: "Ручной",
 	"Standard human task stage (rectangular card). Creates an artist task and advances when its status reaches complete.": "Стандартный пользовательский этап (прямоугольный узел). Создаёт задачу для исполнителя и завершается при переводе её статуса в complete.",
 	"Action · Auto script": "Действие · Автоскрипт (action)",
-	"Action": "Действие",
+	Action: "Действие",
 	"Automated process (rounded pill). Runs a server script or command class automatically when triggered by upstream stages.": "Автоматический процесс (скруглённая капсула). Запускает серверный скрипт или класс команды автоматически при срабатывании предыдущего этапа.",
 	"Condition · Branching": "Условие · Ветвление (condition)",
-	"Condition": "Условие",
+	Condition: "Условие",
 	"Conditional branch (diamond markers). Evaluates a script condition and routes flow to success or failure output streams.": "Условное ветвление (маркеры ромба). Вычисляет условие в скрипте и направляет поток по ветке успеха или отказа.",
 	"Approval · Sign-off": "Согласование · Приёмка (approval)",
-	"Approval": "Согласование",
+	Approval: "Согласование",
 	"Review gate (double-ring stadium). Requires supervisor approval; rejecting sends status back to upstream stages.": "Этап проверки и утверждения (двойной контур). Требует приёмки супервайзером; при отклонении возвращает работу на предыдущие этапы.",
 	"Hierarchy · Sub-workflow": "Иерархия · Подпайплайн (hierarchy)",
-	"Hierarchy": "Иерархия",
+	Hierarchy: "Иерархия",
 	"Nested sub-pipeline container. Expands into child workflow processes and can create parent and child tasks.": "Контейнер вложенного подпайплайна. Раскрывается в дочерний Workflow и позволяет создавать родительские и дочерние задачи.",
 	"Dependency · External wait": "Зависимость · Ожидание (dependency)",
-	"Dependency": "Зависимость",
+	Dependency: "Зависимость",
 	"Cross-object dependency node. Waits for or triggers a process on a related Search Type (parent, child, or expression).": "Межобъектная зависимость. Ожидает завершения или запускает процесс у связанного Search Type (родителя, потомка или по выражению).",
 	"Progress · Tracker": "Прогресс · Сводка (progress)",
 	"Circular progress aggregator. Tracks completion across related objects in another Search Type and pipeline.": "Круговой индикатор прогресса. Отслеживает процент готовности связанных объектов другого Search Type и пайплайна.",
 	"Status · Task state": "Статус · Состояние (status)",
 	"Task status state (used in sthpw/task status pipelines). Defines a status name, color, and completion flag.": "Состояние статуса задачи (используется в пайплайнах sthpw/task). Задаёт имя статуса, цвет и признак завершения.",
 	"Choose how this stage behaves in the workflow and how it is drawn on the canvas:": "Выберите, как этот этап работает в пайплайне и как он отображается на схеме:",
-	"DRAFT": "РЫБА",
+	DRAFT: "РЫБА",
 	"Config table · config": "Таблица конфигурации · config",
 	"System table · sthpw": "Системная таблица · sthpw",
 	"External · {ns}": "Внешний проект · {ns}"
@@ -9863,7 +9863,7 @@ var FrameGraph_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 			}, null, 8, ["scene", "style"])], 44, _hoisted_2$3)], 4)], 8, _hoisted_1$9);
 		};
 	}
-}, [["__scopeId", "data-v-82cd2dc1"]]);
+}, [["__scopeId", "data-v-c370885b"]]);
 //#endregion
 //#region ../src/tactic_stream/shared_ui/controls/charts/chart.ui.mjs
 var palette = [

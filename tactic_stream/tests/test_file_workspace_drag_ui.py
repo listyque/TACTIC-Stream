@@ -39,7 +39,7 @@ import "FileWorkspaceMenus.js" as Menus
 ListView {
     id:list;required property var theme
     property int disclosures:0
-    property var context:({busy:false,controller:{current_user:"admin",application_project:"files"},state:{workspace:"work",streams:[{code:"main",writable:true}]}})
+    property var context:({busy:false,controller:{current_user:"admin",application_project:"files"},workspaceState:{workspace:"work",streams:[{code:"main",writable:true}]}})
     model:100;clip:true
     delegate:FileWorkspaceTreeRow {
         required property int index

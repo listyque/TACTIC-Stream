@@ -8,7 +8,12 @@ import AppSwitch from './AppSwitch.vue';
 import { copyText as writeClipboard, readClipboard } from './clipboard.js';
 import { t } from '../i18n.js';
 import { syntaxTokens, detectLanguage } from './pythonSyntax.js';
-import { editCommand, findMatches, documentSymbols, completions } from './codeEditing.js';
+import {
+  editCommand,
+  findMatches,
+  documentSymbols,
+  completions
+} from './codeEditing.js';
 import './codeEditor.css';
 
 const props = defineProps({
@@ -311,7 +316,11 @@ function complete(manual = true) {
     manual,
     requestId: ++analysisRequest
   });
-  if (!props.analysis && !props.readOnly && document.activeElement === input.value) {
+  if (
+    !props.analysis &&
+    !props.readOnly &&
+    document.activeElement === input.value
+  ) {
     const prefix = /[\w$:-]*$/.exec(model.value.slice(0, cursor))[0];
     suggestions.value =
       !completionSuppressed && (manual || prefix.length >= 2)

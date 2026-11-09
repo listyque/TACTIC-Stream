@@ -433,7 +433,9 @@ export default {
       this.error = '';
       const saved = !this.identity ? this.readViewState() : null;
       const targetIdentity = this.identity || saved?.identity || '';
-      const targetPage = this.identity ? this.ui.page : saved?.page || 'summary';
+      const targetPage = this.identity
+        ? this.ui.page
+        : saved?.page || 'summary';
       try {
         const result = await this.call('load', { identity: targetIdentity });
         if (id !== this.request) return;
@@ -451,7 +453,13 @@ export default {
                 });
           if (id !== this.request) return;
           this.accept(loaded);
-          this.page = ['summary', 'workflow', 'naming', 'details', 'fields'].includes(targetPage)
+          this.page = [
+            'summary',
+            'workflow',
+            'naming',
+            'details',
+            'fields'
+          ].includes(targetPage)
             ? targetPage
             : 'summary';
           this.saveViewState();

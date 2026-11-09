@@ -288,7 +288,9 @@ defineExpose({ dispatch, insertionPoint, ui });
         @click.capture="
           if (
             $event.detail &&
-            !$event.target?.closest?.('[data-frame=&quot;graphContextMenu&quot;]')
+            !$event.target?.closest?.(
+              '[data-frame=&quot;graphContextMenu&quot;]'
+            )
           ) {
             $event.preventDefault();
             $event.stopPropagation();
@@ -383,15 +385,23 @@ defineExpose({ dispatch, insertionPoint, ui });
     box-shadow 160ms cubic-bezier(0.2, 0, 0, 1),
     filter 160ms ease;
 }
-.graph-plane :deep([data-frame^='graphNode_']:hover [data-frame^='graphNodeSurface_']),
-.graph-plane :deep([data-frame^='graphNode_']:focus-visible [data-frame^='graphNodeSurface_']) {
+.graph-plane
+  :deep([data-frame^='graphNode_']:hover [data-frame^='graphNodeSurface_']),
+.graph-plane
+  :deep(
+    [data-frame^='graphNode_']:focus-visible [data-frame^='graphNodeSurface_']
+  ) {
   box-shadow:
     0 10px 28px rgba(0, 0, 0, 0.52),
     0 0 18px rgba(255, 255, 255, 0.08);
   filter: brightness(1.14);
 }
-.graph-plane :deep([data-frame^='graphEdge_']:hover [data-frame^='graphEdgeBadge_']),
-.graph-plane :deep([data-frame^='graphEdge_']:focus-visible [data-frame^='graphEdgeBadge_']) {
+.graph-plane
+  :deep([data-frame^='graphEdge_']:hover [data-frame^='graphEdgeBadge_']),
+.graph-plane
+  :deep(
+    [data-frame^='graphEdge_']:focus-visible [data-frame^='graphEdgeBadge_']
+  ) {
   box-shadow: 0 8px 22px rgba(0, 0, 0, 0.48);
   filter: brightness(1.15);
 }
@@ -401,10 +411,18 @@ defineExpose({ dispatch, insertionPoint, ui });
     filter 140ms ease;
   transform-origin: center center;
 }
-.graph-plane :deep([data-frame^='graphInput_']:hover [data-frame^='graphPortSurface_']),
-.graph-plane :deep([data-frame^='graphOutput_']:hover [data-frame^='graphPortSurface_']),
-.graph-plane :deep([data-frame^='graphInput_']:focus-visible [data-frame^='graphPortSurface_']),
-.graph-plane :deep([data-frame^='graphOutput_']:focus-visible [data-frame^='graphPortSurface_']) {
+.graph-plane
+  :deep([data-frame^='graphInput_']:hover [data-frame^='graphPortSurface_']),
+.graph-plane
+  :deep([data-frame^='graphOutput_']:hover [data-frame^='graphPortSurface_']),
+.graph-plane
+  :deep(
+    [data-frame^='graphInput_']:focus-visible [data-frame^='graphPortSurface_']
+  ),
+.graph-plane
+  :deep(
+    [data-frame^='graphOutput_']:focus-visible [data-frame^='graphPortSurface_']
+  ) {
   transform: scale(1.45);
   filter: brightness(1.35);
 }
