@@ -1,4 +1,7 @@
-# TACTIC Stream
+# TACTIC Stream development
+
+For the product walkthrough, current screenshots, and deployment choices, see
+the [repository README](../README.md) or its [Russian edition](../README.ru.md).
 
 TACTIC Stream is a Python 3.14+ TACTIC server with a Vue web client. The Python
 package and CLI are `tactic-stream`; the source namespace is `tactic_stream`.
