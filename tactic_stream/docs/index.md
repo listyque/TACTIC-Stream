@@ -6,6 +6,9 @@ client; its Python objects and local execution are not server APIs.
 
 | Need | Start here |
 | --- | --- |
+| Product, workflow, docks and administration | [Product tour](../../README.md) · [Русский](../../README.ru.md) |
+| Built-in project assistant | [Presentation](presentations/assistant.en.md) · [Русский](presentations/assistant.ru.md) |
+| Custom dashboards and page authoring | [Presentation](presentations/dashboards.en.md) · [Русский](presentations/dashboards.ru.md) |
 | Install and run Stream | [Application README](../README.md) |
 | Understand source ownership | [Architecture](architecture.md) |
 | Configure projects through an external administrator agent | [Agent start](admin_agent/START.md), [MCP connection and implemented tools](admin_agent/CONNECTION.md), task-specific [source references](admin_agent/SOURCES.md) |
