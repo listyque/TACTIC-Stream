@@ -6,7 +6,8 @@ client; its Python objects and local execution are not server APIs.
 
 | Need | Start here |
 | --- | --- |
-| Product, workflow, docks and administration | [Product tour](../../README.md) · [Русский](../../README.ru.md) |
+| Visual presentation | [English](../../README.md) · [Русский](../../README.ru.md) |
+| Product, workflow, docks and administration | [Full product tour](presentations/product-tour.en.md) · [Русский](presentations/product-tour.ru.md) |
 | Built-in project assistant | [Presentation](presentations/assistant.en.md) · [Русский](presentations/assistant.ru.md) |
 | Custom dashboards and page authoring | [Presentation](presentations/dashboards.en.md) · [Русский](presentations/dashboards.ru.md) |
 | Install and run Stream | [Application README](../README.md) |
