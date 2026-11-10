@@ -2,7 +2,7 @@
 
 **Организуйте работу студии — от устройства проекта до сдачи файлов.**
 
-[English](README.md) · **[Начать работу](#начать-работу)** · [Почему Stream](#почему-stream) · [Обзор возможностей](tactic_stream/docs/presentations/product-tour.ru.md) · [Документация](tactic_stream/docs/index.md)
+[English](README.md) · **[Начать работу](#запустить-stream-и-создать-проект)** · [Почему Stream](#зачем-понадобился-форк-tactic) · [Обзор возможностей](tactic_stream/docs/presentations/product-tour.ru.md) · [Документация](tactic_stream/docs/index.md)
 
 Модель согласовали, риг ещё в работе, а аниматору уже нужна сцена для теста. На такой передаче сходятся задачи, решения ревью и конкретные файлы. TACTIC Stream помогает видеть их вместе: описать объекты проекта, настроить этапы работы и понять, что уже можно передать дальше. Команда работает в браузере, а TACTIC Handler добавляет нативный desktop и работу с Maya.
 
@@ -10,15 +10,15 @@
 
 > **Прототип в разработке.** Stream активно развивается. Perforce-like File Workspace также остаётся прототипом.
 
-## Почему Stream
+## Зачем понадобился форк TACTIC
 
 В TACTIC уже была сильная основа: студия могла описать собственные объекты, связи, процессы и правила публикации. Stream — самостоятельный форк, в котором эта гибкость получает новые рабочие инструменты: сервер на Python 3.14, браузерное приложение на Vue и визуальные редакторы проекта. Сервер и интерфейс развиваются вместе, чтобы студия могла настроить свой процесс и работать в нём каждый день. Название связано с этим замыслом: работа проходит через людей и этапы, а её данные и файлы остаются связаны.
 
 Отсюда и устройство продукта. Схема определяет, с чем работает команда; workflow — что должно произойти дальше; задачи — кто этим занимается; snapshots — какие файлы действительно сданы. Визуальные редакторы позволяют настраивать эти части вместе. Общие описания Tactic Frame используются в браузерном Stream и настольном Handler, у которого есть собственные возможности для локальных файлов и Maya.
 
-[Что унаследовано от TACTIC, что меняет Stream и зачем →](tactic_stream/docs/presentations/product-tour.ru.md#зачем-существует-проект)
+[Что унаследовано от TACTIC, что меняет Stream и зачем →](tactic_stream/docs/presentations/product-tour.ru.md#зачем-понадобился-форк-tactic)
 
-## Начать работу
+## Запустить Stream и создать проект
 
 | Вариант запуска | С чего начать |
 | --- | --- |
@@ -28,41 +28,41 @@
 
 При первом запуске установщик предложит задать пароль администратора. Откройте или создайте проект, настройте его данные и подключите команду.
 
-## Возможности Stream
+## Как устроена работа в Stream
 
-### За графом стоит исполняемый движок
+### Workflow: этапы, зависимости и действия
 
 После моделинга lookdev и риг могут идти параллельно, а перед публикацией может понадобиться согласование. Такой маршрут описывается в Workflow. За узлами графа стоят серверные правила: создать следующие задачи, проверить условие, вызвать действие или отправить уведомление. Редактор позволяет увидеть маршрут целиком и разобраться в настройках каждого этапа.
 
 ![Редактор Workflow: связанные этапы производства и ревью](tactic_stream/docs/assets/product-tour/workflow.png)
 
-[Workflow: от описания к исполнению →](tactic_stream/docs/presentations/product-tour.ru.md#workflow--исполняемый-движок-процессов)
+[Workflow: от описания к исполнению →](tactic_stream/docs/presentations/product-tour.ru.md#workflow-что-запускается-после-завершения-этапа)
 
-### Соберите интерфейс под вашу команду
+### Рабочее место для каждого отдела
 
 При ревью важнее изображение и замечания, при планировании — задачи и даты. Доки позволяют расставить нужные панели рядом и сохранить удобную раскладку. Item View показывает сами объекты и их содержимое; Sidebar Editor, Item Layouts и редактор страниц помогают сделать из этих инструментов рабочее место конкретного отдела.
 
 ![Композиция доков: визуальные объекты, задачи и превью публикаций](tactic_stream/docs/assets/product-tour/docks-planning.png)
 
-[Item View →](tactic_stream/docs/presentations/product-tour.ru.md#рабочее-пространство-начинается-с-объекта) · [Доки →](tactic_stream/docs/presentations/product-tour.ru.md#доки-собрать-интерфейс-под-конкретную-работу) · [Sidebar Editor →](tactic_stream/docs/presentations/product-tour.ru.md#sidebar-editor-навигация-как-часть-рабочего-процесса)
+[Item View →](tactic_stream/docs/presentations/product-tour.ru.md#item-view-найти-ассет-и-увидеть-его-содержимое) · [Доки →](tactic_stream/docs/presentations/product-tour.ru.md#доки-для-ревью-планирования-и-сдачи) · [Sidebar Editor →](tactic_stream/docs/presentations/product-tour.ru.md#sidebar-editor-каждый-отдел-начинает-со-своего-экрана)
 
-### У плана появляются исполнители и сроки
+### Кому передать работу и на какой срок
 
 Список задач отвечает на вопрос, кому что делать. Gantt помогает увидеть, как эта работа помещается в расписание. От задачи можно вернуться к объекту и его обсуждению; договорённости команды остаются в Messages. Если нужно восстановить, почему изменился план или статус, есть обзор объекта и история серверных событий.
 
 ![Gantt: производственные задачи в расписании команды](tactic_stream/docs/assets/product-tour/gantt.png)
 
-[Планирование →](tactic_stream/docs/presentations/product-tour.ru.md#планирование-и-ежедневная-работа) · [Notes и Messages →](tactic_stream/docs/presentations/product-tour.ru.md#общение-с-сохранением-контекста)
+[Планирование →](tactic_stream/docs/presentations/product-tour.ru.md#распределить-работу-и-следить-за-сроками) · [Notes и Messages →](tactic_stream/docs/presentations/product-tour.ru.md#messages-и-notes-обсудить-работу-и-сохранить-решения)
 
-### Файлы сохраняют производственный контекст
+### У каждой сдачи есть объект и версия
 
 Когда файл попадает к следующему участнику, важно знать, к чему он относится и какая это версия. Чекин записывает публикацию у объекта и процесса, Naming Editor задаёт её имя и путь, а Snapshot Browser позволяет вернуться к нужным файлам. Handler дополняет этот путь локальной синхронизацией и открытием сцен в Maya.
 
 ![Snapshot Browser: публикации Survey Drone и предпросмотр файлов](tactic_stream/docs/assets/product-tour/snapshot-browser.png)
 
-[Чекин, версии, нейминг и сдача →](tactic_stream/docs/presentations/product-tour.ru.md#от-рабочего-файла-к-отслеживаемой-публикации)
+[Чекин, версии, нейминг и сдача →](tactic_stream/docs/presentations/product-tour.ru.md#чекин-и-чекаут-передать-файл-следующему-участнику)
 
-### Превратите данные в рабочую страницу
+### Загрузка команды и ассеты на одной странице
 
 Начните с вопроса, на который должна отвечать страница: что сегодня на ревью, где накопилась работа или чем занят отдел. В Dashboard Editor можно поставить рядом нужные показатели, диаграммы и Item View, а затем добавить действия над выбранным объектом. Так сводка помогает перейти к конкретной задаче.
 
@@ -70,7 +70,7 @@
 
 [Дашборды и визуальное создание страниц →](tactic_stream/docs/presentations/dashboards.ru.md)
 
-### Задайте вопрос в контексте проекта
+### Помощник сопоставит задачи и публикации
 
 Иногда быстрее попросить собрать картину: что готово у выбранного ассета, какие версии опубликованы и чего ещё не хватает. Помощник читает записи проекта через доступные инструменты и показывает результаты своей работы. В демонстрационном запросе он обнаружил, что завершённая задача моделинга ещё не подкреплена публикацией модели.
 
@@ -78,7 +78,7 @@
 
 [Чат-бот: провайдеры, инструменты и возможности →](tactic_stream/docs/presentations/assistant.ru.md)
 
-### Соберите общий справочник команды
+### Общий справочник по работе в проекте
 
 Вводные для новичка, требования к сдаче и технические решения полезно хранить там, где команда работает каждый день. В базе знаний статья может быть связана с конкретными объектами и содержать примеры файлов. Автор пишет в Visual или Markdown, сохраняет черновик и публикует готовый материал; читатель находит его через дерево и поиск.
 
@@ -92,17 +92,17 @@
 
 [Презентация встроенной справки →](tactic_stream/docs/presentations/help.ru.md)
 
-## Развивайте платформу под свой процесс
+## Настроить проект под процесс студии
 
 | Область | Подробнее |
 | --- | --- |
-| **Модель и администрирование** | [Схемы и визуальные редакторы](tactic_stream/docs/presentations/product-tour.ru.md#administration-настройка-самого-проекта), [пользователи и права](tactic_stream/docs/presentations/product-tour.ru.md#пользователи-группы-и-итоговые-права), [конфигурация](tactic_stream/docs/presentations/product-tour.ru.md#configuration-подключение-хранение-и-ежедневные-настройки). |
-| **Контекст и события** | [Обзор объекта](tactic_stream/docs/presentations/product-tour.ru.md#обзор-объекта-целостная-производственная-запись) и [история сервера](tactic_stream/docs/presentations/product-tour.ru.md#история-на-сервере-понять-что-произошло). |
-| **Скрипты и интеграции** | [Script Editor и полки](tactic_stream/docs/presentations/product-tour.ru.md#script-editor-полки-и-автоматизация), [серверные API](tactic_stream/docs/admin_agent/SOURCES.md#ts-server-api), [окружение разработчика](tactic_stream/README.md). |
-| **Язык интерфейса** | [Tactic Frame](tactic_stream/docs/presentations/product-tour.ru.md#tactic-frame-единое-описание-два-нативных-интерфейса): общее описание UI, нативные контролы Vue и Qt Quick. |
+| **Модель и администрирование** | [Схемы и визуальные редакторы](tactic_stream/docs/presentations/product-tour.ru.md#administration-описать-объекты-и-связи-вашего-проекта), [пользователи и права](tactic_stream/docs/presentations/product-tour.ru.md#подключить-людей-и-настроить-доступ), [конфигурация](tactic_stream/docs/presentations/product-tour.ru.md#configuration-сервер-репозитории-и-личные-настройки). |
+| **Контекст и события** | [Обзор объекта](tactic_stream/docs/presentations/product-tour.ru.md#всё-что-происходило-с-ассетом) и [история сервера](tactic_stream/docs/presentations/product-tour.ru.md#activity-feed-кто-и-что-изменил-в-проекте). |
+| **Скрипты и интеграции** | [Script Editor и полки](tactic_stream/docs/presentations/product-tour.ru.md#script-editor-написать-скрипт-и-дать-команде-инструмент), [серверные API](tactic_stream/docs/admin_agent/SOURCES.md#ts-server-api), [окружение разработчика](tactic_stream/README.md). |
+| **Язык интерфейса** | [Tactic Frame](tactic_stream/docs/presentations/product-tour.ru.md#tactic-frame-общий-язык-интерфейсов-handler-и-stream): общее описание UI, нативные контролы Vue и Qt Quick. |
 
 **[Полный обзор продукта →](tactic_stream/docs/presentations/product-tour.ru.md)** · [Вся документация](tactic_stream/docs/index.md)
 
 Скриншоты сняты в текущем приложении на изолированном Orbit Studio; данные и иллюстрации демонстрационные. Stream и Handler поставляются независимо. Совместимость с оригинальным TACTIC описана в [карте проверок и ограничений](tactic_stream/docs/compatibility.md).
 
-Основан на [Southpaw TACTIC](https://github.com/Southpaw-TACTIC/TACTIC). [Лицензия TACTIC](tactic_stream/LICENSE.TACTIC) · [Лицензии компонентов](tactic_stream/docs/presentations/product-tour.en.md#scope-and-provenance).
+Основан на [Southpaw TACTIC](https://github.com/Southpaw-TACTIC/TACTIC). [Лицензия TACTIC](tactic_stream/LICENSE.TACTIC) · [Лицензии компонентов](tactic_stream/docs/presentations/product-tour.en.md#compatibility-limitations-and-licenses).
