@@ -1,75 +1,110 @@
-# TACTIC Stream
+# ![TACTIC Stream](tactic_stream/docs/assets/readme/wordmark.svg)
 
-### From incoming work to a finished deliverable
+**A production platform connecting project data, people, processes and files.**
 
-A configurable production platform connecting project data, workflow, people and published files in one workspace. Python · Vue · Tactic Frame.
+[Русский](README.ru.md) · **[Get started](#get-started)** · [Why Stream](#why-stream) · [Feature tour](tactic_stream/docs/presentations/product-tour.en.md) · [Documentation](tactic_stream/docs/index.md)
 
-[Русский](README.ru.md) · [Why Stream](#tactic-foundations-a-stream-workspace) · [Full feature tour](tactic_stream/docs/presentations/product-tour.en.md) · [Get started](#get-started)
+Model your studio's work, define its route through production and bring the team into a shared browser workspace. TACTIC Stream connects configurable objects, an executable workflow engine, planning, review and versioned publications. TACTIC Handler provides the native desktop companion.
 
-![TACTIC Stream: visual project asset workspace](tactic_stream/docs/assets/product-tour/item-view.png)
+![TACTIC Stream Item View: visual assets in a real project workspace](tactic_stream/docs/assets/product-tour/item-view.png)
 
-> **Development prototype.** The Perforce-like File Workspace is also a prototype.
+> **Development prototype.** Stream is under active development. The Perforce-like File Workspace is also a prototype.
 
-## TACTIC foundations. A Stream workspace.
+## Why Stream
 
-Stream carries forward TACTIC's configurable entities, relationships, pipelines, permissions and file versions. The fork develops that foundation alongside a modern Python server, browser workspace and visual editors. Its name describes the continuous handoff from a task through review to publication.
+The fork carries TACTIC's configurable data model, workflow, permissions and file publications into a modern Python server and Vue workspace. **Stream** describes the connected path from incoming work through review to delivery.
 
-[Why the fork exists and what it changes →](tactic_stream/docs/presentations/product-tour.en.md#why-this-project-exists)
+- **Keep the TACTIC foundation.** Objects, relationships, pipelines and snapshots remain the core production concepts.
+- **Make the project editable.** Visual tools expose schemas, workflows, naming, sidebars, layouts and access rules.
+- **Connect browser and desktop.** Tactic Frame describes shared interfaces for Vue and native Qt Quick; Handler adds local repositories and Maya integration.
 
-## An interface shaped around the team
-
-Item View, trees and tables show the same records at different levels of detail. Docks bring objects, tasks and previews together. Card, page and sidebar editors shape that workspace around a department or a particular process.
-
-![Planning and review composition: objects, tasks and publications](tactic_stream/docs/assets/product-tour/docks-planning.png)
-
-[Item View →](tactic_stream/docs/presentations/product-tour.en.md#a-workspace-built-around-the-item) · [Docks →](tactic_stream/docs/presentations/product-tour.en.md#docks-assemble-the-interface-around-a-job) · [Sidebar Editor →](tactic_stream/docs/presentations/product-tour.en.md#sidebar-editor-turn-navigation-into-a-workflow)
-
-## Workflow connects production stages
-
-Describe the object's route through manual work, actions, conditions, approvals and dependencies. The server engine executes configured transitions; the graph and process inspector make the logic visible.
-
-![Workflow: production process graph](tactic_stream/docs/assets/product-tour/workflow.png)
-
-[Workflow engine: from definition to execution →](tactic_stream/docs/presentations/product-tour.en.md#workflow-is-an-execution-engine)
-
-## Plans, people and decisions together
-
-Task Manager, Gantt and the calendar connect assignments and dates. Notes preserve object and process discussions; Messages supports team conversations. Object reports and server history bring you back to the context behind a decision.
-
-![Gantt: team tasks on the production timeline](tactic_stream/docs/assets/product-tour/gantt.png)
-
-[Planning →](tactic_stream/docs/presentations/product-tour.en.md#plan-the-work-then-follow-it-through) · [Messages →](tactic_stream/docs/presentations/product-tour.en.md#conversations-that-retain-production-context) · [Object overview →](tactic_stream/docs/presentations/product-tour.en.md#object-overview-the-complete-production-record) · [History →](tactic_stream/docs/presentations/product-tour.en.md#server-activity-understand-what-happened)
-
-## Files keep their production context
-
-Check-in connects a publication to its object, process and version. Naming Editor defines names and destinations. Snapshot Browser displays published files and previews; Handler adds local Repository Sync and Maya integration.
-
-![Snapshot Browser: two actual Survey Drone publications](tactic_stream/docs/assets/product-tour/snapshot-browser.png)
-
-[Publication, versions and naming →](tactic_stream/docs/presentations/product-tour.en.md#from-working-file-to-traceable-publication)
-
-## Turn project data into working tools
-
-| Built-in assistant | Custom dashboards |
-| --- | --- |
-| ![Assistant preparing a report from selected-object records](tactic_stream/docs/assets/product-tour/assistant.png) | ![Production dashboard: metrics, statuses, workload and assets](tactic_stream/docs/assets/product-tour/dashboard-overview.png) |
-| Ask about real records, prepare changes and inspect the operations. **[Explore the assistant →](tactic_stream/docs/presentations/assistant.en.md)** | Put metrics, charts, Item View and actions on a team page. **[Explore dashboards →](tactic_stream/docs/presentations/dashboards.en.md)** |
-
-## Knowledge inside the workspace
-
-| Built-in Help | Project Knowledge Base |
-| --- | --- |
-| ![Help: topic catalog and instructions for the working tools](tactic_stream/docs/assets/product-tour/help.png) | ![Knowledge Base: article, linked asset and heading outline](tactic_stream/docs/assets/product-tour/knowledge-base.png) |
-| Understand a tool inside the application: contextual articles, full-text search, EN/RU and Markdown download. **[Explore Help →](tactic_stream/docs/presentations/help.en.md)** | Turn team experience into articles with Visual / Markdown, attachments, object links, drafts and history. **[Explore Knowledge Base →](tactic_stream/docs/presentations/knowledge-base.en.md)** |
-
-## Configure the data model and the interface
-
-**Tactic Frame** describes shared interfaces for Vue and native Qt Quick. Visual editors, Script Editor, tool shelves and server APIs let the project evolve with the production.
-
-[Tactic Frame →](tactic_stream/docs/presentations/product-tour.en.md#tactic-frame-one-ui-description-two-native-renderers) · [Scripts →](tactic_stream/docs/presentations/product-tour.en.md#script-editor-shelves-and-production-automation) · [Administration →](tactic_stream/docs/presentations/product-tour.en.md#administration-shape-the-project-itself) · [Users and access →](tactic_stream/docs/presentations/product-tour.en.md#users-groups-and-effective-access) · [Configuration →](tactic_stream/docs/presentations/product-tour.en.md#configuration-connection-storage-and-daily-behavior)
+[What comes from TACTIC, what Stream changes, and why →](tactic_stream/docs/presentations/product-tour.en.md#why-this-project-exists)
 
 ## Get started
 
-[Windows / SQLite](tactic_stream/docs/delivery/WINDOWS_DELIVERY.en.md) · [Linux / PostgreSQL](tactic_stream/docs/delivery/SERVER_DELIVERY.en.md) · [Run from source](tactic_stream/docs/presentations/product-tour.en.md#run-it-and-extend-it) · [All documentation](tactic_stream/docs/index.md)
+| Run Stream | Start here |
+| --- | --- |
+| **Windows desktop / SQLite** | [Portable package guide](tactic_stream/docs/delivery/WINDOWS_DELIVERY.en.md): local application, repository and optional native Handler. |
+| **Linux server / PostgreSQL** | [Server deployment guide](tactic_stream/docs/delivery/SERVER_DELIVERY.en.md): Docker Compose, Apache and a dedicated database. |
+| **From source** | [Local development](tactic_stream/README.md#local-development): Python 3.14, editable installation and the repository launcher. |
 
-Captures use the current application on isolated Orbit Studio data; the records and artwork are illustrative. [Compatibility scope](tactic_stream/docs/compatibility.md) · [TACTIC license](tactic_stream/LICENSE.TACTIC) · [Original Southpaw TACTIC](https://github.com/Southpaw-TACTIC/TACTIC).
+The first setup asks you to create the administrator password. Open or create a project, configure its data and invite the team.
+
+## Inside Stream
+
+### A workflow engine behind the graph
+
+Describe manual work, actions, conditions, approvals and dependencies. The server executes configured transitions; the graph editor and process inspector expose their rules. Tasks and published versions stay attached to the objects moving through that process.
+
+![Workflow editor: connected production stages and review](tactic_stream/docs/assets/product-tour/workflow.png)
+
+[Workflow: from definition to execution →](tactic_stream/docs/presentations/product-tour.en.md#workflow-is-an-execution-engine)
+
+### Compose the workspace your team needs
+
+Browse with Item View, continuous trees or tables. Split and stack docks to keep objects, tasks, notes and previews together. Sidebar Editor, Item Layouts and page editors shape navigation and presentation around the department.
+
+![Dock composition: visual objects, tasks and publication previews](tactic_stream/docs/assets/product-tour/docks-planning.png)
+
+[Item View →](tactic_stream/docs/presentations/product-tour.en.md#a-workspace-built-around-the-item) · [Docks →](tactic_stream/docs/presentations/product-tour.en.md#docks-assemble-the-interface-around-a-job) · [Sidebar Editor →](tactic_stream/docs/presentations/product-tour.en.md#sidebar-editor-turn-navigation-into-a-workflow)
+
+### Give the plan people and dates
+
+Task Manager, Gantt and the calendar connect assignments, schedules and progress. Notes preserve review decisions on the object; Messages supports the team conversation. Object overview and server history help trace what happened.
+
+![Gantt: production tasks arranged across the team's schedule](tactic_stream/docs/assets/product-tour/gantt.png)
+
+[Planning →](tactic_stream/docs/presentations/product-tour.en.md#plan-the-work-then-follow-it-through) · [Notes and Messages →](tactic_stream/docs/presentations/product-tour.en.md#conversations-that-retain-production-context)
+
+### Deliver files with their context intact
+
+Check-in associates files with an object, process and version. Naming Editor defines names and repository paths; Snapshot Browser returns to the required publication. Native Handler extends this workflow with local Repository Sync and Maya scene operations.
+
+![Snapshot Browser: Survey Drone publications and file previews](tactic_stream/docs/assets/product-tour/snapshot-browser.png)
+
+[Check-in, versions, naming and delivery →](tactic_stream/docs/presentations/product-tour.en.md#from-working-file-to-traceable-publication)
+
+### Turn project data into a working page
+
+Compose metrics, charts, Item View and actions in Dashboard Editor. Build a production overview, a department page or a review desk that responds to the current selection.
+
+![Custom dashboard: live project metrics, workload and visual records](tactic_stream/docs/assets/product-tour/dashboard-overview.png)
+
+[Dashboards and visual page authoring →](tactic_stream/docs/presentations/dashboards.en.md)
+
+### Ask questions in project context
+
+The built-in assistant can inspect real records, explain results and prepare operations using available tools. Keep the selected object in the conversation and examine the work behind an answer.
+
+![Project assistant examining production records](tactic_stream/docs/assets/product-tour/assistant.png)
+
+[Assistant: providers, tools and capabilities →](tactic_stream/docs/presentations/assistant.en.md)
+
+### Give the team a shared handbook
+
+Knowledge Base connects searchable sections and articles to project objects. Write in Visual or Markdown, attach reference files, save drafts and publish instructions with article history.
+
+![Knowledge Base: a delivery checklist linked to a production asset](tactic_stream/docs/assets/product-tour/knowledge-base.png)
+
+[Knowledge Base: authoring and publishing →](tactic_stream/docs/presentations/knowledge-base.en.md)
+
+Built-in Help explains the application: contextual articles, topic search, English/Russian content and Markdown downloads are available inside the workspace.
+
+![Built-in Help: application documentation with a searchable topic catalog](tactic_stream/docs/assets/product-tour/help.png)
+
+[Explore built-in Help →](tactic_stream/docs/presentations/help.en.md)
+
+## Build on the platform
+
+| Area | Explore |
+| --- | --- |
+| **Model and administration** | [Schemas and visual editors](tactic_stream/docs/presentations/product-tour.en.md#administration-shape-the-project-itself), [users and access](tactic_stream/docs/presentations/product-tour.en.md#users-groups-and-effective-access), [configuration](tactic_stream/docs/presentations/product-tour.en.md#configuration-connection-storage-and-daily-behavior). |
+| **Context and activity** | [Object overview](tactic_stream/docs/presentations/product-tour.en.md#object-overview-the-complete-production-record) and [server history](tactic_stream/docs/presentations/product-tour.en.md#server-activity-understand-what-happened). |
+| **Scripts and integrations** | [Script Editor and shelves](tactic_stream/docs/presentations/product-tour.en.md#script-editor-shelves-and-production-automation), [server APIs](tactic_stream/docs/admin_agent/SOURCES.md#ts-server-api), [development setup](tactic_stream/README.md). |
+| **Interface language** | [Tactic Frame](tactic_stream/docs/presentations/product-tour.en.md#tactic-frame-one-ui-description-two-native-renderers): one shared UI description, native controls in Vue and Qt Quick. |
+
+**[Full product tour →](tactic_stream/docs/presentations/product-tour.en.md)** · [All documentation](tactic_stream/docs/index.md)
+
+Screenshots are current application captures on isolated Orbit Studio data; records and artwork are illustrative. Stream and Handler ship independently. Original TACTIC compatibility is documented by [scope and verification](tactic_stream/docs/compatibility.md).
+
+Built from [Southpaw TACTIC](https://github.com/Southpaw-TACTIC/TACTIC). [TACTIC license](tactic_stream/LICENSE.TACTIC) · [Third-party licenses](tactic_stream/docs/presentations/product-tour.en.md#scope-and-provenance).
