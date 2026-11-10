@@ -2,7 +2,7 @@
 
 **Управление ассетами и производством.**
 
-[English](README.md) · **[Начать работу](#запуск-и-первый-проект)** · [Почему Stream](#зачем-понадобился-форк-tactic) · [Возможности](#основные-возможности) · [Обзор возможностей](tactic_stream/docs/presentations/product-tour.ru.md) · [Документация](tactic_stream/docs/index.md)
+[English](README.md) · **[Начать работу](#запуск-и-первый-проект)** · [Почему Stream](#зачем-понадобился-форк-tactic) · [Возможности](#основные-возможности) · [Обзор возможностей](https://github.com/listyque/TACTIC-Stream/wiki/Tour-product-tour-ru) · [Документация](https://github.com/listyque/TACTIC-Stream/wiki/Home-ru)
 
 TACTIC Stream — **платформа управления производством, данными проекта и версиями файлов**, которую можно развернуть на своём компьютере или сервере. Она включает сервер и браузерное приложение: команда ведёт ассеты и шоты, назначает задачи, обсуждает работу и публикует файлы. Stream написан на **Python 3.14 и Vue 3** и развивается как форк **Southpaw TACTIC**.
 
@@ -39,24 +39,24 @@ TACTIC Stream — **платформа управления производст
 | **Страницы отделов** | Визуальный редактор дашбордов, переиспользуемые виджеты и пакеты проекта. | Из реальных записей проекта можно собрать обзор отдела или страницу сдачи и перенести её в другой проект. |
 | **Помощь в работе** | Помощник с контекстом проекта и журналом операций, редактируемая база знаний и справка с поиском. | Можно задавать вопросы о текущей работе, просматривать подготовленные изменения и держать инструкции рядом с данными. |
 
-Stream сохраняет модель TACTIC и поддерживаемые API; перенос старых конфигураций, скриптов и плагинов требует сверки с [картой совместимости](tactic_stream/docs/compatibility.md). Для старой подсистемы production и части исторических виджетов действуют исключения.
+Stream сохраняет модель TACTIC и поддерживаемые API; перенос старых конфигураций, скриптов и плагинов требует сверки с [картой совместимости](https://github.com/listyque/TACTIC-Stream/wiki/TACTIC-compatibility). Для старой подсистемы production и части исторических виджетов действуют исключения.
 
-[Основа TACTIC и её развитие в Stream →](tactic_stream/docs/presentations/product-tour.ru.md#что-изменилось-в-stream)
+[Основа TACTIC и её развитие в Stream →](https://github.com/listyque/TACTIC-Stream/wiki/Tour-product-tour-ru#что-изменилось-в-stream)
 
 ## Основные возможности
 
 | Область | Что можно делать |
 | --- | --- |
-| **Данные проекта** | Создавать свои типы объектов, поля, формы и связи. Начинать с пустого проекта или шаблона и управлять структурой через [Administration](tactic_stream/docs/presentations/product-tour.ru.md#администрирование-проекта). |
+| **Данные проекта** | Создавать свои типы объектов, поля, формы и связи. Начинать с пустого проекта или шаблона и управлять структурой через [Administration](https://github.com/listyque/TACTIC-Stream/wiki/Tour-product-tour-ru#администрирование-проекта). |
 | **Движок Workflow** | Собирать pipelines с ручными этапами, согласованиями, действиями, условиями и вложенными процессами. Сервер обрабатывает настроенные события, задачи, скрипты и уведомления; редактор показывает граф и параметры узлов. |
 | **Поиск и Item View** | Искать по тексту, тегам, полям и связанным данным; сохранять поиски; раскрывать связи, процессы и версии объекта. Выбирать карточки, строки или редактируемые таблицы. |
-| **Задачи и планирование** | Назначать работу, менять статусы и даты, редактировать задачи массово, планировать в [Task Manager, Gantt и календаре](tactic_stream/docs/presentations/product-tour.ru.md#планирование). Учитывать рабочее время и просматривать историю задач. |
+| **Задачи и планирование** | Назначать работу, менять статусы и даты, редактировать задачи массово, планировать в [Task Manager, Gantt и календаре](https://github.com/listyque/TACTIC-Stream/wiki/Tour-product-tour-ru#планирование). Учитывать рабочее время и просматривать историю задач. |
 | **Файлы и публикации** | Готовить загрузки в Drop Plate и Commit Queue, чекинить версии в snapshots, просматривать файлы и превью, настраивать нейминг и пути репозитория. |
 | **Ревью и общение** | Хранить Notes у объекта или процесса, переписываться в Messages, открывать обзор объекта и следить за событиями сервера. |
-| **Рабочее пространство и дашборды** | Расставлять доки, сохранять раскладки, оформлять карточки и собирать [страницы](tactic_stream/docs/presentations/dashboards.ru.md) из показателей, диаграмм, Item View и действий. Назначать представления и доступ через Sidebar Editor. |
+| **Рабочее пространство и дашборды** | Расставлять доки, сохранять раскладки, оформлять карточки и собирать [страницы](https://github.com/listyque/TACTIC-Stream/wiki/Tour-dashboards-ru) из показателей, диаграмм, Item View и действий. Назначать представления и доступ через Sidebar Editor. |
 | **Пользователи и администрирование** | Управлять учётными записями, группами и правами в проектах; просматривать конфигурацию и сведения о сервере через приложение. |
 | **Скрипты, API и пакеты** | Писать и запускать серверные скрипты в Script Editor, выносить инструменты на полки, обращаться к Python/XML-RPC/HTTP API, распространять ресурсы проекта как плагины и шаблоны. |
-| **Справка, знания и помощник** | Читать встроенную EN/RU-справку, публиковать статьи студии с вложениями и историей редакций, поручать [помощнику](tactic_stream/docs/presentations/assistant.ru.md) разбор данных и подготовку поддерживаемых изменений. |
+| **Справка, знания и помощник** | Читать встроенную EN/RU-справку, публиковать статьи студии с вложениями и историей редакций, поручать [помощнику](https://github.com/listyque/TACTIC-Stream/wiki/Tour-assistant-ru) разбор данных и подготовку поддерживаемых изменений. |
 
 Браузер работает с проектом, загрузкой и скачиванием файлов. Синхронизация локального репозитория, наблюдение за папками рабочего компьютера и операции со сценами Maya относятся к Handler.
 
@@ -69,8 +69,8 @@ Stream сохраняет модель TACTIC и поддерживаемые AP
 
 В репозитории есть два устанавливаемых примера:
 
-- **[Studio Review](examples/studio_review/README.ru.md)** добавляет тип ревью, примеры записей, пункт sidebar, переиспользуемые виджеты, тему и Python-действие согласования. На нём видно, как пакет проекта объединяет данные, интерфейс и поведение.
-- **[Workspace Pulse](examples/workspace_pulse/README.ru.md)** добавляет сводку по задачам и срокам, диаграммы, очередь с поиском и обзор VFX по существующим типам проекта. Его страницы можно дальше менять в Page Editor.
+- **[Studio Review](https://github.com/listyque/TACTIC-Stream/wiki/Studio-Review-ru)** добавляет тип ревью, примеры записей, пункт sidebar, переиспользуемые виджеты, тему и Python-действие согласования. На нём видно, как пакет проекта объединяет данные, интерфейс и поведение.
+- **[Workspace Pulse](https://github.com/listyque/TACTIC-Stream/wiki/Workspace-Pulse-ru)** добавляет сводку по задачам и срокам, диаграммы, очередь с поиском и обзор VFX по существующим типам проекта. Его страницы можно дальше менять в Page Editor.
 
 Начать можно с конфигурации проекта и визуальных редакторов. Для своих правил добавить скрипты, а затем упаковать настройку, если она нужна и другим проектам.
 
@@ -86,15 +86,15 @@ Stream сохраняет модель TACTIC и поддерживаемые AP
 | Настольный пакет | **Electron** показывает интерфейс Stream и управляет комплектным локальным Python-сервером. Handler — отдельный нативный клиент на **PySide6 / Qt Quick**. |
 | Серверная поставка | Linux-контейнеры с **Docker Compose, Apache и PostgreSQL**. |
 
-[Архитектура](tactic_stream/docs/architecture.md) · [Зависимости Python](tactic_stream/pyproject.toml) · [Зависимости интерфейса](tactic_stream/frontend/package.json) · [Tactic Frame](tactic_stream/docs/frame/index.md)
+[Архитектура](https://github.com/listyque/TACTIC-Stream/wiki/Architecture) · [Зависимости Python](tactic_stream/pyproject.toml) · [Зависимости интерфейса](tactic_stream/frontend/package.json) · [Tactic Frame](https://github.com/listyque/TACTIC-Stream/wiki/Frame)
 
 ## Запуск и первый проект
 
 | Вариант запуска | С чего начать |
 | --- | --- |
-| **Windows / SQLite** | [Инструкция для переносимого пакета](tactic_stream/docs/delivery/WINDOWS_DELIVERY.ru.md): локальное приложение, репозиторий и дополнительный нативный Handler. |
-| **Linux / PostgreSQL** | [Развёртывание сервера](tactic_stream/docs/delivery/SERVER_DELIVERY.ru.md): Docker Compose, Apache и отдельная база данных. |
-| **Из исходников** | [Локальная разработка](tactic_stream/README.md#local-development): Python 3.14, editable-установка и лаунчер репозитория. |
+| **Windows / SQLite** | [Инструкция для переносимого пакета](https://github.com/listyque/TACTIC-Stream/wiki/Windows-ru): локальное приложение, репозиторий и дополнительный нативный Handler. |
+| **Linux / PostgreSQL** | [Развёртывание сервера](https://github.com/listyque/TACTIC-Stream/wiki/Server-ru): Docker Compose, Apache и отдельная база данных. |
+| **Из исходников** | [Локальная разработка](https://github.com/listyque/TACTIC-Stream/wiki/Development#local-development): Python 3.14, editable-установка и лаунчер репозитория. |
 
 При первом запуске установщик предложит задать пароль администратора. Откройте или создайте проект, настройте его данные и подключите команду.
 
@@ -106,7 +106,7 @@ Stream сохраняет модель TACTIC и поддерживаемые AP
 
 ![Редактор Workflow: связанные этапы производства и ревью](tactic_stream/docs/assets/product-tour/workflow.png)
 
-[Workflow: от описания к исполнению →](tactic_stream/docs/presentations/product-tour.ru.md#workflow-граф-и-исполнение)
+[Workflow: от описания к исполнению →](https://github.com/listyque/TACTIC-Stream/wiki/Tour-product-tour-ru#workflow-граф-и-исполнение)
 
 ### Настройка рабочего пространства
 
@@ -114,7 +114,7 @@ Stream сохраняет модель TACTIC и поддерживаемые AP
 
 ![Композиция доков: визуальные объекты, задачи и превью публикаций](tactic_stream/docs/assets/product-tour/docks-planning.png)
 
-[Item View →](tactic_stream/docs/presentations/product-tour.ru.md#item-view-и-поиск) · [Доки →](tactic_stream/docs/presentations/product-tour.ru.md#доки-и-раскладки) · [Sidebar Editor →](tactic_stream/docs/presentations/product-tour.ru.md#sidebar-editor)
+[Item View →](https://github.com/listyque/TACTIC-Stream/wiki/Tour-product-tour-ru#item-view-и-поиск) · [Доки →](https://github.com/listyque/TACTIC-Stream/wiki/Tour-product-tour-ru#доки-и-раскладки) · [Sidebar Editor →](https://github.com/listyque/TACTIC-Stream/wiki/Tour-product-tour-ru#sidebar-editor)
 
 ### Task Manager и Gantt
 
@@ -122,7 +122,7 @@ Stream сохраняет модель TACTIC и поддерживаемые AP
 
 ![Gantt: производственные задачи в расписании команды](tactic_stream/docs/assets/product-tour/gantt.png)
 
-[Планирование →](tactic_stream/docs/presentations/product-tour.ru.md#планирование) · [Notes и Messages →](tactic_stream/docs/presentations/product-tour.ru.md#messages-и-notes)
+[Планирование →](https://github.com/listyque/TACTIC-Stream/wiki/Tour-product-tour-ru#планирование) · [Notes и Messages →](https://github.com/listyque/TACTIC-Stream/wiki/Tour-product-tour-ru#messages-и-notes)
 
 ### Публикации и версии файлов
 
@@ -130,7 +130,7 @@ Stream сохраняет модель TACTIC и поддерживаемые AP
 
 ![Snapshot Browser: публикации Survey Drone и предпросмотр файлов](tactic_stream/docs/assets/product-tour/snapshot-browser.png)
 
-[Чекин, версии, нейминг и сдача →](tactic_stream/docs/presentations/product-tour.ru.md#чекин-и-чекаут)
+[Чекин, версии, нейминг и сдача →](https://github.com/listyque/TACTIC-Stream/wiki/Tour-product-tour-ru#чекин-и-чекаут)
 
 ### Дашборды
 
@@ -138,7 +138,7 @@ Dashboard Editor собирает на одной странице показа�
 
 ![Кастомный дашборд: показатели проекта, загрузка команды и визуальные записи](tactic_stream/docs/assets/product-tour/dashboard-overview.png)
 
-[Дашборды и визуальное создание страниц →](tactic_stream/docs/presentations/dashboards.ru.md)
+[Дашборды и визуальное создание страниц →](https://github.com/listyque/TACTIC-Stream/wiki/Tour-dashboards-ru)
 
 ### Помощник проекта
 
@@ -146,7 +146,7 @@ Dashboard Editor собирает на одной странице показа�
 
 ![Помощник проекта изучает производственные записи](tactic_stream/docs/assets/product-tour/assistant.png)
 
-[Чат-бот: провайдеры, инструменты и возможности →](tactic_stream/docs/presentations/assistant.ru.md)
+[Чат-бот: провайдеры, инструменты и возможности →](https://github.com/listyque/TACTIC-Stream/wiki/Tour-assistant-ru)
 
 ### База знаний и справка
 
@@ -154,25 +154,25 @@ Dashboard Editor собирает на одной странице показа�
 
 ![База знаний: чеклист сдачи, связанный с производственным ассетом](tactic_stream/docs/assets/product-tour/knowledge-base.png)
 
-[База знаний: подготовка и публикация материалов →](tactic_stream/docs/presentations/knowledge-base.ru.md)
+[База знаний: подготовка и публикация материалов →](https://github.com/listyque/TACTIC-Stream/wiki/Tour-knowledge-base-ru)
 
 Встроенная справка описывает инструменты и настройки приложения. Она открывается из рабочих окон, поддерживает поиск, русский и английский языки и выгрузку статьи в Markdown.
 
 ![Встроенная справка: документация приложения и каталог тем с поиском](tactic_stream/docs/assets/product-tour/help.png)
 
-[Презентация встроенной справки →](tactic_stream/docs/presentations/help.ru.md)
+[Презентация встроенной справки →](https://github.com/listyque/TACTIC-Stream/wiki/Tour-help-ru)
 
 ## Конфигурация и разработка
 
 | Область | Подробнее |
 | --- | --- |
-| **Модель и администрирование** | [Схемы и визуальные редакторы](tactic_stream/docs/presentations/product-tour.ru.md#администрирование-проекта), [пользователи и права](tactic_stream/docs/presentations/product-tour.ru.md#пользователи-и-права), [конфигурация](tactic_stream/docs/presentations/product-tour.ru.md#configuration). |
-| **Контекст и события** | [Обзор объекта](tactic_stream/docs/presentations/product-tour.ru.md#обзор-объекта) и [история сервера](tactic_stream/docs/presentations/product-tour.ru.md#activity-feed-и-история-проекта). |
-| **Скрипты и интеграции** | [Script Editor и полки](tactic_stream/docs/presentations/product-tour.ru.md#script-editor-и-автоматизация), [серверные API](tactic_stream/docs/admin_agent/SOURCES.md#ts-server-api), [окружение разработчика](tactic_stream/README.md). |
-| **Язык интерфейса** | [Tactic Frame](tactic_stream/docs/presentations/product-tour.ru.md#tactic-frame): общее описание UI, нативные контролы Vue и Qt Quick. |
+| **Модель и администрирование** | [Схемы и визуальные редакторы](https://github.com/listyque/TACTIC-Stream/wiki/Tour-product-tour-ru#администрирование-проекта), [пользователи и права](https://github.com/listyque/TACTIC-Stream/wiki/Tour-product-tour-ru#пользователи-и-права), [конфигурация](https://github.com/listyque/TACTIC-Stream/wiki/Tour-product-tour-ru#configuration). |
+| **Контекст и события** | [Обзор объекта](https://github.com/listyque/TACTIC-Stream/wiki/Tour-product-tour-ru#обзор-объекта) и [история сервера](https://github.com/listyque/TACTIC-Stream/wiki/Tour-product-tour-ru#activity-feed-и-история-проекта). |
+| **Скрипты и интеграции** | [Script Editor и полки](https://github.com/listyque/TACTIC-Stream/wiki/Tour-product-tour-ru#script-editor-и-автоматизация), [серверные API](https://github.com/listyque/TACTIC-Stream/wiki/Server-API-references#ts-server-api), [окружение разработчика](https://github.com/listyque/TACTIC-Stream/wiki/Development). |
+| **Язык интерфейса** | [Tactic Frame](https://github.com/listyque/TACTIC-Stream/wiki/Tour-product-tour-ru#tactic-frame): общее описание UI, нативные контролы Vue и Qt Quick. |
 
-**[Полный обзор продукта →](tactic_stream/docs/presentations/product-tour.ru.md)** · [Вся документация](tactic_stream/docs/index.md)
+**[Полный обзор продукта →](https://github.com/listyque/TACTIC-Stream/wiki/Tour-product-tour-ru)** · [Вся документация](https://github.com/listyque/TACTIC-Stream/wiki/Home-ru)
 
-Скриншоты сняты в текущем приложении на изолированном Orbit Studio; данные и иллюстрации демонстрационные. Stream и Handler поставляются независимо. Совместимость с оригинальным TACTIC описана в [карте проверок и ограничений](tactic_stream/docs/compatibility.md).
+Скриншоты сняты в текущем приложении на изолированном Orbit Studio; данные и иллюстрации демонстрационные. Stream и Handler поставляются независимо. Совместимость с оригинальным TACTIC описана в [карте проверок и ограничений](https://github.com/listyque/TACTIC-Stream/wiki/TACTIC-compatibility).
 
-Основан на [Southpaw TACTIC](https://github.com/Southpaw-TACTIC/TACTIC). [Лицензия TACTIC](tactic_stream/LICENSE.TACTIC) · [Лицензии компонентов](tactic_stream/docs/presentations/product-tour.en.md#compatibility-limitations-and-licenses).
+Основан на [Southpaw TACTIC](https://github.com/Southpaw-TACTIC/TACTIC). [Лицензия TACTIC](tactic_stream/LICENSE.TACTIC) · [Лицензии компонентов](https://github.com/listyque/TACTIC-Stream/wiki/Tour-product-tour#compatibility-limitations-and-licenses).

@@ -47,7 +47,7 @@ Handler может подключаться к удалённому сервер
 Сборка из рабочего checkout под Windows x64 с Python 3.14:
 
 ```powershell
-.venv\Scripts\python.exe -m tools.windows_delivery --handler "D:/grav/Tactic Stream/TH" --output "../releases/windows-0.112.193"
+.venv\Scripts\python.exe -m tools.windows_delivery --handler "../../TH" --output "../releases/windows"
 ```
 
 Выходная папка не должна существовать. Архивы Python/Electron проверяются

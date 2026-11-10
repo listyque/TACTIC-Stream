@@ -68,9 +68,9 @@ data, including permissions, failures, revision conflicts and rollback.
 From the Stream product directory, supplying the actual Handler checkout:
 
 ```powershell
-.venv/Scripts/python.exe -B -X utf8 tools/handler_deployment_check.py --handler "d:/grav/Tactic Stream/TH"
+.venv/Scripts/python.exe -B -X utf8 tools/handler_deployment_check.py --handler "../../TH"
 # SQLite only, without Docker:
-.venv/Scripts/python.exe -B -X utf8 tools/handler_deployment_check.py --handler "d:/grav/Tactic Stream/TH" --local-only
+.venv/Scripts/python.exe -B -X utf8 tools/handler_deployment_check.py --handler "../../TH" --local-only
 ```
 
 The full check needs the existing PostgreSQL/Apache Compose environment. It uses

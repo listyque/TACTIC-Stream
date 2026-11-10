@@ -2,7 +2,7 @@
 
 **Asset management and production tracking.**
 
-[Русский](README.ru.md) · **[Get started](#setup-and-first-project)** · [Why Stream](#why-fork-tactic) · [Features](#features-at-a-glance) · [Feature tour](tactic_stream/docs/presentations/product-tour.en.md) · [Documentation](tactic_stream/docs/index.md)
+[Русский](README.ru.md) · **[Get started](#setup-and-first-project)** · [Why Stream](#why-fork-tactic) · [Features](#features-at-a-glance) · [Feature tour](https://github.com/listyque/TACTIC-Stream/wiki/Tour-product-tour) · [Documentation](https://github.com/listyque/TACTIC-Stream/wiki/Home)
 
 TACTIC Stream is a **self-hosted platform for managing production, project data and versioned files**. It includes a server and a browser application where a team can organize assets and shots, assign tasks, review work and publish files. It is built on **Python 3.14 and Vue 3** and developed as a fork of **Southpaw TACTIC**.
 
@@ -39,24 +39,24 @@ The fork preserves that foundation while developing a current Python server, a n
 | **Team-specific pages** | Visual dashboard authoring, reusable widgets and project packages. | Build a department overview or delivery page from the project’s actual records and reuse it elsewhere. |
 | **Project assistance** | An integrated assistant with project context and operation history, plus an editable Knowledge Base and searchable Help. | Ask about the current work, inspect proposed changes and keep studio instructions close to the records they describe. |
 
-Stream retains TACTIC’s core model and supported APIs; legacy configurations, scripts and plugins still need checking against the [compatibility scope](tactic_stream/docs/compatibility.md). The old production subsystem and some historical widgets are excluded.
+Stream retains TACTIC’s core model and supported APIs; legacy configurations, scripts and plugins still need checking against the [compatibility scope](https://github.com/listyque/TACTIC-Stream/wiki/TACTIC-compatibility). The old production subsystem and some historical widgets are excluded.
 
-[TACTIC foundations and Stream’s implementation →](tactic_stream/docs/presentations/product-tour.en.md#what-stream-changes)
+[TACTIC foundations and Stream’s implementation →](https://github.com/listyque/TACTIC-Stream/wiki/Tour-product-tour#what-stream-changes)
 
 ## Features at a glance
 
 | Area | What you can do |
 | --- | --- |
-| **Project data** | Create your own object types, fields, forms and relationships. Start with an empty project or a template and manage its structure in [Administration](tactic_stream/docs/presentations/product-tour.en.md#project-administration). |
+| **Project data** | Create your own object types, fields, forms and relationships. Start with an empty project or a template and manage its structure in [Administration](https://github.com/listyque/TACTIC-Stream/wiki/Tour-product-tour#project-administration). |
 | **Workflow engine** | Build pipelines with manual work, approvals, actions, conditions and nested processes. The server handles configured events, tasks, scripts and notifications; the editor exposes the graph and node settings. |
 | **Search and Item View** | Find records by text, tags, fields and related data; save searches; expand objects into relationships, processes and versions. Choose cards, rows or editable tables. |
-| **Tasks and scheduling** | Assign work, edit statuses and dates, make bulk changes and plan in [Task Manager, Gantt and calendar](tactic_stream/docs/presentations/product-tour.en.md#planning). Record work hours and inspect task history. |
+| **Tasks and scheduling** | Assign work, edit statuses and dates, make bulk changes and plan in [Task Manager, Gantt and calendar](https://github.com/listyque/TACTIC-Stream/wiki/Tour-product-tour#planning). Record work hours and inspect task history. |
 | **Files and publications** | Prepare uploads in Drop Plate and Commit Queue, check in versioned snapshots, inspect their files and previews, and configure naming and repository paths. |
 | **Review and communication** | Keep Notes with an object or process, use Messages for conversations, open an object overview and follow server activity. |
-| **Workspace and dashboards** | Arrange docks, save layouts, design object cards and compose [pages](tactic_stream/docs/presentations/dashboards.en.md) from metrics, charts, Item View and actions. Assign views and access through Sidebar Editor. |
+| **Workspace and dashboards** | Arrange docks, save layouts, design object cards and compose [pages](https://github.com/listyque/TACTIC-Stream/wiki/Tour-dashboards) from metrics, charts, Item View and actions. Assign views and access through Sidebar Editor. |
 | **Users and administration** | Manage accounts, groups and project permissions; inspect configuration and server information through the application. |
 | **Scripts, API and packages** | Write and run server scripts in Script Editor, expose tools on shelves, call Python/XML-RPC/HTTP APIs and distribute project resources as plugins or templates. |
-| **Help, knowledge and assistant** | Read built-in EN/RU Help, publish studio articles with attachments and revision history, or ask the [assistant](tactic_stream/docs/presentations/assistant.en.md) to examine project data and prepare supported changes. |
+| **Help, knowledge and assistant** | Read built-in EN/RU Help, publish studio articles with attachments and revision history, or ask the [assistant](https://github.com/listyque/TACTIC-Stream/wiki/Tour-assistant) to examine project data and prepare supported changes. |
 
 The browser handles project work and file uploads/downloads. Local repository synchronization, watched workstation folders and Maya scene operations belong to Handler.
 
@@ -69,8 +69,8 @@ The browser handles project work and file uploads/downloads. Local repository sy
 
 The repository includes two installable examples:
 
-- **[Studio Review](examples/studio_review/README.md)** adds a review type, sample records, a sidebar entry, reusable widgets, a theme and a Python approval action. It shows how a project package combines data, UI and behavior.
-- **[Workspace Pulse](examples/workspace_pulse/README.md)** adds task and deadline summaries, charts, a searchable queue and a VFX overview based on the project’s existing types. Its pages remain editable in Page Editor.
+- **[Studio Review](https://github.com/listyque/TACTIC-Stream/wiki/Studio-Review)** adds a review type, sample records, a sidebar entry, reusable widgets, a theme and a Python approval action. It shows how a project package combines data, UI and behavior.
+- **[Workspace Pulse](https://github.com/listyque/TACTIC-Stream/wiki/Workspace-Pulse)** adds task and deadline summaries, charts, a searchable queue and a VFX overview based on the project’s existing types. Its pages remain editable in Page Editor.
 
 Start with project configuration and the visual editors. Add scripts for custom rules, and package the result when another project needs the same setup.
 
@@ -86,15 +86,15 @@ Start with project configuration and the visual editors. Add scripts for custom 
 | Desktop package | **Electron** hosts the Stream UI and manages its bundled local Python server. Handler is a separate native **PySide6 / Qt Quick** client. |
 | Server deployment | Linux containers with **Docker Compose, Apache and PostgreSQL**. |
 
-[Architecture](tactic_stream/docs/architecture.md) · [Python dependencies](tactic_stream/pyproject.toml) · [Frontend dependencies](tactic_stream/frontend/package.json) · [Tactic Frame](tactic_stream/docs/frame/index.md)
+[Architecture](https://github.com/listyque/TACTIC-Stream/wiki/Architecture) · [Python dependencies](tactic_stream/pyproject.toml) · [Frontend dependencies](tactic_stream/frontend/package.json) · [Tactic Frame](https://github.com/listyque/TACTIC-Stream/wiki/Frame)
 
 ## Setup and first project
 
 | Run Stream | Start here |
 | --- | --- |
-| **Windows desktop / SQLite** | [Portable package guide](tactic_stream/docs/delivery/WINDOWS_DELIVERY.en.md): local application, repository and optional native Handler. |
-| **Linux server / PostgreSQL** | [Server deployment guide](tactic_stream/docs/delivery/SERVER_DELIVERY.en.md): Docker Compose, Apache and a dedicated database. |
-| **From source** | [Local development](tactic_stream/README.md#local-development): Python 3.14, editable installation and the repository launcher. |
+| **Windows desktop / SQLite** | [Portable package guide](https://github.com/listyque/TACTIC-Stream/wiki/Windows): local application, repository and optional native Handler. |
+| **Linux server / PostgreSQL** | [Server deployment guide](https://github.com/listyque/TACTIC-Stream/wiki/Server): Docker Compose, Apache and a dedicated database. |
+| **From source** | [Local development](https://github.com/listyque/TACTIC-Stream/wiki/Development#local-development): Python 3.14, editable installation and the repository launcher. |
 
 The first setup asks you to create the administrator password. Open or create a project, configure its data, then create accounts and grant the team access.
 
@@ -106,7 +106,7 @@ Workflow defines routes through production, including parallel stages, condition
 
 ![Workflow editor: connected production stages and review](tactic_stream/docs/assets/product-tour/workflow.png)
 
-[Workflow: from definition to execution →](tactic_stream/docs/presentations/product-tour.en.md#workflow-graph-and-execution)
+[Workflow: from definition to execution →](https://github.com/listyque/TACTIC-Stream/wiki/Tour-product-tour#workflow-graph-and-execution)
 
 ### Workspace configuration
 
@@ -114,7 +114,7 @@ Arrange object lists, tasks, previews and notes side by side, combine them into 
 
 ![Dock composition: visual objects, tasks and publication previews](tactic_stream/docs/assets/product-tour/docks-planning.png)
 
-[Item View →](tactic_stream/docs/presentations/product-tour.en.md#item-view-and-search) · [Docks →](tactic_stream/docs/presentations/product-tour.en.md#docks-and-layouts) · [Sidebar Editor →](tactic_stream/docs/presentations/product-tour.en.md#sidebar-editor)
+[Item View →](https://github.com/listyque/TACTIC-Stream/wiki/Tour-product-tour#item-view-and-search) · [Docks →](https://github.com/listyque/TACTIC-Stream/wiki/Tour-product-tour#docks-and-layouts) · [Sidebar Editor →](https://github.com/listyque/TACTIC-Stream/wiki/Tour-product-tour#sidebar-editor)
 
 ### Task Manager and Gantt
 
@@ -122,7 +122,7 @@ Task Manager edits assignees, dates and statuses. Gantt shows the schedule and o
 
 ![Gantt: production tasks arranged across the team's schedule](tactic_stream/docs/assets/product-tour/gantt.png)
 
-[Planning →](tactic_stream/docs/presentations/product-tour.en.md#planning) · [Notes and Messages →](tactic_stream/docs/presentations/product-tour.en.md#messages-and-notes)
+[Planning →](https://github.com/listyque/TACTIC-Stream/wiki/Tour-product-tour#planning) · [Notes and Messages →](https://github.com/listyque/TACTIC-Stream/wiki/Tour-product-tour#messages-and-notes)
 
 ### Publications and file versions
 
@@ -130,7 +130,7 @@ Check-in stores a file against an object and process, assigns a version and appl
 
 ![Snapshot Browser: Survey Drone publications and file previews](tactic_stream/docs/assets/product-tour/snapshot-browser.png)
 
-[Check-in, versions, naming and delivery →](tactic_stream/docs/presentations/product-tour.en.md#check-in-and-check-out)
+[Check-in, versions, naming and delivery →](https://github.com/listyque/TACTIC-Stream/wiki/Tour-product-tour#check-in-and-check-out)
 
 ### Dashboards
 
@@ -138,7 +138,7 @@ Dashboard Editor puts metrics, charts, tables and Item View on one page. Details
 
 ![Custom dashboard: live project metrics, workload and visual records](tactic_stream/docs/assets/product-tour/dashboard-overview.png)
 
-[Dashboards and visual page authoring →](tactic_stream/docs/presentations/dashboards.en.md)
+[Dashboards and visual page authoring →](https://github.com/listyque/TACTIC-Stream/wiki/Tour-dashboards)
 
 ### Project assistant
 
@@ -146,7 +146,7 @@ The assistant reads project records, prepares reports and drafts changes through
 
 ![Project assistant examining production records](tactic_stream/docs/assets/product-tour/assistant.png)
 
-[Assistant: providers, tools and capabilities →](tactic_stream/docs/presentations/assistant.en.md)
+[Assistant: providers, tools and capabilities →](https://github.com/listyque/TACTIC-Stream/wiki/Tour-assistant)
 
 ### Knowledge Base and Help
 
@@ -154,25 +154,25 @@ Knowledge Base holds instructions, delivery requirements and technical notes. Ar
 
 ![Knowledge Base: a delivery checklist linked to a production asset](tactic_stream/docs/assets/product-tour/knowledge-base.png)
 
-[Knowledge Base: authoring and publishing →](tactic_stream/docs/presentations/knowledge-base.en.md)
+[Knowledge Base: authoring and publishing →](https://github.com/listyque/TACTIC-Stream/wiki/Tour-knowledge-base)
 
 Built-in Help documents application tools and settings. It opens from working tools and supports search, English and Russian articles, and Markdown export.
 
 ![Built-in Help: application documentation with a searchable topic catalog](tactic_stream/docs/assets/product-tour/help.png)
 
-[Explore built-in Help →](tactic_stream/docs/presentations/help.en.md)
+[Explore built-in Help →](https://github.com/listyque/TACTIC-Stream/wiki/Tour-help)
 
 ## Configuration and development
 
 | Area | Explore |
 | --- | --- |
-| **Model and administration** | [Schemas and visual editors](tactic_stream/docs/presentations/product-tour.en.md#project-administration), [users and access](tactic_stream/docs/presentations/product-tour.en.md#users-and-permissions), [configuration](tactic_stream/docs/presentations/product-tour.en.md#configuration). |
-| **Context and activity** | [Object overview](tactic_stream/docs/presentations/product-tour.en.md#object-overview) and [server history](tactic_stream/docs/presentations/product-tour.en.md#activity-feed-and-project-history). |
-| **Scripts and integrations** | [Script Editor and shelves](tactic_stream/docs/presentations/product-tour.en.md#script-editor-and-automation), [server APIs](tactic_stream/docs/admin_agent/SOURCES.md#ts-server-api), [development setup](tactic_stream/README.md). |
-| **Interface language** | [Tactic Frame](tactic_stream/docs/presentations/product-tour.en.md#tactic-frame): one shared UI description, native controls in Vue and Qt Quick. |
+| **Model and administration** | [Schemas and visual editors](https://github.com/listyque/TACTIC-Stream/wiki/Tour-product-tour#project-administration), [users and access](https://github.com/listyque/TACTIC-Stream/wiki/Tour-product-tour#users-and-permissions), [configuration](https://github.com/listyque/TACTIC-Stream/wiki/Tour-product-tour#configuration). |
+| **Context and activity** | [Object overview](https://github.com/listyque/TACTIC-Stream/wiki/Tour-product-tour#object-overview) and [server history](https://github.com/listyque/TACTIC-Stream/wiki/Tour-product-tour#activity-feed-and-project-history). |
+| **Scripts and integrations** | [Script Editor and shelves](https://github.com/listyque/TACTIC-Stream/wiki/Tour-product-tour#script-editor-and-automation), [server APIs](https://github.com/listyque/TACTIC-Stream/wiki/Server-API-references#ts-server-api), [development setup](https://github.com/listyque/TACTIC-Stream/wiki/Development). |
+| **Interface language** | [Tactic Frame](https://github.com/listyque/TACTIC-Stream/wiki/Tour-product-tour#tactic-frame): one shared UI description, native controls in Vue and Qt Quick. |
 
-**[Full product tour →](tactic_stream/docs/presentations/product-tour.en.md)** · [All documentation](tactic_stream/docs/index.md)
+**[Full product tour →](https://github.com/listyque/TACTIC-Stream/wiki/Tour-product-tour)** · [All documentation](https://github.com/listyque/TACTIC-Stream/wiki/Home)
 
-Screenshots are current application captures on isolated Orbit Studio data; records and artwork are illustrative. Stream and Handler ship independently. Original TACTIC compatibility is documented by [scope and verification](tactic_stream/docs/compatibility.md).
+Screenshots are current application captures on isolated Orbit Studio data; records and artwork are illustrative. Stream and Handler ship independently. Original TACTIC compatibility is documented by [scope and verification](https://github.com/listyque/TACTIC-Stream/wiki/TACTIC-compatibility).
 
-Built from [Southpaw TACTIC](https://github.com/Southpaw-TACTIC/TACTIC). [TACTIC license](tactic_stream/LICENSE.TACTIC) · [Third-party licenses](tactic_stream/docs/presentations/product-tour.en.md#compatibility-limitations-and-licenses).
+Built from [Southpaw TACTIC](https://github.com/Southpaw-TACTIC/TACTIC). [TACTIC license](tactic_stream/LICENSE.TACTIC) · [Third-party licenses](https://github.com/listyque/TACTIC-Stream/wiki/Tour-product-tour#compatibility-limitations-and-licenses).

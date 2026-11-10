@@ -1,5 +1,7 @@
 # TACTIC Stream documentation
 
+GitHub Wiki: [English](https://github.com/listyque/TACTIC-Stream/wiki/Home) · [Русский](https://github.com/listyque/TACTIC-Stream/wiki/Home-ru).
+
 This is the entry point for maintained TS documentation. Stream owns the server,
 core data model, transports and browser UI. Handler is an independent desktop
 client; its Python objects and local execution are not server APIs.
