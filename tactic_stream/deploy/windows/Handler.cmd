@@ -1,5 +1,9 @@
 @echo off
 setlocal
 set "PYTHONDONTWRITEBYTECODE=1"
-if not defined TACTIC_HANDLER_SETTINGS_DIR set "TACTIC_HANDLER_SETTINGS_DIR=%APPDATA%\TACTIC Stream\handler"
+if not defined TACTIC_HANDLER_SETTINGS_DIR (
+    set "TACTIC_HANDLER_SETTINGS_DIR=%~dp0TACTIC-Handler"
+    if exist "%~dp0TACTIC Stream.exe" set "TACTIC_HANDLER_SETTINGS_DIR=%APPDATA%\TACTIC Stream\handler"
+    if exist "%~dp0demo\manifest.json" set "TACTIC_HANDLER_SETTINGS_DIR=%APPDATA%\TACTIC Stream Demo\handler"
+)
 start "TACTIC Handler" "%~dp0runtime\pythonw.exe" -I -B -X utf8 "%~dp0TACTIC-Handler\launch.pyw" %*

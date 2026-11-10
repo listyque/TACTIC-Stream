@@ -1,0 +1,35 @@
+#!/bin/sh
+set -eu
+umask 077
+fail() {
+  printf '%s\n' "$1" >&2
+  [ -z "${SYNOPKG_TEMP_LOGFILE:-}" ] || printf '%s\n' "$1" > "$SYNOPKG_TEMP_LOGFILE"
+  exit 1
+}
+context() {
+  [ "${SYNOPKG_PKGNAME:-}" = '__PACKAGE__' ] || fail 'Invalid TACTIC Stream package context'
+  dest="${SYNOPKG_PKGDEST:-/var/packages/__PACKAGE__/target}"
+  var="${SYNOPKG_PKGVAR:-/var/packages/__PACKAGE__/var}"
+  case "$dest:$var" in /*:/*) ;; *) fail 'DSM package paths must be absolute';; esac
+  ! printf '%s' "$dest$var" | LC_ALL=C grep -q '[[:cntrl:]]' || fail 'Invalid DSM package paths'
+  if [ ! -d "$var" ] && [ -n "${SYNOPKG_PKGDEST_VOL:-}" ]; then
+    retained="$SYNOPKG_PKGDEST_VOL/@appdata/__PACKAGE__"
+    [ ! -d "$retained" ] || var="$retained"
+  fi
+}
+validate() {
+  context
+  [ "$(uname -m)" = x86_64 ] || fail 'TACTIC Stream needs an x86-64 NAS and Container Manager'
+  port="${wizard_port:-__PORT__}"
+  case "$port" in ''|*[!0-9]*|0*) fail 'Choose a port from 1024 to 65535';; esac
+  [ "${#port}" -le 5 ] && [ "$port" -ge 1024 ] && [ "$port" -le 65535 ] || fail 'Choose a port from 1024 to 65535'
+  hex="$(printf '%04X' "$port")"
+  if awk -v target=":$hex" '$4=="0A" && substr($2,length($2)-4)==target {found=1} END {exit !found}' /proc/net/tcp /proc/net/tcp6; then
+    fail 'The selected port is already in use'
+  fi
+  password="${wizard_admin_password:-}"
+  ! printf '%s' "$password" | LC_ALL=C grep -q '[[:cntrl:]]' || fail 'The password must not contain control characters'
+  [ "${#password}" -ge 12 ] && [ "${#password}" -le 128 ] || fail 'Choose an administrator password of 12 to 128 characters'
+  [ "$password" = "${wizard_admin_confirm:-}" ] || fail 'Administrator passwords do not match'
+  [ ! -e "$var/data" ] && [ ! -e "$var/secrets" ] || fail 'Existing package data was preserved. Use a separate installation or an explicit migration.'
+}

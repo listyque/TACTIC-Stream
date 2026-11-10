@@ -90,6 +90,8 @@ Start with project configuration and the visual editors. Add scripts for custom 
 
 ## Setup and first project
 
+**[Download Clean / Demo](https://github.com/listyque/TACTIC-Stream/releases)** — Windows, Docker/PostgreSQL, Synology DSM and combined TH + TS bundles. [Demo projects](examples/demo/README.md) · [Windows guide](tactic_stream/docs/delivery/WINDOWS_DELIVERY.en.md) · [DSM guide](tactic_stream/docs/delivery/DSM_DELIVERY.en.md).
+
 | Run Stream | Start here |
 | --- | --- |
 | **Windows desktop / SQLite** | [Portable package guide](https://github.com/listyque/TACTIC-Stream/wiki/Windows): local application, repository and optional native Handler. |

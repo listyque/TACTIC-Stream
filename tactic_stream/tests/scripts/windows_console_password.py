@@ -43,7 +43,7 @@ def initialize(bundle, parent):
         for _ in processes:
             owned.update(p['ProcessId'] for p in processes if p['ParentProcessId'] in owned)
         matches = [p for p in processes if p['ProcessId'] in owned and
-                   re.search(r'\binit\s+--if-needed\s*$', p['CommandLine'] or '')]
+                   re.search(r'\binit\s+--if-needed(?:\s+--demo\s+.+)?\s*$', p['CommandLine'] or '')]
         if matches:
             assert len(matches) == 1, 'Ambiguous first-run console'
             if kernel.AttachConsole(matches[0]['ProcessId']):

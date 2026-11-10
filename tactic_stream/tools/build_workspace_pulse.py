@@ -3,11 +3,11 @@ from pathlib import Path
 from zipfile import ZIP_DEFLATED, ZipFile
 
 
-def build():
+def build(destination=None):
     root = Path(__file__).resolve().parents[2]
     source = root / 'examples/workspace_pulse'
-    destination = root / 'releases/workspace-pulse-1.1.0.zip'
-    destination.parent.mkdir(exist_ok=True)
+    destination = Path(destination) if destination else root / 'releases/workspace-pulse-1.1.0.zip'
+    destination.parent.mkdir(parents=True, exist_ok=True)
     with ZipFile(destination, 'w', ZIP_DEFLATED) as archive:
         for name in ('manifest.xml', 'empty.spt', 'workspace.py', 'install.py',
                      'uninstall.py', 'README.md', 'README.ru.md'):

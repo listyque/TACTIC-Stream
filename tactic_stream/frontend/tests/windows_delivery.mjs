@@ -7,6 +7,7 @@ import { promisify } from 'node:util';
 import { _electron } from 'playwright';
 
 const [bundle, dataRoot] = process.argv.slice(2).map(item => path.resolve(item));
+const build = JSON.parse(await fs.readFile(path.join(bundle, 'BUILD.json'), 'utf8'));
 assert(process.env.WINDOWS_CHECK_PASSWORD, 'Set WINDOWS_CHECK_PASSWORD for the owned test database');
 const run = promisify(execFile);
 const monitor = path.join(dataRoot, 'server/temp/log/monitor.json');
@@ -55,11 +56,21 @@ for (let iteration = 0; iteration < 2; iteration++) {
       await page.getByRole('button', { name: 'Sign in', exact: true }).click();
       await page.locator('.project-picker').waitFor();
       await page.evaluate(() => localStorage.setItem('portable-check', 'preserved'));
-      const check = path.resolve('../tools/handler_deployment_check.py');
-      const result = await run(path.join(bundle, 'runtime/python.exe'), ['-I', '-B', '-X', 'utf8', '-c',
+      if (build.handler_version) {
+        const check = path.resolve('../tools/handler_deployment_check.py');
+        const result = await run(path.join(bundle, 'runtime/python.exe'), ['-I', '-B', '-X', 'utf8', '-c',
         "import json,os,runpy,secrets,sys; from pathlib import Path; ns=runpy.run_path(sys.argv[1]); print(json.dumps(ns['check'](sys.argv[2],Path(sys.argv[3]),os.environ['WINDOWS_CHECK_PASSWORD'],secrets.token_hex(6),Path(sys.argv[4]))))",
         check, address, path.join(bundle, 'TACTIC-Handler'), dataRoot], { env: { ...environment, TACTIC_QML_TEST_SETTINGS_DIR: path.join(dataRoot, 'handler') }, timeout: 120000 });
-      console.log('Handler SDK:', result.stdout.trim());
+        console.log('Handler SDK:', result.stdout.trim());
+      }
+      if (build.demo) {
+        const accounts = JSON.parse(await fs.readFile(path.join(dataRoot, 'server/demo-accounts.json'), 'utf8'));
+        assert.equal(accounts.length, 3);
+        await page.locator('.project-picker').click();
+        await page.locator('#project-chooser').getByText('Orbit Studio', { exact: true }).waitFor();
+        await page.locator('#project-chooser').getByText('Atlas Reference Library', { exact: true }).waitFor();
+        await page.keyboard.press('Escape');
+      }
       await page.screenshot({ path: path.join(dataRoot, 'desktop.png') });
     } else {
       assert.equal(new URL(page.url()).origin, address);

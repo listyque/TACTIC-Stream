@@ -4,3 +4,9 @@
 tactic_stream/frontend/src/**/*.js text eol=lf
 tactic_stream/frontend/src/**/*.css text eol=lf
 tactic_stream/src/tactic_stream/shared_ui/**/*.json text eol=lf
+tactic_stream/src/tactic_stream/compatibility/table_action_runtime.js text eol=lf
+tactic_stream/tools/frame_*/**/*.js text eol=lf
+tactic_stream/tools/frame_*/**/*.html text eol=lf
+tactic_stream/tools/frame_*/**/*.json text eol=lf
+*.sh text eol=lf
+tactic_stream/deploy/dsm/scripts/* text eol=lf

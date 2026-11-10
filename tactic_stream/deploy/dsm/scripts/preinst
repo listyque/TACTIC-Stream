@@ -1,0 +1,22 @@
+#!/bin/sh
+. "${SYNOPKG_TEMP_SCRIPTS_DIR:-$(dirname "$0")}/functions"
+validate
+stage="${SYNOPKG_PKGINST_TEMP_DIR:-}"
+[ -n "$stage" ] && [ -d "$stage" ] || fail 'DSM did not provide its installation staging directory'
+if [ ! -f "$stage/bootstrap/release.json" ]; then stage="$stage/package"; fi
+[ -d "$stage" ] && [ ! -L "$stage" ] && [ -w "$stage" ] || fail 'Package staging directory is unavailable'
+(cd "$stage" && sha256sum -c SHA256SUMS) || fail 'The TACTIC Stream package is damaged'
+[ ! -e "$stage/project/state" ] || fail 'An earlier preparation is present; staged files were preserved'
+mkdir -p "$stage/project/state/secrets"
+for name in stream postgres; do mkdir -p "$stage/project/state/data/$name"; done
+chmod 0755 "$stage/project/state" "$stage/project/state/data" "$stage/project/state/data/stream"
+for name in postgres_password webmin_password; do
+  head -c 32 /dev/urandom | od -An -v -tx1 | tr -d ' \n' > "$stage/project/state/secrets/$name"
+  [ "$(wc -c < "$stage/project/state/secrets/$name")" -eq 64 ] || fail 'Could not generate a deployment secret'
+done
+printf '%s\n' "$password" > "$stage/project/state/secrets/admin_password"
+# Only the private host directory is traversable by the package owner; app UID10001 reads individual mounted files.
+chmod 0700 "$stage/project/state/secrets"
+chmod 0644 "$stage/project/state/secrets/"*
+sed "s/__STREAM_PORT__/$port/g" "$stage/project/compose.template" > "$stage/project/docker-compose.yaml"
+printf '%s\n' "$port" > "$stage/project/port"

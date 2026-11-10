@@ -1,0 +1,4 @@
+#!/bin/sh
+. "${SYNOPKG_TEMP_SCRIPTS_DIR:-$(dirname "$0")}/functions"
+context
+fail 'This preview SPK supports first installation. Existing data was preserved; back up and migrate explicitly before replacing it.'

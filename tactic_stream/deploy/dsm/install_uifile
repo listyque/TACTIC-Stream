@@ -1,0 +1,12 @@
+[
+  {
+    "step_title": "__TITLE__",
+    "items": [
+      {"type": "description", "desc": "Preview for DSM 7.2.1+ on x86-64 with Container Manager. Creates a separate server. Sign in as admin using the password below. Existing installations cannot be upgraded by this preview."},
+      {"type": "textfield", "subitems": [{"key": "wizard_port", "desc": "HTTP port (1024–65535)", "defaultValue": "__PORT__", "validator": {"allowBlank": false}}]},
+      {"type": "password", "subitems": [{"key": "wizard_admin_password", "desc": "New admin password (12–128 characters)", "validator": {"allowBlank": false, "minLength": 12, "maxLength": 128}}]},
+      {"type": "password", "subitems": [{"key": "wizard_admin_confirm", "desc": "Repeat password", "validator": {"allowBlank": false}}]},
+      {"type": "description", "desc": "Open the selected HTTP port only on your trusted network. Configure DSM Reverse Proxy for HTTPS access. Project data and passwords are retained in the package's persistent var directory when the package is removed."}
+    ]
+  }
+]

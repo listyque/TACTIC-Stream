@@ -23,6 +23,11 @@ def deployment_module(name):
 
 
 class ServerDelivery(unittest.TestCase):
+    def test_linux_entrypoint_uses_unix_line_endings(self):
+        script = (ROOT / 'deploy/docker/start-apache.sh').read_bytes()
+        self.assertNotIn(b'\r', script)
+        self.assertTrue(script.startswith(b'#!/bin/sh\n'))
+
     def test_release_metadata_agrees(self):
         self.assertRegex(release_version(), r'^\d+\.\d+\.\d+$')
 
@@ -58,6 +63,10 @@ class ServerDelivery(unittest.TestCase):
         self.assertEqual(result['volumes'], {'stream_data': {}})
         self.assertEqual(result['networks'], {'default': {}})
         self.assertEqual(result['secrets']['postgres_password'], {'file': '.local/postgres-password'})
+        demo = release_compose(copy.deepcopy(config), '1.2.3', demo=True)
+        self.assertEqual(demo['name'], 'tactic-stream-demo')
+        self.assertEqual(demo['services']['app']['volumes'][-1],
+                         dict(type='bind', source='./demo', target='/opt/tactic-demo', read_only=True))
         config['services']['apache']['volumes'] = [dict(type='bind', source='D:/private', target='/private')]
         with self.assertRaises(AssertionError):
             release_compose(config, '1.2.3')

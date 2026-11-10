@@ -5,16 +5,16 @@ import json
 from pathlib import Path
 import sys
 
-import PySide6
-import tactic_stream
-
-
 root = Path(sys.argv[1]).resolve()
 manifest = json.loads((root / 'manifest.json').read_text(encoding='utf-8'))
 assert all(Path(item).is_relative_to(root) for item in sys.path)
-assert tactic_stream.__version__ == version('tactic-stream') == manifest['server_version']
-assert PySide6.__version__ == manifest['dependencies']['PySide6']
-expected = {entry['path'] for entry in manifest['files']} | {'manifest.json'}
+if manifest['server_version']:
+    import tactic_stream
+    assert tactic_stream.__version__ == version('tactic-stream') == manifest['server_version']
+if manifest['handler_version']:
+    import PySide6
+    assert PySide6.__version__ == manifest['dependencies']['PySide6']
+expected = {entry['path'] for entry in manifest['files']} | {'manifest.json', 'SHA256SUMS'}
 actual = {path.relative_to(root).as_posix() for path in root.rglob('*') if path.is_file()}
 assert actual == expected, dict(extra=sorted(actual - expected), missing=sorted(expected - actual))
 for entry in manifest['files']:
@@ -23,5 +23,11 @@ for entry in manifest['files']:
     assert path.stat().st_size == entry['bytes'], entry['path']
     with path.open('rb') as source:
         assert file_digest(source, 'sha256').hexdigest() == entry['sha256'], entry['path']
-print(json.dumps(dict(python=sys.version.split()[0], qt=PySide6.__version__, stream=tactic_stream.__version__,
+for line in (root / 'SHA256SUMS').read_text(encoding='utf-8').splitlines():
+    expected_hash, relative = line.split('  ', 1)
+    path = (root / relative).resolve()
+    assert path.is_relative_to(root)
+    with path.open('rb') as source:
+        assert file_digest(source, 'sha256').hexdigest() == expected_hash, relative
+print(json.dumps(dict(python=sys.version.split()[0], qt=manifest['dependencies'].get('PySide6'), stream=manifest['server_version'],
                       inventory_files=len(manifest['files']), program_files_unchanged=True)))

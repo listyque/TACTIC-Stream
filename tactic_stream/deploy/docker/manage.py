@@ -30,7 +30,11 @@ def main():
         parser.error('This action requires the source checkout; installed packages use load/update/check')
     if not release and args.action == 'load':
         parser.error('load requires an exported server package')
-    project = args.project_name or ('tactic-stream-server' if release else 'tactic-stream-linux')
+    demo = bool(release and release.get('demo'))
+    project = args.project_name or ('tactic-stream-demo' if demo else 'tactic-stream-server' if release else 'tactic-stream-linux')
+    if demo:
+        os.environ.setdefault('STREAM_HTTP_PORT', '8084')
+        os.environ.setdefault('STREAM_WEBMIN_PORT', '10002')
     docker = shutil.which('docker')
     if not docker and os.name == 'nt':
         candidate = Path(os.environ.get('ProgramFiles', 'C:/Program Files')) / 'Docker/Docker/resources/bin/docker.exe'
@@ -109,7 +113,8 @@ def main():
             if release:
                 compose('run', '--rm', '--no-deps', '-T', 'app', 'python', '-',
                         input=(HERE / 'init-postgres.py').read_bytes())
-            compose('run', '--rm', '--no-deps', 'app', 'tactic-stream', 'init')
+            compose('run', '--rm', '--no-deps', 'app', 'tactic-stream', 'init',
+                    *(['--demo', '/opt/tactic-demo'] if demo else []))
         compose('up', '-d', '--no-build', '--wait', '--wait-timeout', '120')
         apache_config()
         print('Application: http://%s:%s/' % (os.environ.get('STREAM_BIND', '127.0.0.1'), os.environ.get('STREAM_HTTP_PORT', '8082')))

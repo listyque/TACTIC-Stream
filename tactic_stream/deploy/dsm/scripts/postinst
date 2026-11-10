@@ -1,0 +1,19 @@
+#!/bin/sh
+. "${SYNOPKG_TEMP_SCRIPTS_DIR:-$(dirname "$0")}/functions"
+context
+[ -d "$dest" ] && [ -d "$var" ] || fail 'DSM package directories are not ready'
+[ -f "$dest/project/docker-compose.yaml" ] || fail 'The Docker project was not prepared'
+prepared="$dest/project/state"
+[ -d "$prepared" ] && [ ! -L "$prepared" ] || fail 'Prepared package state is unavailable'
+for name in data secrets; do
+  [ -d "$prepared/$name" ] && [ ! -L "$prepared/$name" ] || fail 'Prepared state must be a directory'
+  [ ! -e "$var/$name" ] && [ ! -L "$var/$name" ] || fail 'Existing package state was preserved'
+done
+for name in data secrets; do
+  mv "$prepared/$name" "$var/$name"
+  ln -s "$var/$name" "$prepared/$name"
+done
+port="$(cat "$dest/project/port")"
+case "$port" in ''|*[!0-9]*) fail 'Invalid prepared port';; esac
+sed "s/__STREAM_PORT__/$port/g" "$dest/ui/config.template" > "$dest/ui/config"
+printf '%s\n' "$port" > "$var/port"

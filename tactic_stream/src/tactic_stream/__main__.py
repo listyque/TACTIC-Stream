@@ -18,6 +18,8 @@ def main():
     init = commands.add_parser("init", help="Explicitly initialize NEW data; refuse existing databases")
     init.add_argument("--login", default="admin")
     init.add_argument('--if-needed', action='store_true', help='Skip initialization when the configured system database already exists')
+    init.add_argument('--demo', type=Path, metavar='CONTENT_DIRECTORY', help='Populate a new installation with the public demonstration content')
+    init.add_argument('--password-file', type=Path, help='Read the new administrator password from a deployment secret file')
     commands.add_parser("upgrade", help="Upgrade owned system and registered project schemas")
     commands.add_parser('status', help='Show the monitor and worker state')
     commands.add_parser('stop', help='Request graceful shutdown through stop.monitor')
@@ -46,11 +48,26 @@ def main():
             FirstRunInit().execute()
             print('Configured system database is already initialized')
             return
-        password = getpass.getpass("New administrator password: ")
-        if password != getpass.getpass("Repeat password: "):
-            parser.error("Passwords do not match")
+        if args.password_file:
+            if args.password_file.stat().st_size > 16384:
+                parser.error('Administrator password file is too large')
+            password = args.password_file.read_text(encoding='utf-8').rstrip('\r\n')
+        else:
+            password = getpass.getpass("New administrator password: ")
+            if password != getpass.getpass("Repeat password: "):
+                parser.error("Passwords do not match")
+        if not password or len(password) > 4096:
+            parser.error('A non-empty password of at most 4096 characters is required')
+        if args.demo:
+            from tactic_stream.demo import verify_content
+            verify_content(args.demo)
         Store(args.data_dir).initialize(hash_password(password), args.login)
         FirstRunInit().execute()
+        if args.demo:
+            from tactic_stream.demo import install
+            install(Store(args.data_dir), args.login, password, args.demo)
+            print('Installed Orbit Studio and Atlas Reference Library demonstration projects')
+            print('Demo account passwords: ' + str(args.data_dir.resolve() / 'demo-accounts.json'))
         print("Initialized new owned TACTIC Stream data")
     elif args.command == "upgrade":
         changed = Store(args.data_dir).upgrade()

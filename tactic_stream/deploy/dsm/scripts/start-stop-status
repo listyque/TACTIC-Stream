@@ -1,0 +1,10 @@
+#!/bin/sh
+. "$(dirname "$0")/functions"
+context
+# Container Manager owns actual container start/stop through its resource worker.
+case "${1:-}" in
+  start) touch "$var/.start-requested" ;;
+  stop) rm -f "$var/.start-requested" ;;
+  status) [ -f "$var/.start-requested" ] || exit 3 ;;
+  *) exit 0 ;;
+esac

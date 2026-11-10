@@ -1,56 +1,84 @@
-# Portable Windows desktop
+# TACTIC on Windows
 
-The x64 package contains `TACTIC Stream.exe` (Electron), Python 3.14.9,
-SQLite, Stream and the native Handler with its pinned PySide6 dependency.
-No system Python, Node.js or checkout is required. Extract the entire ZIP
-to a writable local directory; keep its runtime, resources and licenses together.
-The EXE is not signed. Fresh Windows 11 Enterprise Evaluation (build 26300) acceptance
-passed; see [L12 evidence and scope](RECOVERY_ACCEPTANCE.md).
+Download a Windows x64 package from [Stream Releases](https://github.com/listyque/TACTIC-Stream/releases)
+or [Handler Releases](https://github.com/listyque/TACTIC-Handler/releases).
+Python and the required libraries are included; no source checkout, system Python
+or Node.js is needed. These are unsigned preview builds.
 
-Run `TACTIC Stream.exe`. On first launch the native installer opens a console
-and asks for a new administrator password. No default password is shipped.
-The launcher then upgrades the native schema, starts its local monitor/workers
-on loopback and opens the existing Vue UI. Closing the window stops its backend.
-An occupied port or a failed initializer is an error; existing data is not reset.
-Native confirmation dialogs use the Windows language (English fallback/Russian);
-the application language remains selectable in Appearance.
+| Package | What it contains | Start here |
+| --- | --- | --- |
+| Handler Clean | Native Handler, Python and PySide6; connect to your server | Run the Setup EXE, then TH Setup.exe |
+| Handler Demo | Handler plus a local Stream server and demo projects | Run the Setup EXE; initialize Stream, then open TH Setup.exe |
+| Stream Clean / Demo | Stream EXE, Python, SQLite and browser UI | Extract the whole ZIP and run TACTIC Stream.exe |
+| TH + TS Clean / Demo | Both applications in one portable folder | Extract the whole ZIP; run Stream, then TH Setup.exe |
 
-By default all user data lives outside the program folder:
+Handler's demo includes a server because projects and publications belong to the
+server. You can inspect the same demo in native Item View and the browser.
+Clean packages have no demo payload or business projects. All packages retain
+their runtime, resources and licenses together; copying out one EXE is insufficient.
 
-- `%APPDATA%\TACTIC Stream\server`: databases, repository, XML configuration and logs.
-- `%APPDATA%\TACTIC Stream\browser`: browser sessions and interface preferences.
-- `%APPDATA%\TACTIC Stream\handler`: native Handler settings, presets and caches.
+## First launch
 
-For an isolated installation run `"TACTIC Stream.exe" --data-dir "D:\Tactic data"`.
-The selected local port persists in `server/config/tactic-conf.xml`.
-Read it there or in the window URL when configuring Handler.
-Run `Handler.cmd` to open the bundled native application, then use its existing
-server preset/login and project selection. It does not share browser sessions.
-`TACTIC_HANDLER_SETTINGS_DIR` overrides the Handler profile directory;
-`TACTIC_QML_TEST_SETTINGS_DIR` takes priority for isolated tests.
-Handler can connect to a remote server without starting the local Stream EXE.
-The local EXE only manages its own local backend.
+**Stream:** run `TACTIC Stream.exe`. A console asks twice for a new administrator
+password. Sign in as `admin` with that password. The launcher initializes its owned
+database, starts the server on loopback and opens the application. Closing its
+window stops that local server. Handler needs it to remain running when connected locally.
 
-Before updating, close both applications and back up the complete data directory.
-Extract the new bundle into a new folder and launch it with the same data directory.
-Do not copy databases or settings into the program folder. Native upgrade runs
-before serving; binary replacement is not a database rollback. Keep the old
-bundle and a matching pre-upgrade data backup for restoration.
-Upgrade 0.112.192 to 0.112.193, before/after backups, independent restoration and
-rollback passed on isolated fixtures. An offline copy of the existing local dataset
-also passed content/integrity checks. See [recovery procedure and acceptance](RECOVERY_ACCEPTANCE.md).
-Clean Windows installation/startup passed; legacy project migration and full GUI
-acceptance remain L12 work. The previous Windows EXE did not exist; previous-version
-SQLite acceptance starts from the delivered wheel.
+**Handler:** run `TH Setup.exe`. Choose the server URL, sign in, select a project
+and repository, and apply your settings. Then open `TACTIC Handler.exe`.
+The wizard also configures supported DCC plugins and the shelf.
+For a remote server, use its URL; no local Stream launch is necessary.
+The bundled `TH Setup Builder.exe` creates installers with public deployment
+presets. Passwords and session tickets are never included in those presets.
 
-Build from the development checkout with Python 3.14 on Windows x64:
+**Demo:** the first Stream launch creates Orbit Studio and Atlas Reference Library,
+their pictures, publications, tasks, users, workflow and example plugins.
+See the [demo walkthrough](https://github.com/listyque/TACTIC-Stream/wiki/Demo).
+The initial server URL is `http://127.0.0.1:18881`. Generated user passwords are in
+`%APPDATA%\TACTIC Stream Demo\server\demo-accounts.json`.
+Initialization refuses existing business projects and preserves an already installed demo.
+
+## Where data lives
+
+- Stream Clean and the clean combined bundle: `%APPDATA%\TACTIC Stream`.
+- Every local demo bundle: `%APPDATA%\TACTIC Stream Demo`.
+- Within either folder: `server` holds databases, published files, configuration and logs;
+  `browser` holds browser sessions; `handler` holds the bundled Handler profile.
+- Standalone Handler Clean keeps its profile in its `TACTIC-Handler` application folder.
+  Install it in a writable directory, not a protected system folder.
+
+Clean and demo can run side by side. The three demo downloads use the same default
+demo profile; they are different ways to open the same local server, not three servers.
+For another isolated Stream instance, run `"TACTIC Stream.exe" --data-dir "D:\Tactic data"`.
+Its actual port is recorded in `server/config/tactic-conf.xml`; a clean first launch
+chooses a free port. Set `TACTIC_HANDLER_SETTINGS_DIR` when a separate Handler profile
+is needed. `TACTIC_QML_TEST_SETTINGS_DIR` takes priority in isolated tests.
+
+## Updating and restoring
+
+Close both applications and back up the complete data/profile directory first.
+Extract a new ZIP into a new folder and use the same Stream data directory.
+The native schema upgrade runs before the server starts. The Handler EXE installer
+preserves its local settings and repository, keeps a previous-installation folder,
+and refuses to overwrite modified application files.
+
+Keep the old application and its matching pre-upgrade backup. Replacing binaries
+does not roll back a database schema. See the [recovery procedure](RECOVERY_ACCEPTANCE.md).
+Release notes identify checks performed for that build; older acceptance results
+do not certify a new bundle. The File Workspace remains a prototype.
+
+## Building
+
+From `tactic_stream`, with Python 3.14 on Windows x64:
 
 ```powershell
-.venv\Scripts\python.exe -m tools.windows_delivery --handler "../../TH" --output "../releases/windows"
+.venv/Scripts/python.exe -m tools.windows_delivery --handler ../../TH --edition suite --demo --output ../releases/TACTIC-Suite-Demo
 ```
 
-The output must not exist. Official Python/Electron archives are checked against
-pinned SHA-256 digests; dependencies are installed from wheels into the embedded
-runtime. `manifest.json` records exact versions and per-file hashes.
-The embedded `_pth` disables system/user package discovery. The Handler archive
-uses the existing source allowlist and excludes saved credentials and settings.
+Choose `handler`, `stream` or `suite`; omit `--demo` for a clean package.
+The output must not exist. The builder checks pinned Python/Electron archives,
+installs wheels into the isolated embedded runtime and compiles Handler's existing
+.NET launchers. Handler editions also produce a self-contained Setup EXE.
+`manifest.json`, `BUILD.json` and `SHA256SUMS` record versions and file integrity.
+The embedded runtime ignores system/user Python packages. The Handler allowlist
+excludes saved credentials, settings and private scripts.

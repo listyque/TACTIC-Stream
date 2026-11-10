@@ -12,7 +12,7 @@ Images target the architecture on which the package was built.
 From `tactic_stream`, with Docker running:
 
 ```powershell
-.venv/Scripts/python.exe -B -m tools.server_delivery --output ../releases/server-0.112.192
+.venv/Scripts/python.exe -B -m tools.server_delivery --output ../releases/server-clean
 ```
 
 The destination must not exist. Export includes all three images in `images.tar`;
@@ -73,11 +73,28 @@ from the loaded images using existing volumes. A failed migration leaves the bac
 stopped. Restoring a database backup is required if a schema change cannot be reversed;
 loading an older image alone is not a database rollback.
 
-This package supports a new PostgreSQL installation and native upgrades. Legacy
-project migration and complete GUI acceptance remain separate L12 requirements.
-The separate Windows bundle passed installation/startup on fresh Windows 11 build 26300.
-Upgrade 0.112.192 to 0.112.193 and cold restoration/
-rollback into independent PostgreSQL volumes passed; see
-[recovery procedure and acceptance](RECOVERY_ACCEPTANCE.md). Existing SQLite data
-does not become PostgreSQL data by changing a config value. External publication
-requires configuring TLS and trusted proxy settings for the target environment.
+This preview supports a new PostgreSQL installation and native upgrades.
+Legacy project migration still needs checking against the particular source project.
+See the [recovery procedure](RECOVERY_ACCEPTANCE.md); release notes identify the checks
+performed for each build. Changing a config value does not migrate SQLite data.
+For external access configure TLS and trusted proxy settings for the target environment.
+
+## Demo edition
+
+Add `--demo` to the build command or download the Demo package from Releases.
+Run the same `load`, `init`, `check` sequence. Initialization installs the separate
+checksummed demo payload into a fresh database. It does not seed an existing project.
+The default Compose project is `tactic-stream-demo`, HTTP port **8084**, Webmin **10002**.
+Clean and demo use separate volumes and secrets; keep them in separate directories.
+Explicit `STREAM_HTTP_PORT` / `STREAM_WEBMIN_PORT` values override these defaults.
+
+Sign in as admin and open Orbit Studio or Atlas Reference Library. To retrieve
+the newly generated demo account passwords locally:
+
+```sh
+docker compose -p tactic-stream-demo exec app cat /var/lib/tactic_stream/demo-accounts.json
+```
+
+Treat this output as credentials. The [demo walkthrough](https://github.com/listyque/TACTIC-Stream/wiki/Demo)
+explains the records, roles, publications and plugins. Handler connects to the same
+server address with a separate login. For a Synology package, see [DSM](https://github.com/listyque/TACTIC-Stream/wiki/DSM).

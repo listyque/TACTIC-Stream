@@ -38,7 +38,10 @@ def describe(data_dir, port):
 
 if __name__ == '__main__':
     if sys.argv[1] == '--initialize':
-        raise SystemExit(subprocess.call([sys.executable, '-I', '-B', '-X', 'utf8',
-            '-m', 'tactic_stream', '--data-dir', sys.argv[2], 'init', '--if-needed'],
-            creationflags=subprocess.CREATE_NEW_CONSOLE))
+        command = [sys.executable, '-I', '-B', '-X', 'utf8',
+            '-m', 'tactic_stream', '--data-dir', sys.argv[2], 'init', '--if-needed']
+        demo = Path(__file__).resolve().parents[2] / 'demo'
+        if (demo / 'manifest.json').is_file():
+            command += ['--demo', str(demo)]
+        raise SystemExit(subprocess.call(command, creationflags=subprocess.CREATE_NEW_CONSOLE))
     print(json.dumps(describe(sys.argv[1], int(sys.argv[2]))))

@@ -7,10 +7,11 @@ const { pathToFileURL } = require('node:url');
 
 app.setName('TACTIC Stream');
 const bundle = path.dirname(process.execPath);
+const demo = fs.existsSync(path.join(bundle, 'demo', 'manifest.json'));
 const dataArgument = process.argv.indexOf('--data-dir');
 const selectedData = app.commandLine.getSwitchValue('data-dir') || (dataArgument >= 0 ? process.argv[dataArgument + 1] : '');
 if (dataArgument >= 0 && (!selectedData || selectedData.startsWith('--'))) throw new Error('--data-dir requires a directory');
-const root = path.resolve(selectedData || path.join(app.getPath('appData'), 'TACTIC Stream'));
+const root = path.resolve(selectedData || path.join(app.getPath('appData'), demo ? 'TACTIC Stream Demo' : 'TACTIC Stream'));
 const data = path.join(root, 'server');
 fs.mkdirSync(path.join(root, 'browser'), { recursive: true });
 app.setPath('userData', path.join(root, 'browser'));
@@ -59,7 +60,7 @@ async function finish() {
 
 async function start() {
   ({ translate } = await import(pathToFileURL(path.join(__dirname, 'strings.mjs')).href));
-  const info = JSON.parse(await command([path.join(__dirname, 'desktop.py'), data, String(await freePort())]));
+  const info = JSON.parse(await command([path.join(__dirname, 'desktop.py'), data, String(demo ? 18881 : await freePort())]));
   if (!info.initialized) {
     await new Promise((resolve, reject) => {
       setup = spawn(python, ['-I', '-B', '-X', 'utf8', path.join(__dirname, 'desktop.py'), '--initialize', data], { env: environment, stdio: 'ignore', windowsHide: true });

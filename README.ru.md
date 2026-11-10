@@ -90,6 +90,8 @@ Stream сохраняет модель TACTIC и поддерживаемые AP
 
 ## Запуск и первый проект
 
+**[Скачать Clean / Demo](https://github.com/listyque/TACTIC-Stream/releases)** — Windows, Docker/PostgreSQL, Synology DSM и комплекты TH + TS. [Демо-проекты](examples/demo/README.ru.md) · [Инструкция для Windows](tactic_stream/docs/delivery/WINDOWS_DELIVERY.ru.md) · [DSM](tactic_stream/docs/delivery/DSM_DELIVERY.ru.md).
+
 | Вариант запуска | С чего начать |
 | --- | --- |
 | **Windows / SQLite** | [Инструкция для переносимого пакета](https://github.com/listyque/TACTIC-Stream/wiki/Windows-ru): локальное приложение, репозиторий и дополнительный нативный Handler. |
