@@ -55,6 +55,13 @@ Check-in связывает публикацию с объектом, проце
 | ![Ассистент готовит сводку по данным выбранного объекта](tactic_stream/docs/assets/product-tour/assistant.png) | ![Дашборд производства: метрики, статусы, загрузка и ассеты](tactic_stream/docs/assets/product-tour/dashboard-overview.png) |
 | Вопросы по реальным записям, подготовка изменений и видимые операции. **[Отдельная презентация →](tactic_stream/docs/presentations/assistant.ru.md)** | Метрики, диаграммы, Item View и действия на странице команды. **[Отдельная презентация →](tactic_stream/docs/presentations/dashboards.ru.md)** |
 
+## Знания внутри рабочего пространства
+
+| Встроенная справка | База знаний проекта |
+| --- | --- |
+| ![Справка: каталог тем и инструкции к инструментам](tactic_stream/docs/assets/product-tour/help.png) | ![База знаний: статья, связанный ассет и оглавление](tactic_stream/docs/assets/product-tour/knowledge-base.png) |
+| Разберитесь в инструменте прямо в приложении: контекстные статьи, поиск по тексту, EN/RU и выгрузка Markdown. **[Посмотреть справку →](tactic_stream/docs/presentations/help.ru.md)** | Соберите опыт команды в статьи с Visual / Markdown, вложениями, связями с объектами, черновиками и историей. **[Посмотреть базу знаний →](tactic_stream/docs/presentations/knowledge-base.ru.md)** |
+
 ## Настройка от схемы данных до интерфейса
 
 **Tactic Frame** описывает общие интерфейсы для Vue и нативного Qt Quick. Визуальные редакторы, Script Editor, полки инструментов и серверные API позволяют развивать проект вместе с производством.

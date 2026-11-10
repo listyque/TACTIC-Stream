@@ -55,6 +55,13 @@ Check-in connects a publication to its object, process and version. Naming Edito
 | ![Assistant preparing a report from selected-object records](tactic_stream/docs/assets/product-tour/assistant.png) | ![Production dashboard: metrics, statuses, workload and assets](tactic_stream/docs/assets/product-tour/dashboard-overview.png) |
 | Ask about real records, prepare changes and inspect the operations. **[Explore the assistant →](tactic_stream/docs/presentations/assistant.en.md)** | Put metrics, charts, Item View and actions on a team page. **[Explore dashboards →](tactic_stream/docs/presentations/dashboards.en.md)** |
 
+## Knowledge inside the workspace
+
+| Built-in Help | Project Knowledge Base |
+| --- | --- |
+| ![Help: topic catalog and instructions for the working tools](tactic_stream/docs/assets/product-tour/help.png) | ![Knowledge Base: article, linked asset and heading outline](tactic_stream/docs/assets/product-tour/knowledge-base.png) |
+| Understand a tool inside the application: contextual articles, full-text search, EN/RU and Markdown download. **[Explore Help →](tactic_stream/docs/presentations/help.en.md)** | Turn team experience into articles with Visual / Markdown, attachments, object links, drafts and history. **[Explore Knowledge Base →](tactic_stream/docs/presentations/knowledge-base.en.md)** |
+
 ## Configure the data model and the interface
 
 **Tactic Frame** describes shared interfaces for Vue and native Qt Quick. Visual editors, Script Editor, tool shelves and server APIs let the project evolve with the production.
