@@ -1,16 +1,16 @@
 # Built-in Help
 
-**Find the next step without leaving the workspace.**
+**A guide to the tool you are using, available while you work.**
 
 [TACTIC Stream](../../../README.md) · [Русский](help.ru.md) · [Knowledge Base](knowledge-base.en.md) · [Full feature tour](product-tour.en.md)
 
-Help puts the application's instructions beside the work: how a panel behaves, what a setting changes, and how to complete a workflow. Open it from the application menu, or use a window's Help action to go straight to the relevant topic.
+What happens after check-in? Where do you change a naming rule? How do you bring a panel back? These questions come up while you are working. Open Help from the main menu, or use a tool’s Help action to go straight to its article.
 
 ![TACTIC Stream Help: topic catalog, article search and the Knowledge Base guide](../assets/product-tour/help.png)
 
 ## Start with the screen you are using
 
-A question about check-in should lead to check-in instructions. Contextual Help actions select an article for the current tool; the topic catalog remains available for exploring the wider workflow. Configuration, administration, search, publishing, scripting and workspace panels have their own explanations.
+Start with the immediate task, such as understanding the publication queue, then follow the article’s links to the surrounding workflow. The catalog gives you the bigger picture; search finds explanations by words in their titles or text. Search, configuration, administration, scripting and workspace panels have their own topics.
 
 | When you need to… | Help provides… |
 | --- | --- |
@@ -22,9 +22,9 @@ A question about check-in should lead to check-in instructions. Contextual Help 
 
 ## Documentation that belongs to the application
 
-Stream serves the Help catalog and articles with its browser application. The reader offers article links, reload and Markdown download. Articles carried over as original Handler references are explicitly marked: desktop-specific options belong to Handler and are not promises of browser functionality.
+The catalog and articles are available in Stream's browser application. Follow related topics, reload an article or save a Markdown copy. Articles carried over from the original Handler Help are marked separately; their desktop-specific options belong to Handler.
 
-Help is the product's reference library. The **Knowledge Base** is where the team writes its own production handbook: onboarding, naming rules, delivery checklists and technical decisions, linked to actual project objects.
+Help explains application behavior: what a command does and how to use a tool. The team’s own agreements—such as which views to include in a review—belong in **Knowledge Base**. That keeps product instructions and project requirements in places where people can find them.
 
 [Explore the Knowledge Base →](knowledge-base.en.md)
 

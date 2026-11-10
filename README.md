@@ -1,10 +1,10 @@
 # ![TACTIC Stream](tactic_stream/docs/assets/readme/wordmark.svg)
 
-**A production platform connecting project data, people, processes and files.**
+**Organize studio work, from the project model to the files you deliver.**
 
 [Русский](README.ru.md) · **[Get started](#get-started)** · [Why Stream](#why-stream) · [Feature tour](tactic_stream/docs/presentations/product-tour.en.md) · [Documentation](tactic_stream/docs/index.md)
 
-Model your studio's work, define its route through production and bring the team into a shared browser workspace. TACTIC Stream connects configurable objects, an executable workflow engine, planning, review and versioned publications. TACTIC Handler provides the native desktop companion.
+The model is approved, rigging is still under way, and an animator needs a scene to test. That handoff involves tasks, review decisions and specific files. TACTIC Stream helps keep them together: define the project’s objects, arrange the work into stages and see what is ready to pass on. The team works in a browser; TACTIC Handler adds a native desktop and Maya integration.
 
 ![TACTIC Stream Item View: visual assets in a real project workspace](tactic_stream/docs/assets/product-tour/item-view.png)
 
@@ -12,11 +12,9 @@ Model your studio's work, define its route through production and bring the team
 
 ## Why Stream
 
-The fork carries TACTIC's configurable data model, workflow, permissions and file publications into a modern Python server and Vue workspace. **Stream** describes the connected path from incoming work through review to delivery.
+TACTIC already had a strong idea: let a studio define its own objects, relationships, processes and publication rules. Stream is an independent fork that builds new working tools on that foundation: a Python 3.14 server, a Vue browser application and visual project editors. Server and interface evolve together so a studio can configure its process and use it every day. The name reflects that aim: work passes between people and stages, while its records and files stay connected.
 
-- **Keep the TACTIC foundation.** Objects, relationships, pipelines and snapshots remain the core production concepts.
-- **Make the project editable.** Visual tools expose schemas, workflows, naming, sidebars, layouts and access rules.
-- **Connect browser and desktop.** Tactic Frame describes shared interfaces for Vue and native Qt Quick; Handler adds local repositories and Maya integration.
+That explains how the pieces fit. The schema defines what the team works on, workflow describes what happens next, tasks assign the work, and snapshots record what was delivered. Visual editors let you configure those pieces together. Tactic Frame descriptions are shared by browser-based Stream and native Handler, whose desktop tools also work with local files and Maya.
 
 [What comes from TACTIC, what Stream changes, and why →](tactic_stream/docs/presentations/product-tour.en.md#why-this-project-exists)
 
@@ -28,13 +26,13 @@ The fork carries TACTIC's configurable data model, workflow, permissions and fil
 | **Linux server / PostgreSQL** | [Server deployment guide](tactic_stream/docs/delivery/SERVER_DELIVERY.en.md): Docker Compose, Apache and a dedicated database. |
 | **From source** | [Local development](tactic_stream/README.md#local-development): Python 3.14, editable installation and the repository launcher. |
 
-The first setup asks you to create the administrator password. Open or create a project, configure its data and invite the team.
+The first setup asks you to create the administrator password. Open or create a project, configure its data, then create accounts and grant the team access.
 
 ## Inside Stream
 
 ### A workflow engine behind the graph
 
-Describe manual work, actions, conditions, approvals and dependencies. The server executes configured transitions; the graph editor and process inspector expose their rules. Tasks and published versions stay attached to the objects moving through that process.
+After modeling, look development and rigging might run in parallel, followed by approval before publication. Workflow describes that route. Its nodes carry server rules: create the next tasks, check a condition, run an action or send a notification. The editor lets you see the route as a whole and inspect what each stage does.
 
 ![Workflow editor: connected production stages and review](tactic_stream/docs/assets/product-tour/workflow.png)
 
@@ -42,7 +40,7 @@ Describe manual work, actions, conditions, approvals and dependencies. The serve
 
 ### Compose the workspace your team needs
 
-Browse with Item View, continuous trees or tables. Split and stack docks to keep objects, tasks, notes and previews together. Sidebar Editor, Item Layouts and page editors shape navigation and presentation around the department.
+A review needs the image and its notes; planning needs tasks and dates. Docks let you put the right panels together and save that arrangement. Item View keeps the objects and their contents in reach, while Sidebar Editor, Item Layouts and page editing help make those tools useful to a particular department.
 
 ![Dock composition: visual objects, tasks and publication previews](tactic_stream/docs/assets/product-tour/docks-planning.png)
 
@@ -50,7 +48,7 @@ Browse with Item View, continuous trees or tables. Split and stack docks to keep
 
 ### Give the plan people and dates
 
-Task Manager, Gantt and the calendar connect assignments, schedules and progress. Notes preserve review decisions on the object; Messages supports the team conversation. Object overview and server history help trace what happened.
+A task list tells you who is doing what. Gantt shows how that work fits into the schedule. Open a task to return to its object and discussion; use Messages for team coordination. Object overview and server activity help you trace why a plan or status changed.
 
 ![Gantt: production tasks arranged across the team's schedule](tactic_stream/docs/assets/product-tour/gantt.png)
 
@@ -58,7 +56,7 @@ Task Manager, Gantt and the calendar connect assignments, schedules and progress
 
 ### Deliver files with their context intact
 
-Check-in associates files with an object, process and version. Naming Editor defines names and repository paths; Snapshot Browser returns to the required publication. Native Handler extends this workflow with local Repository Sync and Maya scene operations.
+The next person needs to know what a file belongs to and which version it is. Check-in records the publication against an object and process, Naming Editor defines its name and destination, and Snapshot Browser takes you back to the files. Handler adds local synchronization and opening scenes in Maya.
 
 ![Snapshot Browser: Survey Drone publications and file previews](tactic_stream/docs/assets/product-tour/snapshot-browser.png)
 
@@ -66,7 +64,7 @@ Check-in associates files with an object, process and version. Naming Editor def
 
 ### Turn project data into a working page
 
-Compose metrics, charts, Item View and actions in Dashboard Editor. Build a production overview, a department page or a review desk that responds to the current selection.
+Start with the question the page should answer: what is awaiting review, where is work building up, or what is this department doing? Dashboard Editor lets you place the relevant figures, charts and Item View together, then add actions for the selected object. The overview becomes a starting point for the next task.
 
 ![Custom dashboard: live project metrics, workload and visual records](tactic_stream/docs/assets/product-tour/dashboard-overview.png)
 
@@ -74,7 +72,7 @@ Compose metrics, charts, Item View and actions in Dashboard Editor. Build a prod
 
 ### Ask questions in project context
 
-The built-in assistant can inspect real records, explain results and prepare operations using available tools. Keep the selected object in the conversation and examine the work behind an answer.
+Sometimes you want someone to pull the picture together: what is ready on this asset, which versions exist, and what is still missing? The assistant reads project records through its available tools and shows its findings. In the demonstration below, it found a completed modeling task with no model publication to support the handoff.
 
 ![Project assistant examining production records](tactic_stream/docs/assets/product-tour/assistant.png)
 
@@ -82,13 +80,13 @@ The built-in assistant can inspect real records, explain results and prepare ope
 
 ### Give the team a shared handbook
 
-Knowledge Base connects searchable sections and articles to project objects. Write in Visual or Markdown, attach reference files, save drafts and publish instructions with article history.
+Keep onboarding notes, delivery requirements and technical decisions where the team works each day. A Knowledge Base article can link to specific objects and include example files. Authors write in Visual or Markdown, save drafts and publish finished material; readers find it through the article tree and search.
 
 ![Knowledge Base: a delivery checklist linked to a production asset](tactic_stream/docs/assets/product-tour/knowledge-base.png)
 
 [Knowledge Base: authoring and publishing →](tactic_stream/docs/presentations/knowledge-base.en.md)
 
-Built-in Help explains the application: contextual articles, topic search, English/Russian content and Markdown downloads are available inside the workspace.
+Built-in Help explains how to use the application itself. Open the relevant article from a working tool, search for another topic and save a Markdown copy. English and Russian articles are available inside the application.
 
 ![Built-in Help: application documentation with a searchable topic catalog](tactic_stream/docs/assets/product-tour/help.png)
 
